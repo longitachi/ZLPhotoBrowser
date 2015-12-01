@@ -126,7 +126,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     if (_animate) {
         CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
         CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-kBaseViewHeight/2);
-        CABasicAnimation *animation = [ZLAnimationTool animateWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:0.25 keyPath:@"position"];
+        CABasicAnimation *animation = [ZLAnimationTool animateWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:0.2 keyPath:@"position"];
         [self.baseView.layer addAnimation:animation forKey:nil];
     }
 }
