@@ -38,7 +38,7 @@
 - (void)initNavBtn
 {
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(0, 0, 60, 44);
+    btn.frame = CGRectMake(0, 0, 40, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [btn setTitle:@"取消" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

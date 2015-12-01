@@ -63,7 +63,7 @@
     //right nav btn
     _navRightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _navRightBtn.frame = CGRectMake(0, 0, 25, 25);
-    [_navRightBtn setBackgroundImage:[UIImage imageNamed:@"btn_unselected.png"] forState:UIControlStateNormal];
+    [_navRightBtn setBackgroundImage:[UIImage imageNamed:@"btn_circle.png"] forState:UIControlStateNormal];
     [_navRightBtn setBackgroundImage:[UIImage imageNamed:@"btn_selected.png"] forState:UIControlStateSelected];
     [_navRightBtn addTarget:self action:@selector(navRightBtn_Click:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_navRightBtn];

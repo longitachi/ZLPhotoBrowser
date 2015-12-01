@@ -41,6 +41,7 @@
 		FD07878C1C0D484400D17B97 /* ZLCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD0787851C0D484400D17B97 /* ZLCollectionCell.xib */; };
 		FD07878D1C0D484400D17B97 /* ZLPhotoBrowserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787871C0D484400D17B97 /* ZLPhotoBrowserCell.m */; };
 		FD07878E1C0D484400D17B97 /* ZLPhotoBrowserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD0787881C0D484400D17B97 /* ZLPhotoBrowserCell.xib */; };
+		FD2BA4411C0D7C490031D269 /* btn_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD2BA4401C0D7C490031D269 /* btn_circle@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +96,7 @@
 		FD0787861C0D484400D17B97 /* ZLPhotoBrowserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLPhotoBrowserCell.h; sourceTree = "<group>"; };
 		FD0787871C0D484400D17B97 /* ZLPhotoBrowserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoBrowserCell.m; sourceTree = "<group>"; };
 		FD0787881C0D484400D17B97 /* ZLPhotoBrowserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLPhotoBrowserCell.xib; sourceTree = "<group>"; };
+		FD2BA4401C0D7C490031D269 /* btn_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_circle@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +187,7 @@
 		FD0787381C0D460000D17B97 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				FD2BA4401C0D7C490031D269 /* btn_circle@3x.png */,
 				FD0787391C0D460000D17B97 /* btn_selected.png */,
 				FD07873A1C0D460000D17B97 /* btn_selected@2x.png */,
 				FD07873B1C0D460000D17B97 /* btn_selected@3x.png */,
@@ -293,6 +296,7 @@
 				FD07877B1C0D460000D17B97 /* ZLThumbnailViewController.xib in Resources */,
 				FD07872B1C0D45A200D17B97 /* Main.storyboard in Resources */,
 				FD0787611C0D460000D17B97 /* btn_selected.png in Resources */,
+				FD2BA4411C0D7C490031D269 /* btn_circle@3x.png in Resources */,
 				FD0787621C0D460000D17B97 /* btn_selected@2x.png in Resources */,
 				FD0787661C0D460000D17B97 /* btn_unselected@3x.png in Resources */,
 				FD0787731C0D460000D17B97 /* ZLPhotoActionSheet.xib in Resources */,
@@ -471,6 +475,7 @@
 				FD0787361C0D45A200D17B97 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
