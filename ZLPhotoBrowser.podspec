@@ -21,6 +21,5 @@ Pod::Spec.new do |s|
   s.source       = {:git => https://github.com/longitachi/ZLPhotoBrowser.git', :tag => s.version}
   s.source_files = 'ZLPhotoBrowser/PhotoBrowser/*.{h,m,xib}"
   s.requires_arc = true
-  s.resources    = "ZLPhotoBrowser/PhotoBrowser/Images/*.png"
-  s.requires_arc = true
+  s.resources    = 'ZLPhotoBrowser/PhotoBrowser/Images/*.png'
 end
