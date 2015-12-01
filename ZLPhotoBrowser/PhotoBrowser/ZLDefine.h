@@ -15,7 +15,6 @@
 
 ////////ZLPhotoActionSheet
 #define kBaseViewHeight 300
-#define kMaxImageCount  20 >= _arrayDataSources.count?_arrayDataSources.count:20
 
 ////////ZLShowBigImgViewController
 #define kItemMargin 30

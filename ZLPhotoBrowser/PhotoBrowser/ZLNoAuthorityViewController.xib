@@ -133,14 +133,14 @@
                     <exclude reference="ZfR-jB-I7g"/>
                 </mask>
                 <mask key="constraints">
-                    <exclude reference="dEM-h8-acM"/>
-                    <exclude reference="qt5-3w-R5d"/>
-                    <exclude reference="RRO-Kf-e5z"/>
-                    <exclude reference="TxO-8x-Vlh"/>
-                    <exclude reference="Nmo-kT-ycE"/>
-                    <exclude reference="gpI-l7-Obt"/>
                     <exclude reference="9QW-Ij-ctX"/>
                     <exclude reference="gab-fd-XDC"/>
+                    <exclude reference="Nmo-kT-ycE"/>
+                    <exclude reference="gpI-l7-Obt"/>
+                    <exclude reference="RRO-Kf-e5z"/>
+                    <exclude reference="TxO-8x-Vlh"/>
+                    <exclude reference="dEM-h8-acM"/>
+                    <exclude reference="qt5-3w-R5d"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -151,14 +151,14 @@
                     <include reference="ZfR-jB-I7g"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="dEM-h8-acM"/>
-                    <include reference="qt5-3w-R5d"/>
-                    <include reference="RRO-Kf-e5z"/>
-                    <include reference="TxO-8x-Vlh"/>
-                    <include reference="Nmo-kT-ycE"/>
-                    <include reference="gpI-l7-Obt"/>
                     <include reference="9QW-Ij-ctX"/>
                     <include reference="gab-fd-XDC"/>
+                    <include reference="Nmo-kT-ycE"/>
+                    <include reference="gpI-l7-Obt"/>
+                    <include reference="RRO-Kf-e5z"/>
+                    <include reference="TxO-8x-Vlh"/>
+                    <include reference="dEM-h8-acM"/>
+                    <include reference="qt5-3w-R5d"/>
                 </mask>
             </variation>
         </view>

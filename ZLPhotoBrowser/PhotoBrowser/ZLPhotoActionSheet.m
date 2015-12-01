@@ -48,7 +48,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         self.collectionView.backgroundColor = [UIColor whiteColor];
         [self.collectionView registerNib:[UINib nibWithNibName:@"ZLCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"ZLCollectionCell"];
         
-        _maxSelectCount = 20;
+        _maxSelectCount = 10;
+        _maxPreviewCount = 20;
         _arrayDataSources  = [NSMutableArray array];
         _arraySelectPhotos = [NSMutableArray array];
         
@@ -234,7 +235,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 - (void)cell_btn_Click:(UIButton *)btn
 {
-    if (_arraySelectPhotos.count >= self.maxSelectCount) {
+    if (_arraySelectPhotos.count >= self.maxSelectCount
+        && btn.selected == NO) {
         ShowToastLong(@"最多只能选择%ld张图片", self.maxSelectCount);
         return;
     }
@@ -279,8 +281,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    //预览图片默认仅显示20张
-    return kMaxImageCount;
+    return self.maxPreviewCount>_arrayDataSources.count?_arrayDataSources.count:self.maxPreviewCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

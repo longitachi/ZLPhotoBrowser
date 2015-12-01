@@ -23,6 +23,8 @@
 - (IBAction)btnSelectPhoto_Click:(id)sender
 {
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+    actionSheet.maxSelectCount = 5;
+    actionSheet.maxPreviewCount = 20;
     [actionSheet showWithSender:self animate:YES completion:^(NSArray<UIImage *> * _Nonnull selectPhotos) {
         [self.baseView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         

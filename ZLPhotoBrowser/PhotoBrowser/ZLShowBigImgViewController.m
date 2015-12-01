@@ -83,7 +83,8 @@
 
 - (void)navRightBtn_Click:(UIButton *)btn
 {
-    if (_arraySelectPhotos.count >= self.maxSelectCount) {
+    if (_arraySelectPhotos.count >= self.maxSelectCount
+        && btn.selected == NO) {
         ShowToastLong(@"最多只能选择%ld张图片", self.maxSelectCount);
         return;
     }
@@ -131,15 +132,6 @@
         _navRightBtn.selected = YES;
     } else {
         _navRightBtn.selected = NO;
-    }
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    if (self.navigationController.isNavigationBarHidden) {
-        [self showStatusBarAndNavBar];
-    } else {
-        [self hidStatusBarAndNavBar];
     }
 }
 
@@ -216,9 +208,23 @@
 #pragma mark - 图片缩放相关方法
 - (void)addDoubleTapOnScrollView:(UIScrollView *)scrollView
 {
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction:)];
+    [scrollView addGestureRecognizer:singleTap];
+    
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapAction:)];
     doubleTap.numberOfTapsRequired = 2;
     [scrollView addGestureRecognizer:doubleTap];
+    
+    [singleTap requireGestureRecognizerToFail:doubleTap];
+}
+
+- (void)singleTapAction:(UITapGestureRecognizer *)tap
+{
+    if (self.navigationController.navigationBar.isHidden) {
+        [self showStatusBarAndNavBar];
+    } else {
+        [self hidStatusBarAndNavBar];
+    }
 }
 
 - (void)doubleTapAction:(UITapGestureRecognizer *)tap
@@ -261,23 +267,6 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return scrollView.subviews[0];
-}
-
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
-{
-    UIImageView *im = scrollView.subviews[0];
-    NSLog(@"%f, %f\n%f, %f", im.frame.size.width, im.frame.size.height, im.image.size.width, im.image.size.height);
-    NSLog(@"%@, %@, %@", NSStringFromCGRect(im.frame), NSStringFromCGSize(im.image.size), NSStringFromCGSize(scrollView.contentSize));
-//    if (im.image.size.width > im.image.size.height) {
-//        //根据imageView计算图片实际占有高度
-//        CGFloat imgActualHeight = im.image.size.height*im.frame.size.width/im.image.size.width;
-//        if (imgActualHeight < kViewHeight) {
-//            [scrollView setContentSize:CGSizeMake(im.frame.size.width, kViewHeight)];
-//            im.center = scrollView.center;
-//        } else {
-//            [scrollView setContentSize:CGSizeMake(im.frame.size.width, imgActualHeight)];
-//        }
-//    }
 }
 
 #pragma mark - 显示隐藏导航条状态栏
