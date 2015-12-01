@@ -1,8 +1,8 @@
 
 Pod::Spec.new do |s|
-  s.name         = "ZLPhotoBrowser"
-  s.version      = "1.0"
-  s.summary      = "多选照片框架."
+  s.name         = 'ZLPhotoBrowser'
+  s.version      = '1.0'
+  s.summary      = '简单易用的多选照片框架'
 
   s.description  = <<-DESC
                    1. 支持预览相册图片快速多选.
@@ -14,12 +14,13 @@ Pod::Spec.new do |s|
 
                    DESC
 
-  s.homepage     = "https://github.com/longitachi/ZLPhotoBrowser"
-  s.license      = { :type => "MIT", :file => "LICENSE" }
-  s.author       = { "longitachi" => "" }
-  s.ios.deployment_target = '8.0'
-  s.source       = { :git => "https://github.com/longitachi/ZLPhotoBrowser.git", :tag => '1.1'}
-  s.source_files = "ZLPhotoBrowser/PhotoBrowser/*.{h,m,xib}"
+  s.homepage     = 'https://github.com/longitachi/ZLPhotoBrowser'
+  s.license      = 'MIT'
+  s.author       = {'longitachi' => 'longitachi@163.com' }
+  s.platform     = :ios, '8.0'
+  s.source       = {:git => https://github.com/longitachi/ZLPhotoBrowser.git', :tag => s.version}
+  s.source_files = 'ZLPhotoBrowser/PhotoBrowser/*.{h,m,xib}"
+  s.requires_arc = true
   s.resources    = "ZLPhotoBrowser/PhotoBrowser/Images/*.png"
   s.requires_arc = true
 end
