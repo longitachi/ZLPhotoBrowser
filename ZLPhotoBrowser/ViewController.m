@@ -9,6 +9,10 @@
 #import "ViewController.h"
 #import "ZLPhotoActionSheet.h"
 
+///////////////////////////////////////////////////
+// git 地址： https://github.com/longitachi/ZLPhotoBrowser
+// 喜欢的朋友请去给个star，莫大的支持，谢谢
+///////////////////////////////////////////////////
 @interface ViewController ()
 
 @end
@@ -23,7 +27,9 @@
 - (IBAction)btnSelectPhoto_Click:(id)sender
 {
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+    //设置照片最大选择数
     actionSheet.maxSelectCount = 5;
+    //设置照片最大预览数
     actionSheet.maxPreviewCount = 20;
     [actionSheet showWithSender:self animate:YES completion:^(NSArray<UIImage *> * _Nonnull selectPhotos) {
         [self.baseView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];

@@ -53,7 +53,6 @@ static ZLPhotoTool *sharePhotoTool = nil;
                 ablum.count = result.count;
                 ablum.headImageAsset = result.firstObject;
                 ablum.assetCollection = collection;
-                
                 [photoAblumList addObject:ablum];
             }
         }
@@ -115,7 +114,8 @@ static ZLPhotoTool *sharePhotoTool = nil;
     NSMutableArray<PHAsset *> *assets = [NSMutableArray array];
     
     PHFetchOptions *option = [[PHFetchOptions alloc] init];
-    option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+    //ascending 为YES时，按照照片的创建时间升序排列;为NO时，则降序排列
+    option.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:ascending]];
     
     PHFetchResult *result = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:option];
     
@@ -144,8 +144,14 @@ static ZLPhotoTool *sharePhotoTool = nil;
 {
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     //仅显示缩略图，不控制质量显示
-    option.resizeMode = resizeMode;
+    /**
+     PHImageRequestOptionsResizeModeNone, //默认质量
+     PHImageRequestOptionsResizeModeFast, //加载预览图，即不太清晰
+     PHImageRequestOptionsResizeModeExact //加载高清图片，会加载的比较慢
+     */
+    option.resizeMode = PHImageRequestOptionsResizeModeFast;
     option.networkAccessAllowed = YES;
+    //param：targetSize 即你想要的图片尺寸，若想要原尺寸则可输入PHImageManagerMaximumSize
     [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
         completion(image);
     }];
