@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="00a-ed-88M">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="pg9-Na-DYT">
+            <objects>
+                <navigationController id="00a-ed-88M" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9Cb-fE-gdp">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="MVB-Kt-oSE"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qm2-Zx-Nru" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-282" y="337"/>
+        </scene>
+        <!--主界面-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2pn-vv-JDz">
+                                <rect key="frame" x="229" y="84" width="143" height="30"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="143" id="3db-DZ-4wF"/>
+                                    <constraint firstAttribute="height" constant="30" id="CiE-lW-VvO"/>
+                                </constraints>
+                                <state key="normal" title="选择照片">
+                                    <color key="titleColor" red="0.074509803921568626" green="0.59999999999999998" blue="0.90588235294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnSelectPhoto_Click:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DgX-NW-AQW"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S3j-1V-9p8">
+                                <rect key="frame" x="0.0" y="122" width="600" height="478"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="S3j-1V-9p8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="CSf-m9-JMJ"/>
+                            <constraint firstItem="2pn-vv-JDz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HAS-XF-qKv"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="S3j-1V-9p8" secondAttribute="bottom" id="Idc-ng-XR3"/>
+                            <constraint firstItem="S3j-1V-9p8" firstAttribute="top" secondItem="2pn-vv-JDz" secondAttribute="bottom" constant="8" id="S8o-Pa-MgA"/>
+                            <constraint firstAttribute="trailing" secondItem="S3j-1V-9p8" secondAttribute="trailing" id="SOa-ja-TTf"/>
+                            <constraint firstItem="2pn-vv-JDz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="b1w-52-ltb"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="主界面" id="xm7-Su-be1"/>
+                    <connections>
+                        <outlet property="baseView" destination="S3j-1V-9p8" id="6XR-pL-ZNE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="380" y="337"/>
+        </scene>
+    </scenes>
+</document>
