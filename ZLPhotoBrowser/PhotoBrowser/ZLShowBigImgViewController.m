@@ -89,19 +89,26 @@
         return;
     }
     
-    btn.selected = !btn.selected;
     if (![self isHaveCurrentPageImage]) {
         [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
         
         PHAsset *asset = _arrayDataSources[_currentPage-1];
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
         ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
+        
+        if (cell.imageView.image == nil) {
+            ShowToastLong(@"图片加载中，请稍后");
+            return;
+        }
+        
         model.image = cell.imageView.image;
         model.imageName = [asset valueForKey:@"filename"];
         [_arraySelectPhotos addObject:model];
     } else {
         [self removeCurrentPageImage];
     }
+    
+    btn.selected = !btn.selected;
 }
 
 - (BOOL)isHaveCurrentPageImage

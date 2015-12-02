@@ -14,22 +14,22 @@
 #pragma mark - 显示提示视图
 + (void)showAtTop:(NSString *)message
 {
-    [self show:message atTop:YES showTime:1.5];
+    [self show:message atTop:YES showTime:2.0];
 }
 
 + (void)show:(NSString *)message
 {
-    [self show:message atTop:NO showTime:1.5];
+    [self show:message atTop:NO showTime:2.0];
 }
 
 + (void)showLongAtTop:(NSString *)message
 {
-    [self show:message atTop:YES showTime:3.0];
+    [self show:message atTop:YES showTime:4.0];
 }
 
 + (void)showLong:(NSString *)message
 {
-    [self show:message atTop:NO showTime:3.0];
+    [self show:message atTop:NO showTime:4.0];
 }
 
 static UILabel *toastView = nil;

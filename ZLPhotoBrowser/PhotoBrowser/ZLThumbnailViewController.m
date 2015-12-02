@@ -95,12 +95,16 @@
         ShowToastLong(@"最多只能选择%ld张图片", self.maxSelectCount);
         return;
     }
-    btn.selected = !btn.selected;
     
     PHAsset *asset = _arrayDataSources[btn.tag];
     ZLCollectionCell *cell = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:btn.tag inSection:0]];
-    if (btn.selected) {
+    if (!btn.selected) {
+        //添加图片到选中数组
         [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
+        if (cell.imageView.image == nil) {
+            ShowToastLong(@"该图片尚未从iCloud下载，请在系统相册中下载到本地后重新尝试，或在预览大图中加载完毕后选择");
+            return;
+        }
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
         model.image = cell.imageView.image;
         model.imageName = [asset valueForKey:@"filename"];
@@ -113,6 +117,7 @@
             }
         }
     }
+    btn.selected = !btn.selected;
 }
 
 - (IBAction)btnDone_Click:(id)sender
