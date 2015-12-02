@@ -12,5 +12,10 @@
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
+
+- (void)showIndicator;
+
+- (void)hideIndicator;
 
 @end

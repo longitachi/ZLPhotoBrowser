@@ -14,4 +14,15 @@
     // Initialization code
 }
 
+- (void)showIndicator
+{
+    self.indicator.hidden = NO;
+    [self.indicator startAnimating];
+}
+
+- (void)hideIndicator
+{
+    [self.indicator stopAnimating];
+}
+
 @end

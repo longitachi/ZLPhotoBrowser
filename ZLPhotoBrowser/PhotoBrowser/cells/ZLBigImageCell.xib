@@ -20,6 +20,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                 <animations/>
                             </imageView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="9cH-qx-lOc">
+                                <rect key="frame" x="32" y="31" width="37" height="37"/>
+                                <animations/>
+                            </activityIndicatorView>
                         </subviews>
                         <animations/>
                         <constraints>
@@ -29,6 +33,8 @@
                             <constraint firstItem="iBc-BW-jZN" firstAttribute="leading" secondItem="KAf-TU-jOx" secondAttribute="leading" id="GCA-hl-D5f"/>
                             <constraint firstItem="iBc-BW-jZN" firstAttribute="top" secondItem="KAf-TU-jOx" secondAttribute="top" id="Pih-XU-xHt"/>
                             <constraint firstAttribute="bottom" secondItem="iBc-BW-jZN" secondAttribute="bottom" id="WuJ-kR-J4L"/>
+                            <constraint firstItem="9cH-qx-lOc" firstAttribute="centerY" secondItem="KAf-TU-jOx" secondAttribute="centerY" id="gwT-yT-Nr7"/>
+                            <constraint firstItem="9cH-qx-lOc" firstAttribute="centerX" secondItem="KAf-TU-jOx" secondAttribute="centerX" id="xZa-1J-v8Z"/>
                         </constraints>
                     </scrollView>
                 </subviews>
@@ -45,6 +51,7 @@
             <size key="customSize" width="192" height="196"/>
             <connections>
                 <outlet property="imageView" destination="iBc-BW-jZN" id="End-cj-Qkm"/>
+                <outlet property="indicator" destination="9cH-qx-lOc" id="eAy-xx-sg2"/>
                 <outlet property="scrollView" destination="KAf-TU-jOx" id="xCP-Vz-ww7"/>
             </connections>
             <point key="canvasLocation" x="253" y="249"/>

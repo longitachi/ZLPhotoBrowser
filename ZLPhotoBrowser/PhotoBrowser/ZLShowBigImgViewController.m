@@ -182,8 +182,11 @@
     ZLBigImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLBigImageCell" forIndexPath:indexPath];
     PHAsset *asset = _arrayDataSources[indexPath.row];
     
+    cell.imageView.image = nil;
+    [cell showIndicator];
     [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:PHImageManagerMaximumSize resizeMode:PHImageRequestOptionsResizeModeNone completion:^(UIImage *image) {
         cell.imageView.image = image;
+        [cell hideIndicator];
     }];
     
     cell.scrollView.delegate = self;
