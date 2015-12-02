@@ -143,13 +143,14 @@ static ZLPhotoTool *sharePhotoTool = nil;
 - (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *))completion
 {
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
-    //仅显示缩略图，不控制质量显示
     /**
-     PHImageRequestOptionsResizeModeNone, //默认质量
-     PHImageRequestOptionsResizeModeFast, //加载预览图，即不太清晰
-     PHImageRequestOptionsResizeModeExact //加载高清图片，会加载的比较慢
+     resizeMode：对请求的图像怎样缩放。有三种选择：None，不缩放；Fast，尽快地提供接近或稍微大于要求的尺寸；Exact，精准提供要求的尺寸。
+     deliveryMode：图像质量。有三种值：Opportunistic，在速度与质量中均衡；HighQualityFormat，不管花费多长时间，提供高质量图像；FastFormat，以最快速度提供好的质量。
+     这个属性只有在 synchronous 为 true 时有效。
      */
-    option.resizeMode = PHImageRequestOptionsResizeModeFast;
+    option.resizeMode = resizeMode;//控制照片尺寸
+    //option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;//控制照片质量
+    //option.synchronous = YES;
     option.networkAccessAllowed = YES;
     //param：targetSize 即你想要的图片尺寸，若想要原尺寸则可输入PHImageManagerMaximumSize
     [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {

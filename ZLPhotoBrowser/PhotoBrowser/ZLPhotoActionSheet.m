@@ -221,6 +221,9 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     if (self.handler) {
         NSMutableArray *selPhoto = [NSMutableArray array];
         for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
+            if (model.image == nil) {
+                continue;
+            }
             [selPhoto addObject:model.image];
         }
         self.handler(selPhoto);
