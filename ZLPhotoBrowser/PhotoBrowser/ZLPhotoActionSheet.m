@@ -329,7 +329,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     [svc setOnSelectedPhotos:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos) {
         [_arraySelectPhotos removeAllObjects];
         [_arraySelectPhotos addObjectsFromArray:selectedPhotos];
-        [self changeBtnCameraTitle];
+        [weakSelf changeBtnCameraTitle];
         [weakSelf.collectionView reloadData];
     }];
     [self.sender.navigationController.view.layer addAnimation:[ZLAnimationTool animateWithType:kCATransitionMoveIn subType:kCATransitionFromTop duration:0.3] forKey:nil];
@@ -341,9 +341,9 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 {
     __weak typeof(ZLPhotoActionSheet *) weakSelf = self;
     [picker dismissViewControllerAnimated:YES completion:^{
-        if (self.handler) {
+        if (weakSelf.handler) {
             UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            self.handler(@[image]);
+            weakSelf.handler(@[image]);
             UIImageWriteToSavedPhotosAlbum(image, self, @selector(video:didFinishSavingWithError:contextinfo:), nil);
         }
         [weakSelf hide];
