@@ -91,7 +91,8 @@
 #pragma mark - UIButton Action
 - (void)cell_btn_Click:(UIButton *)btn
 {
-    if (_arraySelectPhotos.count >= self.maxSelectCount) {
+    if (_arraySelectPhotos.count >= self.maxSelectCount
+        && btn.selected == NO) {
         ShowToastLong(@"最多只能选择%ld张图片", self.maxSelectCount);
         return;
     }
