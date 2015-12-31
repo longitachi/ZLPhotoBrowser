@@ -197,8 +197,8 @@
     svc.shouldReverseAssets = NO;
     __weak typeof(ZLThumbnailViewController *) weakSelf = self;
     [svc setOnSelectedPhotos:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos) {
-        [_arraySelectPhotos removeAllObjects];
-        [_arraySelectPhotos addObjectsFromArray:selectedPhotos];
+        [weakSelf.arraySelectPhotos removeAllObjects];
+        [weakSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
         [weakSelf.collectionView reloadData];
     }];
     

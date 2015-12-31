@@ -21,13 +21,10 @@
 typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 @interface ZLPhotoActionSheet () <UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPhotoLibraryChangeObserver>
-{
-    NSMutableArray<PHAsset *> *_arrayDataSources;
-    NSMutableArray<ZLSelectPhotoModel *> *_arraySelectPhotos;
-    
-    BOOL _animate;
-}
 
+@property (nonatomic, assign) BOOL animate;
+@property (nonatomic, strong) NSMutableArray<PHAsset *> *arrayDataSources;
+@property (nonatomic, strong) NSMutableArray<ZLSelectPhotoModel *> *arraySelectPhotos;
 @property (nonatomic, copy) handler handler;
 
 @end
@@ -123,6 +120,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 - (void)show
 {
     [self.sender.view addSubview:self];
+    self.hidden = NO;
     if (_animate) {
         CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
         CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-kBaseViewHeight/2);
@@ -202,8 +200,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         
         __weak typeof(ZLPhotoActionSheet *) weakSelf = self;
         [photoBrowser setDoneBlock:^(NSArray<ZLSelectPhotoModel *> *selectPhotos) {
-            [_arraySelectPhotos removeAllObjects];
-            [_arraySelectPhotos addObjectsFromArray:selectPhotos];
+            [weakSelf.arraySelectPhotos removeAllObjects];
+            [weakSelf.arraySelectPhotos addObjectsFromArray:selectPhotos];
             [weakSelf done];
             [weakSelf hide];
         }];
@@ -327,8 +325,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     svc.shouldReverseAssets = YES;
     __weak typeof(ZLPhotoActionSheet *) weakSelf = self;
     [svc setOnSelectedPhotos:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos) {
-        [_arraySelectPhotos removeAllObjects];
-        [_arraySelectPhotos addObjectsFromArray:selectedPhotos];
+        [weakSelf.arraySelectPhotos removeAllObjects];
+        [weakSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
         [weakSelf changeBtnCameraTitle];
         [weakSelf.collectionView reloadData];
     }];
