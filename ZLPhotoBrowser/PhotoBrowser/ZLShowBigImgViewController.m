@@ -34,10 +34,6 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    //当前页
-    _currentPage = self.assets.count-self.selectIndex;
-    self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.assets.count];
-    
     [self initNavBtns];
     [self sortAsset];
     [self initCollectionView];
@@ -151,9 +147,13 @@
         while (obj = [enumerator nextObject]) {
             [_arrayDataSources addObject:obj];
         }
+        //当前页
+        _currentPage = _arrayDataSources.count-self.selectIndex;
     } else {
         [_arrayDataSources addObjectsFromArray:self.assets];
+        _currentPage = self.selectIndex + 1;
     }
+    self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, _arrayDataSources.count];
 }
 
 #pragma mark - 初始化CollectionView
