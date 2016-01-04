@@ -117,10 +117,21 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 }
 
 #pragma mark - 显示隐藏视图及相关动画
+- (void)resetSubViewState
+{
+    self.hidden = NO;
+    self.baseView.hidden = NO;
+    [self.arraySelectPhotos removeAllObjects];
+    [self.btnCamera setTitle:@"拍照" forState:UIControlStateNormal];
+    [self.btnCamera setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+}
+
 - (void)show
 {
     [self.sender.view addSubview:self];
-    self.hidden = NO;
+    
+    [self resetSubViewState];
+    
     if (_animate) {
         CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
         CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-kBaseViewHeight/2);
