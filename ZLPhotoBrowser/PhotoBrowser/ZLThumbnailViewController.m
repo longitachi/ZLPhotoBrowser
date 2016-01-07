@@ -40,6 +40,12 @@
     [self getAssetInAssetCollection];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self changePreViewStatus];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -53,6 +59,17 @@
         if (self.collectionView.contentSize.height > self.collectionView.frame.size.height) {
             [self.collectionView setContentOffset:CGPointMake(0, self.collectionView.contentSize.height-self.collectionView.frame.size.height)];
         }
+    }
+}
+
+- (void)changePreViewStatus
+{
+    if (self.arraySelectPhotos.count == 0) {
+        self.btnPreView.userInteractionEnabled = NO;
+        [self.btnPreView setTitleColor:[UIColor colorWithWhite:0.7 alpha:1] forState:UIControlStateNormal];
+    } else {
+        self.btnPreView.userInteractionEnabled = YES;
+        [self.btnPreView setTitleColor:[UIColor colorWithRed:80/255.0 green:180/255.0 blue:234/255.0 alpha:1] forState:UIControlStateNormal];;
     }
 }
 
@@ -107,6 +124,7 @@
             return;
         }
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
+        model.asset = asset;
         model.image = cell.imageView.image;
         model.imageName = [asset valueForKey:@"filename"];
         [_arraySelectPhotos addObject:model];
@@ -118,7 +136,18 @@
             }
         }
     }
+    
     btn.selected = !btn.selected;
+    [self changePreViewStatus];
+}
+
+- (IBAction)btnPreview_Click:(id)sender
+{
+    NSMutableArray<PHAsset *> *arrSel = [NSMutableArray array];
+    for (ZLSelectPhotoModel *model in self.arraySelectPhotos) {
+        [arrSel addObject:model.asset];
+    }
+    [self pushShowBigImgVCWithDataArray:arrSel selectIndex:arrSel.count-1];
 }
 
 - (IBAction)btnDone_Click:(id)sender
@@ -167,9 +196,9 @@
     cell.imageView.clipsToBounds = YES;
     
     CGSize size = cell.frame.size;
-    size.width *= 2;
-    size.height *= 2;
-    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image) {
+    size.width *= 4;
+    size.height *= 4;
+    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image) {
         cell.imageView.image = image;
         for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
             if ([model.imageName isEqualToString:[asset valueForKey:@"filename"]]) {
@@ -188,10 +217,15 @@
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self pushShowBigImgVCWithDataArray:_arrayDataSources selectIndex:indexPath.row];
+}
+
+- (void)pushShowBigImgVCWithDataArray:(NSArray<PHAsset *> *)dataArray selectIndex:(NSInteger)selectIndex
+{
     ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
-    svc.assets         = _arrayDataSources;
+    svc.assets         = dataArray;
     svc.arraySelectPhotos = self.arraySelectPhotos.mutableCopy;
-    svc.selectIndex    = indexPath.row;
+    svc.selectIndex    = selectIndex;
     svc.maxSelectCount = _maxSelectCount;
     svc.showPopAnimate = NO;
     svc.shouldReverseAssets = NO;

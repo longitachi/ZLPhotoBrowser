@@ -8,9 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
 
 @interface ZLSelectPhotoModel : NSObject
 
+@property (nonatomic, strong) PHAsset *asset;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, copy) NSString *imageName;
 

@@ -70,7 +70,7 @@ static UILabel *toastView = nil;
         height = [self stringText:message font:18 isHeightFixed:NO fixedValue:width];
     }
     
-    CGRect frame = CGRectMake((kViewWidth-width)/2, atTop?kViewHeight*0.15:kViewHeight*0.85, width, height);
+    CGRect frame = CGRectMake(([UIScreen mainScreen].bounds.size.width-width)/2, atTop?[UIScreen mainScreen].bounds.size.height*0.15:[UIScreen mainScreen].bounds.size.height*0.85, width, height);
     toastView.alpha = 1;
     toastView.text = message;
     toastView.frame = frame;

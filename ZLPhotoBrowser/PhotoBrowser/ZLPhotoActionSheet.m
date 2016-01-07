@@ -124,6 +124,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     [self.arraySelectPhotos removeAllObjects];
     [self.btnCamera setTitle:@"拍照" forState:UIControlStateNormal];
     [self.btnCamera setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.collectionView setContentOffset:CGPointZero];
 }
 
 - (void)show
@@ -259,6 +260,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     if (btn.selected) {
         [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
+        model.asset = asset;
         model.image = cell.imageView.image;
         model.imageName = [asset valueForKey:@"filename"];
         [_arraySelectPhotos addObject:model];
@@ -329,12 +331,12 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 {
     ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
     svc.assets         = _arrayDataSources;
-    svc.arraySelectPhotos = _arraySelectPhotos.mutableCopy;
+    svc.arraySelectPhotos = [NSMutableArray arrayWithArray:_arraySelectPhotos];
     svc.selectIndex    = indexPath.row;
     svc.maxSelectCount = _maxSelectCount;
     svc.showPopAnimate = YES;
     svc.shouldReverseAssets = YES;
-    __weak typeof(ZLPhotoActionSheet *) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     [svc setOnSelectedPhotos:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos) {
         [weakSelf.arraySelectPhotos removeAllObjects];
         [weakSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];

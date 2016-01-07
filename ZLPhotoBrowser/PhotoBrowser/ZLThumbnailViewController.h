@@ -26,8 +26,8 @@
 @property (nonatomic, assign) NSInteger maxSelectCount;
 
 @property (weak, nonatomic) IBOutlet UILabel *labCount;
-
-@property (weak, nonatomic) IBOutlet UIView *btnDone;
+@property (weak, nonatomic) IBOutlet UIButton *btnPreView;
+@property (weak, nonatomic) IBOutlet UIButton *btnDone;
 
 //用于回调上级列表，把已选择的图片传回去
 @property (nonatomic, weak) ZLPhotoBrowser *sender;

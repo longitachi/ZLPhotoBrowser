@@ -69,8 +69,9 @@
 - (void)btnBack_Click
 {
     if (self.onSelectedPhotos) {
-        self.onSelectedPhotos(_arraySelectPhotos);
+        self.onSelectedPhotos(self.arraySelectPhotos);
     }
+    
     if (self.showPopAnimate) {
         [self.navigationController.view.layer addAnimation:[ZLAnimationTool animateWithType:kCATransitionMoveIn subType:kCATransitionFromBottom duration:0.3] forKey:nil];
     }
@@ -84,19 +85,17 @@
         ShowToastLong(@"最多只能选择%ld张图片", self.maxSelectCount);
         return;
     }
-    
+    PHAsset *asset = _arrayDataSources[_currentPage-1];
+    ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
     if (![self isHaveCurrentPageImage]) {
         [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
-        
-        PHAsset *asset = _arrayDataSources[_currentPage-1];
-        ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
-        ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
         
         if (cell.imageView.image == nil) {
             ShowToastLong(@"图片加载中，请稍后");
             return;
         }
-        
+        ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
+        model.asset = asset;
         model.image = cell.imageView.image;
         model.imageName = [asset valueForKey:@"filename"];
         [_arraySelectPhotos addObject:model];
