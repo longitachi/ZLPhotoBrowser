@@ -96,6 +96,8 @@ static ZLPhotoTool *sharePhotoTool = nil;
         return @"屏幕快照";
     } else if ([title isEqualToString:@"Camera Roll"]) {
         return @"相机胶卷";
+    } else if ([title isEqualToString:@"Panoramas"]) {
+        return @"全景照片";
     }
     return nil;
 }
