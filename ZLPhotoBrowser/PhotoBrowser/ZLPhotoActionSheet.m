@@ -355,14 +355,14 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         if (weakSelf.handler) {
             UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
             weakSelf.handler(@[image]);
-            UIImageWriteToSavedPhotosAlbum(image, self, @selector(video:didFinishSavingWithError:contextinfo:), nil);
+            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextinfo:), nil);
         }
         [weakSelf hide];
     }];
 }
 
 //写入相册后回调方法
-- (void)video:(NSString *)video didFinishSavingWithError:(NSError *)error contextinfo:(void *)contextInfo
+- (void)image:(NSString *)video didFinishSavingWithError:(NSError *)error contextinfo:(void *)contextInfo
 {
     //do something
 }

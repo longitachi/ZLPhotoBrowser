@@ -46,12 +46,12 @@ static ZLPhotoTool *sharePhotoTool = nil;
         //过滤掉视频和最近删除
         if (!([collection.localizedTitle isEqualToString:@"Recently Deleted"] ||
             [collection.localizedTitle isEqualToString:@"Videos"])) {
-            PHFetchResult *result = [self fetchAssetsInAssetCollection:collection ascending:NO];
-            if (result.count > 0) {
+            NSArray<PHAsset *> *assets = [self getAssetsInAssetCollection:collection ascending:NO];
+            if (assets.count > 0) {
                 ZLPhotoAblumList *ablum = [[ZLPhotoAblumList alloc] init];
                 ablum.title = [self transformAblumTitle:collection.localizedTitle];
-                ablum.count = result.count;
-                ablum.headImageAsset = result.firstObject;
+                ablum.count = assets.count;
+                ablum.headImageAsset = assets.firstObject;
                 ablum.assetCollection = collection;
                 [photoAblumList addObject:ablum];
             }
@@ -61,14 +61,13 @@ static ZLPhotoTool *sharePhotoTool = nil;
     //获取用户创建的相册
     PHFetchResult *userAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:nil];
     [userAlbums enumerateObjectsUsingBlock:^(PHAssetCollection * _Nonnull collection, NSUInteger idx, BOOL * _Nonnull stop) {
-        PHFetchResult *result = [self fetchAssetsInAssetCollection:collection ascending:NO];
-        if (result.count > 0) {
+        NSArray<PHAsset *> *assets = [self getAssetsInAssetCollection:collection ascending:NO];
+        if (assets.count > 0) {
             ZLPhotoAblumList *ablum = [[ZLPhotoAblumList alloc] init];
             ablum.title = collection.localizedTitle;
-            ablum.count = result.count;
-            ablum.headImageAsset = result.firstObject;
+            ablum.count = assets.count;
+            ablum.headImageAsset = assets.firstObject;
             ablum.assetCollection = collection;
-            
             [photoAblumList addObject:ablum];
         }
     }];
@@ -136,7 +135,9 @@ static ZLPhotoTool *sharePhotoTool = nil;
     
     PHFetchResult *result = [self fetchAssetsInAssetCollection:assetCollection ascending:ascending];
     [result enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [arr addObject:obj];
+        if (((PHAsset *)obj).mediaType == PHAssetMediaTypeImage) {
+            [arr addObject:obj];
+        }
     }];
     return arr;
 }
