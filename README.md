@@ -9,12 +9,12 @@
   * 3.支持实时拍照
   * 4.支持多相册(不同的相册名字)图片混合多选
     * [相册内混合选择效果图] (#相册内混合选择效果图)
-  * 5.可实时监测相册图片变化(即在预览图时，如果用户触发截屏等操作，会实时的加载出该图片)
+  * 5.预览已选择照片
+    * [预览已选择照片效果图] (#预览已选择照片效果图)
+  * 6.可实时监测相册图片变化(即在预览图时，如果用户触发截屏等操作，会实时的加载出该图片)
     * [实时监测相册内图片变化] (#实时监测相册内图片变化)
 * [常用Api] (#常用Api)
 * [使用方法] (#使用方法)
-
-（会持续更新已发现的bug）
 
 ###框架支持与框架依赖
 该框架最低支持到iOS8.0，采用arc模式</br>
@@ -75,13 +75,16 @@ actionSheet.maxPreviewCount = 20;
 
 ### <a id="预览快速多选效果图"></a>预览快速多选效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览图快速选择.gif)
-![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览大图多选.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览大图快速多选.gif)
 
 ### <a id="预览大图及缩放效果图"></a>预览大图及缩放效果图
-![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览图支持缩放.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/查看大图支持缩放.gif)
 
 ### <a id="相册内混合选择效果图"></a>相册内混合选择效果图
-![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/相册内部多选.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/相册内混合选择.gif)
+
+### <a id="预览已选择照片效果图"></a>预览已选择照片效果图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览已选择照片.gif)
 
 ### <a id="实时监测相册内图片变化"></a>实时监测相册内图片变化
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/实时监控相册变化.gif)
