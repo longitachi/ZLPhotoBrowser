@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
-            timestampString = "473854904.620639"
+            timestampString = "474363734.109007"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "423"
@@ -50,7 +50,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
-            timestampString = "474192922.648565"
+            timestampString = "474363734.109007"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "334"
@@ -66,12 +66,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLShowBigImgViewController.m"
-            timestampString = "474194913.765097"
+            timestampString = "474364202.770456"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "-btnBack_Click"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "-navRightBtn_Click:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -87,7 +87,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "34"
             endingLineNumber = "34"
-            landmarkName = "-dealloc"
+            landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -98,7 +98,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
-            timestampString = "474194546.514781"
+            timestampString = "474363734.109007"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "346"
@@ -114,7 +114,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
-            timestampString = "474194564.934324"
+            timestampString = "474363734.109007"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "341"
@@ -130,12 +130,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLShowBigImgViewController.m"
-            timestampString = "474194913.765097"
+            timestampString = "474364202.770456"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
-            landmarkName = "-btnBack_Click"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "-navRightBtn_Click:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoTool.m"
+            timestampString = "474363720.41374"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
+            landmarkName = "-requestImageForAsset:size:resizeMode:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
