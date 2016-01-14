@@ -75,7 +75,7 @@ actionSheet.maxPreviewCount = 20;
 
 ### <a id="预览快速多选效果图"></a>预览快速多选效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览图快速选择.gif)
-![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览大图快速多选.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览大图快速选择.gif)
 
 ### <a id="预览大图及缩放效果图"></a>预览大图及缩放效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/查看大图支持缩放.gif)
