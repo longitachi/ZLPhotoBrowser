@@ -31,6 +31,11 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 @implementation ZLPhotoActionSheet
 
+- (void)dealloc
+{
+    [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+}
+
 - (instancetype)init
 {
     self = [[[NSBundle mainBundle] loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
@@ -259,6 +264,10 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     ZLCollectionCell *cell = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:btn.tag inSection:0]];
     if (btn.selected) {
         [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
+        if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
+            ShowToastLong(@"该图片尚未从iCloud下载，请在系统相册中下载到本地后重新尝试，或在预览大图中加载完毕后选择");
+            return;
+        }
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
         model.asset = asset;
         model.image = cell.imageView.image;

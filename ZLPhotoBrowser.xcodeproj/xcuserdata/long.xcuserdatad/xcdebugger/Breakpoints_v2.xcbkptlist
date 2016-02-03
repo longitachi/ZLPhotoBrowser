@@ -9,28 +9,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLThumbnailViewController.m"
-            timestampString = "473843086.915912"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
-            timestampString = "474363734.109007"
+            timestampString = "476183353.523084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "423"
-            endingLineNumber = "423">
+            startingLineNumber = "428"
+            endingLineNumber = "428">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -50,11 +34,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
-            timestampString = "474363734.109007"
+            timestampString = "476183353.523084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "334"
-            endingLineNumber = "334"
+            startingLineNumber = "339"
+            endingLineNumber = "339"
             landmarkName = "-collectionView:didSelectItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -65,29 +49,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLShowBigImgViewController.m"
-            timestampString = "474364202.770456"
+            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
+            timestampString = "476183353.523084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "-navRightBtn_Click:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLShowBigImgViewController.m"
-            timestampString = "474193215.367419"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
+            landmarkName = "-collectionView:didSelectItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -98,7 +66,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
-            timestampString = "474363734.109007"
+            timestampString = "476183353.523084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "346"
@@ -113,29 +81,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoActionSheet.m"
-            timestampString = "474363734.109007"
+            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoTool.m"
+            timestampString = "476182970.802341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "341"
-            endingLineNumber = "341"
-            landmarkName = "-collectionView:didSelectItemAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLShowBigImgViewController.m"
-            timestampString = "474364202.770456"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "-navRightBtn_Click:"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "-judgeAssetisInLocalAblum:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -146,12 +98,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoTool.m"
-            timestampString = "474363720.41374"
+            timestampString = "476182970.802341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
-            landmarkName = "-requestImageForAsset:size:resizeMode:completion:"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
+            landmarkName = "-judgeAssetisInLocalAblum:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoTool.m"
+            timestampString = "476182970.802341"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "-judgeAssetisInLocalAblum:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

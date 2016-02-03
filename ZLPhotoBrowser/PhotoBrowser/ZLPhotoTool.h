@@ -47,4 +47,10 @@
  */
 - (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *image))completion;
 
+
+/**
+ * @brief 判断图片是否存储在本地/或者已经从iCloud上下载到本地
+ */
+- (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset ;
+
 @end

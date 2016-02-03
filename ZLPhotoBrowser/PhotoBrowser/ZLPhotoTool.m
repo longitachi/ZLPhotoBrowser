@@ -151,14 +151,33 @@ static ZLPhotoTool *sharePhotoTool = nil;
      deliveryMode：图像质量。有三种值：Opportunistic，在速度与质量中均衡；HighQualityFormat，不管花费多长时间，提供高质量图像；FastFormat，以最快速度提供好的质量。
      这个属性只有在 synchronous 为 true 时有效。
      */
+    
     option.resizeMode = resizeMode;//控制照片尺寸
     //option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;//控制照片质量
-    //option.synchronous = YES;
     option.networkAccessAllowed = YES;
-    //param：targetSize 即你想要的图片尺寸，若想要原尺寸则可输入PHImageManagerMaximumSize
+    
     [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
-        completion(image);
+        BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
+        if (downloadFinined && completion) {
+            completion(image);
+        }
     }];
+}
+
+- (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset
+{
+    PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
+    option.networkAccessAllowed = NO;
+    option.synchronous = YES;
+    
+    __block BOOL isInLocalAblum = YES;
+    CGFloat scale = [UIScreen mainScreen].scale;
+    
+    //为了保证验证速度，设置属性尽量设置到较低配置
+    [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth*scale/10, asset.pixelHeight*scale/10) contentMode:PHImageContentModeDefault options:option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        isInLocalAblum = result ? YES : NO;
+    }];
+    return isInLocalAblum;
 }
 
 @end
