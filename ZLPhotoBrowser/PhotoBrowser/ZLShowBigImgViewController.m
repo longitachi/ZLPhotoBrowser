@@ -74,8 +74,12 @@
     
     if (self.showPopAnimate) {
         [self.navigationController.view.layer addAnimation:[ZLAnimationTool animateWithType:kCATransitionMoveIn subType:kCATransitionFromBottom duration:0.3] forKey:nil];
+        [self.navigationController popViewControllerAnimated:NO];
+    } else {
+        //由于collectionView的frame的width是大于该界面的width，所以设置这个颜色是为了pop时候隐藏collectionView的黑色背景
+        _collectionView.backgroundColor = [UIColor clearColor];
+        [self.navigationController popViewControllerAnimated:YES];
     }
-    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)navRightBtn_Click:(UIButton *)btn
@@ -90,7 +94,7 @@
     if (![self isHaveCurrentPageImage]) {
         [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
         
-        if (cell.imageView.image == nil) {
+        if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
             ShowToastLong(@"图片加载中，请稍后");
             return;
         }
