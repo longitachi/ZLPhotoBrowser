@@ -20,6 +20,16 @@
 该框架最低支持到iOS8.0，采用arc模式</br>
 需要导入Photos.framework
 
+###注意点
+如果项目中设置了
+```objc
+[[UINavigationBar appearance] setTranslucent:NO];
+```
+则需要在ZLDefine.h里 把kViewHeight 修改为
+```objc
+#define kViewHeight [[UIScreen mainScreen] bounds].size.height - 64
+```
+
 ###<a id="常用Api"></a>常用Api
 ```objc
 NS_ASSUME_NONNULL_BEGIN
@@ -43,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * @brief 显示多选照片视图
  * @param sender
- *              调用该空间的试图控制器
+ *              调用该空间的视图控制器
  * @param animate
  *              是否显示动画效果
  * @param completion
