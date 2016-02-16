@@ -52,8 +52,8 @@
     if (self.CancelBlock) {
         self.CancelBlock();
     }
-    [self.navigationController.view.layer addAnimation:[ZLAnimationTool animateWithType:kCATransitionMoveIn subType:kCATransitionFromBottom duration:0.3] forKey:nil];
-    [self.navigationController popViewControllerAnimated:NO];
+    
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)loadAblums
@@ -108,6 +108,7 @@
     ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] init];
     tvc.title = ablum.title;
     tvc.maxSelectCount = self.maxSelectCount;
+    tvc.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
     tvc.assetCollection = ablum.assetCollection;
     tvc.arraySelectPhotos = self.arraySelectPhotos.mutableCopy;
     tvc.sender = self;

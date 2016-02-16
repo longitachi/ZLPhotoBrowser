@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "ZLPhotoActionSheet.h"
+#import "ZLShowBigImage.h"
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
@@ -34,6 +35,7 @@
 - (IBAction)btnSelectPhoto_Click:(id)sender
 {
     __weak typeof(self) weakSelf = self;
+    
     [actionSheet showWithSender:self animate:YES completion:^(NSArray<UIImage *> * _Nonnull selectPhotos) {
         [weakSelf.baseView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         
@@ -44,6 +46,20 @@
             [weakSelf.baseView addSubview:imgView];
         }
     }];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView:self.view];
+    for (UIView *view in self.baseView.subviews) {
+        CGRect convertRect = [self.baseView convertRect:view.frame toView:self.view];
+        if ([view isKindOfClass:[UIImageView class]] &&
+            CGRectContainsPoint(convertRect, point)) {
+            [ZLShowBigImage showBigImage:(UIImageView *)view];
+            break;
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

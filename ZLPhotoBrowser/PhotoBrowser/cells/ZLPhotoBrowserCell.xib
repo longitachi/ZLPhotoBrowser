@@ -15,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="287" height="55.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="所有照片" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h9L-rf-sFQ">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="所有照片" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h9L-rf-sFQ">
                         <rect key="frame" x="73" y="15" width="68" height="25"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="7mj-rX-OPE"/>
@@ -56,7 +56,7 @@
                             </mask>
                         </variation>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="(15)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rQp-dH-AYV">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="(15)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rQp-dH-AYV">
                         <rect key="frame" x="146" y="17" width="29" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="3LK-9h-QKy"/>
@@ -96,12 +96,12 @@
                         <exclude reference="yYX-9A-EMR"/>
                     </mask>
                     <mask key="constraints">
+                        <exclude reference="InD-Xy-52h"/>
+                        <exclude reference="N5w-HU-vrl"/>
                         <exclude reference="9nF-Eh-gux"/>
                         <exclude reference="XbV-nQ-P7G"/>
                         <exclude reference="kl7-8e-LAo"/>
                         <exclude reference="lTf-Wt-IHR"/>
-                        <exclude reference="InD-Xy-52h"/>
-                        <exclude reference="N5w-HU-vrl"/>
                         <exclude reference="fJY-qQ-Y5T"/>
                         <exclude reference="znx-yg-TGX"/>
                     </mask>
@@ -111,12 +111,12 @@
                         <include reference="yYX-9A-EMR"/>
                     </mask>
                     <mask key="constraints">
+                        <include reference="InD-Xy-52h"/>
+                        <include reference="N5w-HU-vrl"/>
                         <include reference="9nF-Eh-gux"/>
                         <exclude reference="XbV-nQ-P7G"/>
                         <include reference="kl7-8e-LAo"/>
                         <include reference="lTf-Wt-IHR"/>
-                        <include reference="InD-Xy-52h"/>
-                        <include reference="N5w-HU-vrl"/>
                         <include reference="fJY-qQ-Y5T"/>
                         <include reference="znx-yg-TGX"/>
                     </mask>

@@ -24,16 +24,19 @@
 
 //最大选择数
 @property (nonatomic, assign) NSInteger maxSelectCount;
+//是否选择了原图
+@property (nonatomic, assign) BOOL isSelectOriginalPhoto;
 
-@property (weak, nonatomic) IBOutlet UILabel *labCount;
 @property (weak, nonatomic) IBOutlet UIButton *btnPreView;
+@property (weak, nonatomic) IBOutlet UIButton *btnOriginalPhoto;
+@property (weak, nonatomic) IBOutlet UILabel *labPhotosBytes;
 @property (weak, nonatomic) IBOutlet UIButton *btnDone;
 
 //用于回调上级列表，把已选择的图片传回去
 @property (nonatomic, weak) ZLPhotoBrowser *sender;
 
 //选则完成后回调
-@property (nonatomic, copy) void (^DoneBlock)(NSArray<ZLSelectPhotoModel *> *);
+@property (nonatomic, copy) void (^DoneBlock)(NSArray<ZLSelectPhotoModel *> *selPhotoModels, NSArray<UIImage *> *selPhotos);
 //取消选择后回调
 @property (nonatomic, copy) void (^CancelBlock)();
 

@@ -49,6 +49,17 @@
 
 
 /**
+ * @brief 点击确定时，获取每个Asset对应的图片（imageData）
+ */
+- (void)requestImageForAsset:(PHAsset *)asset scale:(CGFloat)scale resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *image))completion;
+
+/**
+ * @brief 获取数组内图片的字节大小
+ */
+- (void)getPhotosBytesWithArray:(NSArray *)photos completion:(void (^)(NSString *photosBytes))completion;
+
+
+/**
  * @brief 判断图片是否存储在本地/或者已经从iCloud上下载到本地
  */
 - (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset ;

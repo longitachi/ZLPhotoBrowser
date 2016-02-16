@@ -21,10 +21,19 @@
     
     NSMutableArray<PHAsset *> *_arrayDataSources;
     UIButton *_navRightBtn;
+    
+    //底部view
+    UIView   *_bottomView;
+    UIButton *_btnOriginalPhoto;
+    UIButton *_btnDone;
+    
     //双击的scrollView
     UIScrollView *_selectScrollView;
     NSInteger _currentPage;
 }
+
+@property (nonatomic, strong) UILabel *labPhotosBytes;
+
 @end
 
 @implementation ZLShowBigImgViewController
@@ -37,6 +46,8 @@
     [self initNavBtns];
     [self sortAsset];
     [self initCollectionView];
+    [self initBottomView];
+    [self changeBtnDoneTitle];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -65,16 +76,104 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_navRightBtn];
 }
 
+#pragma mark - 初始化CollectionView
+- (void)initCollectionView
+{
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    layout.minimumLineSpacing = kItemMargin;
+    layout.sectionInset = UIEdgeInsetsMake(0, kItemMargin/2, 0, kItemMargin/2);
+    layout.itemSize = self.view.bounds.size;
+    
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight) collectionViewLayout:layout];
+    [_collectionView registerNib:[UINib nibWithNibName:@"ZLBigImageCell" bundle:nil] forCellWithReuseIdentifier:@"ZLBigImageCell"];
+    _collectionView.dataSource = self;
+    _collectionView.delegate = self;
+    _collectionView.pagingEnabled = YES;
+    [self.view addSubview:_collectionView];
+}
+
+- (void)initBottomView
+{
+    _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, kViewWidth, 44)];
+    _bottomView.backgroundColor = [UIColor whiteColor];
+    
+    _btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnOriginalPhoto.frame = CGRectMake(12, 7, 60, 30);
+    [_btnOriginalPhoto setTitle:@"原图" forState:UIControlStateNormal];
+    _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
+    [_btnOriginalPhoto setTitleColor:kRGB(80, 180, 234) forState: UIControlStateNormal];
+    [_btnOriginalPhoto setTitleColor:kRGB(80, 180, 234) forState: UIControlStateSelected];
+    [_btnOriginalPhoto setImage:[UIImage imageNamed:@"btn_original_circle.png"] forState:UIControlStateNormal];
+    [_btnOriginalPhoto setImage:[UIImage imageNamed:@"btn_selected.png"] forState:UIControlStateSelected];
+    [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];
+    [_btnOriginalPhoto addTarget:self action:@selector(btnOriginalImage_Click:) forControlEvents:UIControlEventTouchUpInside];
+    _btnOriginalPhoto.selected = self.isSelectOriginalPhoto;
+    if (self.arraySelectPhotos.count > 0) {
+        [self getPhotosBytes];
+    }
+    [_bottomView addSubview:_btnOriginalPhoto];
+    
+    self.labPhotosBytes = [[UILabel alloc] initWithFrame:CGRectMake(75, 7, 80, 30)];
+    self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
+    self.labPhotosBytes.textColor = kRGB(80, 180, 234);
+    [_bottomView addSubview:self.labPhotosBytes];
+    
+    _btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
+    [_btnDone setTitle:@"确定" forState:UIControlStateNormal];
+    _btnDone.titleLabel.font = [UIFont systemFontOfSize:15];
+    _btnDone.layer.masksToBounds = YES;
+    _btnDone.layer.cornerRadius = 3.0f;
+    [_btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_btnDone setBackgroundColor:kRGB(80, 180, 234)];
+    [_btnDone addTarget:self action:@selector(btnDone_Click:) forControlEvents:UIControlEventTouchUpInside];
+    [_bottomView addSubview:_btnDone];
+    
+    [self.view addSubview:_bottomView];
+}
+
 #pragma mark - UIButton Actions
+- (void)btnOriginalImage_Click:(UIButton *)btn
+{
+    self.isSelectOriginalPhoto = btn.selected = !btn.selected;
+    if (btn.selected) {
+        if (![self isHaveCurrentPageImage]) {
+            [self navRightBtn_Click:_navRightBtn];
+        } else {
+            [self getPhotosBytes];
+        }
+    } else {
+        self.labPhotosBytes.text = nil;
+    }
+}
+
+- (void)btnDone_Click:(UIButton *)btn
+{
+    if (self.arraySelectPhotos.count == 0) {
+        PHAsset *asset = _arrayDataSources[_currentPage-1];
+        if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
+            ShowToastLong(@"图片加载中，请稍后");
+            return;
+        }
+        ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
+        model.asset = asset;
+        model.imageName = [asset valueForKey:@"filename"];
+        [_arraySelectPhotos addObject:model];
+    }
+    if (self.btnDoneBlock) {
+        self.btnDoneBlock(self.arraySelectPhotos, self.isSelectOriginalPhoto);
+    }
+}
+
 - (void)btnBack_Click
 {
     if (self.onSelectedPhotos) {
-        self.onSelectedPhotos(self.arraySelectPhotos);
+        self.onSelectedPhotos(self.arraySelectPhotos, self.isSelectOriginalPhoto);
     }
     
-    if (self.showPopAnimate) {
-        [self.navigationController.view.layer addAnimation:[ZLAnimationTool animateWithType:kCATransitionMoveIn subType:kCATransitionFromBottom duration:0.3] forKey:nil];
-        [self.navigationController popViewControllerAnimated:NO];
+    if (self.isPresent) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     } else {
         //由于collectionView的frame的width是大于该界面的width，所以设置这个颜色是为了pop时候隐藏collectionView的黑色背景
         _collectionView.backgroundColor = [UIColor clearColor];
@@ -90,7 +189,6 @@
         return;
     }
     PHAsset *asset = _arrayDataSources[_currentPage-1];
-    ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
     if (![self isHaveCurrentPageImage]) {
         [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
         
@@ -100,7 +198,6 @@
         }
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
         model.asset = asset;
-        model.image = cell.imageView.image;
         model.imageName = [asset valueForKey:@"filename"];
         [_arraySelectPhotos addObject:model];
     } else {
@@ -108,6 +205,8 @@
     }
     
     btn.selected = !btn.selected;
+    [self getPhotosBytes];
+    [self changeBtnDoneTitle];
 }
 
 - (BOOL)isHaveCurrentPageImage
@@ -132,6 +231,7 @@
     }
 }
 
+#pragma mark - 更新按钮、导航条等显示状态
 - (void)changeNavRightBtnStatus
 {
     if ([self isHaveCurrentPageImage]) {
@@ -139,6 +239,43 @@
     } else {
         _navRightBtn.selected = NO;
     }
+}
+
+- (void)changeBtnDoneTitle
+{
+    if (self.arraySelectPhotos.count > 0) {
+        [_btnDone setTitle:[NSString stringWithFormat:@"确定(%ld)", self.arraySelectPhotos.count] forState:UIControlStateNormal];
+    } else {
+        [_btnDone setTitle:@"确定" forState:UIControlStateNormal];
+    }
+}
+
+- (void)getPhotosBytes
+{
+    if (!self.isSelectOriginalPhoto) return;
+    
+    if (self.arraySelectPhotos.count > 0) {
+        __weak typeof(self) weakSelf = self;
+        [[ZLPhotoTool sharePhotoTool] getPhotosBytesWithArray:_arraySelectPhotos completion:^(NSString *photosBytes) {
+            weakSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
+        }];
+    } else {
+        self.labPhotosBytes.text = nil;
+    }
+}
+
+- (void)showNavBarAndBottomView
+{
+    self.navigationController.navigationBar.hidden = NO;
+    [UIApplication sharedApplication].statusBarHidden = NO;
+    _bottomView.hidden = NO;
+}
+
+- (void)hideNavBarAndBottomView
+{
+    self.navigationController.navigationBar.hidden = YES;
+    [UIApplication sharedApplication].statusBarHidden = YES;
+    _bottomView.hidden = YES;
 }
 
 - (void)sortAsset
@@ -159,22 +296,6 @@
     self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, _arrayDataSources.count];
 }
 
-#pragma mark - 初始化CollectionView
-- (void)initCollectionView
-{
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    layout.minimumLineSpacing = kItemMargin;
-    layout.sectionInset = UIEdgeInsetsMake(0, kItemMargin/2, 0, kItemMargin/2);
-    layout.itemSize = self.view.bounds.size;
-    
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight) collectionViewLayout:layout];
-    [_collectionView registerNib:[UINib nibWithNibName:@"ZLBigImageCell" bundle:nil] forCellWithReuseIdentifier:@"ZLBigImageCell"];
-    _collectionView.dataSource = self;
-    _collectionView.delegate = self;
-    _collectionView.pagingEnabled = YES;
-    [self.view addSubview:_collectionView];
-}
 
 #pragma mark - UICollectionDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -194,11 +315,12 @@
     
     cell.imageView.image = nil;
     [cell showIndicator];
-    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:PHImageManagerMaximumSize resizeMode:PHImageRequestOptionsResizeModeNone completion:^(UIImage *image) {
+    CGFloat scale = [UIScreen mainScreen].scale;
+    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:CGSizeMake(asset.pixelWidth*scale, asset.pixelHeight*scale) resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image) {
+        NSLog(@"%ld", UIImagePNGRepresentation(image).length);
         cell.imageView.image = image;
         [cell hideIndicator];
     }];
-    
     cell.scrollView.delegate = self;
     
     [self addDoubleTapOnScrollView:cell.scrollView];
@@ -234,9 +356,9 @@
 - (void)singleTapAction:(UITapGestureRecognizer *)tap
 {
     if (self.navigationController.navigationBar.isHidden) {
-        [self showStatusBarAndNavBar];
+        [self showNavBarAndBottomView];
     } else {
-        [self hidStatusBarAndNavBar];
+        [self hideNavBarAndBottomView];
     }
 }
 
@@ -280,19 +402,6 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return scrollView.subviews[0];
-}
-
-#pragma mark - 显示隐藏导航条状态栏
-- (void)showStatusBarAndNavBar
-{
-    self.navigationController.navigationBar.hidden = NO;
-    [UIApplication sharedApplication].statusBarHidden = NO;
-}
-
-- (void)hidStatusBarAndNavBar
-{
-    self.navigationController.navigationBar.hidden = YES;
-    [UIApplication sharedApplication].statusBarHidden = YES;
 }
 
 @end

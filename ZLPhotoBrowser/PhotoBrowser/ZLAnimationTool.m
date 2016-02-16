@@ -10,18 +10,6 @@
 
 @implementation ZLAnimationTool
 
-+ (CATransition *)animateWithType:(NSString *)type subType:(NSString *)subType duration:(CFTimeInterval)duration
-{
-    CATransition *animate = [CATransition animation];
-    
-    [animate setDuration:duration];
-    [animate setType:type];
-    [animate setSubtype:subType];
-    [animate setTimingFunction:UIViewAnimationCurveEaseInOut];
-    
-    return animate;
-}
-
 + (CABasicAnimation *)animateWithFromValue:(id)fromValue toValue:(id)toValue duration:(CFTimeInterval)duration keyPath:(NSString *)keyPath
 {
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];

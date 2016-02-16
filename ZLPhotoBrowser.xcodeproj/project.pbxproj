@@ -42,6 +42,12 @@
 		FD07878E1C0D484400D17B97 /* ZLPhotoBrowserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD0787881C0D484400D17B97 /* ZLPhotoBrowserCell.xib */; };
 		FD1AB7751C473DFD0048CB2D /* navBackBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD1AB7741C473DFD0048CB2D /* navBackBtn@2x.png */; };
 		FD2BA4411C0D7C490031D269 /* btn_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD2BA4401C0D7C490031D269 /* btn_circle@3x.png */; };
+		FD2CE7451C71B6CA00BC4A10 /* ZLProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FD2CE7441C71B6CA00BC4A10 /* ZLProgressHUD.m */; };
+		FD30F0691C72EECC0060F19F /* ZLShowBigImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */; };
+		FD30F06B1C72F77C0060F19F /* btn_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD30F06A1C72F77C0060F19F /* btn_circle@2x.png */; };
+		FD30F06F1C72F78C0060F19F /* btn_original_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD30F06C1C72F78C0060F19F /* btn_original_circle@2x.png */; };
+		FD30F0701C72F78C0060F19F /* btn_original_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = FD30F06D1C72F78C0060F19F /* btn_original_circle.png */; };
+		FD30F0711C72F78C0060F19F /* btn_original_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD30F06E1C72F78C0060F19F /* btn_original_circle@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +103,14 @@
 		FD0787881C0D484400D17B97 /* ZLPhotoBrowserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLPhotoBrowserCell.xib; sourceTree = "<group>"; };
 		FD1AB7741C473DFD0048CB2D /* navBackBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navBackBtn@2x.png"; sourceTree = "<group>"; };
 		FD2BA4401C0D7C490031D269 /* btn_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_circle@3x.png"; sourceTree = "<group>"; };
+		FD2CE7431C71B6CA00BC4A10 /* ZLProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLProgressHUD.h; sourceTree = "<group>"; };
+		FD2CE7441C71B6CA00BC4A10 /* ZLProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLProgressHUD.m; sourceTree = "<group>"; };
+		FD30F0671C72EECC0060F19F /* ZLShowBigImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLShowBigImage.h; sourceTree = "<group>"; };
+		FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImage.m; sourceTree = "<group>"; };
+		FD30F06A1C72F77C0060F19F /* btn_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_circle@2x.png"; sourceTree = "<group>"; };
+		FD30F06C1C72F78C0060F19F /* btn_original_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_original_circle@2x.png"; sourceTree = "<group>"; };
+		FD30F06D1C72F78C0060F19F /* btn_original_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_original_circle.png; sourceTree = "<group>"; };
+		FD30F06E1C72F78C0060F19F /* btn_original_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_original_circle@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +150,8 @@
 				FD0787241C0D45A200D17B97 /* AppDelegate.m */,
 				FD0787261C0D45A200D17B97 /* ViewController.h */,
 				FD0787271C0D45A200D17B97 /* ViewController.m */,
+				FD30F0671C72EECC0060F19F /* ZLShowBigImage.h */,
+				FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */,
 				FD0787291C0D45A200D17B97 /* Main.storyboard */,
 				FD07872C1C0D45A200D17B97 /* Assets.xcassets */,
 				FD07872E1C0D45A200D17B97 /* LaunchScreen.storyboard */,
@@ -161,6 +177,8 @@
 				FD07874C1C0D460000D17B97 /* ZLDefine.h */,
 				FD0787421C0D460000D17B97 /* ToastUtils.h */,
 				FD0787431C0D460000D17B97 /* ToastUtils.m */,
+				FD2CE7431C71B6CA00BC4A10 /* ZLProgressHUD.h */,
+				FD2CE7441C71B6CA00BC4A10 /* ZLProgressHUD.m */,
 				FD0787581C0D460000D17B97 /* ZLPhotoTool.h */,
 				FD0787591C0D460000D17B97 /* ZLPhotoTool.m */,
 				FD0787441C0D460000D17B97 /* ZLAnimationTool.h */,
@@ -187,7 +205,11 @@
 		FD0787381C0D460000D17B97 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				FD30F06A1C72F77C0060F19F /* btn_circle@2x.png */,
 				FD2BA4401C0D7C490031D269 /* btn_circle@3x.png */,
+				FD30F06D1C72F78C0060F19F /* btn_original_circle.png */,
+				FD30F06C1C72F78C0060F19F /* btn_original_circle@2x.png */,
+				FD30F06E1C72F78C0060F19F /* btn_original_circle@3x.png */,
 				FD0787391C0D460000D17B97 /* btn_selected.png */,
 				FD07873A1C0D460000D17B97 /* btn_selected@2x.png */,
 				FD07873B1C0D460000D17B97 /* btn_selected@3x.png */,
@@ -294,6 +316,9 @@
 				FD0787681C0D460000D17B97 /* lock.png in Resources */,
 				FD07877B1C0D460000D17B97 /* ZLThumbnailViewController.xib in Resources */,
 				FD1AB7751C473DFD0048CB2D /* navBackBtn@2x.png in Resources */,
+				FD30F0711C72F78C0060F19F /* btn_original_circle@3x.png in Resources */,
+				FD30F0701C72F78C0060F19F /* btn_original_circle.png in Resources */,
+				FD30F06B1C72F77C0060F19F /* btn_circle@2x.png in Resources */,
 				FD07872B1C0D45A200D17B97 /* Main.storyboard in Resources */,
 				FD0787611C0D460000D17B97 /* btn_selected.png in Resources */,
 				FD2BA4411C0D7C490031D269 /* btn_circle@3x.png in Resources */,
@@ -302,6 +327,7 @@
 				FD0787731C0D460000D17B97 /* ZLPhotoActionSheet.xib in Resources */,
 				FD07878A1C0D484400D17B97 /* ZLBigImageCell.xib in Resources */,
 				FD0787631C0D460000D17B97 /* btn_selected@3x.png in Resources */,
+				FD30F06F1C72F78C0060F19F /* btn_original_circle@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,8 +342,10 @@
 				FD0787781C0D460000D17B97 /* ZLSelectPhotoModel.m in Sources */,
 				FD07878D1C0D484400D17B97 /* ZLPhotoBrowserCell.m in Sources */,
 				FD0787281C0D45A200D17B97 /* ViewController.m in Sources */,
+				FD30F0691C72EECC0060F19F /* ZLShowBigImage.m in Sources */,
 				FD0787251C0D45A200D17B97 /* AppDelegate.m in Sources */,
 				FD0787701C0D460000D17B97 /* ZLNoAuthorityViewController.m in Sources */,
+				FD2CE7451C71B6CA00BC4A10 /* ZLProgressHUD.m in Sources */,
 				FD0787891C0D484400D17B97 /* ZLBigImageCell.m in Sources */,
 				FD07876B1C0D460000D17B97 /* ZLAnimationTool.m in Sources */,
 				FD0787741C0D460000D17B97 /* ZLPhotoBrowser.m in Sources */,

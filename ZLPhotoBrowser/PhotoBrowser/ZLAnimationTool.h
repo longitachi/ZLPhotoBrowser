@@ -11,12 +11,6 @@
 
 @interface ZLAnimationTool : NSObject
 
-/**
- * @brief viewcontroller之间push和pop的过渡动画
- */
-+ (CATransition *)animateWithType:(NSString *)type subType:(NSString *)subType duration:(CFTimeInterval)duration;
-
-
 + (CABasicAnimation *)animateWithFromValue:(id)fromValue toValue:(id)toValue duration:(CFTimeInterval)duration keyPath:(NSString *)keyPath;
 
 /**

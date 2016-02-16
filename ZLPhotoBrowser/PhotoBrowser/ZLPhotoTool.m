@@ -7,6 +7,7 @@
 //
 
 #import "ZLPhotoTool.h"
+#import "ZLSelectPhotoModel.h"
 
 @implementation ZLPhotoAblumList
 
@@ -156,12 +157,68 @@ static ZLPhotoTool *sharePhotoTool = nil;
     //option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;//控制照片质量
     option.networkAccessAllowed = YES;
     
+    /*
+     info字典提供请求状态信息:
+     PHImageResultIsInCloudKey：图像是否必须从iCloud请求
+     PHImageResultIsDegradedKey：当前UIImage是否是低质量的，这个可以实现给用户先显示一个预览图
+     PHImageResultRequestIDKey和PHImageCancelledKey：请求ID以及请求是否已经被取消
+     PHImageErrorKey：如果没有图像，字典内的错误信息
+     */
     [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
         BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
         if (downloadFinined && completion) {
             completion(image);
         }
     }];
+}
+
+- (void)requestImageForAsset:(PHAsset *)asset scale:(CGFloat)scale resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *image))completion
+{
+    PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
+    option.resizeMode = resizeMode;//控制照片尺寸
+    option.networkAccessAllowed = YES;
+    
+    [[PHCachingImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
+        if (downloadFinined && completion) {
+            CGFloat sca = imageData.length/(CGFloat)UIImageJPEGRepresentation([UIImage imageWithData:imageData], 1).length;
+            NSData *data = UIImageJPEGRepresentation([UIImage imageWithData:imageData], scale==1?sca:sca/2);
+            completion([UIImage imageWithData:data]);
+        }
+    }];
+}
+
+- (void)getPhotosBytesWithArray:(NSArray *)photos completion:(void (^)(NSString *photosBytes))completion
+{
+    __block NSInteger dataLength = 0;
+    __weak typeof(self) weakSelf = self;
+    
+    __block NSInteger count = photos.count;
+    
+    for (int i = 0; i < photos.count; i++) {
+        ZLSelectPhotoModel *model = photos[i];
+        [[PHCachingImageManager defaultManager] requestImageDataForAsset:model.asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            dataLength += imageData.length;
+            count--;
+            if (count <= 0) {
+                if (completion) {
+                    completion([weakSelf transformDataLength:dataLength]);
+                }
+            }
+        }];
+    }
+}
+
+- (NSString *)transformDataLength:(NSInteger)dataLength {
+    NSString *bytes = @"";
+    if (dataLength >= 0.1 * (1024 * 1024)) {
+        bytes = [NSString stringWithFormat:@"%.1fM",dataLength/1024/1024.0];
+    } else if (dataLength >= 1024) {
+        bytes = [NSString stringWithFormat:@"%.0fK",dataLength/1024.0];
+    } else {
+        bytes = [NSString stringWithFormat:@"%zdB",dataLength];
+    }
+    return bytes;
 }
 
 - (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset
@@ -171,11 +228,9 @@ static ZLPhotoTool *sharePhotoTool = nil;
     option.synchronous = YES;
     
     __block BOOL isInLocalAblum = YES;
-    CGFloat scale = [UIScreen mainScreen].scale;
     
-    //为了保证验证速度，设置属性尽量设置到较低配置
-    [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth*scale/10, asset.pixelHeight*scale/10) contentMode:PHImageContentModeDefault options:option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-        isInLocalAblum = result ? YES : NO;
+    [[PHCachingImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        isInLocalAblum = imageData ? YES : NO;
     }];
     return isInLocalAblum;
 }
