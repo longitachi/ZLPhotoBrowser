@@ -185,6 +185,7 @@
 {
     if (_arraySelectPhotos.count >= self.maxSelectCount
         && btn.selected == NO) {
+        [self getPhotosBytes];
         ShowToastLong(@"最多只能选择%ld张图片", self.maxSelectCount);
         return;
     }
