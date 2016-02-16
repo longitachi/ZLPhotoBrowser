@@ -11,7 +11,9 @@
     * [相册内混合选择效果图] (#相册内混合选择效果图)
   * 5.预览已选择照片
     * [预览已选择照片效果图] (#预览已选择照片效果图)
-  * 6.可实时监测相册图片变化(即在预览图时，如果用户触发截屏等操作，会实时的加载出该图片)
+  * 6.原图功能
+    * [原图功能效果图] (#原图功能效果图)
+  * 7.可实时监测相册图片变化(即在预览图时，如果用户触发截屏等操作，会实时的加载出该图片)
     * [实时监测相册内图片变化] (#实时监测相册内图片变化)
 * [常用Api] (#常用Api)
 * [使用方法] (#使用方法)
@@ -95,6 +97,9 @@ actionSheet.maxPreviewCount = 20;
 
 ### <a id="预览已选择照片效果图"></a>预览已选择照片效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览已选择照片.gif)
+
+### <a id="原图功能效果图"></a>原图功能效果图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/原图功能.gif)
 
 ### <a id="实时监测相册内图片变化"></a>实时监测相册内图片变化
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/实时监控相册变化.gif)
