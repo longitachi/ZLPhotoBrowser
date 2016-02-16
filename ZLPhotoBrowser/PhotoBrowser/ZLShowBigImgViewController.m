@@ -317,7 +317,6 @@
     [cell showIndicator];
     CGFloat scale = [UIScreen mainScreen].scale;
     [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:CGSizeMake(asset.pixelWidth*scale, asset.pixelHeight*scale) resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image) {
-        NSLog(@"%ld", UIImagePNGRepresentation(image).length);
         cell.imageView.image = image;
         [cell hideIndicator];
     }];

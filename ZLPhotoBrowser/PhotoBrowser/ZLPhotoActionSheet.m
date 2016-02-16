@@ -177,8 +177,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 - (IBAction)btnCamera_Click:(id)sender
 {
     if (_arraySelectPhotos.count > 0) {
-        [self requestSelPhotos];
-        [self hide];
+        [self requestSelPhotos:nil];
     } else {
         if (![self judgeIsHaveCameraAuthority]) {
             [self showAlertWithTitle:@"无法使用相机" message:@"请在iPhone的\"设置-隐私-相机\"中允许访问相机"];
@@ -280,7 +279,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 }
 
 #pragma mark - 请求所选择图片、回调
-- (void)requestSelPhotos
+- (void)requestSelPhotos:(UIViewController *)vc
 {
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     [hud show];
@@ -301,6 +300,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
             }
             [hud hide];
             [weakSelf done:photos];
+            [weakSelf hide];
+            [vc.navigationController dismissViewControllerAnimated:YES completion:nil];
         }];
     }
 }
@@ -375,9 +376,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         weakSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
         [weakSelf.arraySelectPhotos removeAllObjects];
         [weakSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
-        [weakSelf requestSelPhotos];
-        [weakSelf hide];
-        [weakSvc.navigationController dismissViewControllerAnimated:YES completion:nil];
+        [weakSelf requestSelPhotos:weakSvc];
     }];
     [self presentVC:svc];
 }
