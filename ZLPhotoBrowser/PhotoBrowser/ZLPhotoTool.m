@@ -146,6 +146,12 @@ static ZLPhotoTool *sharePhotoTool = nil;
 #pragma mark - 获取asset对应的图片
 - (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *))completion
 {
+    //请求大图界面，当切换图片时，取消上一张图片的请求，对于iCloud端的图片，可以节省流量
+    static PHImageRequestID requestID = -1;
+    if (requestID >= 1 && size.width/asset.pixelWidth == [UIScreen mainScreen].scale) {
+        [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
+    }
+    
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     /**
      resizeMode：对请求的图像怎样缩放。有三种选择：None，默认加载方式；Fast，尽快地提供接近或稍微大于要求的尺寸；Exact，精准提供要求的尺寸。
@@ -164,8 +170,11 @@ static ZLPhotoTool *sharePhotoTool = nil;
      PHImageResultRequestIDKey和PHImageCancelledKey：请求ID以及请求是否已经被取消
      PHImageErrorKey：如果没有图像，字典内的错误信息
      */
-    [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
-        BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
+    
+    requestID = [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
+        BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey];
+        //不要该判断，即如果该图片在iCloud上时候，会先显示一张模糊的预览图，待加载完毕后会显示高清图
+        // && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue]
         if (downloadFinined && completion) {
             completion(image);
         }

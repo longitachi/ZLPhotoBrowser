@@ -33,13 +33,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLShowBigImgViewController.m"
-            timestampString = "477307182.082854"
+            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoTool.m"
+            timestampString = "477369334.409353"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "247"
-            endingLineNumber = "247"
-            landmarkName = "-changeBtnDoneTitle"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "-requestImageForAsset:size:resizeMode:completion:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
