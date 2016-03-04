@@ -253,11 +253,11 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         }
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
         model.asset = asset;
-        model.imageName = [asset valueForKey:@"filename"];
+        model.localIdentifier = asset.localIdentifier;
         [_arraySelectPhotos addObject:model];
     } else {
         for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
-            if ([model.imageName isEqualToString:[asset valueForKey:@"filename"]]) {
+            if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
                 [_arraySelectPhotos removeObject:model];
                 break;
             }
@@ -334,7 +334,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     [self getImageWithAsset:asset completion:^(UIImage *image) {
         cell.imageView.image = image;
         for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
-            if ([model.imageName isEqualToString:[asset valueForKey:@"filename"]]) {
+            if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
                 cell.btnSelect.selected = YES;
                 break;
             }

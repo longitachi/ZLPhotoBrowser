@@ -13,6 +13,6 @@
 @interface ZLSelectPhotoModel : NSObject
 
 @property (nonatomic, strong) PHAsset *asset;
-@property (nonatomic, copy) NSString *imageName;
+@property (nonatomic, copy) NSString *localIdentifier;
 
 @end
