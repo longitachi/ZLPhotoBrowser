@@ -288,13 +288,14 @@
 
 - (void)getOriginalImageBytes
 {
-    self.btnOriginalPhoto.selected = self.isSelectOriginalPhoto;
     __weak typeof(self) weakSelf = self;
     if (self.isSelectOriginalPhoto && self.arraySelectPhotos.count > 0) {
         [[ZLPhotoTool sharePhotoTool] getPhotosBytesWithArray:self.arraySelectPhotos completion:^(NSString *photosBytes) {
             weakSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
         }];
+        self.btnOriginalPhoto.selected = self.isSelectOriginalPhoto;
     } else {
+        self.btnOriginalPhoto.selected = NO;
         self.labPhotosBytes.text = nil;
     }
 }
