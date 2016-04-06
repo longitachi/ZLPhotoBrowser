@@ -33,46 +33,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLPhotoTool.m"
-            timestampString = "478762005.728992"
+            filePath = "ZLPhotoBrowser/PhotoBrowser/ZLThumbnailViewController.m"
+            timestampString = "481615633.808935"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
-            landmarkName = "-requestImageForAsset:size:resizeMode:completion:"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "-resetBottomBtnsStatus"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ZLPhotoTool requestImageForAsset:size:resizeMode:completion:]"
-                  moduleName = "ZLPhotoBrowser"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/long/Desktop/%E5%AD%A6%E4%B9%A0/%E8%87%AA%E5%B7%B1%E5%B0%81%E8%A3%85%E7%9A%84%E5%AE%9E%E7%94%A8%E5%BA%93/ZLPhotoBrowser/ZLPhotoBrowser/PhotoBrowser/ZLPhotoTool.m"
-                  timestampString = "478756165.773694"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "175"
-                  endingLineNumber = "175"
-                  offsetFromSymbolStart = "484">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__63-[ZLPhotoTool requestImageForAsset:size:resizeMode:completion:]_block_invoke"
-                  moduleName = "ZLPhotoBrowser"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/long/Desktop/%E5%AD%A6%E4%B9%A0/%E8%87%AA%E5%B7%B1%E5%B0%81%E8%A3%85%E7%9A%84%E5%AE%9E%E7%94%A8%E5%BA%93/ZLPhotoBrowser/ZLPhotoBrowser/PhotoBrowser/ZLPhotoTool.m"
-                  timestampString = "478756165.773986"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "175"
-                  endingLineNumber = "175"
-                  offsetFromSymbolStart = "88">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
