@@ -33,6 +33,7 @@
     
     [self initNavBtn];
     [self loadAblums];
+    [self pushAllPhotoSoon];
 }
 
 - (void)initNavBtn
@@ -47,6 +48,24 @@
     self.navigationItem.hidesBackButton = YES;
 }
 
+- (void)loadAblums
+{
+    [_arrayDataSources addObjectsFromArray:[[ZLPhotoTool sharePhotoTool] getPhotoAblumList]];
+}
+
+#pragma mark - 直接push到所有照片界面
+- (void)pushAllPhotoSoon
+{
+    NSInteger i = 0;
+    for (ZLPhotoAblumList *ablum in _arrayDataSources) {
+        if ([ablum.title isEqualToString:@"所有照片"]) {
+            i = [_arrayDataSources indexOfObject:ablum];
+            break;
+        }
+    }
+    [self pushThumbnailVCWithIndex:i animated:NO];
+}
+
 - (void)navRightBtn_Click
 {
     if (self.CancelBlock) {
@@ -54,16 +73,6 @@
     }
     
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)loadAblums
-{
-    [_arrayDataSources addObjectsFromArray:[[ZLPhotoTool sharePhotoTool] getPhotoAblumList]];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -103,7 +112,12 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZLPhotoAblumList *ablum = _arrayDataSources[indexPath.row];
+    [self pushThumbnailVCWithIndex:indexPath.row animated:YES];
+}
+
+- (void)pushThumbnailVCWithIndex:(NSInteger)index animated:(BOOL)animated
+{
+    ZLPhotoAblumList *ablum = _arrayDataSources[index];
     
     ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] init];
     tvc.title = ablum.title;
@@ -114,7 +128,12 @@
     tvc.sender = self;
     tvc.DoneBlock = self.DoneBlock;
     tvc.CancelBlock = self.CancelBlock;
-    [self.navigationController pushViewController:tvc animated:YES];
+    [self.navigationController pushViewController:tvc animated:animated];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end
