@@ -22,7 +22,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="68" id="iiM-Bo-fkZ"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
@@ -37,7 +37,7 @@
                             </mask>
                         </variation>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultphoto.png" translatesAutoresizingMaskIntoConstraints="NO" id="yYX-9A-EMR">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultphoto.png" translatesAutoresizingMaskIntoConstraints="NO" id="yYX-9A-EMR">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="yYX-9A-EMR" secondAttribute="height" multiplier="1:1" id="7Nb-yT-774"/>
