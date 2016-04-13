@@ -1,6 +1,6 @@
 # ZLPhotoBrowser
 
-###项目整体介绍
+###框架整体介绍
 * 该框架为一个多选照片（不支持视频）的框架，兼容设备开启的iCloud照片存储，并在加载和选择iCloud端照片时做部分细节处理。
   * 1.支持预览多选(预览图数量及最大多选数可设置)
     * [预览快速多选效果图] (#预览快速多选效果图)
@@ -18,7 +18,7 @@
   * 8.加载iCloud端照片(所有照片加载时都会先加载模糊的图片，然后过渡高清图，iCloud端照片加载更加明显)
     * [加载iCloud端照片效果图] (#加载iCloud端照片效果图)
 * [常用Api] (#常用Api)
-* [使用方法] (#使用方法)
+* [使用方法(支持cocoapods安装)] (#使用方法)
 
 ###框架支持与框架依赖
 该框架最低支持到iOS8.0，采用arc模式</br>
@@ -71,7 +71,11 @@ NS_ASSUME_NONNULL_END
 ```
 
 ###<a id="使用方法"></a>使用方法
-把PhotoBrowser文件夹拖入到您的工程中
+- 直接把PhotoBrowser文件夹拖入到您的工程中
+- Cocoapods安装
+```objc
+pod search ZLPhotoBrowser
+```
 
 ```objc
 #import "ZLPhotoActionSheet.h"
