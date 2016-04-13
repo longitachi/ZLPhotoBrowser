@@ -120,7 +120,7 @@
 {
     ZLPhotoAblumList *ablum = _arrayDataSources[index];
     
-    ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] init];
+    ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] initWithNibName:@"ZLThumbnailViewController" bundle:kZLPhotoBrowserBundle];
     tvc.title = ablum.title;
     tvc.maxSelectCount = self.maxSelectCount;
     tvc.isSelectOriginalPhoto = self.isSelectOriginalPhoto;

@@ -385,7 +385,23 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 {
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
     nav.navigationBar.translucent = YES;
+    
+    [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    [[UINavigationBar appearance] setBackgroundImage:[self imageWithColor:[UIColor colorWithRed:19/255.0 green:153/255.0 blue:231/255.0 alpha:1]] forBarMetrics:UIBarMetricsDefault];
+    [nav.navigationBar setTintColor:[UIColor whiteColor]];
     [self.sender presentViewController:nav animated:YES completion:nil];
+}
+
+- (UIImage *)imageWithColor:(UIColor*)color
+{
+    CGRect rect=CGRectMake(0,0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
 }
 
 #pragma mark - UIImagePickerControllerDelegate

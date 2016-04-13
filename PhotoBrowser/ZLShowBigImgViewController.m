@@ -65,13 +65,13 @@
 - (void)initNavBtns
 {
     //left nav btn
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"navBackBtn"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:kZLPhotoBrowserSrcName(@"navBackBtn.png")] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
     
     //right nav btn
     _navRightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _navRightBtn.frame = CGRectMake(0, 0, 25, 25);
-    [_navRightBtn setBackgroundImage:[UIImage imageNamed:@"btn_circle.png"] forState:UIControlStateNormal];
-    [_navRightBtn setBackgroundImage:[UIImage imageNamed:@"btn_selected.png"] forState:UIControlStateSelected];
+    [_navRightBtn setBackgroundImage:[UIImage imageNamed:kZLPhotoBrowserSrcName(@"btn_circle.png")] forState:UIControlStateNormal];
+    [_navRightBtn setBackgroundImage:[UIImage imageNamed:kZLPhotoBrowserSrcName(@"btn_selected.png")] forState:UIControlStateSelected];
     [_navRightBtn addTarget:self action:@selector(navRightBtn_Click:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_navRightBtn];
 }
@@ -104,8 +104,8 @@
     _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
     [_btnOriginalPhoto setTitleColor:kRGB(80, 180, 234) forState: UIControlStateNormal];
     [_btnOriginalPhoto setTitleColor:kRGB(80, 180, 234) forState: UIControlStateSelected];
-    [_btnOriginalPhoto setImage:[UIImage imageNamed:@"btn_original_circle.png"] forState:UIControlStateNormal];
-    [_btnOriginalPhoto setImage:[UIImage imageNamed:@"btn_selected.png"] forState:UIControlStateSelected];
+    [_btnOriginalPhoto setImage:[UIImage imageNamed:kZLPhotoBrowserSrcName(@"btn_original_circle.png")] forState:UIControlStateNormal];
+    [_btnOriginalPhoto setImage:[UIImage imageNamed:kZLPhotoBrowserSrcName(@"btn_selected.png")] forState:UIControlStateSelected];
     [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];
     [_btnOriginalPhoto addTarget:self action:@selector(btnOriginalImage_Click:) forControlEvents:UIControlEventTouchUpInside];
     _btnOriginalPhoto.selected = self.isSelectOriginalPhoto;
