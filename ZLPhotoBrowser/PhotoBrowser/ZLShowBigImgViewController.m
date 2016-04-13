@@ -86,7 +86,7 @@
     layout.itemSize = self.view.bounds.size;
     
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight) collectionViewLayout:layout];
-    [_collectionView registerNib:[UINib nibWithNibName:@"ZLBigImageCell" bundle:nil] forCellWithReuseIdentifier:@"ZLBigImageCell"];
+    [_collectionView registerNib:[UINib nibWithNibName:@"ZLBigImageCell" bundle:kZLPhotoBrowserBundle] forCellWithReuseIdentifier:@"ZLBigImageCell"];
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
     _collectionView.pagingEnabled = YES;

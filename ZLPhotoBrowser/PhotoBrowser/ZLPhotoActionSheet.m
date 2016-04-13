@@ -39,7 +39,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 - (instancetype)init
 {
-    self = [[[NSBundle mainBundle] loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
+    self = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
     if (self) {
         self.frame = CGRectMake(0, 0, kViewWidth, kViewHeight);
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -49,7 +49,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         
         self.collectionView.collectionViewLayout = layout;
         self.collectionView.backgroundColor = [UIColor whiteColor];
-        [self.collectionView registerNib:[UINib nibWithNibName:@"ZLCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"ZLCollectionCell"];
+        [self.collectionView registerNib:[UINib nibWithNibName:@"ZLCollectionCell" bundle:kZLPhotoBrowserBundle] forCellWithReuseIdentifier:@"ZLCollectionCell"];
         
         _maxSelectCount = 10;
         _maxPreviewCount = 20;
@@ -204,7 +204,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 {
     if (![self judgeIsHavePhotoAblumAuthority]) {
         //无相册访问权限
-        ZLNoAuthorityViewController *nvc = [[ZLNoAuthorityViewController alloc] init];
+        ZLNoAuthorityViewController *nvc = [[ZLNoAuthorityViewController alloc] initWithNibName:@"ZLNoAuthorityViewController" bundle:kZLPhotoBrowserBundle];
         [self presentVC:nvc];
     } else {
         _animate = NO;

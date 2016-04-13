@@ -11,6 +11,7 @@
 #import "ZLPhotoTool.h"
 #import "ZLAnimationTool.h"
 #import "ZLThumbnailViewController.h"
+#import "ZLDefine.h"
 
 @interface ZLPhotoBrowser ()
 {
@@ -95,7 +96,7 @@
     ZLPhotoBrowserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ZLPhotoBrowserCell"];
     
     if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:@"ZLPhotoBrowserCell" owner:self options:nil] lastObject];
+        cell = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoBrowserCell" owner:self options:nil] lastObject];
     }
     
     ZLPhotoAblumList *ablumList= _arrayDataSources[indexPath.row];

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'ZLPhotoBrowser'
-  s.version      = '1.0'
+  s.version      = '1.0.1'
   s.summary      = 'An easy way to Multiselect photos from ablum'
   s.homepage     = 'https://github.com/longitachi/ZLPhotoBrowser'
   s.license      = 'MIT'
@@ -11,4 +11,5 @@ Pod::Spec.new do |s|
   s.source_files = 'ZLPhotoBrowser/PhotoBrowser/*.{h,m}'
   s.resources    = 'ZLPhotoBrowser/PhotoBrowser/resource/*.{png,xib,nib}'
   s.requires_arc = true
+  s.frameworks   = 'UIKit','Photos'
 end
