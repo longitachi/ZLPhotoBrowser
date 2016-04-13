@@ -387,7 +387,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     nav.navigationBar.translucent = YES;
     
     [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
-    [[UINavigationBar appearance] setBackgroundImage:[self imageWithColor:[UIColor colorWithRed:19/255.0 green:153/255.0 blue:231/255.0 alpha:1]] forBarMetrics:UIBarMetricsDefault];
+    [nav.navigationBar setBackgroundImage:[self imageWithColor:[UIColor colorWithRed:19/255.0 green:153/255.0 blue:231/255.0 alpha:1]] forBarMetrics:UIBarMetricsDefault];
     [nav.navigationBar setTintColor:[UIColor whiteColor]];
     [self.sender presentViewController:nav animated:YES completion:nil];
 }
