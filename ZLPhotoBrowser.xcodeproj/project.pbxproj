@@ -26,7 +26,6 @@
 		FD028BDD1CBE33BB009DD2FC /* ZLSelectPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBA1CBE33BB009DD2FC /* ZLSelectPhotoModel.m */; };
 		FD028BDE1CBE33BB009DD2FC /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */; };
 		FD028BDF1CBE33BB009DD2FC /* ZLThumbnailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */; };
-		FD028BE11CBE3473009DD2FC /* ZLPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE01CBE3473009DD2FC /* ZLPhotoBrowser.bundle */; };
 		FD028BF01CBE373F009DD2FC /* btn_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE21CBE373F009DD2FC /* btn_circle@2x.png */; };
 		FD028BF11CBE373F009DD2FC /* btn_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE31CBE373F009DD2FC /* btn_circle@3x.png */; };
 		FD028BF21CBE373F009DD2FC /* btn_original_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE41CBE373F009DD2FC /* btn_original_circle.png */; };
@@ -41,6 +40,7 @@
 		FD028BFB1CBE373F009DD2FC /* defaultphoto.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BED1CBE373F009DD2FC /* defaultphoto.png */; };
 		FD028BFC1CBE373F009DD2FC /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BEE1CBE373F009DD2FC /* lock.png */; };
 		FD028BFD1CBE373F009DD2FC /* navBackBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BEF1CBE373F009DD2FC /* navBackBtn@2x.png */; };
+		FD028BFF1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */; };
 		FD0787221C0D45A200D17B97 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787211C0D45A200D17B97 /* main.m */; };
 		FD0787251C0D45A200D17B97 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787241C0D45A200D17B97 /* AppDelegate.m */; };
 		FD0787281C0D45A200D17B97 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787271C0D45A200D17B97 /* ViewController.m */; };
@@ -85,7 +85,6 @@
 		FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImgViewController.m; sourceTree = "<group>"; };
 		FD028BBD1CBE33BB009DD2FC /* ZLThumbnailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLThumbnailViewController.h; sourceTree = "<group>"; };
 		FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLThumbnailViewController.m; sourceTree = "<group>"; };
-		FD028BE01CBE3473009DD2FC /* ZLPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZLPhotoBrowser.bundle; sourceTree = "<group>"; };
 		FD028BE21CBE373F009DD2FC /* btn_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_circle@2x.png"; sourceTree = "<group>"; };
 		FD028BE31CBE373F009DD2FC /* btn_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_circle@3x.png"; sourceTree = "<group>"; };
 		FD028BE41CBE373F009DD2FC /* btn_original_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_original_circle.png; sourceTree = "<group>"; };
@@ -100,6 +99,7 @@
 		FD028BED1CBE373F009DD2FC /* defaultphoto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultphoto.png; sourceTree = "<group>"; };
 		FD028BEE1CBE373F009DD2FC /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock.png; sourceTree = "<group>"; };
 		FD028BEF1CBE373F009DD2FC /* navBackBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navBackBtn@2x.png"; sourceTree = "<group>"; };
+		FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZLPhotoBrowser.bundle; sourceTree = "<group>"; };
 		FD07871D1C0D45A200D17B97 /* ZLPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZLPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD0787211C0D45A200D17B97 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FD0787231C0D45A200D17B97 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -130,7 +130,6 @@
 		FD028B8E1CBE33BB009DD2FC /* PhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				FD028BE01CBE3473009DD2FC /* ZLPhotoBrowser.bundle */,
 				FD028B8F1CBE33BB009DD2FC /* resource */,
 				FD028BA41CBE33BB009DD2FC /* ToastUtils.h */,
 				FD028BA51CBE33BB009DD2FC /* ToastUtils.m */,
@@ -166,6 +165,7 @@
 		FD028B8F1CBE33BB009DD2FC /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */,
 				FD028BE21CBE373F009DD2FC /* btn_circle@2x.png */,
 				FD028BE31CBE373F009DD2FC /* btn_circle@3x.png */,
 				FD028BE41CBE373F009DD2FC /* btn_original_circle.png */,
@@ -301,7 +301,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD028BFD1CBE373F009DD2FC /* navBackBtn@2x.png in Resources */,
-				FD028BE11CBE3473009DD2FC /* ZLPhotoBrowser.bundle in Resources */,
+				FD028BFF1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle in Resources */,
 				FD0787301C0D45A200D17B97 /* LaunchScreen.storyboard in Resources */,
 				FD028BF41CBE373F009DD2FC /* btn_original_circle@3x.png in Resources */,
 				FD028BCF1CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib in Resources */,
