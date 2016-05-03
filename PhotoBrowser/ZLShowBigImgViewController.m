@@ -9,7 +9,6 @@
 #import "ZLShowBigImgViewController.h"
 #import <Photos/Photos.h>
 #import "ZLBigImageCell.h"
-#import "ZLAnimationTool.h"
 #import "ZLDefine.h"
 #import "ZLSelectPhotoModel.h"
 #import "ZLPhotoTool.h"
@@ -197,7 +196,7 @@
     }
     PHAsset *asset = _arrayDataSources[_currentPage-1];
     if (![self isHaveCurrentPageImage]) {
-        [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
+        [btn.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
         
         if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
             ShowToastLong(@"图片加载中，请稍后");

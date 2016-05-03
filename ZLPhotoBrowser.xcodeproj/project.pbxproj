@@ -14,7 +14,6 @@
 		FD028BD11CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */; };
 		FD028BD21CBE33BB009DD2FC /* ZLThumbnailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA31CBE33BB009DD2FC /* ZLThumbnailViewController.xib */; };
 		FD028BD31CBE33BB009DD2FC /* ToastUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BA51CBE33BB009DD2FC /* ToastUtils.m */; };
-		FD028BD41CBE33BB009DD2FC /* ZLAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BA71CBE33BB009DD2FC /* ZLAnimationTool.m */; };
 		FD028BD51CBE33BB009DD2FC /* ZLBigImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BA91CBE33BB009DD2FC /* ZLBigImageCell.m */; };
 		FD028BD61CBE33BB009DD2FC /* ZLCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BAB1CBE33BB009DD2FC /* ZLCollectionCell.m */; };
 		FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BAE1CBE33BB009DD2FC /* ZLNoAuthorityViewController.m */; };
@@ -60,8 +59,6 @@
 		FD028BA31CBE33BB009DD2FC /* ZLThumbnailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLThumbnailViewController.xib; sourceTree = "<group>"; };
 		FD028BA41CBE33BB009DD2FC /* ToastUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToastUtils.h; sourceTree = "<group>"; };
 		FD028BA51CBE33BB009DD2FC /* ToastUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToastUtils.m; sourceTree = "<group>"; };
-		FD028BA61CBE33BB009DD2FC /* ZLAnimationTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLAnimationTool.h; sourceTree = "<group>"; };
-		FD028BA71CBE33BB009DD2FC /* ZLAnimationTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLAnimationTool.m; sourceTree = "<group>"; };
 		FD028BA81CBE33BB009DD2FC /* ZLBigImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLBigImageCell.h; sourceTree = "<group>"; };
 		FD028BA91CBE33BB009DD2FC /* ZLBigImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLBigImageCell.m; sourceTree = "<group>"; };
 		FD028BAA1CBE33BB009DD2FC /* ZLCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLCollectionCell.h; sourceTree = "<group>"; };
@@ -133,8 +130,6 @@
 				FD028B8F1CBE33BB009DD2FC /* resource */,
 				FD028BA41CBE33BB009DD2FC /* ToastUtils.h */,
 				FD028BA51CBE33BB009DD2FC /* ToastUtils.m */,
-				FD028BA61CBE33BB009DD2FC /* ZLAnimationTool.h */,
-				FD028BA71CBE33BB009DD2FC /* ZLAnimationTool.m */,
 				FD028BA81CBE33BB009DD2FC /* ZLBigImageCell.h */,
 				FD028BA91CBE33BB009DD2FC /* ZLBigImageCell.m */,
 				FD028BAA1CBE33BB009DD2FC /* ZLCollectionCell.h */,
@@ -343,7 +338,6 @@
 				FD028BDF1CBE33BB009DD2FC /* ZLThumbnailViewController.m in Sources */,
 				FD0787251C0D45A200D17B97 /* AppDelegate.m in Sources */,
 				FD028BDB1CBE33BB009DD2FC /* ZLPhotoTool.m in Sources */,
-				FD028BD41CBE33BB009DD2FC /* ZLAnimationTool.m in Sources */,
 				FD0787221C0D45A200D17B97 /* main.m in Sources */,
 				FD028BDC1CBE33BB009DD2FC /* ZLProgressHUD.m in Sources */,
 				FD028BD81CBE33BB009DD2FC /* ZLPhotoActionSheet.m in Sources */,

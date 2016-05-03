@@ -10,7 +10,6 @@
 #import <Photos/Photos.h>
 #import "ZLCollectionCell.h"
 #import "ZLShowBigImgViewController.h"
-#import "ZLAnimationTool.h"
 #import "ZLDefine.h"
 #import "ZLSelectPhotoModel.h"
 #import "ZLPhotoTool.h"
@@ -142,7 +141,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     if (_animate) {
         CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
         CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-kBaseViewHeight/2);
-        CABasicAnimation *animation = [ZLAnimationTool animateWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:0.2 keyPath:@"position"];
+        CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.2, @"position");
         [self.baseView.layer addAnimation:animation forKey:nil];
     }
 }
@@ -152,7 +151,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     if (_animate) {
         CGPoint fromPoint = self.baseView.layer.position;
         CGPoint toPoint   = CGPointMake(fromPoint.x, fromPoint.y+kBaseViewHeight);
-        CABasicAnimation *animation = [ZLAnimationTool animateWithFromValue:[NSValue valueWithCGPoint:fromPoint] toValue:[NSValue valueWithCGPoint:toPoint] duration:0.1 keyPath:@"position"];
+        CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.1, @"position");
         animation.delegate = self;
         
         [self.baseView.layer addAnimation:animation forKey:nil];
@@ -241,12 +240,11 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         ShowToastLong(@"最多只能选择%ld张图片", self.maxSelectCount);
         return;
     }
-    btn.selected = !btn.selected;
     
     PHAsset *asset = _arrayDataSources[btn.tag];
     
-    if (btn.selected) {
-        [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
+    if (!btn.selected) {
+        [btn.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
         if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
             ShowToastLong(@"该图片尚未从iCloud下载，请在系统相册中下载到本地后重新尝试，或在预览大图中加载完毕后选择");
             return;
@@ -264,6 +262,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         }
     }
     
+    btn.selected = !btn.selected;
     [self changeBtnCameraTitle];
 }
 

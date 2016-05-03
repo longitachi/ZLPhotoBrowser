@@ -9,7 +9,6 @@
 #import "ZLPhotoBrowser.h"
 #import "ZLPhotoBrowserCell.h"
 #import "ZLPhotoTool.h"
-#import "ZLAnimationTool.h"
 #import "ZLThumbnailViewController.h"
 #import "ZLDefine.h"
 

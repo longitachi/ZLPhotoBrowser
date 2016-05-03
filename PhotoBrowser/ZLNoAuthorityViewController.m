@@ -7,7 +7,6 @@
 //
 
 #import "ZLNoAuthorityViewController.h"
-#import "ZLAnimationTool.h"
 
 @interface ZLNoAuthorityViewController ()
 

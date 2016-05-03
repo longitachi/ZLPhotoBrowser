@@ -12,7 +12,6 @@
 #import "ZLCollectionCell.h"
 #import "ZLPhotoTool.h"
 #import "ZLSelectPhotoModel.h"
-#import "ZLAnimationTool.h"
 #import "ZLShowBigImgViewController.h"
 #import "ZLPhotoBrowser.h"
 #import "ToastUtils.h"
@@ -126,7 +125,7 @@
 
     if (!btn.selected) {
         //添加图片到选中数组
-        [btn.layer addAnimation:[ZLAnimationTool animateWithBtnStatusChanged] forKey:nil];
+        [btn.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
         if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
             ShowToastLong(@"该图片尚未从iCloud下载，请在系统相册中下载到本地后重新尝试，或在预览大图中加载完毕后选择");
             return;
