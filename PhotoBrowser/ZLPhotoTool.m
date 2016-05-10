@@ -45,12 +45,11 @@ static ZLPhotoTool *sharePhotoTool = nil;
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection * _Nonnull collection, NSUInteger idx, BOOL *stop) {
         //过滤掉视频和最近删除
-        if (!([collection.localizedTitle isEqualToString:@"Recently Deleted"] ||
-            [collection.localizedTitle isEqualToString:@"Videos"])) {
+        if(collection.assetCollectionSubtype != 202 && collection.assetCollectionSubtype < 212){
             NSArray<PHAsset *> *assets = [self getAssetsInAssetCollection:collection ascending:NO];
             if (assets.count > 0) {
                 ZLPhotoAblumList *ablum = [[ZLPhotoAblumList alloc] init];
-                ablum.title = [self transformAblumTitle:collection.localizedTitle];
+                ablum.title = collection.localizedTitle;
                 ablum.count = assets.count;
                 ablum.headImageAsset = assets.firstObject;
                 ablum.assetCollection = collection;
@@ -74,32 +73,6 @@ static ZLPhotoTool *sharePhotoTool = nil;
     }];
     
     return photoAblumList;
-}
-
-- (NSString *)transformAblumTitle:(NSString *)title
-{
-    if ([title isEqualToString:@"Slo-mo"]) {
-        return @"慢动作";
-    } else if ([title isEqualToString:@"Recently Added"]) {
-        return @"最近添加";
-    } else if ([title isEqualToString:@"Favorites"]) {
-        return @"最爱";
-    } else if ([title isEqualToString:@"Recently Deleted"]) {
-        return @"最近删除";
-    } else if ([title isEqualToString:@"Videos"]) {
-        return @"视频";
-    } else if ([title isEqualToString:@"All Photos"]) {
-        return @"所有照片";
-    } else if ([title isEqualToString:@"Selfies"]) {
-        return @"自拍";
-    } else if ([title isEqualToString:@"Screenshots"]) {
-        return @"屏幕快照";
-    } else if ([title isEqualToString:@"Camera Roll"]) {
-        return @"相机胶卷";
-    } else if ([title isEqualToString:@"Panoramas"]) {
-        return @"全景照片";
-    }
-    return nil;
 }
 
 - (PHFetchResult *)fetchAssetsInAssetCollection:(PHAssetCollection *)assetCollection ascending:(BOOL)ascending
