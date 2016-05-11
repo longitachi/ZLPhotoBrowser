@@ -76,6 +76,13 @@ NS_ASSUME_NONNULL_END
 ```objc
 pod search ZLPhotoBrowser
 ```
+- 在项目plist配置文件中添加如下键，值并设为YES
+```objc
+Localized resources can be mixed YES
+//或者右键plist文件Open As->Source Code 添加
+<key>CFBundleAllowMixedLocalizations</key>
+<true/>
+```
 
 ```objc
 #import "ZLPhotoActionSheet.h"
