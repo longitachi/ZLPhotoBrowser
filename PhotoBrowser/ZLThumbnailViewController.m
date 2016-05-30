@@ -236,9 +236,10 @@
     CGSize size = cell.frame.size;
     size.width *= 3;
     size.height *= 3;
+    __weak typeof(self) weakSelf = self;
     [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image) {
         cell.imageView.image = image;
-        for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
+        for (ZLSelectPhotoModel *model in weakSelf.arraySelectPhotos) {
             if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
                 cell.btnSelect.selected = YES;
                 break;

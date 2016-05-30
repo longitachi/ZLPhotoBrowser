@@ -330,9 +330,10 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     
     cell.btnSelect.selected = NO;
     PHAsset *asset = _arrayDataSources[indexPath.row];
+    __weak typeof(self) weakSelf = self;
     [self getImageWithAsset:asset completion:^(UIImage *image) {
         cell.imageView.image = image;
-        for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
+        for (ZLSelectPhotoModel *model in weakSelf.arraySelectPhotos) {
             if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
                 cell.btnSelect.selected = YES;
                 break;
