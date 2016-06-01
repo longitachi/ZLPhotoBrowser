@@ -165,36 +165,9 @@
 
 - (IBAction)btnDone_Click:(id)sender
 {
-    ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
-    [hud show];
-    
-    __weak typeof(self) weakSelf = self;
-    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:self.arraySelectPhotos.count];
-    for (int i = 0; i < self.arraySelectPhotos.count; i++) {
-        [photos addObject:@""];
-    }
-    
-    CGFloat scale = self.isSelectOriginalPhoto?1:[UIScreen mainScreen].scale;
-    for (int i = 0; i < self.arraySelectPhotos.count; i++) {
-        ZLSelectPhotoModel *model = self.arraySelectPhotos[i];
-        [[ZLPhotoTool sharePhotoTool] requestImageForAsset:model.asset scale:scale resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image) {
-            [photos replaceObjectAtIndex:i withObject:image];
-            for (id obj in photos) {
-                if ([obj isKindOfClass:[NSString class]]) return;
-            }
-            [hud hide];
-            [weakSelf requestImageOK:photos];
-        }];
-    }
-}
-
-- (void)requestImageOK:(NSArray<UIImage *> *)photos
-{
     if (self.DoneBlock) {
-        self.DoneBlock(self.arraySelectPhotos, photos);
+        self.DoneBlock(self.arraySelectPhotos, self.isSelectOriginalPhoto);
     }
-    
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)navLeftBtn_Click
@@ -236,10 +209,11 @@
     CGSize size = cell.frame.size;
     size.width *= 3;
     size.height *= 3;
-    __weak typeof(self) weakSelf = self;
+    weakify(self);
     [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image) {
+        strongify(weakSelf);
         cell.imageView.image = image;
-        for (ZLSelectPhotoModel *model in weakSelf.arraySelectPhotos) {
+        for (ZLSelectPhotoModel *model in strongSelf.arraySelectPhotos) {
             if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
                 cell.btnSelect.selected = YES;
                 break;
@@ -268,20 +242,23 @@
     svc.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
     svc.isPresent = NO;
     svc.shouldReverseAssets = NO;
-    __weak typeof(ZLThumbnailViewController *) weakSelf = self;
+    
+    weakify(self);
     [svc setOnSelectedPhotos:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos, BOOL isSelectOriginalPhoto) {
-        weakSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
-        [weakSelf.arraySelectPhotos removeAllObjects];
-        [weakSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
-        [weakSelf.collectionView reloadData];
-        [weakSelf getOriginalImageBytes];
-        [weakSelf resetBottomBtnsStatus];
+        strongify(weakSelf);
+        strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
+        [strongSelf.arraySelectPhotos removeAllObjects];
+        [strongSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
+        [strongSelf.collectionView reloadData];
+        [strongSelf getOriginalImageBytes];
+        [strongSelf resetBottomBtnsStatus];
     }];
     [svc setBtnDoneBlock:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos, BOOL isSelectOriginalPhoto) {
-        weakSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
-        [weakSelf.arraySelectPhotos removeAllObjects];
-        [weakSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
-        [weakSelf btnDone_Click:nil];
+        strongify(weakSelf);
+        strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
+        [strongSelf.arraySelectPhotos removeAllObjects];
+        [strongSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
+        [strongSelf btnDone_Click:nil];
     }];
     
     [self.navigationController pushViewController:svc animated:YES];
@@ -289,10 +266,11 @@
 
 - (void)getOriginalImageBytes
 {
-    __weak typeof(self) weakSelf = self;
+    weakify(self);
     if (self.isSelectOriginalPhoto && self.arraySelectPhotos.count > 0) {
         [[ZLPhotoTool sharePhotoTool] getPhotosBytesWithArray:self.arraySelectPhotos completion:^(NSString *photosBytes) {
-            weakSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
+            strongify(weakSelf);
+            strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
         }];
         self.btnOriginalPhoto.selected = self.isSelectOriginalPhoto;
     } else {

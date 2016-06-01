@@ -9,6 +9,8 @@
 #import "ZLPhotoTool.h"
 #import "ZLSelectPhotoModel.h"
 
+#define CollectionName [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]
+
 @implementation ZLPhotoAblumList
 
 
@@ -34,6 +36,63 @@ static ZLPhotoTool *sharePhotoTool = nil;
         sharePhotoTool = [super allocWithZone:zone];
     });
     return sharePhotoTool;
+}
+
+#pragma mark - 保存图片到系统相册
+- (void)saveImageToAblum:(UIImage *)image completion:(void (^)(BOOL, PHAsset *))completion
+{
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusDenied) {
+        if (completion) completion(NO, nil);
+    } else if (status == PHAuthorizationStatusRestricted) {
+        if (completion) completion(NO, nil);
+    } else {
+        __block NSString *assetId = nil;
+        
+        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+            assetId = [PHAssetCreationRequest creationRequestForAssetFromImage:image].placeholderForCreatedAsset.localIdentifier;
+        } completionHandler:^(BOOL success, NSError * _Nullable error) {
+            if (!success) {
+                if (completion) completion(NO, nil);
+                return;
+            }
+            
+            PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].lastObject;
+            
+            PHAssetCollection *desCollection = [self getDestinationCollection];
+            if (!desCollection) completion(NO, nil);
+            
+            //保存图片
+            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                [[PHAssetCollectionChangeRequest changeRequestForAssetCollection:desCollection] addAssets:@[asset]];
+            } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                if (completion) completion(success, asset);
+            }];
+        }];
+    }
+}
+
+//获取自定义相册
+- (PHAssetCollection *)getDestinationCollection
+{
+    //找是否已经创建自定义相册
+    PHFetchResult<PHAssetCollection *> *collectionResult = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+    for (PHAssetCollection *collection in collectionResult) {
+        if ([collection.localizedTitle isEqualToString:CollectionName]) {
+            return collection;
+        }
+    }
+    //新建自定义相册
+    __block NSString *collectionId = nil;
+    NSError *error = nil;
+    [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+        collectionId = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:CollectionName].placeholderForCreatedAssetCollection.localIdentifier;
+    } error:&error];
+    if (error) {
+        NSLog(@"创建相册：%@失败", CollectionName);
+        return nil;
+    }
+    return [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[collectionId] options:nil].lastObject;
 }
 
 #pragma mark - 获取所有相册列表
@@ -173,18 +232,19 @@ static ZLPhotoTool *sharePhotoTool = nil;
 - (void)getPhotosBytesWithArray:(NSArray *)photos completion:(void (^)(NSString *photosBytes))completion
 {
     __block NSInteger dataLength = 0;
-    __weak typeof(self) weakSelf = self;
     
     __block NSInteger count = photos.count;
     
+    __weak typeof(self) weakSelf = self;
     for (int i = 0; i < photos.count; i++) {
         ZLSelectPhotoModel *model = photos[i];
         [[PHCachingImageManager defaultManager] requestImageDataForAsset:model.asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
             dataLength += imageData.length;
             count--;
             if (count <= 0) {
                 if (completion) {
-                    completion([weakSelf transformDataLength:dataLength]);
+                    completion([strongSelf transformDataLength:dataLength]);
                 }
             }
         }];

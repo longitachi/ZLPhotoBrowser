@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="00a-ed-88M">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="00a-ed-88M">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="pg9-Na-DYT">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Qm2-Zx-Nru" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="00a-ed-88M" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9Cb-fE-gdp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -18,6 +17,7 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="MVB-Kt-oSE"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qm2-Zx-Nru" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-282" y="337"/>
         </scene>
@@ -46,24 +46,35 @@
                                     <action selector="btnSelectPhoto_Click:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DgX-NW-AQW"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S3j-1V-9p8">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="o85-e2-mBb">
                                 <rect key="frame" x="0.0" y="122" width="600" height="478"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DUd-zh-ixV">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="cWy-WJ-d2b"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="EsS-hu-buc"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="S3j-1V-9p8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="CSf-m9-JMJ"/>
+                            <constraint firstItem="o85-e2-mBb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="DlF-VU-Jfa"/>
                             <constraint firstItem="2pn-vv-JDz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HAS-XF-qKv"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="S3j-1V-9p8" secondAttribute="bottom" id="Idc-ng-XR3"/>
-                            <constraint firstItem="S3j-1V-9p8" firstAttribute="top" secondItem="2pn-vv-JDz" secondAttribute="bottom" constant="8" id="S8o-Pa-MgA"/>
-                            <constraint firstAttribute="trailing" secondItem="S3j-1V-9p8" secondAttribute="trailing" id="SOa-ja-TTf"/>
+                            <constraint firstAttribute="trailing" secondItem="o85-e2-mBb" secondAttribute="trailing" id="W3M-vQ-Mzb"/>
                             <constraint firstItem="2pn-vv-JDz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="b1w-52-ltb"/>
+                            <constraint firstItem="o85-e2-mBb" firstAttribute="top" secondItem="2pn-vv-JDz" secondAttribute="bottom" constant="8" id="gN2-So-M8l"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="o85-e2-mBb" secondAttribute="bottom" id="oWu-3K-Nj6"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="主界面" id="xm7-Su-be1"/>
                     <connections>
-                        <outlet property="baseView" destination="S3j-1V-9p8" id="6XR-pL-ZNE"/>
+                        <outlet property="collectionView" destination="o85-e2-mBb" id="Mj4-6s-Yvd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

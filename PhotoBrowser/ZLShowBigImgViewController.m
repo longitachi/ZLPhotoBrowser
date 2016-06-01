@@ -261,9 +261,10 @@
     if (!self.isSelectOriginalPhoto) return;
     
     if (self.arraySelectPhotos.count > 0) {
-        __weak typeof(self) weakSelf = self;
-        [[ZLPhotoTool sharePhotoTool] getPhotosBytesWithArray:_arraySelectPhotos completion:^(NSString *photosBytes) {
-            weakSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
+        weakify(self);
+        [[ZLPhotoTool sharePhotoTool] getPhotosBytesWithArray:self.arraySelectPhotos completion:^(NSString *photosBytes) {
+            strongify(weakSelf);
+            strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
         }];
     } else {
         self.labPhotosBytes.text = nil;

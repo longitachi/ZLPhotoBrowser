@@ -58,7 +58,7 @@
 {
     NSInteger i = 0;
     for (ZLPhotoAblumList *ablum in _arrayDataSources) {
-        if ([ablum.title isEqualToString:@"所有照片"]) {
+        if (ablum.assetCollection.assetCollectionSubtype == 209 || [ablum.title isEqualToString:@"所有照片"]) {
             i = [_arrayDataSources indexOfObject:ablum];
             break;
         }

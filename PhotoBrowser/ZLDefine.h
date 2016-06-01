@@ -13,6 +13,9 @@
 
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
+#define weakify(var)   __weak typeof(var) weakSelf = var
+#define strongify(var) __strong typeof(var) strongSelf = var
+
 #define kZLPhotoBrowserBundle [NSBundle bundleForClass:[self class]]
 
 // 图片路径

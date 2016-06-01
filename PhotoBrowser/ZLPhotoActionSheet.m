@@ -17,7 +17,9 @@
 #import "ZLPhotoBrowser.h"
 #import "ToastUtils.h"
 
-typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
+double const ScalePhotoWidth = 1000;
+
+typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels);
 
 @interface ZLPhotoActionSheet () <UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPhotoLibraryChangeObserver>
 
@@ -50,10 +52,10 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         self.collectionView.backgroundColor = [UIColor whiteColor];
         [self.collectionView registerNib:[UINib nibWithNibName:@"ZLCollectionCell" bundle:kZLPhotoBrowserBundle] forCellWithReuseIdentifier:@"ZLCollectionCell"];
         
-        _maxSelectCount = 10;
-        _maxPreviewCount = 20;
-        _arrayDataSources  = [NSMutableArray array];
-        _arraySelectPhotos = [NSMutableArray array];
+        self.maxSelectCount = 10;
+        self.maxPreviewCount = 20;
+        self.arrayDataSources  = [NSMutableArray array];
+        self.arraySelectPhotos = [NSMutableArray array];
         
         //注册实施监听相册变化
         [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
@@ -69,15 +71,13 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     });
 }
 
-- (void)showWithSender:(UIViewController *)sender animate:(BOOL)animate completion:(void (^)(NSArray<UIImage *> *))completion
+- (void)showWithSender:(UIViewController *)sender animate:(BOOL)animate lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> *)lastSelectPhotoModels completion:(void (^)(NSArray<UIImage *> * _Nonnull, NSArray<ZLSelectPhotoModel *> * _Nonnull))completion
 {
-    if (![self judgeIsHavePhotoAblumAuthority]) {
-        
-    }
-    
-    _handler = completion;
-    _animate = animate;
-    _sender  = sender;
+    self.handler = completion;
+    self.animate = animate;
+    self.sender  = sender;
+    [self.arraySelectPhotos removeAllObjects];
+    [self.arraySelectPhotos addObjectsFromArray:lastSelectPhotoModels];
     
     [self loadPhotoFromAlbum];
     
@@ -115,8 +115,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 - (void)loadPhotoFromAlbum
 {
-    [_arrayDataSources removeAllObjects];
-    [_arrayDataSources addObjectsFromArray:[[ZLPhotoTool sharePhotoTool] getAllAssetInPhotoAblumWithAscending:NO]];
+    [self.arrayDataSources removeAllObjects];
+    [self.arrayDataSources addObjectsFromArray:[[ZLPhotoTool sharePhotoTool] getAllAssetInPhotoAblumWithAscending:NO]];
     
     [self.collectionView reloadData];
 }
@@ -126,9 +126,13 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 {
     self.hidden = NO;
     self.baseView.hidden = NO;
-    [self.arraySelectPhotos removeAllObjects];
-    [self.btnCamera setTitle:@"拍照" forState:UIControlStateNormal];
-    [self.btnCamera setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    if (self.arraySelectPhotos.count == 0) {
+        [self.btnCamera setTitle:@"拍照" forState:UIControlStateNormal];
+        [self.btnCamera setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    } else {
+        [self.btnCamera setTitle:[NSString stringWithFormat:@"确定(%ld)", self.arraySelectPhotos.count] forState:UIControlStateNormal];
+        [self.btnCamera setTitleColor:kRGB(19, 153, 231) forState:UIControlStateNormal];
+    }
     [self.collectionView setContentOffset:CGPointZero];
 }
 
@@ -138,7 +142,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     
     [self resetSubViewState];
     
-    if (_animate) {
+    if (self.animate) {
         CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
         CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-kBaseViewHeight/2);
         CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.2, @"position");
@@ -148,7 +152,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 - (void)hide
 {
-    if (_animate) {
+    if (self.animate) {
         CGPoint fromPoint = self.baseView.layer.position;
         CGPoint toPoint   = CGPointMake(fromPoint.x, fromPoint.y+kBaseViewHeight);
         CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.1, @"position");
@@ -175,7 +179,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 #pragma mark - UIButton Action
 - (IBAction)btnCamera_Click:(id)sender
 {
-    if (_arraySelectPhotos.count > 0) {
+    if (self.arraySelectPhotos.count > 0) {
         [self requestSelPhotos:nil];
     } else {
         if (![self judgeIsHaveCameraAuthority]) {
@@ -192,9 +196,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
             picker.allowsEditing = NO;
             picker.videoQuality = UIImagePickerControllerQualityTypeLow;
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            [self.sender presentViewController:picker animated:YES completion:^{
-            }];
-            picker = nil;
+            [self.sender presentViewController:picker animated:YES completion:nil];
         }
     }
 }
@@ -206,21 +208,26 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         ZLNoAuthorityViewController *nvc = [[ZLNoAuthorityViewController alloc] initWithNibName:@"ZLNoAuthorityViewController" bundle:kZLPhotoBrowserBundle];
         [self presentVC:nvc];
     } else {
-        _animate = NO;
+        self.animate = NO;
         
         ZLPhotoBrowser *photoBrowser = [[ZLPhotoBrowser alloc] initWithStyle:UITableViewStylePlain];
         photoBrowser.maxSelectCount = self.maxSelectCount;
-        photoBrowser.arraySelectPhotos = _arraySelectPhotos.mutableCopy;
+        photoBrowser.arraySelectPhotos = self.arraySelectPhotos.mutableCopy;
         
-        __weak typeof(ZLPhotoActionSheet *) weakSelf = self;
-        [photoBrowser setDoneBlock:^(NSArray<ZLSelectPhotoModel *> *selPhotoModels, NSArray<UIImage *> *selPhotos) {
-            [weakSelf.arraySelectPhotos removeAllObjects];
-            [weakSelf.arraySelectPhotos addObjectsFromArray:selPhotoModels];
-            [weakSelf done:selPhotos];
-            [weakSelf hide];
+        weakify(self);
+        __weak typeof(photoBrowser) weakPB = photoBrowser;
+        [photoBrowser setDoneBlock:^(NSArray<ZLSelectPhotoModel *> *selPhotoModels, BOOL isSelectOriginalPhoto) {
+            strongify(weakSelf);
+            __strong typeof(weakPB) strongPB = weakPB;
+            strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
+            [strongSelf.arraySelectPhotos removeAllObjects];
+            [strongSelf.arraySelectPhotos addObjectsFromArray:selPhotoModels];
+            [strongSelf requestSelPhotos:strongPB];
         }];
+        
         [photoBrowser setCancelBlock:^{
-            [weakSelf hide];
+            strongify(weakSelf);
+            [strongSelf hide];
         }];
         
         [self presentVC:photoBrowser];
@@ -229,7 +236,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 - (IBAction)btnCancel_Click:(id)sender
 {
-    [_arraySelectPhotos removeAllObjects];
+    [self.arraySelectPhotos removeAllObjects];
     [self hide];
 }
 
@@ -241,7 +248,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         return;
     }
     
-    PHAsset *asset = _arrayDataSources[btn.tag];
+    PHAsset *asset = self.arrayDataSources[btn.tag];
     
     if (!btn.selected) {
         [btn.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
@@ -252,11 +259,11 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
         model.asset = asset;
         model.localIdentifier = asset.localIdentifier;
-        [_arraySelectPhotos addObject:model];
+        [self.arraySelectPhotos addObject:model];
     } else {
-        for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
+        for (ZLSelectPhotoModel *model in self.arraySelectPhotos) {
             if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
-                [_arraySelectPhotos removeObject:model];
+                [self.arraySelectPhotos removeObject:model];
                 break;
             }
         }
@@ -268,8 +275,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 
 - (void)changeBtnCameraTitle
 {
-    if (_arraySelectPhotos.count > 0) {
-        [self.btnCamera setTitle:[NSString stringWithFormat:@"确定(%ld)", _arraySelectPhotos.count] forState:UIControlStateNormal];
+    if (self.arraySelectPhotos.count > 0) {
+        [self.btnCamera setTitle:[NSString stringWithFormat:@"确定(%ld)", self.arraySelectPhotos.count] forState:UIControlStateNormal];
         [self.btnCamera setTitleColor:kRGB(19, 153, 231) forState:UIControlStateNormal];
     } else {
         [self.btnCamera setTitle:@"拍照" forState:UIControlStateNormal];
@@ -283,7 +290,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     [hud show];
     
-    __weak typeof(self) weakSelf = self;
+    weakify(self);
     NSMutableArray *photos = [NSMutableArray arrayWithCapacity:self.arraySelectPhotos.count];
     for (int i = 0; i < self.arraySelectPhotos.count; i++) {
         [photos addObject:@""];
@@ -293,22 +300,38 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     for (int i = 0; i < self.arraySelectPhotos.count; i++) {
         ZLSelectPhotoModel *model = self.arraySelectPhotos[i];
         [[ZLPhotoTool sharePhotoTool] requestImageForAsset:model.asset scale:scale resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image) {
-            [photos replaceObjectAtIndex:i withObject:image];
+            strongify(weakSelf);
+            if (image) [photos replaceObjectAtIndex:i withObject:[self scaleImage:image]];
+            
             for (id obj in photos) {
                 if ([obj isKindOfClass:[NSString class]]) return;
             }
+            
             [hud hide];
-            [weakSelf done:photos];
-            [weakSelf hide];
+            [strongSelf done:photos];
+            [strongSelf hide];
             [vc.navigationController dismissViewControllerAnimated:YES completion:nil];
         }];
     }
 }
 
+/**
+ * @brief 这里对拿到的图片进行缩放，不然原图直接返回的话会造成内存暴涨
+ */
+- (UIImage *)scaleImage:(UIImage *)image
+{
+    CGSize size = CGSizeMake(ScalePhotoWidth, ScalePhotoWidth * image.size.height / image.size.width);
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 - (void)done:(NSArray<UIImage *> *)photos
 {
     if (self.handler) {
-        self.handler(photos);
+        self.handler(photos, self.arraySelectPhotos.copy);
         self.handler = nil;
     }
 }
@@ -330,10 +353,11 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     
     cell.btnSelect.selected = NO;
     PHAsset *asset = _arrayDataSources[indexPath.row];
-    __weak typeof(self) weakSelf = self;
+    weakify(self);
     [self getImageWithAsset:asset completion:^(UIImage *image) {
+        strongify(weakSelf);
         cell.imageView.image = image;
-        for (ZLSelectPhotoModel *model in weakSelf.arraySelectPhotos) {
+        for (ZLSelectPhotoModel *model in strongSelf.arraySelectPhotos) {
             if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
                 cell.btnSelect.selected = YES;
                 break;
@@ -350,7 +374,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 #pragma mark - UICollectionViewDelegate
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PHAsset *asset = _arrayDataSources[indexPath.row];
+    PHAsset *asset = self.arrayDataSources[indexPath.row];
     return [self getSizeWithAsset:asset];
 }
 
@@ -363,20 +387,23 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
     svc.maxSelectCount = _maxSelectCount;
     svc.isPresent = YES;
     svc.shouldReverseAssets = YES;
-    __weak typeof(self) weakSelf = self;
-    __weak typeof(svc)  weakSvc  = svc;
+    weakify(self);
+    __weak typeof(svc) weakSvc  = svc;
     [svc setOnSelectedPhotos:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos, BOOL isSelectOriginalPhoto) {
-        weakSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
-        [weakSelf.arraySelectPhotos removeAllObjects];
-        [weakSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
-        [weakSelf changeBtnCameraTitle];
-        [weakSelf.collectionView reloadData];
+        strongify(weakSelf);
+        strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
+        [strongSelf.arraySelectPhotos removeAllObjects];
+        [strongSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
+        [strongSelf changeBtnCameraTitle];
+        [strongSelf.collectionView reloadData];
     }];
     [svc setBtnDoneBlock:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos, BOOL isSelectOriginalPhoto) {
-        weakSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
-        [weakSelf.arraySelectPhotos removeAllObjects];
-        [weakSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
-        [weakSelf requestSelPhotos:weakSvc];
+        strongify(weakSelf);
+        __strong typeof(weakSvc) strongSvc = weakSvc;
+        strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
+        [strongSelf.arraySelectPhotos removeAllObjects];
+        [strongSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
+        [strongSelf requestSelPhotos:strongSvc];
     }];
     [self presentVC:svc];
 }
@@ -407,28 +434,38 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    __weak typeof(ZLPhotoActionSheet *) weakSelf = self;
+    weakify(self);
     [picker dismissViewControllerAnimated:YES completion:^{
-        if (weakSelf.handler) {
+        strongify(weakSelf);
+        if (strongSelf.handler) {
             UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            weakSelf.handler(@[image]);
-            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextinfo:), nil);
+            ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+            [hud show];
+            
+            [[ZLPhotoTool sharePhotoTool] saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (suc) {
+                        ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
+                        model.asset = asset;
+                        model.localIdentifier = asset.localIdentifier;
+                        strongSelf.handler(@[[strongSelf scaleImage:image]], @[model]);
+                    } else {
+                        ShowToastLong(@"保存图片到相册失败");
+                    }
+                    [hud hide];
+                    [strongSelf hide];
+                });
+            }];
         }
-        [weakSelf hide];
     }];
-}
-
-//写入相册后回调方法
-- (void)image:(NSString *)video didFinishSavingWithError:(NSError *)error contextinfo:(void *)contextInfo
-{
-    //do something
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    __weak typeof(ZLPhotoActionSheet *) weakSelf = self;
+    weakify(self);
     [picker dismissViewControllerAnimated:YES completion:^{
-        [weakSelf hide];
+        strongify(weakSelf);
+        [strongSelf hide];
     }];
 }
 
@@ -445,8 +482,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos);
 - (void)getImageWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *image))completion
 {
     CGSize size = [self getSizeWithAsset:asset];
-    size.width  *= 2;
-    size.height *= 2;
+    size.width  *= 1.5;
+    size.height *= 1.5;
     [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast completion:completion];
 }
 

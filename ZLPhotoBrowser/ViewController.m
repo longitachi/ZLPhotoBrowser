@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "ZLPhotoActionSheet.h"
 #import "ZLShowBigImage.h"
+#import "ZLDefine.h"
+#import "ZLCollectionCell.h"
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
@@ -16,8 +18,13 @@
 ///////////////////////////////////////////////////
 @interface ViewController ()
 {
-    ZLPhotoActionSheet *actionSheet;
+//    ZLPhotoActionSheet *actionSheet;
 }
+
+@property (nonatomic, strong) NSArray<ZLSelectPhotoModel *> *lastSelectMoldels;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, strong) NSArray *arrDataSources;
+
 @end
 
 @implementation ViewController
@@ -25,41 +32,58 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    actionSheet = [[ZLPhotoActionSheet alloc] init];
-    //设置照片最大选择数
-    actionSheet.maxSelectCount = 5;
-    //设置照片最大预览数
-    actionSheet.maxPreviewCount = 20;
+    [self initCollectionView];
+}
+
+- (void)initCollectionView
+{
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.itemSize = CGSizeMake((width-9)/4, (width-9)/4);
+    layout.minimumInteritemSpacing = 1.5;
+    layout.minimumLineSpacing = 1.5;
+    layout.sectionInset = UIEdgeInsetsMake(3, 0, 3, 0);
+    self.collectionView.collectionViewLayout = layout;
+    self.collectionView.backgroundColor = [UIColor whiteColor];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"ZLCollectionCell" bundle:kZLPhotoBrowserBundle] forCellWithReuseIdentifier:@"ZLCollectionCell"];
 }
 
 - (IBAction)btnSelectPhoto_Click:(id)sender
 {
-    __weak typeof(self) weakSelf = self;
-    
-    [actionSheet showWithSender:self animate:YES completion:^(NSArray<UIImage *> * _Nonnull selectPhotos) {
-        [weakSelf.baseView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-        
-        CGFloat width = [UIScreen mainScreen].bounds.size.width/4-2;
-        for (int i = 0; i < selectPhotos.count; i++) {
-            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(i%4*(width+2), i/4*(width+2), width, width)];
-            imgView.image = selectPhotos[i];
-            [weakSelf.baseView addSubview:imgView];
-        }
+    ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+    //设置照片最大选择数
+    actionSheet.maxSelectCount = 5;
+    //设置照片最大预览数
+    actionSheet.maxPreviewCount = 20;
+    weakify(self);
+    [actionSheet showWithSender:self animate:YES lastSelectPhotoModels:self.lastSelectMoldels completion:^(NSArray<UIImage *> * _Nonnull selectPhotos, NSArray<ZLSelectPhotoModel *> * _Nonnull selectPhotoModels) {
+        strongify(weakSelf);
+        strongSelf.arrDataSources = selectPhotos;
+        strongSelf.lastSelectMoldels = selectPhotoModels;
+        [strongSelf.collectionView reloadData];
+        NSLog(@"%@", selectPhotos);
     }];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [touch locationInView:self.view];
-    for (UIView *view in self.baseView.subviews) {
-        CGRect convertRect = [self.baseView convertRect:view.frame toView:self.view];
-        if ([view isKindOfClass:[UIImageView class]] &&
-            CGRectContainsPoint(convertRect, point)) {
-            [ZLShowBigImage showBigImage:(UIImageView *)view];
-            break;
-        }
-    }
+    return _arrDataSources.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZLCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLCollectionCell" forIndexPath:indexPath];
+    cell.btnSelect.hidden = YES;
+    cell.imageView.image = _arrDataSources[indexPath.row];
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZLCollectionCell *cell = (ZLCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [ZLShowBigImage showBigImage:cell.imageView];
 }
 
 - (void)didReceiveMemoryWarning {

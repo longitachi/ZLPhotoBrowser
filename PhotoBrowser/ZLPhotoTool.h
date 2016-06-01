@@ -24,6 +24,11 @@
 + (instancetype)sharePhotoTool;
 
 /**
+ * @brief 保存图片到系统相册
+ */
+- (void)saveImageToAblum:(UIImage *)image completion:(void (^)(BOOL suc, PHAsset *asset))completion;
+
+/**
  * @brief 获取用户所有相册列表
  */
 - (NSArray<ZLPhotoAblumList *> *)getPhotoAblumList;
