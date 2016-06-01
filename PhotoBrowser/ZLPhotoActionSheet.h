@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param animate
  *              是否显示动画效果
  * @param selectedAssets
- *              已选择的PHAsset，再次调用"showWithSender:animate:completion:"方法之前，可以把上次回调中selectAssets赋值给该属性，便可实现记录上次选择照片的功能，若不需要记录上次选择照片的功能，则该值传nil即可
+ *              已选择的PHAsset，再次调用"showWithSender:animate:lastSelectPhotoModels:completion:"方法之前，可以把上次回调中selectAssets赋值给该属性，便可实现记录上次选择照片的功能，若不需要记录上次选择照片的功能，则该值传nil即可
  * @param completion
  *              完成回调
  */
