@@ -8,11 +8,11 @@
 
 #import "ZLPhotoTool.h"
 #import "ZLSelectPhotoModel.h"
+#import "ZLDefine.h"
 
 #define CollectionName [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]
 
 @implementation ZLPhotoAblumList
-
 
 
 @end
@@ -176,11 +176,14 @@ static ZLPhotoTool *sharePhotoTool = nil;
 }
 
 #pragma mark - 获取asset对应的图片
-- (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *))completion
+- (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *, NSDictionary *))completion
 {
     //请求大图界面，当切换图片时，取消上一张图片的请求，对于iCloud端的图片，可以节省流量
     static PHImageRequestID requestID = -1;
-    if (requestID >= 1 && size.width/asset.pixelWidth == [UIScreen mainScreen].scale) {
+    CGFloat scale = [UIScreen mainScreen].scale;
+    CGFloat width = MIN(kViewWidth, kMaxImageWidth);
+    if (requestID >= 1 && size.width/width==scale) {
+        NSLog(@"cancelImageID:%d", requestID);
         [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
     }
     
@@ -208,7 +211,7 @@ static ZLPhotoTool *sharePhotoTool = nil;
         //不要该判断，即如果该图片在iCloud上时候，会先显示一张模糊的预览图，待加载完毕后会显示高清图
         // && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue]
         if (downloadFinined && completion) {
-            completion(image);
+            completion(image, info);
         }
     }];
 }

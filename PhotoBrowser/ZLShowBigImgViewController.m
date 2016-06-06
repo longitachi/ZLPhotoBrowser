@@ -89,7 +89,7 @@
     layout.itemSize = self.view.bounds.size;
     
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight) collectionViewLayout:layout];
-    [_collectionView registerNib:[UINib nibWithNibName:@"ZLBigImageCell" bundle:kZLPhotoBrowserBundle] forCellWithReuseIdentifier:@"ZLBigImageCell"];
+    [_collectionView registerClass:[ZLBigImageCell class] forCellWithReuseIdentifier:@"ZLBigImageCell"];
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
     _collectionView.pagingEnabled = YES;
@@ -320,66 +320,18 @@
     ZLBigImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLBigImageCell" forIndexPath:indexPath];
     PHAsset *asset = _arrayDataSources[indexPath.row];
     
-    cell.imageView.image = nil;
-    [cell showIndicator];
-    CGFloat scale = [UIScreen mainScreen].scale;
-    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:CGSizeMake(asset.pixelWidth*scale, asset.pixelHeight*scale) resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image) {
-        cell.imageView.image = image;
-        [cell hideIndicator];
-    }];
-    cell.scrollView.delegate = self;
-    
-    [self addDoubleTapOnScrollView:cell.scrollView];
+    cell.asset = asset;
+    weakify(self);
+    cell.singleTapCallBack = ^() {
+        strongify(weakSelf);
+        if (strongSelf.navigationController.navigationBar.isHidden) {
+            [strongSelf showNavBarAndBottomView];
+        } else {
+            [strongSelf hideNavBarAndBottomView];
+        }
+    };
     
     return cell;
-}
-
-#pragma mark - UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    ZLBigImageCell *cell1 = (ZLBigImageCell *)cell;
-    cell1.scrollView.zoomScale = 1;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
-
-#pragma mark - 图片缩放相关方法
-- (void)addDoubleTapOnScrollView:(UIScrollView *)scrollView
-{
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction:)];
-    [scrollView addGestureRecognizer:singleTap];
-    
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapAction:)];
-    doubleTap.numberOfTapsRequired = 2;
-    [scrollView addGestureRecognizer:doubleTap];
-    
-    [singleTap requireGestureRecognizerToFail:doubleTap];
-}
-
-- (void)singleTapAction:(UITapGestureRecognizer *)tap
-{
-    if (self.navigationController.navigationBar.isHidden) {
-        [self showNavBarAndBottomView];
-    } else {
-        [self hideNavBarAndBottomView];
-    }
-}
-
-- (void)doubleTapAction:(UITapGestureRecognizer *)tap
-{
-    UIScrollView *scrollView = (UIScrollView *)tap.view;
-    _selectScrollView = scrollView;
-    CGFloat scale = 1;
-    if (scrollView.zoomScale != 3.0) {
-        scale = 3;
-    } else {
-        scale = 1;
-    }
-    CGRect zoomRect = [self zoomRectForScale:scale withCenter:[tap locationInView:tap.view]];
-    [scrollView zoomToRect:zoomRect animated:YES];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -393,21 +345,6 @@
         self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, _arrayDataSources.count];
         [self changeNavRightBtnStatus];
     }
-}
-
-- (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center
-{
-    CGRect zoomRect;
-    zoomRect.size.height = _selectScrollView.frame.size.height / scale;
-    zoomRect.size.width  = _selectScrollView.frame.size.width  / scale;
-    zoomRect.origin.x    = center.x - (zoomRect.size.width  /2.0);
-    zoomRect.origin.y    = center.y - (zoomRect.size.height /2.0);
-    return zoomRect;
-}
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
-{
-    return scrollView.subviews[0];
 }
 
 @end

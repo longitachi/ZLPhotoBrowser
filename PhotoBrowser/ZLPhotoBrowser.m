@@ -100,7 +100,7 @@
     
     ZLPhotoAblumList *ablumList= _arrayDataSources[indexPath.row];
     
-    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:ablumList.headImageAsset size:CGSizeMake(65*3, 65*3) resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image) {
+    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:ablumList.headImageAsset size:CGSizeMake(65*3, 65*3) resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image, NSDictionary *info) {
         cell.headImageView.image = image;
     }];
     cell.labTitle.text = ablumList.title;

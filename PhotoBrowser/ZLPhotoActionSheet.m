@@ -354,7 +354,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     cell.btnSelect.selected = NO;
     PHAsset *asset = _arrayDataSources[indexPath.row];
     weakify(self);
-    [self getImageWithAsset:asset completion:^(UIImage *image) {
+    [self getImageWithAsset:asset completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
         cell.imageView.image = image;
         for (ZLSelectPhotoModel *model in strongSelf.arraySelectPhotos) {
@@ -479,7 +479,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     return CGSizeMake(self.collectionView.frame.size.height*scale, self.collectionView.frame.size.height);
 }
 
-- (void)getImageWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *image))completion
+- (void)getImageWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *image, NSDictionary *info))completion
 {
     CGSize size = [self getSizeWithAsset:asset];
     size.width  *= 1.5;

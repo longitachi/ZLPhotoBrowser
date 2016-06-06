@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FD028BCD1CBE33BB009DD2FC /* ZLBigImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028B9E1CBE33BB009DD2FC /* ZLBigImageCell.xib */; };
 		FD028BCE1CBE33BB009DD2FC /* ZLCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028B9F1CBE33BB009DD2FC /* ZLCollectionCell.xib */; };
 		FD028BCF1CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA01CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib */; };
 		FD028BD01CBE33BB009DD2FC /* ZLPhotoActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */; };
@@ -51,7 +50,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FD028B9E1CBE33BB009DD2FC /* ZLBigImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLBigImageCell.xib; sourceTree = "<group>"; };
 		FD028B9F1CBE33BB009DD2FC /* ZLCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLCollectionCell.xib; sourceTree = "<group>"; };
 		FD028BA01CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLNoAuthorityViewController.xib; sourceTree = "<group>"; };
 		FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLPhotoActionSheet.xib; sourceTree = "<group>"; };
@@ -176,7 +174,6 @@
 				FD028BEE1CBE373F009DD2FC /* lock.png */,
 				FD028BEF1CBE373F009DD2FC /* navBackBtn@2x.png */,
 				FD028B9F1CBE33BB009DD2FC /* ZLCollectionCell.xib */,
-				FD028B9E1CBE33BB009DD2FC /* ZLBigImageCell.xib */,
 				FD028BA01CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib */,
 				FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */,
 				FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */,
@@ -310,7 +307,6 @@
 				FD028BF21CBE373F009DD2FC /* btn_original_circle.png in Resources */,
 				FD028BF31CBE373F009DD2FC /* btn_original_circle@2x.png in Resources */,
 				FD028BCE1CBE33BB009DD2FC /* ZLCollectionCell.xib in Resources */,
-				FD028BCD1CBE33BB009DD2FC /* ZLBigImageCell.xib in Resources */,
 				FD028BF01CBE373F009DD2FC /* btn_circle@2x.png in Resources */,
 				FD028BF11CBE373F009DD2FC /* btn_circle@3x.png in Resources */,
 				FD07872D1C0D45A200D17B97 /* Assets.xcassets in Resources */,

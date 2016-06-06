@@ -210,7 +210,7 @@
     size.width *= 3;
     size.height *= 3;
     weakify(self);
-    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image) {
+    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
         cell.imageView.image = image;
         for (ZLSelectPhotoModel *model in strongSelf.arraySelectPhotos) {

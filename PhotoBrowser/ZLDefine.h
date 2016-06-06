@@ -32,6 +32,29 @@
 ////////ZLShowBigImgViewController
 #define kItemMargin 30
 
+///////ZLBigImageCell 不建议设置太大，太大的话会导致图片加载过慢
+#define kMaxImageWidth 500
+
+static inline void SetViewWidth (UIView *view, CGFloat width) {
+    CGRect frame = view.frame;
+    frame.size.width = width;
+    view.frame = frame;
+}
+
+static inline CGFloat GetViewWidth (UIView *view) {
+    return view.frame.size.width;
+}
+
+static inline void SetViewHeight (UIView *view, CGFloat height) {
+    CGRect frame = view.frame;
+    frame.size.height = height;
+    view.frame = frame;
+}
+
+static inline CGFloat GetViewHeight (UIView *view) {
+    return view.frame.size.height;
+}
+
 static inline CABasicAnimation * GetPositionAnimation (id fromValue, id toValue, CFTimeInterval duration, NSString *keyPath) {
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
     animation.fromValue = fromValue;
