@@ -183,7 +183,6 @@ static ZLPhotoTool *sharePhotoTool = nil;
     CGFloat scale = [UIScreen mainScreen].scale;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
     if (requestID >= 1 && size.width/width==scale) {
-        NSLog(@"cancelImageID:%d", requestID);
         [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
     }
     
