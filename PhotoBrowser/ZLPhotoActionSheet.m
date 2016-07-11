@@ -17,6 +17,8 @@
 #import "ZLPhotoBrowser.h"
 #import "ToastUtils.h"
 
+#import "ZLPhotoActionSheetViewController.h"
+
 double const ScalePhotoWidth = 1000;
 
 typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels);
@@ -28,6 +30,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 @property (nonatomic, strong) NSMutableArray<ZLSelectPhotoModel *> *arraySelectPhotos;
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
 @property (nonatomic, copy)   handler handler;
+
+@property (nonatomic, weak) ZLPhotoActionSheetViewController *showController;
 
 @end
 
@@ -110,7 +114,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:action];
-    [self.sender presentViewController:alert animated:YES completion:nil];
+    [self.showController presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)loadPhotoFromAlbum
@@ -138,31 +142,16 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 
 - (void)show
 {
-    [self.sender.view addSubview:self];
+    ZLPhotoActionSheetViewController *showController = [ZLPhotoActionSheetViewController createWithActionSheetView:self];
+    self.showController = showController;
+    [showController showWithController:self.sender];
     
     [self resetSubViewState];
-    
-    if (self.animate) {
-        CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
-        CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-kBaseViewHeight/2);
-        CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.2, @"position");
-        [self.baseView.layer addAnimation:animation forKey:nil];
-    }
 }
 
 - (void)hide
 {
-    if (self.animate) {
-        CGPoint fromPoint = self.baseView.layer.position;
-        CGPoint toPoint   = CGPointMake(fromPoint.x, fromPoint.y+kBaseViewHeight);
-        CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.1, @"position");
-        animation.delegate = self;
-        
-        [self.baseView.layer addAnimation:animation forKey:nil];
-    } else {
-        self.hidden = YES;
-        [self removeFromSuperview];
-    }
+    [self.showController hide];
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
@@ -196,7 +185,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
             picker.allowsEditing = NO;
             picker.videoQuality = UIImagePickerControllerQualityTypeLow;
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            [self.sender presentViewController:picker animated:YES completion:nil];
+            [self.showController presentViewController:picker animated:YES completion:nil];
         }
     }
 }
@@ -416,7 +405,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
     [nav.navigationBar setBackgroundImage:[self imageWithColor:kRGB(19, 153, 231)] forBarMetrics:UIBarMetricsDefault];
     [nav.navigationBar setTintColor:[UIColor whiteColor]];
-    [self.sender presentViewController:nav animated:YES completion:nil];
+    [self.showController presentViewController:nav animated:YES completion:nil];
 }
 
 - (UIImage *)imageWithColor:(UIColor*)color

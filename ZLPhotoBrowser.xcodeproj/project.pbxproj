@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E0EB6F1D1D337ABB00E2EBF1 /* ZLPhotoActionSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EB6F1C1D337ABB00E2EBF1 /* ZLPhotoActionSheetViewController.m */; };
 		FD028BCE1CBE33BB009DD2FC /* ZLCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028B9F1CBE33BB009DD2FC /* ZLCollectionCell.xib */; };
 		FD028BCF1CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA01CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib */; };
 		FD028BD01CBE33BB009DD2FC /* ZLPhotoActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */; };
@@ -50,6 +51,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E0EB6F1B1D337ABB00E2EBF1 /* ZLPhotoActionSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLPhotoActionSheetViewController.h; sourceTree = "<group>"; };
+		E0EB6F1C1D337ABB00E2EBF1 /* ZLPhotoActionSheetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoActionSheetViewController.m; sourceTree = "<group>"; };
 		FD028B9F1CBE33BB009DD2FC /* ZLCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLCollectionCell.xib; sourceTree = "<group>"; };
 		FD028BA01CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLNoAuthorityViewController.xib; sourceTree = "<group>"; };
 		FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLPhotoActionSheet.xib; sourceTree = "<group>"; };
@@ -137,6 +140,8 @@
 				FD028BAE1CBE33BB009DD2FC /* ZLNoAuthorityViewController.m */,
 				FD028BAF1CBE33BB009DD2FC /* ZLPhotoActionSheet.h */,
 				FD028BB01CBE33BB009DD2FC /* ZLPhotoActionSheet.m */,
+				E0EB6F1B1D337ABB00E2EBF1 /* ZLPhotoActionSheetViewController.h */,
+				E0EB6F1C1D337ABB00E2EBF1 /* ZLPhotoActionSheetViewController.m */,
 				FD028BB11CBE33BB009DD2FC /* ZLPhotoBrowser.h */,
 				FD028BB21CBE33BB009DD2FC /* ZLPhotoBrowser.m */,
 				FD028BB31CBE33BB009DD2FC /* ZLPhotoBrowserCell.h */,
@@ -330,6 +335,7 @@
 				FD0787281C0D45A200D17B97 /* ViewController.m in Sources */,
 				FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */,
 				FD30F0691C72EECC0060F19F /* ZLShowBigImage.m in Sources */,
+				E0EB6F1D1D337ABB00E2EBF1 /* ZLPhotoActionSheetViewController.m in Sources */,
 				FD028BD91CBE33BB009DD2FC /* ZLPhotoBrowser.m in Sources */,
 				FD028BDF1CBE33BB009DD2FC /* ZLThumbnailViewController.m in Sources */,
 				FD0787251C0D45A200D17B97 /* AppDelegate.m in Sources */,
