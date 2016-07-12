@@ -298,8 +298,9 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
             
             [hud hide];
             [strongSelf done:photos];
+            [vc.navigationController dismissViewControllerAnimated:NO completion:nil];
             [strongSelf hide];
-            [vc.navigationController dismissViewControllerAnimated:YES completion:nil];
+            
         }];
     }
 }

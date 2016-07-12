@@ -24,13 +24,26 @@
 
 - (void)showWithController:(UIViewController *)controller
 {
+    [self.view setBackgroundColor:[UIColor clearColor]];
     self.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    [controller presentViewController:self animated:YES completion:nil];
+    
+    __weak typeof(self) weakSelf = self;
+    [controller presentViewController:self animated:YES completion:^{
+        [UIView animateWithDuration:0.1 animations:^{
+            weakSelf.view.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
+        }];
+    }];
 }
 
 - (void)hide
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:0.1 animations:^{
+         weakSelf.view.backgroundColor = [UIColor clearColor];
+    } completion:^(BOOL finished) {
+        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
 }
 
 - (void)viewDidLoad {

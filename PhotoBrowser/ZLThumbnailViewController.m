@@ -179,10 +179,10 @@
 
 - (void)navRightBtn_Click
 {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     if (self.CancelBlock) {
         self.CancelBlock();
     }
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UICollectionViewDataSource
