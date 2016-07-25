@@ -132,6 +132,7 @@
         }
     }
     
+    self.scrollView.zoomScale = 1;
     self.scrollView.contentSize = frame.size;
     [self.scrollView scrollRectToVisible:self.bounds animated:NO];
     self.containerView.frame = frame;
