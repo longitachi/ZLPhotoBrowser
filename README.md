@@ -1,4 +1,8 @@
 # ZLPhotoBrowser
+[![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
+[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
+[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
+![Language](https://img.shields.io/badge/Language-%20Objective%20C%20-blue.svg)
 
 ###框架整体介绍
 * 该框架为一个多选照片（不支持视频）的框架，兼容设备开启的iCloud照片存储，并在加载和选择iCloud端照片时做部分细节处理(快速滑动切换图片不会导致图片显示混乱)，支持记录历史选择照片。
