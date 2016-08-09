@@ -273,16 +273,24 @@
 
 - (void)showNavBarAndBottomView
 {
-    self.navigationController.navigationBar.hidden = NO;
-    [UIApplication sharedApplication].statusBarHidden = NO;
-    _bottomView.hidden = NO;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+    CGRect frame = _bottomView.frame;
+    frame.origin.y -= frame.size.height;
+    [UIView animateWithDuration:0.3 animations:^{
+        _bottomView.frame = frame;
+    }];
 }
 
 - (void)hideNavBarAndBottomView
 {
-    self.navigationController.navigationBar.hidden = YES;
-    [UIApplication sharedApplication].statusBarHidden = YES;
-    _bottomView.hidden = YES;
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    CGRect frame = _bottomView.frame;
+    frame.origin.y += frame.size.height;
+    [UIView animateWithDuration:0.3 animations:^{
+        _bottomView.frame = frame;
+    }];
 }
 
 - (void)sortAsset

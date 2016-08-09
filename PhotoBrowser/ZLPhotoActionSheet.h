@@ -47,3 +47,11 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 @end
+
+
+
+@interface CustomerNavgationController : UINavigationController
+
+@property (nonatomic, assign) UIStatusBarStyle previousStatusBarStyle;
+
+@end

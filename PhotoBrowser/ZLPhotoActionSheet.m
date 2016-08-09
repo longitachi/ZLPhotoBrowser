@@ -28,6 +28,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 @property (nonatomic, strong) NSMutableArray<ZLSelectPhotoModel *> *arraySelectPhotos;
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
 @property (nonatomic, copy)   handler handler;
+@property (nonatomic, assign) UIStatusBarStyle previousStatusBarStyle;
 
 @end
 
@@ -76,6 +77,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     self.handler = completion;
     self.animate = animate;
     self.sender  = sender;
+    self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
     [self.arraySelectPhotos removeAllObjects];
     [self.arraySelectPhotos addObjectsFromArray:lastSelectPhotoModels];
     
@@ -410,12 +412,14 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 
 - (void)presentVC:(UIViewController *)vc
 {
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    CustomerNavgationController *nav = [[CustomerNavgationController alloc] initWithRootViewController:vc];
     nav.navigationBar.translucent = YES;
-    
+    nav.previousStatusBarStyle = self.previousStatusBarStyle;
     [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
     [nav.navigationBar setBackgroundImage:[self imageWithColor:kRGB(19, 153, 231)] forBarMetrics:UIBarMetricsDefault];
     [nav.navigationBar setTintColor:[UIColor whiteColor]];
+    nav.navigationBar.barStyle = UIBarStyleBlack;
+    
     [self.sender presentViewController:nav animated:YES completion:nil];
 }
 
@@ -486,5 +490,34 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     size.height *= 1.5;
     [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast completion:completion];
 }
+
+@end
+
+
+#pragma mark - 自定义导航控制器
+@implementation CustomerNavgationController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [UIApplication sharedApplication].statusBarStyle = self.previousStatusBarStyle;
+//    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+//BOOL dismiss = NO;
+//- (UIStatusBarStyle)previousStatusBarStyle
+//{
+//    if (!dismiss) {
+//        return UIStatusBarStyleLightContent;
+//    } else {
+//        return self.previousStatusBarStyle;
+//    }
+//}
 
 @end
