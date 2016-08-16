@@ -141,6 +141,9 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 - (void)show
 {
     [self.sender.view addSubview:self];
+    if (self.sender.tabBarController) {
+        self.sender.tabBarController.tabBar.hidden = YES;
+    }
     
     [self resetSubViewState];
     
@@ -164,6 +167,9 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     } else {
         self.hidden = YES;
         [self removeFromSuperview];
+    }
+    if (self.sender.tabBarController) {
+        self.sender.tabBarController.tabBar.hidden = NO;
     }
 }
 
