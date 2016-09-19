@@ -24,6 +24,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [super awakeFromNib];
 }
 
 - (UIScrollView *)scrollView
