@@ -207,8 +207,8 @@
     cell.imageView.clipsToBounds = YES;
     
     CGSize size = cell.frame.size;
-    size.width *= 3;
-    size.height *= 3;
+    size.width *= 2.5;
+    size.height *= 2.5;
     weakify(self);
     [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
