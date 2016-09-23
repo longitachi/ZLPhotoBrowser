@@ -48,7 +48,7 @@
     [self.collectionView registerNib:[UINib nibWithNibName:@"ZLCollectionCell" bundle:kZLPhotoBrowserBundle] forCellWithReuseIdentifier:@"ZLCollectionCell"];
 }
 
-- (IBAction)btnSelectPhoto_Click:(id)sender
+- (IBAction)btnSelectPhotoPreview:(id)sender
 {
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
     //设置照片最大选择数
@@ -56,7 +56,7 @@
     //设置照片最大预览数
     actionSheet.maxPreviewCount = 20;
     weakify(self);
-    [actionSheet showWithSender:self animate:YES lastSelectPhotoModels:self.lastSelectMoldels completion:^(NSArray<UIImage *> * _Nonnull selectPhotos, NSArray<ZLSelectPhotoModel *> * _Nonnull selectPhotoModels) {
+    [actionSheet showPreviewPhotoWithSender:self animate:YES lastSelectPhotoModels:self.lastSelectMoldels completion:^(NSArray<UIImage *> * _Nonnull selectPhotos, NSArray<ZLSelectPhotoModel *> * _Nonnull selectPhotoModels) {
         strongify(weakSelf);
         strongSelf.arrDataSources = selectPhotos;
         strongSelf.lastSelectMoldels = selectPhotoModels;
@@ -64,6 +64,19 @@
         NSLog(@"%@", selectPhotos);
     }];
 }
+
+- (IBAction)btnSelectPhotoLibrary:(id)sender {
+    ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+    weakify(self);
+    [actionSheet showPhotoLibraryWithSender:self lastSelectPhotoModels:self.lastSelectMoldels completion:^(NSArray<UIImage *> * _Nonnull selectPhotos, NSArray<ZLSelectPhotoModel *> * _Nonnull selectPhotoModels) {
+        strongify(weakSelf);
+        strongSelf.arrDataSources = selectPhotos;
+        strongSelf.lastSelectMoldels = selectPhotoModels;
+        [strongSelf.collectionView reloadData];
+        NSLog(@"%@", selectPhotos);
+    }];
+}
+
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {

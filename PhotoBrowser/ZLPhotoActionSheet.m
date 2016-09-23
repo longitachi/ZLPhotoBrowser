@@ -16,6 +16,7 @@
 #import "ZLNoAuthorityViewController.h"
 #import "ZLPhotoBrowser.h"
 #import "ToastUtils.h"
+#import <objc/runtime.h>
 
 double const ScalePhotoWidth = 1000;
 
@@ -36,6 +37,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 
 - (void)dealloc
 {
+    objc_setAssociatedObject(self.sender, &RelatedKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
 }
 
@@ -74,6 +76,21 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 
 - (void)showWithSender:(UIViewController *)sender animate:(BOOL)animate lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> *)lastSelectPhotoModels completion:(void (^)(NSArray<UIImage *> * _Nonnull, NSArray<ZLSelectPhotoModel *> * _Nonnull))completion
 {
+    [self showPreviewPhotoWithSender:sender animate:animate lastSelectPhotoModels:lastSelectPhotoModels completion:completion];
+}
+
+- (void)showPreviewPhotoWithSender:(UIViewController *)sender animate:(BOOL)animate lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> *)lastSelectPhotoModels completion:(void (^)(NSArray<UIImage *> * _Nonnull, NSArray<ZLSelectPhotoModel *> * _Nonnull))completion
+{
+    [self showPreview:YES sender:sender animate:animate lastSelectPhotoModels:lastSelectPhotoModels completion:completion];
+}
+
+- (void)showPhotoLibraryWithSender:(UIViewController *)sender lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> *)lastSelectPhotoModels completion:(void (^)(NSArray<UIImage *> * _Nonnull, NSArray<ZLSelectPhotoModel *> * _Nonnull))completion
+{
+    [self showPreview:NO sender:sender animate:NO lastSelectPhotoModels:lastSelectPhotoModels completion:completion];
+}
+
+- (void)showPreview:(BOOL)preview sender:(UIViewController *)sender animate:(BOOL)animate lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> *)lastSelectPhotoModels completion:(void (^)(NSArray<UIImage *> * _Nonnull, NSArray<ZLSelectPhotoModel *> * _Nonnull))completion
+{
     self.handler = completion;
     self.animate = animate;
     self.sender  = sender;
@@ -81,9 +98,32 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     [self.arraySelectPhotos removeAllObjects];
     [self.arraySelectPhotos addObjectsFromArray:lastSelectPhotoModels];
     
-    [self loadPhotoFromAlbum];
-    
-    [self show];
+    if (preview) {
+        [self loadPhotoFromAlbum];
+        [self show];
+    } else {
+        [self addAssociatedOnSender];
+        [self btnPhotoLibrary_Click:nil];
+    }
+}
+
+static char RelatedKey;
+- (void)addAssociatedOnSender
+{
+    BOOL selfInstanceIsClassVar = NO;
+    unsigned int count = 0;
+    Ivar *vars = class_copyIvarList(self.sender.class, &count);
+    for (int i = 0; i < count; i++) {
+        Ivar var = vars[i];
+        const char * type = ivar_getTypeEncoding(var);
+        NSString *className = [NSString stringWithUTF8String:type];
+        if ([className isEqualToString:[NSString stringWithFormat:@"@\"%@\"", NSStringFromClass(self.class)]]) {
+            selfInstanceIsClassVar = YES;
+        }
+    }
+    if (!selfInstanceIsClassVar) {
+        objc_setAssociatedObject(self.sender, &RelatedKey, self, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
 }
 
 #pragma mark - 判断软件是否有相册、相机访问权限
