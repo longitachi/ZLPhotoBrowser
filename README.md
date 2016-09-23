@@ -25,8 +25,8 @@
 * [使用方法(支持cocoapods安装)] (#使用方法)
 
 ###框架支持与框架依赖
-该框架最低支持到iOS8.0，采用arc模式</br>
-需要导入Photos.framework
+* iOS8.0, * (采用arc模式)
+* XCode8.0 (需要导入Photos.framework)
 
 ###注意点
 如果项目中设置了
@@ -66,8 +66,8 @@ NS_ASSUME_NONNULL_BEGIN
  *              调用该空间的视图控制器
  * @param animate
  *              是否显示动画效果
- * @param selectedAssets
- *              已选择的PHAsset，再次调用"showWithSender:animate:lastSelectPhotoModels:completion:"方法之前，可以把上次回调中selectAssets赋值给该属性，便可实现记录上次选择照片的功能，若不需要记录上次选择照片的功能，则该值传nil即可
+ * @param lastSelectPhotoModels
+ *              已选择的PHAsset，再次调用"showWithSender:animate:lastSelectPhotoModels:completion:"方法之前，可以把上次回调中selectPhotoModels赋值给该属性，便可实现记录上次选择照片的功能，若不需要记录上次选择照片的功能，则该值传nil即可
  * @param completion
  *              完成回调
  */
