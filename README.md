@@ -26,7 +26,7 @@
 
 ###框架支持与框架依赖
 * iOS8.0, * (采用arc模式)
-* XCode8.0 (需要导入Photos.framework)
+* XCode8.0, * (需要导入Photos.framework)
 
 ###注意点
 如果项目中设置了
@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * @brief 显示多选照片视图
  * @param sender
- *              调用该空间的视图控制器
+ *              调用该控件的视图控制器
  * @param animate
  *              是否显示动画效果
  * @param lastSelectPhotoModels
