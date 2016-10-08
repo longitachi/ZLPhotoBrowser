@@ -25,6 +25,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 @interface ZLPhotoActionSheet () <UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPhotoLibraryChangeObserver, CAAnimationDelegate>
 
 @property (nonatomic, assign) BOOL animate;
+@property (nonatomic, assign) BOOL preview;
 @property (nonatomic, strong) NSMutableArray<PHAsset *> *arrayDataSources;
 @property (nonatomic, strong) NSMutableArray<ZLSelectPhotoModel *> *arraySelectPhotos;
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
@@ -70,7 +71,12 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 - (void)photoLibraryDidChange:(PHChange *)changeInstance
 {
     dispatch_sync(dispatch_get_main_queue(), ^{
-        [self loadPhotoFromAlbum];
+        if (self.preview) {
+            [self loadPhotoFromAlbum];
+            [self show];
+        } else {
+            [self btnPhotoLibrary_Click:nil];
+        }
     });
 }
 
@@ -93,17 +99,29 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 {
     self.handler = completion;
     self.animate = animate;
+    self.preview = preview;
     self.sender  = sender;
     self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
     [self.arraySelectPhotos removeAllObjects];
     [self.arraySelectPhotos addObjectsFromArray:lastSelectPhotoModels];
     
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    [self addAssociatedOnSender];
     if (preview) {
-        [self loadPhotoFromAlbum];
-        [self show];
+        if (status == PHAuthorizationStatusAuthorized) {
+            [self loadPhotoFromAlbum];
+            [self show];
+        } else if (status == PHAuthorizationStatusRestricted ||
+                   status == PHAuthorizationStatusDenied) {
+            [self showNoAuthorityVC];
+        }
     } else {
-        [self addAssociatedOnSender];
-        [self btnPhotoLibrary_Click:nil];
+        if (status == PHAuthorizationStatusAuthorized) {
+            [self btnPhotoLibrary_Click:nil];
+        } else if (status == PHAuthorizationStatusRestricted ||
+                   status == PHAuthorizationStatusDenied) {
+            [self showNoAuthorityVC];
+        }
     }
 }
 
@@ -130,11 +148,10 @@ static char RelatedKey;
 - (BOOL)judgeIsHavePhotoAblumAuthority
 {
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusRestricted ||
-        status == PHAuthorizationStatusDenied) {
-        return NO;
+    if (status == PHAuthorizationStatusAuthorized) {
+        return YES;
     }
-    return YES;
+    return NO;
 }
 
 - (BOOL)judgeIsHaveCameraAuthority
@@ -252,9 +269,7 @@ static char RelatedKey;
 - (IBAction)btnPhotoLibrary_Click:(id)sender
 {
     if (![self judgeIsHavePhotoAblumAuthority]) {
-        //无相册访问权限
-        ZLNoAuthorityViewController *nvc = [[ZLNoAuthorityViewController alloc] initWithNibName:@"ZLNoAuthorityViewController" bundle:kZLPhotoBrowserBundle];
-        [self presentVC:nvc];
+        [self showNoAuthorityVC];
     } else {
         self.animate = NO;
         
@@ -454,6 +469,14 @@ static char RelatedKey;
         [strongSelf requestSelPhotos:strongSvc];
     }];
     [self presentVC:svc];
+}
+
+#pragma mark - 显示无权限视图
+- (void)showNoAuthorityVC
+{
+    //无相册访问权限
+    ZLNoAuthorityViewController *nvc = [[ZLNoAuthorityViewController alloc] initWithNibName:@"ZLNoAuthorityViewController" bundle:kZLPhotoBrowserBundle];
+    [self presentVC:nvc];
 }
 
 - (void)presentVC:(UIViewController *)vc
