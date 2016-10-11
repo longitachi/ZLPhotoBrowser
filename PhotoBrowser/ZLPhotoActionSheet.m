@@ -77,6 +77,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
         } else {
             [self btnPhotoLibrary_Click:nil];
         }
+        [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
     });
 }
 
