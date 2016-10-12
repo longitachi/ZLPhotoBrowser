@@ -61,8 +61,10 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
         self.arrayDataSources  = [NSMutableArray array];
         self.arraySelectPhotos = [NSMutableArray array];
         
-        //注册实施监听相册变化
-        [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+        if (![self judgeIsHavePhotoAblumAuthority]) {
+            //注册实施监听相册变化
+            [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+        }
     }
     return self;
 }
