@@ -52,7 +52,7 @@
 {
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
     //设置照片最大选择数
-    actionSheet.maxSelectCount = 5;
+    actionSheet.maxSelectCount = 2;
     //设置照片最大预览数
     actionSheet.maxPreviewCount = 20;
     weakify(self);
@@ -67,6 +67,8 @@
 
 - (IBAction)btnSelectPhotoLibrary:(id)sender {
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+    //设置照片最大选择数
+    actionSheet.maxSelectCount = 2;
     weakify(self);
     [actionSheet showPhotoLibraryWithSender:self lastSelectPhotoModels:self.lastSelectMoldels completion:^(NSArray<UIImage *> * _Nonnull selectPhotos, NSArray<ZLSelectPhotoModel *> * _Nonnull selectPhotoModels) {
         strongify(weakSelf);

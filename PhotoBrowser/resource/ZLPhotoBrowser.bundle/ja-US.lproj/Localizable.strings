@@ -1,0 +1,21 @@
+"ZLPhotoBrowserCameraText" = "カメラ";
+"ZLPhotoBrowserAblumText" = "アルバム";
+"ZLPhotoBrowserCancelText" = "取り消し";
+
+"ZLPhotoBrowserOriginalText" = "原図";
+"ZLPhotoBrowserDoneText" = "確定";
+"ZLPhotoBrowserOKText" = "確定";
+
+"ZLPhotoBrowserPhotoText" = "写真";
+"ZLPhotoBrowserPreviewText" = "プレビュー";
+
+"ZLPhotoBrowserLoadingText" = "ロード中，お待ち下さい";
+"ZLPhotoBrowserHandleText" = "後ほど...";
+
+"ZLPhotoBrowserSaveImageErrorText" = "アルバムには写真を保存する";
+"ZLPhotoBrowserMaxSelectCountText" = "最大選択数: %ld";
+
+"ZLPhotoBrowserNoCameraAuthorityText" = "「設定」->「プライパシー」->「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
+"ZLPhotoBrowserNoAblumAuthorityText" = "%@があなたのアルバムにアクセスするには「設定」->「プライバシー」->「写真」";
+
+"ZLPhotoBrowseriCloudPhotoText" = "システムのアルバムにダウンロードしてからダウンロードしてください";

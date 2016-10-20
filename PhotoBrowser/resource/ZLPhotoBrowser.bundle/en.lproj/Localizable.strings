@@ -1,0 +1,21 @@
+"ZLPhotoBrowserCameraText" = "Camera";
+"ZLPhotoBrowserAblumText" = "Album";
+"ZLPhotoBrowserCancelText" = "Cancel";
+
+"ZLPhotoBrowserOriginalText" = "Original";
+"ZLPhotoBrowserDoneText" = "Done";
+"ZLPhotoBrowserOKText" = "OK";
+
+"ZLPhotoBrowserPhotoText" = "Photos";
+"ZLPhotoBrowserPreviewText" = "Preview";
+
+"ZLPhotoBrowserLoadingText" = "loading，waiting please";
+"ZLPhotoBrowserHandleText" = "waiting...";
+
+"ZLPhotoBrowserSaveImageErrorText" = "Save photo to ablum failed";
+"ZLPhotoBrowserMaxSelectCountText" = "Max select count: %ld";
+
+"ZLPhotoBrowserNoCameraAuthorityText" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
+"ZLPhotoBrowserNoAblumAuthorityText" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";
+
+"ZLPhotoBrowseriCloudPhotoText" = "Retry after download in ablum";

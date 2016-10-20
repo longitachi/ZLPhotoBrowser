@@ -7,8 +7,11 @@
 //
 
 #import "ZLNoAuthorityViewController.h"
+#import "ZLDefine.h"
 
 @interface ZLNoAuthorityViewController ()
+
+@property (weak, nonatomic) IBOutlet UILabel *labPrompt;
 
 @end
 
@@ -16,15 +19,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"照片";
+    
+    self.title = GetLocalLanguageTextValue(ZLPhotoBrowserPhotoText);
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(0, 0, 60, 44);
+    CGFloat width = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 16, YES, 44);
+    btn.frame = CGRectMake(0, 0, width, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [btn setTitle:@"取消" forState:UIControlStateNormal];
+    [btn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    
+    NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoAblumAuthorityText), [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]];
+    
+    self.labPrompt.text = message;
     
     self.navigationItem.hidesBackButton = YES;
 }
@@ -34,13 +43,13 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)btnSetting_Click:(id)sender {
-    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-    if ([[UIApplication sharedApplication] canOpenURL:url]) {
-        //如果点击打开的话，需要记录当前的状态，从设置回到应用的时候会用到
-        [[UIApplication sharedApplication] openURL:url];
-    }
-}
+//- (IBAction)btnSetting_Click:(id)sender {
+//    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+//    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+//        //如果点击打开的话，需要记录当前的状态，从设置回到应用的时候会用到
+//        [[UIApplication sharedApplication] openURL:url];
+//    }
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

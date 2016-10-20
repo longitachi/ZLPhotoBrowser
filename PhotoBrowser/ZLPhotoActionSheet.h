@@ -16,10 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) UIViewController *sender;
 
-@property (weak, nonatomic) IBOutlet UIButton *btnCamera;
-@property (weak, nonatomic) IBOutlet UIView *baseView;
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-
 /** 最大选择数 default is 10 */
 @property (nonatomic, assign) NSInteger maxSelectCount;
 

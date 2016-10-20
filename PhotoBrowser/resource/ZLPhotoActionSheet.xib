@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -122,7 +122,9 @@
             </constraints>
             <connections>
                 <outlet property="baseView" destination="NwQ-VQ-65C" id="NHE-rh-QeU"/>
+                <outlet property="btnAblum" destination="3c7-2D-ETF" id="o6A-X8-uuZ"/>
                 <outlet property="btnCamera" destination="Seh-ZL-uBR" id="yL8-H8-NKv"/>
+                <outlet property="btnCancel" destination="0gN-s7-KDC" id="MUt-WS-Vf4"/>
                 <outlet property="collectionView" destination="kyz-US-a4b" id="5ue-oG-KUP"/>
             </connections>
             <point key="canvasLocation" x="172" y="368"/>

@@ -47,6 +47,7 @@
 		FD0787301C0D45A200D17B97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD07872E1C0D45A200D17B97 /* LaunchScreen.storyboard */; };
 		FD07877E1C0D47DA00D17B97 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD07877D1C0D47DA00D17B97 /* Photos.framework */; };
 		FD30F0691C72EECC0060F19F /* ZLShowBigImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */; };
+		FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +109,8 @@
 		FD07877D1C0D47DA00D17B97 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		FD30F0671C72EECC0060F19F /* ZLShowBigImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLShowBigImage.h; sourceTree = "<group>"; };
 		FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImage.m; sourceTree = "<group>"; };
+		FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ZLPhotoBrowser.h"; sourceTree = "<group>"; };
+		FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ZLPhotoBrowser.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +154,8 @@
 				FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */,
 				FD028BBD1CBE33BB009DD2FC /* ZLThumbnailViewController.h */,
 				FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */,
+				FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */,
+				FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */,
 			);
 			path = PhotoBrowser;
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 				FD028BD51CBE33BB009DD2FC /* ZLBigImageCell.m in Sources */,
 				FD0787281C0D45A200D17B97 /* ViewController.m in Sources */,
 				FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */,
+				FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */,
 				FD30F0691C72EECC0060F19F /* ZLShowBigImage.m in Sources */,
 				FD028BD91CBE33BB009DD2FC /* ZLPhotoBrowser.m in Sources */,
 				FD028BDF1CBE33BB009DD2FC /* ZLThumbnailViewController.m in Sources */,
@@ -459,7 +465,7 @@
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jumpton.SFAMobile;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.ZLPhotoBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -473,7 +479,7 @@
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jumpton.SFAMobile;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.ZLPhotoBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

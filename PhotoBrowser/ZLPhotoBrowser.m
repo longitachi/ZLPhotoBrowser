@@ -25,7 +25,7 @@
     
     self.edgesForExtendedLayout = UIRectEdgeTop;
     
-    self.title = @"照片";
+    self.title = GetLocalLanguageTextValue(ZLPhotoBrowserPhotoText);
     
     _arrayDataSources = [NSMutableArray array];
     
@@ -39,9 +39,10 @@
 - (void)initNavBtn
 {
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(0, 0, 40, 44);
+    CGFloat width = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 16, YES, 44);
+    btn.frame = CGRectMake(0, 0, width, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [btn setTitle:@"取消" forState:UIControlStateNormal];
+    [btn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
@@ -58,7 +59,7 @@
 {
     NSInteger i = 0;
     for (ZLPhotoAblumList *ablum in _arrayDataSources) {
-        if (ablum.assetCollection.assetCollectionSubtype == 209 || [ablum.title isEqualToString:@"所有照片"]) {
+        if (ablum.assetCollection.assetCollectionSubtype == 209) {
             i = [_arrayDataSources indexOfObject:ablum];
             break;
         }

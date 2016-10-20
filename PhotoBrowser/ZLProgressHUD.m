@@ -7,6 +7,7 @@
 //
 
 #import "ZLProgressHUD.h"
+#import "ZLDefine.h"
 
 @implementation ZLProgressHUD
 
@@ -38,7 +39,7 @@
     lab.textAlignment = NSTextAlignmentCenter;
     lab.textColor = [UIColor whiteColor];
     lab.font = [UIFont systemFontOfSize:16];
-    lab.text = @"正在处理...";
+    lab.text = GetLocalLanguageTextValue(ZLPhotoBrowserHandleText);
     
     [view addSubview:indicator];
     [view addSubview:lab];

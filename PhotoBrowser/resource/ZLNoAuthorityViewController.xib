@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -8,6 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZLNoAuthorityViewController">
             <connections>
+                <outlet property="labPrompt" destination="fTn-hW-TfW" id="sOF-1n-fw1"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -22,34 +23,20 @@
                         <constraint firstAttribute="height" constant="150" id="c3g-xx-Z18"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="此应用程序没有权限访问您的照片" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pXw-FR-pPd">
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="在“设置-隐私-图片”中开启口即可查看" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fTn-hW-TfW">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="在“设置-隐私-图片”中开启口即可查看" textAlignment="center" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fTn-hW-TfW">
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OWk-uE-NZ8">
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <state key="normal" title="前往设置"/>
-                    <connections>
-                        <action selector="btnSetting_Click:" destination="-1" eventType="touchUpInside" id="LIH-vR-0Vs"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="fTn-hW-TfW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="50" id="1kj-nA-6g5"/>
                 <constraint firstItem="hzo-0p-E2U" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="2lb-b1-TIu"/>
                 <constraint firstItem="fTn-hW-TfW" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="GzT-K1-tzA"/>
-                <constraint firstItem="OWk-uE-NZ8" firstAttribute="top" secondItem="fTn-hW-TfW" secondAttribute="bottom" constant="8" id="UHh-CU-Uwy"/>
+                <constraint firstAttribute="trailing" secondItem="fTn-hW-TfW" secondAttribute="trailing" constant="50" id="H90-60-jkj"/>
+                <constraint firstItem="fTn-hW-TfW" firstAttribute="top" secondItem="hzo-0p-E2U" secondAttribute="bottom" constant="20" id="TNO-9p-sNW"/>
                 <constraint firstItem="hzo-0p-E2U" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="70" id="WeX-5O-jgU"/>
-                <constraint firstItem="pXw-FR-pPd" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="YWe-4x-oug"/>
-                <constraint firstItem="pXw-FR-pPd" firstAttribute="top" secondItem="hzo-0p-E2U" secondAttribute="bottom" constant="10" id="bLa-1U-Q0F"/>
-                <constraint firstItem="OWk-uE-NZ8" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="gAY-bG-76B"/>
-                <constraint firstItem="fTn-hW-TfW" firstAttribute="top" secondItem="pXw-FR-pPd" secondAttribute="bottom" constant="10" id="l1q-hY-zm9"/>
             </constraints>
         </view>
     </objects>

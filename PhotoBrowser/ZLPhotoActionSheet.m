@@ -24,6 +24,12 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 
 @interface ZLPhotoActionSheet () <UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPhotoLibraryChangeObserver, CAAnimationDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *btnCamera;
+@property (weak, nonatomic) IBOutlet UIButton *btnAblum;
+@property (weak, nonatomic) IBOutlet UIButton *btnCancel;
+@property (weak, nonatomic) IBOutlet UIView *baseView;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+
 @property (nonatomic, assign) BOOL animate;
 @property (nonatomic, assign) BOOL preview;
 @property (nonatomic, strong) NSMutableArray<PHAsset *> *arrayDataSources;
@@ -67,6 +73,15 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
         }
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.btnCamera setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCameraText) forState:UIControlStateNormal];
+    [self.btnAblum setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserAblumText) forState:UIControlStateNormal];
+    [self.btnCancel setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
+    [self resetSubViewState];
 }
 
 //相册变化回调
@@ -170,7 +185,7 @@ static char RelatedKey;
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOKText) style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:action];
     [self.sender presentViewController:alert animated:YES completion:nil];
 }
@@ -188,13 +203,7 @@ static char RelatedKey;
 {
     self.hidden = NO;
     self.baseView.hidden = NO;
-    if (self.arraySelectPhotos.count == 0) {
-        [self.btnCamera setTitle:@"拍照" forState:UIControlStateNormal];
-        [self.btnCamera setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    } else {
-        [self.btnCamera setTitle:[NSString stringWithFormat:@"确定(%ld)", self.arraySelectPhotos.count] forState:UIControlStateNormal];
-        [self.btnCamera setTitleColor:kRGB(19, 153, 231) forState:UIControlStateNormal];
-    }
+    [self changeBtnCameraTitle];
     [self.collectionView setContentOffset:CGPointZero];
 }
 
@@ -204,8 +213,6 @@ static char RelatedKey;
     if (self.sender.tabBarController) {
         self.sender.tabBarController.tabBar.hidden = YES;
     }
-    
-    [self resetSubViewState];
     
     if (self.animate) {
         CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
@@ -251,7 +258,8 @@ static char RelatedKey;
         [self requestSelPhotos:nil];
     } else {
         if (![self judgeIsHaveCameraAuthority]) {
-            [self showAlertWithTitle:@"无法使用相机" message:@"请在iPhone的\"设置-隐私-相机\"中允许访问相机"];
+            NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoCameraAuthorityText), [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]];
+            [self showAlertWithTitle:nil message:message];
             [self hide];
             return;
         }
@@ -310,7 +318,7 @@ static char RelatedKey;
 {
     if (_arraySelectPhotos.count >= self.maxSelectCount
         && btn.selected == NO) {
-        ShowToastLong(@"最多只能选择%ld张图片", self.maxSelectCount);
+        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), self.maxSelectCount);
         return;
     }
     
@@ -319,7 +327,7 @@ static char RelatedKey;
     if (!btn.selected) {
         [btn.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
         if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
-            ShowToastLong(@"该图片尚未从iCloud下载，请在系统相册中下载到本地后重新尝试，或在预览大图中加载完毕后选择");
+            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
             return;
         }
         ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
@@ -342,10 +350,10 @@ static char RelatedKey;
 - (void)changeBtnCameraTitle
 {
     if (self.arraySelectPhotos.count > 0) {
-        [self.btnCamera setTitle:[NSString stringWithFormat:@"确定(%ld)", self.arraySelectPhotos.count] forState:UIControlStateNormal];
+        [self.btnCamera setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), self.arraySelectPhotos.count] forState:UIControlStateNormal];
         [self.btnCamera setTitleColor:kRGB(19, 153, 231) forState:UIControlStateNormal];
     } else {
-        [self.btnCamera setTitle:@"拍照" forState:UIControlStateNormal];
+        [self.btnCamera setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCameraText) forState:UIControlStateNormal];
         [self.btnCamera setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
 }
@@ -526,7 +534,7 @@ static char RelatedKey;
                         model.localIdentifier = asset.localIdentifier;
                         strongSelf.handler(@[[strongSelf scaleImage:image]], @[model]);
                     } else {
-                        ShowToastLong(@"保存图片到相册失败");
+                        ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
                     }
                     [hud hide];
                     [strongSelf hide];

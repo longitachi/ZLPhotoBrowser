@@ -10,6 +10,23 @@
 #define ZLDefine_h
 
 #import "ZLProgressHUD.h"
+#import "NSBundle+ZLPhotoBrowser.h"
+
+#define ZLPhotoBrowserCameraText @"ZLPhotoBrowserCameraText"
+#define ZLPhotoBrowserAblumText @"ZLPhotoBrowserAblumText"
+#define ZLPhotoBrowserCancelText @"ZLPhotoBrowserCancelText"
+#define ZLPhotoBrowserOriginalText @"ZLPhotoBrowserOriginalText"
+#define ZLPhotoBrowserDoneText @"ZLPhotoBrowserDoneText"
+#define ZLPhotoBrowserOKText @"ZLPhotoBrowserOKText"
+#define ZLPhotoBrowserPhotoText @"ZLPhotoBrowserPhotoText"
+#define ZLPhotoBrowserPreviewText @"ZLPhotoBrowserPreviewText"
+#define ZLPhotoBrowserLoadingText @"ZLPhotoBrowserLoadingText"
+#define ZLPhotoBrowserHandleText @"ZLPhotoBrowserHandleText"
+#define ZLPhotoBrowserSaveImageErrorText @"ZLPhotoBrowserSaveImageErrorText"
+#define ZLPhotoBrowserMaxSelectCountText @"ZLPhotoBrowserMaxSelectCountText"
+#define ZLPhotoBrowserNoCameraAuthorityText @"ZLPhotoBrowserNoCameraAuthorityText"
+#define ZLPhotoBrowserNoAblumAuthorityText @"ZLPhotoBrowserNoAblumAuthorityText"
+#define ZLPhotoBrowseriCloudPhotoText @"ZLPhotoBrowseriCloudPhotoText"
 
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -53,6 +70,30 @@ static inline void SetViewHeight (UIView *view, CGFloat height) {
 
 static inline CGFloat GetViewHeight (UIView *view) {
     return view.frame.size.height;
+}
+
+static inline NSString *  GetLocalLanguageTextValue (NSString *key) {
+    return [NSBundle zlLocalizedStringForKey:key];
+}
+
+static inline CGFloat GetMatchValue (NSString *text, CGFloat fontSize, BOOL isHeightFixed, CGFloat fixedValue) {
+    CGSize size;
+    if (isHeightFixed) {
+        size = CGSizeMake(MAXFLOAT, fixedValue);
+    } else {
+        size = CGSizeMake(fixedValue, MAXFLOAT);
+    }
+    
+    CGSize resultSize;
+    if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 7.0) {
+        //返回计算出的size
+        resultSize = [text boundingRectWithSize:size options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:fontSize]} context:nil].size;
+    }
+    if (isHeightFixed) {
+        return resultSize.width;
+    } else {
+        return resultSize.height;
+    }
 }
 
 static inline CABasicAnimation * GetPositionAnimation (id fromValue, id toValue, CFTimeInterval duration, NSString *keyPath) {

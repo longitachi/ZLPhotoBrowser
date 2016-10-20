@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -39,7 +39,7 @@
                             <color key="backgroundColor" red="0.31372549019607843" green="0.70588235294117641" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="FFV-5o-8ty"/>
-                                <constraint firstAttribute="width" constant="70" id="R3A-ez-6Nl"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="R3A-ez-6Nl"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" title="确定">
@@ -62,7 +62,7 @@
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="3Ie-hz-kUe"/>
-                                <constraint firstAttribute="width" constant="45" id="u6Y-cc-LIo"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="45" id="u6Y-cc-LIo"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" title="预览">
@@ -74,7 +74,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xCB-bb-9Iz">
                             <constraints>
-                                <constraint firstAttribute="width" constant="55" id="7Gr-sS-c7c"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="55" id="7Gr-sS-c7c"/>
                                 <constraint firstAttribute="height" constant="30" id="Nq1-4z-wQd"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -112,7 +112,7 @@
                         <constraint firstItem="U0F-PF-fjF" firstAttribute="centerY" secondItem="UEG-aC-cFL" secondAttribute="centerY" id="XwZ-oR-Gks"/>
                         <constraint firstItem="k6v-hM-Uel" firstAttribute="centerY" secondItem="UEG-aC-cFL" secondAttribute="centerY" id="Yhc-HF-RAO"/>
                         <constraint firstItem="EYy-Pw-rys" firstAttribute="centerY" secondItem="UEG-aC-cFL" secondAttribute="centerY" id="e1r-Zt-LcA"/>
-                        <constraint firstItem="xCB-bb-9Iz" firstAttribute="leading" secondItem="k6v-hM-Uel" secondAttribute="trailing" constant="3" id="rMS-Dd-PAg"/>
+                        <constraint firstItem="xCB-bb-9Iz" firstAttribute="leading" secondItem="k6v-hM-Uel" secondAttribute="trailing" constant="5" id="rMS-Dd-PAg"/>
                         <constraint firstItem="xCB-bb-9Iz" firstAttribute="centerY" secondItem="UEG-aC-cFL" secondAttribute="centerY" id="xJX-Xj-51m"/>
                     </constraints>
                 </view>
