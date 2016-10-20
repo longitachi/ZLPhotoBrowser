@@ -6,22 +6,23 @@
 
 ###框架整体介绍
 * 该框架为一个多选照片（不支持视频）的框架，兼容设备开启的iCloud照片存储，并在加载和选择iCloud端照片时做部分细节处理(快速滑动切换图片不会导致图片显示混乱)，支持记录历史选择照片。
-  * 1.支持预览多选(预览图数量及最大多选数可设置)
+  * 1.支持多语言国际化(中:简繁, 英，日)
+  * 2.支持预览多选(预览图数量及最大多选数可设置)
     * [预览快速多选效果图] (#预览快速多选效果图)
-  * 2.支持直接进入相册多选
+  * 3.支持直接进入相册多选
     * [直接进入相册选择相片效果图] (#直接进入相册选择相片效果图)
-  * 3.支持预览大图，大图的缩放等
+  * 4.支持预览大图，大图的缩放等
     * [预览大图及缩放效果图] (#预览大图及缩放效果图)
-  * 4.支持实时拍照
-  * 5.支持多相册(不同的相册名字)图片混合多选
+  * 5.支持实时拍照
+  * 6.支持多相册(不同的相册名字)图片混合多选
     * [相册内混合选择效果图] (#相册内混合选择效果图)
-  * 6.预览已选择照片
+  * 7.预览已选择照片
     * [预览已选择照片效果图] (#预览已选择照片效果图)
-  * 7.原图功能
+  * 8.原图功能
     * [原图功能效果图] (#原图功能效果图)
-  * 8.可实时监测相册图片变化(即在预览图时，如果用户触发截屏等操作，会实时的加载出该图片)
+  * 9.可实时监测相册图片变化(即在预览图时，如果用户触发截屏等操作，会实时的加载出该图片)
     * [实时监测相册内图片变化] (#实时监测相册内图片变化)
-  * 9.加载iCloud端照片(所有照片加载时都会先加载模糊的图片，然后过渡高清图，iCloud端照片加载更加明显)
+  * 10.加载iCloud端照片(所有照片加载时都会先加载模糊的图片，然后过渡高清图，iCloud端照片加载更加明显)
     * [加载iCloud端照片效果图] (#加载iCloud端照片效果图)
 * [常用Api] (#常用Api)
 * [过期Api] (#过期Api)
@@ -74,10 +75,10 @@
 ###<a id="过期Api"></a>过期Api
 ```objc
 //如继续使用该api，将默认调用显示预览视图的效果api
-- (void)showWithSender:(UIViewController *)sender
-               animate:(BOOL)animate
-        lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> * _Nullable)lastSelectPhotoModels
-            completion:(void (^)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels))completion NS_DEPRECATED(2.0, 2.0, 2.0, 8.0, "Use - showPreviewPhotoWithSender:animate:lastSelectPhotoModels:completion:");
+- (void)showPreviewPhotoWithSender:(UIViewController *)sender
+                 animate:(BOOL)animate
+   lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> * _Nullable)lastSelectPhotoModels
+              completion:(void (^)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels))completion; NS_DEPRECATED(2.0, 2.0, 2.0, 8.0, "Use - showPreviewPhotoWithSender:animate:lastSelectPhotoModels:completion:");
 ```
 
 ###<a id="使用方法"></a>使用方法
@@ -102,11 +103,17 @@ ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
 actionSheet.maxSelectCount = 5;
 //设置预览图最大数目
 actionSheet.maxPreviewCount = 20;
-[actionSheet showWithSender:self animate:YES completion:^(NSArray<UIImage *> * _Nonnull selectPhotos) {
-    // your codes
+[actionSheet showPreviewPhotoWithSender:self animate:YES lastSelectPhotoModels:self.lastSelectMoldels completion:^(NSArray<UIImage *> * _Nonnull selectPhotos, NSArray<ZLSelectPhotoModel *> * _Nonnull selectPhotoModels) {
+        // your codes...
 }];
     
 ```
+
+###<a id="多语言国际化效果图"></a>多语言国际化效果图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/english.png)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/japan.png)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/zh-hans.png)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/zh-hant.png)
 
 ###<a id="预览快速多选效果图"></a>预览快速多选效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览图快速选择.gif)
