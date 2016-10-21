@@ -76,10 +76,10 @@
 ###<a id="过期Api"></a>过期Api
 ```objc
 //如继续使用该api，将默认调用显示预览视图的效果api
-- (void)showPreviewPhotoWithSender:(UIViewController *)sender
-                 animate:(BOOL)animate
-   lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> * _Nullable)lastSelectPhotoModels
-              completion:(void (^)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels))completion; NS_DEPRECATED(2.0, 2.0, 2.0, 8.0, "Use - showPreviewPhotoWithSender:animate:lastSelectPhotoModels:completion:");
+- (void)showWithSender:(UIViewController *)sender
+               animate:(BOOL)animate
+        lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> * _Nullable)lastSelectPhotoModels
+            completion:(void (^)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels))completion NS_DEPRECATED(2.0, 2.0, 2.0, 8.0, "Use - showPreviewPhotoWithSender:animate:lastSelectPhotoModels:completion:");
 ```
 
 ###<a id="使用方法"></a>使用方法

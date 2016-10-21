@@ -44,7 +44,6 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 
 - (void)dealloc
 {
-    objc_setAssociatedObject(self.sender, &RelatedKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
 }
 
