@@ -37,6 +37,7 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
 @property (nonatomic, copy)   handler handler;
 @property (nonatomic, assign) UIStatusBarStyle previousStatusBarStyle;
+@property (nonatomic, assign) BOOL senderTabBarIsShow;
 
 @end
 
@@ -209,7 +210,8 @@ static char RelatedKey;
 - (void)show
 {
     [self.sender.view addSubview:self];
-    if (self.sender.tabBarController) {
+    if (self.sender.tabBarController.tabBar.hidden == NO) {
+        self.senderTabBarIsShow = YES;
         self.sender.tabBarController.tabBar.hidden = YES;
     }
     
@@ -234,7 +236,7 @@ static char RelatedKey;
         self.hidden = YES;
         [self removeFromSuperview];
     }
-    if (self.sender.tabBarController) {
+    if (self.senderTabBarIsShow) {
         self.sender.tabBarController.tabBar.hidden = NO;
     }
 }
