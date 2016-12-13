@@ -39,7 +39,7 @@ static ZLPhotoTool *sharePhotoTool = nil;
 }
 
 #pragma mark - 保存图片到系统相册
-- (void)saveImageToAblum:(UIImage *)image completion:(void (^)(BOOL, PHAsset *))completion
+-(void)saveImageToAblum:(UIImage *)image completion:(void (^)(BOOL, PHAsset *))completion
 {
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
     if (status == PHAuthorizationStatusDenied) {
@@ -47,22 +47,18 @@ static ZLPhotoTool *sharePhotoTool = nil;
     } else if (status == PHAuthorizationStatusRestricted) {
         if (completion) completion(NO, nil);
     } else {
-        __block NSString *assetId = nil;
-        
+        __block PHObjectPlaceholder *placeholderAsset=nil;
         [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-            assetId = [PHAssetCreationRequest creationRequestForAssetFromImage:image].placeholderForCreatedAsset.localIdentifier;
+            PHAssetChangeRequest *newAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+            placeholderAsset = newAssetRequest.placeholderForCreatedAsset;
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
             if (!success) {
                 if (completion) completion(NO, nil);
                 return;
             }
-            
-            PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].lastObject;
-            
+            PHAsset *asset = [self getAssetFromlocalIdentifier:placeholderAsset.localIdentifier];
             PHAssetCollection *desCollection = [self getDestinationCollection];
             if (!desCollection) completion(NO, nil);
-            
-            //保存图片
             [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
                 [[PHAssetCollectionChangeRequest changeRequestForAssetCollection:desCollection] addAssets:@[asset]];
             } completionHandler:^(BOOL success, NSError * _Nullable error) {
@@ -70,6 +66,19 @@ static ZLPhotoTool *sharePhotoTool = nil;
             }];
         }];
     }
+}
+
+
+-(PHAsset *)getAssetFromlocalIdentifier:(NSString *)localIdentifier{
+    if(localIdentifier == nil){
+        NSLog(@"Cannot get asset from localID because it is nil");
+        return nil;
+    }
+    PHFetchResult *result = [PHAsset fetchAssetsWithLocalIdentifiers:@[localIdentifier] options:nil];
+    if(result.count){
+        return result[0];
+    }
+    return nil;
 }
 
 //获取自定义相册
