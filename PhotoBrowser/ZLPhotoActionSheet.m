@@ -18,6 +18,8 @@
 #import "ToastUtils.h"
 #import <objc/runtime.h>
 
+#define kBaseViewHeight (self.maxPreviewCount ? 300 : 142)
+
 double const ScalePhotoWidth = 1000;
 
 typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels);
@@ -29,6 +31,8 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 @property (weak, nonatomic) IBOutlet UIView *baseView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *verColHeight;
+
 
 @property (nonatomic, assign) BOOL animate;
 @property (nonatomic, assign) BOOL preview;
@@ -122,6 +126,10 @@ typedef void (^handler)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoM
     self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
     [self.arraySelectPhotos removeAllObjects];
     [self.arraySelectPhotos addObjectsFromArray:lastSelectPhotoModels];
+    
+    if (!self.maxPreviewCount) {
+        self.verColHeight.constant = .0;
+    }
     
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
     [self addAssociatedOnSender];
