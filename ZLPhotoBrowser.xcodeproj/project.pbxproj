@@ -48,6 +48,7 @@
 		FD07877E1C0D47DA00D17B97 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD07877D1C0D47DA00D17B97 /* Photos.framework */; };
 		FD30F0691C72EECC0060F19F /* ZLShowBigImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */; };
 		FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */; };
+		FD999E031E4AF082008A7B31 /* UITableView+Placeholder.m in Sources */ = {isa = PBXBuildFile; fileRef = FD999E021E4AF082008A7B31 /* UITableView+Placeholder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -111,6 +112,8 @@
 		FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImage.m; sourceTree = "<group>"; };
 		FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ZLPhotoBrowser.h"; sourceTree = "<group>"; };
 		FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ZLPhotoBrowser.m"; sourceTree = "<group>"; };
+		FD999E011E4AF082008A7B31 /* UITableView+Placeholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Placeholder.h"; sourceTree = "<group>"; };
+		FD999E021E4AF082008A7B31 /* UITableView+Placeholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Placeholder.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +159,8 @@
 				FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */,
 				FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */,
 				FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */,
+				FD999E011E4AF082008A7B31 /* UITableView+Placeholder.h */,
+				FD999E021E4AF082008A7B31 /* UITableView+Placeholder.m */,
 			);
 			path = PhotoBrowser;
 			sourceTree = "<group>";
@@ -348,6 +353,7 @@
 				FD028BD61CBE33BB009DD2FC /* ZLCollectionCell.m in Sources */,
 				FD028BDA1CBE33BB009DD2FC /* ZLPhotoBrowserCell.m in Sources */,
 				FD028BDD1CBE33BB009DD2FC /* ZLSelectPhotoModel.m in Sources */,
+				FD999E031E4AF082008A7B31 /* UITableView+Placeholder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
