@@ -8,6 +8,12 @@
 
 "ZLPhotoBrowserPhotoText" = "Photos";
 "ZLPhotoBrowserPreviewText" = "Preview";
+"ZLPhotoBrowserGifPreviewText" = "GIF preview";
+"ZLPhotoBrowserVideoPreviewText" = "Video preview";
+
+"ZLPhotoBrowserNoPhotoText" = "No Photo";
+"ZLPhotoBrowserCannotSelectVideo" = "Unable to select video";
+"ZLPhotoBrowserCannotSelectGIF" = "Unable to select GIF image";
 
 "ZLPhotoBrowserLoadingText" = "loading，waiting please";
 "ZLPhotoBrowserHandleText" = "waiting...";
@@ -18,4 +24,5 @@
 "ZLPhotoBrowserNoCameraAuthorityText" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
 "ZLPhotoBrowserNoAblumAuthorityText" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";
 
-"ZLPhotoBrowseriCloudPhotoText" = "Retry after download in ablum";
+"ZLPhotoBrowseriCloudPhotoText" = "Retry after download in photo ablum";
+"ZLPhotoBrowseriCloudVideoText" = "Unable to sync from iCloud";

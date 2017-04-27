@@ -8,6 +8,12 @@
 
 "ZLPhotoBrowserPhotoText" = "照片";
 "ZLPhotoBrowserPreviewText" = "預覽";
+"ZLPhotoBrowserGifPreviewText" = "GIF 預覽";
+"ZLPhotoBrowserVideoPreviewText" = "視頻 預覽";
+
+"ZLPhotoBrowserNoPhotoText" = "無照片";
+"ZLPhotoBrowserCannotSelectVideo" = "不能同時選擇照片和視頻";
+"ZLPhotoBrowserCannotSelectGIF" = "不能同時選擇照片和GIF";
 
 "ZLPhotoBrowserLoadingText" = "加載中，請稍後";
 "ZLPhotoBrowserHandleText" = "正在處理...";
@@ -19,3 +25,4 @@
 "ZLPhotoBrowserNoAblumAuthorityText" = "請在iPhone的\"設置-隱私-相冊\"選項中，允許%@訪問你的相冊";
 
 "ZLPhotoBrowseriCloudPhotoText" = "請在系統相冊中下載到本地后重新嘗試";
+"ZLPhotoBrowseriCloudVideoText" = "iCloud無法同步";

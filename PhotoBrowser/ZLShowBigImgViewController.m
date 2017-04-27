@@ -10,15 +10,15 @@
 #import <Photos/Photos.h>
 #import "ZLBigImageCell.h"
 #import "ZLDefine.h"
-#import "ZLSelectPhotoModel.h"
-#import "ZLPhotoTool.h"
 #import "ToastUtils.h"
+#import "ZLPhotoBrowser.h"
+#import "ZLPhotoModel.h"
+#import "ZLPhotoManager.h"
 
 @interface ZLShowBigImgViewController () <UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 {
     UICollectionView *_collectionView;
     
-    NSMutableArray<PHAsset *> *_arrayDataSources;
     UIButton *_navRightBtn;
     
     //底部view
@@ -29,6 +29,10 @@
     //双击的scrollView
     UIScrollView *_selectScrollView;
     NSInteger _currentPage;
+    
+    NSArray *_arrSelPhotosBackup;
+    NSMutableArray *_arrSelAssets;
+    NSArray *_arrSelAssetsBackup;
 }
 
 @property (nonatomic, strong) UILabel *labPhotosBytes;
@@ -42,8 +46,9 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    _currentPage = self.selectIndex+1;
+    self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
     [self initNavBtns];
-    [self sortAsset];
     [self initCollectionView];
     [self initBottomView];
     [self changeBtnDoneTitle];
@@ -52,27 +57,40 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.shouldReverseAssets) {
-        [_collectionView setContentOffset:CGPointMake((self.assets.count-self.selectIndex-1)*(kViewWidth+kItemMargin), 0)];
-    } else {
-        [_collectionView setContentOffset:CGPointMake(self.selectIndex*(kViewWidth+kItemMargin), 0)];
-    }
     
-    [self changeNavRightBtnStatus];
+    [_collectionView setContentOffset:CGPointMake(self.selectIndex*(kViewWidth+kItemMargin), 0)];
+}
+
+- (void)setModels:(NSArray<ZLPhotoModel *> *)models
+{
+    _models = models;
+    if (self.arrSelPhotos) {
+        _arrSelAssets = [NSMutableArray array];
+        for (ZLPhotoModel *m in models) {
+            [_arrSelAssets addObject:m.asset];
+        }
+        _arrSelAssetsBackup = _arrSelAssets.copy;
+    }
+}
+
+- (void)setArrSelPhotos:(NSMutableArray<UIImage *> *)arrSelPhotos
+{
+    _arrSelPhotos = arrSelPhotos;
+    _arrSelPhotosBackup = arrSelPhotos.copy;
 }
 
 - (void)initNavBtns
 {
     //left nav btn
-    UIImage *navBackImg = [UIImage imageNamed:kZLPhotoBrowserSrcName(@"navBackBtn.png")]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(@"navBackBtn.png")];
+    UIImage *navBackImg = GetImageWithName(@"navBackBtn.png");
                            
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
     
     //right nav btn
     _navRightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _navRightBtn.frame = CGRectMake(0, 0, 25, 25);
-    UIImage *normalImg = [UIImage imageNamed:kZLPhotoBrowserSrcName(@"btn_circle.png")]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(@"btn_circle.png")];
-    UIImage *selImg = [UIImage imageNamed:kZLPhotoBrowserSrcName(@"btn_selected.png")]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(@"btn_selected.png")];
+    UIImage *normalImg = GetImageWithName(@"btn_circle.png");
+    UIImage *selImg = GetImageWithName(@"btn_selected.png");
     [_navRightBtn setBackgroundImage:normalImg forState:UIControlStateNormal];
     [_navRightBtn setBackgroundImage:selImg forState:UIControlStateSelected];
     [_navRightBtn addTarget:self action:@selector(navRightBtn_Click:) forControlEvents:UIControlEventTouchUpInside];
@@ -98,6 +116,8 @@
 
 - (void)initBottomView
 {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
     _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, kViewWidth, 44)];
     _bottomView.backgroundColor = [UIColor whiteColor];
     
@@ -106,23 +126,22 @@
     _btnOriginalPhoto.frame = CGRectMake(12, 7, btnOriWidth+25, 30);
     [_btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
     _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_btnOriginalPhoto setTitleColor:kRGB(80, 180, 234) forState: UIControlStateNormal];
-    [_btnOriginalPhoto setTitleColor:kRGB(80, 180, 234) forState: UIControlStateSelected];
-    UIImage *normalImg = [UIImage imageNamed:kZLPhotoBrowserSrcName(@"btn_original_circle.png")]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(@"btn_original_circle.png")];
-    UIImage *selImg = [UIImage imageNamed:kZLPhotoBrowserSrcName(@"btn_selected.png")]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(@"btn_selected.png")];
+    [_btnOriginalPhoto setTitleColor:kDoneButton_bgColor forState: UIControlStateNormal];
+    UIImage *normalImg = GetImageWithName(@"btn_original_circle.png");
+    UIImage *selImg = GetImageWithName(@"btn_selected.png");
     [_btnOriginalPhoto setImage:normalImg forState:UIControlStateNormal];
     [_btnOriginalPhoto setImage:selImg forState:UIControlStateSelected];
     [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];
     [_btnOriginalPhoto addTarget:self action:@selector(btnOriginalImage_Click:) forControlEvents:UIControlEventTouchUpInside];
-    _btnOriginalPhoto.selected = self.isSelectOriginalPhoto;
-    if (self.arraySelectPhotos.count > 0) {
+    _btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
+    if (nav.arrSelectedModels.count > 0) {
         [self getPhotosBytes];
     }
     [_bottomView addSubview:_btnOriginalPhoto];
     
     self.labPhotosBytes = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_btnOriginalPhoto.frame)+5, 7, 80, 30)];
     self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
-    self.labPhotosBytes.textColor = kRGB(80, 180, 234);
+    self.labPhotosBytes.textColor = kDoneButton_bgColor;
     [_bottomView addSubview:self.labPhotosBytes];
     
     _btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -132,19 +151,26 @@
     _btnDone.layer.masksToBounds = YES;
     _btnDone.layer.cornerRadius = 3.0f;
     [_btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_btnDone setBackgroundColor:kRGB(80, 180, 234)];
+    [_btnDone setBackgroundColor:kDoneButton_bgColor];
     [_btnDone addTarget:self action:@selector(btnDone_Click:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_btnDone];
     
     [self.view addSubview:_bottomView];
+    
+    if (self.arrSelPhotos) {
+        //预览用户已确定选择的照片，隐藏原图按钮
+        _btnOriginalPhoto.hidden = YES;
+    }
 }
 
 #pragma mark - UIButton Actions
 - (void)btnOriginalImage_Click:(UIButton *)btn
 {
-    self.isSelectOriginalPhoto = btn.selected = !btn.selected;
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    nav.isSelectOriginalPhoto = btn.selected = !btn.selected;
     if (btn.selected) {
-        if (![self isHaveCurrentPageImage]) {
+        ZLPhotoModel *m = self.models[_currentPage-1];
+        if (!m.isSelected) {
             [self navRightBtn_Click:_navRightBtn];
         } else {
             [self getPhotosBytes];
@@ -156,59 +182,79 @@
 
 - (void)btnDone_Click:(UIButton *)btn
 {
-    if (self.arraySelectPhotos.count == 0) {
-        PHAsset *asset = _arrayDataSources[_currentPage-1];
-        if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.arrSelectedModels.count == 0) {
+        ZLPhotoModel *model = self.models[_currentPage-1];
+        if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadingText));
             return;
         }
-        ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
-        model.asset = asset;
-        model.localIdentifier = asset.localIdentifier;
-        [_arraySelectPhotos addObject:model];
+        
+        [nav.arrSelectedModels addObject:model];
     }
-    if (self.btnDoneBlock) {
-        self.btnDoneBlock(self.arraySelectPhotos, self.isSelectOriginalPhoto);
+    if (self.arrSelPhotos && self.btnDonePreviewBlock) {
+        self.btnDonePreviewBlock(self.arrSelPhotos, _arrSelAssets);
+    } else if (nav.callSelectImageBlock) {
+        nav.callSelectImageBlock();
     }
 }
 
 - (void)btnBack_Click
 {
-    if (self.onSelectedPhotos) {
-        self.onSelectedPhotos(self.arraySelectPhotos, self.isSelectOriginalPhoto);
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (self.btnBackBlock) {
+        self.btnBackBlock(nav.arrSelectedModels, nav.isSelectOriginalPhoto);
     }
     
-    if (self.isPresent) {
+    UIViewController *vc = [self.navigationController popViewControllerAnimated:YES];
+    //由于collectionView的frame的width是大于该界面的width，所以设置这个颜色是为了pop时候隐藏collectionView的黑色背景
+    _collectionView.backgroundColor = [UIColor clearColor];
+    if (!vc) {
         [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        //由于collectionView的frame的width是大于该界面的width，所以设置这个颜色是为了pop时候隐藏collectionView的黑色背景
-        _collectionView.backgroundColor = [UIColor clearColor];
-        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
 - (void)navRightBtn_Click:(UIButton *)btn
 {
-    if (_arraySelectPhotos.count >= self.maxSelectCount
-        && btn.selected == NO) {
-        [self getPhotosBytes];
-        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), self.maxSelectCount);
-        return;
-    }
-    PHAsset *asset = _arrayDataSources[_currentPage-1];
-    if (![self isHaveCurrentPageImage]) {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
+    ZLPhotoModel *model = self.models[_currentPage-1];
+    if (!btn.selected) {
+        //选中
         [btn.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
-        
-        if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
+        if (nav.arrSelectedModels.count >= nav.maxSelectCount) {
+            ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), nav.maxSelectCount);
+            return;
+        }
+        if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadingText));
             return;
         }
-        ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
-        model.asset = asset;
-        model.localIdentifier = asset.localIdentifier;
-        [_arraySelectPhotos addObject:model];
+        model.isSelected = YES;
+        [nav.arrSelectedModels addObject:model];
+        if (self.arrSelPhotos) {
+            [self.arrSelPhotos addObject:_arrSelPhotosBackup[_currentPage-1]];
+            [_arrSelAssets addObject:_arrSelAssetsBackup[_currentPage-1]];
+        }
+        [self getPhotosBytes];
     } else {
-        [self removeCurrentPageImage];
+        //移除
+        model.isSelected = NO;
+        for (ZLPhotoModel *m in nav.arrSelectedModels) {
+            if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
+                [nav.arrSelectedModels removeObject:model];
+                break;
+            }
+        }
+        if (self.arrSelPhotos) {
+            for (PHAsset *asset in _arrSelAssets) {
+                if ([asset isEqual:_arrSelAssetsBackup[_currentPage-1]]) {
+                    [_arrSelAssets removeObject:asset];
+                    break;
+                }
+            }
+            [self.arrSelPhotos removeObject:_arrSelPhotosBackup[_currentPage-1]];
+        }
     }
     
     btn.selected = !btn.selected;
@@ -216,42 +262,12 @@
     [self changeBtnDoneTitle];
 }
 
-- (BOOL)isHaveCurrentPageImage
-{
-    PHAsset *asset = _arrayDataSources[_currentPage-1];
-    for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
-        if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (void)removeCurrentPageImage
-{
-    PHAsset *asset = _arrayDataSources[_currentPage-1];
-    for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
-        if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
-            [_arraySelectPhotos removeObject:model];
-            break;
-        }
-    }
-}
-
 #pragma mark - 更新按钮、导航条等显示状态
-- (void)changeNavRightBtnStatus
-{
-    if ([self isHaveCurrentPageImage]) {
-        _navRightBtn.selected = YES;
-    } else {
-        _navRightBtn.selected = NO;
-    }
-}
-
 - (void)changeBtnDoneTitle
 {
-    if (self.arraySelectPhotos.count > 0) {
-        [_btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), self.arraySelectPhotos.count] forState:UIControlStateNormal];
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.arrSelectedModels.count > 0) {
+        [_btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), nav.arrSelectedModels.count] forState:UIControlStateNormal];
     } else {
         [_btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
     }
@@ -259,11 +275,12 @@
 
 - (void)getPhotosBytes
 {
-    if (!self.isSelectOriginalPhoto) return;
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (!nav.isSelectOriginalPhoto) return;
     
-    if (self.arraySelectPhotos.count > 0) {
+    if (nav.arrSelectedModels.count > 0) {
         weakify(self);
-        [[ZLPhotoTool sharePhotoTool] getPhotosBytesWithArray:self.arraySelectPhotos completion:^(NSString *photosBytes) {
+        [ZLPhotoManager getPhotosBytesWithArray:nav.arrSelectedModels completion:^(NSString *photosBytes) {
             strongify(weakSelf);
             strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
         }];
@@ -294,24 +311,6 @@
     }];
 }
 
-- (void)sortAsset
-{
-    _arrayDataSources = [NSMutableArray array];
-    if (self.shouldReverseAssets) {
-        NSEnumerator *enumerator = [self.assets reverseObjectEnumerator];
-        id obj;
-        while (obj = [enumerator nextObject]) {
-            [_arrayDataSources addObject:obj];
-        }
-        //当前页
-        _currentPage = _arrayDataSources.count-self.selectIndex;
-    } else {
-        [_arrayDataSources addObjectsFromArray:self.assets];
-        _currentPage = self.selectIndex + 1;
-    }
-    self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, _arrayDataSources.count];
-}
-
 
 #pragma mark - UICollectionDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -321,15 +320,25 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _arrayDataSources.count;
+    return self.models.count;
 }
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [(ZLBigImageCell *)cell resetCellStatus];
+}
+
+//- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    [(ZLBigImageCell *)cell resetCellStatus];
+//}
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZLBigImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLBigImageCell" forIndexPath:indexPath];
-    PHAsset *asset = _arrayDataSources[indexPath.row];
+    ZLPhotoModel *model = self.models[indexPath.row];
     
-    cell.asset = asset;
+    cell.model = model;
     weakify(self);
     cell.singleTapCallBack = ^() {
         strongify(weakSelf);
@@ -351,8 +360,9 @@
         CGFloat page = scrollView.contentOffset.x/(kViewWidth+kItemMargin);
         NSString *str = [NSString stringWithFormat:@"%.0f", page];
         _currentPage = str.integerValue + 1;
-        self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, _arrayDataSources.count];
-        [self changeNavRightBtnStatus];
+        self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
+        ZLPhotoModel *model = self.models[_currentPage-1];
+        _navRightBtn.selected = model.isSelected;
     }
 }
 

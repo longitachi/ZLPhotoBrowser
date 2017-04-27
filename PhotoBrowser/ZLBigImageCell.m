@@ -7,16 +7,14 @@
 //
 
 #import "ZLBigImageCell.h"
-#import "ZLPhotoTool.h"
+#import "ZLPhotoManager.h"
 #import "ZLDefine.h"
 #import <Photos/Photos.h>
+#import "ZLPhotoModel.h"
 
-@interface ZLBigImageCell () <UIScrollViewDelegate>
+@interface ZLBigImageCell ()
 
-@property (nonatomic, strong) UIView *containerView;
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) UIActivityIndicatorView *indicator;
+@property (nonatomic, strong) ZLBigImageView *bigImageView;
 
 @end
 
@@ -25,6 +23,80 @@
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];
+}
+
+- (ZLBigImageView *)bigImageView
+{
+    if (!_bigImageView) {
+        _bigImageView = [[ZLBigImageView alloc] initWithFrame:self.bounds];
+    }
+    return _bigImageView;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self addSubview:self.bigImageView];
+        weakify(self);
+        self.bigImageView.singleTapCallBack = ^() {
+            strongify(weakSelf);
+            if (strongSelf.singleTapCallBack) strongSelf.singleTapCallBack();
+        };
+    }
+    return self;
+}
+
+- (void)resetCellStatus
+{
+    [self.bigImageView resetScale];
+}
+
+- (void)setModel:(ZLPhotoModel *)model
+{
+    _model = model;
+    
+    [self.bigImageView loadNormalImage:model.asset];
+}
+
+@end
+
+/////////////////
+@interface ZLBigImageView () <UIScrollViewDelegate>
+
+@property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIActivityIndicatorView *indicator;
+
+@end
+
+@implementation ZLBigImageView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initUI];
+    }
+    return self;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self initUI];
+    }
+    return self;
+}
+
+- (void)initUI
+{
+    [self addSubview:self.scrollView];
+    [self.scrollView addSubview:self.containerView];
+    [self.containerView addSubview:self.imageView];
+    [self addSubview:self.indicator];
 }
 
 - (UIScrollView *)scrollView
@@ -76,33 +148,44 @@
     if (!_indicator) {
         _indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         _indicator.hidesWhenStopped = YES;
-        _indicator.center = self.contentView.center;
+        _indicator.center = self.center;
     }
     return _indicator;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (void)resetScale
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self addSubview:self.scrollView];
-        [self.scrollView addSubview:self.containerView];
-        [self.containerView addSubview:self.imageView];
-        [self addSubview:self.indicator];
-    }
-    return self;
+    self.scrollView.zoomScale = 1;
 }
 
-- (void)setAsset:(PHAsset *)asset
+- (UIImage *)image
 {
-    _asset = asset;
+    return self.imageView.image;
+}
+
+- (void)loadGifImage:(PHAsset *)asset
+{
+    [self.indicator startAnimating];
+    weakify(self);
+
+    [ZLPhotoManager requestOriginalImageDataForAsset:asset completion:^(NSData *data, NSDictionary *info) {
+        strongify(weakSelf);
+        if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
+            strongSelf.imageView.image = [ZLPhotoManager transformToGifImageWithData:data];
+            [strongSelf resetSubviewSize];
+            [strongSelf.indicator stopAnimating];
+        }
+    }];
+}
+
+- (void)loadNormalImage:(PHAsset *)asset
+{
+    [self.indicator startAnimating];
     CGFloat scale = [UIScreen mainScreen].scale;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
     CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
-    
-    [self.indicator startAnimating];
     weakify(self);
-    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image, NSDictionary *info) {
+    [ZLPhotoManager requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
         strongSelf.imageView.image = image;
         [strongSelf resetSubviewSize];

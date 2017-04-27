@@ -27,8 +27,20 @@
 #define ZLPhotoBrowserNoCameraAuthorityText @"ZLPhotoBrowserNoCameraAuthorityText"
 #define ZLPhotoBrowserNoAblumAuthorityText @"ZLPhotoBrowserNoAblumAuthorityText"
 #define ZLPhotoBrowseriCloudPhotoText @"ZLPhotoBrowseriCloudPhotoText"
+#define ZLPhotoBrowserGifPreviewText @"ZLPhotoBrowserGifPreviewText"
+#define ZLPhotoBrowserVideoPreviewText @"ZLPhotoBrowserVideoPreviewText"
+#define ZLPhotoBrowserNoPhotoText @"ZLPhotoBrowserNoPhotoText"
+#define ZLPhotoBrowserCannotSelectVideo @"ZLPhotoBrowserCannotSelectVideo"
+#define ZLPhotoBrowserCannotSelectGIF @"ZLPhotoBrowserCannotSelectGIF"
+#define ZLPhotoBrowseriCloudVideoText @"ZLPhotoBrowseriCloudVideoText"
 
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
+
+#define kNavBar_color kRGB(19, 153, 231)
+#define kBottomView_color kRGB(255, 255, 255)
+#define kDoneButton_textColor kRGB(255, 255, 255)
+#define kDoneButton_bgColor kRGB(80, 180, 234)
+#define kButtonUnable_textColor kRGB(200, 200, 200)
 
 #define weakify(var)   __weak typeof(var) weakSelf = var
 #define strongify(var) __strong typeof(var) strongSelf = var
@@ -44,7 +56,7 @@
 #define kViewHeight     [[UIScreen mainScreen] bounds].size.height
 
 ////////ZLShowBigImgViewController
-#define kItemMargin 30
+#define kItemMargin 50
 
 ///////ZLBigImageCell 不建议设置太大，太大的话会导致图片加载过慢
 #define kMaxImageWidth 500
@@ -71,6 +83,10 @@ static inline CGFloat GetViewHeight (UIView *view) {
 
 static inline NSString *  GetLocalLanguageTextValue (NSString *key) {
     return [NSBundle zlLocalizedStringForKey:key];
+}
+
+static inline UIImage * GetImageWithName (NSString *name) {
+    return [UIImage imageNamed:kZLPhotoBrowserSrcName(name)]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(name)];
 }
 
 static inline CGFloat GetMatchValue (NSString *text, CGFloat fontSize, BOOL isHeightFixed, CGFloat fixedValue) {

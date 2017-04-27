@@ -10,62 +10,91 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ZLSelectPhotoModel;
+@class ZLPhotoModel;
+@class PHAsset;
+@class AVPlayerItem;
 
 @interface ZLPhotoActionSheet : UIView
 
 @property (nonatomic, weak) UIViewController *sender;
 
-/** 最大选择数 default is 10 */
+/**最大选择数 默认10张*/
 @property (nonatomic, assign) NSInteger maxSelectCount;
 
-/** 预览图最大显示数 default is 20 */
+/**预览图最大显示数 默认20张*/
 @property (nonatomic, assign) NSInteger maxPreviewCount;
+
+/**是否允许选择照片 默认YES*/
+@property (nonatomic, assign) BOOL allowSelectImage;
+
+/**是否允许选择视频 默认YES*/
+@property (nonatomic, assign) BOOL allowSelectVideo;
+
+/**是否允许选择Gif，只是控制是否选择，并不控制是否显示，如果为NO，则不显示gif标识 默认YES*/
+@property (nonatomic, assign) BOOL allowSelectGif;
+
+/**是否允许相册内部拍照 默认YES*/
+@property (nonatomic, assign) BOOL allowTakePhotoInLibrary;
+
+/**是否升序排列，预览界面不受该参数影响，默认升序 YES*/
+@property (nonatomic, assign) BOOL sortAscending;
+
+/**已选择的asset对象数组*/
+@property (nonatomic, strong) NSMutableArray<PHAsset *> *arrSelectedAssets;
+
+/**选择照片回调，回调解析好的图片、对应的asset对象、是否原图*/
+@property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *, NSArray<PHAsset *> *, BOOL);
+
+/**选择gif照片回调，回调解析好的gif图片、对应的asset对象*/
+@property (nonatomic, copy) void (^selectGifBlock)(UIImage *, PHAsset *);
+
+/**选择视频回调，回调第一帧封面图片、对应的asset对象，对应的AVPlayerItem对象*/
+@property (nonatomic, copy) void (^selectVideoBlock)(UIImage *, PHAsset *);
 
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
 
-- (void)showWithSender:(UIViewController *)sender
-               animate:(BOOL)animate
-        lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> * _Nullable)lastSelectPhotoModels
-            completion:(void (^)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels))completion NS_DEPRECATED(2.0, 2.0, 2.0, 8.0, "Use - showPreviewPhotoWithSender:animate:lastSelectPhotoModels:completion:");
+/**
+ 显示ZLPhotoActionSheet选择照片视图
+ 
+ @warning 需提前赋值 sender 对象
+ @param animate 是否显示动画效果
+ */
+- (void)showPreviewAnimated:(BOOL)animate;
+
 
 /**
- * @brief 显示多选照片视图，带预览效果
- * @param sender
- *              调用该控件的视图控制器
- * @param animate
- *              是否显示动画效果
- * @param lastSelectPhotoModels
- *              已选择的PHAsset，再次调用"showWithSender:animate:lastSelectPhotoModels:completion:"方法之前，可以把上次回调中selectPhotoModels赋值给该属性，便可实现记录上次选择照片的功能，若不需要记录上次选择照片的功能，则该值传nil即可
- * @param completion
- *              完成回调
+ 显示ZLPhotoActionSheet选择照片视图
+
+ @param animate 是否显示动画效果
+ @param sender 调用该对象的控制器
  */
-- (void)showPreviewPhotoWithSender:(UIViewController *)sender
-                 animate:(BOOL)animate
-   lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> * _Nullable)lastSelectPhotoModels
-              completion:(void (^)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels))completion;
+- (void)showPreviewAnimated:(BOOL)animate sender:(UIViewController *)sender;
+
 
 /**
- * @brief 显示多选照片视图，直接进入相册选择界面
- * @param sender
- *              调用该控件的视图控制器
- * @param lastSelectPhotoModels
- *              已选择的PHAsset，再次调用"showWithSender:animate:lastSelectPhotoModels:completion:"方法之前，可以把上次回调中selectPhotoModels赋值给该属性，便可实现记录上次选择照片的功能，若不需要记录上次选择照片的功能，则该值传nil即可
- * @param completion
- *              完成回调
+ 直接进入相册选择界面
  */
-- (void)showPhotoLibraryWithSender:(UIViewController *)sender
-             lastSelectPhotoModels:(NSArray<ZLSelectPhotoModel *> * _Nullable)lastSelectPhotoModels
-                        completion:(void (^)(NSArray<UIImage *> *selectPhotos, NSArray<ZLSelectPhotoModel *> *selectPhotoModels))completion;
+- (void)showPhotoLibrary;
+
+/**
+ 直接进入相册选择界面
+ 
+ @param sender 调用该对象的控制器
+ */
+- (void)showPhotoLibraryWithSender:(UIViewController *)sender;
+
+
+
+/**
+ 提供 预览用户已选择的照片(非gif与video类型)，并可以取消已选择的照片
+
+ @param photos 已选择的uiimage照片数组
+ @param assets 已选择的phasset照片数组
+ @param index 点击的照片索引
+ */
+- (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index;
 
 NS_ASSUME_NONNULL_END
 
 @end
 
-
-
-@interface CustomerNavgationController : UINavigationController
-
-@property (nonatomic, assign) UIStatusBarStyle previousStatusBarStyle;
-
-@end

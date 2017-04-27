@@ -8,9 +8,30 @@
 
 #import <UIKit/UIKit.h>
 
+@class ZLPhotoModel;
+
 @interface ZLCollectionCell : UICollectionViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UIButton *btnSelect;
+@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIButton *btnSelect;
+@property (nonatomic, strong) UIImageView *videoBottomView;
+@property (nonatomic, strong) UIImageView *videoImageView;
+@property (nonatomic, strong) UILabel *timeLabel;
+//@property (nonatomic, strong) UIView *topView;
+
+@property (nonatomic, assign) BOOL allSelectGif;
+@property (nonatomic, strong) ZLPhotoModel *model;
+
+@property (nonatomic, copy) void (^selectedBlock)(BOOL);
+
+@property (nonatomic, copy) BOOL (^isSelectedImage)();
+
+@end
+
+
+
+@interface ZLTakePhotoCell : UICollectionViewCell
+
+@property (nonatomic, strong) UIImageView *imageView;
 
 @end

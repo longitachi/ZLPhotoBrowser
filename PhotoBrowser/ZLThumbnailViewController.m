@@ -10,39 +10,65 @@
 #import <Photos/Photos.h>
 #import "ZLDefine.h"
 #import "ZLCollectionCell.h"
-#import "ZLPhotoTool.h"
-#import "ZLSelectPhotoModel.h"
+#import "ZLPhotoManager.h"
+#import "ZLPhotoModel.h"
 #import "ZLShowBigImgViewController.h"
 #import "ZLPhotoBrowser.h"
 #import "ToastUtils.h"
+#import "ZLProgressHUD.h"
+#import "ZLShowGifViewController.h"
+#import "ZLShowVideoViewController.h"
 
-@interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
-    NSMutableArray<PHAsset *> *_arrayDataSources;
-    
     BOOL _isLayoutOK;
 }
+
+@property (nonatomic, strong) NSMutableArray<ZLPhotoModel *> *arrDataSources;
+@property (nonatomic, assign) BOOL allowTakePhoto;
+
 @end
 
 @implementation ZLThumbnailViewController
 
+- (NSMutableArray<ZLPhotoModel *> *)arrDataSources
+{
+    if (!_arrDataSources) {
+        ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+        [hud show];
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        [ZLPhotoManager markSelcectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
+        _arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
+        [hud hide];
+    }
+    return _arrDataSources;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _arrayDataSources = [NSMutableArray array];
+    self.title = self.albumListModel.title;
     
     self.btnDone.layer.masksToBounds = YES;
     self.btnDone.layer.cornerRadius = 3.0f;
+    
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (self.albumListModel.isCameraRoll && nav.allowTakePhotoInLibrary && nav.allowSelectImage) {
+        self.allowTakePhoto = YES;
+    }
     
     [self.btnPreView setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserPreviewText] forState:UIControlStateNormal];
     [self.btnOriginalPhoto setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserOriginalText] forState:UIControlStateNormal];
     [self.btnDone setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserDoneText] forState:UIControlStateNormal];
     
-    [self resetBottomBtnsStatus];
-    [self getOriginalImageBytes];
     [self initNavBtn];
     [self initCollectionView];
-    [self getAssetInAssetCollection];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self resetBottomBtnsStatus];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -54,33 +80,52 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    
     if (!_isLayoutOK) {
-        if (self.collectionView.contentSize.height > self.collectionView.frame.size.height) {
-            [self.collectionView setContentOffset:CGPointMake(0, self.collectionView.contentSize.height-self.collectionView.frame.size.height)];
+        [self scrollToBottom];
+    }
+}
+
+- (void)scrollToBottom
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (!nav.sortAscending) {
+        return;
+    }
+    if (self.arrDataSources.count > 0) {
+        NSInteger index = self.arrDataSources.count-1;
+        if (self.allowTakePhoto) {
+            index += 1;
         }
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
     }
 }
 
 - (void)resetBottomBtnsStatus
 {
-    if (self.arraySelectPhotos.count > 0) {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.arrSelectedModels.count > 0) {
         self.btnOriginalPhoto.enabled = YES;
         self.btnPreView.enabled = YES;
         self.btnDone.enabled = YES;
-        [self.btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), self.arraySelectPhotos.count] forState:UIControlStateNormal];
-        [self.btnOriginalPhoto setTitleColor:kRGB(80, 180, 234) forState:UIControlStateNormal];
-        [self.btnPreView setTitleColor:kRGB(80, 180, 234) forState:UIControlStateNormal];
-        self.btnDone.backgroundColor = kRGB(80, 180, 234);
+        [self.btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), nav.arrSelectedModels.count] forState:UIControlStateNormal];
+        [self.btnOriginalPhoto setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
+        [self.btnPreView setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
+        self.btnDone.backgroundColor = kDoneButton_bgColor;
         [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     } else {
         self.btnOriginalPhoto.enabled = NO;
         self.btnPreView.enabled = NO;
         self.btnDone.enabled = NO;
         [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateDisabled];
-        [self.btnOriginalPhoto setTitleColor:[UIColor colorWithWhite:0.7 alpha:1] forState:UIControlStateDisabled];
-        [self.btnPreView setTitleColor:[UIColor colorWithWhite:0.7 alpha:1] forState:UIControlStateDisabled];
-        self.btnDone.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+        [self.btnOriginalPhoto setTitleColor:kButtonUnable_textColor forState:UIControlStateDisabled];
+        [self.btnPreView setTitleColor:kButtonUnable_textColor forState:UIControlStateDisabled];
+        self.btnDone.backgroundColor = kButtonUnable_textColor;
         [self.btnDone setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+    }
+    self.btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
+    if (nav.isSelectOriginalPhoto) {
+        [self getOriginalImageBytes];
     }
 }
 
@@ -94,12 +139,9 @@
     
     self.collectionView.collectionViewLayout = layout;
     self.collectionView.backgroundColor = [UIColor whiteColor];
-    [self.collectionView registerNib:[UINib nibWithNibName:@"ZLCollectionCell" bundle:kZLPhotoBrowserBundle] forCellWithReuseIdentifier:@"ZLCollectionCell"];
-}
-
-- (void)getAssetInAssetCollection
-{
-    [_arrayDataSources addObjectsFromArray:[[ZLPhotoTool sharePhotoTool] getAssetsInAssetCollection:self.assetCollection ascending:YES]];
+    
+    [self.collectionView registerClass:NSClassFromString(@"ZLTakePhotoCell") forCellWithReuseIdentifier:@"ZLTakePhotoCell"];
+    [self.collectionView registerClass:NSClassFromString(@"ZLCollectionCell") forCellWithReuseIdentifier:@"ZLCollectionCell"];
 }
 
 - (void)initNavBtn
@@ -113,79 +155,47 @@
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
     
-    UIImage *navBackImg = [UIImage imageNamed:kZLPhotoBrowserSrcName(@"navBackBtn.png")]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(@"navBackBtn.png")];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(navLeftBtn_Click)];
+//    UIImage *navBackImg = GetImageWithName(@"navBackBtn.png");
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(navLeftBtn_Click)];
 }
 
 #pragma mark - UIButton Action
-- (void)cell_btn_Click:(UIButton *)btn
-{
-    if (_arraySelectPhotos.count >= self.maxSelectCount
-        && btn.selected == NO) {
-        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), self.maxSelectCount);
-        return;
-    }
-    
-    PHAsset *asset = _arrayDataSources[btn.tag];
-
-    if (!btn.selected) {
-        //添加图片到选中数组
-        [btn.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
-        if (![[ZLPhotoTool sharePhotoTool] judgeAssetisInLocalAblum:asset]) {
-            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
-            return;
-        }
-        ZLSelectPhotoModel *model = [[ZLSelectPhotoModel alloc] init];
-        model.asset = asset;
-        model.localIdentifier = asset.localIdentifier;
-        [_arraySelectPhotos addObject:model];
-    } else {
-        for (ZLSelectPhotoModel *model in _arraySelectPhotos) {
-            if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
-                [_arraySelectPhotos removeObject:model];
-                break;
-            }
-        }
-    }
-    
-    btn.selected = !btn.selected;
-    [self resetBottomBtnsStatus];
-    [self getOriginalImageBytes];
-}
-
 - (IBAction)btnPreview_Click:(id)sender
 {
-    NSMutableArray<PHAsset *> *arrSel = [NSMutableArray array];
-    for (ZLSelectPhotoModel *model in self.arraySelectPhotos) {
-        [arrSel addObject:model.asset];
-    }
-    [self pushShowBigImgVCWithDataArray:arrSel selectIndex:arrSel.count-1];
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    [self pushShowBigImgVCWithDataArray:nav.arrSelectedModels selectIndex:nav.arrSelectedModels.count-1];
 }
 
 - (IBAction)btnOriginalPhoto_Click:(id)sender
 {
-    self.isSelectOriginalPhoto = !self.btnOriginalPhoto.selected;
-    [self getOriginalImageBytes];
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    self.btnOriginalPhoto.selected = !self.btnOriginalPhoto.selected;
+    nav.isSelectOriginalPhoto = self.btnOriginalPhoto.selected;
+    if (nav.isSelectOriginalPhoto) {
+        [self getOriginalImageBytes];
+    } else {
+        self.labPhotosBytes.text = nil;
+    }
 }
 
 - (IBAction)btnDone_Click:(id)sender
 {
-    if (self.DoneBlock) {
-        self.DoneBlock(self.arraySelectPhotos, self.isSelectOriginalPhoto);
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.callSelectImageBlock) {
+        nav.callSelectImageBlock();
     }
 }
 
 - (void)navLeftBtn_Click
 {
-    self.sender.arraySelectPhotos = self.arraySelectPhotos.mutableCopy;
-    self.sender.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)navRightBtn_Click
 {
-    if (self.CancelBlock) {
-        self.CancelBlock();
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.cancelBlock) {
+        nav.cancelBlock();
     }
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -198,35 +208,71 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _arrayDataSources.count;
+    if (self.allowTakePhoto) {
+        return self.arrDataSources.count + 1;
+    }
+    return self.arrDataSources.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
+    if (self.allowTakePhoto && ((nav.sortAscending && indexPath.row >= self.arrDataSources.count) || (!nav.sortAscending && indexPath.row == 0))) {
+        ZLTakePhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLTakePhotoCell" forIndexPath:indexPath];
+        return cell;
+    }
+    
     ZLCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLCollectionCell" forIndexPath:indexPath];
     
-    cell.btnSelect.selected = NO;
-    PHAsset *asset = _arrayDataSources[indexPath.row];
-    
+    ZLPhotoModel *model;
+    if (!self.allowTakePhoto || nav.sortAscending) {
+        model = self.arrDataSources[indexPath.row];
+    } else {
+        model = self.arrDataSources[indexPath.row-1];
+    }
     cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    cell.imageView.clipsToBounds = YES;
     
-    CGSize size = cell.frame.size;
-    size.width *= 2.5;
-    size.height *= 2.5;
     weakify(self);
-    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeExact completion:^(UIImage *image, NSDictionary *info) {
+    __weak typeof(nav) weakNav = nav;
+    __weak typeof(cell) weakCell = cell;
+    cell.selectedBlock = ^(BOOL selected) {
         strongify(weakSelf);
-        cell.imageView.image = image;
-        for (ZLSelectPhotoModel *model in strongSelf.arraySelectPhotos) {
-            if ([model.localIdentifier isEqualToString:asset.localIdentifier]) {
-                cell.btnSelect.selected = YES;
-                break;
+        __strong typeof(weakCell) strongCell = weakCell;
+        __strong typeof(weakNav) strongNav = weakNav;
+        if (!selected) {
+            //选中
+            if (nav.arrSelectedModels.count >= nav.maxSelectCount) {
+                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), nav.maxSelectCount);
+                return;
+            }
+            if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
+                return;
+            }
+            model.isSelected = YES;
+            [strongNav.arrSelectedModels addObject:model];
+            strongCell.btnSelect.selected = YES;
+        } else {
+            strongCell.btnSelect.selected = NO;
+            model.isSelected = NO;
+            for (ZLPhotoModel *m in nav.arrSelectedModels) {
+                if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
+                    [strongNav.arrSelectedModels removeObject:m];
+                    break;
+                }
             }
         }
-    }];
-    cell.btnSelect.tag = indexPath.row;
-    [cell.btnSelect addTarget:self action:@selector(cell_btn_Click:) forControlEvents:UIControlEventTouchUpInside];
+//        [collectionView reloadItemsAtIndexPaths:[collectionView indexPathsForVisibleItems]];
+        [strongSelf resetBottomBtnsStatus];
+    };
+    cell.isSelectedImage = ^BOOL() {
+        strongify(weakSelf);
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)strongSelf.navigationController;
+        return nav.arrSelectedModels.count > 0;
+    };
+    cell.allSelectGif = nav.allowSelectGif;
+    cell.model = model;
     
     return cell;
 }
@@ -234,54 +280,148 @@
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self pushShowBigImgVCWithDataArray:_arrayDataSources selectIndex:indexPath.row];
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (self.allowTakePhoto && ((nav.sortAscending && indexPath.row >= self.arrDataSources.count) || (!nav.sortAscending && indexPath.row == 0))) {
+        //拍照
+        [self takePhoto];
+        return;
+    }
+    
+    NSInteger index = indexPath.row;
+    if (self.allowTakePhoto && !nav.sortAscending) {
+        index = indexPath.row - 1;
+    }
+    ZLPhotoModel *model = self.arrDataSources[index];
+    
+    if (model.type == ZLAssetMediaTypeVideo) {
+        if (nav.arrSelectedModels.count > 0) {
+            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectVideo]);
+            return;
+        }
+        //跳转预览视频
+        ZLShowVideoViewController *vc = [[ZLShowVideoViewController alloc] init];
+        vc.model = model;
+        [self showViewController:vc sender:self];
+    } else if (nav.allowSelectGif && model.type == ZLAssetMediaTypeGif) {
+        if (nav.arrSelectedModels.count > 0) {
+            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectGIF]);
+            return;
+        }
+        //跳转预览GIF
+        ZLShowGifViewController *vc = [[ZLShowGifViewController alloc] init];
+        vc.model = model;
+        [self showViewController:vc sender:self];
+    } else {
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        
+        NSArray *arr = [ZLPhotoManager getPhotoInResult:self.albumListModel.result allowSelectVideo:NO allowSelectImage:YES allowSelectGif:!nav.allowSelectGif];
+        
+        NSMutableArray *selIdentifiers = [NSMutableArray array];
+        for (ZLPhotoModel *m in nav.arrSelectedModels) {
+            [selIdentifiers addObject:m.asset.localIdentifier];
+        }
+        
+        int i = 0;
+        BOOL isFind = NO;
+        for (ZLPhotoModel *m in arr) {
+            if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
+                isFind = YES;
+            }
+            if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
+                m.isSelected = YES;
+            }
+            if (!isFind) {
+                i++;
+            }
+        }
+
+        [self pushShowBigImgVCWithDataArray:arr selectIndex:i];
+    }
 }
 
-- (void)pushShowBigImgVCWithDataArray:(NSArray<PHAsset *> *)dataArray selectIndex:(NSInteger)selectIndex
+- (void)takePhoto
+{
+    //拍照
+    if ([UIImagePickerController isSourceTypeAvailable:
+         UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = NO;
+        picker.videoQuality = UIImagePickerControllerQualityTypeLow;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self showDetailViewController:picker sender:self];
+    }
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    weakify(self);
+    [picker dismissViewControllerAnimated:YES completion:^{
+        strongify(weakSelf);
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+        [hud show];
+        
+        [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (suc) {
+                    ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
+                    [strongSelf handleDataArray:model];
+                } else {
+                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
+                }
+                [hud hide];
+            });
+        }];
+    }];
+}
+
+- (void)handleDataArray:(ZLPhotoModel *)model
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.sortAscending) {
+        [self.arrDataSources addObject:model];
+    } else {
+        [self.arrDataSources insertObject:model atIndex:0];
+    }
+    if (nav.arrSelectedModels.count < nav.maxSelectCount) {
+        model.isSelected = YES;
+        [nav.arrSelectedModels addObject:model];
+    }
+    [self.collectionView reloadData];
+    [self scrollToBottom];
+    [self resetBottomBtnsStatus];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)pushShowBigImgVCWithDataArray:(NSArray<ZLPhotoModel *> *)dataArray selectIndex:(NSInteger)selectIndex
 {
     ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
-    svc.assets         = dataArray;
-    svc.arraySelectPhotos = self.arraySelectPhotos.mutableCopy;
-    svc.selectIndex    = selectIndex;
-    svc.maxSelectCount = _maxSelectCount;
-    svc.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
-    svc.isPresent = NO;
-    svc.shouldReverseAssets = NO;
-    
+    svc.models = dataArray;
+    svc.selectIndex = selectIndex;
     weakify(self);
-    [svc setOnSelectedPhotos:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos, BOOL isSelectOriginalPhoto) {
+    [svc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
         strongify(weakSelf);
-        strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
-        [strongSelf.arraySelectPhotos removeAllObjects];
-        [strongSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
+        [ZLPhotoManager markSelcectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
         [strongSelf.collectionView reloadData];
-        [strongSelf getOriginalImageBytes];
-        [strongSelf resetBottomBtnsStatus];
     }];
-    [svc setBtnDoneBlock:^(NSArray<ZLSelectPhotoModel *> *selectedPhotos, BOOL isSelectOriginalPhoto) {
-        strongify(weakSelf);
-        strongSelf.isSelectOriginalPhoto = isSelectOriginalPhoto;
-        [strongSelf.arraySelectPhotos removeAllObjects];
-        [strongSelf.arraySelectPhotos addObjectsFromArray:selectedPhotos];
-        [strongSelf btnDone_Click:nil];
-    }];
-    
-    [self.navigationController pushViewController:svc animated:YES];
+    [self.navigationController showViewController:svc sender:self];
 }
 
 - (void)getOriginalImageBytes
 {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     weakify(self);
-    if (self.isSelectOriginalPhoto && self.arraySelectPhotos.count > 0) {
-        [[ZLPhotoTool sharePhotoTool] getPhotosBytesWithArray:self.arraySelectPhotos completion:^(NSString *photosBytes) {
-            strongify(weakSelf);
-            strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
-        }];
-        self.btnOriginalPhoto.selected = self.isSelectOriginalPhoto;
-    } else {
-        self.btnOriginalPhoto.selected = NO;
-        self.labPhotosBytes.text = nil;
-    }
+    [ZLPhotoManager getPhotosBytesWithArray:nav.arrSelectedModels completion:^(NSString *photosBytes) {
+        strongify(weakSelf);
+        strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
+    }];
 }
 
 @end

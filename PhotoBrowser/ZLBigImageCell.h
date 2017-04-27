@@ -7,11 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
+
+@class ZLPhotoModel;
 @class PHAsset;
 
 @interface ZLBigImageCell : UICollectionViewCell
 
-@property (nonatomic, strong) PHAsset *asset;
+@property (nonatomic, strong) ZLPhotoModel *model;
 @property (nonatomic, copy)   void (^singleTapCallBack)();
+
+- (void)resetCellStatus;
+
+@end
+
+@interface ZLBigImageView : UIView
+
+
+@property (nonatomic, copy)   void (^singleTapCallBack)();
+
+- (void)loadNormalImage:(PHAsset *)asset;
+- (void)loadGifImage:(PHAsset *)asset;
+- (void)resetScale;
+
+- (UIImage *)image;
 
 @end

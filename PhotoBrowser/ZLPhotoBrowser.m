@@ -8,18 +8,89 @@
 
 #import "ZLPhotoBrowser.h"
 #import "ZLPhotoBrowserCell.h"
-#import "ZLPhotoTool.h"
+#import "ZLPhotoManager.h"
+#import "ZLPhotoModel.h"
 #import "ZLThumbnailViewController.h"
 #import "ZLDefine.h"
 #import "UITableView+Placeholder.h"
 
-@interface ZLPhotoBrowser ()
+@implementation ZLImageNavigationController
+
+- (instancetype)initWithRootViewController:(UIViewController *)rootViewController
 {
-    NSMutableArray<ZLPhotoAblumList *> *_arrayDataSources;
+    self = [super initWithRootViewController:rootViewController];
+    if (self) {
+        [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+        [self.navigationBar setBackgroundImage:[self imageWithColor:kNavBar_color] forBarMetrics:UIBarMetricsDefault];
+        [self.navigationBar setTintColor:[UIColor whiteColor]];
+        self.navigationBar.barStyle = UIBarStyleBlack;
+        self.navigationBar.translucent = YES;
+    }
+    return self;
 }
+
+- (UIImage *)imageWithColor:(UIColor*)color
+{
+    CGRect rect=CGRectMake(0,0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
+}
+
+- (NSMutableArray<ZLPhotoModel *> *)arrSelectedModels
+{
+    if (!_arrSelectedModels) {
+        _arrSelectedModels = [NSMutableArray array];
+    }
+    return _arrSelectedModels;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [UIApplication sharedApplication].statusBarStyle = self.previousStatusBarStyle;
+    //    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+//BOOL dismiss = NO;
+//- (UIStatusBarStyle)previousStatusBarStyle
+//{
+//    if (!dismiss) {
+//        return UIStatusBarStyleLightContent;
+//    } else {
+//        return self.previousStatusBarStyle;
+//    }
+//}
+
+@end
+
+
+@interface ZLPhotoBrowser ()
+
+@property (nonatomic, strong) NSMutableArray<ZLAlbumListModel *> *arrayDataSources;
+
 @end
 
 @implementation ZLPhotoBrowser
+
+- (NSMutableArray<ZLAlbumListModel *> *)arrayDataSources
+{
+    if (!_arrayDataSources) {
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        _arrayDataSources = [NSMutableArray arrayWithArray:[ZLPhotoManager getPhotoAblumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage]];
+    }
+    return _arrayDataSources;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,13 +99,14 @@
     
     self.title = GetLocalLanguageTextValue(ZLPhotoBrowserPhotoText);
     
-    _arrayDataSources = [NSMutableArray array];
-    
     self.tableView.tableFooterView = [[UIView alloc] init];
-    
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self initNavBtn];
-    [self loadAblums];
-    [self pushAllPhotoSoon];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 - (void)initNavBtn
@@ -47,37 +119,15 @@
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
-    self.navigationItem.hidesBackButton = YES;
-}
-
-- (void)loadAblums
-{
-    [_arrayDataSources addObjectsFromArray:[[ZLPhotoTool sharePhotoTool] getPhotoAblumList]];
-}
-
-#pragma mark - 直接push到所有照片界面
-- (void)pushAllPhotoSoon
-{
-    if (_arrayDataSources.count == 0) {
-        return;
-    }
-    NSInteger i = 0;
-    for (ZLPhotoAblumList *ablum in _arrayDataSources) {
-        if (ablum.assetCollection.assetCollectionSubtype == 209) {
-            i = [_arrayDataSources indexOfObject:ablum];
-            break;
-        }
-    }
-    [self pushThumbnailVCWithIndex:i animated:NO];
 }
 
 - (void)navRightBtn_Click
 {
-    if (self.CancelBlock) {
-        self.CancelBlock();
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.cancelBlock) {
+        nav.cancelBlock();
     }
-    
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [nav dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -88,13 +138,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    [tableView placeholderBaseOnNumber:_arrayDataSources.count iconConfig:^(UIImageView *imageView) {
-        imageView.image = [UIImage imageNamed:kZLPhotoBrowserSrcName(@"defaultphoto.png")]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(@"defaultphoto.png")];
+    [tableView placeholderBaseOnNumber:self.arrayDataSources.count iconConfig:^(UIImageView *imageView) {
+        imageView.image = GetImageWithName(@"defaultphoto.png");
     } textConfig:^(UILabel *label) {
-        label.text = @"无照片";
+        label.text = [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserNoPhotoText];
         label.textColor = [UIColor darkGrayColor];
     }];
-    return _arrayDataSources.count;
+    return self.arrayDataSources.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -109,13 +159,9 @@
         cell = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoBrowserCell" owner:self options:nil] lastObject];
     }
     
-    ZLPhotoAblumList *ablumList= _arrayDataSources[indexPath.row];
+    ZLAlbumListModel *albumModel = self.arrayDataSources[indexPath.row];
     
-    [[ZLPhotoTool sharePhotoTool] requestImageForAsset:ablumList.headImageAsset size:CGSizeMake(65*3, 65*3) resizeMode:PHImageRequestOptionsResizeModeFast completion:^(UIImage *image, NSDictionary *info) {
-        cell.headImageView.image = image;
-    }];
-    cell.labTitle.text = ablumList.title;
-    cell.labCount.text = [NSString stringWithFormat:@"(%ld)", ablumList.count];
+    cell.model = albumModel;
     
     return cell;
 }
@@ -123,23 +169,18 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self pushThumbnailVCWithIndex:indexPath.row animated:YES];
 }
 
 - (void)pushThumbnailVCWithIndex:(NSInteger)index animated:(BOOL)animated
 {
-    ZLPhotoAblumList *ablum = _arrayDataSources[index];
+    ZLAlbumListModel *model = self.arrayDataSources[index];
     
     ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] initWithNibName:@"ZLThumbnailViewController" bundle:kZLPhotoBrowserBundle];
-    tvc.title = ablum.title;
-    tvc.maxSelectCount = self.maxSelectCount;
-    tvc.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
-    tvc.assetCollection = ablum.assetCollection;
-    tvc.arraySelectPhotos = self.arraySelectPhotos.mutableCopy;
-    tvc.sender = self;
-    tvc.DoneBlock = self.DoneBlock;
-    tvc.CancelBlock = self.CancelBlock;
-    [self.navigationController pushViewController:tvc animated:animated];
+    tvc.albumListModel = model;
+    
+    [self.navigationController showViewController:tvc sender:self];
 }
 
 - (void)didReceiveMemoryWarning {

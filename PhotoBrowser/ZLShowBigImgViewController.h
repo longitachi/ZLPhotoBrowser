@@ -9,26 +9,20 @@
 #import <UIKit/UIKit.h>
 #import <Photos/Photos.h>
 
-@class ZLSelectPhotoModel;
+@class ZLPhotoModel;
 
 @interface ZLShowBigImgViewController : UIViewController
 
-@property (nonatomic, strong) NSArray<PHAsset *> *assets;
-
-@property (nonatomic, strong) NSMutableArray<ZLSelectPhotoModel *> *arraySelectPhotos;
+@property (nonatomic, strong) NSArray<ZLPhotoModel *> *models;
 
 @property (nonatomic, assign) NSInteger selectIndex; //选中的图片下标
 
-@property (nonatomic, assign) NSInteger maxSelectCount; //最大选择照片数
+@property (nonatomic, copy) void (^btnBackBlock)(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal);
 
-@property (nonatomic, assign) BOOL isSelectOriginalPhoto; //是否选择了原图
 
-@property (nonatomic, assign) BOOL isPresent; //该界面显示方式，预览界面查看大图进来是present，从相册小图进来是push
+//点击选择后的图片预览数组
+@property (nonatomic, strong) NSMutableArray<UIImage *> *arrSelPhotos;
 
-@property (nonatomic, assign) BOOL shouldReverseAssets; //是否需要对接收到的图片数组进行逆序排列
-
-@property (nonatomic, copy) void (^onSelectedPhotos)(NSArray<ZLSelectPhotoModel *> *, BOOL isSelectOriginalPhoto); //点击返回按钮的回调
-
-@property (nonatomic, copy) void (^btnDoneBlock)(NSArray<ZLSelectPhotoModel *> *, BOOL isSelectOriginalPhoto); //点击确定按钮回调
+@property (nonatomic, copy) void (^btnDonePreviewBlock)(NSArray<UIImage *> *, NSArray<PHAsset *> *);
 
 @end
