@@ -15,7 +15,8 @@
   * 4.支持预览大图，大图的缩放等（预览视频、gif）
     * [预览大图及缩放效果图](#预览大图及缩放效果图)
   * 5.支持预览界面和相册内实时拍照
-  * 6.支持多相册(不同的相册名字)图片混合多选
+    * [拍照](#拍照)
+  * 6.支持多相册图片混合多选
     * [相册内混合选择效果图](#相册内混合选择效果图)
   * 7.预览已选择照片
     * [预览已选择照片效果图](#预览已选择照片效果图)
@@ -131,12 +132,19 @@ Localized resources can be mixed YES
 
 ### <a id="预览大图及缩放效果图"></a>预览大图及缩放效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/查看大图支持缩放.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览选择gif.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览选择视频.gif)
+
+### <a id="拍照"></a>拍照
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/相册内部拍照.gif)
 
 ### <a id="相册内混合选择效果图"></a>相册内混合选择效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/相册内混合选择.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/不能同时选择照片和gif/video.gif)
 
 ### <a id="预览已选择照片效果图"></a>预览已选择照片效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览已选择照片.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览确定选择的照片.gif)
 
 ### <a id="原图功能效果图"></a>原图功能效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/原图功能.gif)
