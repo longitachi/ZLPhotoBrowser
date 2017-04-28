@@ -95,6 +95,10 @@
     [_navRightBtn setBackgroundImage:selImg forState:UIControlStateSelected];
     [_navRightBtn addTarget:self action:@selector(navRightBtn_Click:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_navRightBtn];
+    
+    if (self.models.count == 1) {
+        _navRightBtn.selected = self.models.firstObject.isSelected;
+    }
 }
 
 #pragma mark - 初始化CollectionView

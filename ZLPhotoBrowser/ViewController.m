@@ -87,7 +87,7 @@
     
     NSMutableArray *arr = [NSMutableArray array];
     for (PHAsset *asset in self.lastSelectAssets) {
-        if (asset.mediaType == PHAssetMediaTypeImage) {
+        if (asset.mediaType == PHAssetMediaTypeImage && ![[asset valueForKey:@"filename"] hasSuffix:@"GIF"]) {
             [arr addObject:asset];
         }
     }
