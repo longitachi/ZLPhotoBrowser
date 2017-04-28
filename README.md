@@ -31,16 +31,6 @@
 * XCode8.0
   * (需要导入Photos.framework)
 
-### 注意点
-如果项目中设置了
-```objc
-[[UINavigationBar appearance] setTranslucent:NO];
-```
-则需要在ZLDefine.h里 把kViewHeight 修改为
-```objc
-#define kViewHeight [[UIScreen mainScreen] bounds].size.height - 64
-```
-
 ### <a id="常用Api"></a>常用Api
 ```objc
 /**
@@ -140,7 +130,7 @@ Localized resources can be mixed YES
 
 ### <a id="相册内混合选择效果图"></a>相册内混合选择效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/相册内混合选择.gif)
-![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/不能同时选择照片和gif/video.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/不能同时选择照片和gif或video.gif)
 
 ### <a id="预览已选择照片效果图"></a>预览已选择照片效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览已选择照片.gif)
