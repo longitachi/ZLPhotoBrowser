@@ -106,7 +106,6 @@ double const ScalePhotoWidth = 1000;
 {
     self = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
     if (self) {
-        self.frame = CGRectMake(0, 0, kViewWidth, kViewHeight);
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumInteritemSpacing = 3;
@@ -303,6 +302,7 @@ static char RelatedKey;
 
 - (void)show
 {
+    self.frame = self.sender.view.bounds;
     [self.sender.view addSubview:self];
     if (self.sender.tabBarController.tabBar.hidden == NO) {
         self.senderTabBarIsShow = YES;
@@ -310,8 +310,9 @@ static char RelatedKey;
     }
     
     if (self.animate) {
-        CGPoint fromPoint = CGPointMake(kViewWidth/2, kViewHeight+kBaseViewHeight/2);
-        CGPoint toPoint   = CGPointMake(kViewWidth/2, kViewHeight-kBaseViewHeight/2);
+        CGFloat height = self.frame.size.height;
+        CGPoint fromPoint = CGPointMake(kViewWidth/2, height+kBaseViewHeight/2);
+        CGPoint toPoint   = CGPointMake(kViewWidth/2, height-kBaseViewHeight/2);
         CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.2, @"position");
         [self.baseView.layer addAnimation:animation forKey:nil];
     }
