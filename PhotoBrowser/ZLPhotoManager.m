@@ -309,19 +309,19 @@ static BOOL _sortAscending;
             CGFloat scale = [UIScreen mainScreen].scale;
             CGFloat width = MIN(kViewWidth, kMaxImageWidth);
             CGSize size = CGSizeMake(width*scale, width*scale*model.asset.pixelHeight/model.asset.pixelWidth);
-            [self requestImageForAsset:model.asset size:size completion:completion];
+            [self requestImageForAsset:model.asset size:size resizeMode:PHImageRequestOptionsResizeModeFast cancel:NO completion:completion];
         }
     }
 }
 
 + (void)requestOriginalImageForAsset:(PHAsset *)asset completion:(void (^)(UIImage *, NSDictionary *))completion
 {
-    [self requestImageForAsset:asset size:PHImageManagerMaximumSize resizeMode:PHImageRequestOptionsResizeModeExact synchronous:YES completion:completion];
+    [self requestImageForAsset:asset size:PHImageManagerMaximumSize resizeMode:PHImageRequestOptionsResizeModeExact cancel:NO completion:completion];
 }
 
 + (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size completion:(void (^)(UIImage *, NSDictionary *))completion
 {
-    [self requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast synchronous:NO completion:completion];
+    [self requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast cancel:YES completion:completion];
 }
 
 + (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *, NSDictionary *))completion
@@ -333,12 +333,12 @@ static BOOL _sortAscending;
 
 static PHImageRequestID requestID = -1;
 #pragma mark - 获取asset对应的图片
-+ (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode synchronous:(BOOL)synchronous completion:(void (^)(UIImage *, NSDictionary *))completion
++ (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode cancel:(BOOL)cancel completion:(void (^)(UIImage *, NSDictionary *))completion
 {
     //请求大图界面，当切换图片时，取消上一张图片的请求，对于iCloud端的图片，可以节省流量
     CGFloat scale = [UIScreen mainScreen].scale;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
-    if (requestID >= 1 && size.width/width==scale) {
+    if (cancel && requestID >= 1 && size.width/width==scale) {
         [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
     }
     
@@ -349,9 +349,8 @@ static PHImageRequestID requestID = -1;
      这个属性只有在 synchronous 为 true 时有效。
      */
     
-    option.synchronous = synchronous;
     option.resizeMode = resizeMode;//控制照片尺寸
-    option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;//控制照片质量
+//    option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;//控制照片质量
     option.networkAccessAllowed = YES;
     
     /*
