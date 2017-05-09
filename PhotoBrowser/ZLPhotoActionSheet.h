@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**预览图最大显示数 默认20张*/
 @property (nonatomic, assign) NSInteger maxPreviewCount;
 
+/**cell的圆角弧度 默认为0*/
+@property (nonatomic, assign) CGFloat cellCornerRadio;
+
 /**是否允许选择照片 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectImage;
 
@@ -52,6 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) void (^selectVideoBlock)(UIImage *, PHAsset *);
 
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
+
 
 /**
  显示ZLPhotoActionSheet选择照片视图

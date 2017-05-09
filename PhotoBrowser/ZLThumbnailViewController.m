@@ -220,6 +220,8 @@
     
     if (self.allowTakePhoto && ((nav.sortAscending && indexPath.row >= self.arrDataSources.count) || (!nav.sortAscending && indexPath.row == 0))) {
         ZLTakePhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLTakePhotoCell" forIndexPath:indexPath];
+        cell.layer.masksToBounds = YES;
+        cell.layer.cornerRadius = nav.cellCornerRadio;
         return cell;
     }
     
@@ -272,6 +274,7 @@
         return nav.arrSelectedModels.count > 0;
     };
     cell.allSelectGif = nav.allowSelectGif;
+    cell.cornerRadio = nav.cellCornerRadio;
     cell.model = model;
     
     return cell;

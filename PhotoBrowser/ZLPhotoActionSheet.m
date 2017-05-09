@@ -117,6 +117,7 @@ double const ScalePhotoWidth = 1000;
         
         self.maxSelectCount = 10;
         self.maxPreviewCount = 20;
+        self.cellCornerRadio = .0;
         self.allowSelectImage = YES;
         self.allowSelectVideo = YES;
         self.allowSelectGif = YES;
@@ -194,7 +195,7 @@ double const ScalePhotoWidth = 1000;
     
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
     if (status == PHAuthorizationStatusRestricted ||
-               status == PHAuthorizationStatusDenied) {
+        status == PHAuthorizationStatusDenied) {
         [self showNoAuthorityVC];
     } else if (status == PHAuthorizationStatusNotDetermined) {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
@@ -319,23 +320,27 @@ static char RelatedKey;
     }
     
     if (self.animate) {
-        CGFloat height = self.frame.size.height;
-        CGPoint fromPoint = CGPointMake(kViewWidth/2, height+kBaseViewHeight/2);
-        CGPoint toPoint   = CGPointMake(kViewWidth/2, height-kBaseViewHeight/2);
-        CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.2, @"position");
-        [self.baseView.layer addAnimation:animation forKey:nil];
+        __block CGRect frame = self.baseView.frame;
+        frame.origin.y += kBaseViewHeight;
+        self.baseView.frame = frame;
+        [UIView animateWithDuration:0.2 animations:^{
+            frame.origin.y -= kBaseViewHeight;
+            self.baseView.frame = frame;
+        } completion:nil];
     }
 }
 
 - (void)hide
 {
     if (self.animate) {
-        CGPoint fromPoint = self.baseView.layer.position;
-        CGPoint toPoint   = CGPointMake(fromPoint.x, fromPoint.y+kBaseViewHeight);
-        CABasicAnimation *animation = GetPositionAnimation([NSValue valueWithCGPoint:fromPoint], [NSValue valueWithCGPoint:toPoint], 0.1, @"position");
-        animation.delegate = self;
-        
-        [self.baseView.layer addAnimation:animation forKey:nil];
+        __block CGRect frame = self.baseView.frame;
+        frame.origin.y += kBaseViewHeight;
+        [UIView animateWithDuration:0.2 animations:^{
+            self.baseView.frame = frame;
+        } completion:^(BOOL finished) {
+            self.hidden = YES;
+            [self removeFromSuperview];
+        }];
     } else {
         self.hidden = YES;
         [self removeFromSuperview];
@@ -523,6 +528,7 @@ static char RelatedKey;
         return strongSelf.arrSelectedModels.count > 0;
     };
     cell.allSelectGif = self.allowSelectGif;
+    cell.cornerRadio = self.cellCornerRadio;
     cell.model = model;
     
     return cell;
@@ -591,6 +597,7 @@ static char RelatedKey;
     ZLImageNavigationController *nav = [[ZLImageNavigationController alloc] initWithRootViewController:rootVC];
     nav.previousStatusBarStyle = self.previousStatusBarStyle;
     nav.maxSelectCount = self.maxSelectCount;
+    nav.cellCornerRadio = self.cellCornerRadio;
     nav.allowSelectVideo = self.allowSelectVideo;
     nav.allowSelectImage = self.allowSelectImage;
     nav.allowSelectGif = self.allowSelectGif;

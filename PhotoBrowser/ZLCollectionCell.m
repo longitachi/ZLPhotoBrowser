@@ -103,6 +103,11 @@
 {
     _model = model;
     
+    if (self.cornerRadio > .0) {
+        self.layer.masksToBounds = YES;
+        self.layer.cornerRadius = self.cornerRadio;
+    }
+    
     if (model.type == ZLAssetMediaTypeVideo) {
         self.btnSelect.hidden = YES;
         self.videoBottomView.hidden = NO;

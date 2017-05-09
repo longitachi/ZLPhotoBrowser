@@ -34,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *rememberLastSelSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *previewTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
+@property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
 
 @property (nonatomic, strong) NSMutableArray<UIImage *> *lastSelectPhotos;
 @property (nonatomic, strong) NSMutableArray<PHAsset *> *lastSelectAssets;
@@ -82,7 +83,7 @@
     actionSheet.maxPreviewCount = self.previewTextField.text.integerValue;
     //设置照片最大选择数
     actionSheet.maxSelectCount = self.maxSelCountTextField.text.integerValue;
-    
+    actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
     actionSheet.sender = self;
     
     NSMutableArray *arr = [NSMutableArray array];

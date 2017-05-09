@@ -25,6 +25,9 @@
 /**是否允许选择视频 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectVideo;
 
+/**cell的圆角弧度 默认为0*/
+@property (nonatomic, assign) CGFloat cellCornerRadio;
+
 /**是否允许选择Gif 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectGif;
 
