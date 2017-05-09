@@ -193,6 +193,15 @@ double const ScalePhotoWidth = 1000;
     }
     
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusRestricted ||
+               status == PHAuthorizationStatusDenied) {
+        [self showNoAuthorityVC];
+    } else if (status == PHAuthorizationStatusNotDetermined) {
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            
+        }];
+    }
+    
     [self addAssociatedOnSender];
     if (preview) {
         if (status == PHAuthorizationStatusAuthorized) {
