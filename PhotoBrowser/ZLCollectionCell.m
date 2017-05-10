@@ -35,7 +35,7 @@
 {
     if (!_imageView) {
         _imageView = [[UIImageView alloc] init];
-        _imageView.contentMode = UIViewContentModeScaleAspectFit;
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.clipsToBounds = YES;
         [self.contentView addSubview:_imageView];
     }
@@ -135,8 +135,8 @@
     self.btnSelect.selected = model.isSelected;
     
     CGSize size;
-    size.width = GetViewWidth(self) * 2;
-    size.height = GetViewHeight(self) * 2;
+    size.width = GetViewWidth(self) * 2.5;
+    size.height = GetViewHeight(self) * 2.5;
     
     weakify(self);
     [ZLPhotoManager requestImageForAsset:model.asset size:size completion:^(UIImage *image, NSDictionary *info) {

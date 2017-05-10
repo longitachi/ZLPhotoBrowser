@@ -21,6 +21,12 @@
 - (void)setModel:(ZLAlbumListModel *)model
 {
     _model = model;
+    
+    if (self.cornerRadio > .0) {
+        self.headImageView.layer.masksToBounds = YES;
+        self.headImageView.layer.cornerRadius = self.cornerRadio;
+    }
+    
     weakify(self);
     [ZLPhotoManager requestImageForAsset:model.headImageAsset size:CGSizeMake(GetViewWidth(self)*3, GetViewHeight(self)*3) completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);

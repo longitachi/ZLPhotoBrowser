@@ -167,7 +167,7 @@
 {
     [self.indicator startAnimating];
     weakify(self);
-
+    
     [ZLPhotoManager requestOriginalImageDataForAsset:asset completion:^(NSData *data, NSDictionary *info) {
         strongify(weakSelf);
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
@@ -181,7 +181,7 @@
 - (void)loadNormalImage:(PHAsset *)asset
 {
     [self.indicator startAnimating];
-    CGFloat scale = [UIScreen mainScreen].scale;
+    CGFloat scale = 2;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
     CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
     weakify(self);
@@ -199,29 +199,34 @@
 {
     CGRect frame;
     frame.origin = CGPointZero;
+    frame.size.width = kViewWidth;
     
     UIImage *image = self.imageView.image;
     CGFloat imageScale = image.size.height/image.size.width;
     CGFloat screenScale = kViewHeight/kViewWidth;
-    if (image.size.width <= GetViewWidth(self) && image.size.height <= GetViewHeight(self)) {
-        frame.size.width = image.size.width;
-        frame.size.height = image.size.height;
+    
+    if (imageScale > screenScale) {
+        frame.size.height = floorf(kViewWidth * imageScale);
     } else {
-        if (imageScale > screenScale) {
-            frame.size.height = GetViewHeight(self);
-            frame.size.width = GetViewHeight(self)/imageScale;
-        } else {
-            frame.size.width = GetViewWidth(self);
-            frame.size.height = GetViewWidth(self) * imageScale;
+        CGFloat height = floorf(kViewWidth * imageScale);
+        if (height < 1 || isnan(height)) {
+            //iCloud图片height为NaN
+            height = GetViewHeight(self);
         }
+        frame.size.height = height;
     }
     
-    self.scrollView.zoomScale = 1;
-    self.scrollView.contentSize = frame.size;
-    [self.scrollView scrollRectToVisible:self.bounds animated:NO];
     self.containerView.frame = frame;
-    self.containerView.center = self.scrollView.center;
+    if (frame.size.height < GetViewHeight(self)) {
+        self.containerView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);
+    }
+    
+    CGSize contentSize = CGSizeMake(kViewWidth, MAX(kViewHeight, frame.size.height));
+    self.scrollView.contentSize = contentSize;
+    
     self.imageView.frame = self.containerView.bounds;
+    
+    [self.scrollView scrollRectToVisible:self.bounds animated:NO];
 }
 
 #pragma mark - 手势点击事件

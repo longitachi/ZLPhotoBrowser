@@ -76,7 +76,7 @@ double const ScalePhotoWidth = 1000;
 {
     if (!_placeholderLabel) {
         _placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kViewWidth, 100)];
-        _placeholderLabel.text = @"暂无照片";
+        _placeholderLabel.text = GetLocalLanguageTextValue(ZLPhotoBrowserNoPhotoText);
         _placeholderLabel.textAlignment = NSTextAlignmentCenter;
         _placeholderLabel.textColor = [UIColor darkGrayColor];
         _placeholderLabel.font = [UIFont systemFontOfSize:15];
@@ -741,7 +741,7 @@ static char RelatedKey;
 {
     CGFloat width  = (CGFloat)asset.pixelWidth;
     CGFloat height = (CGFloat)asset.pixelHeight;
-    CGFloat scale = width/height;
+    CGFloat scale = MAX(0.5, width/height);
     
     return CGSizeMake(self.collectionView.frame.size.height*scale, self.collectionView.frame.size.height);
 }

@@ -278,12 +278,10 @@ static BOOL _sortAscending;
 
 + (void)requestOriginalImageDataForAsset:(PHAsset *)asset completion:(void (^)(NSData *, NSDictionary *))completion
 {
-    [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
-    
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc]init];
     option.networkAccessAllowed = YES;
     option.resizeMode = PHImageRequestOptionsResizeModeFast;
-    requestID = [[PHImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
         BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
         if (downloadFinined && imageData) {
             if (completion) completion(imageData, info);
@@ -309,19 +307,19 @@ static BOOL _sortAscending;
             CGFloat scale = [UIScreen mainScreen].scale;
             CGFloat width = MIN(kViewWidth, kMaxImageWidth);
             CGSize size = CGSizeMake(width*scale, width*scale*model.asset.pixelHeight/model.asset.pixelWidth);
-            [self requestImageForAsset:model.asset size:size resizeMode:PHImageRequestOptionsResizeModeFast cancel:NO completion:completion];
+            [self requestImageForAsset:model.asset size:size completion:completion];
         }
     }
 }
 
 + (void)requestOriginalImageForAsset:(PHAsset *)asset completion:(void (^)(UIImage *, NSDictionary *))completion
 {
-    [self requestImageForAsset:asset size:PHImageManagerMaximumSize resizeMode:PHImageRequestOptionsResizeModeExact cancel:NO completion:completion];
+    [self requestImageForAsset:asset size:PHImageManagerMaximumSize resizeMode:PHImageRequestOptionsResizeModeExact completion:completion];
 }
 
 + (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size completion:(void (^)(UIImage *, NSDictionary *))completion
 {
-    [self requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast cancel:YES completion:completion];
+    [self requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast completion:completion];
 }
 
 + (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *, NSDictionary *))completion
@@ -331,17 +329,9 @@ static BOOL _sortAscending;
     }];
 }
 
-static PHImageRequestID requestID = -1;
 #pragma mark - 获取asset对应的图片
-+ (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode cancel:(BOOL)cancel completion:(void (^)(UIImage *, NSDictionary *))completion
++ (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *, NSDictionary *))completion
 {
-    //请求大图界面，当切换图片时，取消上一张图片的请求，对于iCloud端的图片，可以节省流量
-    CGFloat scale = [UIScreen mainScreen].scale;
-    CGFloat width = MIN(kViewWidth, kMaxImageWidth);
-    if (cancel && requestID >= 1 && size.width/width==scale) {
-        [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
-    }
-    
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     /**
      resizeMode：对请求的图像怎样缩放。有三种选择：None，默认加载方式；Fast，尽快地提供接近或稍微大于要求的尺寸；Exact，精准提供要求的尺寸。
@@ -361,7 +351,7 @@ static PHImageRequestID requestID = -1;
      PHImageErrorKey：如果没有图像，字典内的错误信息
      */
     
-    requestID = [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
+    [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
         BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey];
         //不要该判断，即如果该图片在iCloud上时候，会先显示一张模糊的预览图，待加载完毕后会显示高清图
         // && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue]

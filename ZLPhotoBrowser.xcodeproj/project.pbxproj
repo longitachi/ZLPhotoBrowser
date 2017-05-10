@@ -49,7 +49,6 @@
 		FD22D7221E9E2EDC008FCC4E /* ZLPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD22D7211E9E2EDC008FCC4E /* ZLPhotoManager.m */; };
 		FD30F0691C72EECC0060F19F /* ZLShowBigImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */; };
 		FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */; };
-		FD999E031E4AF082008A7B31 /* UITableView+Placeholder.m in Sources */ = {isa = PBXBuildFile; fileRef = FD999E021E4AF082008A7B31 /* UITableView+Placeholder.m */; };
 		FDDB9EBA1E6D2EF6008ED9F1 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDB9EB71E6D2EF6008ED9F1 /* YYWeakProxy.m */; };
 		FDDB9EBB1E6D2EF6008ED9F1 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDB9EB91E6D2EF6008ED9F1 /* YYFPSLabel.m */; };
 /* End PBXBuildFile section */
@@ -118,8 +117,6 @@
 		FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImage.m; sourceTree = "<group>"; };
 		FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ZLPhotoBrowser.h"; sourceTree = "<group>"; };
 		FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ZLPhotoBrowser.m"; sourceTree = "<group>"; };
-		FD999E011E4AF082008A7B31 /* UITableView+Placeholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Placeholder.h"; sourceTree = "<group>"; };
-		FD999E021E4AF082008A7B31 /* UITableView+Placeholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Placeholder.m"; sourceTree = "<group>"; };
 		FDDB9EB61E6D2EF6008ED9F1 /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
 		FDDB9EB71E6D2EF6008ED9F1 /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
 		FDDB9EB81E6D2EF6008ED9F1 /* YYFPSLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYFPSLabel.h; sourceTree = "<group>"; };
@@ -173,8 +170,6 @@
 				FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */,
 				FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */,
 				FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */,
-				FD999E011E4AF082008A7B31 /* UITableView+Placeholder.h */,
-				FD999E021E4AF082008A7B31 /* UITableView+Placeholder.m */,
 			);
 			path = PhotoBrowser;
 			sourceTree = "<group>";
@@ -372,7 +367,6 @@
 				FDDB9EBA1E6D2EF6008ED9F1 /* YYWeakProxy.m in Sources */,
 				FD10CECB1EA855100041095C /* ZLShowVideoViewController.m in Sources */,
 				FD028BDA1CBE33BB009DD2FC /* ZLPhotoBrowserCell.m in Sources */,
-				FD999E031E4AF082008A7B31 /* UITableView+Placeholder.m in Sources */,
 				FD10CECE1EA86AF60041095C /* ZLCollectionCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

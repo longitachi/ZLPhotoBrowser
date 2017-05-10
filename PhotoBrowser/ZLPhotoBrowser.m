@@ -12,7 +12,6 @@
 #import "ZLPhotoModel.h"
 #import "ZLThumbnailViewController.h"
 #import "ZLDefine.h"
-#import "UITableView+Placeholder.h"
 
 @implementation ZLImageNavigationController
 
@@ -79,9 +78,35 @@
 
 @property (nonatomic, strong) NSMutableArray<ZLAlbumListModel *> *arrayDataSources;
 
+@property (nonatomic, strong) UIView *placeholderView;
+
 @end
 
 @implementation ZLPhotoBrowser
+
+- (UIView *)placeholderView
+{
+    if (!_placeholderView) {
+        _placeholderView = [[UIView alloc] initWithFrame:self.view.bounds];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 80)];
+        imageView.image = GetImageWithName(@"defaultphoto.png");
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.center = CGPointMake(kViewWidth/2, kViewHeight/2-90);
+        [_placeholderView addSubview:imageView];
+        
+        UILabel *placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kViewHeight/2-40, kViewWidth, 20)];
+        placeholderLabel.text = GetLocalLanguageTextValue(ZLPhotoBrowserNoPhotoText);
+        placeholderLabel.textAlignment = NSTextAlignmentCenter;
+        placeholderLabel.textColor = [UIColor darkGrayColor];
+        placeholderLabel.font = [UIFont systemFontOfSize:15];
+        [_placeholderView addSubview:placeholderLabel];
+        
+        _placeholderView.hidden = YES;
+        [self.view addSubview:_placeholderView];
+    }
+    return _placeholderView;
+}
 
 - (NSMutableArray<ZLAlbumListModel *> *)arrayDataSources
 {
@@ -138,12 +163,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    [tableView placeholderBaseOnNumber:self.arrayDataSources.count iconConfig:^(UIImageView *imageView) {
-        imageView.image = GetImageWithName(@"defaultphoto.png");
-    } textConfig:^(UILabel *label) {
-        label.text = [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserNoPhotoText];
-        label.textColor = [UIColor darkGrayColor];
-    }];
+    if (self.arrayDataSources.count == 0) {
+        self.placeholderView.hidden = NO;
+    } else {
+        self.placeholderView.hidden = YES;
+    }
     return self.arrayDataSources.count;
 }
 
@@ -160,6 +184,9 @@
     }
     
     ZLAlbumListModel *albumModel = self.arrayDataSources[indexPath.row];
+    
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    cell.cornerRadio = nav.cellCornerRadio;
     
     cell.model = albumModel;
     
