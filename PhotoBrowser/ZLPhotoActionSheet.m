@@ -649,7 +649,7 @@ static char RelatedKey;
 {
     ZLPhotoBrowser *photoBrowser = [[ZLPhotoBrowser alloc] initWithStyle:UITableViewStylePlain];
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:photoBrowser];
-    ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] init];
+    ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] initWithNibName:@"ZLThumbnailViewController" bundle:kZLPhotoBrowserBundle];
     ZLAlbumListModel *m = [ZLPhotoManager getCameraRollAlbumList:self.allowSelectVideo allowSelectImage:self.allowSelectImage];
     tvc.albumListModel = m;
     [nav pushViewController:tvc animated:YES];
