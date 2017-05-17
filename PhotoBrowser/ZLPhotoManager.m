@@ -418,6 +418,8 @@ static BOOL _sortAscending;
     for (ZLPhotoModel *m in dataArr) {
         if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
             m.isSelected = YES;
+        } else {
+            m.isSelected = NO;
         }
     }
 }

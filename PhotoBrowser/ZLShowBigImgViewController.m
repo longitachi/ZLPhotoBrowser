@@ -246,7 +246,7 @@
         model.isSelected = NO;
         for (ZLPhotoModel *m in nav.arrSelectedModels) {
             if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
-                [nav.arrSelectedModels removeObject:model];
+                [nav.arrSelectedModels removeObject:m];
                 break;
             }
         }
