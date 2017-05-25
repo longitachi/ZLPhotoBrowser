@@ -406,7 +406,7 @@
 - (void)pushShowBigImgVCWithDataArray:(NSArray<ZLPhotoModel *> *)dataArray selectIndex:(NSInteger)selectIndex
 {
     ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
-    svc.models = dataArray;
+    svc.models = dataArray.copy;
     svc.selectIndex = selectIndex;
     weakify(self);
     [svc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
