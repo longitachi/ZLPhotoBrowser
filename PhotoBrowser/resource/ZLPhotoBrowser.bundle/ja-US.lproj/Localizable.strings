@@ -6,6 +6,8 @@
 "ZLPhotoBrowserDoneText" = "確定";
 "ZLPhotoBrowserOKText" = "確定";
 
+"ZLPhotoBrowserBackText" = "戻る";
+
 "ZLPhotoBrowserPhotoText" = "写真";
 "ZLPhotoBrowserPreviewText" = "プレビュー";
 "ZLPhotoBrowserGifPreviewText" = "プレビュー";

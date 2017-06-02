@@ -84,6 +84,7 @@
     //设置照片最大选择数
     actionSheet.maxSelectCount = self.maxSelCountTextField.text.integerValue;
     actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
+    actionSheet.showSelectBtn = YES;
     actionSheet.sender = self;
     
     NSMutableArray *arr = [NSMutableArray array];
@@ -92,7 +93,7 @@
             [arr addObject:asset];
         }
     }
-    actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn ? arr : nil;
+    actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn&&self.maxSelCountTextField.text.integerValue>1 ? arr : nil;
     
     weakify(self);
     [actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {

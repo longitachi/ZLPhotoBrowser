@@ -37,6 +37,9 @@
 /**是否升序排列，预览界面不受该参数影响，默认升序 YES*/
 @property (nonatomic, assign) BOOL sortAscending;
 
+/**控制单选模式下，是否显示选择按钮，默认 NO，多选模式不受控制*/
+@property (nonatomic, assign) BOOL showSelectBtn;
+
 /**是否选择了原图*/
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
 

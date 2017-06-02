@@ -6,6 +6,8 @@
 "ZLPhotoBrowserDoneText" = "確定";
 "ZLPhotoBrowserOKText" = "確定";
 
+"ZLPhotoBrowserBackText" = "返回";
+
 "ZLPhotoBrowserPhotoText" = "照片";
 "ZLPhotoBrowserPreviewText" = "預覽";
 "ZLPhotoBrowserGifPreviewText" = "GIF 預覽";

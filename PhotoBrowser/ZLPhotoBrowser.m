@@ -19,9 +19,9 @@
 {
     self = [super initWithRootViewController:rootViewController];
     if (self) {
-        [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+        [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: kNavBar_tintColor}];
         [self.navigationBar setBackgroundImage:[self imageWithColor:kNavBar_color] forBarMetrics:UIBarMetricsDefault];
-        [self.navigationBar setTintColor:[UIColor whiteColor]];
+        [self.navigationBar setTintColor:kNavBar_tintColor];
         self.navigationBar.barStyle = UIBarStyleBlack;
         self.navigationBar.translucent = YES;
     }
@@ -125,7 +125,7 @@
     self.title = GetLocalLanguageTextValue(ZLPhotoBrowserPhotoText);
     
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserBackText) style:UIBarButtonItemStylePlain target:nil action:nil];
     [self initNavBtn];
 }
 
@@ -141,7 +141,7 @@
     btn.frame = CGRectMake(0, 0, width, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [btn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn setTitleColor:kNavBar_tintColor forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
 }

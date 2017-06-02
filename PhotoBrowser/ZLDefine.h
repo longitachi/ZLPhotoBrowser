@@ -18,6 +18,7 @@
 #define ZLPhotoBrowserOriginalText @"ZLPhotoBrowserOriginalText"
 #define ZLPhotoBrowserDoneText @"ZLPhotoBrowserDoneText"
 #define ZLPhotoBrowserOKText @"ZLPhotoBrowserOKText"
+#define ZLPhotoBrowserBackText @"ZLPhotoBrowserBackText"
 #define ZLPhotoBrowserPhotoText @"ZLPhotoBrowserPhotoText"
 #define ZLPhotoBrowserPreviewText @"ZLPhotoBrowserPreviewText"
 #define ZLPhotoBrowserLoadingText @"ZLPhotoBrowserLoadingText"
@@ -37,6 +38,7 @@
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 #define kNavBar_color kRGB(19, 153, 231)
+#define kNavBar_tintColor kRGB(255, 255, 255)
 #define kBottomView_color kRGB(255, 255, 255)
 #define kDoneButton_textColor kRGB(255, 255, 255)
 #define kDoneButton_bgColor kRGB(80, 180, 234)

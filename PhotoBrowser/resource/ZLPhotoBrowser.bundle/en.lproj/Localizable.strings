@@ -6,6 +6,8 @@
 "ZLPhotoBrowserDoneText" = "Done";
 "ZLPhotoBrowserOKText" = "OK";
 
+"ZLPhotoBrowserBackText" = "Back";
+
 "ZLPhotoBrowserPhotoText" = "Photos";
 "ZLPhotoBrowserPreviewText" = "Preview";
 "ZLPhotoBrowserGifPreviewText" = "GIF preview";

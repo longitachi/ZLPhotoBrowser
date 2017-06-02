@@ -50,7 +50,7 @@
 /**
  * @brief 获取选中的图片
  */
-+ (void)requestSelectedImageForAsset:(ZLPhotoModel *)model isOriginal:(BOOL)isOriginal completion:(void (^)(UIImage *, NSDictionary *))completion;
++ (void)requestSelectedImageForAsset:(ZLPhotoModel *)model isOriginal:(BOOL)isOriginal allowSelectGif:(BOOL)allowSelectGif completion:(void (^)(UIImage *, NSDictionary *))completion;
 
 
 /**

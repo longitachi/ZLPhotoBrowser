@@ -20,6 +20,7 @@
 //@property (nonatomic, strong) UIView *topView;
 
 @property (nonatomic, assign) BOOL allSelectGif;
+@property (nonatomic, assign) BOOL showSelectBtn;
 @property (nonatomic, assign) CGFloat cornerRadio;
 @property (nonatomic, strong) ZLPhotoModel *model;
 

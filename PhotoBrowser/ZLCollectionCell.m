@@ -118,7 +118,7 @@
 //            self.topView.hidden = !self.isSelectedImage();
 //        }
     } else if (model.type == ZLAssetMediaTypeGif) {
-        self.btnSelect.hidden = self.allSelectGif;
+        self.btnSelect.hidden = self.allSelectGif?:!self.showSelectBtn;
         self.videoBottomView.hidden = !self.allSelectGif;
         self.videoImageView.hidden = YES;
         self.timeLabel.hidden = NO;
@@ -127,7 +127,7 @@
 //            self.topView.hidden = self.allSelectGif && !self.isSelectedImage();
 //        }
     } else {
-        self.btnSelect.hidden = NO;
+        self.btnSelect.hidden = !self.showSelectBtn;
         self.videoBottomView.hidden = YES;
 //        self.topView.hidden = YES;
     }

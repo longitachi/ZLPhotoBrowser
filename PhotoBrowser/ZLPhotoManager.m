@@ -289,9 +289,9 @@ static BOOL _sortAscending;
     }];
 }
 
-+ (void)requestSelectedImageForAsset:(ZLPhotoModel *)model isOriginal:(BOOL)isOriginal completion:(void (^)(UIImage *, NSDictionary *))completion
++ (void)requestSelectedImageForAsset:(ZLPhotoModel *)model isOriginal:(BOOL)isOriginal allowSelectGif:(BOOL)allowSelectGif completion:(void (^)(UIImage *, NSDictionary *))completion
 {
-    if (model.type == ZLAssetMediaTypeGif) {
+    if (model.type == ZLAssetMediaTypeGif && allowSelectGif) {
         [self requestOriginalImageDataForAsset:model.asset completion:^(NSData *data, NSDictionary *info) {
             if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
                 UIImage *image = [ZLPhotoManager transformToGifImageWithData:data];

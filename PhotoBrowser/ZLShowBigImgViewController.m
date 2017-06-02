@@ -86,6 +86,11 @@
                            
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
     
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (!nav.showSelectBtn) {
+        return;
+    }
+    
     //right nav btn
     _navRightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _navRightBtn.frame = CGRectMake(0, 0, 25, 25);
@@ -123,7 +128,7 @@
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
     _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, kViewWidth, 44)];
-    _bottomView.backgroundColor = [UIColor whiteColor];
+    _bottomView.backgroundColor = kBottomView_color;
     
     _btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat btnOriWidth = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, 30);

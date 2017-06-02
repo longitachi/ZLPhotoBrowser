@@ -72,7 +72,7 @@
 
     
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, kViewWidth, 44)];
-    self.bottomView.backgroundColor = [UIColor whiteColor];
+    self.bottomView.backgroundColor = kBottomView_color;
     [self.view addSubview:_bottomView];
     
     self.labPhotosBytes = [[UILabel alloc] initWithFrame:CGRectMake(12, 7, 80, 30)];

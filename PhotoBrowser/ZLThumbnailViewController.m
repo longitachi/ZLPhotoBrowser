@@ -60,6 +60,7 @@
     [self.btnPreView setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserPreviewText] forState:UIControlStateNormal];
     [self.btnOriginalPhoto setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserOriginalText] forState:UIControlStateNormal];
     [self.btnDone setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserDoneText] forState:UIControlStateNormal];
+    self.bottomView.backgroundColor = kBottomView_color;
     
     [self initNavBtn];
     [self initCollectionView];
@@ -151,7 +152,7 @@
     btn.frame = CGRectMake(0, 0, width, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [btn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn setTitleColor:kNavBar_tintColor forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
     
@@ -274,6 +275,7 @@
         return nav.arrSelectedModels.count > 0;
     };
     cell.allSelectGif = nav.allowSelectGif;
+    cell.showSelectBtn = nav.showSelectBtn;
     cell.cornerRadio = nav.cellCornerRadio;
     cell.model = model;
     
@@ -389,9 +391,14 @@
     } else {
         [self.arrDataSources insertObject:model atIndex:0];
     }
-    if (nav.arrSelectedModels.count < nav.maxSelectCount) {
+    if (nav.maxSelectCount > 1 && nav.arrSelectedModels.count < nav.maxSelectCount) {
         model.isSelected = YES;
         [nav.arrSelectedModels addObject:model];
+    } else if (nav.maxSelectCount == 1 && !nav.arrSelectedModels.count) {
+        model.isSelected = YES;
+        [nav.arrSelectedModels addObject:model];
+        [self btnDone_Click:nil];
+        return;
     }
     [self.collectionView reloadData];
     [self scrollToBottom];

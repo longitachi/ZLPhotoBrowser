@@ -25,7 +25,7 @@
 
 double const ScalePhotoWidth = 1000;
 
-@interface ZLPhotoActionSheet () <UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPhotoLibraryChangeObserver, CAAnimationDelegate>
+@interface ZLPhotoActionSheet () <UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPhotoLibraryChangeObserver>
 
 @property (weak, nonatomic) IBOutlet UIButton *btnCamera;
 @property (weak, nonatomic) IBOutlet UIButton *btnAblum;
@@ -123,6 +123,7 @@ double const ScalePhotoWidth = 1000;
         self.allowSelectGif = YES;
         self.allowTakePhotoInLibrary = YES;
         self.sortAscending = YES;
+        self.showSelectBtn = NO;
         
         if (![self judgeIsHavePhotoAblumAuthority]) {
             //注册实施监听相册变化
@@ -182,6 +183,9 @@ double const ScalePhotoWidth = 1000;
     if (!self.allowSelectImage && self.arrSelectedModels.count) {
         [self.arrSelectedAssets removeAllObjects];
         [self.arrSelectedModels removeAllObjects];
+    }
+    if (self.maxSelectCount > 1) {
+        self.showSelectBtn = YES;
     }
     self.animate = animate;
     self.preview = preview;
@@ -350,12 +354,6 @@ static char RelatedKey;
     }
 }
 
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
-{
-    self.hidden = YES;
-    [self removeFromSuperview];
-}
-
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [self hide];
@@ -429,7 +427,7 @@ static char RelatedKey;
     weakify(self);
     for (int i = 0; i < self.arrSelectedModels.count; i++) {
         ZLPhotoModel *model = self.arrSelectedModels[i];
-        [ZLPhotoManager requestSelectedImageForAsset:model isOriginal:self.isSelectOriginalPhoto completion:^(UIImage *image, NSDictionary *info) {
+        [ZLPhotoManager requestSelectedImageForAsset:model isOriginal:self.isSelectOriginalPhoto allowSelectGif:self.allowSelectGif completion:^(UIImage *image, NSDictionary *info) {
             if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
             
             strongify(weakSelf);
@@ -528,6 +526,7 @@ static char RelatedKey;
         return strongSelf.arrSelectedModels.count > 0;
     };
     cell.allSelectGif = self.allowSelectGif;
+    cell.showSelectBtn = self.showSelectBtn;
     cell.cornerRadio = self.cellCornerRadio;
     cell.model = model;
     
@@ -603,6 +602,7 @@ static char RelatedKey;
     nav.allowSelectGif = self.allowSelectGif;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
     nav.sortAscending = self.sortAscending;
+    nav.showSelectBtn = self.showSelectBtn;
     nav.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
     [nav.arrSelectedModels removeAllObjects];
     [nav.arrSelectedModels addObjectsFromArray:self.arrSelectedModels];
@@ -723,9 +723,14 @@ static char RelatedKey;
 - (void)handleDataArray:(ZLPhotoModel *)model
 {
     [self.arrDataSources insertObject:model atIndex:0];
-    if (self.arrSelectedModels.count < self.maxSelectCount) {
+    if (self.maxSelectCount > 1 && self.arrSelectedModels.count < self.maxSelectCount) {
         model.isSelected = YES;
         [self.arrSelectedModels addObject:model];
+    } else if (self.maxSelectCount == 1 && !self.arrSelectedModels.count) {
+        model.isSelected = YES;
+        [self.arrSelectedModels addObject:model];
+        [self requestSelPhotos:nil];
+        return;
     }
     [self.collectionView reloadData];
     [self changeCancelBtnTitle];
