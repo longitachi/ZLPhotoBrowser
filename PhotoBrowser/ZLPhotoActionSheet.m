@@ -122,6 +122,7 @@ double const ScalePhotoWidth = 1000;
         self.allowSelectVideo = YES;
         self.allowSelectGif = YES;
         self.allowTakePhotoInLibrary = YES;
+        self.showCaptureImageOnTakePhotoBtn = YES;
         self.sortAscending = YES;
         self.showSelectBtn = NO;
         
@@ -601,6 +602,7 @@ static char RelatedKey;
     nav.allowSelectImage = self.allowSelectImage;
     nav.allowSelectGif = self.allowSelectGif;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
+    nav.showCaptureImageOnTakePhotoBtn = self.showCaptureImageOnTakePhotoBtn;
     nav.sortAscending = self.sortAscending;
     nav.showSelectBtn = self.showSelectBtn;
     nav.isSelectOriginalPhoto = self.isSelectOriginalPhoto;

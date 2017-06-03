@@ -32,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *selVideoSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *takePhotoInLibrarySwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *rememberLastSelSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *showCaptureImageSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *previewTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
@@ -74,17 +75,28 @@
 - (ZLPhotoActionSheet *)getPas
 {
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+    
+#pragma optional
+    //以下参数为自定义参数，均可不设置，有默认值
     actionSheet.sortAscending = self.sortSegment.selectedSegmentIndex==0;
     actionSheet.allowSelectImage = self.selImageSwitch.isOn;
     actionSheet.allowSelectGif = self.selGifSwitch.isOn;
     actionSheet.allowSelectVideo = self.selVideoSwitch.isOn;
+    //设置相册内部显示拍照按钮
     actionSheet.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
+    //设置在内部拍照按钮上实时显示相机俘获画面
+    actionSheet.showCaptureImageOnTakePhotoBtn = self.showCaptureImageSwitch.isOn;
     //设置照片最大预览数
     actionSheet.maxPreviewCount = self.previewTextField.text.integerValue;
     //设置照片最大选择数
     actionSheet.maxSelectCount = self.maxSelCountTextField.text.integerValue;
+    //设置照片cell弧度
     actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
-    actionSheet.showSelectBtn = YES;
+    //单选模式是否显示选择按钮
+    actionSheet.showSelectBtn = NO;
+    
+#pragma required
+    //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;
     
     NSMutableArray *arr = [NSMutableArray array];

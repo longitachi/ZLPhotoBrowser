@@ -39,6 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**是否允许相册内部拍照 默认YES*/
 @property (nonatomic, assign) BOOL allowTakePhotoInLibrary;
 
+/**是否在相册内部拍照按钮上面实时显示相机俘获的影像 默认 YES*/
+@property (nonatomic, assign) BOOL showCaptureImageOnTakePhotoBtn;
+
 /**是否升序排列，预览界面不受该参数影响，默认升序 YES*/
 @property (nonatomic, assign) BOOL sortAscending;
 

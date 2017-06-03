@@ -157,8 +157,24 @@
 @end
 
 
+//////////////////////////////////////
+@import AVFoundation;
+
+@interface ZLTakePhotoCell ()
+
+@property (nonatomic, strong) AVCaptureSession *session;
+@property (nonatomic, strong) AVCaptureDeviceInput *videoInput;
+@property (nonatomic, strong) AVCaptureStillImageOutput *stillImageOutPut;
+
+@end
 
 @implementation ZLTakePhotoCell
+
+- (void)dealloc
+{
+    [self.session stopRunning];
+    self.session = nil;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -166,13 +182,63 @@
     if (self) {
         self.imageView = [[UIImageView alloc] initWithImage:GetImageWithName(@"takePhoto")];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        CGFloat width = GetViewHeight(self)/2;
+        CGFloat width = GetViewHeight(self)/3;
         self.imageView.frame = CGRectMake(0, 0, width, width);
         self.imageView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
         [self addSubview:self.imageView];
-        self.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1];
+        self.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     }
     return self;
+}
+
+- (void)startCapture
+{
+    if (self.session && [self.session isRunning]) {
+        return;
+    }
+    [self.session stopRunning];
+    [self.session removeInput:self.videoInput];
+    [self.session removeOutput:self.stillImageOutPut];
+    self.session = nil;
+    
+    self.session = [[AVCaptureSession alloc] init];
+    self.videoInput = [AVCaptureDeviceInput deviceInputWithDevice:[self backCamera] error:nil];
+    self.stillImageOutPut = [[AVCaptureStillImageOutput alloc] init];
+    //这是输出流的设置参数AVVideoCodecJPEG参数表示以JPEG的图片格式输出图片
+    NSDictionary *dicOutputSetting = [NSDictionary dictionaryWithObject:AVVideoCodecJPEG forKey:AVVideoCodecKey];
+    [self.stillImageOutPut setOutputSettings:dicOutputSetting];
+    
+    if ([self.session canAddInput:self.videoInput]) {
+        [self.session addInput:self.videoInput];
+    }
+    if ([self.session canAddOutput:self.stillImageOutPut]) {
+        [self.session addOutput:self.stillImageOutPut];
+    }
+    
+    AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
+    [self.contentView.layer setMasksToBounds:YES];
+    
+    previewLayer.frame = self.contentView.layer.bounds;
+    [previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+    [self.contentView.layer insertSublayer:previewLayer atIndex:0];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self.session startRunning];
+    });
+}
+
+- (AVCaptureDevice *)backCamera {
+    return [self cameraWithPosition:AVCaptureDevicePositionBack];
+}
+
+- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition) position {
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == position) {
+            return device;
+        }
+    }
+    return nil;
 }
 
 @end

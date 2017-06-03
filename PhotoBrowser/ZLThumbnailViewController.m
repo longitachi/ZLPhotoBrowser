@@ -198,7 +198,7 @@
     if (nav.cancelBlock) {
         nav.cancelBlock();
     }
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [nav dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -223,6 +223,9 @@
         ZLTakePhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLTakePhotoCell" forIndexPath:indexPath];
         cell.layer.masksToBounds = YES;
         cell.layer.cornerRadius = nav.cellCornerRadio;
+        if (nav.showCaptureImageOnTakePhotoBtn) {
+            [cell startCapture];
+        }
         return cell;
     }
     
@@ -288,6 +291,16 @@
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (self.allowTakePhoto && ((nav.sortAscending && indexPath.row >= self.arrDataSources.count) || (!nav.sortAscending && indexPath.row == 0))) {
         //拍照
+        AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+        if (status == AVAuthorizationStatusRestricted ||
+            status == AVAuthorizationStatusDenied) {
+            NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoCameraAuthorityText), [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOKText) style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:action];
+            [self presentViewController:alert animated:YES completion:nil];
+            return;
+        }
         [self takePhoto];
         return;
     }

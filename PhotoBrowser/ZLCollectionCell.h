@@ -36,4 +36,6 @@
 
 @property (nonatomic, strong) UIImageView *imageView;
 
+- (void)startCapture;
+
 @end
