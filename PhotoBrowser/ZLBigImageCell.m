@@ -68,6 +68,8 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIActivityIndicatorView *indicator;
+@property (nonatomic, strong) PHAsset *asset;
+@property (nonatomic, assign) PHImageRequestID imageRequestID;
 
 @end
 
@@ -172,7 +174,7 @@
         strongify(weakSelf);
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             strongSelf.imageView.image = [ZLPhotoManager transformToGifImageWithData:data];
-            [strongSelf resetSubviewSize];
+            [strongSelf resetSubviewSize:asset];
             [strongSelf.indicator stopAnimating];
         }
     }];
@@ -180,35 +182,40 @@
 
 - (void)loadNormalImage:(PHAsset *)asset
 {
+    if (_asset && self.imageRequestID >= 0) {
+        [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
+    }
+    _asset = asset;
     [self.indicator startAnimating];
     CGFloat scale = 2;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
     CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
     weakify(self);
-    [ZLPhotoManager requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
+    self.imageRequestID = [ZLPhotoManager requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
         strongSelf.imageView.image = image;
-        [strongSelf resetSubviewSize];
+        [strongSelf resetSubviewSize:asset];
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             [strongSelf.indicator stopAnimating];
         }
     }];
 }
 
-- (void)resetSubviewSize
+- (void)resetSubviewSize:(PHAsset *)asset
 {
+    CGFloat width = MIN(kViewWidth, asset.pixelWidth);
     CGRect frame;
     frame.origin = CGPointZero;
-    frame.size.width = kViewWidth;
+    frame.size.width = width;
     
     UIImage *image = self.imageView.image;
     CGFloat imageScale = image.size.height/image.size.width;
     CGFloat screenScale = kViewHeight/kViewWidth;
     
     if (imageScale > screenScale) {
-        frame.size.height = floorf(kViewWidth * imageScale);
+        frame.size.height = floorf(width * imageScale);
     } else {
-        CGFloat height = floorf(kViewWidth * imageScale);
+        CGFloat height = floorf(width * imageScale);
         if (height < 1 || isnan(height)) {
             //iCloud图片height为NaN
             height = GetViewHeight(self);
@@ -221,7 +228,7 @@
         self.containerView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);
     }
     
-    CGSize contentSize = CGSizeMake(kViewWidth, MAX(kViewHeight, frame.size.height));
+    CGSize contentSize = CGSizeMake(width, MAX(kViewHeight, frame.size.height));
     self.scrollView.contentSize = contentSize;
     
     self.imageView.frame = self.containerView.bounds;

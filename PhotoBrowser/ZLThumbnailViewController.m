@@ -109,24 +109,28 @@
         self.btnOriginalPhoto.enabled = YES;
         self.btnPreView.enabled = YES;
         self.btnDone.enabled = YES;
+        if (nav.isSelectOriginalPhoto) {
+            [self getOriginalImageBytes];
+        } else {
+            self.labPhotosBytes.text = nil;
+        }
+        self.btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
         [self.btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), nav.arrSelectedModels.count] forState:UIControlStateNormal];
         [self.btnOriginalPhoto setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
         [self.btnPreView setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
         self.btnDone.backgroundColor = kDoneButton_bgColor;
         [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     } else {
+        self.btnOriginalPhoto.selected = NO;
         self.btnOriginalPhoto.enabled = NO;
         self.btnPreView.enabled = NO;
         self.btnDone.enabled = NO;
+        self.labPhotosBytes.text = nil;
         [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateDisabled];
         [self.btnOriginalPhoto setTitleColor:kButtonUnable_textColor forState:UIControlStateDisabled];
         [self.btnPreView setTitleColor:kButtonUnable_textColor forState:UIControlStateDisabled];
         self.btnDone.backgroundColor = kButtonUnable_textColor;
         [self.btnDone setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
-    }
-    self.btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
-    if (nav.isSelectOriginalPhoto) {
-        [self getOriginalImageBytes];
     }
 }
 

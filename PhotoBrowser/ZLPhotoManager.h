@@ -66,7 +66,7 @@
 /**
  * @brief 根据传入size获取图片
  */
-+ (void)requestImageForAsset:(PHAsset *)asset size:(CGSize)size completion:(void (^)(UIImage *, NSDictionary *))completion;
++ (PHImageRequestID)requestImageForAsset:(PHAsset *)asset size:(CGSize)size completion:(void (^)(UIImage *, NSDictionary *))completion;
 
 /**
  * @brief 获取视频
