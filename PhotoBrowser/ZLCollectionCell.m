@@ -165,6 +165,7 @@
 @property (nonatomic, strong) AVCaptureSession *session;
 @property (nonatomic, strong) AVCaptureDeviceInput *videoInput;
 @property (nonatomic, strong) AVCaptureStillImageOutput *stillImageOutPut;
+@property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 
 @end
 
@@ -191,6 +192,12 @@
     return self;
 }
 
+- (void)restartCapture
+{
+    [self.session stopRunning];
+    [self startCapture];
+}
+
 - (void)startCapture
 {
     if (self.session && [self.session isRunning]) {
@@ -200,6 +207,8 @@
     [self.session removeInput:self.videoInput];
     [self.session removeOutput:self.stillImageOutPut];
     self.session = nil;
+    [self.previewLayer removeFromSuperlayer];
+    self.previewLayer = nil;
     
     self.session = [[AVCaptureSession alloc] init];
     self.videoInput = [AVCaptureDeviceInput deviceInputWithDevice:[self backCamera] error:nil];
@@ -215,12 +224,12 @@
         [self.session addOutput:self.stillImageOutPut];
     }
     
-    AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
+    self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
     [self.contentView.layer setMasksToBounds:YES];
     
-    previewLayer.frame = self.contentView.layer.bounds;
-    [previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
-    [self.contentView.layer insertSublayer:previewLayer atIndex:0];
+    self.previewLayer.frame = self.contentView.layer.bounds;
+    [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+    [self.contentView.layer insertSublayer:self.previewLayer atIndex:0];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self.session startRunning];

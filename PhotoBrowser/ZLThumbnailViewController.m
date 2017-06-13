@@ -22,6 +22,7 @@
 @interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     BOOL _isLayoutOK;
+    BOOL _haveTakePic;
 }
 
 @property (nonatomic, strong) NSMutableArray<ZLPhotoModel *> *arrDataSources;
@@ -228,7 +229,11 @@
         cell.layer.masksToBounds = YES;
         cell.layer.cornerRadius = nav.cellCornerRadio;
         if (nav.showCaptureImageOnTakePhotoBtn) {
-            [cell startCapture];
+            if (!_isLayoutOK || _haveTakePic) {
+                [cell restartCapture];
+            } else {
+                [cell startCapture];
+            }
         }
         return cell;
     }

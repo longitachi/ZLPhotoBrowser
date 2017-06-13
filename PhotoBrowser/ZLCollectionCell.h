@@ -38,4 +38,6 @@
 
 - (void)startCapture;
 
+- (void)restartCapture;
+
 @end
