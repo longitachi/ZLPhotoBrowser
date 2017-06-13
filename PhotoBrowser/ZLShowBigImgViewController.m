@@ -104,6 +104,8 @@
     if (self.models.count == 1) {
         _navRightBtn.selected = self.models.firstObject.isSelected;
     }
+    ZLPhotoModel *model = self.models[_currentPage-1];
+    _navRightBtn.selected = model.isSelected;
 }
 
 #pragma mark - 初始化CollectionView
