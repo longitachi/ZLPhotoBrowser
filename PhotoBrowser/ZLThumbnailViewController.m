@@ -416,6 +416,7 @@
     if (nav.maxSelectCount > 1 && nav.arrSelectedModels.count < nav.maxSelectCount) {
         model.isSelected = YES;
         [nav.arrSelectedModels addObject:model];
+        self.albumListModel = [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage];
     } else if (nav.maxSelectCount == 1 && !nav.arrSelectedModels.count) {
         model.isSelected = YES;
         [nav.arrSelectedModels addObject:model];
