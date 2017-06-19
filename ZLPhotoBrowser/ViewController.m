@@ -102,13 +102,13 @@
     NSMutableArray *arr = [NSMutableArray array];
     for (PHAsset *asset in self.lastSelectAssets) {
         if (asset.mediaType == PHAssetMediaTypeImage) {
-            if (![[asset valueForKey:@"filename"] hasSuffix:@"GIF"]
-                || !self.selGifSwitch.isOn) {
-                [arr addObject:asset];
+            if (self.selGifSwitch.isOn && [[asset valueForKey:@"filename"] hasSuffix:@"GIF"]) {
+                continue;
             }
-            if (!(asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive)) {
-                [arr addObject:asset];
+            if (self.selLivePhotoSwitch.isOn && (asset.mediaSubtypes== PHAssetMediaSubtypePhotoLive || asset.mediaSubtypes == 10)) {
+                continue;
             }
+            [arr addObject:asset];
         }
     }
     actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn&&self.maxSelCountTextField.text.integerValue>1 ? arr : nil;
@@ -194,7 +194,7 @@
         ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeGif duration:nil];
         vc.model = model;
         [self showDetailViewController:vc sender:self];
-    } else if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
+    } else if (self.selLivePhotoSwitch.isOn && (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive || asset.mediaSubtypes == 10)) {
         ZLShowLivePhotoViewController *vc = [[ZLShowLivePhotoViewController alloc] init];
         ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeLivePhoto duration:nil];
         vc.model = model;
