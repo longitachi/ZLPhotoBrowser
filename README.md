@@ -5,7 +5,7 @@
 ![Language](https://img.shields.io/badge/Language-%20Objective%20C%20-blue.svg)
 
 ### 框架整体介绍
-* 该框架为一个多选照片（支持视频、gif）的框架，兼容设备开启的iCloud照片存储，支持记录历史选择照片。
+* 该框架为一个多选照片（支持视频、gif、Live Photo）的框架，兼容设备开启的iCloud照片存储，支持记录历史选择照片。
   * 1.支持多语言国际化(中:简繁, 英，日)
     * [多语言国际化效果图](#多语言国际化效果图)
   * 2.支持预览多选(预览图数量及最大多选数可设置)
@@ -27,6 +27,7 @@
 
 ### 更新日志
 ```
+● 2.1.8: 新增选择及预览Live Photo功能
 ● 2.1.7: 新增内部拍照按钮实时显示相机俘获画面功能
 ● ... 新增gif及video选择功能
 ```
@@ -108,9 +109,14 @@ Localized resources can be mixed YES
     [actionSheet setSelectGifBlock:^(UIImage * _Nonnull gif, PHAsset * _Nonnull asset) {
         //your codes
     }];
+    [actionSheet setSelectLivePhotoBlock:^(UIImage * _Nonnull livePhoto, PHAsset * _Nonnull asset) {
+        //your codes
+    }];
     [actionSheet setSelectVideoBlock:^(UIImage * _Nonnull coverImage, PHAsset * _Nonnull asset) {
         //your codes
     }];
+    
+    [actionSheet showPreviewAnimated:YES];
 ```
 
 ### <a id="多语言国际化效果图"></a> 多语言国际化效果图
