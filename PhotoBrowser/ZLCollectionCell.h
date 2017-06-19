@@ -16,10 +16,12 @@
 @property (nonatomic, strong) UIButton *btnSelect;
 @property (nonatomic, strong) UIImageView *videoBottomView;
 @property (nonatomic, strong) UIImageView *videoImageView;
+@property (nonatomic, strong) UIImageView *liveImageView;
 @property (nonatomic, strong) UILabel *timeLabel;
 //@property (nonatomic, strong) UIView *topView;
 
 @property (nonatomic, assign) BOOL allSelectGif;
+@property (nonatomic, assign) BOOL allSelectLivePhoto;
 @property (nonatomic, assign) BOOL showSelectBtn;
 @property (nonatomic, assign) CGFloat cornerRadio;
 @property (nonatomic, strong) ZLPhotoModel *model;

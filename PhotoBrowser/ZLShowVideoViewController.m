@@ -31,6 +31,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    NSLog(@"---- %s", __FUNCTION__);
 }
 
 - (void)viewDidLoad {
@@ -42,6 +43,7 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
     
+    self.view.backgroundColor = [UIColor blackColor];
     [self requestPlayItem];
 }
 
@@ -90,8 +92,6 @@
 
 - (void)initUI
 {
-    self.view.backgroundColor = [UIColor blackColor];
-    
     self.playLayer = [[AVPlayerLayer alloc] init];
     self.playLayer.frame = self.view.bounds;
     [self.view.layer addSublayer:self.playLayer];

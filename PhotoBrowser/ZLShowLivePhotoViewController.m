@@ -1,30 +1,32 @@
 //
-//  ZLShowGifViewController.m
+//  ZLShowLivePhotoViewController.m
 //  ZLPhotoBrowser
 //
-//  Created by long on 17/4/19.
+//  Created by long on 2017/6/17.
 //  Copyright © 2017年 long. All rights reserved.
 //
 
-#import "ZLShowGifViewController.h"
+#import "ZLShowLivePhotoViewController.h"
+#import <PhotosUI/PhotosUI.h>
 #import "ZLDefine.h"
-#import "ZLPhotoModel.h"
-#import "ZLBigImageCell.h"
-#import "ZLPhotoBrowser.h"
 #import "ZLPhotoManager.h"
-#import "ToastUtils.h"
+#import "ZLPhotoModel.h"
+#import "ZLPhotoBrowser.h"
 
-@interface ZLShowGifViewController ()
+@interface ZLShowLivePhotoViewController ()
 
-@property (nonatomic, strong) ZLBigImageView *bigImageView;
+@property (nonatomic, strong) PHLivePhotoView *lpView;
+
+@property (nonatomic, strong) UIImage *coverImage;
 @property (nonatomic, strong) UIView *bottomView;
-@property (nonatomic, strong) UILabel *labPhotosBytes;
+@property (nonatomic, strong) UILabel *labVideoBytes;
 @property (nonatomic, strong) UIButton *btnDone;
+
 @property (nonatomic, assign) UIStatusBarStyle previousStatusBarStyle;
 
 @end
 
-@implementation ZLShowGifViewController
+@implementation ZLShowLivePhotoViewController
 
 - (void)dealloc
 {
@@ -34,7 +36,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self initUI];
+    self.title = [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserLivePhotoPreviewText];
+    //left nav btn
+    UIImage *navBackImg = GetImageWithName(@"navBackBtn.png");
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
+    
+    self.view.backgroundColor = [UIColor blackColor];
+    [self requestLivePhoto];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -50,40 +59,42 @@
     [UIApplication sharedApplication].statusBarStyle = self.previousStatusBarStyle;
 }
 
+- (void)btnBack_Click
+{
+    UIViewController *vc = [self.navigationController popViewControllerAnimated:YES];
+    if (!vc) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void)requestLivePhoto
+{
+    weakify(self);
+    [ZLPhotoManager requestLivePhotoForAsset:self.model.asset completion:^(PHLivePhoto *lv, NSDictionary *info) {
+        strongify(weakSelf);
+        if (lv) {
+            [strongSelf initUI];
+            strongSelf.lpView.livePhoto = lv;
+            [strongSelf.lpView startPlaybackWithStyle:PHLivePhotoViewPlaybackStyleFull];
+        }
+    }];
+}
+
 - (void)initUI
 {
-    self.title = [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserGifPreviewText];
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.view.backgroundColor = [UIColor blackColor];
-    
-    //left nav btn
-    UIImage *navBackImg = GetImageWithName(@"navBackBtn.png");
-    
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
-    
-    self.bigImageView = [[ZLBigImageView alloc] initWithFrame:self.view.bounds];
-    weakify(self);
-    self.bigImageView.singleTapCallBack = ^() {
-        strongify(weakSelf);
-        if (strongSelf.bottomView.hidden) {
-            [strongSelf showNavBarAndBottomView];
-        } else {
-            [strongSelf hideNavBarAndBottomView];
-        }
-    };
-    [self.bigImageView loadGifImage:self.model.asset];
-    [self.view addSubview:self.bigImageView];
-
+    self.lpView = [[PHLivePhotoView alloc] initWithFrame:self.view.bounds];
+    self.lpView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:self.lpView];
     
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, kViewWidth, 44)];
     self.bottomView.backgroundColor = kBottomView_color;
+    
     [self.view addSubview:_bottomView];
     
-    self.labPhotosBytes = [[UILabel alloc] initWithFrame:CGRectMake(12, 7, 80, 30)];
-    self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
-    self.labPhotosBytes.textColor = kDoneButton_bgColor;
-    [self.bottomView addSubview:self.labPhotosBytes];
+    self.labVideoBytes = [[UILabel alloc] initWithFrame:CGRectMake(12, 7, 80, 30)];
+    self.labVideoBytes.font = [UIFont systemFontOfSize:15];
+    self.labVideoBytes.textColor = kDoneButton_bgColor;
+    [self.bottomView addSubview:self.labVideoBytes];
     
     self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
@@ -91,22 +102,44 @@
     self.btnDone.titleLabel.font = [UIFont systemFontOfSize:15];
     self.btnDone.layer.masksToBounds = YES;
     self.btnDone.layer.cornerRadius = 3.0f;
-    [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.btnDone setTitleColor:kDoneButton_textColor forState:UIControlStateNormal];
     [self.btnDone setBackgroundColor:kDoneButton_bgColor];
     [self.btnDone addTarget:self action:@selector(btnDone_Click:) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomView addSubview:self.btnDone];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+    [self.view addGestureRecognizer:tap];
+    
+    weakify(self);
     [ZLPhotoManager getPhotosBytesWithArray:@[self.model] completion:^(NSString *photosBytes) {
         strongify(weakSelf);
-        strongSelf.labPhotosBytes.text = photosBytes;
+        strongSelf.labVideoBytes.text = photosBytes;
+    }];
+    [ZLPhotoManager requestOriginalImageForAsset:self.model.asset completion:^(UIImage *image, NSDictionary *info) {
+        if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+        strongify(weakSelf);
+        strongSelf.coverImage = image;
     }];
 }
 
-- (void)btnBack_Click
+- (void)btnDone_Click:(UIButton *)btn
 {
-    UIViewController *vc = [self.navigationController popViewControllerAnimated:YES];
-    if (!vc) {
-        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    if (self.navigationController) {
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        if (nav.callSelectLivePhotoBlock) {
+            nav.callSelectLivePhotoBlock(self.coverImage, self.model.asset);
+        }
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void)tapAction
+{
+    if (self.bottomView.hidden) {
+        [self showNavBarAndBottomView];
+    } else {
+        [self hideNavBarAndBottomView];
     }
 }
 
@@ -133,22 +166,6 @@
     } completion:^(BOOL finished) {
         _bottomView.hidden = YES;
     }];
-}
-
-- (void)btnDone_Click:(UIButton *)btn
-{
-    if (!self.bigImageView.image) {
-        ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadingText));
-        return;
-    }
-    if (self.navigationController) {
-        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-        if (nav.callSelectGifBlock) {
-            nav.callSelectGifBlock(self.bigImageView.image, self.model.asset);
-        }
-    } else {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
 }
 
 - (void)didReceiveMemoryWarning {

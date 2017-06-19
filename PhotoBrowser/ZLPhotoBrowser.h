@@ -31,6 +31,9 @@
 /**是否允许选择Gif 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectGif;
 
+/**是否允许选择Live Photo，默认NO*/
+@property (nonatomic, assign) BOOL allowSelectLivePhoto;
+
 /**是否允许相册内部拍照 默认YES*/
 @property (nonatomic, assign) BOOL allowTakePhotoInLibrary;
 
@@ -53,6 +56,9 @@
 
 /**点击确定gif回调*/
 @property (nonatomic, copy) void (^callSelectGifBlock)(UIImage *, PHAsset *);
+
+/**点击确定live photo回调*/
+@property (nonatomic, copy) void (^callSelectLivePhotoBlock)(UIImage *, PHAsset *);
 
 /**点击确定video回调*/
 @property (nonatomic, copy) void (^callSelectVideoBlock)(UIImage *, PHAsset *);

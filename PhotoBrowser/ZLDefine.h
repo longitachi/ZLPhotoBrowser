@@ -30,9 +30,11 @@
 #define ZLPhotoBrowseriCloudPhotoText @"ZLPhotoBrowseriCloudPhotoText"
 #define ZLPhotoBrowserGifPreviewText @"ZLPhotoBrowserGifPreviewText"
 #define ZLPhotoBrowserVideoPreviewText @"ZLPhotoBrowserVideoPreviewText"
+#define ZLPhotoBrowserLivePhotoPreviewText @"ZLPhotoBrowserLivePhotoPreviewText"
 #define ZLPhotoBrowserNoPhotoText @"ZLPhotoBrowserNoPhotoText"
 #define ZLPhotoBrowserCannotSelectVideo @"ZLPhotoBrowserCannotSelectVideo"
 #define ZLPhotoBrowserCannotSelectGIF @"ZLPhotoBrowserCannotSelectGIF"
+#define ZLPhotoBrowserCannotSelectLivePhoto @"ZLPhotoBrowserCannotSelectLivePhoto"
 #define ZLPhotoBrowseriCloudVideoText @"ZLPhotoBrowseriCloudVideoText"
 
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]

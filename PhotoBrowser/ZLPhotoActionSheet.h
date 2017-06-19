@@ -36,6 +36,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**是否允许选择Gif，只是控制是否选择，并不控制是否显示，如果为NO，则不显示gif标识 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectGif;
 
+/**
+ * 是否允许选择Live Photo，只是控制是否选择，并不控制是否显示，如果为NO，则不显示Live Photo标识 默认NO
+ * @warning ios9 以上系统支持
+ */
+@property (nonatomic, assign) BOOL allowSelectLivePhoto;
+
 /**是否允许相册内部拍照 默认YES*/
 @property (nonatomic, assign) BOOL allowTakePhotoInLibrary;
 
@@ -56,6 +62,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**选择gif照片回调，回调解析好的gif图片、对应的asset对象*/
 @property (nonatomic, copy) void (^selectGifBlock)(UIImage *, PHAsset *);
+
+/**选择live photo照片回调，回调解析好的live photo图片、对应的asset对象*/
+@property (nonatomic, copy) void (^selectLivePhotoBlock)(UIImage *, PHAsset *);
 
 /**选择视频回调，回调第一帧封面图片、对应的asset对象，对应的AVPlayerItem对象*/
 @property (nonatomic, copy) void (^selectVideoBlock)(UIImage *, PHAsset *);

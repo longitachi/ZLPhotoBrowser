@@ -12,10 +12,12 @@
 "ZLPhotoBrowserPreviewText" = "Preview";
 "ZLPhotoBrowserGifPreviewText" = "GIF preview";
 "ZLPhotoBrowserVideoPreviewText" = "Video preview";
+"ZLPhotoBrowserLivePhotoPreviewText" = "Live Photo preview";
 
 "ZLPhotoBrowserNoPhotoText" = "No Photo";
 "ZLPhotoBrowserCannotSelectVideo" = "Unable to select video";
 "ZLPhotoBrowserCannotSelectGIF" = "Unable to select GIF image";
+"ZLPhotoBrowserCannotSelectLivePhoto" = "Unable to select Live Photo";
 
 "ZLPhotoBrowserLoadingText" = "loading，waiting please";
 "ZLPhotoBrowserHandleText" = "waiting...";

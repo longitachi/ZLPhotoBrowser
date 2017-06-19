@@ -16,15 +16,13 @@
 #import "ZLShowGifViewController.h"
 #import "ZLShowVideoViewController.h"
 #import "ZLPhotoModel.h"
+#import "ZLShowLivePhotoViewController.h"
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
 // 喜欢的朋友请去给个star，谢谢
 ///////////////////////////////////////////////////
 @interface ViewController () <UITextFieldDelegate>
-{
-//    ZLPhotoActionSheet *actionSheet;
-}
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *sortSegment;
 @property (weak, nonatomic) IBOutlet UISwitch *selImageSwitch;
@@ -33,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *takePhotoInLibrarySwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *rememberLastSelSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *showCaptureImageSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *selLivePhotoSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *previewTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
@@ -82,6 +81,7 @@
     actionSheet.allowSelectImage = self.selImageSwitch.isOn;
     actionSheet.allowSelectGif = self.selGifSwitch.isOn;
     actionSheet.allowSelectVideo = self.selVideoSwitch.isOn;
+    actionSheet.allowSelectLivePhoto = self.selLivePhotoSwitch.isOn;
     //设置相册内部显示拍照按钮
     actionSheet.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
     //设置在内部拍照按钮上实时显示相机俘获画面
@@ -101,8 +101,14 @@
     
     NSMutableArray *arr = [NSMutableArray array];
     for (PHAsset *asset in self.lastSelectAssets) {
-        if (asset.mediaType == PHAssetMediaTypeImage && ![[asset valueForKey:@"filename"] hasSuffix:@"GIF"]) {
-            [arr addObject:asset];
+        if (asset.mediaType == PHAssetMediaTypeImage) {
+            if (![[asset valueForKey:@"filename"] hasSuffix:@"GIF"]
+                || !self.selGifSwitch.isOn) {
+                [arr addObject:asset];
+            }
+            if (!(asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive)) {
+                [arr addObject:asset];
+            }
         }
     }
     actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn&&self.maxSelCountTextField.text.integerValue>1 ? arr : nil;
@@ -122,6 +128,13 @@
         strongSelf.lastSelectAssets = @[asset].mutableCopy;
         [strongSelf.collectionView reloadData];
         NSLog(@"gif:%@", gif);
+    }];
+    [actionSheet setSelectLivePhotoBlock:^(UIImage * _Nonnull livePhoto, PHAsset * _Nonnull asset) {
+        strongify(weakSelf);
+        strongSelf.arrDataSources = @[livePhoto];
+        strongSelf.lastSelectAssets = @[asset].mutableCopy;
+        [strongSelf.collectionView reloadData];
+        NSLog(@"livePhoto:%@", livePhoto);
     }];
     [actionSheet setSelectVideoBlock:^(UIImage * _Nonnull coverImage, PHAsset * _Nonnull asset) {
         strongify(weakSelf);
@@ -146,12 +159,12 @@
 
 - (void)showWithPreview:(BOOL)preview
 {
-    ZLPhotoActionSheet *actionSheet = [self getPas];
+    ZLPhotoActionSheet *a = [self getPas];
     
     if (preview) {
-        [actionSheet showPreviewAnimated:YES];
+        [a showPreviewAnimated:YES];
     } else {
-        [actionSheet showPhotoLibrary];
+        [a showPhotoLibrary];
     }
 }
 
@@ -179,6 +192,11 @@
         //gif预览
         ZLShowGifViewController *vc = [[ZLShowGifViewController alloc] init];
         ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeGif duration:nil];
+        vc.model = model;
+        [self showDetailViewController:vc sender:self];
+    } else if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
+        ZLShowLivePhotoViewController *vc = [[ZLShowLivePhotoViewController alloc] init];
+        ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeLivePhoto duration:nil];
         vc.model = model;
         [self showDetailViewController:vc sender:self];
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {

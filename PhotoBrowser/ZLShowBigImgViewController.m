@@ -41,6 +41,11 @@
 
 @implementation ZLShowBigImgViewController
 
+- (void)dealloc
+{
+//    NSLog(@"---- %s", __FUNCTION__);
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];

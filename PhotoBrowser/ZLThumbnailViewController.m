@@ -18,6 +18,7 @@
 #import "ZLProgressHUD.h"
 #import "ZLShowGifViewController.h"
 #import "ZLShowVideoViewController.h"
+#import "ZLShowLivePhotoViewController.h"
 
 @interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
@@ -31,6 +32,11 @@
 @end
 
 @implementation ZLThumbnailViewController
+
+- (void)dealloc
+{
+//    NSLog(@"---- %s", __FUNCTION__);
+}
 
 - (NSMutableArray<ZLPhotoModel *> *)arrDataSources
 {
@@ -257,8 +263,8 @@
         __strong typeof(weakNav) strongNav = weakNav;
         if (!selected) {
             //选中
-            if (nav.arrSelectedModels.count >= nav.maxSelectCount) {
-                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), nav.maxSelectCount);
+            if (strongNav.arrSelectedModels.count >= strongNav.maxSelectCount) {
+                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), strongNav.maxSelectCount);
                 return;
             }
             if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
@@ -271,7 +277,7 @@
         } else {
             strongCell.btnSelect.selected = NO;
             model.isSelected = NO;
-            for (ZLPhotoModel *m in nav.arrSelectedModels) {
+            for (ZLPhotoModel *m in strongNav.arrSelectedModels) {
                 if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
                     [strongNav.arrSelectedModels removeObject:m];
                     break;
@@ -287,6 +293,7 @@
         return nav.arrSelectedModels.count > 0;
     };
     cell.allSelectGif = nav.allowSelectGif;
+    cell.allSelectLivePhoto = nav.allowSelectLivePhoto;
     cell.showSelectBtn = nav.showSelectBtn;
     cell.cornerRadio = nav.cellCornerRadio;
     cell.model = model;
@@ -338,10 +345,19 @@
         ZLShowGifViewController *vc = [[ZLShowGifViewController alloc] init];
         vc.model = model;
         [self showViewController:vc sender:self];
+    } else if (nav.allowSelectLivePhoto && model.type == ZLAssetMediaTypeLivePhoto) {
+        if (nav.arrSelectedModels.count > 0) {
+            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectLivePhoto]);
+            return;
+        }
+        //跳转预览GIF
+        ZLShowLivePhotoViewController *vc = [[ZLShowLivePhotoViewController alloc] init];
+        vc.model = model;
+        [self showViewController:vc sender:self];
     } else {
         ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
         
-        NSArray *arr = [ZLPhotoManager getPhotoInResult:self.albumListModel.result allowSelectVideo:NO allowSelectImage:YES allowSelectGif:!nav.allowSelectGif];
+        NSArray *arr = [ZLPhotoManager getPhotoInResult:self.albumListModel.result allowSelectVideo:NO allowSelectImage:YES allowSelectGif:!nav.allowSelectGif allowSelectLivePhoto:!nav.allowSelectLivePhoto];
         
         NSMutableArray *selIdentifiers = [NSMutableArray array];
         for (ZLPhotoModel *m in nav.arrSelectedModels) {

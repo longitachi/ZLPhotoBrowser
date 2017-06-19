@@ -12,10 +12,12 @@
 "ZLPhotoBrowserPreviewText" = "プレビュー";
 "ZLPhotoBrowserGifPreviewText" = "プレビュー";
 "ZLPhotoBrowserVideoPreviewText" = "プレビュー";
+"ZLPhotoBrowserLivePhotoPreviewText" = "プレビュー";
 
 "ZLPhotoBrowserNoPhotoText" = "写真でない";
 "ZLPhotoBrowserCannotSelectVideo" = "ビデオを選択できません";
 "ZLPhotoBrowserCannotSelectGIF" = "GIF画像を選択できません";
+"ZLPhotoBrowserCannotSelectLivePhoto" = "Live Photoを選択できません";
 
 "ZLPhotoBrowserLoadingText" = "ロード中，お待ち下さい";
 "ZLPhotoBrowserHandleText" = "後ほど...";

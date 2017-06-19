@@ -17,9 +17,9 @@
 #import "ZLThumbnailViewController.h"
 #import "ZLNoAuthorityViewController.h"
 #import "ToastUtils.h"
-#import <objc/runtime.h>
 #import "ZLShowGifViewController.h"
 #import "ZLShowVideoViewController.h"
+#import "ZLShowLivePhotoViewController.h"
 
 #define kBaseViewHeight (self.maxPreviewCount ? 300 : 142)
 
@@ -54,6 +54,7 @@ double const ScalePhotoWidth = 1000;
 - (void)dealloc
 {
     [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+//    NSLog(@"---- %s", __FUNCTION__);
 }
 
 - (NSMutableArray<ZLPhotoModel *> *)arrDataSources
@@ -93,13 +94,26 @@ double const ScalePhotoWidth = 1000;
     [self.arrSelectedModels removeAllObjects];
     for (PHAsset *asset in arrSelectedAssets) {
         if (asset.mediaType != PHAssetMediaTypeImage) {
-            //选择的视频和gif不做保存
+            //选择的视频不做保存
             continue;
         }
         ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
         model.isSelected = YES;
         [self.arrSelectedModels addObject:model];
     }
+}
+
+- (void)setAllowSelectLivePhoto:(BOOL)allowSelectLivePhoto
+{
+    _allowSelectLivePhoto = allowSelectLivePhoto;
+    if ([UIDevice currentDevice].systemVersion.floatValue < 9.0) {
+        _allowSelectLivePhoto = NO;
+    }
+}
+
+- (void)willRemoveSubview:(UIView *)subview
+{
+    [super willRemoveSubview:subview];
 }
 
 - (instancetype)init
@@ -121,6 +135,7 @@ double const ScalePhotoWidth = 1000;
         self.allowSelectImage = YES;
         self.allowSelectVideo = YES;
         self.allowSelectGif = YES;
+        self.allowSelectLivePhoto = NO;
         self.allowTakePhotoInLibrary = YES;
         self.showCaptureImageOnTakePhotoBtn = YES;
         self.sortAscending = YES;
@@ -208,7 +223,6 @@ double const ScalePhotoWidth = 1000;
         }];
     }
     
-    [self addAssociatedOnSender];
     if (preview) {
         if (status == PHAuthorizationStatusAuthorized) {
             [self loadPhotoFromAlbum];
@@ -219,6 +233,7 @@ double const ScalePhotoWidth = 1000;
         }
     } else {
         if (status == PHAuthorizationStatusAuthorized) {
+            [self.sender.view addSubview:self];
             [self btnPhotoLibrary_Click:nil];
         } else if (status == PHAuthorizationStatusRestricted ||
                    status == PHAuthorizationStatusDenied) {
@@ -229,8 +244,6 @@ double const ScalePhotoWidth = 1000;
 
 - (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index
 {
-    [self addAssociatedOnSender];
-    
     self.arrSelectedAssets = [NSMutableArray arrayWithArray:assets];
     ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:svc];
@@ -248,25 +261,6 @@ double const ScalePhotoWidth = 1000;
         [strongNav dismissViewControllerAnimated:YES completion:nil];
     }];
     [self.sender showDetailViewController:nav sender:nil];
-}
-
-static char RelatedKey;
-- (void)addAssociatedOnSender
-{
-    BOOL selfInstanceIsClassVar = NO;
-    unsigned int count = 0;
-    Ivar *vars = class_copyIvarList(self.sender.class, &count);
-    for (int i = 0; i < count; i++) {
-        Ivar var = vars[i];
-        const char * type = ivar_getTypeEncoding(var);
-        NSString *className = [NSString stringWithUTF8String:type];
-        if ([className isEqualToString:[NSString stringWithFormat:@"@\"%@\"", NSStringFromClass(self.class)]]) {
-            selfInstanceIsClassVar = YES;
-        }
-    }
-    if (!selfInstanceIsClassVar) {
-        objc_setAssociatedObject(self.sender, &RelatedKey, self, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
 }
 
 #pragma mark - 判断软件是否有相册、相机访问权限
@@ -301,7 +295,8 @@ static char RelatedKey;
 {
     [self.arrDataSources removeAllObjects];
     //因为预览界面需快速选择最近图片，所以不受self.sortAscending限制，
-    [self.arrDataSources addObjectsFromArray:[ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:NO limitCount:self.maxPreviewCount allowSelectVideo:self.allowSelectVideo allowSelectImage:self.allowSelectImage allowSelectGif:YES]];
+    //这里allow gif和allow liveohoto 置为yes，为了获取所有asset
+    [self.arrDataSources addObjectsFromArray:[ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:NO limitCount:self.maxPreviewCount allowSelectVideo:self.allowSelectVideo allowSelectImage:self.allowSelectImage allowSelectGif:YES allowSelectLivePhoto:YES]];
     [ZLPhotoManager markSelcectModelInArr:self.arrDataSources selArr:self.arrSelectedModels];
     [self.collectionView reloadData];
 }
@@ -309,8 +304,7 @@ static char RelatedKey;
 #pragma mark - 显示隐藏视图及相关动画
 - (void)resetSubViewState
 {
-    self.hidden = NO;
-    self.baseView.hidden = NO;
+    self.hidden = !self.preview;
     [self changeCancelBtnTitle];
     [self.collectionView setContentOffset:CGPointZero];
 }
@@ -527,6 +521,7 @@ static char RelatedKey;
         return strongSelf.arrSelectedModels.count > 0;
     };
     cell.allSelectGif = self.allowSelectGif;
+    cell.allSelectLivePhoto = self.allowSelectLivePhoto;
     cell.showSelectBtn = self.showSelectBtn;
     cell.cornerRadio = self.cellCornerRadio;
     cell.model = model;
@@ -558,8 +553,15 @@ static char RelatedKey;
         }
         //跳转预览GIF
         [self pushGifViewControllerWithModel:model];
+    } else if (self.allowSelectLivePhoto && model.type == ZLAssetMediaTypeLivePhoto) {
+        if (self.arrSelectedModels.count > 0) {
+            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectLivePhoto]);
+            return;
+        }
+        //跳转预览Live Photo
+        [self pushLivePhotoViewControllerWithModel:model];
     } else {
-        NSArray *arr = [ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:self.sortAscending limitCount:NSIntegerMax allowSelectVideo:NO allowSelectImage:self.allowSelectImage allowSelectGif:!self.allowSelectGif];
+        NSArray *arr = [ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:self.sortAscending limitCount:NSIntegerMax allowSelectVideo:NO allowSelectImage:self.allowSelectImage allowSelectGif:!self.allowSelectGif allowSelectLivePhoto:!self.allowSelectLivePhoto];
         
         NSMutableArray *selIdentifiers = [NSMutableArray array];
         for (ZLPhotoModel *m in self.arrSelectedModels) {
@@ -594,13 +596,57 @@ static char RelatedKey;
 
 - (ZLImageNavigationController *)getImageNavWithRootVC:(UIViewController *)rootVC
 {
+    
     ZLImageNavigationController *nav = [[ZLImageNavigationController alloc] initWithRootViewController:rootVC];
+    weakify(self);
+    __weak typeof(ZLImageNavigationController *) weakNav = nav;
+    [nav setCallSelectImageBlock:^{
+        strongify(weakSelf);
+        strongSelf.isSelectOriginalPhoto = weakNav.isSelectOriginalPhoto;
+        [strongSelf.arrSelectedModels removeAllObjects];
+        [strongSelf.arrSelectedModels addObjectsFromArray:weakNav.arrSelectedModels];
+        [strongSelf requestSelPhotos:weakNav];
+    }];
+    [nav setCallSelectGifBlock:^(UIImage *gif, PHAsset *asset) {
+        strongify(weakSelf);
+        if (strongSelf.selectGifBlock) {
+            strongSelf.selectGifBlock(gif, asset);
+        }
+        [strongSelf hide];
+        [weakNav dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [nav setCallSelectLivePhotoBlock:^(UIImage *lv, PHAsset *asset){
+        strongify(weakSelf);
+        if (strongSelf.selectLivePhotoBlock) {
+            strongSelf.selectGifBlock(lv, asset);
+        }
+        [strongSelf hide];
+        [weakNav dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [nav setCallSelectVideoBlock:^(UIImage *coverImage, PHAsset *asset) {
+        strongify(weakSelf);
+        if (strongSelf.selectVideoBlock) {
+            strongSelf.selectVideoBlock(coverImage, asset);
+        }
+        [strongSelf hide];
+        [weakNav dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [nav setCancelBlock:^{
+        strongify(weakSelf);
+        [strongSelf hide];
+    }];
+
+    
     nav.previousStatusBarStyle = self.previousStatusBarStyle;
     nav.maxSelectCount = self.maxSelectCount;
     nav.cellCornerRadio = self.cellCornerRadio;
     nav.allowSelectVideo = self.allowSelectVideo;
     nav.allowSelectImage = self.allowSelectImage;
     nav.allowSelectGif = self.allowSelectGif;
+    nav.allowSelectLivePhoto = self.allowSelectLivePhoto;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
     nav.showCaptureImageOnTakePhotoBtn = self.showCaptureImageOnTakePhotoBtn;
     nav.sortAscending = self.sortAscending;
@@ -608,40 +654,6 @@ static char RelatedKey;
     nav.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
     [nav.arrSelectedModels removeAllObjects];
     [nav.arrSelectedModels addObjectsFromArray:self.arrSelectedModels];
-    
-    weakify(self);
-    __weak typeof(nav) weakNav = nav;
-    [nav setCallSelectImageBlock:^{
-        strongify(weakSelf);
-        __strong typeof(weakNav) strongNav = weakNav;
-        strongSelf.isSelectOriginalPhoto = strongNav.isSelectOriginalPhoto;
-        [strongSelf.arrSelectedModels removeAllObjects];
-        [strongSelf.arrSelectedModels addObjectsFromArray:strongNav.arrSelectedModels];
-        [strongSelf requestSelPhotos:strongNav];
-    }];
-    [nav setCallSelectGifBlock:^(UIImage *gif, PHAsset *asset) {
-        strongify(weakSelf);
-        __strong typeof(weakNav) strongNav = weakNav;
-        if (strongSelf.selectGifBlock) {
-            strongSelf.selectGifBlock(gif, asset);
-        }
-        [strongSelf hide];
-        [strongNav dismissViewControllerAnimated:YES completion:nil];
-    }];
-    [nav setCallSelectVideoBlock:^(UIImage *coverImage, PHAsset *asset) {
-        strongify(weakSelf);
-        __strong typeof(weakNav) strongNav = weakNav;
-        if (strongSelf.selectVideoBlock) {
-            strongSelf.selectVideoBlock(coverImage, asset);
-        }
-        [strongSelf hide];
-        [strongNav dismissViewControllerAnimated:YES completion:nil];
-    }];
-    
-    [nav setCancelBlock:^{
-        strongify(weakSelf);
-        [strongSelf hide];
-    }];
     
     return nav;
 }
@@ -655,7 +667,7 @@ static char RelatedKey;
     ZLAlbumListModel *m = [ZLPhotoManager getCameraRollAlbumList:self.allowSelectVideo allowSelectImage:self.allowSelectImage];
     tvc.albumListModel = m;
     [nav pushViewController:tvc animated:YES];
-    [self.sender showDetailViewController:nav sender:nil];
+    [self.sender presentViewController:nav animated:YES completion:nil];
 }
 
 //查看大图界面
@@ -683,6 +695,14 @@ static char RelatedKey;
 - (void)pushGifViewControllerWithModel:(ZLPhotoModel *)model
 {
     ZLShowGifViewController *vc = [[ZLShowGifViewController alloc] init];
+    vc.model = model;
+    ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
+    [self.sender showDetailViewController:nav sender:nil];
+}
+
+- (void)pushLivePhotoViewControllerWithModel:(ZLPhotoModel *)model
+{
+    ZLShowLivePhotoViewController *vc = [[ZLShowLivePhotoViewController alloc] init];
     vc.model = model;
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
     [self.sender showDetailViewController:nav sender:nil];

@@ -27,6 +27,7 @@
 //    self.topView.frame = self.bounds;
     self.videoBottomView.frame = CGRectMake(0, GetViewHeight(self)-15, GetViewWidth(self), 15);
     self.videoImageView.frame = CGRectMake(5, 1, 16, 12);
+    self.liveImageView.frame = CGRectMake(5, -1, 15, 15);
     self.timeLabel.frame = CGRectMake(30, 1, GetViewWidth(self)-35, 12);
     [self.contentView sendSubviewToBack:self.imageView];
 }
@@ -59,6 +60,7 @@
     if (!_videoBottomView) {
         _videoBottomView = [[UIImageView alloc] initWithImage:GetImageWithName(@"videoView")];
         [_videoBottomView addSubview:self.videoImageView];
+        [_videoBottomView addSubview:self.liveImageView];
         [_videoBottomView addSubview:self.timeLabel];
         [self.contentView addSubview:_videoBottomView];
     }
@@ -72,6 +74,15 @@
         _videoImageView.image = GetImageWithName(@"video");
     }
     return _videoImageView;
+}
+
+- (UIImageView *)liveImageView
+{
+    if (!_liveImageView) {
+        _liveImageView = [[UIImageView alloc] init];
+        _liveImageView.image = GetImageWithName(@"livePhoto");
+    }
+    return _liveImageView;
 }
 
 - (UILabel *)timeLabel
@@ -112,7 +123,7 @@
         self.btnSelect.hidden = YES;
         self.videoBottomView.hidden = NO;
         self.videoImageView.hidden = NO;
-        self.timeLabel.hidden = NO;
+        self.liveImageView.hidden = YES;
         self.timeLabel.text = model.duration;
 //        if (self.isSelectedImage) {
 //            self.topView.hidden = !self.isSelectedImage();
@@ -121,10 +132,19 @@
         self.btnSelect.hidden = self.allSelectGif?:!self.showSelectBtn;
         self.videoBottomView.hidden = !self.allSelectGif;
         self.videoImageView.hidden = YES;
-        self.timeLabel.hidden = NO;
+        self.liveImageView.hidden = YES;
         self.timeLabel.text = @"GIF";
 //        if (self.allSelectGif && self.isSelectedImage) {
 //            self.topView.hidden = self.allSelectGif && !self.isSelectedImage();
+//        }
+    } else if (model.type == ZLAssetMediaTypeLivePhoto) {
+        self.btnSelect.hidden = self.allSelectLivePhoto?:!self.showSelectBtn;
+        self.videoBottomView.hidden = !self.allSelectLivePhoto;
+        self.videoImageView.hidden = YES;
+        self.liveImageView.hidden = NO;
+        self.timeLabel.text = @"Live";
+//        if (self.allSelectLivePhoto && self.isSelectedImage) {
+//            self.topView.hidden = self.allSelectLivePhoto && !self.isSelectedImage();
 //        }
     } else {
         self.btnSelect.hidden = !self.showSelectBtn;

@@ -12,10 +12,12 @@
 "ZLPhotoBrowserPreviewText" = "預覽";
 "ZLPhotoBrowserGifPreviewText" = "GIF 預覽";
 "ZLPhotoBrowserVideoPreviewText" = "視頻 預覽";
+"ZLPhotoBrowserLivePhotoPreviewText" = "Live Photo 預覽";
 
 "ZLPhotoBrowserNoPhotoText" = "無照片";
 "ZLPhotoBrowserCannotSelectVideo" = "不能同時選擇照片和視頻";
 "ZLPhotoBrowserCannotSelectGIF" = "不能同時選擇照片和GIF";
+"ZLPhotoBrowserCannotSelectLivePhoto" = "不能同時選擇照片和Live Photo";
 
 "ZLPhotoBrowserLoadingText" = "加載中，請稍後";
 "ZLPhotoBrowserHandleText" = "正在處理...";

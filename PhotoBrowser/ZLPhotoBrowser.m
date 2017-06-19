@@ -15,6 +15,11 @@
 
 @implementation ZLImageNavigationController
 
+- (void)dealloc
+{
+//    NSLog(@"---- %s", __FUNCTION__);
+}
+
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController
 {
     self = [super initWithRootViewController:rootViewController];
@@ -84,6 +89,11 @@
 
 @implementation ZLPhotoBrowser
 
+- (void)dealloc
+{
+//    NSLog(@"---- %s", __FUNCTION__);
+}
+
 - (UIView *)placeholderView
 {
     if (!_placeholderView) {
@@ -108,15 +118,6 @@
     return _placeholderView;
 }
 
-- (NSMutableArray<ZLAlbumListModel *> *)arrayDataSources
-{
-    if (!_arrayDataSources) {
-        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-        _arrayDataSources = [NSMutableArray arrayWithArray:[ZLPhotoManager getPhotoAblumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage]];
-    }
-    return _arrayDataSources;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -132,6 +133,16 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        [ZLPhotoManager getPhotoAblumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage complete:^(NSArray<ZLAlbumListModel *> *albums) {
+            self.arrayDataSources = [NSMutableArray arrayWithArray:albums];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }];
+    });
 }
 
 - (void)initNavBtn

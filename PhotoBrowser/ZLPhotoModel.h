@@ -13,6 +13,7 @@ typedef NS_ENUM(NSUInteger, ZLAssetMediaType) {
     ZLAssetMediaTypeUnknown,
     ZLAssetMediaTypeImage,
     ZLAssetMediaTypeGif,
+    ZLAssetMediaTypeLivePhoto,
     ZLAssetMediaTypeVideo,
     ZLAssetMediaTypeAudio,
 };
