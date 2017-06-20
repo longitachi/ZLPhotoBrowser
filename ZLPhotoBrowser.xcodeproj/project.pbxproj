@@ -51,6 +51,7 @@
 		FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */; };
 		FD7852511EF4FD5300C69E84 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD7852501EF4FD5300C69E84 /* PhotosUI.framework */; };
 		FD7852541EF50EE700C69E84 /* ZLShowLivePhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7852531EF50EE700C69E84 /* ZLShowLivePhotoViewController.m */; };
+		FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FDD979E21EF8C62300DD9DA4 /* ImageCell.m */; };
 		FDDB9EBA1E6D2EF6008ED9F1 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDB9EB71E6D2EF6008ED9F1 /* YYWeakProxy.m */; };
 		FDDB9EBB1E6D2EF6008ED9F1 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDB9EB91E6D2EF6008ED9F1 /* YYFPSLabel.m */; };
 /* End PBXBuildFile section */
@@ -122,6 +123,8 @@
 		FD7852501EF4FD5300C69E84 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		FD7852521EF50EE700C69E84 /* ZLShowLivePhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLShowLivePhotoViewController.h; sourceTree = "<group>"; };
 		FD7852531EF50EE700C69E84 /* ZLShowLivePhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowLivePhotoViewController.m; sourceTree = "<group>"; };
+		FDD979E11EF8C62300DD9DA4 /* ImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCell.h; sourceTree = "<group>"; };
+		FDD979E21EF8C62300DD9DA4 /* ImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCell.m; sourceTree = "<group>"; };
 		FDDB9EB61E6D2EF6008ED9F1 /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
 		FDDB9EB71E6D2EF6008ED9F1 /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
 		FDDB9EB81E6D2EF6008ED9F1 /* YYFPSLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYFPSLabel.h; sourceTree = "<group>"; };
@@ -233,6 +236,8 @@
 				FD0787241C0D45A200D17B97 /* AppDelegate.m */,
 				FD0787261C0D45A200D17B97 /* ViewController.h */,
 				FD0787271C0D45A200D17B97 /* ViewController.m */,
+				FDD979E11EF8C62300DD9DA4 /* ImageCell.h */,
+				FDD979E21EF8C62300DD9DA4 /* ImageCell.m */,
 				FD30F0671C72EECC0060F19F /* ZLShowBigImage.h */,
 				FD30F0681C72EECC0060F19F /* ZLShowBigImage.m */,
 				FDDB9EB61E6D2EF6008ED9F1 /* YYWeakProxy.h */,
@@ -361,6 +366,7 @@
 				FD0787281C0D45A200D17B97 /* ViewController.m in Sources */,
 				FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */,
 				FD0AE30D1EA768E400954E7F /* ZLShowGifViewController.m in Sources */,
+				FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */,
 				FD22D71F1E9E25D1008FCC4E /* ZLPhotoModel.m in Sources */,
 				FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */,
 				FD30F0691C72EECC0060F19F /* ZLShowBigImage.m in Sources */,

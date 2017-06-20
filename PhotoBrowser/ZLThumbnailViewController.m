@@ -255,16 +255,22 @@
     cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
     
     weakify(self);
-    __weak typeof(nav) weakNav = nav;
     __weak typeof(cell) weakCell = cell;
+    
     cell.selectedBlock = ^(BOOL selected) {
         strongify(weakSelf);
         __strong typeof(weakCell) strongCell = weakCell;
-        __strong typeof(weakNav) strongNav = weakNav;
+        
+        //TODO: 在模拟器上运行如果做了强弱转换，会导致预览已选择照片时候界面卡顿假死。暂时这样判断，不影响真机下运行
+#if TARGET_IPHONE_SIMULATOR
+        ZLImageNavigationController *weakNav = nav;
+#else
+        ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
+#endif
         if (!selected) {
             //选中
-            if (strongNav.arrSelectedModels.count >= strongNav.maxSelectCount) {
-                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), strongNav.maxSelectCount);
+            if (weakNav.arrSelectedModels.count >= weakNav.maxSelectCount) {
+                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), weakNav.maxSelectCount);
                 return;
             }
             if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
@@ -272,14 +278,14 @@
                 return;
             }
             model.isSelected = YES;
-            [strongNav.arrSelectedModels addObject:model];
+            [weakNav.arrSelectedModels addObject:model];
             strongCell.btnSelect.selected = YES;
         } else {
             strongCell.btnSelect.selected = NO;
             model.isSelected = NO;
-            for (ZLPhotoModel *m in strongNav.arrSelectedModels) {
+            for (ZLPhotoModel *m in weakNav.arrSelectedModels) {
                 if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
-                    [strongNav.arrSelectedModels removeObject:m];
+                    [weakNav.arrSelectedModels removeObject:m];
                     break;
                 }
             }
@@ -287,11 +293,11 @@
 //        [collectionView reloadItemsAtIndexPaths:[collectionView indexPathsForVisibleItems]];
         [strongSelf resetBottomBtnsStatus];
     };
-    cell.isSelectedImage = ^BOOL() {
-        strongify(weakSelf);
-        ZLImageNavigationController *nav = (ZLImageNavigationController *)strongSelf.navigationController;
-        return nav.arrSelectedModels.count > 0;
-    };
+//    cell.isSelectedImage = ^BOOL() {
+//        strongify(weakSelf);
+//        ZLImageNavigationController *nav = (ZLImageNavigationController *)strongSelf.navigationController;
+//        return nav.arrSelectedModels.count > 0;
+//    };
     cell.allSelectGif = nav.allowSelectGif;
     cell.allSelectLivePhoto = nav.allowSelectLivePhoto;
     cell.showSelectBtn = nav.showSelectBtn;

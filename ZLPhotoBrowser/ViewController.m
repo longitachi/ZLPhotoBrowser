@@ -10,7 +10,7 @@
 #import "ZLPhotoActionSheet.h"
 #import "ZLShowBigImage.h"
 #import "ZLDefine.h"
-#import "ZLCollectionCell.h"
+#import "ImageCell.h"
 #import "YYFPSLabel.h"
 #import <Photos/Photos.h>
 #import "ZLShowGifViewController.h"
@@ -48,6 +48,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.automaticallyAdjustsScrollViewInsets = NO;
     YYFPSLabel *label = [[YYFPSLabel alloc] initWithFrame:CGRectMake(kViewWidth - 100, 30, 100, 30)];
     [[UIApplication sharedApplication].keyWindow addSubview:label];
     [self initCollectionView];
@@ -68,7 +69,7 @@
     layout.sectionInset = UIEdgeInsetsMake(3, 0, 3, 0);
     self.collectionView.collectionViewLayout = layout;
     self.collectionView.backgroundColor = [UIColor whiteColor];
-    [self.collectionView registerClass:NSClassFromString(@"ZLCollectionCell") forCellWithReuseIdentifier:@"ZLCollectionCell"];
+    [self.collectionView registerClass:NSClassFromString(@"ImageCell") forCellWithReuseIdentifier:@"ImageCell"];
 }
 
 - (ZLPhotoActionSheet *)getPas
@@ -175,13 +176,8 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZLCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLCollectionCell" forIndexPath:indexPath];
-    cell.btnSelect.hidden = YES;
-    cell.videoImageView.hidden = YES;
-//    cell.topView.hidden = YES;
+    ImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCell" forIndexPath:indexPath];
     cell.imageView.image = _arrDataSources[indexPath.row];
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    
     return cell;
 }
 

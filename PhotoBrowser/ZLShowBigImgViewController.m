@@ -50,7 +50,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
+
     _currentPage = self.selectIndex+1;
     self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
     [self initNavBtns];
@@ -373,6 +373,10 @@
 {
     if (scrollView == (UIScrollView *)_collectionView) {
         //改变导航标题
+        CGPoint offset = scrollView.contentOffset;
+        if (offset.x < .0 || offset.x > (scrollView.contentSize.width-kViewWidth-kItemMargin)) {
+            return;
+        }
         CGFloat page = scrollView.contentOffset.x/(kViewWidth+kItemMargin);
         NSString *str = [NSString stringWithFormat:@"%.0f", page];
         _currentPage = str.integerValue + 1;

@@ -238,6 +238,8 @@ double const ScalePhotoWidth = 1000;
         } else if (status == PHAuthorizationStatusRestricted ||
                    status == PHAuthorizationStatusDenied) {
             [self showNoAuthorityVC];
+        } else {
+            [self.sender.view addSubview:self];
         }
     }
 }
@@ -247,6 +249,7 @@ double const ScalePhotoWidth = 1000;
     self.arrSelectedAssets = [NSMutableArray arrayWithArray:assets];
     ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:svc];
+    nav.showSelectBtn = YES;
     svc.selectIndex = index;
     svc.arrSelPhotos = [NSMutableArray arrayWithArray:photos];
     svc.models = self.arrSelectedModels;
@@ -260,6 +263,8 @@ double const ScalePhotoWidth = 1000;
         }
         [strongNav dismissViewControllerAnimated:YES completion:nil];
     }];
+    self.preview = NO;
+    [self.sender.view addSubview:self];
     [self.sender showDetailViewController:nav sender:nil];
 }
 
@@ -312,7 +317,9 @@ double const ScalePhotoWidth = 1000;
 - (void)show
 {
     self.frame = self.sender.view.bounds;
-    [self.sender.view addSubview:self];
+    if (!self.superview) {
+        [self.sender.view addSubview:self];
+    }
     if (self.sender.tabBarController.tabBar.hidden == NO) {
         self.senderTabBarIsShow = YES;
         self.sender.tabBarController.tabBar.hidden = YES;
