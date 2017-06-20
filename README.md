@@ -22,69 +22,34 @@
     * [预览已选择照片效果图](#预览已选择照片效果图)
   * 8.原图功能
     * [原图功能效果图](#原图功能效果图)
-* [常用Api](#常用Api)
+  * 9.3D Touch预览
+    * [3DTouch预览效果图](#3DTouch预览效果图)
 * [使用方法(支持cocoapods安装)](#使用方法)
 
 ### 更新日志
 ```
-● 2.1.8: 新增选择及预览Live Photo功能
-● 2.1.7: 新增内部拍照按钮实时显示相机俘获画面功能
-● ... 新增gif及video选择功能
+● 2.2.1: 新增3D Touch预览功能 (需设备支持);
+● 2.2.0: 优化内存问题;
+● 2.1.9: 新增选择及预览Live Photo功能 (iOS 9.0);
+● 2.1.7: 新增内部拍照按钮实时显示相机俘获画面功能;
+● ... 新增gif及video选择功能;
 ```
 
 ### 框架支持与框架依赖
-* iOS8.0
-  * (采用arc模式)
-* XCode8.0
-  * (需要导入Photos.framework)
-
-### <a id="常用Api"></a>常用Api
-```objc
-/**
- 显示ZLPhotoActionSheet选择照片视图
- 
- @warning 需提前赋值 sender 对象
- @param animate 是否显示动画效果
- */
-- (void)showPreviewAnimated:(BOOL)animate;
-
-/**
- 显示ZLPhotoActionSheet选择照片视图
-
- @param animate 是否显示动画效果
- @param sender 调用该对象的控制器
- */
-- (void)showPreviewAnimated:(BOOL)animate sender:(UIViewController *)sender;
-
-/**
- 直接进入相册选择界面
- */
-- (void)showPhotoLibrary;
-
-/**
- 直接进入相册选择界面
- 
- @param sender 调用该对象的控制器
- */
-- (void)showPhotoLibraryWithSender:(UIViewController *)sender;
-
-/**
- 提供 预览用户已选择的照片(非gif与video类型)，并可以取消已选择的照片
-
- @param photos 已选择的uiimage照片数组
- @param assets 已选择的phasset照片数组
- @param index 点击的照片索引
- */
-- (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index;
-
-```
+iOS8.0 (采用arc模式)
 
 ### <a id="使用方法"></a>使用方法
-- 直接把PhotoBrowser文件夹拖入到您的工程中
-- Cocoapods安装
+
+第一步：
+* 直接把PhotoBrowser文件夹拖入到您的工程中
+  * 1.导入 Photos.framework
+  * 2.导入 PhotosUI.framework
+* Cocoapods安装
 ```objc
 pod search ZLPhotoBrowser
 ```
+
+第二步：
 - 在项目plist配置文件中添加如下键，值并设为YES
 ```objc
 Localized resources can be mixed YES
@@ -93,30 +58,31 @@ Localized resources can be mixed YES
 <true/>
 ```
 
+代码中调用
 ```objc
-    #import "ZLPhotoActionSheet.h"
+#import "ZLPhotoActionSheet.h"
     
-    ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
-    //设置照片最大预览数
-    actionSheet.maxPreviewCount = 20;
-    //设置照片最大选择数
-    actionSheet.maxSelectCount = 10;
-    actionSheet.sender = self;
-    
-    [actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
-        //your codes
-    }];
-    [actionSheet setSelectGifBlock:^(UIImage * _Nonnull gif, PHAsset * _Nonnull asset) {
-        //your codes
-    }];
-    [actionSheet setSelectLivePhotoBlock:^(UIImage * _Nonnull livePhoto, PHAsset * _Nonnull asset) {
-        //your codes
-    }];
-    [actionSheet setSelectVideoBlock:^(UIImage * _Nonnull coverImage, PHAsset * _Nonnull asset) {
-        //your codes
-    }];
-    
-    [actionSheet showPreviewAnimated:YES];
+ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
+//设置照片最大预览数
+actionSheet.maxPreviewCount = 20;
+//设置照片最大选择数
+actionSheet.maxSelectCount = 10;
+actionSheet.sender = self;
+
+[actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
+    //your codes
+}];
+[actionSheet setSelectGifBlock:^(UIImage * _Nonnull gif, PHAsset * _Nonnull asset) {
+    //your codes
+}];
+[actionSheet setSelectLivePhotoBlock:^(UIImage * _Nonnull livePhoto, PHAsset * _Nonnull asset) {
+    //your codes
+}];
+[actionSheet setSelectVideoBlock:^(UIImage * _Nonnull coverImage, PHAsset * _Nonnull asset) {
+    //your codes
+}];
+
+[actionSheet showPreviewAnimated:YES];
 ```
 
 ### <a id="多语言国际化效果图"></a> 多语言国际化效果图
@@ -150,4 +116,7 @@ Localized resources can be mixed YES
 
 ### <a id="原图功能效果图"></a>原图功能效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/原图功能.gif)
+
+### <a id="3DTouch预览效果图"></a>3DTouch预览效果图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/forceTouch.gif)
 
