@@ -111,11 +111,6 @@ double const ScalePhotoWidth = 1000;
     }
 }
 
-- (void)willRemoveSubview:(UIView *)subview
-{
-    [super willRemoveSubview:subview];
-}
-
 - (instancetype)init
 {
     self = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
@@ -137,6 +132,7 @@ double const ScalePhotoWidth = 1000;
         self.allowSelectGif = YES;
         self.allowSelectLivePhoto = NO;
         self.allowTakePhotoInLibrary = YES;
+        self.allowForceTouch = YES;
         self.showCaptureImageOnTakePhotoBtn = YES;
         self.sortAscending = YES;
         self.showSelectBtn = NO;
@@ -221,6 +217,8 @@ double const ScalePhotoWidth = 1000;
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             
         }];
+        
+        [self.sender.view addSubview:self];
     }
     
     if (preview) {
@@ -238,8 +236,6 @@ double const ScalePhotoWidth = 1000;
         } else if (status == PHAuthorizationStatusRestricted ||
                    status == PHAuthorizationStatusDenied) {
             [self showNoAuthorityVC];
-        } else {
-            [self.sender.view addSubview:self];
         }
     }
 }
@@ -309,7 +305,7 @@ double const ScalePhotoWidth = 1000;
 #pragma mark - 显示隐藏视图及相关动画
 - (void)resetSubViewState
 {
-    self.hidden = !self.preview;
+    self.hidden = ![self judgeIsHavePhotoAblumAuthority] || !self.preview;
     [self changeCancelBtnTitle];
     [self.collectionView setContentOffset:CGPointZero];
 }
@@ -655,6 +651,7 @@ double const ScalePhotoWidth = 1000;
     nav.allowSelectGif = self.allowSelectGif;
     nav.allowSelectLivePhoto = self.allowSelectLivePhoto;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
+    nav.allowForceTouch = self.allowForceTouch;
     nav.showCaptureImageOnTakePhotoBtn = self.showCaptureImageOnTakePhotoBtn;
     nav.sortAscending = self.sortAscending;
     nav.showSelectBtn = self.showSelectBtn;

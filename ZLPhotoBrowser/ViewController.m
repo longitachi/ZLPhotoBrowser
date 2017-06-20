@@ -32,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *rememberLastSelSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *showCaptureImageSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *selLivePhotoSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *allowForceTouchSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *previewTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
@@ -83,6 +84,7 @@
     actionSheet.allowSelectGif = self.selGifSwitch.isOn;
     actionSheet.allowSelectVideo = self.selVideoSwitch.isOn;
     actionSheet.allowSelectLivePhoto = self.selLivePhotoSwitch.isOn;
+    actionSheet.allowForceTouch = self.allowForceTouchSwitch.isOn;
     //设置相册内部显示拍照按钮
     actionSheet.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
     //设置在内部拍照按钮上实时显示相机俘获画面

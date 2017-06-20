@@ -19,8 +19,9 @@
 #import "ZLShowGifViewController.h"
 #import "ZLShowVideoViewController.h"
 #import "ZLShowLivePhotoViewController.h"
+#import "ZLForceTouchPreviewController.h"
 
-@interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIViewControllerPreviewingDelegate>
 {
     BOOL _isLayoutOK;
     BOOL _haveTakePic;
@@ -92,6 +93,11 @@
     if (!_isLayoutOK) {
         [self scrollToBottom];
     }
+}
+
+- (BOOL)forceTouchAvailable
+{
+    return self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
 }
 
 - (void)scrollToBottom
@@ -175,7 +181,22 @@
 - (IBAction)btnPreview_Click:(id)sender
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    [self pushShowBigImgVCWithDataArray:nav.arrSelectedModels selectIndex:nav.arrSelectedModels.count-1];
+    UIViewController *vc = [self getBigImageVCWithData:nav.arrSelectedModels index:nav.arrSelectedModels.count-1];
+    [self.navigationController showViewController:vc sender:nil];
+}
+
+- (UIViewController *)getBigImageVCWithData:(NSArray<ZLPhotoModel *> *)data index:(NSInteger)index
+{
+    ZLShowBigImgViewController *vc = [[ZLShowBigImgViewController alloc] init];
+    vc.models = data.copy;
+    vc.selectIndex = index;
+    weakify(self);
+    [vc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
+        strongify(weakSelf);
+        [ZLPhotoManager markSelcectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
+        [strongSelf.collectionView reloadData];
+    }];
+    return vc;
 }
 
 - (IBAction)btnOriginalPhoto_Click:(id)sender
@@ -304,6 +325,11 @@
     cell.cornerRadio = nav.cellCornerRadio;
     cell.model = model;
     
+    //3d touch
+    if (nav.allowForceTouch && [self forceTouchAvailable]) {
+        [self registerForPreviewingWithDelegate:self sourceView:cell];
+    }
+    
     return cell;
 }
 
@@ -333,33 +359,46 @@
     }
     ZLPhotoModel *model = self.arrDataSources[index];
     
+    UIViewController *vc = [self getMatchVCWithModel:model];
+    if (vc) {
+        [self showViewController:vc sender:nil];
+    }
+}
+
+/**
+ 获取对应的vc
+ */
+- (UIViewController *)getMatchVCWithModel:(ZLPhotoModel *)model
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
     if (model.type == ZLAssetMediaTypeVideo) {
         if (nav.arrSelectedModels.count > 0) {
             ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectVideo]);
-            return;
+            return nil;
         }
         //跳转预览视频
         ZLShowVideoViewController *vc = [[ZLShowVideoViewController alloc] init];
         vc.model = model;
-        [self showViewController:vc sender:self];
+        return vc;
     } else if (nav.allowSelectGif && model.type == ZLAssetMediaTypeGif) {
         if (nav.arrSelectedModels.count > 0) {
             ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectGIF]);
-            return;
+            return nil;
         }
         //跳转预览GIF
         ZLShowGifViewController *vc = [[ZLShowGifViewController alloc] init];
         vc.model = model;
-        [self showViewController:vc sender:self];
+        return vc;
     } else if (nav.allowSelectLivePhoto && model.type == ZLAssetMediaTypeLivePhoto) {
         if (nav.arrSelectedModels.count > 0) {
             ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectLivePhoto]);
-            return;
+            return nil;
         }
         //跳转预览GIF
         ZLShowLivePhotoViewController *vc = [[ZLShowLivePhotoViewController alloc] init];
         vc.model = model;
-        [self showViewController:vc sender:self];
+        return vc;
     } else {
         ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
         
@@ -383,8 +422,8 @@
                 i++;
             }
         }
-
-        [self pushShowBigImgVCWithDataArray:arr selectIndex:i];
+        
+        return [self getBigImageVCWithData:arr index:i];
     }
 }
 
@@ -455,20 +494,6 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)pushShowBigImgVCWithDataArray:(NSArray<ZLPhotoModel *> *)dataArray selectIndex:(NSInteger)selectIndex
-{
-    ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
-    svc.models = dataArray.copy;
-    svc.selectIndex = selectIndex;
-    weakify(self);
-    [svc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
-        strongify(weakSelf);
-        [ZLPhotoManager markSelcectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
-        [strongSelf.collectionView reloadData];
-    }];
-    [self.navigationController showViewController:svc sender:self];
-}
-
 - (void)getOriginalImageBytes
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
@@ -477,6 +502,55 @@
         strongify(weakSelf);
         strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
     }];
+}
+
+#pragma mark - UIViewControllerPreviewingDelegate
+//!!!!: 3D Touch
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
+{
+    NSIndexPath *indexPath = [self.collectionView indexPathForCell:(UICollectionViewCell *)previewingContext.sourceView];
+    
+    if (!indexPath) {
+        return nil;
+    }
+    
+    ZLForceTouchPreviewController *vc = [[ZLForceTouchPreviewController alloc] init];
+    
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    NSInteger index = indexPath.row;
+    if (self.allowTakePhoto && !nav.sortAscending) {
+        index = indexPath.row - 1;
+    }
+    ZLPhotoModel *model = self.arrDataSources[index];
+    vc.model = model;
+    vc.allowSelectGif = nav.allowSelectGif;
+    vc.allowSelectLivePhoto = nav.allowSelectLivePhoto;
+    
+    vc.preferredContentSize = [self getSize:model];
+    
+    return vc;
+}
+
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
+{
+    ZLPhotoModel *model = [(ZLForceTouchPreviewController *)viewControllerToCommit model];
+    
+    UIViewController *vc = [self getMatchVCWithModel:model];
+    if (vc) {
+        [self showViewController:vc sender:self];
+    }
+}
+
+- (CGSize)getSize:(ZLPhotoModel *)model
+{
+    CGFloat w = MIN(model.asset.pixelWidth, kViewWidth);
+    CGFloat h = w * model.asset.pixelHeight / model.asset.pixelWidth;
+    if (h > kViewHeight) {
+        h = kViewHeight;
+        w = h * model.asset.pixelWidth / model.asset.pixelHeight;
+    }
+    
+    return CGSizeMake(w, h);
 }
 
 @end
