@@ -61,7 +61,7 @@
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     CGSize size = [self getSize];
-    imageView.frame = (CGRect){{0, 0}, [self getSize]};
+    imageView.frame = (CGRect){CGPointZero, [self getSize]};
     [self.view addSubview:imageView];
     
     [ZLPhotoManager requestImageForAsset:self.model.asset size:CGSizeMake(size.width*2, size.height*2) completion:^(UIImage *img, NSDictionary *info) {
@@ -73,7 +73,7 @@
 {
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageView.frame = (CGRect){{0, 0}, [self getSize]};
+    imageView.frame = (CGRect){CGPointZero, [self getSize]};
     [self.view addSubview:imageView];
     
     [ZLPhotoManager requestOriginalImageDataForAsset:self.model.asset completion:^(NSData *data, NSDictionary *info) {
@@ -85,7 +85,7 @@
 {
     PHLivePhotoView *lpView = [[PHLivePhotoView alloc] init];
     lpView.contentMode = UIViewContentModeScaleAspectFit;
-    lpView.frame = (CGRect){{0, 0}, [self getSize]};
+    lpView.frame = (CGRect){CGPointZero, [self getSize]};
     [self.view addSubview:lpView];
     
     [ZLPhotoManager requestLivePhotoForAsset:self.model.asset completion:^(PHLivePhoto *lv, NSDictionary *info) {
@@ -97,7 +97,7 @@
 - (void)loadVideo
 {
     AVPlayerLayer *playLayer = [[AVPlayerLayer alloc] init];
-    playLayer.frame = (CGRect){{0, 0}, [self getSize]};
+    playLayer.frame = (CGRect){CGPointZero, [self getSize]};
     [self.view.layer addSublayer:playLayer];
     
     [ZLPhotoManager requestVideoForAsset:self.model.asset completion:^(AVPlayerItem *item, NSDictionary *info) {
@@ -113,6 +113,8 @@
 {
     CGFloat w = MIN(self.model.asset.pixelWidth, kViewWidth);
     CGFloat h = w * self.model.asset.pixelHeight / self.model.asset.pixelWidth;
+    if (isnan(h)) return CGSizeZero;
+    
     if (h > kViewHeight) {
         h = kViewHeight;
         w = h * self.model.asset.pixelWidth / self.model.asset.pixelHeight;

@@ -282,12 +282,7 @@
         strongify(weakSelf);
         __strong typeof(weakCell) strongCell = weakCell;
         
-        //TODO: 在模拟器上运行如果做了强弱转换，会导致预览已选择照片时候界面卡顿假死。暂时这样判断，不影响真机下运行
-#if TARGET_IPHONE_SIMULATOR
-        ZLImageNavigationController *weakNav = nav;
-#else
         ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
-#endif
         if (!selected) {
             //选中
             if (weakNav.arrSelectedModels.count >= weakNav.maxSelectCount) {
@@ -545,7 +540,9 @@
 {
     CGFloat w = MIN(model.asset.pixelWidth, kViewWidth);
     CGFloat h = w * model.asset.pixelHeight / model.asset.pixelWidth;
-    if (h > kViewHeight) {
+    if (isnan(h)) return CGSizeZero;
+    
+    if (h > kViewHeight || isnan(h)) {
         h = kViewHeight;
         w = h * model.asset.pixelWidth / model.asset.pixelHeight;
     }

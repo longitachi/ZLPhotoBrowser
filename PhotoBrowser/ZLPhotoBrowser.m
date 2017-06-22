@@ -133,13 +133,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        weakify(self);
         [ZLPhotoManager getPhotoAblumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage complete:^(NSArray<ZLAlbumListModel *> *albums) {
-            self.arrayDataSources = [NSMutableArray arrayWithArray:albums];
+            strongify(weakSelf);
+            strongSelf.arrayDataSources = [NSMutableArray arrayWithArray:albums];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
+                [strongSelf.tableView reloadData];
             });
         }];
     });

@@ -220,6 +220,11 @@
 
 - (void)startCapture
 {
+    if (![UIImagePickerController isSourceTypeAvailable:
+         UIImagePickerControllerSourceTypeCamera]) {
+        return;
+    }
+    
     if (self.session && [self.session isRunning]) {
         return;
     }

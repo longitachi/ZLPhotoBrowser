@@ -150,9 +150,7 @@
     [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];
     [_btnOriginalPhoto addTarget:self action:@selector(btnOriginalImage_Click:) forControlEvents:UIControlEventTouchUpInside];
     _btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
-    if (nav.arrSelectedModels.count > 0) {
-        [self getPhotosBytes];
-    }
+    [self getPhotosBytes];
     [_bottomView addSubview:_btnOriginalPhoto];
     
     self.labPhotosBytes = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_btnOriginalPhoto.frame)+5, 7, 80, 30)];
@@ -185,11 +183,12 @@
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     nav.isSelectOriginalPhoto = btn.selected = !btn.selected;
     if (btn.selected) {
-        ZLPhotoModel *m = self.models[_currentPage-1];
-        if (!m.isSelected) {
-            [self navRightBtn_Click:_navRightBtn];
-        } else {
-            [self getPhotosBytes];
+        [self getPhotosBytes];
+        if (!_navRightBtn.isSelected) {
+            if (nav.showSelectBtn &&
+                nav.arrSelectedModels.count < nav.maxSelectCount) {
+                [self navRightBtn_Click:_navRightBtn];
+            }
         }
     } else {
         self.labPhotosBytes.text = nil;
@@ -252,7 +251,6 @@
             [self.arrSelPhotos addObject:_arrSelPhotosBackup[_currentPage-1]];
             [_arrSelAssets addObject:_arrSelAssetsBackup[_currentPage-1]];
         }
-        [self getPhotosBytes];
     } else {
         //移除
         model.isSelected = NO;
@@ -294,9 +292,11 @@
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (!nav.isSelectOriginalPhoto) return;
     
-    if (nav.arrSelectedModels.count > 0) {
+    NSArray *arr = nav.showSelectBtn?nav.arrSelectedModels:@[self.models[_currentPage-1]];
+    
+    if (arr.count) {
         weakify(self);
-        [ZLPhotoManager getPhotosBytesWithArray:nav.arrSelectedModels completion:^(NSString *photosBytes) {
+        [ZLPhotoManager getPhotosBytesWithArray:arr completion:^(NSString *photosBytes) {
             strongify(weakSelf);
             strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
         }];
@@ -344,11 +344,6 @@
     [(ZLBigImageCell *)cell resetCellStatus];
 }
 
-//- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    [(ZLBigImageCell *)cell resetCellStatus];
-//}
-
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZLBigImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLBigImageCell" forIndexPath:indexPath];
@@ -383,6 +378,9 @@
         self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
         ZLPhotoModel *model = self.models[_currentPage-1];
         _navRightBtn.selected = model.isSelected;
+        //单选模式下获取当前图片大小
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        if (!nav.showSelectBtn) [self getPhotosBytes];
     }
 }
 

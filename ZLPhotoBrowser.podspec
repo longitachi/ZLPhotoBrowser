@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.source_files = 'PhotoBrowser/*.{h,m}'
   s.resources    = 'PhotoBrowser/resource/*.{png,xib,nib,bundle}'
   s.requires_arc = true
-  s.frameworks   = 'UIKit','Photos'
+  s.frameworks   = 'UIKit','Photos','PhotosUI'
 end

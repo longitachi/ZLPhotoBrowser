@@ -61,16 +61,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray<PHAsset *> *arrSelectedAssets;
 
 /**选择照片回调，回调解析好的图片、对应的asset对象、是否原图*/
-@property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *, NSArray<PHAsset *> *, BOOL);
+@property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *images, NSArray<PHAsset *> *assets, BOOL isOriginal);
 
 /**选择gif照片回调，回调解析好的gif图片、对应的asset对象*/
-@property (nonatomic, copy) void (^selectGifBlock)(UIImage *, PHAsset *);
+@property (nonatomic, copy) void (^selectGifBlock)(UIImage *gif, PHAsset *asset);
 
 /**选择live photo照片回调，回调解析好的live photo图片、对应的asset对象*/
-@property (nonatomic, copy) void (^selectLivePhotoBlock)(UIImage *, PHAsset *);
+@property (nonatomic, copy) void (^selectLivePhotoBlock)(UIImage *livePhoto, PHAsset *asset);
 
 /**选择视频回调，回调第一帧封面图片、对应的asset对象，对应的AVPlayerItem对象*/
-@property (nonatomic, copy) void (^selectVideoBlock)(UIImage *, PHAsset *);
+@property (nonatomic, copy) void (^selectVideoBlock)(UIImage *cover, PHAsset *asset);
 
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
 
