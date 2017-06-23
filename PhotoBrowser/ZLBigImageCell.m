@@ -14,8 +14,6 @@
 
 @interface ZLBigImageCell ()
 
-@property (nonatomic, strong) ZLBigImageView *bigImageView;
-
 @end
 
 @implementation ZLBigImageCell

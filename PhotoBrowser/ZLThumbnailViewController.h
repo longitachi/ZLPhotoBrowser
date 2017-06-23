@@ -14,6 +14,8 @@
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
+@property (weak, nonatomic) IBOutlet UIButton *btnEdit;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *verLeftSpace;
 @property (weak, nonatomic) IBOutlet UIButton *btnPreView;
 @property (weak, nonatomic) IBOutlet UIButton *btnOriginalPhoto;
 @property (weak, nonatomic) IBOutlet UILabel *labPhotosBytes;

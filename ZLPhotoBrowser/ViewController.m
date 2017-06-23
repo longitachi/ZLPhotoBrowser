@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *showCaptureImageSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *selLivePhotoSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowForceTouchSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *allowEditSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *previewTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
@@ -85,6 +86,7 @@
     actionSheet.allowSelectVideo = self.selVideoSwitch.isOn;
     actionSheet.allowSelectLivePhoto = self.selLivePhotoSwitch.isOn;
     actionSheet.allowForceTouch = self.allowForceTouchSwitch.isOn;
+    actionSheet.allowEditImage = self.allowEditSwitch.isOn;
     //设置相册内部显示拍照按钮
     actionSheet.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
     //设置在内部拍照按钮上实时显示相机俘获画面
@@ -216,6 +218,8 @@
     if (s == self.selImageSwitch) {
         if (!s.isOn) {
             [self.selGifSwitch setOn:NO animated:YES];
+            [self.selLivePhotoSwitch setOn:NO animated:YES];
+            [self.allowEditSwitch setOn:NO animated:YES];
             [self.selVideoSwitch setOn:YES animated:YES];
         }
     } else if (s == self.selGifSwitch) {

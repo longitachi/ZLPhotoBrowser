@@ -10,9 +10,11 @@
 
 @class ZLPhotoModel;
 @class PHAsset;
+@class ZLBigImageView;
 
 @interface ZLBigImageCell : UICollectionViewCell
 
+@property (nonatomic, strong) ZLBigImageView *bigImageView;
 @property (nonatomic, strong) ZLPhotoModel *model;
 @property (nonatomic, copy)   void (^singleTapCallBack)();
 

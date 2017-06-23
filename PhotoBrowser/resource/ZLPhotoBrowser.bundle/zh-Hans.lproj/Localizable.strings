@@ -8,6 +8,9 @@
 
 "ZLPhotoBrowserBackText" = "返回";
 
+"ZLPhotoBrowserEditText" = "编辑";
+"ZLPhotoBrowserSaveText" = "保存";
+
 "ZLPhotoBrowserPhotoText" = "照片";
 "ZLPhotoBrowserPreviewText" = "预览";
 "ZLPhotoBrowserGifPreviewText" = "GIF 预览";

@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = 'ZLPhotoBrowser'
-  s.version      = '2.2.1'
-  s.summary      = 'An easy way to Multiselect photos,video,gif from ablum, and support for multiple languages (Chinese, English, Japanese ...)'
+  s.version      = '2.2.3'
+  s.summary      = 'An easy way to Multiselect photos,video,gif,livephoto from ablum, force touch to preview image, and support for multiple languages (Chinese, English, Japanese ...)'
   s.homepage     = 'https://github.com/longitachi/ZLPhotoBrowser'
   s.license      = 'MIT'
   s.platform     = :ios

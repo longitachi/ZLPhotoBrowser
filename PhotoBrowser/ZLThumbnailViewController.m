@@ -20,6 +20,7 @@
 #import "ZLShowVideoViewController.h"
 #import "ZLShowLivePhotoViewController.h"
 #import "ZLForceTouchPreviewController.h"
+#import "ZLEditViewController.h"
 
 @interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIViewControllerPreviewingDelegate>
 {
@@ -65,10 +66,16 @@
         self.allowTakePhoto = YES;
     }
     
-    [self.btnPreView setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserPreviewText] forState:UIControlStateNormal];
-    [self.btnOriginalPhoto setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserOriginalText] forState:UIControlStateNormal];
-    [self.btnDone setTitle:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowserDoneText] forState:UIControlStateNormal];
+    [self.btnEdit setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserEditText) forState:UIControlStateNormal];
+    [self.btnPreView setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText) forState:UIControlStateNormal];
+    [self.btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
+    [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
     self.bottomView.backgroundColor = kBottomView_color;
+    
+    if (!nav.allowEditImage) {
+        [self.verLeftSpace setConstant:-5-self.btnEdit.bounds.size.width];
+        self.btnEdit.hidden = YES;
+    }
     
     [self initNavBtn];
     [self initCollectionView];
@@ -145,6 +152,9 @@
         self.btnDone.backgroundColor = kButtonUnable_textColor;
         [self.btnDone setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
     }
+    
+    [self.btnEdit setTitleColor:nav.arrSelectedModels.count==1?kDoneButton_bgColor:kButtonUnable_textColor forState:UIControlStateNormal];
+    self.btnEdit.userInteractionEnabled = nav.arrSelectedModels.count==1;
 }
 
 - (void)initCollectionView
@@ -172,12 +182,16 @@
     [btn setTitleColor:kNavBar_tintColor forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
-    
-//    UIImage *navBackImg = GetImageWithName(@"navBackBtn.png");
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(navLeftBtn_Click)];
 }
 
 #pragma mark - UIButton Action
+- (IBAction)btnEdit_Click:(id)sender {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLEditViewController *vc = [[ZLEditViewController alloc] init];
+    vc.model = nav.arrSelectedModels.firstObject;
+    [self.navigationController pushViewController:vc animated:NO];
+}
+
 - (IBAction)btnPreview_Click:(id)sender
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;

@@ -14,6 +14,7 @@
 #import "ZLPhotoBrowser.h"
 #import "ZLPhotoModel.h"
 #import "ZLPhotoManager.h"
+#import "ZLEditViewController.h"
 
 @interface ZLShowBigImgViewController () <UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 {
@@ -25,6 +26,8 @@
     UIView   *_bottomView;
     UIButton *_btnOriginalPhoto;
     UIButton *_btnDone;
+    //编辑按钮
+    UIButton *_btnEdit;
     
     //双击的scrollView
     UIScrollView *_selectScrollView;
@@ -33,6 +36,8 @@
     NSArray *_arrSelPhotosBackup;
     NSMutableArray *_arrSelAssets;
     NSArray *_arrSelAssetsBackup;
+    
+    BOOL _isFirstAppear;
 }
 
 @property (nonatomic, strong) UILabel *labPhotosBytes;
@@ -51,18 +56,24 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
 
+    _isFirstAppear = YES;
     _currentPage = self.selectIndex+1;
     self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
     [self initNavBtns];
     [self initCollectionView];
     [self initBottomView];
-    [self changeBtnDoneTitle];
+    [self resetDontBtnState];
+    [self resetEditBtnState];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
+    if (!_isFirstAppear) {
+        return;
+    }
+    _isFirstAppear = NO;
     [_collectionView setContentOffset:CGPointMake(self.selectIndex*(kViewWidth+kItemMargin), 0)];
 }
 
@@ -158,6 +169,15 @@
     self.labPhotosBytes.textColor = kDoneButton_bgColor;
     [_bottomView addSubview:self.labPhotosBytes];
     
+    //编辑
+    _btnEdit = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnEdit.frame = CGRectMake(kViewWidth/2-30, 7, 60, 30);
+    [_btnEdit setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserEditText) forState:UIControlStateNormal];
+    _btnEdit.titleLabel.font = [UIFont systemFontOfSize:15];
+    [_btnEdit setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
+    [_btnEdit addTarget:self action:@selector(btnEdit_Click:) forControlEvents:UIControlEventTouchUpInside];
+    [_bottomView addSubview:_btnEdit];
+    
     _btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
     _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
     [_btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
@@ -174,6 +194,10 @@
     if (self.arrSelPhotos) {
         //预览用户已确定选择的照片，隐藏原图按钮
         _btnOriginalPhoto.hidden = YES;
+        _btnEdit.hidden = YES;
+    }
+    if (!nav.allowEditImage) {
+        _btnEdit.hidden = YES;
     }
 }
 
@@ -193,6 +217,27 @@
     } else {
         self.labPhotosBytes.text = nil;
     }
+}
+
+- (void)btnEdit_Click:(UIButton *)btn
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    BOOL flag = !_navRightBtn.isSelected && nav.showSelectBtn &&
+    nav.arrSelectedModels.count < nav.maxSelectCount;
+    
+    ZLPhotoModel *model = self.models[_currentPage-1];
+    if (flag) {
+        [self navRightBtn_Click:_navRightBtn];
+        if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
+            return;
+        }
+    }
+    
+    ZLEditViewController *vc = [[ZLEditViewController alloc] init];
+    vc.model = model;
+    ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
+    vc.oriImage = cell.bigImageView.image;
+    [self.navigationController pushViewController:vc animated:NO];
 }
 
 - (void)btnDone_Click:(UIButton *)btn
@@ -273,17 +318,33 @@
     
     btn.selected = !btn.selected;
     [self getPhotosBytes];
-    [self changeBtnDoneTitle];
+    [self resetDontBtnState];
+    [self resetEditBtnState];
 }
 
 #pragma mark - 更新按钮、导航条等显示状态
-- (void)changeBtnDoneTitle
+- (void)resetDontBtnState
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (nav.arrSelectedModels.count > 0) {
         [_btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), nav.arrSelectedModels.count] forState:UIControlStateNormal];
     } else {
         [_btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
+    }
+}
+
+- (void)resetEditBtnState
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (!nav.allowEditImage) return;
+
+    BOOL flag = [self.models[_currentPage-1].asset.localIdentifier isEqualToString:nav.arrSelectedModels.firstObject.asset.localIdentifier];
+    if (nav.arrSelectedModels.count ==0 || (nav.arrSelectedModels.count <= 1 && flag)) {
+        [_btnEdit setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
+        _btnEdit.userInteractionEnabled = YES;
+    } else {
+        [_btnEdit setTitleColor:kButtonUnable_textColor forState:UIControlStateNormal];
+        _btnEdit.userInteractionEnabled = NO;
     }
 }
 
@@ -378,10 +439,15 @@
         self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
         ZLPhotoModel *model = self.models[_currentPage-1];
         _navRightBtn.selected = model.isSelected;
-        //单选模式下获取当前图片大小
-        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-        if (!nav.showSelectBtn) [self getPhotosBytes];
     }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self resetEditBtnState];
+    //单选模式下获取当前图片大小
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (!nav.showSelectBtn) [self getPhotosBytes];
 }
 
 @end

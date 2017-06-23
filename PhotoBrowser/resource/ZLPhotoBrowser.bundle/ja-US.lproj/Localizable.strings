@@ -8,6 +8,9 @@
 
 "ZLPhotoBrowserBackText" = "戻る";
 
+"ZLPhotoBrowserEditText" = "編集";
+"ZLPhotoBrowserSaveText" = "保存";
+
 "ZLPhotoBrowserPhotoText" = "写真";
 "ZLPhotoBrowserPreviewText" = "プレビュー";
 "ZLPhotoBrowserGifPreviewText" = "プレビュー";

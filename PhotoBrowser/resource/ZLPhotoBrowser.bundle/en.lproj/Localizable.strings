@@ -8,6 +8,9 @@
 
 "ZLPhotoBrowserBackText" = "Back";
 
+"ZLPhotoBrowserEditText" = "Edit";
+"ZLPhotoBrowserSaveText" = "Save";
+
 "ZLPhotoBrowserPhotoText" = "Photos";
 "ZLPhotoBrowserPreviewText" = "Preview";
 "ZLPhotoBrowserGifPreviewText" = "GIF preview";

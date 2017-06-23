@@ -133,6 +133,7 @@ double const ScalePhotoWidth = 1000;
         self.allowSelectLivePhoto = NO;
         self.allowTakePhotoInLibrary = YES;
         self.allowForceTouch = YES;
+        self.allowEditImage = YES;
         self.showCaptureImageOnTakePhotoBtn = YES;
         self.sortAscending = YES;
         self.showSelectBtn = NO;
@@ -599,7 +600,6 @@ double const ScalePhotoWidth = 1000;
 
 - (ZLImageNavigationController *)getImageNavWithRootVC:(UIViewController *)rootVC
 {
-    
     ZLImageNavigationController *nav = [[ZLImageNavigationController alloc] initWithRootViewController:rootVC];
     weakify(self);
     __weak typeof(ZLImageNavigationController *) weakNav = nav;
@@ -637,12 +637,20 @@ double const ScalePhotoWidth = 1000;
         [weakNav dismissViewControllerAnimated:YES completion:nil];
     }];
     
+    [nav setCallSelectClipImageBlock:^(UIImage *image, PHAsset *asset){
+        strongify(weakSelf);
+        if (strongSelf.selectImageBlock) {
+            strongSelf.selectImageBlock(@[image], @[asset], NO);
+        }
+        [strongSelf hide];
+        [weakNav dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
     [nav setCancelBlock:^{
         strongify(weakSelf);
         [strongSelf hide];
     }];
 
-    
     nav.previousStatusBarStyle = self.previousStatusBarStyle;
     nav.maxSelectCount = self.maxSelectCount;
     nav.cellCornerRadio = self.cellCornerRadio;
@@ -652,6 +660,7 @@ double const ScalePhotoWidth = 1000;
     nav.allowSelectLivePhoto = self.allowSelectLivePhoto;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
     nav.allowForceTouch = self.allowForceTouch;
+    nav.allowEditImage = self.allowEditImage;
     nav.showCaptureImageOnTakePhotoBtn = self.showCaptureImageOnTakePhotoBtn;
     nav.sortAscending = self.sortAscending;
     nav.showSelectBtn = self.showSelectBtn;

@@ -5,7 +5,7 @@
 ![Language](https://img.shields.io/badge/Language-%20Objective%20C%20-blue.svg)
 
 ### 框架整体介绍
-* 该框架为一个多选照片（支持视频、gif、Live Photo）的框架，兼容设备开启的iCloud照片存储，支持记录历史选择照片。
+* 该框架为一个多选照片（支持视频、gif、Live Photo）的框架，兼容设备开启的iCloud照片存储，支持编辑裁剪图片，支持记录历史选择照片。
   * 1.支持多语言国际化(中:简繁, 英，日)
     * [多语言国际化效果图](#多语言国际化效果图)
   * 2.支持预览多选(预览图数量及最大多选数可设置)
@@ -24,6 +24,8 @@
     * [原图功能效果图](#原图功能效果图)
   * 9.3D Touch预览
     * [3DTouch预览效果图](#3DTouch预览效果图)
+  * 10.编辑功能
+    * [编辑功能预览图](#编辑功能预览图)
 * [使用方法(支持cocoapods安装)](#使用方法)
 
 ### 更新日志
@@ -91,6 +93,12 @@ actionSheet.sender = self;
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/zh-hans.png)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/zh-hant.png)
 
+### <a id="3DTouch预览效果图"></a>3DTouch预览效果图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/forceTouch.gif)
+
+### <a id="编辑功能预览图"></a>编辑功能预览图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/edit.gif)
+
 ### <a id="预览快速多选效果图"></a> 预览快速多选效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览图快速选择.gif)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览大图快速选择.gif)
@@ -116,7 +124,4 @@ actionSheet.sender = self;
 
 ### <a id="原图功能效果图"></a>原图功能效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/原图功能.gif)
-
-### <a id="3DTouch预览效果图"></a>3DTouch预览效果图
-![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/forceTouch.gif)
 

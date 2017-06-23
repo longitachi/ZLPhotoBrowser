@@ -40,6 +40,9 @@
 /**是否Force Touch 功能 默认YES*/
 @property (nonatomic, assign) BOOL allowForceTouch;
 
+/**是否允许编辑图片，选择一张时候才允许编辑，默认YES*/
+@property (nonatomic, assign) BOOL allowEditImage;
+
 /**是否在相册内部拍照按钮上面实时显示相机俘获的影像 默认 YES*/
 @property (nonatomic, assign) BOOL showCaptureImageOnTakePhotoBtn;
 
@@ -65,6 +68,9 @@
 
 /**点击确定video回调*/
 @property (nonatomic, copy) void (^callSelectVideoBlock)(UIImage *, PHAsset *);
+
+/**编辑图片后回调*/
+@property (nonatomic, copy) void (^callSelectClipImageBlock)(UIImage *, PHAsset *);
 
 /**取消block*/
 @property (nonatomic, copy) void (^cancelBlock)();

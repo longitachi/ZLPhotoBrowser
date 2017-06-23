@@ -48,6 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**是否允许Force Touch功能 默认YES*/
 @property (nonatomic, assign) BOOL allowForceTouch;
 
+/**是否允许编辑图片，选择一张时候才允许编辑，默认YES*/
+@property (nonatomic, assign) BOOL allowEditImage;
+
 /**是否在相册内部拍照按钮上面实时显示相机俘获的影像 默认 YES*/
 @property (nonatomic, assign) BOOL showCaptureImageOnTakePhotoBtn;
 

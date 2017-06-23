@@ -51,6 +51,7 @@
 		FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */; };
 		FD7852511EF4FD5300C69E84 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD7852501EF4FD5300C69E84 /* PhotosUI.framework */; };
 		FD7852541EF50EE700C69E84 /* ZLShowLivePhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7852531EF50EE700C69E84 /* ZLShowLivePhotoViewController.m */; };
+		FD7B52731EFCB81600FB9087 /* ZLEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */; };
 		FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FDD979E21EF8C62300DD9DA4 /* ImageCell.m */; };
 		FDD979E61EF8F35700DD9DA4 /* ZLForceTouchPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FDD979E51EF8F35700DD9DA4 /* ZLForceTouchPreviewController.m */; };
 		FDDB9EBA1E6D2EF6008ED9F1 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDB9EB71E6D2EF6008ED9F1 /* YYWeakProxy.m */; };
@@ -124,6 +125,8 @@
 		FD7852501EF4FD5300C69E84 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		FD7852521EF50EE700C69E84 /* ZLShowLivePhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLShowLivePhotoViewController.h; sourceTree = "<group>"; };
 		FD7852531EF50EE700C69E84 /* ZLShowLivePhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowLivePhotoViewController.m; sourceTree = "<group>"; };
+		FD7B52711EFCB81600FB9087 /* ZLEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLEditViewController.h; sourceTree = "<group>"; };
+		FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLEditViewController.m; sourceTree = "<group>"; };
 		FDD979E11EF8C62300DD9DA4 /* ImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCell.h; sourceTree = "<group>"; };
 		FDD979E21EF8C62300DD9DA4 /* ImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCell.m; sourceTree = "<group>"; };
 		FDD979E41EF8F35700DD9DA4 /* ZLForceTouchPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLForceTouchPreviewController.h; sourceTree = "<group>"; };
@@ -158,8 +161,6 @@
 				FD10CECF1EA882490041095C /* ZLCollectionCell.h */,
 				FD10CECD1EA86AF60041095C /* ZLCollectionCell.m */,
 				FD028BAC1CBE33BB009DD2FC /* ZLDefine.h */,
-				FD028BAD1CBE33BB009DD2FC /* ZLNoAuthorityViewController.h */,
-				FD028BAE1CBE33BB009DD2FC /* ZLNoAuthorityViewController.m */,
 				FD028BAF1CBE33BB009DD2FC /* ZLPhotoActionSheet.h */,
 				FD028BB01CBE33BB009DD2FC /* ZLPhotoActionSheet.m */,
 				FD028BB11CBE33BB009DD2FC /* ZLPhotoBrowser.h */,
@@ -172,6 +173,8 @@
 				FD22D71E1E9E25D1008FCC4E /* ZLPhotoModel.m */,
 				FD028BB71CBE33BB009DD2FC /* ZLProgressHUD.h */,
 				FD028BB81CBE33BB009DD2FC /* ZLProgressHUD.m */,
+				FD028BAD1CBE33BB009DD2FC /* ZLNoAuthorityViewController.h */,
+				FD028BAE1CBE33BB009DD2FC /* ZLNoAuthorityViewController.m */,
 				FD028BBB1CBE33BB009DD2FC /* ZLShowBigImgViewController.h */,
 				FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */,
 				FD0AE30B1EA768E400954E7F /* ZLShowGifViewController.h */,
@@ -184,6 +187,8 @@
 				FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */,
 				FDD979E41EF8F35700DD9DA4 /* ZLForceTouchPreviewController.h */,
 				FDD979E51EF8F35700DD9DA4 /* ZLForceTouchPreviewController.m */,
+				FD7B52711EFCB81600FB9087 /* ZLEditViewController.h */,
+				FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */,
 				FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */,
 				FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */,
 			);
@@ -370,6 +375,7 @@
 				FD028BD31CBE33BB009DD2FC /* ToastUtils.m in Sources */,
 				FD028BD51CBE33BB009DD2FC /* ZLBigImageCell.m in Sources */,
 				FD0787281C0D45A200D17B97 /* ViewController.m in Sources */,
+				FD7B52731EFCB81600FB9087 /* ZLEditViewController.m in Sources */,
 				FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */,
 				FD0AE30D1EA768E400954E7F /* ZLShowGifViewController.m in Sources */,
 				FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */,
