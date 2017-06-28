@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**选择live photo照片回调，回调解析好的live photo图片、对应的asset对象*/
 @property (nonatomic, copy) void (^selectLivePhotoBlock)(UIImage *livePhoto, PHAsset *asset);
 
-/**选择视频回调，回调第一帧封面图片、对应的asset对象，对应的AVPlayerItem对象*/
+/**选择视频回调，回调第一帧封面图片、对应的asset对象*/
 @property (nonatomic, copy) void (^selectVideoBlock)(UIImage *cover, PHAsset *asset);
 
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;

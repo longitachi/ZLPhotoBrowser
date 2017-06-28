@@ -19,7 +19,6 @@
 @property (nonatomic, strong) UIImage *coverImage;
 @property (nonatomic, strong) UIButton *playBtn;
 @property (nonatomic, strong) UIView *bottomView;
-@property (nonatomic, strong) UILabel *labVideoBytes;
 @property (nonatomic, strong) UIButton *btnDone;
 
 @property (nonatomic, strong) UILabel *icloudLoadFailedLabel;
@@ -101,11 +100,6 @@
     
     [self.view addSubview:_bottomView];
     
-    self.labVideoBytes = [[UILabel alloc] initWithFrame:CGRectMake(12, 7, 80, 30)];
-    self.labVideoBytes.font = [UIFont systemFontOfSize:15];
-    self.labVideoBytes.textColor = kDoneButton_bgColor;
-    [self.bottomView addSubview:self.labVideoBytes];
-    
     self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
     [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
@@ -128,10 +122,6 @@
     [self.view addGestureRecognizer:tap];
     
     weakify(self);
-    [ZLPhotoManager getPhotosBytesWithArray:@[self.model] completion:^(NSString *photosBytes) {
-        strongify(weakSelf);
-        strongSelf.labVideoBytes.text = photosBytes;
-    }];
     [ZLPhotoManager requestOriginalImageForAsset:self.model.asset completion:^(UIImage *image, NSDictionary *info) {
         if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
         strongify(weakSelf);

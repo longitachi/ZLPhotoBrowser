@@ -12,6 +12,13 @@
 #import "ZLDefine.h"
 #import "ToastUtils.h"
 
+@interface ZLCollectionCell ()
+
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, assign) PHImageRequestID imageRequestID;
+
+@end
+
 @implementation ZLCollectionCell
 
 - (void)awakeFromNib {
@@ -19,26 +26,17 @@
     [super awakeFromNib];
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    self.imageView.frame = self.bounds;
-    self.btnSelect.frame = CGRectMake(GetViewWidth(self.contentView)-26, 5, 23, 23);
-//    self.topView.frame = self.bounds;
-    self.videoBottomView.frame = CGRectMake(0, GetViewHeight(self)-15, GetViewWidth(self), 15);
-    self.videoImageView.frame = CGRectMake(5, 1, 16, 12);
-    self.liveImageView.frame = CGRectMake(5, -1, 15, 15);
-    self.timeLabel.frame = CGRectMake(30, 1, GetViewWidth(self)-35, 12);
-    [self.contentView sendSubviewToBack:self.imageView];
-}
-
 - (UIImageView *)imageView
 {
     if (!_imageView) {
         _imageView = [[UIImageView alloc] init];
+        _imageView.frame = self.bounds;
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.clipsToBounds = YES;
         [self.contentView addSubview:_imageView];
+        
+        [self.contentView bringSubviewToFront:self.videoBottomView];
+        [self.contentView bringSubviewToFront:self.btnSelect];
     }
     return _imageView;
 }
@@ -47,6 +45,7 @@
 {
     if (!_btnSelect) {
         _btnSelect = [UIButton buttonWithType:UIButtonTypeCustom];
+        _btnSelect.frame = CGRectMake(GetViewWidth(self.contentView)-26, 5, 23, 23);
         [_btnSelect setBackgroundImage:GetImageWithName(@"btn_unselected.png") forState:UIControlStateNormal];
         [_btnSelect setBackgroundImage:GetImageWithName(@"btn_selected.png") forState:UIControlStateSelected];
         [_btnSelect addTarget:self action:@selector(btnSelectClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -59,9 +58,7 @@
 {
     if (!_videoBottomView) {
         _videoBottomView = [[UIImageView alloc] initWithImage:GetImageWithName(@"videoView")];
-        [_videoBottomView addSubview:self.videoImageView];
-        [_videoBottomView addSubview:self.liveImageView];
-        [_videoBottomView addSubview:self.timeLabel];
+        _videoBottomView.frame = CGRectMake(0, GetViewHeight(self)-15, GetViewWidth(self), 15);
         [self.contentView addSubview:_videoBottomView];
     }
     return _videoBottomView;
@@ -70,8 +67,9 @@
 - (UIImageView *)videoImageView
 {
     if (!_videoImageView) {
-        _videoImageView = [[UIImageView alloc] init];
+        _videoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 1, 16, 12)];
         _videoImageView.image = GetImageWithName(@"video");
+        [self.videoBottomView addSubview:_videoImageView];
     }
     return _videoImageView;
 }
@@ -79,8 +77,9 @@
 - (UIImageView *)liveImageView
 {
     if (!_liveImageView) {
-        _liveImageView = [[UIImageView alloc] init];
+        _liveImageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, -1, 15, 15)];
         _liveImageView.image = GetImageWithName(@"livePhoto");
+        [self.videoBottomView addSubview:_liveImageView];
     }
     return _liveImageView;
 }
@@ -88,10 +87,11 @@
 - (UILabel *)timeLabel
 {
     if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc] init];
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 1, GetViewWidth(self)-35, 12)];
         _timeLabel.textAlignment = NSTextAlignmentRight;
         _timeLabel.font = [UIFont systemFontOfSize:13];
         _timeLabel.textColor = [UIColor whiteColor];
+        [self.videoBottomView addSubview:_timeLabel];
     }
     return _timeLabel;
 }
@@ -153,15 +153,28 @@
     }
     
     self.btnSelect.selected = model.isSelected;
-    
+
     CGSize size;
-    size.width = GetViewWidth(self) * 2.5;
-    size.height = GetViewHeight(self) * 2.5;
+    size.width = GetViewWidth(self) * 1.7;
+    size.height = GetViewHeight(self) * 1.7;
     
     weakify(self);
-    [ZLPhotoManager requestImageForAsset:model.asset size:size completion:^(UIImage *image, NSDictionary *info) {
+    if (model.asset && self.imageRequestID >= 0) {
+        NSLog(@"cancel");
+        [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
+    }
+    self.identifier = model.asset.localIdentifier;
+    self.imageView.image = nil;
+    self.imageRequestID = [ZLPhotoManager requestImageForAsset:model.asset size:size completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
-        strongSelf.imageView.image = image;
+        
+        if ([strongSelf.identifier isEqualToString:model.asset.localIdentifier]) {
+            strongSelf.imageView.image = image;
+        }
+        
+        if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
+            strongSelf.imageRequestID = -1;
+        }
     }];
 }
 

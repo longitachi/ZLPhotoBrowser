@@ -170,6 +170,11 @@
     
     [self.collectionView registerClass:NSClassFromString(@"ZLTakePhotoCell") forCellWithReuseIdentifier:@"ZLTakePhotoCell"];
     [self.collectionView registerClass:NSClassFromString(@"ZLCollectionCell") forCellWithReuseIdentifier:@"ZLCollectionCell"];
+    //注册3d touch
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.allowForceTouch && [self forceTouchAvailable]) {
+        [self registerForPreviewingWithDelegate:self sourceView:self.collectionView];
+    }
 }
 
 - (void)initNavBtn
@@ -287,8 +292,7 @@
     } else {
         model = self.arrDataSources[indexPath.row-1];
     }
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    
+
     weakify(self);
     __weak typeof(cell) weakCell = cell;
     
@@ -323,22 +327,17 @@
 //        [collectionView reloadItemsAtIndexPaths:[collectionView indexPathsForVisibleItems]];
         [strongSelf resetBottomBtnsStatus];
     };
-//    cell.isSelectedImage = ^BOOL() {
-//        strongify(weakSelf);
-//        ZLImageNavigationController *nav = (ZLImageNavigationController *)strongSelf.navigationController;
-//        return nav.arrSelectedModels.count > 0;
-//    };
+////    cell.isSelectedImage = ^BOOL() {
+////        strongify(weakSelf);
+////        ZLImageNavigationController *nav = (ZLImageNavigationController *)strongSelf.navigationController;
+////        return nav.arrSelectedModels.count > 0;
+////    };
     cell.allSelectGif = nav.allowSelectGif;
     cell.allSelectLivePhoto = nav.allowSelectLivePhoto;
     cell.showSelectBtn = nav.showSelectBtn;
     cell.cornerRadio = nav.cellCornerRadio;
     cell.model = model;
-    
-    //3d touch
-    if (nav.allowForceTouch && [self forceTouchAvailable]) {
-        [self registerForPreviewingWithDelegate:self sourceView:cell];
-    }
-    
+
     return cell;
 }
 
@@ -517,11 +516,13 @@
 //!!!!: 3D Touch
 - (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location
 {
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:(UICollectionViewCell *)previewingContext.sourceView];
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:location];
     
     if (!indexPath) {
         return nil;
     }
+    //设置突出区域
+    previewingContext.sourceRect = [self.collectionView cellForItemAtIndexPath:indexPath].frame;
     
     ZLForceTouchPreviewController *vc = [[ZLForceTouchPreviewController alloc] init];
     
