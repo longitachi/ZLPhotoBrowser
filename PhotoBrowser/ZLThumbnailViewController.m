@@ -521,6 +521,32 @@
     if (!indexPath) {
         return nil;
     }
+    UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[ZLTakePhotoCell class]]) {
+        //拍照
+        AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+        if (status == AVAuthorizationStatusRestricted ||
+            status == AVAuthorizationStatusDenied) {
+            NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoCameraAuthorityText), [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOKText) style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:action];
+            [self presentViewController:alert animated:YES completion:nil];
+            return nil;
+        }
+        if ([UIImagePickerController isSourceTypeAvailable:
+             UIImagePickerControllerSourceTypeCamera])
+        {
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.delegate = self;
+            picker.allowsEditing = NO;
+            picker.videoQuality = UIImagePickerControllerQualityTypeLow;
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            return picker;
+        }else {
+            return nil;
+        }
+    }
     //设置突出区域
     previewingContext.sourceRect = [self.collectionView cellForItemAtIndexPath:indexPath].frame;
     
@@ -543,6 +569,10 @@
 
 - (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit
 {
+    if ([viewControllerToCommit isKindOfClass:[UIImagePickerController class]]) {
+        [self showViewController:viewControllerToCommit sender:self];
+        return;
+    }
     ZLPhotoModel *model = [(ZLForceTouchPreviewController *)viewControllerToCommit model];
     
     UIViewController *vc = [self getMatchVCWithModel:model];
