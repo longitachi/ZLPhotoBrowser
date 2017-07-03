@@ -521,6 +521,12 @@
     if (!indexPath) {
         return nil;
     }
+    
+    UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[ZLTakePhotoCell class]]) {
+        return nil;
+    }
+    
     //设置突出区域
     previewingContext.sourceRect = [self.collectionView cellForItemAtIndexPath:indexPath].frame;
     

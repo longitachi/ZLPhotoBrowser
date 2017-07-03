@@ -160,7 +160,6 @@
     
     weakify(self);
     if (model.asset && self.imageRequestID >= 0) {
-        NSLog(@"cancel");
         [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
     }
     self.identifier = model.asset.localIdentifier;
