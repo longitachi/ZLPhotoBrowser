@@ -26,6 +26,21 @@
     [super awakeFromNib];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    static int i = 0;
+    NSLog(@"%d", i++);
+    self.imageView.frame = self.bounds;
+    self.btnSelect.frame = CGRectMake(GetViewWidth(self.contentView)-26, 5, 23, 23);
+    //    self.topView.frame = self.bounds;
+    self.videoBottomView.frame = CGRectMake(0, GetViewHeight(self)-15, GetViewWidth(self), 15);
+    self.videoImageView.frame = CGRectMake(5, 1, 16, 12);
+    self.liveImageView.frame = CGRectMake(5, -1, 15, 15);
+    self.timeLabel.frame = CGRectMake(30, 1, GetViewWidth(self)-35, 12);
+    [self.contentView sendSubviewToBack:self.imageView];
+}
+
 - (UIImageView *)imageView
 {
     if (!_imageView) {
