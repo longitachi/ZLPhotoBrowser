@@ -254,7 +254,6 @@ double const ScalePhotoWidth = 1000;
     __weak typeof(nav) weakNav = nav;
     [svc setBtnDonePreviewBlock:^(NSArray<UIImage *> *photos, NSArray<PHAsset *> *assets) {
         strongify(weakSelf);
-        strongSelf.arrSelectedAssets = assets.mutableCopy;
         __strong typeof(weakNav) strongNav = weakNav;
         if (strongSelf.selectImageBlock) {
             strongSelf.selectImageBlock(photos, assets, NO);
