@@ -29,8 +29,6 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    static int i = 0;
-    NSLog(@"%d", i++);
     self.imageView.frame = self.bounds;
     self.btnSelect.frame = CGRectMake(GetViewWidth(self.contentView)-26, 5, 23, 23);
     //    self.topView.frame = self.bounds;
@@ -174,7 +172,7 @@
     size.height = GetViewHeight(self) * 1.7;
     
     weakify(self);
-    if (model.asset && self.imageRequestID >= 0) {
+    if (model.asset && self.imageRequestID >= PHInvalidImageRequestID) {
         [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
     }
     self.identifier = model.asset.localIdentifier;
