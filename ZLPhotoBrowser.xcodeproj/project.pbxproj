@@ -307,7 +307,7 @@
 				TargetAttributes = {
 					FD07871C1C0D45A200D17B97 = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = P652TXPU8G;
+						DevelopmentTeam = 47UY3G7UH6;
 					};
 				};
 			};
@@ -503,11 +503,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = P652TXPU8G;
+				DEVELOPMENT_TEAM = 47UY3G7UH6;
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simpleplan.marketing;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.ABC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -517,11 +517,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = P652TXPU8G;
+				DEVELOPMENT_TEAM = 47UY3G7UH6;
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.simpleplan.marketing;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.ABC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

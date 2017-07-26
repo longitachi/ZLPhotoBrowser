@@ -26,10 +26,15 @@
     * [3DTouch预览效果图](#3DTouch预览效果图)
   * 10.编辑功能
     * [编辑功能预览图](#编辑功能预览图)
+  * 11.video、gif、livephoto、image混合选择（多选video、gif、livephoto、image）
+    * [混合选择预览图](#混合选择预览图)
 * [使用方法(支持cocoapods安装)](#使用方法)
 
 ### 更新日志
 ```
+● 2.2.6: ①：可混合选择image、gif、livephoto、video类型
+         ②：支持video、gif、livephoto类型的多选
+         ③：支持控制video最大选择时长 
 ● 2.2.3: 新增图片编辑功能;
 ● 2.2.1: 新增3D Touch预览功能 (需设备支持);
 ● 2.2.0: 优化内存问题;
@@ -44,10 +49,10 @@ iOS8.0 (采用arc模式)
 ### <a id="使用方法"></a>使用方法
 
 第一步：
-* 直接把PhotoBrowser文件夹拖入到您的工程中
-  * 1.导入 Photos.framework
-  * 2.导入 PhotosUI.framework
-* Cocoapods安装
+* Manually 
+  * 1.直接把PhotoBrowser文件夹拖入到您的工程中
+  * 2.导入 Photos.framework及PhotosUI.framework
+* Cocoapods
 ```objc
 pod search ZLPhotoBrowser
 ```
@@ -100,6 +105,9 @@ actionSheet.sender = self;
 ### <a id="编辑功能预览图"></a>编辑功能预览图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/edit.gif)
 
+### <a id="混合选择预览图"></a>混合选择预览图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/mixSelect.gif)
+
 ### <a id="预览快速多选效果图"></a> 预览快速多选效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览图快速选择.gif)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览大图快速选择.gif)
@@ -117,7 +125,6 @@ actionSheet.sender = self;
 
 ### <a id="相册内混合选择效果图"></a>相册内混合选择效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/相册内混合选择.gif)
-![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/不能同时选择照片和gif或video.gif)
 
 ### <a id="预览已选择照片效果图"></a>预览已选择照片效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览已选择照片.gif)
