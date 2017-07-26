@@ -7,7 +7,6 @@
 //
 
 #import "ZLPhotoManager.h"
-#import "ZLPhotoModel.h"
 #import "ZLDefine.h"
 
 #define CollectionName [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]
@@ -208,7 +207,7 @@ static BOOL _sortAscending;
         model.headImageAsset = result.firstObject;
     }
     //为了获取所有asset gif设置为yes
-    model.models = [ZLPhotoManager getPhotoInResult:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage allowSelectGif:YES allowSelectLivePhoto:YES];
+    model.models = [ZLPhotoManager getPhotoInResult:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage allowSelectGif:allowSelectImage allowSelectLivePhoto:allowSelectImage];
     
     return model;
 }
@@ -227,8 +226,8 @@ static BOOL _sortAscending;
         ZLAssetMediaType type = [self transformAssetType:obj];
         
         if (type == ZLAssetMediaTypeImage && !allowSelectImage) return;
-        if (type == ZLAssetMediaTypeGif && (!allowSelectImage || !allowSelectGif)) return;
-        if (type == ZLAssetMediaTypeLivePhoto && (!allowSelectImage || !allowSelectLivePhoto)) return;
+        if (type == ZLAssetMediaTypeGif && !allowSelectImage) return;
+        if (type == ZLAssetMediaTypeLivePhoto && !allowSelectImage) return;
         if (type == ZLAssetMediaTypeVideo && !allowSelectVideo) return;
         
         if (count == limit) {

@@ -27,6 +27,7 @@
 
 "ZLPhotoBrowserSaveImageErrorText" = "アルバムには写真を保存する";
 "ZLPhotoBrowserMaxSelectCountText" = "最大選択数: %ld";
+"ZLPhotoBrowserMaxVideoDurationText" = "%ldsより長い動画は選択できません";
 
 "ZLPhotoBrowserNoCameraAuthorityText" = "「設定」->「プライパシー」->「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
 "ZLPhotoBrowserNoAblumAuthorityText" = "%@があなたのアルバムにアクセスするには「設定」->「プライバシー」->「写真」";

@@ -93,11 +93,11 @@ double const ScalePhotoWidth = 1000;
     _arrSelectedAssets = arrSelectedAssets;
     [self.arrSelectedModels removeAllObjects];
     for (PHAsset *asset in arrSelectedAssets) {
-        if (asset.mediaType != PHAssetMediaTypeImage) {
-            //选择的视频不做保存
-            continue;
-        }
-        ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
+//        if (asset.mediaType != PHAssetMediaTypeImage) {
+//            //选择的视频不做保存
+//            continue;
+//        }
+        ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:[ZLPhotoManager transformAssetType:asset] duration:nil];
         model.isSelected = YES;
         [self.arrSelectedModels addObject:model];
     }
@@ -126,6 +126,7 @@ double const ScalePhotoWidth = 1000;
         
         self.maxSelectCount = 10;
         self.maxPreviewCount = 20;
+        self.maxVideoDuration = 120;
         self.cellCornerRadio = .0;
         self.allowSelectImage = YES;
         self.allowSelectVideo = YES;
@@ -134,6 +135,7 @@ double const ScalePhotoWidth = 1000;
         self.allowTakePhotoInLibrary = YES;
         self.allowForceTouch = YES;
         self.allowEditImage = YES;
+        self.allowMixSelect = YES;
         self.showCaptureImageOnTakePhotoBtn = YES;
         self.sortAscending = YES;
         self.showSelectBtn = NO;
@@ -299,7 +301,7 @@ double const ScalePhotoWidth = 1000;
     [self.arrDataSources removeAllObjects];
     //因为预览界面需快速选择最近图片，所以不受self.sortAscending限制，
     //这里allow gif和allow liveohoto 置为yes，为了获取所有asset
-    [self.arrDataSources addObjectsFromArray:[ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:NO limitCount:self.maxPreviewCount allowSelectVideo:self.allowSelectVideo allowSelectImage:self.allowSelectImage allowSelectGif:YES allowSelectLivePhoto:YES]];
+    [self.arrDataSources addObjectsFromArray:[ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:NO limitCount:self.maxPreviewCount allowSelectVideo:self.allowSelectVideo allowSelectImage:self.allowSelectImage allowSelectGif:self.allowSelectGif allowSelectLivePhoto:self.allowSelectLivePhoto]];
     [ZLPhotoManager markSelcectModelInArr:self.arrDataSources selArr:self.arrSelectedModels];
     [self.collectionView reloadData];
 }
@@ -500,10 +502,23 @@ double const ScalePhotoWidth = 1000;
                 ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), strongSelf.maxSelectCount);
                 return;
             }
+            if (strongSelf.arrSelectedModels.count > 0) {
+                ZLPhotoModel *sm = strongSelf.arrSelectedModels.firstObject;
+                if (!self.allowMixSelect &&
+                    ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
+                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
+                    return;
+                }
+            }
             if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
                 return;
             }
+            if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > strongSelf.maxVideoDuration) {
+                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), strongSelf.maxVideoDuration);
+                return;
+            }
+            
             model.isSelected = YES;
             [strongSelf.arrSelectedModels addObject:model];
             strongCell.btnSelect.selected = YES;
@@ -544,51 +559,41 @@ double const ScalePhotoWidth = 1000;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZLPhotoModel *model = self.arrDataSources[indexPath.row];
-    if (model.type == ZLAssetMediaTypeVideo) {
-        if (self.arrSelectedModels.count > 0) {
-            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectVideo]);
+    
+    if (self.arrSelectedModels.count > 0) {
+        ZLPhotoModel *sm = self.arrSelectedModels.firstObject;
+        if (!self.allowMixSelect &&
+            ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
+            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
             return;
         }
-        //跳转预览视频
-        [self pushVideoViewControllerWithModel:model];
-    } else if (self.allowSelectGif && model.type == ZLAssetMediaTypeGif) {
-        if (self.arrSelectedModels.count > 0) {
-            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectGIF]);
-            return;
-        }
-        //跳转预览GIF
-        [self pushGifViewControllerWithModel:model];
-    } else if (self.allowSelectLivePhoto && model.type == ZLAssetMediaTypeLivePhoto) {
-        if (self.arrSelectedModels.count > 0) {
-            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectLivePhoto]);
-            return;
-        }
-        //跳转预览Live Photo
-        [self pushLivePhotoViewControllerWithModel:model];
-    } else {
-        NSArray *arr = [ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:self.sortAscending limitCount:NSIntegerMax allowSelectVideo:NO allowSelectImage:self.allowSelectImage allowSelectGif:!self.allowSelectGif allowSelectLivePhoto:!self.allowSelectLivePhoto];
-        
-        NSMutableArray *selIdentifiers = [NSMutableArray array];
-        for (ZLPhotoModel *m in self.arrSelectedModels) {
-            [selIdentifiers addObject:m.asset.localIdentifier];
-        }
-        
-        int i = 0;
-        BOOL isFind = NO;
-        for (ZLPhotoModel *m in arr) {
-            if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
-                isFind = YES;
-            }
-            if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
-                m.isSelected = YES;
-            }
-            if (!isFind) {
-                i++;
-            }
-        }
-        
-        [self pushBigImageViewControllerWithModels:arr index:i];
     }
+    
+    BOOL allowSelImage = !(model.type==ZLAssetMediaTypeVideo)?YES:self.allowMixSelect;
+    BOOL allowSelVideo = model.type==ZLAssetMediaTypeVideo?YES:self.allowMixSelect;
+    
+    NSArray *arr = [ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:self.sortAscending limitCount:NSIntegerMax allowSelectVideo:allowSelVideo allowSelectImage:allowSelImage allowSelectGif:self.allowSelectGif allowSelectLivePhoto:self.allowSelectLivePhoto];
+    
+    NSMutableArray *selIdentifiers = [NSMutableArray array];
+    for (ZLPhotoModel *m in self.arrSelectedModels) {
+        [selIdentifiers addObject:m.asset.localIdentifier];
+    }
+    
+    int i = 0;
+    BOOL isFind = NO;
+    for (ZLPhotoModel *m in arr) {
+        if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
+            isFind = YES;
+        }
+        if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
+            m.isSelected = YES;
+        }
+        if (!isFind) {
+            i++;
+        }
+    }
+    
+    [self pushBigImageViewControllerWithModels:arr index:i];
 }
 
 #pragma mark - 显示无权限视图
@@ -611,32 +616,6 @@ double const ScalePhotoWidth = 1000;
         [strongSelf.arrSelectedModels addObjectsFromArray:weakNav.arrSelectedModels];
         [strongSelf requestSelPhotos:weakNav];
     }];
-    [nav setCallSelectGifBlock:^(UIImage *gif, PHAsset *asset) {
-        strongify(weakSelf);
-        if (strongSelf.selectGifBlock) {
-            strongSelf.selectGifBlock(gif, asset);
-        }
-        [strongSelf hide];
-        [weakNav dismissViewControllerAnimated:YES completion:nil];
-    }];
-    
-    [nav setCallSelectLivePhotoBlock:^(UIImage *lv, PHAsset *asset){
-        strongify(weakSelf);
-        if (strongSelf.selectLivePhotoBlock) {
-            strongSelf.selectGifBlock(lv, asset);
-        }
-        [strongSelf hide];
-        [weakNav dismissViewControllerAnimated:YES completion:nil];
-    }];
-    
-    [nav setCallSelectVideoBlock:^(UIImage *coverImage, PHAsset *asset) {
-        strongify(weakSelf);
-        if (strongSelf.selectVideoBlock) {
-            strongSelf.selectVideoBlock(coverImage, asset);
-        }
-        [strongSelf hide];
-        [weakNav dismissViewControllerAnimated:YES completion:nil];
-    }];
     
     [nav setCallSelectClipImageBlock:^(UIImage *image, PHAsset *asset){
         strongify(weakSelf);
@@ -654,6 +633,7 @@ double const ScalePhotoWidth = 1000;
 
     nav.previousStatusBarStyle = self.previousStatusBarStyle;
     nav.maxSelectCount = self.maxSelectCount;
+    nav.maxVideoDuration = self.maxVideoDuration;
     nav.cellCornerRadio = self.cellCornerRadio;
     nav.allowSelectVideo = self.allowSelectVideo;
     nav.allowSelectImage = self.allowSelectImage;
@@ -662,6 +642,7 @@ double const ScalePhotoWidth = 1000;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
     nav.allowForceTouch = self.allowForceTouch;
     nav.allowEditImage = self.allowEditImage;
+    nav.allowMixSelect = self.allowMixSelect;
     nav.showCaptureImageOnTakePhotoBtn = self.showCaptureImageOnTakePhotoBtn;
     nav.sortAscending = self.sortAscending;
     nav.showSelectBtn = self.showSelectBtn;

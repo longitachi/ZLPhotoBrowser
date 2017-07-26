@@ -153,8 +153,15 @@
         [self.btnDone setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
     }
     
-    [self.btnEdit setTitleColor:nav.arrSelectedModels.count==1?kDoneButton_bgColor:kButtonUnable_textColor forState:UIControlStateNormal];
-    self.btnEdit.userInteractionEnabled = nav.arrSelectedModels.count==1;
+    BOOL canEdit = NO;
+    if (nav.arrSelectedModels.count == 1) {
+        ZLPhotoModel *m = nav.arrSelectedModels.firstObject;
+        canEdit = (m.type == ZLAssetMediaTypeImage) ||
+        (m.type == ZLAssetMediaTypeGif && !nav.allowSelectGif) ||
+        (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto);
+    }
+    [self.btnEdit setTitleColor:canEdit?kDoneButton_bgColor:kButtonUnable_textColor forState:UIControlStateNormal];
+    self.btnEdit.userInteractionEnabled = canEdit;
 }
 
 - (void)initCollectionView
@@ -307,10 +314,23 @@
                 ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), weakNav.maxSelectCount);
                 return;
             }
+            if (weakNav.arrSelectedModels.count > 0) {
+                ZLPhotoModel *sm = weakNav.arrSelectedModels.firstObject;
+                if (!weakNav.allowMixSelect &&
+                    ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
+                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
+                    return;
+                }
+            }
             if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
                 return;
             }
+            if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > weakNav.maxVideoDuration) {
+                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), weakNav.maxVideoDuration);
+                return;
+            }
+            
             model.isSelected = YES;
             [weakNav.arrSelectedModels addObject:model];
             strongCell.btnSelect.selected = YES;
@@ -380,59 +400,40 @@
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
-    if (model.type == ZLAssetMediaTypeVideo) {
-        if (nav.arrSelectedModels.count > 0) {
-            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectVideo]);
+    if (nav.arrSelectedModels.count > 0) {
+        ZLPhotoModel *sm = nav.arrSelectedModels.firstObject;
+        if (!nav.allowMixSelect &&
+            ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
+            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
             return nil;
         }
-        //跳转预览视频
-        ZLShowVideoViewController *vc = [[ZLShowVideoViewController alloc] init];
-        vc.model = model;
-        return vc;
-    } else if (nav.allowSelectGif && model.type == ZLAssetMediaTypeGif) {
-        if (nav.arrSelectedModels.count > 0) {
-            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectGIF]);
-            return nil;
-        }
-        //跳转预览GIF
-        ZLShowGifViewController *vc = [[ZLShowGifViewController alloc] init];
-        vc.model = model;
-        return vc;
-    } else if (nav.allowSelectLivePhoto && model.type == ZLAssetMediaTypeLivePhoto) {
-        if (nav.arrSelectedModels.count > 0) {
-            ShowToastLong(@"%@", [NSBundle zlLocalizedStringForKey:ZLPhotoBrowserCannotSelectLivePhoto]);
-            return nil;
-        }
-        //跳转预览GIF
-        ZLShowLivePhotoViewController *vc = [[ZLShowLivePhotoViewController alloc] init];
-        vc.model = model;
-        return vc;
-    } else {
-        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-        
-        NSArray *arr = [ZLPhotoManager getPhotoInResult:self.albumListModel.result allowSelectVideo:NO allowSelectImage:YES allowSelectGif:!nav.allowSelectGif allowSelectLivePhoto:!nav.allowSelectLivePhoto];
-        
-        NSMutableArray *selIdentifiers = [NSMutableArray array];
-        for (ZLPhotoModel *m in nav.arrSelectedModels) {
-            [selIdentifiers addObject:m.asset.localIdentifier];
-        }
-        
-        int i = 0;
-        BOOL isFind = NO;
-        for (ZLPhotoModel *m in arr) {
-            if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
-                isFind = YES;
-            }
-            if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
-                m.isSelected = YES;
-            }
-            if (!isFind) {
-                i++;
-            }
-        }
-        
-        return [self getBigImageVCWithData:arr index:i];
     }
+    
+    BOOL allowSelImage = !(model.type==ZLAssetMediaTypeVideo)?YES:nav.allowMixSelect;
+    BOOL allowSelVideo = model.type==ZLAssetMediaTypeVideo?YES:nav.allowMixSelect;
+    
+    NSArray *arr = [ZLPhotoManager getPhotoInResult:self.albumListModel.result allowSelectVideo:allowSelVideo allowSelectImage:allowSelImage allowSelectGif:nav.allowSelectGif allowSelectLivePhoto:nav.allowSelectLivePhoto];
+    
+    NSMutableArray *selIdentifiers = [NSMutableArray array];
+    for (ZLPhotoModel *m in nav.arrSelectedModels) {
+        [selIdentifiers addObject:m.asset.localIdentifier];
+    }
+    
+    int i = 0;
+    BOOL isFind = NO;
+    for (ZLPhotoModel *m in arr) {
+        if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
+            isFind = YES;
+        }
+        if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
+            m.isSelected = YES;
+        }
+        if (!isFind) {
+            i++;
+        }
+    }
+    
+    return [self getBigImageVCWithData:arr index:i];
 }
 
 - (void)takePhoto

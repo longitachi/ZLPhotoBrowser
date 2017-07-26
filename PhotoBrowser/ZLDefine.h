@@ -38,6 +38,7 @@
 #define ZLPhotoBrowseriCloudVideoText @"ZLPhotoBrowseriCloudVideoText"
 #define ZLPhotoBrowserEditText @"ZLPhotoBrowserEditText"
 #define ZLPhotoBrowserSaveText @"ZLPhotoBrowserSaveText"
+#define ZLPhotoBrowserMaxVideoDurationText @"ZLPhotoBrowserMaxVideoDurationText"
 
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
@@ -140,6 +141,16 @@ static inline CAKeyframeAnimation * GetBtnStatusChangedAnimation() {
                        [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.8, 0.8, 1.0)],
                        [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)]];
     return animate;
+}
+
+static inline NSInteger GetDuration (NSString *duration) {
+    NSArray *arr = [duration componentsSeparatedByString:@":"];
+    
+    NSInteger d = 0;
+    for (int i = 0; i < arr.count; i++) {
+        d += [arr[i] integerValue] * pow(60, (arr.count-1-i));
+    }
+    return d;
 }
 
 #endif /* ZLDefine_h */

@@ -64,6 +64,7 @@
     [self initBottomView];
     [self resetDontBtnState];
     [self resetEditBtnState];
+    [self resetOriginalBtnState];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -73,8 +74,17 @@
     if (!_isFirstAppear) {
         return;
     }
-    _isFirstAppear = NO;
+    
     [_collectionView setContentOffset:CGPointMake(self.selectIndex*(kViewWidth+kItemMargin), 0)];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    if (!_isFirstAppear) {
+        return;
+    }
+    _isFirstAppear = NO;
+    [self reloadCurrentCell];
 }
 
 - (void)setModels:(NSArray<ZLPhotoModel *> *)models
@@ -194,7 +204,6 @@
     if (self.arrSelPhotos) {
         //预览用户已确定选择的照片，隐藏原图按钮
         _btnOriginalPhoto.hidden = YES;
-        _btnEdit.hidden = YES;
     }
     if (!nav.allowEditImage) {
         _btnEdit.hidden = YES;
@@ -236,7 +245,7 @@
     ZLEditViewController *vc = [[ZLEditViewController alloc] init];
     vc.model = model;
     ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
-    vc.oriImage = cell.bigImageView.image;
+    vc.oriImage = cell.previewView.image;
     [self.navigationController pushViewController:vc animated:NO];
 }
 
@@ -247,6 +256,10 @@
         ZLPhotoModel *model = self.models[_currentPage-1];
         if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadingText));
+            return;
+        }
+        if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > nav.maxVideoDuration) {
+            ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), nav.maxVideoDuration);
             return;
         }
         
@@ -290,6 +303,11 @@
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadingText));
             return;
         }
+        if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > nav.maxVideoDuration) {
+            ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), nav.maxVideoDuration);
+            return;
+        }
+        
         model.isSelected = YES;
         [nav.arrSelectedModels addObject:model];
         if (self.arrSelPhotos) {
@@ -338,14 +356,33 @@
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (!nav.allowEditImage) return;
 
-    BOOL flag = [self.models[_currentPage-1].asset.localIdentifier isEqualToString:nav.arrSelectedModels.firstObject.asset.localIdentifier];
-    if (nav.arrSelectedModels.count ==0 || (nav.arrSelectedModels.count <= 1 && flag)) {
-        [_btnEdit setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
-        _btnEdit.userInteractionEnabled = YES;
+    ZLPhotoModel *m = self.models[_currentPage-1];
+    BOOL flag = [m.asset.localIdentifier isEqualToString:nav.arrSelectedModels.firstObject.asset.localIdentifier];
+    
+    if (((m.type == ZLAssetMediaTypeImage) ||
+         (m.type == ZLAssetMediaTypeGif && !nav.allowSelectGif) ||
+         (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto)) &&
+        (nav.arrSelectedModels.count == 0 ||
+         (nav.arrSelectedModels.count <= 1 && flag))) {
+        _btnEdit.hidden = NO;
     } else {
-        [_btnEdit setTitleColor:kButtonUnable_textColor forState:UIControlStateNormal];
-        _btnEdit.userInteractionEnabled = NO;
+        _btnEdit.hidden = YES;
     }
+}
+
+- (void)resetOriginalBtnState
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoModel *m = self.models[_currentPage-1];
+    if ((m.type == ZLAssetMediaTypeImage) ||
+         (m.type == ZLAssetMediaTypeGif && !nav.allowSelectGif) ||
+         (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto)) {
+            _btnOriginalPhoto.hidden = NO;
+            self.labPhotosBytes.hidden = NO;
+        } else {
+            _btnOriginalPhoto.hidden = YES;
+            self.labPhotosBytes.hidden = YES;
+        }
 }
 
 - (void)getPhotosBytes
@@ -402,7 +439,13 @@
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [(ZLBigImageCell *)cell resetCellStatus];
+    [((ZLBigImageCell *)cell).previewView resetScale];
+    ((ZLBigImageCell *)cell).willDisplaying = YES;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [((ZLBigImageCell *)cell).previewView handlerEndDisplaying];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -410,6 +453,10 @@
     ZLBigImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLBigImageCell" forIndexPath:indexPath];
     ZLPhotoModel *model = self.models[indexPath.row];
     
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
+    cell.showGif = nav.allowSelectGif;
+    cell.showLivePhoto = nav.allowSelectLivePhoto;
     cell.model = model;
     weakify(self);
     cell.singleTapCallBack = ^() {
@@ -428,26 +475,56 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView == (UIScrollView *)_collectionView) {
+        ZLPhotoModel *m = [self getCurrentPageModel];
+        if (!m) return;
         //改变导航标题
-        CGPoint offset = scrollView.contentOffset;
-        if (offset.x < .0 || offset.x > (scrollView.contentSize.width-kViewWidth-kItemMargin)) {
-            return;
-        }
-        CGFloat page = scrollView.contentOffset.x/(kViewWidth+kItemMargin);
-        NSString *str = [NSString stringWithFormat:@"%.0f", page];
-        _currentPage = str.integerValue + 1;
         self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
-        ZLPhotoModel *model = self.models[_currentPage-1];
-        _navRightBtn.selected = model.isSelected;
+        
+        _navRightBtn.selected = m.isSelected;
+        
+        [self resetOriginalBtnState];
+        [self resetEditBtnState];
+        
+        if (m.type == ZLAssetMediaTypeGif ||
+            m.type == ZLAssetMediaTypeLivePhoto ||
+            m.type == ZLAssetMediaTypeVideo) {
+            ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
+            [cell pausePlay];
+        }
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    [self resetEditBtnState];
     //单选模式下获取当前图片大小
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (!nav.showSelectBtn) [self getPhotosBytes];
+    
+    [self reloadCurrentCell];
+}
+
+- (void)reloadCurrentCell
+{
+    ZLPhotoModel *m = [self getCurrentPageModel];
+    if (m.type == ZLAssetMediaTypeGif ||
+        m.type == ZLAssetMediaTypeLivePhoto ||
+        m.type == ZLAssetMediaTypeVideo) {
+        ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
+        [cell reloadGifLivePhoto];
+    }
+}
+
+- (ZLPhotoModel *)getCurrentPageModel
+{
+    CGPoint offset = _collectionView.contentOffset;
+    if (offset.x < .0 || offset.x > (_collectionView.contentSize.width-kViewWidth-kItemMargin)) {
+        return nil;
+    }
+    CGFloat page = _collectionView.contentOffset.x/(kViewWidth+kItemMargin);
+    NSString *str = [NSString stringWithFormat:@"%.0f", page];
+    _currentPage = str.integerValue + 1;
+    ZLPhotoModel *model = self.models[_currentPage-1];
+    return model;
 }
 
 @end

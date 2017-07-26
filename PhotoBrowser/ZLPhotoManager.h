@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <Photos/Photos.h>
+#import "ZLPhotoModel.h"
 
 @class ZLAlbumListModel;
-@class ZLPhotoModel;
 
 @interface ZLPhotoManager : NSObject
 
@@ -78,6 +78,11 @@
  * @brief 获取视频
  */
 + (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *, NSDictionary *))completion;
+
+/**
+ * @brief 将系统mediatype转换为自定义mediatype
+ */
++ (ZLAssetMediaType)transformAssetType:(PHAsset *)asset;
 
 /**
  * @brief 判断图片是否存储在本地/或者已经从iCloud上下载到本地

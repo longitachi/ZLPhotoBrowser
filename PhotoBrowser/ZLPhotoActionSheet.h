@@ -24,8 +24,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**预览图最大显示数 默认20张*/
 @property (nonatomic, assign) NSInteger maxPreviewCount;
 
+/**允许选择视频的最大时长，单位：秒， 默认 120s*/
+@property (nonatomic, assign) NSInteger maxVideoDuration;
+
 /**cell的圆角弧度 默认为0*/
 @property (nonatomic, assign) CGFloat cellCornerRadio;
+
+/**是否允许混合选择，即可以同时选择image(image/gif/livephoto)、video类型*/
+@property (nonatomic, assign) BOOL allowMixSelect;
 
 /**是否允许选择照片 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectImage;
@@ -67,13 +73,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *images, NSArray<PHAsset *> *assets, BOOL isOriginal);
 
 /**选择gif照片回调，回调解析好的gif图片、对应的asset对象*/
-@property (nonatomic, copy) void (^selectGifBlock)(UIImage *gif, PHAsset *asset);
+@property (nonatomic, copy) void (^selectGifBlock)(UIImage *gif, PHAsset *asset) NS_DEPRECATED_IOS(2_0, 8_0, "pod 2.2.6版本之后已废弃，删除使用的地方即可， 统一通过selectImageBlock回调，后续将删除");
 
 /**选择live photo照片回调，回调解析好的live photo图片、对应的asset对象*/
-@property (nonatomic, copy) void (^selectLivePhotoBlock)(UIImage *livePhoto, PHAsset *asset);
+@property (nonatomic, copy) void (^selectLivePhotoBlock)(UIImage *livePhoto, PHAsset *asset) NS_DEPRECATED_IOS(2_0, 8_0, "pod 2.2.6版本之后已废弃，删除使用的地方即可， 统一通过selectImageBlock回调，后续将删除");
 
 /**选择视频回调，回调第一帧封面图片、对应的asset对象*/
-@property (nonatomic, copy) void (^selectVideoBlock)(UIImage *cover, PHAsset *asset);
+@property (nonatomic, copy) void (^selectVideoBlock)(UIImage *cover, PHAsset *asset) NS_DEPRECATED_IOS(2_0, 8_0, "pod 2.2.6版本之后已废弃，删除使用的地方即可， 统一通过selectImageBlock回调，后续将删除");
 
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
 

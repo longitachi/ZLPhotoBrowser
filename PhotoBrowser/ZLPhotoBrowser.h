@@ -19,14 +19,20 @@
 /** 最大选择数 默认10张*/
 @property (nonatomic, assign) NSInteger maxSelectCount;
 
+/**允许选择视频的最大时长，单位：秒， 默认 60s*/
+@property (nonatomic, assign) NSInteger maxVideoDuration;
+
+/**cell的圆角弧度 默认为0*/
+@property (nonatomic, assign) CGFloat cellCornerRadio;
+
+/**是否允许混合选择，即可以同时选择image(image/gif/livephoto)、video类型*/
+@property (nonatomic, assign) BOOL allowMixSelect;
+
 /**是否允许选择照片 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectImage;
 
 /**是否允许选择视频 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectVideo;
-
-/**cell的圆角弧度 默认为0*/
-@property (nonatomic, assign) CGFloat cellCornerRadio;
 
 /**是否允许选择Gif 默认YES*/
 @property (nonatomic, assign) BOOL allowSelectGif;

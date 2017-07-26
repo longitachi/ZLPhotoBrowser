@@ -16,7 +16,7 @@
 
 @interface ZLShowGifViewController ()
 
-@property (nonatomic, strong) ZLBigImageView *bigImageView;
+@property (nonatomic, strong) ZLPreviewImageAndGif *bigImageView;
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UILabel *labPhotosBytes;
 @property (nonatomic, strong) UIButton *btnDone;
@@ -62,7 +62,7 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
     
-    self.bigImageView = [[ZLBigImageView alloc] initWithFrame:self.view.bounds];
+    self.bigImageView = [[ZLPreviewImageAndGif alloc] initWithFrame:self.view.bounds];
     weakify(self);
     self.bigImageView.singleTapCallBack = ^() {
         strongify(weakSelf);
@@ -74,7 +74,7 @@
     };
     [self.bigImageView loadGifImage:self.model.asset];
     [self.view addSubview:self.bigImageView];
-
+    
     
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, kViewWidth, 44)];
     self.bottomView.backgroundColor = kBottomView_color;

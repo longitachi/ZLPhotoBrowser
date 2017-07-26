@@ -27,6 +27,7 @@
 
 "ZLPhotoBrowserSaveImageErrorText" = "保存圖片到相冊失敗";
 "ZLPhotoBrowserMaxSelectCountText" = "最多隻能選擇%ld張圖片";
+"ZLPhotoBrowserMaxVideoDurationText" = "不能選擇超過%ld秒的視頻";
 
 "ZLPhotoBrowserNoCameraAuthorityText" = "請在iPhone的\"設置-隱私-相機\"選項中，允許%@訪問你的相機";
 "ZLPhotoBrowserNoAblumAuthorityText" = "請在iPhone的\"設置-隱私-相冊\"選項中，允許%@訪問你的相冊";

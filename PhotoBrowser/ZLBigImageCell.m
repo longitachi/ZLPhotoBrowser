@@ -11,6 +11,7 @@
 #import "ZLDefine.h"
 #import <Photos/Photos.h>
 #import "ZLPhotoModel.h"
+#import "ZLPhotoBrowser.h"
 
 @interface ZLBigImageCell ()
 
@@ -23,21 +24,21 @@
     [super awakeFromNib];
 }
 
-- (ZLBigImageView *)bigImageView
+- (ZLPreviewView *)previewView
 {
-    if (!_bigImageView) {
-        _bigImageView = [[ZLBigImageView alloc] initWithFrame:self.bounds];
+    if (!_previewView) {
+        _previewView = [[ZLPreviewView alloc] initWithFrame:self.bounds];
     }
-    return _bigImageView;
+    return _previewView;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self addSubview:self.bigImageView];
+        [self addSubview:self.previewView];
         weakify(self);
-        self.bigImageView.singleTapCallBack = ^() {
+        self.previewView.singleTapCallBack = ^() {
             strongify(weakSelf);
             if (strongSelf.singleTapCallBack) strongSelf.singleTapCallBack();
         };
@@ -45,33 +46,216 @@
     return self;
 }
 
+- (void)setModel:(ZLPhotoModel *)model
+{
+    _model = model;
+    self.previewView.showGif = self.showGif;
+    self.previewView.showLivePhoto = self.showLivePhoto;
+    self.previewView.model = model;
+}
+
 - (void)resetCellStatus
 {
-    [self.bigImageView resetScale];
+    [self.previewView resetScale];
+}
+
+- (void)reloadGifLivePhoto
+{
+    if (self.willDisplaying) {
+        self.willDisplaying = NO;
+        [self.previewView reload];
+    } else {
+        [self.previewView resumePlay];
+    }
+}
+
+- (void)pausePlay
+{
+    [self.previewView pausePlay];
+}
+
+@end
+
+//!!!!: ZLPreviewView
+@implementation ZLPreviewView
+
+- (ZLPreviewImageAndGif *)imageGifView
+{
+    if (!_imageGifView) {
+        _imageGifView = [[ZLPreviewImageAndGif alloc] initWithFrame:self.bounds];
+        _imageGifView.singleTapCallBack = self.singleTapCallBack;
+    }
+    return _imageGifView;
+}
+
+- (ZLPreviewLivePhoto *)livePhotoView
+{
+    if (!_livePhotoView) {
+        _livePhotoView = [[ZLPreviewLivePhoto alloc] initWithFrame:self.bounds];
+        _livePhotoView.singleTapCallBack = self.singleTapCallBack;
+    }
+    return _livePhotoView;
+}
+
+- (ZLPreviewVideo *)videoView
+{
+    if (!_videoView) {
+        _videoView = [[ZLPreviewVideo alloc] initWithFrame:self.bounds];
+        _videoView.singleTapCallBack = self.singleTapCallBack;
+    }
+    return _videoView;
 }
 
 - (void)setModel:(ZLPhotoModel *)model
 {
     _model = model;
     
-    [self.bigImageView loadNormalImage:model.asset];
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    switch (model.type) {
+        case ZLAssetMediaTypeImage:
+        {
+            [self addSubview:self.imageGifView];
+            [self.imageGifView loadNormalImage:model.asset];
+        }
+            break;
+        case ZLAssetMediaTypeGif:
+        {
+            [self addSubview:self.imageGifView];
+            [self.imageGifView loadNormalImage:model.asset];
+        }
+            break;
+        case ZLAssetMediaTypeLivePhoto:
+        {
+            [self addSubview:self.livePhotoView];
+            [self.livePhotoView loadNormalImage:model.asset];
+        }
+            break;
+        case ZLAssetMediaTypeVideo:
+        {
+            [self addSubview:self.videoView];
+            [self.videoView loadNormalImage:model.asset];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)reload
+{
+    if (self.showGif &&
+        self.model.type == ZLAssetMediaTypeGif) {
+        [self.imageGifView loadGifImage:self.model.asset];
+    } else if (self.showLivePhoto &&
+               self.model.type == ZLAssetMediaTypeLivePhoto) {
+        [self.livePhotoView loadLivePhoto:self.model.asset];
+    }
+}
+
+- (void)resumePlay
+{
+    if (self.model.type == ZLAssetMediaTypeGif) {
+        [self.imageGifView resumeGif];
+    }
+}
+
+- (void)pausePlay
+{
+    if (self.model.type == ZLAssetMediaTypeGif) {
+        [self.imageGifView pauseGif];
+    } else if (self.model.type == ZLAssetMediaTypeLivePhoto) {
+        [self.livePhotoView stopPlayLivePhoto];
+    } else if (self.model.type == ZLAssetMediaTypeVideo) {
+        [self.videoView stopPlayVideo];
+    }
+}
+
+- (void)handlerEndDisplaying
+{
+    if (self.model.type == ZLAssetMediaTypeGif) {
+        [self.imageGifView loadNormalImage:self.model.asset];
+    } else if (self.model.type == ZLAssetMediaTypeVideo) {
+        [self.videoView loadNormalImage:self.model.asset];
+    }
+}
+
+- (void)resetScale
+{
+    [self.imageGifView resetScale];
+}
+
+- (UIImage *)image
+{
+    if (self.model.type == ZLAssetMediaTypeImage) {
+        return self.imageGifView.imageView.image;
+    }
+    return nil;
 }
 
 @end
 
-/////////////////
-@interface ZLBigImageView () <UIScrollViewDelegate>
+//!!!!: ZLBasePreviewView
+@implementation ZLBasePreviewView
 
-@property (nonatomic, strong) UIView *containerView;
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) UIActivityIndicatorView *indicator;
-@property (nonatomic, strong) PHAsset *asset;
-@property (nonatomic, assign) PHImageRequestID imageRequestID;
+- (UIActivityIndicatorView *)indicator
+{
+    if (!_indicator) {
+        _indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        _indicator.hidesWhenStopped = YES;
+        _indicator.center = self.center;
+    }
+    return _indicator;
+}
+
+- (UIImageView *)imageView
+{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] init];
+        _imageView.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    return _imageView;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction)];
+        [self addGestureRecognizer:singleTap];
+    }
+    return self;
+}
+
+- (void)singleTapAction
+{
+    if (self.singleTapCallBack) self.singleTapCallBack();
+}
+
+- (UIImage *)image
+{
+    return self.imageView.image;
+}
+
+- (void)loadNormalImage:(PHAsset *)asset
+{
+    //子类重写
+}
+
+- (void)resetScale
+{
+    //子类重写
+}
 
 @end
 
-@implementation ZLBigImageView
+
+//!!!!: ZLPreviewImageAndGif
+@interface ZLPreviewImageAndGif () <UIScrollViewDelegate>
+
+@end
+
+@implementation ZLPreviewImageAndGif
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -97,6 +281,12 @@
     [self.scrollView addSubview:self.containerView];
     [self.containerView addSubview:self.imageView];
     [self addSubview:self.indicator];
+    
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapAction:)];
+    doubleTap.numberOfTapsRequired = 2;
+    [self addGestureRecognizer:doubleTap];
+    
+    [self.singleTap requireGestureRecognizerToFail:doubleTap];
 }
 
 - (UIScrollView *)scrollView
@@ -113,15 +303,6 @@
         _scrollView.showsVerticalScrollIndicator = NO;
         _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _scrollView.delaysContentTouches = NO;
-        
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction:)];
-        [_scrollView addGestureRecognizer:singleTap];
-        
-        UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapAction:)];
-        doubleTap.numberOfTapsRequired = 2;
-        [_scrollView addGestureRecognizer:doubleTap];
-        
-        [singleTap requireGestureRecognizerToFail:doubleTap];
     }
     return _scrollView;
 }
@@ -134,25 +315,6 @@
     return _containerView;
 }
 
-- (UIImageView *)imageView
-{
-    if (!_imageView) {
-        _imageView = [[UIImageView alloc] init];
-        _imageView.contentMode = UIViewContentModeScaleAspectFit;
-    }
-    return _imageView;
-}
-
-- (UIActivityIndicatorView *)indicator
-{
-    if (!_indicator) {
-        _indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        _indicator.hidesWhenStopped = YES;
-        _indicator.center = self.center;
-    }
-    return _indicator;
-}
-
 - (void)resetScale
 {
     self.scrollView.zoomScale = 1;
@@ -161,6 +323,27 @@
 - (UIImage *)image
 {
     return self.imageView.image;
+}
+
+- (void)resumeGif
+{
+    CALayer *layer = self.imageView.layer;
+    if (layer.speed != 0) return;
+    CFTimeInterval pausedTime = [layer timeOffset];
+    layer.speed = 1.0;
+    layer.timeOffset = 0.0;
+    layer.beginTime = 0.0;
+    CFTimeInterval timeSincePause = [layer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
+    layer.beginTime = timeSincePause;
+}
+
+- (void)pauseGif
+{
+    CALayer *layer = self.imageView.layer;
+    if (layer.speed == .0) return;
+    CFTimeInterval pausedTime = [layer convertTime:CACurrentMediaTime() fromLayer:nil];
+    layer.speed = 0.0;
+    layer.timeOffset = pausedTime;
 }
 
 - (void)loadGifImage:(PHAsset *)asset
@@ -172,6 +355,7 @@
         strongify(weakSelf);
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             strongSelf.imageView.image = [ZLPhotoManager transformToGifImageWithData:data];
+            [strongSelf resumeGif];
             [strongSelf resetSubviewSize:asset];
             [strongSelf.indicator stopAnimating];
         }
@@ -180,10 +364,11 @@
 
 - (void)loadNormalImage:(PHAsset *)asset
 {
-    if (_asset && self.imageRequestID >= 0) {
+    if (self.asset && self.imageRequestID >= 0) {
         [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
     }
-    _asset = asset;
+    self.asset = asset;
+    
     [self.indicator startAnimating];
     CGFloat scale = 2;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
@@ -235,14 +420,9 @@
 }
 
 #pragma mark - 手势点击事件
-- (void)singleTapAction:(UITapGestureRecognizer *)singleTap
-{
-    if (self.singleTapCallBack) self.singleTapCallBack();
-}
-
 - (void)doubleTapAction:(UITapGestureRecognizer *)tap
 {
-    UIScrollView *scrollView = (UIScrollView *)tap.view;
+    UIScrollView *scrollView = self.scrollView;
     
     CGFloat scale = 1;
     if (scrollView.zoomScale != 3.0) {
@@ -273,6 +453,359 @@
     CGFloat offsetX = (GetViewWidth(scrollView) > scrollView.contentSize.width) ? (GetViewWidth(scrollView) - scrollView.contentSize.width) * 0.5 : 0.0;
     CGFloat offsetY = (GetViewHeight(scrollView) > scrollView.contentSize.height) ? (GetViewHeight(scrollView) - scrollView.contentSize.height) * 0.5 : 0.0;
     self.containerView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX, scrollView.contentSize.height * 0.5 + offsetY);
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self resumeGif];
+}
+
+@end
+
+
+
+//!!!!: ZLPreviewLivePhoto
+@implementation ZLPreviewLivePhoto
+
+- (PHLivePhotoView *)lpView
+{
+    if (!_lpView) {
+        _lpView = [[PHLivePhotoView alloc] initWithFrame:self.bounds];
+        _lpView.contentMode = UIViewContentModeScaleAspectFit;
+        [self addSubview:_lpView];
+    }
+    return _lpView;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initUI];
+    }
+    return self;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self initUI];
+    }
+    return self;
+}
+
+- (void)initUI
+{
+    [self addSubview:self.imageView];
+    [self addSubview:self.lpView];
+    [self addSubview:self.indicator];
+}
+
+- (void)loadNormalImage:(PHAsset *)asset
+{
+    if (self.asset && self.imageRequestID >= 0) {
+        [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
+    }
+    self.asset = asset;
+    
+    [self.indicator startAnimating];
+    CGFloat scale = 2;
+    CGFloat width = MIN(kViewWidth, kMaxImageWidth);
+    CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
+    weakify(self);
+    self.imageRequestID = [ZLPhotoManager requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
+        strongify(weakSelf);
+        strongSelf.imageView.image = image;
+        [strongSelf resetSubviewSize:asset];
+        if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
+            [strongSelf.indicator stopAnimating];
+        }
+    }];
+}
+
+- (void)resetSubviewSize:(PHAsset *)asset
+{
+    CGFloat width = MIN(kViewWidth, asset.pixelWidth);
+    CGRect frame;
+    frame.origin = CGPointZero;
+    frame.size.width = width;
+    
+    UIImage *image = self.imageView.image;
+    CGFloat imageScale = image.size.height/image.size.width;
+    CGFloat screenScale = kViewHeight/kViewWidth;
+    
+    if (imageScale > screenScale) {
+        frame.size.height = floorf(width * imageScale);
+    } else {
+        CGFloat height = floorf(width * imageScale);
+        if (height < 1 || isnan(height)) {
+            //iCloud图片height为NaN
+            height = GetViewHeight(self);
+        }
+        frame.size.height = height;
+    }
+    
+    self.imageView.frame = frame;
+    if (frame.size.height < GetViewHeight(self)) {
+        self.imageView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);
+    }
+}
+
+- (void)loadLivePhoto:(PHAsset *)asset
+{
+    weakify(self);
+    [ZLPhotoManager requestLivePhotoForAsset:asset completion:^(PHLivePhoto *lv, NSDictionary *info) {
+        strongify(weakSelf);
+        if (lv) {
+            strongSelf.lpView.livePhoto = lv;
+            [strongSelf.lpView startPlaybackWithStyle:PHLivePhotoViewPlaybackStyleFull];
+        }
+    }];
+}
+
+- (void)stopPlayLivePhoto
+{
+    [self.lpView stopPlayback];
+}
+
+@end
+
+
+//!!!!: ZLPreviewVideo
+@implementation ZLPreviewVideo
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_playLayer removeObserver:self forKeyPath:@"status"];
+}
+
+- (AVPlayerLayer *)playLayer
+{
+    if (!_playLayer) {
+        _playLayer = [[AVPlayerLayer alloc] init];
+        _playLayer.frame = self.bounds;
+    }
+    return _playLayer;
+}
+
+- (UIButton *)playBtn
+{
+    if (!_playBtn) {
+        _playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_playBtn setBackgroundImage:GetImageWithName(@"playVideo") forState:UIControlStateNormal];
+        _playBtn.frame = CGRectMake(0, 0, 80, 80);
+        _playBtn.center = self.center;
+        [_playBtn addTarget:self action:@selector(playBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    }
+    [self bringSubviewToFront:_playBtn];
+    return _playBtn;
+}
+
+- (UILabel *)icloudLoadFailedLabel
+{
+    if (!_icloudLoadFailedLabel) {
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
+        //创建图片附件
+        NSTextAttachment *attach = [[NSTextAttachment alloc]init];
+        attach.image = GetImageWithName(@"videoLoadFailed");
+        attach.bounds = CGRectMake(0, -10, 30, 30);
+        //创建属性字符串 通过图片附件
+        NSAttributedString *attrStr = [NSAttributedString attributedStringWithAttachment:attach];
+        //把NSAttributedString添加到NSMutableAttributedString里面
+        [str appendAttributedString:attrStr];
+        
+        NSAttributedString *lastStr = [[NSAttributedString alloc] initWithString:[NSBundle zlLocalizedStringForKey:ZLPhotoBrowseriCloudVideoText]];
+        [str appendAttributedString:lastStr];
+        _icloudLoadFailedLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 70, 200, 35)];
+        _icloudLoadFailedLabel.font = [UIFont systemFontOfSize:12];
+        _icloudLoadFailedLabel.attributedText = str;
+        _icloudLoadFailedLabel.textColor = [UIColor whiteColor];
+        [self addSubview:_icloudLoadFailedLabel];
+    }
+    return _icloudLoadFailedLabel;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initUI];
+    }
+    return self;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self initUI];
+    }
+    return self;
+}
+
+- (void)initUI
+{
+    [self addSubview:self.imageView];
+    [self addSubview:self.playBtn];
+    [self addSubview:self.indicator];
+}
+
+- (void)loadNormalImage:(PHAsset *)asset
+{
+    if (self.asset && self.imageRequestID >= 0) {
+        [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
+    }
+    self.asset = asset;
+    
+    if (_playLayer) {
+        _playLayer.player = nil;
+        [_playLayer removeFromSuperlayer];
+        [_playLayer removeObserver:self forKeyPath:@"status"];
+        _playLayer = nil;
+    }
+    
+    self.imageView.image = nil;
+    
+    if (![ZLPhotoManager judgeAssetisInLocalAblum:asset]) {
+        [self initVideoLoadFailedFromiCloudUI];
+        return;
+    }
+    
+    self.playBtn.enabled = YES;
+    self.icloudLoadFailedLabel.hidden = YES;
+    self.imageView.hidden = NO;
+    
+    [self.indicator startAnimating];
+    CGFloat scale = 2;
+    CGFloat width = MIN(kViewWidth, kMaxImageWidth);
+    CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
+    weakify(self);
+    self.imageRequestID = [ZLPhotoManager requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
+        strongify(weakSelf);
+        strongSelf.imageView.image = image;
+        [strongSelf resetSubviewSize:asset];
+        if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
+            [strongSelf.indicator stopAnimating];
+        }
+    }];
+}
+
+- (void)resetSubviewSize:(PHAsset *)asset
+{
+    CGFloat width = MIN(kViewWidth, asset.pixelWidth);
+    CGRect frame;
+    frame.origin = CGPointZero;
+    frame.size.width = width;
+    
+    UIImage *image = self.imageView.image;
+    CGFloat imageScale = image.size.height/image.size.width;
+    CGFloat screenScale = kViewHeight/kViewWidth;
+    
+    if (imageScale > screenScale) {
+        frame.size.height = floorf(width * imageScale);
+    } else {
+        CGFloat height = floorf(width * imageScale);
+        if (height < 1 || isnan(height)) {
+            //iCloud图片height为NaN
+            height = GetViewHeight(self);
+        }
+        frame.size.height = height;
+    }
+    
+    self.imageView.frame = frame;
+    if (frame.size.height < GetViewHeight(self)) {
+        self.imageView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);
+    }
+}
+
+- (void)initVideoLoadFailedFromiCloudUI
+{
+    self.icloudLoadFailedLabel.hidden = NO;
+    self.playBtn.enabled = NO;
+}
+
+- (void)stopPlayVideo
+{
+    if (!_playLayer) {
+        return;
+    }
+    AVPlayer *player = self.playLayer.player;
+    
+    if (player.rate != .0) {
+        [player pause];
+        self.playBtn.hidden = NO;
+    }
+}
+
+- (void)singleTapAction
+{
+    [super singleTapAction];
+    
+    if (!_playLayer) {
+        weakify(self);
+        [ZLPhotoManager requestVideoForAsset:self.asset completion:^(AVPlayerItem *item, NSDictionary *info) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                strongify(weakSelf);
+                if (!item) {
+                    [strongSelf initVideoLoadFailedFromiCloudUI];
+                    return;
+                }
+                AVPlayer *player = [AVPlayer playerWithPlayerItem:item];
+                [strongSelf.layer addSublayer:strongSelf.playLayer];
+                strongSelf.playLayer.player = player;
+                [strongSelf switchVideoStatus];
+                [strongSelf.playLayer addObserver:strongSelf forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+                [[NSNotificationCenter defaultCenter] addObserver:strongSelf selector:@selector(playFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:player.currentItem];
+            });
+        }];
+    } else {
+        [self switchVideoStatus];
+    }
+}
+
+- (void)playBtnClick
+{
+    [self singleTapAction];
+}
+
+- (void)switchVideoStatus
+{
+    AVPlayer *player = self.playLayer.player;
+    CMTime stop = player.currentItem.currentTime;
+    CMTime duration = player.currentItem.duration;
+    if (player.rate == .0) {
+        self.playBtn.hidden = YES;
+        if (stop.value == duration.value) {
+            [player.currentItem seekToTime:CMTimeMake(0, 1)];
+        }
+        [player play];
+    } else {
+        self.playBtn.hidden = NO;
+        [player pause];
+    }
+}
+
+- (void)playFinished:(AVPlayerItem *)item
+{
+    [super singleTapAction];
+    self.playBtn.hidden = NO;
+    self.imageView.hidden = NO;
+    [self.playLayer.player seekToTime:kCMTimeZero];
+}
+
+//监听获得消息
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    AVPlayerItem *playerItem = (AVPlayerItem *)object;
+    
+    if ([keyPath isEqualToString:@"status"]) {
+        if ([playerItem status] == AVPlayerStatusReadyToPlay) {
+            //status 点进去看 有三种状态
+            self.imageView.hidden = YES;
+        }
+    }
 }
 
 @end

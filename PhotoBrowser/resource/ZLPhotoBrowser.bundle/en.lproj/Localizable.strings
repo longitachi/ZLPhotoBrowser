@@ -27,6 +27,7 @@
 
 "ZLPhotoBrowserSaveImageErrorText" = "Save photo to ablum failed";
 "ZLPhotoBrowserMaxSelectCountText" = "Max select count: %ld";
+"ZLPhotoBrowserMaxVideoDurationText" = "Unable to select video with a duration longer than %lds";
 
 "ZLPhotoBrowserNoCameraAuthorityText" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
 "ZLPhotoBrowserNoAblumAuthorityText" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";

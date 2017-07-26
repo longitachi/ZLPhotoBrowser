@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "ZLPhotoActionSheet.h"
-#import "ZLShowBigImage.h"
 #import "ZLDefine.h"
 #import "ImageCell.h"
 #import "YYFPSLabel.h"
@@ -34,9 +33,11 @@
 @property (weak, nonatomic) IBOutlet UISwitch *selLivePhotoSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowForceTouchSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowEditSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *mixSelectSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *previewTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
+@property (weak, nonatomic) IBOutlet UITextField *maxVideoDurationTextField;
 
 @property (nonatomic, strong) NSMutableArray<UIImage *> *lastSelectPhotos;
 @property (nonatomic, strong) NSMutableArray<PHAsset *> *lastSelectAssets;
@@ -87,6 +88,7 @@
     actionSheet.allowSelectLivePhoto = self.selLivePhotoSwitch.isOn;
     actionSheet.allowForceTouch = self.allowForceTouchSwitch.isOn;
     actionSheet.allowEditImage = self.allowEditSwitch.isOn;
+    actionSheet.allowMixSelect = self.mixSelectSwitch.isOn;
     //设置相册内部显示拍照按钮
     actionSheet.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
     //设置在内部拍照按钮上实时显示相机俘获画面
@@ -95,6 +97,8 @@
     actionSheet.maxPreviewCount = self.previewTextField.text.integerValue;
     //设置照片最大选择数
     actionSheet.maxSelectCount = self.maxSelCountTextField.text.integerValue;
+    //设置允许选择的视频最大时长
+    actionSheet.maxVideoDuration = self.maxVideoDurationTextField.text.integerValue;
     //设置照片cell弧度
     actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
     //单选模式是否显示选择按钮
@@ -104,19 +108,7 @@
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;
     
-    NSMutableArray *arr = [NSMutableArray array];
-    for (PHAsset *asset in self.lastSelectAssets) {
-        if (asset.mediaType == PHAssetMediaTypeImage) {
-            if (self.selGifSwitch.isOn && [[asset valueForKey:@"filename"] hasSuffix:@"GIF"]) {
-                continue;
-            }
-            if (self.selLivePhotoSwitch.isOn && (asset.mediaSubtypes== PHAssetMediaSubtypePhotoLive || asset.mediaSubtypes == 10)) {
-                continue;
-            }
-            [arr addObject:asset];
-        }
-    }
-    actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn&&self.maxSelCountTextField.text.integerValue>1 ? arr : nil;
+    actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn&&self.maxSelCountTextField.text.integerValue>1 ? self.lastSelectAssets : nil;
     
     weakify(self);
     [actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
@@ -126,27 +118,6 @@
         strongSelf.lastSelectPhotos = images.mutableCopy;
         [strongSelf.collectionView reloadData];
         NSLog(@"image:%@", images);
-    }];
-    [actionSheet setSelectGifBlock:^(UIImage * _Nonnull gif, PHAsset * _Nonnull asset) {
-        strongify(weakSelf);
-        strongSelf.arrDataSources = @[gif];
-        strongSelf.lastSelectAssets = @[asset].mutableCopy;
-        [strongSelf.collectionView reloadData];
-        NSLog(@"gif:%@", gif);
-    }];
-    [actionSheet setSelectLivePhotoBlock:^(UIImage * _Nonnull livePhoto, PHAsset * _Nonnull asset) {
-        strongify(weakSelf);
-        strongSelf.arrDataSources = @[livePhoto];
-        strongSelf.lastSelectAssets = @[asset].mutableCopy;
-        [strongSelf.collectionView reloadData];
-        NSLog(@"livePhoto:%@", livePhoto);
-    }];
-    [actionSheet setSelectVideoBlock:^(UIImage * _Nonnull coverImage, PHAsset * _Nonnull asset) {
-        strongify(weakSelf);
-        strongSelf.arrDataSources = @[coverImage];
-        strongSelf.lastSelectAssets = @[asset].mutableCopy;
-        [strongSelf.collectionView reloadData];
-        NSLog(@"video cover image:%@", coverImage);
     }];
     
     return actionSheet;
@@ -182,33 +153,15 @@
 {
     ImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCell" forIndexPath:indexPath];
     cell.imageView.image = _arrDataSources[indexPath.row];
+    PHAsset *asset = self.lastSelectAssets[indexPath.row];
+    cell.playImageView.hidden = !(asset.mediaType == PHAssetMediaTypeVideo);
+    
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PHAsset *asset = self.lastSelectAssets[indexPath.row];
-    if (self.selGifSwitch.isOn && [[asset valueForKey:@"filename"] containsString:@"GIF"]) {
-        //gif预览
-        ZLShowGifViewController *vc = [[ZLShowGifViewController alloc] init];
-        ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeGif duration:nil];
-        vc.model = model;
-        [self showDetailViewController:vc sender:self];
-    } else if (self.selLivePhotoSwitch.isOn && (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive || asset.mediaSubtypes == 10)) {
-        ZLShowLivePhotoViewController *vc = [[ZLShowLivePhotoViewController alloc] init];
-        ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeLivePhoto duration:nil];
-        vc.model = model;
-        [self showDetailViewController:vc sender:self];
-    } else if (asset.mediaType == PHAssetMediaTypeVideo) {
-        //视频预览
-        ZLShowVideoViewController *vc = [[ZLShowVideoViewController alloc] init];
-        ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
-        vc.model = model;
-        [self showDetailViewController:vc sender:self];
-    } else {
-        //image预览
-        [[self getPas] previewSelectedPhotos:self.lastSelectPhotos assets:self.lastSelectAssets index:indexPath.row];
-    }
+    [[self getPas] previewSelectedPhotos:self.lastSelectPhotos assets:self.lastSelectAssets index:indexPath.row];
 }
 
 - (IBAction)valueChanged:(id)sender

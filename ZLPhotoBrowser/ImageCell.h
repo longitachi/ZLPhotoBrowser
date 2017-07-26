@@ -11,5 +11,6 @@
 @interface ImageCell : UICollectionViewCell
 
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UIImageView *playImageView;
 
 @end

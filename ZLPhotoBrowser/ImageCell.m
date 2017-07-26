@@ -19,6 +19,10 @@
         self.imageView.frame = self.contentView.bounds;
         self.imageView.clipsToBounds = YES;
         [self.contentView addSubview:self.imageView];
+        
+        self.playImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.bounds.size.width/2-15, self.bounds.size.height/2-15, 30, 30)];
+        self.playImageView.image = [UIImage imageNamed:@"playVideo"];
+        [self.contentView addSubview:self.playImageView];
     }
     return self;
 }

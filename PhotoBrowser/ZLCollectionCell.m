@@ -133,7 +133,6 @@
     }
     
     if (model.type == ZLAssetMediaTypeVideo) {
-        self.btnSelect.hidden = YES;
         self.videoBottomView.hidden = NO;
         self.videoImageView.hidden = NO;
         self.liveImageView.hidden = YES;
@@ -142,7 +141,6 @@
 //            self.topView.hidden = !self.isSelectedImage();
 //        }
     } else if (model.type == ZLAssetMediaTypeGif) {
-        self.btnSelect.hidden = self.allSelectGif?:!self.showSelectBtn;
         self.videoBottomView.hidden = !self.allSelectGif;
         self.videoImageView.hidden = YES;
         self.liveImageView.hidden = YES;
@@ -151,7 +149,6 @@
 //            self.topView.hidden = self.allSelectGif && !self.isSelectedImage();
 //        }
     } else if (model.type == ZLAssetMediaTypeLivePhoto) {
-        self.btnSelect.hidden = self.allSelectLivePhoto?:!self.showSelectBtn;
         self.videoBottomView.hidden = !self.allSelectLivePhoto;
         self.videoImageView.hidden = YES;
         self.liveImageView.hidden = NO;
@@ -160,11 +157,11 @@
 //            self.topView.hidden = self.allSelectLivePhoto && !self.isSelectedImage();
 //        }
     } else {
-        self.btnSelect.hidden = !self.showSelectBtn;
         self.videoBottomView.hidden = YES;
 //        self.topView.hidden = YES;
     }
     
+    self.btnSelect.hidden = !self.showSelectBtn;
     self.btnSelect.selected = model.isSelected;
 
     CGSize size;
