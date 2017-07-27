@@ -5,7 +5,7 @@
 ![Language](https://img.shields.io/badge/Language-%20Objective%20C%20-blue.svg)
 
 ### 框架整体介绍
-* 该框架为一个多选照片（支持视频、gif、Live Photo）的框架，兼容设备开启的iCloud照片存储，支持编辑裁剪图片，支持记录历史选择照片。
+* 该框架为一个多选照片（支持多选视频、gif、Live Photo）的框架，兼容设备开启的iCloud照片存储，支持编辑裁剪图片，支持记录历史选择照片。
   * 1.支持多语言国际化(中:简繁, 英，日)
     * [多语言国际化效果图](#多语言国际化效果图)
   * 2.支持预览多选(预览图数量及最大多选数可设置)
@@ -32,9 +32,9 @@
 
 ### 更新日志
 ```
-● 2.2.6: ①：可混合选择image、gif、livephoto、video类型
-         ②：支持video、gif、livephoto类型的多选
-         ③：支持控制video最大选择时长 
+● 2.2.6: ①：可混合选择image、gif、livephoto、video类型;
+         ②：支持video、gif、livephoto类型的多选;
+         ③：支持控制video最大选择时长;
 ● 2.2.3: 新增图片编辑功能;
 ● 2.2.1: 新增3D Touch预览功能 (需设备支持);
 ● 2.2.0: 优化内存问题;
@@ -43,8 +43,8 @@
 ● ... 新增gif及video选择功能;
 ```
 
-### 框架支持与框架依赖
-iOS8.0 (采用arc模式)
+### 框架支持
+最低支持：iOS8.0
 
 ### <a id="使用方法"></a>使用方法
 
@@ -78,15 +78,6 @@ actionSheet.maxSelectCount = 10;
 actionSheet.sender = self;
 
 [actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
-    //your codes
-}];
-[actionSheet setSelectGifBlock:^(UIImage * _Nonnull gif, PHAsset * _Nonnull asset) {
-    //your codes
-}];
-[actionSheet setSelectLivePhotoBlock:^(UIImage * _Nonnull livePhoto, PHAsset * _Nonnull asset) {
-    //your codes
-}];
-[actionSheet setSelectVideoBlock:^(UIImage * _Nonnull coverImage, PHAsset * _Nonnull asset) {
     //your codes
 }];
 
