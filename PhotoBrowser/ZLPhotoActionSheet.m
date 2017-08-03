@@ -600,7 +600,7 @@ double const ScalePhotoWidth = 1000;
 - (void)showNoAuthorityVC
 {
     //无相册访问权限
-    ZLNoAuthorityViewController *nvc = [[ZLNoAuthorityViewController alloc] initWithNibName:@"ZLNoAuthorityViewController" bundle:kZLPhotoBrowserBundle];
+    ZLNoAuthorityViewController *nvc = [[ZLNoAuthorityViewController alloc] init];
     [self.sender showDetailViewController:[self getImageNavWithRootVC:nvc] sender:nil];
 }
 

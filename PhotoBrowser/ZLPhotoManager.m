@@ -175,7 +175,7 @@ static BOOL _sortAscending;
             //过滤PHCollectionList对象
             if (![collection isKindOfClass:PHAssetCollection.class]) return;
             //过滤最近删除
-            if (collection.assetCollectionSubtype >= 212) return;
+            if (collection.assetCollectionSubtype > 213) return;
             //获取相册内asset result
             PHFetchResult<PHAsset *> *result = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (!result.count) return;
