@@ -317,6 +317,7 @@ double const ScalePhotoWidth = 1000;
 - (void)show
 {
     self.frame = self.sender.view.bounds;
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     if (!self.superview) {
         [self.sender.view addSubview:self];
     }

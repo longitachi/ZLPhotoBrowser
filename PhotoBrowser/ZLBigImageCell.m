@@ -127,8 +127,13 @@
             break;
         case ZLAssetMediaTypeLivePhoto:
         {
-            [self addSubview:self.livePhotoView];
-            [self.livePhotoView loadNormalImage:model.asset];
+            if (self.showLivePhoto) {
+                [self addSubview:self.livePhotoView];
+                [self.livePhotoView loadNormalImage:model.asset];
+            } else {
+                [self addSubview:self.imageGifView];
+                [self.imageGifView loadNormalImage:model.asset];
+            }
         }
             break;
         case ZLAssetMediaTypeVideo:
@@ -225,8 +230,8 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction)];
-        [self addGestureRecognizer:singleTap];
+        self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction)];
+        [self addGestureRecognizer:self.singleTap];
     }
     return self;
 }
