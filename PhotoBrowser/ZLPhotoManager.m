@@ -175,7 +175,7 @@ static BOOL _sortAscending;
             //过滤PHCollectionList对象
             if (![collection isKindOfClass:PHAssetCollection.class]) return;
             //过滤最近删除
-            if (collection.assetCollectionSubtype >= 212) return;
+            if (collection.assetCollectionSubtype > 213) return;
             //获取相册内asset result
             PHFetchResult<PHAsset *> *result = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (!result.count) return;
@@ -329,7 +329,12 @@ static BOOL _sortAscending;
 
 + (void)requestLivePhotoForAsset:(PHAsset *)asset completion:(void (^)(PHLivePhoto *, NSDictionary *))completion
 {
-    [[PHCachingImageManager defaultManager] requestLivePhotoForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(PHLivePhoto * _Nullable livePhoto, NSDictionary * _Nullable info) {
+    PHLivePhotoRequestOptions *option = [[PHLivePhotoRequestOptions alloc] init];
+    option.version = PHImageRequestOptionsVersionCurrent;
+    option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+    option.networkAccessAllowed = YES;
+    
+    [[PHCachingImageManager defaultManager] requestLivePhotoForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeAspectFit options:option resultHandler:^(PHLivePhoto * _Nullable livePhoto, NSDictionary * _Nullable info) {
         if (completion) completion(livePhoto, info);
     }];
 }

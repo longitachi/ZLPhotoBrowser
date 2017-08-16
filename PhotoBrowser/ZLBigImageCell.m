@@ -127,8 +127,13 @@
             break;
         case ZLAssetMediaTypeLivePhoto:
         {
-            [self addSubview:self.livePhotoView];
-            [self.livePhotoView loadNormalImage:model.asset];
+            if (self.showLivePhoto) {
+                [self addSubview:self.livePhotoView];
+                [self.livePhotoView loadNormalImage:model.asset];
+            } else {
+                [self addSubview:self.imageGifView];
+                [self.imageGifView loadNormalImage:model.asset];
+            }
         }
             break;
         case ZLAssetMediaTypeVideo:
@@ -175,9 +180,13 @@
 - (void)handlerEndDisplaying
 {
     if (self.model.type == ZLAssetMediaTypeGif) {
-        [self.imageGifView loadNormalImage:self.model.asset];
+        if ([self.imageGifView.imageView.image isKindOfClass:NSClassFromString(@"_UIAnimatedImage")]) {
+            [self.imageGifView loadNormalImage:self.model.asset];
+        }
     } else if (self.model.type == ZLAssetMediaTypeVideo) {
-        [self.videoView loadNormalImage:self.model.asset];
+        if ([self.videoView haveLoadVideo]) {
+            [self.videoView loadNormalImage:self.model.asset];
+        }
     }
 }
 
@@ -221,8 +230,8 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction)];
-        [self addGestureRecognizer:singleTap];
+        self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction)];
+        [self addGestureRecognizer:self.singleTap];
     }
     return self;
 }
@@ -509,6 +518,11 @@
     }
     self.asset = asset;
     
+    if (_lpView) {
+        [_lpView removeFromSuperview];
+        _lpView = nil;
+    }
+    
     [self.indicator startAnimating];
     CGFloat scale = 2;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
@@ -724,6 +738,11 @@
 {
     self.icloudLoadFailedLabel.hidden = NO;
     self.playBtn.enabled = NO;
+}
+
+- (BOOL)haveLoadVideo
+{
+    return _playLayer;
 }
 
 - (void)stopPlayVideo

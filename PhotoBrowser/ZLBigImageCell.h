@@ -116,7 +116,6 @@
 @interface ZLPreviewLivePhoto : ZLBasePreviewView
 
 @property (nonatomic, strong) PHLivePhotoView *lpView;
-@property (nonatomic, strong) UIImage *coverImage;
 
 - (void)loadLivePhoto:(PHAsset *)asset;
 
@@ -131,6 +130,8 @@
 @property (nonatomic, strong) AVPlayerLayer *playLayer;
 @property (nonatomic, strong) UILabel *icloudLoadFailedLabel;
 @property (nonatomic, strong) UIButton *playBtn;
+
+- (BOOL)haveLoadVideo;
 
 - (void)stopPlayVideo;
 

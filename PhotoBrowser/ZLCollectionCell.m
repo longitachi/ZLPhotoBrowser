@@ -11,6 +11,7 @@
 #import "ZLPhotoManager.h"
 #import "ZLDefine.h"
 #import "ToastUtils.h"
+#import "UIButton+EnlargeTouchArea.h"
 
 @interface ZLCollectionCell ()
 
@@ -62,6 +63,8 @@
         [_btnSelect setBackgroundImage:GetImageWithName(@"btn_unselected.png") forState:UIControlStateNormal];
         [_btnSelect setBackgroundImage:GetImageWithName(@"btn_selected.png") forState:UIControlStateSelected];
         [_btnSelect addTarget:self action:@selector(btnSelectClick:) forControlEvents:UIControlEventTouchUpInside];
+        //扩大点击区域
+        [_btnSelect setEnlargeEdgeWithTop:0 right:0 bottom:20 left:20];
         [self.contentView addSubview:self.btnSelect];
     }
     return _btnSelect;

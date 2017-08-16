@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FD028BCF1CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA01CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib */; };
 		FD028BD01CBE33BB009DD2FC /* ZLPhotoActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */; };
 		FD028BD11CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */; };
 		FD028BD21CBE33BB009DD2FC /* ZLThumbnailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA31CBE33BB009DD2FC /* ZLThumbnailViewController.xib */; };
@@ -20,20 +19,13 @@
 		FD028BDC1CBE33BB009DD2FC /* ZLProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BB81CBE33BB009DD2FC /* ZLProgressHUD.m */; };
 		FD028BDE1CBE33BB009DD2FC /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */; };
 		FD028BDF1CBE33BB009DD2FC /* ZLThumbnailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */; };
-		FD028BF01CBE373F009DD2FC /* btn_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE21CBE373F009DD2FC /* btn_circle@2x.png */; };
-		FD028BF11CBE373F009DD2FC /* btn_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE31CBE373F009DD2FC /* btn_circle@3x.png */; };
 		FD028BF21CBE373F009DD2FC /* btn_original_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE41CBE373F009DD2FC /* btn_original_circle.png */; };
 		FD028BF31CBE373F009DD2FC /* btn_original_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE51CBE373F009DD2FC /* btn_original_circle@2x.png */; };
 		FD028BF41CBE373F009DD2FC /* btn_original_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE61CBE373F009DD2FC /* btn_original_circle@3x.png */; };
 		FD028BF51CBE373F009DD2FC /* btn_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE71CBE373F009DD2FC /* btn_selected.png */; };
 		FD028BF61CBE373F009DD2FC /* btn_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE81CBE373F009DD2FC /* btn_selected@2x.png */; };
 		FD028BF71CBE373F009DD2FC /* btn_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE91CBE373F009DD2FC /* btn_selected@3x.png */; };
-		FD028BF81CBE373F009DD2FC /* btn_unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BEA1CBE373F009DD2FC /* btn_unselected.png */; };
-		FD028BF91CBE373F009DD2FC /* btn_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BEB1CBE373F009DD2FC /* btn_unselected@2x.png */; };
-		FD028BFA1CBE373F009DD2FC /* btn_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BEC1CBE373F009DD2FC /* btn_unselected@3x.png */; };
 		FD028BFB1CBE373F009DD2FC /* defaultphoto.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BED1CBE373F009DD2FC /* defaultphoto.png */; };
-		FD028BFC1CBE373F009DD2FC /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BEE1CBE373F009DD2FC /* lock.png */; };
-		FD028BFD1CBE373F009DD2FC /* navBackBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BEF1CBE373F009DD2FC /* navBackBtn@2x.png */; };
 		FD028BFF1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */; };
 		FD0787221C0D45A200D17B97 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787211C0D45A200D17B97 /* main.m */; };
 		FD0787251C0D45A200D17B97 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787241C0D45A200D17B97 /* AppDelegate.m */; };
@@ -51,6 +43,7 @@
 		FD6CFD661F273C6F00E17861 /* ZLShowVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6CFD631F273C6F00E17861 /* ZLShowVideoViewController.m */; };
 		FD7852511EF4FD5300C69E84 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD7852501EF4FD5300C69E84 /* PhotosUI.framework */; };
 		FD7B52731EFCB81600FB9087 /* ZLEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */; };
+		FD92FA6D1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = FD92FA6C1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m */; };
 		FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FDD979E21EF8C62300DD9DA4 /* ImageCell.m */; };
 		FDD979E61EF8F35700DD9DA4 /* ZLForceTouchPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FDD979E51EF8F35700DD9DA4 /* ZLForceTouchPreviewController.m */; };
 		FDDB9EBA1E6D2EF6008ED9F1 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDB9EB71E6D2EF6008ED9F1 /* YYWeakProxy.m */; };
@@ -58,7 +51,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FD028BA01CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLNoAuthorityViewController.xib; sourceTree = "<group>"; };
 		FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLPhotoActionSheet.xib; sourceTree = "<group>"; };
 		FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLPhotoBrowserCell.xib; sourceTree = "<group>"; };
 		FD028BA31CBE33BB009DD2FC /* ZLThumbnailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLThumbnailViewController.xib; sourceTree = "<group>"; };
@@ -81,20 +73,13 @@
 		FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImgViewController.m; sourceTree = "<group>"; };
 		FD028BBD1CBE33BB009DD2FC /* ZLThumbnailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLThumbnailViewController.h; sourceTree = "<group>"; };
 		FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLThumbnailViewController.m; sourceTree = "<group>"; };
-		FD028BE21CBE373F009DD2FC /* btn_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_circle@2x.png"; sourceTree = "<group>"; };
-		FD028BE31CBE373F009DD2FC /* btn_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_circle@3x.png"; sourceTree = "<group>"; };
 		FD028BE41CBE373F009DD2FC /* btn_original_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_original_circle.png; sourceTree = "<group>"; };
 		FD028BE51CBE373F009DD2FC /* btn_original_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_original_circle@2x.png"; sourceTree = "<group>"; };
 		FD028BE61CBE373F009DD2FC /* btn_original_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_original_circle@3x.png"; sourceTree = "<group>"; };
 		FD028BE71CBE373F009DD2FC /* btn_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_selected.png; sourceTree = "<group>"; };
 		FD028BE81CBE373F009DD2FC /* btn_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_selected@2x.png"; sourceTree = "<group>"; };
 		FD028BE91CBE373F009DD2FC /* btn_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_selected@3x.png"; sourceTree = "<group>"; };
-		FD028BEA1CBE373F009DD2FC /* btn_unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_unselected.png; sourceTree = "<group>"; };
-		FD028BEB1CBE373F009DD2FC /* btn_unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_unselected@2x.png"; sourceTree = "<group>"; };
-		FD028BEC1CBE373F009DD2FC /* btn_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_unselected@3x.png"; sourceTree = "<group>"; };
 		FD028BED1CBE373F009DD2FC /* defaultphoto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultphoto.png; sourceTree = "<group>"; };
-		FD028BEE1CBE373F009DD2FC /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock.png; sourceTree = "<group>"; };
-		FD028BEF1CBE373F009DD2FC /* navBackBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navBackBtn@2x.png"; sourceTree = "<group>"; };
 		FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZLPhotoBrowser.bundle; sourceTree = "<group>"; };
 		FD07871D1C0D45A200D17B97 /* ZLPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZLPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD0787211C0D45A200D17B97 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -124,6 +109,8 @@
 		FD7852501EF4FD5300C69E84 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		FD7B52711EFCB81600FB9087 /* ZLEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLEditViewController.h; sourceTree = "<group>"; };
 		FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLEditViewController.m; sourceTree = "<group>"; };
+		FD92FA6B1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+EnlargeTouchArea.h"; sourceTree = "<group>"; };
+		FD92FA6C1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EnlargeTouchArea.m"; sourceTree = "<group>"; };
 		FDD979E11EF8C62300DD9DA4 /* ImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCell.h; sourceTree = "<group>"; };
 		FDD979E21EF8C62300DD9DA4 /* ImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCell.m; sourceTree = "<group>"; };
 		FDD979E41EF8F35700DD9DA4 /* ZLForceTouchPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLForceTouchPreviewController.h; sourceTree = "<group>"; };
@@ -188,6 +175,8 @@
 				FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */,
 				FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */,
 				FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */,
+				FD92FA6B1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.h */,
+				FD92FA6C1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m */,
 			);
 			path = PhotoBrowser;
 			sourceTree = "<group>";
@@ -196,21 +185,13 @@
 			isa = PBXGroup;
 			children = (
 				FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */,
-				FD028BE21CBE373F009DD2FC /* btn_circle@2x.png */,
-				FD028BE31CBE373F009DD2FC /* btn_circle@3x.png */,
 				FD028BE41CBE373F009DD2FC /* btn_original_circle.png */,
 				FD028BE51CBE373F009DD2FC /* btn_original_circle@2x.png */,
 				FD028BE61CBE373F009DD2FC /* btn_original_circle@3x.png */,
 				FD028BE71CBE373F009DD2FC /* btn_selected.png */,
 				FD028BE81CBE373F009DD2FC /* btn_selected@2x.png */,
 				FD028BE91CBE373F009DD2FC /* btn_selected@3x.png */,
-				FD028BEA1CBE373F009DD2FC /* btn_unselected.png */,
-				FD028BEB1CBE373F009DD2FC /* btn_unselected@2x.png */,
-				FD028BEC1CBE373F009DD2FC /* btn_unselected@3x.png */,
 				FD028BED1CBE373F009DD2FC /* defaultphoto.png */,
-				FD028BEE1CBE373F009DD2FC /* lock.png */,
-				FD028BEF1CBE373F009DD2FC /* navBackBtn@2x.png */,
-				FD028BA01CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib */,
 				FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */,
 				FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */,
 				FD028BA31CBE33BB009DD2FC /* ZLThumbnailViewController.xib */,
@@ -302,7 +283,7 @@
 		FD0787151C0D45A200D17B97 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = long;
 				TargetAttributes = {
 					FD07871C1C0D45A200D17B97 = {
@@ -334,26 +315,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD028BFD1CBE373F009DD2FC /* navBackBtn@2x.png in Resources */,
 				FD028BFF1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle in Resources */,
 				FD0787301C0D45A200D17B97 /* LaunchScreen.storyboard in Resources */,
 				FD028BF41CBE373F009DD2FC /* btn_original_circle@3x.png in Resources */,
-				FD028BCF1CBE33BB009DD2FC /* ZLNoAuthorityViewController.xib in Resources */,
-				FD028BFA1CBE373F009DD2FC /* btn_unselected@3x.png in Resources */,
 				FD028BD21CBE33BB009DD2FC /* ZLThumbnailViewController.xib in Resources */,
 				FD028BF71CBE373F009DD2FC /* btn_selected@3x.png in Resources */,
 				FD028BD01CBE33BB009DD2FC /* ZLPhotoActionSheet.xib in Resources */,
-				FD028BFC1CBE373F009DD2FC /* lock.png in Resources */,
 				FD028BFB1CBE373F009DD2FC /* defaultphoto.png in Resources */,
-				FD028BF81CBE373F009DD2FC /* btn_unselected.png in Resources */,
 				FD028BF21CBE373F009DD2FC /* btn_original_circle.png in Resources */,
 				FD028BF31CBE373F009DD2FC /* btn_original_circle@2x.png in Resources */,
-				FD028BF01CBE373F009DD2FC /* btn_circle@2x.png in Resources */,
-				FD028BF11CBE373F009DD2FC /* btn_circle@3x.png in Resources */,
 				FD07872D1C0D45A200D17B97 /* Assets.xcassets in Resources */,
 				FD07872B1C0D45A200D17B97 /* Main.storyboard in Resources */,
 				FD028BD11CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib in Resources */,
-				FD028BF91CBE373F009DD2FC /* btn_unselected@2x.png in Resources */,
 				FD028BF51CBE373F009DD2FC /* btn_selected.png in Resources */,
 				FD028BF61CBE373F009DD2FC /* btn_selected@2x.png in Resources */,
 			);
@@ -378,6 +351,7 @@
 				FD22D71F1E9E25D1008FCC4E /* ZLPhotoModel.m in Sources */,
 				FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */,
 				FDDB9EBB1E6D2EF6008ED9F1 /* YYFPSLabel.m in Sources */,
+				FD92FA6D1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m in Sources */,
 				FD028BD91CBE33BB009DD2FC /* ZLPhotoBrowser.m in Sources */,
 				FD028BDF1CBE33BB009DD2FC /* ZLThumbnailViewController.m in Sources */,
 				FD0787251C0D45A200D17B97 /* AppDelegate.m in Sources */,
@@ -423,14 +397,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -468,14 +448,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
