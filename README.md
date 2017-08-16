@@ -32,7 +32,7 @@
 
 ### 更新日志
 ```
-● 2.2.8: 更新编辑图片功能，增加裁剪比例选项(1:1, 3:4, 2:3, 9:16,等比例开发者可根据需求，按照规则自行行添加所需比例);
+● 2.2.8: 更新编辑图片功能，增加裁剪比例选项(1:1, 3:4, 2:3, 9:16,等比例，开发者可根据需求，按照规则自行添加所需比例);
 ● 2.2.6: ①：可混合选择image、gif、livephoto、video类型;
          ②：支持video、gif、livephoto类型的多选;
          ③：支持控制video最大选择时长;
@@ -53,10 +53,11 @@
 * Manually 
   * 1.直接把PhotoBrowser文件夹拖入到您的工程中
   * 2.导入 Photos.framework及PhotosUI.framework
+  * 3.导入 "ZLPhotoActionSheet.h"
 * Cocoapods
-```objc
-pod search ZLPhotoBrowser
-```
+  * 1.在Podfile 中添加 `pod 'ZLPhotoBrowser'`
+  * 2.执行 `pod install` 或 `pod update`
+  * 3.导入 \<ZLPhotoActionSheet.h\>
 
 第二步：
 - 在项目plist配置文件中添加如下键，值并设为YES
