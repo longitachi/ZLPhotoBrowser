@@ -387,6 +387,14 @@
     }
     ZLPhotoModel *model = self.arrDataSources[index];
     
+    if (nav.editAfterSelectThumbnailImage &&
+        nav.allowEditImage &&
+        nav.maxSelectCount == 1) {
+        [nav.arrSelectedModels addObject:model];
+        [self btnEdit_Click:nil];
+        return;
+    }
+    
     UIViewController *vc = [self getMatchVCWithModel:model];
     if (vc) {
         [self showViewController:vc sender:nil];
