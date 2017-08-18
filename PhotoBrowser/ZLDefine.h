@@ -68,6 +68,10 @@
 ///////ZLBigImageCell 不建议设置太大，太大的话会导致图片加载过慢
 #define kMaxImageWidth 500
 
+#define ClippingRatioValue1 @"value1"
+#define ClippingRatioValue2 @"value2"
+#define ClippingRatioTitleFormat @"titleFormat"
+
 static inline void SetViewWidth (UIView *view, CGFloat width) {
     CGRect frame = view.frame;
     frame.size.width = width;
@@ -151,6 +155,10 @@ static inline NSInteger GetDuration (NSString *duration) {
         d += [arr[i] integerValue] * pow(60, (arr.count-1-i));
     }
     return d;
+}
+
+static inline NSDictionary * GetClipRatio(NSInteger value1, NSInteger value2) {
+    return @{ClippingRatioValue1: @(value1), ClippingRatioValue2: @(value2), ClippingRatioTitleFormat:@"%g : %g"};
 }
 
 #endif /* ZLDefine_h */

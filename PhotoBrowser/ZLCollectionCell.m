@@ -165,6 +165,7 @@
     }
     
     self.btnSelect.hidden = !self.showSelectBtn;
+    self.btnSelect.enabled = self.showSelectBtn;
     self.btnSelect.selected = model.isSelected;
 
     CGSize size;

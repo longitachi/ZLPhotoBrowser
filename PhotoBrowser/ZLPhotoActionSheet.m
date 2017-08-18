@@ -9,7 +9,6 @@
 #import "ZLPhotoActionSheet.h"
 #import <Photos/Photos.h>
 #import "ZLCollectionCell.h"
-#import "ZLDefine.h"
 #import "ZLPhotoModel.h"
 #import "ZLPhotoManager.h"
 #import "ZLPhotoBrowser.h"
@@ -20,6 +19,7 @@
 #import "ZLShowGifViewController.h"
 #import "ZLShowVideoViewController.h"
 #import "ZLShowLivePhotoViewController.h"
+#import "ZLEditViewController.h"
 
 #define kBaseViewHeight (self.maxPreviewCount ? 300 : 142)
 
@@ -135,6 +135,7 @@ double const ScalePhotoWidth = 1000;
         self.allowTakePhotoInLibrary = YES;
         self.allowForceTouch = YES;
         self.allowEditImage = YES;
+        self.editAfterSelectThumbnailImage = NO;
         self.allowMixSelect = YES;
         self.showCaptureImageOnTakePhotoBtn = YES;
         self.sortAscending = YES;
@@ -561,6 +562,13 @@ double const ScalePhotoWidth = 1000;
 {
     ZLPhotoModel *model = self.arrDataSources[indexPath.row];
     
+    if (self.editAfterSelectThumbnailImage &&
+        self.allowEditImage &&
+        self.maxSelectCount == 1) {
+        [self pushEditVCWithModel:model];
+        return;
+    }
+    
     if (self.arrSelectedModels.count > 0) {
         ZLPhotoModel *sm = self.arrSelectedModels.firstObject;
         if (!self.allowMixSelect &&
@@ -643,6 +651,8 @@ double const ScalePhotoWidth = 1000;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
     nav.allowForceTouch = self.allowForceTouch;
     nav.allowEditImage = self.allowEditImage;
+    nav.editAfterSelectThumbnailImage = self.editAfterSelectThumbnailImage;
+    nav.clipRatios = self.clipRatios;
     nav.allowMixSelect = self.allowMixSelect;
     nav.showCaptureImageOnTakePhotoBtn = self.showCaptureImageOnTakePhotoBtn;
     nav.sortAscending = self.sortAscending;
@@ -685,6 +695,15 @@ double const ScalePhotoWidth = 1000;
         [strongSelf changeCancelBtnTitle];
     }];
     
+    [self.sender showDetailViewController:nav sender:nil];
+}
+
+- (void)pushEditVCWithModel:(ZLPhotoModel *)model
+{
+    ZLEditViewController *vc = [[ZLEditViewController alloc] init];
+    ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
+    [nav.arrSelectedModels addObject:model];
+    vc.model = model;
     [self.sender showDetailViewController:nav sender:nil];
 }
 

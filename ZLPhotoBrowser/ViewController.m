@@ -34,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *allowForceTouchSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowEditSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *mixSelectSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *editAfterSelectImageSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *previewTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
@@ -103,6 +104,10 @@
     actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
     //单选模式是否显示选择按钮
     actionSheet.showSelectBtn = NO;
+    //是否在选择图片后直接进入编辑界面
+    actionSheet.editAfterSelectThumbnailImage = self.editAfterSelectImageSwitch.isOn;
+    //设置编辑比例
+//    actionSheet.clipRatios = @[GetClipRatio(4, 3)];
     
 #pragma required
     //如果调用的方法没有传sender，则该属性必须提前赋值
@@ -183,9 +188,20 @@
         if (!s.isOn) {
             [self.selImageSwitch setOn:YES animated:YES];
         }
+    } else if (s == self.selLivePhotoSwitch) {
+        if (s.isOn) {
+            [self.selImageSwitch setOn:YES animated:YES];
+        }
+    } else if (s == self.allowEditSwitch) {
+        if (!s.isOn) {
+            [self.editAfterSelectImageSwitch setOn:NO animated:YES];
+        }
+    } else if (s == self.editAfterSelectImageSwitch) {
+        if (s.isOn) {
+            [self.allowEditSwitch setOn:YES animated:YES];
+        }
     }
 }
-
 
 #pragma mark - text field delegate
 - (void)textFieldDidEndEditing:(UITextField *)textField

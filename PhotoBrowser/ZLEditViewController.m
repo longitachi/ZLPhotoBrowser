@@ -436,14 +436,9 @@
     CGFloat W = 70;
     CGFloat x = 0;
     
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     //如需要其他比例，请按照格式自行设置
-    NSArray *ratios = @[
-                        @{@"value1":@0, @"value2":@0, @"titleFormat":@"Custom"},
-                        @{@"value1":@1, @"value2":@1, @"titleFormat":@"%g : %g"},
-                        @{@"value1":@4, @"value2":@3, @"titleFormat":@"%g : %g"},
-                        @{@"value1":@3, @"value2":@2, @"titleFormat":@"%g : %g"},
-                        @{@"value1":@16, @"value2":@9, @"titleFormat":@"%g : %g"},
-                        ];
+    NSArray *ratios = nav.clipRatios;
     
     for(NSDictionary *info in ratios){
         CGFloat val1 = [info[@"value1"] floatValue];
@@ -740,7 +735,16 @@
 #pragma mark - action
 - (void)cancelBtn_click
 {
-    [self.navigationController popViewControllerAnimated:NO];
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.editAfterSelectThumbnailImage &&
+        nav.allowEditImage &&
+        nav.maxSelectCount == 1) {
+        [nav.arrSelectedModels removeAllObjects];
+    }
+    UIViewController *vc = [self.navigationController popViewControllerAnimated:NO];
+    if (!vc) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (void)saveBtn_click

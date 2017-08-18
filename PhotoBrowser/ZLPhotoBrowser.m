@@ -53,6 +53,21 @@
     return _arrSelectedModels;
 }
 
+- (NSArray<NSDictionary *> *)clipRatios
+{
+    if (_clipRatios) {
+        return _clipRatios;
+    } else {
+        return @[
+                 @{ClippingRatioValue1: @0, ClippingRatioValue2: @0, ClippingRatioTitleFormat: @"Custom"},
+                 @{ClippingRatioValue1: @1, ClippingRatioValue2: @1, ClippingRatioTitleFormat: @"%g : %g"},
+                 @{ClippingRatioValue1: @4, ClippingRatioValue2: @3, ClippingRatioTitleFormat: @"%g : %g"},
+                 @{ClippingRatioValue1: @3, ClippingRatioValue2: @2, ClippingRatioTitleFormat: @"%g : %g"},
+                 @{ClippingRatioValue1: @16, ClippingRatioValue2: @9, ClippingRatioTitleFormat: @"%g : %g"},
+                 ];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
