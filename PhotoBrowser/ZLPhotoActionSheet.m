@@ -658,6 +658,7 @@ double const ScalePhotoWidth = 1000;
     nav.sortAscending = self.sortAscending;
     nav.showSelectBtn = self.showSelectBtn;
     nav.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
+    nav.navBarColor = self.navBarColor;
     [nav.arrSelectedModels removeAllObjects];
     [nav.arrSelectedModels addObjectsFromArray:self.arrSelectedModels];
     

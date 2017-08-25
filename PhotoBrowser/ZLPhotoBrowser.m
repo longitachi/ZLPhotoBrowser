@@ -25,7 +25,6 @@
     self = [super initWithRootViewController:rootViewController];
     if (self) {
         [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: kNavBar_tintColor}];
-        [self.navigationBar setBackgroundImage:[self imageWithColor:kNavBar_color] forBarMetrics:UIBarMetricsDefault];
         [self.navigationBar setTintColor:kNavBar_tintColor];
         self.navigationBar.barStyle = UIBarStyleBlack;
         self.navigationBar.translucent = YES;
@@ -66,6 +65,12 @@
                  @{ClippingRatioValue1: @16, ClippingRatioValue2: @9, ClippingRatioTitleFormat: @"%g : %g"},
                  ];
     }
+}
+
+- (void)setNavBarColor:(UIColor *)navBarColor
+{
+    _navBarColor = navBarColor?:kNavBar_color;
+    [self.navigationBar setBackgroundImage:[self imageWithColor:_navBarColor] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)viewWillAppear:(BOOL)animated

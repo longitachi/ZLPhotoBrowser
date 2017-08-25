@@ -69,6 +69,9 @@
 
 @property (nonatomic, copy) NSMutableArray<ZLPhotoModel *> *arrSelectedModels;
 
+/**导航条颜色，默认 rgb(19, 153, 231)*/
+@property (nonatomic, strong) UIColor *navBarColor;
+
 /**点击确定选择照片回调*/
 @property (nonatomic, copy) void (^callSelectImageBlock)();
 

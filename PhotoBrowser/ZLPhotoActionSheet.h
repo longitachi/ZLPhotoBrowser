@@ -76,6 +76,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**已选择的asset对象数组*/
 @property (nonatomic, strong) NSMutableArray<PHAsset *> *arrSelectedAssets;
 
+/**导航条颜色，默认 rgb(19, 153, 231)*/
+@property (nonatomic, strong) UIColor *navBarColor;
+
 /**选择照片回调，回调解析好的图片、对应的asset对象、是否原图*/
 @property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *images, NSArray<PHAsset *> *assets, BOOL isOriginal);
 

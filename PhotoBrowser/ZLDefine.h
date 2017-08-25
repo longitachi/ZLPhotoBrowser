@@ -157,6 +157,12 @@ static inline NSInteger GetDuration (NSString *duration) {
     return d;
 }
 
+
+static inline NSDictionary *
+GetCustomRatio() {
+    return @{ClippingRatioValue1: @(0), ClippingRatioValue2: @(0), ClippingRatioTitleFormat: @"Custom"};
+}
+
 static inline NSDictionary * GetClipRatio(NSInteger value1, NSInteger value2) {
     return @{ClippingRatioValue1: @(value1), ClippingRatioValue2: @(value2), ClippingRatioTitleFormat:@"%g : %g"};
 }
