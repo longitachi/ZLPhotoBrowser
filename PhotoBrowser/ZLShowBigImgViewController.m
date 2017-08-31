@@ -38,6 +38,12 @@
     NSArray *_arrSelAssetsBackup;
     
     BOOL _isFirstAppear;
+    
+    BOOL _hideNavBar;
+    
+    //设备旋转前的index
+    NSInteger _indexBeforeRotation;
+    UICollectionViewFlowLayout *_layout;
 }
 
 @property (nonatomic, strong) UILabel *labPhotosBytes;
@@ -48,6 +54,7 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 //    NSLog(@"---- %s", __FUNCTION__);
 }
 
@@ -58,6 +65,7 @@
 
     _isFirstAppear = YES;
     _currentPage = self.selectIndex+1;
+    _indexBeforeRotation = self.selectIndex;
     self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
     [self initNavBtns];
     [self initCollectionView];
@@ -65,6 +73,8 @@
     [self resetDontBtnState];
     [self resetEditBtnState];
     [self resetOriginalBtnState];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -74,8 +84,7 @@
     if (!_isFirstAppear) {
         return;
     }
-    
-    [_collectionView setContentOffset:CGPointMake(self.selectIndex*(kViewWidth+kItemMargin), 0)];
+    [_collectionView setContentOffset:CGPointMake((kViewWidth+kItemMargin)*_indexBeforeRotation, 0)];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -85,6 +94,31 @@
     }
     _isFirstAppear = NO;
     [self reloadCurrentCell];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    _layout.minimumLineSpacing = kItemMargin;
+    _layout.sectionInset = UIEdgeInsetsMake(0, kItemMargin/2, 0, kItemMargin/2);
+    _layout.itemSize = self.view.bounds.size;
+    [_collectionView setCollectionViewLayout:_layout];
+    
+    _collectionView.frame = CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight);
+    
+    [_collectionView setContentOffset:CGPointMake((kViewWidth+kItemMargin)*_indexBeforeRotation, 0)];
+    
+    CGRect frame = _hideNavBar?CGRectMake(0, kViewHeight, kViewWidth, 44):CGRectMake(0, kViewHeight-44, kViewWidth, 44);
+    _bottomView.frame = frame;
+    _btnEdit.frame = CGRectMake(kViewWidth/2-30, 7, 60, 30);
+    _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
+}
+
+#pragma mark - 设备旋转
+- (void)deviceOrientationChanged:(NSNotification *)notify
+{
+//    NSLog(@"%s %@", __FUNCTION__, NSStringFromCGRect(self.view.bounds));
+    _indexBeforeRotation = _currentPage - 1;
 }
 
 - (void)setModels:(NSArray<ZLPhotoModel *> *)models
@@ -137,13 +171,16 @@
 #pragma mark - 初始化CollectionView
 - (void)initCollectionView
 {
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    layout.minimumLineSpacing = kItemMargin;
-    layout.sectionInset = UIEdgeInsetsMake(0, kItemMargin/2, 0, kItemMargin/2);
-    layout.itemSize = self.view.bounds.size;
+    _layout = [[UICollectionViewFlowLayout alloc] init];
+    _layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+//    _layout.minimumLineSpacing = kItemMargin;
+//    _layout.sectionInset = UIEdgeInsetsMake(0, kItemMargin/2, 0, kItemMargin/2);
+//    _layout.itemSize = self.view.bounds.size;
+//    [_collectionView setCollectionViewLayout:_layout];
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight) collectionViewLayout:layout];
+//    _collectionView.frame = CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight);
+    
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:_layout];
     [_collectionView registerClass:[ZLBigImageCell class] forCellWithReuseIdentifier:@"ZLBigImageCell"];
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
@@ -155,7 +192,7 @@
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
-    _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, kViewWidth, 44)];
+    _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, kViewHeight - 44, kViewWidth, 44)];
     _bottomView.backgroundColor = kBottomView_color;
     
     _btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -181,21 +218,21 @@
     
     //编辑
     _btnEdit = [UIButton buttonWithType:UIButtonTypeCustom];
-    _btnEdit.frame = CGRectMake(kViewWidth/2-30, 7, 60, 30);
     [_btnEdit setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserEditText) forState:UIControlStateNormal];
     _btnEdit.titleLabel.font = [UIFont systemFontOfSize:15];
     [_btnEdit setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
+    _btnEdit.frame = CGRectMake(kViewWidth/2-30, 7, 60, 30);
     [_btnEdit addTarget:self action:@selector(btnEdit_Click:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_btnEdit];
     
     _btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
-    _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
     [_btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
     _btnDone.titleLabel.font = [UIFont systemFontOfSize:15];
     _btnDone.layer.masksToBounds = YES;
     _btnDone.layer.cornerRadius = 3.0f;
     [_btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_btnDone setBackgroundColor:kDoneButton_bgColor];
+    _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
     [_btnDone addTarget:self action:@selector(btnDone_Click:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_btnDone];
     
@@ -403,28 +440,18 @@
     }
 }
 
-- (void)showNavBarAndBottomView
+- (void)handlerSingleTap
 {
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-    CGRect frame = _bottomView.frame;
-    frame.origin.y -= frame.size.height;
+    _hideNavBar = !_hideNavBar;
+    
+    [self.navigationController setNavigationBarHidden:_hideNavBar animated:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:_hideNavBar withAnimation:UIStatusBarAnimationSlide];
+    
+    CGRect frame = _hideNavBar?CGRectMake(0, kViewHeight, kViewWidth, 44):CGRectMake(0, kViewHeight-44, kViewWidth, 44);
     [UIView animateWithDuration:0.3 animations:^{
         _bottomView.frame = frame;
     }];
 }
-
-- (void)hideNavBarAndBottomView
-{
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-    CGRect frame = _bottomView.frame;
-    frame.origin.y += frame.size.height;
-    [UIView animateWithDuration:0.3 animations:^{
-        _bottomView.frame = frame;
-    }];
-}
-
 
 #pragma mark - UICollectionDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -461,11 +488,7 @@
     weakify(self);
     cell.singleTapCallBack = ^() {
         strongify(weakSelf);
-        if (strongSelf.navigationController.navigationBar.isHidden) {
-            [strongSelf showNavBarAndBottomView];
-        } else {
-            [strongSelf hideNavBarAndBottomView];
-        }
+        [strongSelf handlerSingleTap];
     };
     
     return cell;
@@ -517,10 +540,11 @@
 - (ZLPhotoModel *)getCurrentPageModel
 {
     CGPoint offset = _collectionView.contentOffset;
-    if (offset.x < .0 || offset.x > (_collectionView.contentSize.width-kViewWidth-kItemMargin)) {
+
+    CGFloat page = offset.x/(kViewWidth+kItemMargin);
+    if (ceilf(page) >= self.models.count) {
         return nil;
     }
-    CGFloat page = _collectionView.contentOffset.x/(kViewWidth+kItemMargin);
     NSString *str = [NSString stringWithFormat:@"%.0f", page];
     _currentPage = str.integerValue + 1;
     ZLPhotoModel *model = self.models[_currentPage-1];

@@ -63,7 +63,7 @@
 #define kViewHeight     [[UIScreen mainScreen] bounds].size.height
 
 ////////ZLShowBigImgViewController
-#define kItemMargin 50
+#define kItemMargin 40
 
 ///////ZLBigImageCell 不建议设置太大，太大的话会导致图片加载过慢
 #define kMaxImageWidth 500

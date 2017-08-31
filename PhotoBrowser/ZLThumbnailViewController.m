@@ -26,6 +26,9 @@
 {
     BOOL _isLayoutOK;
     BOOL _haveTakePic;
+    
+    //设备旋转前的第一个可视indexPath
+    NSIndexPath *_visibleIndexPath;
 }
 
 @property (nonatomic, strong) NSMutableArray<ZLPhotoModel *> *arrDataSources;
@@ -79,6 +82,8 @@
     
     [self initNavBtn];
     [self initCollectionView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -97,9 +102,20 @@
 {
     [super viewDidLayoutSubviews];
     
+    NSLog(@"%f, %f", kViewWidth, kViewHeight);
+    
     if (!_isLayoutOK) {
         [self scrollToBottom];
+    } else {
+        [self.collectionView scrollToItemAtIndexPath:_visibleIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
+}
+
+#pragma mark - 设备旋转
+- (void)deviceOrientationChanged:(NSNotification *)notify
+{
+    CGPoint pInView = [self.view convertPoint:CGPointMake(0, 70) toView:self.collectionView];
+    _visibleIndexPath = [self.collectionView indexPathForItemAtPoint:pInView];
 }
 
 - (BOOL)forceTouchAvailable
@@ -171,7 +187,15 @@
 - (void)initCollectionView
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize = CGSizeMake((kViewWidth-9)/4, (kViewWidth-9)/4);
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    CGFloat width = .0;
+    if (orientation == UIDeviceOrientationLandscapeLeft ||
+               orientation == UIDeviceOrientationLandscapeRight) {
+        width = kViewHeight;
+    } else {
+        width = kViewWidth;
+    }
+    layout.itemSize = CGSizeMake((width-9)/4, (width-9)/4);
     layout.minimumInteritemSpacing = 1.5;
     layout.minimumLineSpacing = 1.5;
     layout.sectionInset = UIEdgeInsetsMake(3, 0, 3, 0);

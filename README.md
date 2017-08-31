@@ -31,10 +31,13 @@
     * [编辑功能预览图](#编辑功能预览图)
   * 11.video、gif、livephoto、image混合选择（多选video、gif、livephoto、image）
     * [混合选择预览图](#混合选择预览图)
+  * 12.横屏
+  * [横屏预览图](#横屏预览图)
 * [使用方法(支持cocoapods安装)](#使用方法)
 
 ### 更新日志
 ```
+● 2.3.1: 新增设置导航颜色api，初步适配横屏;
 ● 2.2.9: 新增单选模式下选择图片后直接进入编辑界面功能，提供设置裁剪比例api;
 ● 2.2.8: 更新编辑图片功能，增加裁剪比例选项(1:1, 3:4, 2:3, 9:16,等比例，开发者可根据需求，按照规则自行添加所需比例);
 ● 2.2.6: ①：可混合选择image、gif、livephoto、video类型;
@@ -104,6 +107,9 @@ actionSheet.sender = self;
 
 ### <a id="混合选择预览图"></a>混合选择预览图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/mixSelect.gif)
+
+### <a id="横屏预览图"></a>横屏预览图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/landscape.gif)
 
 ### <a id="预览快速多选效果图"></a> 预览快速多选效果图
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览图快速选择.gif)

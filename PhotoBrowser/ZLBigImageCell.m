@@ -24,10 +24,19 @@
     [super awakeFromNib];
 }
 
+/*
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.previewView.frame = self.bounds;
+}
+ */
+
 - (ZLPreviewView *)previewView
 {
     if (!_previewView) {
         _previewView = [[ZLPreviewView alloc] initWithFrame:self.bounds];
+        _previewView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
     return _previewView;
 }
@@ -79,10 +88,27 @@
 //!!!!: ZLPreviewView
 @implementation ZLPreviewView
 
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if (self.model.type == ZLAssetMediaTypeImage ||
+        self.model.type == ZLAssetMediaTypeGif ||
+        (self.model.type == ZLAssetMediaTypeLivePhoto && !self.showLivePhoto)) {
+        self.imageGifView.frame = self.bounds;
+    } else if (self.model.type == ZLAssetMediaTypeLivePhoto) {
+        self.livePhotoView.frame = self.bounds;
+    } else if (self.model.type == ZLAssetMediaTypeVideo) {
+        self.videoView.frame = self.bounds;
+    }
+}
+
+
 - (ZLPreviewImageAndGif *)imageGifView
 {
     if (!_imageGifView) {
         _imageGifView = [[ZLPreviewImageAndGif alloc] initWithFrame:self.bounds];
+//        _imageGifView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _imageGifView.singleTapCallBack = self.singleTapCallBack;
     }
     return _imageGifView;
@@ -92,6 +118,7 @@
 {
     if (!_livePhotoView) {
         _livePhotoView = [[ZLPreviewLivePhoto alloc] initWithFrame:self.bounds];
+//        _livePhotoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _livePhotoView.singleTapCallBack = self.singleTapCallBack;
     }
     return _livePhotoView;
@@ -101,6 +128,7 @@
 {
     if (!_videoView) {
         _videoView = [[ZLPreviewVideo alloc] initWithFrame:self.bounds];
+//        _videoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _videoView.singleTapCallBack = self.singleTapCallBack;
     }
     return _videoView;
@@ -208,6 +236,12 @@
 //!!!!: ZLBasePreviewView
 @implementation ZLBasePreviewView
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.indicator.center = self.center;
+}
+
 - (UIActivityIndicatorView *)indicator
 {
     if (!_indicator) {
@@ -223,6 +257,7 @@
     if (!_imageView) {
         _imageView = [[UIImageView alloc] init];
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
+//        _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
     return _imageView;
 }
@@ -265,6 +300,16 @@
 @end
 
 @implementation ZLPreviewImageAndGif
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.scrollView.frame = self.bounds;
+//    [self.scrollView setZoomScale:1.0];
+    [self resetSubviewSize:self.asset];
+//    [self loadNormalImage:self.asset];
+}
+
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -310,7 +355,7 @@
         _scrollView.scrollsToTop = NO;
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _scrollView.delaysContentTouches = NO;
     }
     return _scrollView;
@@ -395,32 +440,77 @@
 
 - (void)resetSubviewSize:(PHAsset *)asset
 {
-    CGFloat width = MIN(kViewWidth, asset.pixelWidth);
+    self.containerView.frame = CGRectMake(0, 0, kViewWidth, 0);
+    
     CGRect frame;
-    frame.origin = CGPointZero;
-    frame.size.width = width;
     
-    UIImage *image = self.imageView.image;
-    CGFloat imageScale = image.size.height/image.size.width;
-    CGFloat screenScale = kViewHeight/kViewWidth;
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     
-    if (imageScale > screenScale) {
-        frame.size.height = floorf(width * imageScale);
-    } else {
-        CGFloat height = floorf(width * imageScale);
-        if (height < 1 || isnan(height)) {
-            //iCloud图片height为NaN
-            height = GetViewHeight(self);
-        }
+    CGFloat width = MIN(kViewWidth, asset.pixelWidth);
+    BOOL orientationIsUpOrDown = YES;
+    if (orientation == UIDeviceOrientationLandscapeLeft ||
+        orientation == UIDeviceOrientationLandscapeRight) {
+        orientationIsUpOrDown = NO;
+        CGFloat height = MIN(kViewHeight, asset.pixelHeight);
+        frame.origin = CGPointZero;
         frame.size.height = height;
+        UIImage *image = self.imageView.image;
+
+        CGFloat imageScale = image.size.width/image.size.height;
+        CGFloat screenScale = kViewWidth/kViewHeight;
+
+        if (imageScale > screenScale) {
+            frame.size.width = floorf(height * imageScale);
+            if (frame.size.width > kViewWidth) {
+                frame.size.width = kViewWidth;
+                frame.size.height = kViewWidth / imageScale;
+            }
+        } else {
+            CGFloat width = floorf(height * imageScale);
+            if (width < 1 || isnan(width)) {
+                //iCloud图片height为NaN
+                width = GetViewWidth(self);
+            }
+            frame.size.width = width;
+        }
+    } else {
+        frame.origin = CGPointZero;
+        frame.size.width = width;
+        UIImage *image = self.imageView.image;
+        
+        CGFloat imageScale = image.size.height/image.size.width;
+        CGFloat screenScale = kViewHeight/kViewWidth;
+        
+        if (imageScale > screenScale) {
+            frame.size.height = floorf(width * imageScale);
+        } else {
+            CGFloat height = floorf(width * imageScale);
+            if (height < 1 || isnan(height)) {
+                //iCloud图片height为NaN
+                height = GetViewHeight(self);
+            }
+            frame.size.height = height;
+        }
     }
     
     self.containerView.frame = frame;
-    if (frame.size.height < GetViewHeight(self)) {
-        self.containerView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);
-    }
     
-    CGSize contentSize = CGSizeMake(width, MAX(kViewHeight, frame.size.height));
+    
+    CGSize contentSize;
+    if (orientationIsUpOrDown) {
+        contentSize = CGSizeMake(width, MAX(kViewHeight, frame.size.height));
+        if (frame.size.height < GetViewHeight(self)) {
+            self.containerView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);
+        } else {
+            self.containerView.frame = (CGRect){CGPointMake((GetViewWidth(self)-frame.size.width)/2, 0), frame.size};
+        }
+    } else {
+        contentSize = frame.size;
+        if (frame.size.width < GetViewWidth(self)) {
+            self.containerView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);
+        }
+    }
+
     self.scrollView.contentSize = contentSize;
     
     self.imageView.frame = self.containerView.bounds;
@@ -475,6 +565,14 @@
 
 //!!!!: ZLPreviewLivePhoto
 @implementation ZLPreviewLivePhoto
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    self.imageView.frame = self.bounds;
+    _lpView.frame = self.bounds;
+}
 
 - (PHLivePhotoView *)lpView
 {
@@ -593,6 +691,15 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_playLayer removeObserver:self forKeyPath:@"status"];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    self.imageView.frame = self.bounds;
+    _playLayer.frame = self.bounds;
+    self.playBtn.center = self.center;
 }
 
 - (AVPlayerLayer *)playLayer
