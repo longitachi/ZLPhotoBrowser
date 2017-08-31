@@ -296,7 +296,9 @@
 
 //!!!!: ZLPreviewImageAndGif
 @interface ZLPreviewImageAndGif () <UIScrollViewDelegate>
-
+{
+    BOOL _loadOK;
+}
 @end
 
 @implementation ZLPreviewImageAndGif
@@ -305,9 +307,10 @@
 {
     [super layoutSubviews];
     self.scrollView.frame = self.bounds;
-//    [self.scrollView setZoomScale:1.0];
-    [self resetSubviewSize:self.asset];
-//    [self loadNormalImage:self.asset];
+    [self.scrollView setZoomScale:1.0];
+    if (_loadOK) {
+        [self resetSubviewSize:self.asset];
+    }
 }
 
 
@@ -434,6 +437,7 @@
         [strongSelf resetSubviewSize:asset];
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             [strongSelf.indicator stopAnimating];
+            strongSelf->_loadOK = YES;
         }
     }];
 }
@@ -511,11 +515,13 @@
         }
     }
 
-    self.scrollView.contentSize = contentSize;
-    
-    self.imageView.frame = self.containerView.bounds;
-    
-    [self.scrollView scrollRectToVisible:self.bounds animated:NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.scrollView.contentSize = contentSize;
+        
+        self.imageView.frame = self.containerView.bounds;
+        
+        [self.scrollView scrollRectToVisible:self.bounds animated:NO];
+    });
 }
 
 #pragma mark - 手势点击事件
