@@ -195,7 +195,16 @@
     } else {
         width = kViewWidth;
     }
-    layout.itemSize = CGSizeMake((width-9)/4, (width-9)/4);
+    
+    NSInteger columnCount;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        columnCount = 6;
+    } else {
+        columnCount = 4;
+    }
+    
+    layout.itemSize = CGSizeMake((width-1.5*columnCount)/columnCount, (width-1.5*columnCount)/columnCount);
     layout.minimumInteritemSpacing = 1.5;
     layout.minimumLineSpacing = 1.5;
     layout.sectionInset = UIEdgeInsetsMake(3, 0, 3, 0);
