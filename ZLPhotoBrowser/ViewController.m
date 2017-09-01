@@ -12,10 +12,7 @@
 #import "ImageCell.h"
 #import "YYFPSLabel.h"
 #import <Photos/Photos.h>
-#import "ZLShowGifViewController.h"
-#import "ZLShowVideoViewController.h"
 #import "ZLPhotoModel.h"
-#import "ZLShowLivePhotoViewController.h"
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
@@ -35,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *allowEditSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *mixSelectSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *editAfterSelectImageSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *maskSwitch;
 @property (weak, nonatomic) IBOutlet UITextField *previewTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
@@ -108,7 +106,10 @@
     actionSheet.editAfterSelectThumbnailImage = self.editAfterSelectImageSwitch.isOn;
     //设置编辑比例
 //    actionSheet.clipRatios = @[GetClipRatio(4, 3)];
-    
+    //是否在已选择照片上显示遮罩层
+    actionSheet.showSelectedMask = self.maskSwitch.isOn;
+    //遮罩层颜色
+//    actionSheet.selectedMaskColor = [UIColor orangeColor];
 #pragma required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;

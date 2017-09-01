@@ -25,14 +25,16 @@
 - [x] 裁剪图片(可自定义裁剪比例)
 - [x] 多语言国际化(中文简/繁、英文、日文)
 - [x] 相册内拍照按钮实时显示镜头捕捉画面
+- [x] 已选择图片遮罩层标记
 - [x] 预览已选择照片
-- [x] 自定义圆角弧度
+- [x] 相册内图片自定义圆角弧度
 - [x] 自定义升序降序排列
 - [x] 多张拍照
  
 ### 更新日志
 ```
-● 2.3.2: 新增设置导航颜色api，初步适配横屏，适配iPad;
+● 2.3.3: 删除废弃文件，新增在已选择图片上显示遮罩层标记功能;
+● 2.3.2: 新增设置导航颜色api，适配横屏，适配iPad;
 ● 2.2.9: 新增单选模式下选择图片后直接进入编辑界面功能，提供设置裁剪比例api;
 ● 2.2.8: 更新编辑图片功能，增加裁剪比例选项(1:1, 3:4, 2:3, 9:16,等比例，开发者可根据需求，按照规则自行添加所需比例);
 ● 2.2.6: ①：可混合选择image、gif、livephoto、video类型;
@@ -96,39 +98,54 @@ actionSheet.sender = self;
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/zh-hant.png)
 
 - 3DTouch预览效果图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/forceTouch.gif)
 
 - 编辑功能预览图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/edit.gif)
 
 - 混合选择预览图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/mixSelect.gif)
 
 - 横屏预览图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/landscape.gif)
 
+- 遮罩层
+
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/selectmask.gif)
+
 - 预览快速多选效果图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览图快速选择.gif)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览大图快速选择.gif)
 
 - 直接进入相册选择相片效果图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/直接进入相册选择相片.gif)
 
 - 预览大图及缩放效果图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/查看大图支持缩放.gif)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览选择gif.gif)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览选择视频.gif)
 
 - 拍照
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/相册内部拍照.gif)
 
 - 相册内混合选择效果图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/相册内混合选择.gif)
 
 - 预览已选择照片效果图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览已选择照片.gif)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/预览确定选择的照片.gif)
 
 - 原图功能效果图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/原图功能.gif)
 

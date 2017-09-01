@@ -79,17 +79,17 @@ NS_ASSUME_NONNULL_BEGIN
 /**导航条颜色，默认 rgb(19, 153, 231)*/
 @property (nonatomic, strong) UIColor *navBarColor;
 
-/**选择照片回调，回调解析好的图片、对应的asset对象、是否原图*/
+/**是否在已选择的图片上方覆盖一层已选中遮罩层，默认 NO*/
+@property (nonatomic, assign) BOOL showSelectedMask;
+
+/**遮罩层颜色，内部会默认调整颜色的透明度为0.2， 默认 blackColor*/
+@property (nonatomic, strong) UIColor *selectedMaskColor;
+
+/**
+ 选择照片回调，回调解析好的图片、对应的asset对象、是否原图
+ pod 2.2.6版本之后 统一通过selectImageBlock回调
+ */
 @property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *images, NSArray<PHAsset *> *assets, BOOL isOriginal);
-
-/**选择gif照片回调，回调解析好的gif图片、对应的asset对象*/
-@property (nonatomic, copy) void (^selectGifBlock)(UIImage *gif, PHAsset *asset) NS_DEPRECATED_IOS(2_0, 8_0, "pod 2.2.6版本之后已废弃，删除使用的地方即可， 统一通过selectImageBlock回调，后续将删除");
-
-/**选择live photo照片回调，回调解析好的live photo图片、对应的asset对象*/
-@property (nonatomic, copy) void (^selectLivePhotoBlock)(UIImage *livePhoto, PHAsset *asset) NS_DEPRECATED_IOS(2_0, 8_0, "pod 2.2.6版本之后已废弃，删除使用的地方即可， 统一通过selectImageBlock回调，后续将删除");
-
-/**选择视频回调，回调第一帧封面图片、对应的asset对象*/
-@property (nonatomic, copy) void (^selectVideoBlock)(UIImage *cover, PHAsset *asset) NS_DEPRECATED_IOS(2_0, 8_0, "pod 2.2.6版本之后已废弃，删除使用的地方即可， 统一通过selectImageBlock回调，后续将删除");
 
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
 

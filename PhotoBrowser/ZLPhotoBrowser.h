@@ -72,6 +72,12 @@
 /**导航条颜色，默认 rgb(19, 153, 231)*/
 @property (nonatomic, strong) UIColor *navBarColor;
 
+/**是否在已选择的图片上方覆盖一层已选中遮罩层，默认 NO*/
+@property (nonatomic, assign) BOOL showSelectedMask;
+
+/**遮罩层颜色，内部会默认调整颜色的透明度为0.2， 默认 blackColor*/
+@property (nonatomic, strong) UIColor *selectedMaskColor;
+
 /**点击确定选择照片回调*/
 @property (nonatomic, copy) void (^callSelectImageBlock)();
 

@@ -38,9 +38,6 @@
 		FD22D71F1E9E25D1008FCC4E /* ZLPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FD22D71E1E9E25D1008FCC4E /* ZLPhotoModel.m */; };
 		FD22D7221E9E2EDC008FCC4E /* ZLPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD22D7211E9E2EDC008FCC4E /* ZLPhotoManager.m */; };
 		FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */; };
-		FD6CFD641F273C6F00E17861 /* ZLShowGifViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6CFD5F1F273C6F00E17861 /* ZLShowGifViewController.m */; };
-		FD6CFD651F273C6F00E17861 /* ZLShowLivePhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6CFD611F273C6F00E17861 /* ZLShowLivePhotoViewController.m */; };
-		FD6CFD661F273C6F00E17861 /* ZLShowVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6CFD631F273C6F00E17861 /* ZLShowVideoViewController.m */; };
 		FD7852511EF4FD5300C69E84 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD7852501EF4FD5300C69E84 /* PhotosUI.framework */; };
 		FD7B52731EFCB81600FB9087 /* ZLEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */; };
 		FD92FA6D1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = FD92FA6C1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m */; };
@@ -100,12 +97,6 @@
 		FD22D7211E9E2EDC008FCC4E /* ZLPhotoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoManager.m; sourceTree = "<group>"; };
 		FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ZLPhotoBrowser.h"; sourceTree = "<group>"; };
 		FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ZLPhotoBrowser.m"; sourceTree = "<group>"; };
-		FD6CFD5E1F273C6F00E17861 /* ZLShowGifViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLShowGifViewController.h; sourceTree = "<group>"; };
-		FD6CFD5F1F273C6F00E17861 /* ZLShowGifViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowGifViewController.m; sourceTree = "<group>"; };
-		FD6CFD601F273C6F00E17861 /* ZLShowLivePhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLShowLivePhotoViewController.h; sourceTree = "<group>"; };
-		FD6CFD611F273C6F00E17861 /* ZLShowLivePhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowLivePhotoViewController.m; sourceTree = "<group>"; };
-		FD6CFD621F273C6F00E17861 /* ZLShowVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLShowVideoViewController.h; sourceTree = "<group>"; };
-		FD6CFD631F273C6F00E17861 /* ZLShowVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowVideoViewController.m; sourceTree = "<group>"; };
 		FD7852501EF4FD5300C69E84 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		FD7B52711EFCB81600FB9087 /* ZLEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLEditViewController.h; sourceTree = "<group>"; };
 		FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLEditViewController.m; sourceTree = "<group>"; };
@@ -161,12 +152,6 @@
 				FD028BAE1CBE33BB009DD2FC /* ZLNoAuthorityViewController.m */,
 				FD028BBB1CBE33BB009DD2FC /* ZLShowBigImgViewController.h */,
 				FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */,
-				FD6CFD5E1F273C6F00E17861 /* ZLShowGifViewController.h */,
-				FD6CFD5F1F273C6F00E17861 /* ZLShowGifViewController.m */,
-				FD6CFD601F273C6F00E17861 /* ZLShowLivePhotoViewController.h */,
-				FD6CFD611F273C6F00E17861 /* ZLShowLivePhotoViewController.m */,
-				FD6CFD621F273C6F00E17861 /* ZLShowVideoViewController.h */,
-				FD6CFD631F273C6F00E17861 /* ZLShowVideoViewController.m */,
 				FD028BBD1CBE33BB009DD2FC /* ZLThumbnailViewController.h */,
 				FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */,
 				FDD979E41EF8F35700DD9DA4 /* ZLForceTouchPreviewController.h */,
@@ -340,11 +325,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FDD979E61EF8F35700DD9DA4 /* ZLForceTouchPreviewController.m in Sources */,
-				FD6CFD641F273C6F00E17861 /* ZLShowGifViewController.m in Sources */,
 				FD028BD31CBE33BB009DD2FC /* ToastUtils.m in Sources */,
 				FD028BD51CBE33BB009DD2FC /* ZLBigImageCell.m in Sources */,
 				FD0787281C0D45A200D17B97 /* ViewController.m in Sources */,
-				FD6CFD661F273C6F00E17861 /* ZLShowVideoViewController.m in Sources */,
 				FD7B52731EFCB81600FB9087 /* ZLEditViewController.m in Sources */,
 				FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */,
 				FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */,
@@ -358,7 +341,6 @@
 				FD0787221C0D45A200D17B97 /* main.m in Sources */,
 				FD028BDC1CBE33BB009DD2FC /* ZLProgressHUD.m in Sources */,
 				FD028BD81CBE33BB009DD2FC /* ZLPhotoActionSheet.m in Sources */,
-				FD6CFD651F273C6F00E17861 /* ZLShowLivePhotoViewController.m in Sources */,
 				FD028BDE1CBE33BB009DD2FC /* ZLShowBigImgViewController.m in Sources */,
 				FD22D7221E9E2EDC008FCC4E /* ZLPhotoManager.m in Sources */,
 				FDDB9EBA1E6D2EF6008ED9F1 /* YYWeakProxy.m in Sources */,

@@ -16,9 +16,6 @@
 #import "ZLThumbnailViewController.h"
 #import "ZLNoAuthorityViewController.h"
 #import "ToastUtils.h"
-#import "ZLShowGifViewController.h"
-#import "ZLShowVideoViewController.h"
-#import "ZLShowLivePhotoViewController.h"
 #import "ZLEditViewController.h"
 
 #define kBaseViewHeight (self.maxPreviewCount ? 300 : 142)
@@ -93,10 +90,6 @@ double const ScalePhotoWidth = 1000;
     _arrSelectedAssets = arrSelectedAssets;
     [self.arrSelectedModels removeAllObjects];
     for (PHAsset *asset in arrSelectedAssets) {
-//        if (asset.mediaType != PHAssetMediaTypeImage) {
-//            //选择的视频不做保存
-//            continue;
-//        }
         ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:[ZLPhotoManager transformAssetType:asset] duration:nil];
         model.isSelected = YES;
         [self.arrSelectedModels addObject:model];
@@ -140,6 +133,8 @@ double const ScalePhotoWidth = 1000;
         self.showCaptureImageOnTakePhotoBtn = YES;
         self.sortAscending = YES;
         self.showSelectBtn = NO;
+        self.showSelectedMask = NO;
+        self.selectedMaskColor = [UIColor blackColor];
         
         if (![self judgeIsHavePhotoAblumAuthority]) {
             //注册实施监听相册变化
@@ -300,8 +295,7 @@ double const ScalePhotoWidth = 1000;
 - (void)loadPhotoFromAlbum
 {
     [self.arrDataSources removeAllObjects];
-    //因为预览界面需快速选择最近图片，所以不受self.sortAscending限制，
-    //这里allow gif和allow liveohoto 置为yes，为了获取所有asset
+    
     [self.arrDataSources addObjectsFromArray:[ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:NO limitCount:self.maxPreviewCount allowSelectVideo:self.allowSelectVideo allowSelectImage:self.allowSelectImage allowSelectGif:self.allowSelectGif allowSelectLivePhoto:self.allowSelectLivePhoto]];
     [ZLPhotoManager markSelcectModelInArr:self.arrDataSources selArr:self.arrSelectedModels];
     [self.collectionView reloadData];
@@ -534,18 +528,19 @@ double const ScalePhotoWidth = 1000;
                 }
             }
         }
+        
+        if (strongSelf.showSelectedMask) {
+            strongCell.topView.hidden = !model.isSelected;
+        }
         [strongSelf changeCancelBtnTitle];
-//        [collectionView reloadItemsAtIndexPaths:[collectionView indexPathsForVisibleItems]];
     };
     
-    cell.isSelectedImage = ^BOOL() {
-        strongify(weakSelf);
-        return strongSelf.arrSelectedModels.count > 0;
-    };
     cell.allSelectGif = self.allowSelectGif;
     cell.allSelectLivePhoto = self.allowSelectLivePhoto;
     cell.showSelectBtn = self.showSelectBtn;
     cell.cornerRadio = self.cellCornerRadio;
+    cell.showMask = self.showSelectedMask;
+    cell.maskColor = self.selectedMaskColor;
     cell.model = model;
     
     return cell;
@@ -659,6 +654,8 @@ double const ScalePhotoWidth = 1000;
     nav.showSelectBtn = self.showSelectBtn;
     nav.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
     nav.navBarColor = self.navBarColor;
+    nav.showSelectedMask = self.showSelectedMask;
+    nav.selectedMaskColor = self.selectedMaskColor;
     [nav.arrSelectedModels removeAllObjects];
     [nav.arrSelectedModels addObjectsFromArray:self.arrSelectedModels];
     
@@ -705,30 +702,6 @@ double const ScalePhotoWidth = 1000;
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
     [nav.arrSelectedModels addObject:model];
     vc.model = model;
-    [self.sender showDetailViewController:nav sender:nil];
-}
-
-- (void)pushGifViewControllerWithModel:(ZLPhotoModel *)model
-{
-    ZLShowGifViewController *vc = [[ZLShowGifViewController alloc] init];
-    vc.model = model;
-    ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
-    [self.sender showDetailViewController:nav sender:nil];
-}
-
-- (void)pushLivePhotoViewControllerWithModel:(ZLPhotoModel *)model
-{
-    ZLShowLivePhotoViewController *vc = [[ZLShowLivePhotoViewController alloc] init];
-    vc.model = model;
-    ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
-    [self.sender showDetailViewController:nav sender:nil];
-}
-
-- (void)pushVideoViewControllerWithModel:(ZLPhotoModel *)model
-{
-    ZLShowVideoViewController *vc = [[ZLShowVideoViewController alloc] init];
-    vc.model = model;
-    ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
     [self.sender showDetailViewController:nav sender:nil];
 }
 

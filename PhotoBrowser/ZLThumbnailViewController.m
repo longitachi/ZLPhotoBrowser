@@ -16,9 +16,6 @@
 #import "ZLPhotoBrowser.h"
 #import "ToastUtils.h"
 #import "ZLProgressHUD.h"
-#import "ZLShowGifViewController.h"
-#import "ZLShowVideoViewController.h"
-#import "ZLShowLivePhotoViewController.h"
 #import "ZLForceTouchPreviewController.h"
 #import "ZLEditViewController.h"
 
@@ -29,6 +26,8 @@
     
     //设备旋转前的第一个可视indexPath
     NSIndexPath *_visibleIndexPath;
+    //是否切换横竖屏
+    BOOL _switchOrientation;
 }
 
 @property (nonatomic, strong) NSMutableArray<ZLPhotoModel *> *arrDataSources;
@@ -102,11 +101,10 @@
 {
     [super viewDidLayoutSubviews];
     
-    NSLog(@"%f, %f", kViewWidth, kViewHeight);
-    
     if (!_isLayoutOK) {
         [self scrollToBottom];
-    } else {
+    } else if (_switchOrientation) {
+        _switchOrientation = NO;
         [self.collectionView scrollToItemAtIndexPath:_visibleIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
 }
@@ -116,6 +114,7 @@
 {
     CGPoint pInView = [self.view convertPoint:CGPointMake(0, 70) toView:self.collectionView];
     _visibleIndexPath = [self.collectionView indexPathForItemAtPoint:pInView];
+    _switchOrientation = YES;
 }
 
 - (BOOL)forceTouchAvailable
@@ -381,18 +380,19 @@
                 }
             }
         }
-//        [collectionView reloadItemsAtIndexPaths:[collectionView indexPathsForVisibleItems]];
+        
+        if (weakNav.showSelectedMask) {
+            strongCell.topView.hidden = !model.isSelected;
+        }
         [strongSelf resetBottomBtnsStatus];
     };
-////    cell.isSelectedImage = ^BOOL() {
-////        strongify(weakSelf);
-////        ZLImageNavigationController *nav = (ZLImageNavigationController *)strongSelf.navigationController;
-////        return nav.arrSelectedModels.count > 0;
-////    };
+    
     cell.allSelectGif = nav.allowSelectGif;
     cell.allSelectLivePhoto = nav.allowSelectLivePhoto;
     cell.showSelectBtn = nav.showSelectBtn;
     cell.cornerRadio = nav.cellCornerRadio;
+    cell.showMask = nav.showSelectedMask;
+    cell.maskColor = nav.selectedMaskColor;
     cell.model = model;
 
     return cell;

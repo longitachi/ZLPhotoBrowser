@@ -32,7 +32,9 @@
     [super layoutSubviews];
     self.imageView.frame = self.bounds;
     self.btnSelect.frame = CGRectMake(GetViewWidth(self.contentView)-26, 5, 23, 23);
-    //    self.topView.frame = self.bounds;
+    if (self.showMask) {
+        self.topView.frame = self.bounds;
+    }
     self.videoBottomView.frame = CGRectMake(0, GetViewHeight(self)-15, GetViewWidth(self), 15);
     self.videoImageView.frame = CGRectMake(5, 1, 16, 12);
     self.liveImageView.frame = CGRectMake(5, -1, 15, 15);
@@ -49,6 +51,7 @@
         _imageView.clipsToBounds = YES;
         [self.contentView addSubview:_imageView];
         
+        [self.contentView bringSubviewToFront:_topView];
         [self.contentView bringSubviewToFront:self.videoBottomView];
         [self.contentView bringSubviewToFront:self.btnSelect];
     }
@@ -112,19 +115,16 @@
     return _timeLabel;
 }
 
-//- (UIView *)topView
-//{
-//    if (!_topView) {
-//        _topView = [[UIView alloc] init];
-//        _topView.backgroundColor = [UIColor whiteColor];
-//        _topView.alpha = 0.5;
-//        _topView.userInteractionEnabled = NO;
-//        _topView.hidden = YES;
-//        [self.contentView addSubview:_topView];
-//        [self.contentView bringSubviewToFront:_topView];
-//    }
-//    return _topView;
-//}
+- (UIView *)topView
+{
+    if (!_topView) {
+        _topView = [[UIView alloc] init];
+        _topView.userInteractionEnabled = NO;
+        _topView.hidden = YES;
+        [self.contentView addSubview:_topView];
+    }
+    return _topView;
+}
 
 - (void)setModel:(ZLPhotoModel *)model
 {
@@ -140,28 +140,23 @@
         self.videoImageView.hidden = NO;
         self.liveImageView.hidden = YES;
         self.timeLabel.text = model.duration;
-//        if (self.isSelectedImage) {
-//            self.topView.hidden = !self.isSelectedImage();
-//        }
     } else if (model.type == ZLAssetMediaTypeGif) {
         self.videoBottomView.hidden = !self.allSelectGif;
         self.videoImageView.hidden = YES;
         self.liveImageView.hidden = YES;
         self.timeLabel.text = @"GIF";
-//        if (self.allSelectGif && self.isSelectedImage) {
-//            self.topView.hidden = self.allSelectGif && !self.isSelectedImage();
-//        }
     } else if (model.type == ZLAssetMediaTypeLivePhoto) {
         self.videoBottomView.hidden = !self.allSelectLivePhoto;
         self.videoImageView.hidden = YES;
         self.liveImageView.hidden = NO;
         self.timeLabel.text = @"Live";
-//        if (self.allSelectLivePhoto && self.isSelectedImage) {
-//            self.topView.hidden = self.allSelectLivePhoto && !self.isSelectedImage();
-//        }
     } else {
         self.videoBottomView.hidden = YES;
-//        self.topView.hidden = YES;
+    }
+    
+    if (self.showMask) {
+        self.topView.backgroundColor = [self.maskColor colorWithAlphaComponent:.2];
+        self.topView.hidden = !model.isSelected;
     }
     
     self.btnSelect.hidden = !self.showSelectBtn;
