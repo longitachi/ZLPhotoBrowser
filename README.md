@@ -12,6 +12,7 @@
 * [功能介绍](#功能介绍)
 * [更新日志](#更新日志)
 * [使用方法(支持cocoapods安装)](#使用方法)
+* [问答](#问答)
 * [效果图](#效果图)
 
 ### <a id="功能介绍"></a>功能介绍
@@ -89,6 +90,10 @@ actionSheet.sender = self;
 
 [actionSheet showPreviewAnimated:YES];
 ```
+
+### <a id="问答"></a>问答
+* 关于 `@available(9.0, *)` 报错 ([#90](https://github.com/longitachi/ZLPhotoBrowser/issues/90))
+> 该错误会出现在XCode 9.0以下版本，把该代码替换为 `[UIDevice currentDevice].systemVersion.floatValue >= 9.0` 即可
 
 ### <a id="效果图"></a> 效果图
 - 多语言国际化效果图
