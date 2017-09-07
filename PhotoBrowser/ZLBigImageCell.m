@@ -12,7 +12,7 @@
 #import <Photos/Photos.h>
 #import "ZLPhotoModel.h"
 #import "ZLPhotoBrowser.h"
-#import "UIImageView+WebCache.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "ToastUtils.h"
 
 @interface ZLBigImageCell ()

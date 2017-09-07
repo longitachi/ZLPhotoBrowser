@@ -12,7 +12,7 @@
 #import "ZLPhotoModel.h"
 #import "ZLThumbnailViewController.h"
 #import "ZLDefine.h"
-#import "SDWebImageManager.h"
+#import <SDWebImage/SDWebImageManager.h>
 
 @implementation ZLImageNavigationController
 
