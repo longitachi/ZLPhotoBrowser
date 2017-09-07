@@ -119,7 +119,8 @@
 
 - (BOOL)forceTouchAvailable
 {
-    if (@available(iOS 9.0, *)) {
+    //@available(iOS 9.0, *)
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 9.0) {
         return self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
     } else {
         return NO;

@@ -20,9 +20,13 @@
 @property (nonatomic, copy) void (^btnBackBlock)(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal);
 
 
-//点击选择后的图片预览数组
-@property (nonatomic, strong) NSMutableArray<UIImage *> *arrSelPhotos;
+//点击选择后的图片预览数组，预览相册图片时为 UIImage，预览网络图片时候为UIImage/NSUrl
+@property (nonatomic, strong) NSMutableArray *arrSelPhotos;
 
+//预览相册图片回调
 @property (nonatomic, copy) void (^btnDonePreviewBlock)(NSArray<UIImage *> *, NSArray<PHAsset *> *);
+
+//预览网络图片回调
+@property (nonatomic, copy) void (^previewNetImageBlock)(NSArray *photos);
 
 @end

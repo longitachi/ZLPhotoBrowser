@@ -124,6 +124,10 @@
 - (void)setModels:(NSArray<ZLPhotoModel *> *)models
 {
     _models = models;
+    //如果预览网络图片则返回
+    if (models.firstObject.type == ZLAssetMediaTypeNetImage) {
+        return;
+    }
     if (self.arrSelPhotos) {
         _arrSelAssets = [NSMutableArray array];
         for (ZLPhotoModel *m in models) {
@@ -133,7 +137,7 @@
     }
 }
 
-- (void)setArrSelPhotos:(NSMutableArray<UIImage *> *)arrSelPhotos
+- (void)setArrSelPhotos:(NSMutableArray *)arrSelPhotos
 {
     _arrSelPhotos = arrSelPhotos;
     _arrSelPhotosBackup = arrSelPhotos.copy;
@@ -173,12 +177,6 @@
 {
     _layout = [[UICollectionViewFlowLayout alloc] init];
     _layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-//    _layout.minimumLineSpacing = kItemMargin;
-//    _layout.sectionInset = UIEdgeInsetsMake(0, kItemMargin/2, 0, kItemMargin/2);
-//    _layout.itemSize = self.view.bounds.size;
-//    [_collectionView setCollectionViewLayout:_layout];
-    
-//    _collectionView.frame = CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight);
     
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:_layout];
     [_collectionView registerClass:[ZLBigImageCell class] forCellWithReuseIdentifier:@"ZLBigImageCell"];
@@ -289,7 +287,7 @@
 - (void)btnDone_Click:(UIButton *)btn
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.arrSelectedModels.count == 0) {
+    if (!self.arrSelPhotos && nav.arrSelectedModels.count == 0) {
         ZLPhotoModel *model = self.models[_currentPage-1];
         if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadingText));
@@ -304,6 +302,8 @@
     }
     if (self.arrSelPhotos && self.btnDonePreviewBlock) {
         self.btnDonePreviewBlock(self.arrSelPhotos, _arrSelAssets);
+    } else if (self.arrSelPhotos && self.previewNetImageBlock) {
+        self.previewNetImageBlock(self.arrSelPhotos);
     } else if (nav.callSelectImageBlock) {
         nav.callSelectImageBlock();
     }
@@ -336,7 +336,7 @@
             ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), nav.maxSelectCount);
             return;
         }
-        if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
+        if (model.asset && ![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadingText));
             return;
         }
@@ -355,7 +355,9 @@
         //移除
         model.isSelected = NO;
         for (ZLPhotoModel *m in nav.arrSelectedModels) {
-            if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
+            if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier] ||
+                [m.image isEqual:model.image] ||
+                [m.url.absoluteString isEqualToString:model.url.absoluteString]) {
                 [nav.arrSelectedModels removeObject:m];
                 break;
             }
@@ -530,8 +532,7 @@
 {
     ZLPhotoModel *m = [self getCurrentPageModel];
     if (m.type == ZLAssetMediaTypeGif ||
-        m.type == ZLAssetMediaTypeLivePhoto ||
-        m.type == ZLAssetMediaTypeVideo) {
+        m.type == ZLAssetMediaTypeLivePhoto) {
         ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
         [cell reloadGifLivePhoto];
     }

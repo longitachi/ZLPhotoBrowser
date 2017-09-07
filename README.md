@@ -8,7 +8,6 @@
 ----------------------------------------
 
 ### 框架整体介绍
-* 该框架为一个多选照片（支持多选视频、gif、Live Photo）的框架，兼容设备开启的iCloud照片存储，支持编辑裁剪图片，支持记录历史选择照片。
 * [功能介绍](#功能介绍)
 * [更新日志](#更新日志)
 * [使用方法(支持cocoapods安装)](#使用方法)
@@ -22,18 +21,21 @@
 - [x] 查看、选择gif、LivePhoto(iOS9.0)、video
 - [x] 3D Touch预览image、gif、LivePhoto、video
 - [x] 混合选择image、gif、livePhoto、video
+- [x] 在线下载iCloud照片
 - [x] 控制选择video最大时长
 - [x] 裁剪图片(可自定义裁剪比例)
 - [x] 多语言国际化(中文简/繁、英文、日文)
 - [x] 相册内拍照按钮实时显示镜头捕捉画面
 - [x] 已选择图片遮罩层标记
 - [x] 预览已选择照片
+- [x] 预览网络及本地照片
 - [x] 相册内图片自定义圆角弧度
 - [x] 自定义升序降序排列
 - [x] 多张拍照
  
 ### 更新日志
 ```
+● 2.4.0: 新增预览网络及本地图片api，并可进行选择删除;
 ● 2.3.3: 删除废弃文件，新增在已选择图片上显示遮罩层标记功能;
 ● 2.3.2: 新增设置导航颜色api，适配横屏，适配iPad;
 ● 2.2.9: 新增单选模式下选择图片后直接进入编辑界面功能，提供设置裁剪比例api;
@@ -61,8 +63,9 @@
   * 3.导入 "ZLPhotoActionSheet.h"
 * Cocoapods
   * 1.在Podfile 中添加 `pod 'ZLPhotoBrowser'`
-  * 2.执行 `pod install` 或 `pod update`
-  * 3.导入 \<ZLPhotoActionSheet.h\>
+  * 2.执行 `pod setup`
+  * 3.执行 `pod install` 或 `pod update`
+  * 4.导入 \<ZLPhotoActionSheet.h\>
 
 第二步：
 - 在项目plist配置文件中添加如下键，值并设为YES
@@ -117,6 +120,10 @@ actionSheet.sender = self;
 - 横屏预览图
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/landscape.gif)
+
+- 预览网络图片
+
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/previewNetImage.gif)
 
 - 遮罩层
 

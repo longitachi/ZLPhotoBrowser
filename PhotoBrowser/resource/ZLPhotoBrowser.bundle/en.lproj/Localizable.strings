@@ -34,3 +34,6 @@
 
 "ZLPhotoBrowseriCloudPhotoText" = "Retry after download in photo ablum";
 "ZLPhotoBrowseriCloudVideoText" = "Unable to sync from iCloud";
+
+"ZLPhotoBrowserLoadNetImageFailed" = "loading failed";
+

@@ -127,13 +127,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- 提供 预览用户已选择的照片(非gif与video类型)，并可以取消已选择的照片
+ 提供 预览用户已选择的照片，并可以取消已选择的照片
 
  @param photos 已选择的uiimage照片数组
  @param assets 已选择的phasset照片数组
  @param index 点击的照片索引
  */
 - (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index;
+
+
+/**
+ 提供 预览照片网络/本地图片
+ 
+ @param photos 接收对象 UIImage / NSURL
+ @param index 点击的照片索引
+ @param complete 回调 (数组内为接收的UIImage / NSUrl 对象)
+ */
+- (void)previewPhotos:(NSArray *)photos index:(NSInteger)index complete:(void (^)(NSArray *photos))complete;
 
 NS_ASSUME_NONNULL_END
 

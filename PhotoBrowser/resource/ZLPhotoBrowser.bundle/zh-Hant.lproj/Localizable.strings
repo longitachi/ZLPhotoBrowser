@@ -34,3 +34,5 @@
 
 "ZLPhotoBrowseriCloudPhotoText" = "請在系統相冊中下載到本地后重新嘗試";
 "ZLPhotoBrowseriCloudVideoText" = "iCloud無法同步";
+
+"ZLPhotoBrowserLoadNetImageFailed" = "圖片加載失敗";

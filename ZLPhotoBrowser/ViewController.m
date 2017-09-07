@@ -43,6 +43,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSArray *arrDataSources;
 
+
 @end
 
 @implementation ViewController
@@ -168,6 +169,19 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     [[self getPas] previewSelectedPhotos:self.lastSelectPhotos assets:self.lastSelectAssets index:indexPath.row];
+}
+
+- (IBAction)btnPreviewNetImageClick:(id)sender
+{
+    NSArray *arrNetImages = @[[NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842038745.jpg"],
+                              [NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842025734.jpg"],
+                              [NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842029339.jpg"],
+                              [NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842034354.jpg"],
+                              [NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504756336591&di=56a3c8866c95891cbb9c43f907b4f954&imgtype=0&src=http%3A%2F%2Ff5.topitme.com%2F5%2Fa0%2F42%2F111173677859242a05o.jpg"],
+                              [NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504756368444&di=7e1a2d1fc8aeea41220b1dc56dfc0012&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fitem%2F201605%2F10%2F20160510182555_KQ8FH.thumb.700_0.jpeg"]];
+    [[self getPas] previewPhotos:arrNetImages index:0 complete:^(NSArray * _Nonnull photos) {
+        NSLog(@"%@", photos);
+    }];
 }
 
 - (IBAction)valueChanged:(id)sender

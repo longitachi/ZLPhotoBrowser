@@ -105,6 +105,7 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 
 - (void)loadGifImage:(PHAsset *)asset;
+- (void)loadImage:(id)obj;
 
 - (void)resumeGif;
 - (void)pauseGif;
@@ -136,3 +137,4 @@
 - (void)stopPlayVideo;
 
 @end
+

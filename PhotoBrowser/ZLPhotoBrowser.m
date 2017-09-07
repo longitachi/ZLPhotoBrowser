@@ -12,11 +12,13 @@
 #import "ZLPhotoModel.h"
 #import "ZLThumbnailViewController.h"
 #import "ZLDefine.h"
+#import <SDWebImageManager.h>
 
 @implementation ZLImageNavigationController
 
 - (void)dealloc
 {
+    [[SDWebImageManager sharedManager] cancelAll];
 //    NSLog(@"---- %s", __FUNCTION__);
 }
 

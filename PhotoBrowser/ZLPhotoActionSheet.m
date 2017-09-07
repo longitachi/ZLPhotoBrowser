@@ -242,14 +242,9 @@ double const ScalePhotoWidth = 1000;
 - (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index
 {
     self.arrSelectedAssets = [NSMutableArray arrayWithArray:assets];
-    ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
-    ZLImageNavigationController *nav = [self getImageNavWithRootVC:svc];
-    nav.showSelectBtn = YES;
-    svc.selectIndex = index;
-    svc.arrSelPhotos = [NSMutableArray arrayWithArray:photos];
-    svc.models = self.arrSelectedModels;
+    ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos index:index];
     weakify(self);
-    __weak typeof(nav) weakNav = nav;
+    __weak typeof(svc.navigationController) weakNav = svc.navigationController;
     [svc setBtnDonePreviewBlock:^(NSArray<UIImage *> *photos, NSArray<PHAsset *> *assets) {
         strongify(weakSelf);
         strongSelf.arrSelectedAssets = assets.mutableCopy;
@@ -259,9 +254,29 @@ double const ScalePhotoWidth = 1000;
         }
         [strongNav dismissViewControllerAnimated:YES completion:nil];
     }];
-    self.preview = NO;
-    [self.sender.view addSubview:self];
-    [self.sender showDetailViewController:nav sender:nil];
+}
+
+- (void)previewPhotos:(NSArray *)photos index:(NSInteger)index complete:(nonnull void (^)(NSArray * _Nonnull))complete
+{
+    [self.arrSelectedModels removeAllObjects];
+    for (id obj in photos) {
+        ZLPhotoModel *model = [[ZLPhotoModel alloc] init];
+        if ([obj isKindOfClass:UIImage.class]) {
+            model.image = obj;
+        } else if ([obj isKindOfClass:NSURL.class]) {
+            model.url = obj;
+        }
+        model.type = ZLAssetMediaTypeNetImage;
+        model.isSelected = YES;
+        [self.arrSelectedModels addObject:model];
+    }
+    ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos index:index];
+    __weak typeof(svc.navigationController) weakNav = svc.navigationController;
+    [svc setPreviewNetImageBlock:^(NSArray *photos) {
+        __strong typeof(weakNav) strongNav = weakNav;
+        if (complete) complete(photos);
+        [strongNav dismissViewControllerAnimated:YES completion:nil];
+    }];
 }
 
 #pragma mark - 判断软件是否有相册、相机访问权限
@@ -694,6 +709,22 @@ double const ScalePhotoWidth = 1000;
     }];
     
     [self.sender showDetailViewController:nav sender:nil];
+}
+
+- (ZLShowBigImgViewController *)pushBigImageToPreview:(NSArray *)photos index:(NSInteger)index
+{
+    ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
+    ZLImageNavigationController *nav = [self getImageNavWithRootVC:svc];
+    nav.showSelectBtn = YES;
+    svc.selectIndex = index;
+    svc.arrSelPhotos = [NSMutableArray arrayWithArray:photos];
+    svc.models = self.arrSelectedModels;
+    
+    self.preview = NO;
+    [self.sender.view addSubview:self];
+    [self.sender showDetailViewController:nav sender:nil];
+    
+    return svc;
 }
 
 - (void)pushEditVCWithModel:(ZLPhotoModel *)model

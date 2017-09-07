@@ -34,3 +34,6 @@
 
 "ZLPhotoBrowseriCloudPhotoText" = "写真のライブラリをダウンロードした後の再試行";
 "ZLPhotoBrowseriCloudVideoText" = "iCloudから同期できません";
+
+"ZLPhotoBrowserLoadNetImageFailed" = "ロード失敗";
+
