@@ -345,7 +345,7 @@
             return;
         }
         
-        model.isSelected = YES;
+        model.selected = YES;
         [nav.arrSelectedModels addObject:model];
         if (self.arrSelPhotos) {
             [self.arrSelPhotos addObject:_arrSelPhotosBackup[_currentPage-1]];
@@ -353,7 +353,7 @@
         }
     } else {
         //移除
-        model.isSelected = NO;
+        model.selected = NO;
         for (ZLPhotoModel *m in nav.arrSelectedModels) {
             if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier] ||
                 [m.image isEqual:model.image] ||

@@ -17,7 +17,7 @@
     model.asset = asset;
     model.type = type;
     model.duration = duration;
-    model.isSelected = NO;
+    model.selected = NO;
     return model;
 }
 

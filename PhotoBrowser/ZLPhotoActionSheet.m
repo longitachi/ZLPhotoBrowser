@@ -91,7 +91,7 @@ double const ScalePhotoWidth = 1000;
     [self.arrSelectedModels removeAllObjects];
     for (PHAsset *asset in arrSelectedAssets) {
         ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:[ZLPhotoManager transformAssetType:asset] duration:nil];
-        model.isSelected = YES;
+        model.selected = YES;
         [self.arrSelectedModels addObject:model];
     }
 }
@@ -128,6 +128,7 @@ double const ScalePhotoWidth = 1000;
         self.allowTakePhotoInLibrary = YES;
         self.allowForceTouch = YES;
         self.allowEditImage = YES;
+        self.allowSlideSelect = YES;
         self.editAfterSelectThumbnailImage = NO;
         self.allowMixSelect = YES;
         self.showCaptureImageOnTakePhotoBtn = YES;
@@ -267,7 +268,7 @@ double const ScalePhotoWidth = 1000;
             model.url = obj;
         }
         model.type = ZLAssetMediaTypeNetImage;
-        model.isSelected = YES;
+        model.selected = YES;
         [self.arrSelectedModels addObject:model];
     }
     ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos index:index];
@@ -530,12 +531,12 @@ double const ScalePhotoWidth = 1000;
                 return;
             }
             
-            model.isSelected = YES;
+            model.selected = YES;
             [strongSelf.arrSelectedModels addObject:model];
             strongCell.btnSelect.selected = YES;
         } else {
             strongCell.btnSelect.selected = NO;
-            model.isSelected = NO;
+            model.selected = NO;
             for (ZLPhotoModel *m in strongSelf.arrSelectedModels) {
                 if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
                     [strongSelf.arrSelectedModels removeObject:m];
@@ -605,7 +606,7 @@ double const ScalePhotoWidth = 1000;
             isFind = YES;
         }
         if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
-            m.isSelected = YES;
+            m.selected = YES;
         }
         if (!isFind) {
             i++;
@@ -661,6 +662,7 @@ double const ScalePhotoWidth = 1000;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
     nav.allowForceTouch = self.allowForceTouch;
     nav.allowEditImage = self.allowEditImage;
+    nav.allowSlideSelect = self.allowSlideSelect;
     nav.editAfterSelectThumbnailImage = self.editAfterSelectThumbnailImage;
     nav.clipRatios = self.clipRatios;
     nav.allowMixSelect = self.allowMixSelect;
@@ -766,10 +768,10 @@ double const ScalePhotoWidth = 1000;
 {
     [self.arrDataSources insertObject:model atIndex:0];
     if (self.maxSelectCount > 1 && self.arrSelectedModels.count < self.maxSelectCount) {
-        model.isSelected = YES;
+        model.selected = YES;
         [self.arrSelectedModels addObject:model];
     } else if (self.maxSelectCount == 1 && !self.arrSelectedModels.count) {
-        model.isSelected = YES;
+        model.selected = YES;
         [self.arrSelectedModels addObject:model];
         [self requestSelPhotos:nil];
         return;

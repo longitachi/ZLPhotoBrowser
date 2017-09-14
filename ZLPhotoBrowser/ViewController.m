@@ -37,6 +37,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *maxSelCountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxVideoDurationTextField;
+@property (weak, nonatomic) IBOutlet UISwitch *allowSlideSelectSwitch;
+
 
 @property (nonatomic, strong) NSMutableArray<UIImage *> *lastSelectPhotos;
 @property (nonatomic, strong) NSMutableArray<PHAsset *> *lastSelectAssets;
@@ -88,6 +90,7 @@
     actionSheet.allowSelectLivePhoto = self.selLivePhotoSwitch.isOn;
     actionSheet.allowForceTouch = self.allowForceTouchSwitch.isOn;
     actionSheet.allowEditImage = self.allowEditSwitch.isOn;
+    actionSheet.allowSlideSelect = self.allowSlideSelectSwitch.isOn;
     actionSheet.allowMixSelect = self.mixSelectSwitch.isOn;
     //设置相册内部显示拍照按钮
     actionSheet.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;

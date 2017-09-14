@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, ZLAssetMediaType) {
 //视频时长
 @property (nonatomic, copy) NSString *duration;
 //是否被选择
-@property (nonatomic, assign) BOOL isSelected;
+@property (nonatomic, assign, getter=isSelected) BOOL selected;
 
 //网络/本地 图片url
 @property (nonatomic, strong) NSURL *url ;

@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong) ZLPreviewView *previewView;
 @property (nonatomic, strong) ZLPhotoModel *model;
-@property (nonatomic, copy)   void (^singleTapCallBack)();
+@property (nonatomic, copy)   void (^singleTapCallBack)(void);
 @property (nonatomic, assign) BOOL willDisplaying;
 
 
@@ -52,7 +52,7 @@
 @property (nonatomic, strong) ZLPreviewLivePhoto *livePhotoView;
 @property (nonatomic, strong) ZLPreviewVideo *videoView;
 @property (nonatomic, strong) ZLPhotoModel *model;
-@property (nonatomic, copy)   void (^singleTapCallBack)();
+@property (nonatomic, copy)   void (^singleTapCallBack)(void);
 
 /**
  界面每次即将显示时，重置scrollview缩放状态
@@ -86,7 +86,7 @@
 @property (nonatomic, strong) PHAsset *asset;
 @property (nonatomic, assign) PHImageRequestID imageRequestID;
 @property (nonatomic, strong) UITapGestureRecognizer *singleTap;
-@property (nonatomic, copy)   void (^singleTapCallBack)();
+@property (nonatomic, copy)   void (^singleTapCallBack)(void);
 
 - (void)singleTapAction;
 

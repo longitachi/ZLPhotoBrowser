@@ -18,6 +18,7 @@
 - [x] 支持横竖屏
 - [x] 预览快速选择、可设置预览最大数
 - [x] 直接进入相册选择
+- [x] 支持滑动多选
 - [x] 查看、选择gif、LivePhoto(iOS9.0)、video
 - [x] 3D Touch预览image、gif、LivePhoto、video
 - [x] 混合选择image、gif、livePhoto、video
@@ -35,6 +36,7 @@
  
 ### 更新日志
 ```
+● 2.4.1: 新增仿iPhone相册滑动多选功能;
 ● 2.4.0: 新增预览网络及本地图片api，并可进行选择删除;
 ● 2.3.3: 删除废弃文件，新增在已选择图片上显示遮罩层标记功能;
 ● 2.3.2: 新增设置导航颜色api，适配横屏，适配iPad;
@@ -48,7 +50,6 @@
 ● 2.2.0: 优化内存问题;
 ● 2.1.9: 新增选择及预览Live Photo功能 (iOS 9.0);
 ● 2.1.7: 新增内部拍照按钮实时显示相机俘获画面功能;
-● ... 新增gif及video选择功能;
 ```
 
 ### 框架支持
@@ -60,7 +61,8 @@
 * Manually 
   * 1.直接把PhotoBrowser文件夹拖入到您的工程中
   * 2.导入 Photos.framework及PhotosUI.framework
-  * 3.导入 "ZLPhotoActionSheet.h"
+  * 3.项目依赖 `SDWebImage`，所以需要导入该框架
+  * 4.导入 "ZLPhotoActionSheet.h"
 * Cocoapods
   * 1.在Podfile 中添加 `pod 'ZLPhotoBrowser'`
   * 2.执行 `pod setup`
@@ -70,6 +72,8 @@
 第二步：
 - 在项目plist配置文件中添加如下键，值并设为YES
 ```objc
+//如果不添加该键值对，则不支持多语言，相册名称默认为英文
+
 Localized resources can be mixed YES
 //或者右键plist文件Open As->Source Code 添加
 <key>CFBundleAllowMixedLocalizations</key>
@@ -112,6 +116,10 @@ actionSheet.sender = self;
 - 编辑功能预览图
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/edit.gif)
+
+- 滑动多选预览图
+
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/slideSelect.gif)
 
 - 混合选择预览图
 

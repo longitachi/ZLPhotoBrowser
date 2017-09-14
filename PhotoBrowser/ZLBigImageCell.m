@@ -821,7 +821,7 @@
 
 - (BOOL)haveLoadVideo
 {
-    return _playLayer;
+    return _playLayer ? YES : NO;
 }
 
 - (void)stopPlayVideo

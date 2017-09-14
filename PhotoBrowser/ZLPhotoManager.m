@@ -434,9 +434,9 @@ static BOOL _sortAscending;
     }
     for (ZLPhotoModel *m in dataArr) {
         if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
-            m.isSelected = YES;
+            m.selected = YES;
         } else {
-            m.isSelected = NO;
+            m.selected = NO;
         }
     }
 }
@@ -459,8 +459,7 @@ static BOOL _sortAscending;
     
     if (count <= 1) {
         animatedImage = [[UIImage alloc] initWithData:data];
-    }
-    else {
+    } else {
         NSMutableArray *images = [NSMutableArray array];
         
         NSTimeInterval duration = 0.0f;
@@ -496,8 +495,7 @@ static BOOL _sortAscending;
     NSNumber *delayTimeUnclampedProp = gifProperties[(NSString *)kCGImagePropertyGIFUnclampedDelayTime];
     if (delayTimeUnclampedProp) {
         frameDuration = [delayTimeUnclampedProp floatValue];
-    }
-    else {
+    } else {
         
         NSNumber *delayTimeProp = gifProperties[(NSString *)kCGImagePropertyGIFDelayTime];
         if (delayTimeProp) {

@@ -58,6 +58,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**是否允许编辑图片，选择一张时候才允许编辑，默认YES*/
 @property (nonatomic, assign) BOOL allowEditImage;
 
+/**是否允许滑动选择 默认 YES*/
+@property (nonatomic, assign) BOOL allowSlideSelect;
+
 /**根据需要设置自身需要的裁剪比例，e.g.:1:1，请使用ZLDefine中所提供方法 GetClipRatio(NSInteger value1, NSInteger value2)，该数组可不设置，有默认比例，为（Custom, 1:1, 4:3, 3:2, 16:9）*/
 @property (nonatomic, strong) NSArray<NSDictionary *> *clipRatios;
 

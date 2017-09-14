@@ -19,6 +19,12 @@
 #import "ZLForceTouchPreviewController.h"
 #import "ZLEditViewController.h"
 
+typedef NS_ENUM(NSUInteger, SlideSelectType) {
+    SlideSelectTypeNone,
+    SlideSelectTypeSelect,
+    SlideSelectTypeCancel,
+};
+
 @interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIViewControllerPreviewingDelegate>
 {
     BOOL _isLayoutOK;
@@ -28,11 +34,26 @@
     NSIndexPath *_visibleIndexPath;
     //是否切换横竖屏
     BOOL _switchOrientation;
+    
+    //开始滑动选择 或 取消
+    BOOL _beginSelect;
+    /**
+     滑动选择 或 取消
+     当初始滑动的cell处于未选择状态，则开始选择，反之，则开始取消选择
+     */
+    SlideSelectType _selectType;
+    /**开始滑动的indexPath*/
+    NSIndexPath *_beginSlideIndexPath;
+    /**最后滑动经过的index，开始的indexPath不计入，优化拖动手势计算，避免单个cell中冗余计算多次*/
+    NSInteger _lastSlideIndex;
 }
 
 @property (nonatomic, strong) NSMutableArray<ZLPhotoModel *> *arrDataSources;
 @property (nonatomic, assign) BOOL allowTakePhoto;
-
+/**所有滑动经过的indexPath*/
+@property (nonatomic, strong) NSMutableArray<NSIndexPath *> *arrSlideIndexPath;
+/**所有滑动经过的indexPath的初始选择状态*/
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *dicOriSelectStatus;
 @end
 
 @implementation ZLThumbnailViewController
@@ -53,6 +74,22 @@
         [hud hide];
     }
     return _arrDataSources;
+}
+
+- (NSMutableArray<NSIndexPath *> *)arrSlideIndexPath
+{
+    if (!_arrSlideIndexPath) {
+        _arrSlideIndexPath = [NSMutableArray array];
+    }
+    return _arrSlideIndexPath;
+}
+
+- (NSMutableDictionary<NSString *, NSNumber *> *)dicOriSelectStatus
+{
+    if (!_dicOriSelectStatus) {
+        _dicOriSelectStatus = [NSMutableDictionary dictionary];
+    }
+    return _dicOriSelectStatus;
 }
 
 - (void)viewDidLoad {
@@ -219,6 +256,12 @@
     if (nav.allowForceTouch && [self forceTouchAvailable]) {
         [self registerForPreviewingWithDelegate:self sourceView:self.collectionView];
     }
+    
+    if (nav.allowSlideSelect) {
+        //添加滑动选择手势
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
+        [self.view addGestureRecognizer:pan];
+    }
 }
 
 - (void)initNavBtn
@@ -296,6 +339,156 @@
     [nav dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - pan action
+- (void)panAction:(UIPanGestureRecognizer *)pan
+{
+    CGPoint point = [pan locationInView:self.collectionView];
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
+    UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
+    BOOL asc = !self.allowTakePhoto || nav.sortAscending;
+    
+    if (pan.state == UIGestureRecognizerStateBegan) {
+        _beginSelect = !indexPath ? NO : ![cell isKindOfClass:ZLTakePhotoCell.class];
+        
+        if (_beginSelect) {
+            NSInteger index = asc ? indexPath.row : indexPath.row-1;
+            
+            ZLPhotoModel *m = self.arrDataSources[index];
+            _selectType = m.isSelected ? SlideSelectTypeCancel : SlideSelectTypeSelect;
+            _beginSlideIndexPath = indexPath;
+            
+            if (!m.isSelected && [self canAddModel:m]) {
+                m.selected = YES;
+                [nav.arrSelectedModels addObject:m];
+            } else if (m.isSelected) {
+                m.selected = NO;
+                for (ZLPhotoModel *sm in nav.arrSelectedModels) {
+                    if ([sm.asset.localIdentifier isEqualToString:m.asset.localIdentifier]) {
+                        [nav.arrSelectedModels removeObject:sm];
+                        break;
+                    }
+                }
+            }
+            ZLCollectionCell *c = (ZLCollectionCell *)cell;
+            c.btnSelect.selected = m.isSelected;
+            c.topView.hidden = nav.showSelectedMask ? !m.isSelected : YES;
+            [self resetBottomBtnsStatus];
+        }
+    } else if (pan.state == UIGestureRecognizerStateChanged) {
+        if (!_beginSelect ||
+            !indexPath ||
+            indexPath.row == _lastSlideIndex ||
+            [cell isKindOfClass:ZLTakePhotoCell.class]) return;
+        
+        _lastSlideIndex = indexPath.row;
+        
+        NSInteger minIndex = MIN(indexPath.row, _beginSlideIndexPath.row);
+        NSInteger maxIndex = MAX(indexPath.row, _beginSlideIndexPath.row);
+        
+        BOOL minIsBegin = minIndex == _beginSlideIndexPath.row;
+        
+        for (NSInteger i = _beginSlideIndexPath.row;
+             minIsBegin ? i<=maxIndex: i>= minIndex;
+             minIsBegin ? i++ : i--) {
+            if (i == _beginSlideIndexPath.row) continue;
+            NSIndexPath *p = [NSIndexPath indexPathForRow:i inSection:0];
+            if (![self.arrSlideIndexPath containsObject:p]) {
+                [self.arrSlideIndexPath addObject:p];
+                NSInteger index = asc ? i : i-1;
+                ZLPhotoModel *m = self.arrDataSources[index];
+                [self.dicOriSelectStatus setValue:@(m.isSelected) forKey:@(p.row).stringValue];
+            }
+        }
+        
+        for (NSIndexPath *path in self.arrSlideIndexPath) {
+            NSInteger index = asc ? path.row : path.row-1;
+            
+            //是否在最初和现在的间隔区间内
+            BOOL inSection = path.row >= minIndex && path.row <= maxIndex;
+            
+            ZLPhotoModel *m = self.arrDataSources[index];
+            switch (_selectType) {
+                case SlideSelectTypeSelect: {
+                    if (inSection &&
+                        !m.isSelected &&
+                        [self canAddModel:m]) m.selected = YES;
+                }
+                    break;
+                case SlideSelectTypeCancel: {
+                    if (inSection) m.selected = NO;
+                }
+                    break;
+                default:
+                    break;
+            }
+            
+            if (!inSection) {
+                //未在区间内的model还原为初始选择状态
+                m.selected = [self.dicOriSelectStatus[@(path.row).stringValue] boolValue];
+            }
+            
+            //判断当前model是否已存在于已选择数组中
+            BOOL flag = NO;
+            NSMutableArray *arrDel = [NSMutableArray array];
+            for (ZLPhotoModel *sm in nav.arrSelectedModels) {
+                if ([sm.asset.localIdentifier isEqualToString:m.asset.localIdentifier]) {
+                    if (!m.isSelected) {
+                        [arrDel addObject:sm];
+                    }
+                    flag = YES;
+                    break;
+                }
+            }
+            
+            [nav.arrSelectedModels removeObjectsInArray:arrDel];
+            
+            if (!flag && m.isSelected) {
+                [nav.arrSelectedModels addObject:m];
+            }
+            
+            ZLCollectionCell *c = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:path];
+            c.btnSelect.selected = m.isSelected;
+            c.topView.hidden = nav.showSelectedMask ? !m.isSelected : YES;
+            
+            [self resetBottomBtnsStatus];
+        }
+    } else if (pan.state == UIGestureRecognizerStateEnded ||
+               pan.state == UIGestureRecognizerStateCancelled) {
+        //清空临时属性及数组
+        _selectType = SlideSelectTypeNone;
+        [self.arrSlideIndexPath removeAllObjects];
+        [self.dicOriSelectStatus removeAllObjects];
+    }
+}
+
+- (BOOL)canAddModel:(ZLPhotoModel *)model
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.arrSelectedModels.count >= nav.maxSelectCount) {
+        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), nav.maxSelectCount);
+        return NO;
+    }
+    if (nav.arrSelectedModels.count > 0) {
+        ZLPhotoModel *sm = nav.arrSelectedModels.firstObject;
+        if (!nav.allowMixSelect &&
+            ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
+            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
+            return NO;
+        }
+    }
+    if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
+        ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
+        return NO;
+    }
+    if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > nav.maxVideoDuration) {
+        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), nav.maxVideoDuration);
+        return NO;
+    }
+    return YES;
+}
+
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -347,33 +540,14 @@
         ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
         if (!selected) {
             //选中
-            if (weakNav.arrSelectedModels.count >= weakNav.maxSelectCount) {
-                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), weakNav.maxSelectCount);
-                return;
+            if ([strongSelf canAddModel:model]) {
+                model.selected = YES;
+                [weakNav.arrSelectedModels addObject:model];
+                strongCell.btnSelect.selected = YES;
             }
-            if (weakNav.arrSelectedModels.count > 0) {
-                ZLPhotoModel *sm = weakNav.arrSelectedModels.firstObject;
-                if (!weakNav.allowMixSelect &&
-                    ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
-                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
-                    return;
-                }
-            }
-            if (![ZLPhotoManager judgeAssetisInLocalAblum:model.asset]) {
-                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
-                return;
-            }
-            if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > weakNav.maxVideoDuration) {
-                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), weakNav.maxVideoDuration);
-                return;
-            }
-            
-            model.isSelected = YES;
-            [weakNav.arrSelectedModels addObject:model];
-            strongCell.btnSelect.selected = YES;
         } else {
             strongCell.btnSelect.selected = NO;
-            model.isSelected = NO;
+            model.selected = NO;
             for (ZLPhotoModel *m in weakNav.arrSelectedModels) {
                 if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
                     [weakNav.arrSelectedModels removeObject:m];
@@ -472,7 +646,7 @@
             isFind = YES;
         }
         if ([selIdentifiers containsObject:m.asset.localIdentifier]) {
-            m.isSelected = YES;
+            m.selected = YES;
         }
         if (!isFind) {
             i++;
@@ -530,11 +704,11 @@
         [self.arrDataSources insertObject:model atIndex:0];
     }
     if (nav.maxSelectCount > 1 && nav.arrSelectedModels.count < nav.maxSelectCount) {
-        model.isSelected = YES;
+        model.selected = YES;
         [nav.arrSelectedModels addObject:model];
         self.albumListModel = [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage];
     } else if (nav.maxSelectCount == 1 && !nav.arrSelectedModels.count) {
-        model.isSelected = YES;
+        model.selected = YES;
         [nav.arrSelectedModels addObject:model];
         [self btnDone_Click:nil];
         return;
