@@ -18,6 +18,7 @@
 #import "ZLProgressHUD.h"
 #import "ZLForceTouchPreviewController.h"
 #import "ZLEditViewController.h"
+#import "ZLEditVideoController.h"
 
 typedef NS_ENUM(NSUInteger, SlideSelectType) {
     SlideSelectTypeNone,
@@ -61,6 +62,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)dealloc
 {
 //    NSLog(@"---- %s", __FUNCTION__);
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (ZLAlbumListModel *)albumListModel
+{
+    if (!_albumListModel) {
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        _albumListModel = [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage];
+    }
+    return _albumListModel;
 }
 
 - (NSMutableArray<ZLPhotoModel *> *)arrDataSources
@@ -111,9 +122,15 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
     self.bottomView.backgroundColor = kBottomView_color;
     
-    if (!nav.allowEditImage) {
+    if (!nav.allowEditImage && !nav.allowEditVideo) {
         [self.verLeftSpace setConstant:-5-self.btnEdit.bounds.size.width];
         self.btnEdit.hidden = YES;
+    }
+    
+    if (nav.allowSlideSelect) {
+        //添加滑动选择手势
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
+        [self.view addGestureRecognizer:pan];
     }
     
     [self initNavBtn];
@@ -213,9 +230,10 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     BOOL canEdit = NO;
     if (nav.arrSelectedModels.count == 1) {
         ZLPhotoModel *m = nav.arrSelectedModels.firstObject;
-        canEdit = (m.type == ZLAssetMediaTypeImage) ||
+        canEdit = (nav.allowEditImage && ((m.type == ZLAssetMediaTypeImage) ||
         (m.type == ZLAssetMediaTypeGif && !nav.allowSelectGif) ||
-        (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto);
+        (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto))) ||
+        (nav.allowEditVideo && m.type == ZLAssetMediaTypeVideo && round(m.asset.duration) >= nav.maxEditVideoTime);
     }
     [self.btnEdit setTitleColor:canEdit?kDoneButton_bgColor:kButtonUnable_textColor forState:UIControlStateNormal];
     self.btnEdit.userInteractionEnabled = canEdit;
@@ -256,12 +274,6 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     if (nav.allowForceTouch && [self forceTouchAvailable]) {
         [self registerForPreviewingWithDelegate:self sourceView:self.collectionView];
     }
-    
-    if (nav.allowSlideSelect) {
-        //添加滑动选择手势
-        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
-        [self.view addGestureRecognizer:pan];
-    }
 }
 
 - (void)initNavBtn
@@ -279,9 +291,19 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 #pragma mark - UIButton Action
 - (IBAction)btnEdit_Click:(id)sender {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    ZLEditViewController *vc = [[ZLEditViewController alloc] init];
-    vc.model = nav.arrSelectedModels.firstObject;
-    [self.navigationController pushViewController:vc animated:NO];
+    ZLPhotoModel *m = nav.arrSelectedModels.firstObject;
+    
+    if (m.type == ZLAssetMediaTypeVideo) {
+        ZLEditVideoController *vc = [[ZLEditVideoController alloc] init];
+        vc.model = m;
+        [self.navigationController pushViewController:vc animated:NO];
+    } else if (m.type == ZLAssetMediaTypeImage ||
+               m.type == ZLAssetMediaTypeGif ||
+               m.type == ZLAssetMediaTypeLivePhoto) {
+        ZLEditViewController *vc = [[ZLEditViewController alloc] init];
+        vc.model = m;
+        [self.navigationController pushViewController:vc animated:NO];
+    }
 }
 
 - (IBAction)btnPreview_Click:(id)sender
@@ -360,8 +382,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             _beginSlideIndexPath = indexPath;
             
             if (!m.isSelected && [self canAddModel:m]) {
-                m.selected = YES;
-                [nav.arrSelectedModels addObject:m];
+                if (nav.editAfterSelectThumbnailImage &&
+                    nav.maxSelectCount == 1 &&
+                    (nav.allowEditImage || nav.allowEditVideo)) {
+                    [self shouldDirectEdit:m];
+                    _selectType = SlideSelectTypeNone;
+                    return;
+                } else {
+                    m.selected = YES;
+                    [nav.arrSelectedModels addObject:m];
+                }
             } else if (m.isSelected) {
                 m.selected = NO;
                 for (ZLPhotoModel *sm in nav.arrSelectedModels) {
@@ -380,7 +410,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         if (!_beginSelect ||
             !indexPath ||
             indexPath.row == _lastSlideIndex ||
-            [cell isKindOfClass:ZLTakePhotoCell.class]) return;
+            [cell isKindOfClass:ZLTakePhotoCell.class] ||
+            _selectType == SlideSelectTypeNone) return;
         
         _lastSlideIndex = indexPath.row;
         
@@ -541,9 +572,12 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         if (!selected) {
             //选中
             if ([strongSelf canAddModel:model]) {
-                model.selected = YES;
-                [weakNav.arrSelectedModels addObject:model];
-                strongCell.btnSelect.selected = YES;
+                if (![strongSelf shouldDirectEdit:model]) {
+                    model.selected = YES;
+                    [weakNav.arrSelectedModels addObject:model];
+                    strongCell.btnSelect.selected = YES;
+                    [strongSelf shouldDirectEdit:model];
+                }
             }
         } else {
             strongCell.btnSelect.selected = NO;
@@ -599,18 +633,33 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     }
     ZLPhotoModel *model = self.arrDataSources[index];
     
-    if (nav.editAfterSelectThumbnailImage &&
-        nav.allowEditImage &&
-        nav.maxSelectCount == 1) {
-        [nav.arrSelectedModels addObject:model];
-        [self btnEdit_Click:nil];
-        return;
-    }
+    if ([self shouldDirectEdit:model]) return;
     
     UIViewController *vc = [self getMatchVCWithModel:model];
     if (vc) {
         [self showViewController:vc sender:nil];
     }
+}
+
+- (BOOL)shouldDirectEdit:(ZLPhotoModel *)model
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    //当前点击图片可编辑
+    BOOL editImage = nav.editAfterSelectThumbnailImage && nav.allowEditImage && nav.maxSelectCount == 1 && (model.type == ZLAssetMediaTypeImage || model.type == ZLAssetMediaTypeGif || model.type == ZLAssetMediaTypeLivePhoto);
+    //当前点击视频可编辑
+    BOOL editVideo = nav.editAfterSelectThumbnailImage && nav.allowEditVideo && model.type == ZLAssetMediaTypeVideo && nav.maxSelectCount == 1 && round(model.asset.duration) >= nav.maxEditVideoTime;
+    //当前为选择图片 或已经选择了一张并且点击的是已选择的图片
+    BOOL flag = nav.arrSelectedModels.count == 0 || (nav.arrSelectedModels.count == 1 && [nav.arrSelectedModels.firstObject.asset.localIdentifier isEqualToString:model.asset.localIdentifier]);
+    
+    if (editImage && flag) {
+        [nav.arrSelectedModels addObject:model];
+        [self btnEdit_Click:nil];
+    } else if (editVideo && flag) {
+        [nav.arrSelectedModels addObject:model];
+        [self btnEdit_Click:nil];
+    }
+    
+    return nav.editAfterSelectThumbnailImage && nav.maxSelectCount == 1 && (nav.allowEditImage || nav.allowEditVideo);
 }
 
 /**

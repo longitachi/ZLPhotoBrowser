@@ -19,12 +19,13 @@
 - [x] 预览快速选择、可设置预览最大数
 - [x] 直接进入相册选择
 - [x] 支持滑动多选
+- [x] 裁剪图片(可自定义裁剪比例)
+- [x] 编辑视频
 - [x] 查看、选择gif、LivePhoto(iOS9.0)、video
 - [x] 3D Touch预览image、gif、LivePhoto、video
 - [x] 混合选择image、gif、livePhoto、video
 - [x] 在线下载iCloud照片
 - [x] 控制选择video最大时长
-- [x] 裁剪图片(可自定义裁剪比例)
 - [x] 多语言国际化(中文简/繁、英文、日文)
 - [x] 相册内拍照按钮实时显示镜头捕捉画面
 - [x] 已选择图片遮罩层标记
@@ -36,6 +37,7 @@
  
 ### 更新日志
 ```
+● 2.4.2: 新增编辑视频功能;
 ● 2.4.1: 新增仿iPhone相册滑动多选功能;
 ● 2.4.0: 新增预览网络及本地图片api，并可进行选择删除;
 ● 2.3.3: 删除废弃文件，新增在已选择图片上显示遮罩层标记功能;
@@ -113,7 +115,10 @@ actionSheet.sender = self;
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/forceTouch.gif)
 
-- 编辑功能预览图
+- 编辑视频预览图
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/editVideo.gif)
+
+- 编辑图片预览图
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/edit.gif)
 

@@ -8,7 +8,7 @@
 
 #import "ZLPhotoManager.h"
 #import "ZLDefine.h"
-
+#import <AVFoundation/AVFoundation.h>
 #define CollectionName [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]
 
 static BOOL _sortAscending;
@@ -37,6 +37,36 @@ static BOOL _sortAscending;
         __block PHObjectPlaceholder *placeholderAsset=nil;
         [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
             PHAssetChangeRequest *newAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+            placeholderAsset = newAssetRequest.placeholderForCreatedAsset;
+        } completionHandler:^(BOOL success, NSError * _Nullable error) {
+            if (!success) {
+                if (completion) completion(NO, nil);
+                return;
+            }
+            PHAsset *asset = [self getAssetFromlocalIdentifier:placeholderAsset.localIdentifier];
+            PHAssetCollection *desCollection = [self getDestinationCollection];
+            if (!desCollection) completion(NO, nil);
+            
+            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                [[PHAssetCollectionChangeRequest changeRequestForAssetCollection:desCollection] addAssets:@[asset]];
+            } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                if (completion) completion(success, asset);
+            }];
+        }];
+    }
+}
+
++ (void)saveVideoToAblum:(NSURL *)url completion:(void (^)(BOOL, PHAsset *))completion
+{
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusDenied) {
+        if (completion) completion(NO, nil);
+    } else if (status == PHAuthorizationStatusRestricted) {
+        if (completion) completion(NO, nil);
+    } else {
+        __block PHObjectPlaceholder *placeholderAsset=nil;
+        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+            PHAssetChangeRequest *newAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
             placeholderAsset = newAssetRequest.placeholderForCreatedAsset;
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
             if (!success) {
@@ -265,7 +295,7 @@ static BOOL _sortAscending;
 {
     if (asset.mediaType != PHAssetMediaTypeVideo) return nil;
     
-    NSInteger duration = (NSInteger)ceil(asset.duration);
+    NSInteger duration = (NSInteger)round(asset.duration);
     
     if (duration < 60) {
         return [NSString stringWithFormat:@"00:%02ld", duration];
@@ -514,6 +544,112 @@ static BOOL _sortAscending;
     
     CFRelease(cfFrameProperties);
     return frameDuration;
+}
+
+#pragma mark - 编辑视频相关
++ (void)analysisEverySecondsImageForAsset:(PHAsset *)asset interval:(NSTimeInterval)interval size:(CGSize)size complete:(void (^)(AVAsset *, NSArray<UIImage *> *))complete
+{
+    PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
+    options.version = PHVideoRequestOptionsVersionOriginal;
+    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+    options.networkAccessAllowed = YES;
+    [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+        [self analysisAVAsset:asset interval:interval size:size complete:complete];
+    }];
+}
+
++ (void)analysisAVAsset:(AVAsset *)asset interval:(NSTimeInterval)interval size:(CGSize)size complete:(void (^)(AVAsset *, NSArray<UIImage *> *))complete
+{
+    long duration = round(asset.duration.value) / asset.duration.timescale;
+    
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    generator.maximumSize = size;
+    generator.appliesPreferredTrackTransform = YES;
+    generator.requestedTimeToleranceBefore = kCMTimeZero;
+    generator.requestedTimeToleranceAfter = kCMTimeZero;
+    
+    //每秒的第一帧
+    NSMutableArray *arr = [NSMutableArray array];
+    for (int i = 0; i < duration; i += interval) {
+        /*
+         CMTimeMake(a,b) a当前第几帧, b每秒钟多少帧
+         */
+        //这里加上0.35 是为了避免解析0s图片必定失败的问题
+        CMTime time = CMTimeMake((i+0.35) * asset.duration.timescale, asset.duration.timescale);
+        NSValue *value = [NSValue valueWithCMTime:time];
+        [arr addObject:value];
+    }
+    
+    NSMutableArray *arrImages = [NSMutableArray array];
+    
+    __block long count = 0;
+    [generator generateCGImagesAsynchronouslyForTimes:arr completionHandler:^(CMTime requestedTime, CGImageRef  _Nullable image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError * _Nullable error) {
+        switch (result) {
+            case AVAssetImageGeneratorSucceeded:
+                [arrImages addObject:[UIImage imageWithCGImage:image]];
+                break;
+            case AVAssetImageGeneratorFailed:
+                NSLog(@"第%ld秒图片解析失败", count);
+                break;
+            case AVAssetImageGeneratorCancelled:
+                NSLog(@"取消解析视频图片");
+                break;
+        }
+        
+        count++;
+        
+        if (count == arr.count && complete) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                complete(asset, arrImages);
+            });
+        }
+    }];
+}
+
++ (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range complete:(void (^)(BOOL, PHAsset *))complete
+{
+    NSTimeInterval interval = [[[NSDate alloc] init] timeIntervalSince1970];
+    
+    NSString *exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%f.mov", interval]];
+    
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetPassthrough];
+    
+    NSURL *exportFileUrl = [NSURL fileURLWithPath:exportFilePath];
+    
+    exportSession.outputURL = exportFileUrl;
+    exportSession.outputFileType = AVFileTypeQuickTimeMovie;
+    exportSession.timeRange = range;
+    
+    [exportSession exportAsynchronouslyWithCompletionHandler:^{
+        
+        switch ([exportSession status]) {
+            case AVAssetExportSessionStatusFailed:
+                NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
+                break;
+            case AVAssetExportSessionStatusCancelled:
+                NSLog(@"Export canceled");
+                break;
+                
+            case AVAssetExportSessionStatusCompleted:{
+                NSLog(@"Export completed");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self saveVideoToAblum:exportFileUrl completion:^(BOOL isSuc, PHAsset *asset) {
+                        if (complete) complete(isSuc, asset);
+                        if (isSuc) {
+                            NSLog(@"导出的的视频路径: %@", exportFilePath);
+                        } else {
+                            NSLog(@"导出视频失败");
+                        }
+                    }];
+                });
+            }
+                break;
+                
+            default:
+                NSLog(@"Export other");
+                break;
+        }
+    }];
 }
 
 @end

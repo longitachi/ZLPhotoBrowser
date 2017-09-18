@@ -38,6 +38,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *cornerRadioTextField;
 @property (weak, nonatomic) IBOutlet UITextField *maxVideoDurationTextField;
 @property (weak, nonatomic) IBOutlet UISwitch *allowSlideSelectSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *allowEditVideoSwitch;
 
 
 @property (nonatomic, strong) NSMutableArray<UIImage *> *lastSelectPhotos;
@@ -90,6 +91,7 @@
     actionSheet.allowSelectLivePhoto = self.selLivePhotoSwitch.isOn;
     actionSheet.allowForceTouch = self.allowForceTouchSwitch.isOn;
     actionSheet.allowEditImage = self.allowEditSwitch.isOn;
+    actionSheet.allowEditVideo = self.allowEditVideoSwitch.isOn;
     actionSheet.allowSlideSelect = self.allowSlideSelectSwitch.isOn;
     actionSheet.allowMixSelect = self.mixSelectSwitch.isOn;
     //设置相册内部显示拍照按钮
@@ -105,7 +107,7 @@
     //设置照片cell弧度
     actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
     //单选模式是否显示选择按钮
-    actionSheet.showSelectBtn = NO;
+    actionSheet.showSelectBtn = YES;
     //是否在选择图片后直接进入编辑界面
     actionSheet.editAfterSelectThumbnailImage = self.editAfterSelectImageSwitch.isOn;
     //设置编辑比例
@@ -210,13 +212,9 @@
         if (s.isOn) {
             [self.selImageSwitch setOn:YES animated:YES];
         }
-    } else if (s == self.allowEditSwitch) {
-        if (!s.isOn) {
+    } else if (s == self.allowEditSwitch || s == self.allowEditVideoSwitch) {
+        if (!self.allowEditSwitch.isOn && !self.allowEditVideoSwitch.isOn) {
             [self.editAfterSelectImageSwitch setOn:NO animated:YES];
-        }
-    } else if (s == self.editAfterSelectImageSwitch) {
-        if (s.isOn) {
-            [self.allowEditSwitch setOn:YES animated:YES];
         }
     }
 }

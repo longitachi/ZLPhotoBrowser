@@ -25,7 +25,7 @@
 "ZLPhotoBrowserLoadingText" = "loading，waiting please";
 "ZLPhotoBrowserHandleText" = "waiting...";
 
-"ZLPhotoBrowserSaveImageErrorText" = "Save photo to ablum failed";
+"ZLPhotoBrowserSaveImageErrorText" = "Failed to save the image";
 "ZLPhotoBrowserMaxSelectCountText" = "Max select count: %ld";
 "ZLPhotoBrowserMaxVideoDurationText" = "Unable to select video with a duration longer than %lds";
 
@@ -36,4 +36,5 @@
 "ZLPhotoBrowseriCloudVideoText" = "Unable to sync from iCloud";
 
 "ZLPhotoBrowserLoadNetImageFailed" = "loading failed";
+"ZLPhotoBrowserSaveVideoFailed" = "Failed to save the video";
 

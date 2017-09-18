@@ -15,6 +15,7 @@
 #import "ZLPhotoModel.h"
 #import "ZLPhotoManager.h"
 #import "ZLEditViewController.h"
+#import "ZLEditVideoController.h"
 
 @interface ZLShowBigImgViewController () <UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 {
@@ -44,6 +45,8 @@
     //设备旋转前的index
     NSInteger _indexBeforeRotation;
     UICollectionViewFlowLayout *_layout;
+    
+    NSString *_modelIdentifile;
 }
 
 @property (nonatomic, strong) UILabel *labPhotosBytes;
@@ -240,7 +243,7 @@
         //预览用户已确定选择的照片，隐藏原图按钮
         _btnOriginalPhoto.hidden = YES;
     }
-    if (!nav.allowEditImage) {
+    if (!nav.allowEditImage && !nav.allowEditVideo) {
         _btnEdit.hidden = YES;
     }
 }
@@ -277,11 +280,19 @@
         }
     }
     
-    ZLEditViewController *vc = [[ZLEditViewController alloc] init];
-    vc.model = model;
-    ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
-    vc.oriImage = cell.previewView.image;
-    [self.navigationController pushViewController:vc animated:NO];
+    if (model.type == ZLAssetMediaTypeVideo) {
+        ZLEditVideoController *vc = [[ZLEditVideoController alloc] init];
+        vc.model = model;
+        [self.navigationController pushViewController:vc animated:NO];
+    } else if (model.type == ZLAssetMediaTypeImage ||
+               (model.type == ZLAssetMediaTypeGif && !nav.allowSelectGif) ||
+               (model.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto)) {
+        ZLEditViewController *vc = [[ZLEditViewController alloc] init];
+        vc.model = model;
+        ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
+        vc.oriImage = cell.previewView.image;
+        [self.navigationController pushViewController:vc animated:NO];
+    }
 }
 
 - (void)btnDone_Click:(UIButton *)btn
@@ -393,16 +404,20 @@
 - (void)resetEditBtnState
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (!nav.allowEditImage) return;
+    if (!nav.allowEditImage && !nav.allowEditVideo) return;
 
     ZLPhotoModel *m = self.models[_currentPage-1];
     BOOL flag = [m.asset.localIdentifier isEqualToString:nav.arrSelectedModels.firstObject.asset.localIdentifier];
     
-    if (((m.type == ZLAssetMediaTypeImage) ||
+    if ((nav.arrSelectedModels.count == 0 ||
+         (nav.arrSelectedModels.count <= 1 && flag)) &&
+        
+        ((nav.allowEditImage &&
+         (m.type == ZLAssetMediaTypeImage ||
          (m.type == ZLAssetMediaTypeGif && !nav.allowSelectGif) ||
-         (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto)) &&
-        (nav.arrSelectedModels.count == 0 ||
-         (nav.arrSelectedModels.count <= 1 && flag))) {
+         (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto))) ||
+        
+        (nav.allowEditVideo && m.type == ZLAssetMediaTypeVideo && round(m.asset.duration) >= nav.maxEditVideoTime))) {
         _btnEdit.hidden = NO;
     } else {
         _btnEdit.hidden = YES;
@@ -501,7 +516,8 @@
 {
     if (scrollView == (UIScrollView *)_collectionView) {
         ZLPhotoModel *m = [self getCurrentPageModel];
-        if (!m) return;
+        if (!m || [_modelIdentifile isEqualToString:m.asset.localIdentifier]) return;
+        _modelIdentifile = m.asset.localIdentifier;
         //改变导航标题
         self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
         

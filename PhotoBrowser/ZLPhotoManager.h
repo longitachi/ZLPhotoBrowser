@@ -72,12 +72,12 @@
 /**
  * @brief 获取live photo
  */
-+ (void)requestLivePhotoForAsset:(PHAsset *)asset completion:(void (^)(PHLivePhoto *, NSDictionary *))completion;
++ (void)requestLivePhotoForAsset:(PHAsset *)asset completion:(void (^)(PHLivePhoto *livePhoto, NSDictionary *info))completion;
 
 /**
  * @brief 获取视频
  */
-+ (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *, NSDictionary *))completion;
++ (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *item, NSDictionary *info))completion;
 
 /**
  * @brief 将系统mediatype转换为自定义mediatype
@@ -104,5 +104,21 @@
  */
 + (UIImage *)transformToGifImageWithData:(NSData *)data;
 
+
+#pragma mark - 编辑视频相关
+
+/**
+ 解析视频，获取每秒对应的一帧图片
+
+ @param size 图片size
+ */
++ (void)analysisEverySecondsImageForAsset:(PHAsset *)asset interval:(NSTimeInterval)interval size:(CGSize)size complete:(void (^)(AVAsset *avAsset, NSArray<UIImage *> *images))complete;
+
+/**
+ 导出视频并保存到相册
+ 
+ @param range 需要到处的视频间隔
+ */
++ (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range complete:(void (^)(BOOL isSuc, PHAsset *asset))complete;
 
 @end

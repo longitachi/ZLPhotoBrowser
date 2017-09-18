@@ -17,6 +17,7 @@
 #import "ZLNoAuthorityViewController.h"
 #import "ToastUtils.h"
 #import "ZLEditViewController.h"
+#import "ZLEditVideoController.h"
 
 #define kBaseViewHeight (self.maxPreviewCount ? 300 : 142)
 
@@ -104,6 +105,11 @@ double const ScalePhotoWidth = 1000;
     }
 }
 
+- (void)setMaxEditVideoTime:(NSInteger)maxEditVideoTime
+{
+    _maxEditVideoTime = MAX(maxEditVideoTime, 10);
+}
+
 - (instancetype)init
 {
     self = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
@@ -128,6 +134,8 @@ double const ScalePhotoWidth = 1000;
         self.allowTakePhotoInLibrary = YES;
         self.allowForceTouch = YES;
         self.allowEditImage = YES;
+        self.allowEditVideo = NO;
+        self.maxEditVideoTime = 10;
         self.allowSlideSelect = YES;
         self.editAfterSelectThumbnailImage = NO;
         self.allowMixSelect = YES;
@@ -531,9 +539,11 @@ double const ScalePhotoWidth = 1000;
                 return;
             }
             
-            model.selected = YES;
-            [strongSelf.arrSelectedModels addObject:model];
-            strongCell.btnSelect.selected = YES;
+            if (![strongSelf shouldDirectEdit:model]) {
+                model.selected = YES;
+                [strongSelf.arrSelectedModels addObject:model];
+                strongCell.btnSelect.selected = YES;
+            }
         } else {
             strongCell.btnSelect.selected = NO;
             model.selected = NO;
@@ -573,12 +583,7 @@ double const ScalePhotoWidth = 1000;
 {
     ZLPhotoModel *model = self.arrDataSources[indexPath.row];
     
-    if (self.editAfterSelectThumbnailImage &&
-        self.allowEditImage &&
-        self.maxSelectCount == 1) {
-        [self pushEditVCWithModel:model];
-        return;
-    }
+    if ([self shouldDirectEdit:model]) return;
     
     if (self.arrSelectedModels.count > 0) {
         ZLPhotoModel *sm = self.arrSelectedModels.firstObject;
@@ -614,6 +619,24 @@ double const ScalePhotoWidth = 1000;
     }
     
     [self pushBigImageViewControllerWithModels:arr index:i];
+}
+
+- (BOOL)shouldDirectEdit:(ZLPhotoModel *)model
+{
+    //当前点击图片可编辑
+    BOOL editImage = self.editAfterSelectThumbnailImage && self.allowEditImage && self.maxSelectCount == 1 && (model.type == ZLAssetMediaTypeImage || model.type == ZLAssetMediaTypeGif || model.type == ZLAssetMediaTypeLivePhoto);
+    //当前点击视频可编辑
+    BOOL editVideo = self.editAfterSelectThumbnailImage && self.allowEditVideo && model.type == ZLAssetMediaTypeVideo && self.maxSelectCount == 1 && round(model.asset.duration) >= self.maxEditVideoTime;
+    //当前为选择图片 或已经选择了一张并且点击的是已选择的图片
+    BOOL flag = self.arrSelectedModels.count == 0 || (self.arrSelectedModels.count == 1 && [self.arrSelectedModels.firstObject.asset.localIdentifier isEqualToString:model.asset.localIdentifier]);
+    
+    if (editImage && flag) {
+        [self pushEditVCWithModel:model];
+    } else if (editVideo && flag) {
+        [self pushEditVideoVCWithModel:model];
+    }
+    
+    return self.editAfterSelectThumbnailImage && self.maxSelectCount == 1 && (self.allowEditImage || self.allowEditVideo);
 }
 
 #pragma mark - 显示无权限视图
@@ -662,6 +685,8 @@ double const ScalePhotoWidth = 1000;
     nav.allowTakePhotoInLibrary = self.allowTakePhotoInLibrary;
     nav.allowForceTouch = self.allowForceTouch;
     nav.allowEditImage = self.allowEditImage;
+    nav.allowEditVideo = self.allowEditVideo;
+    nav.maxEditVideoTime = self.maxEditVideoTime;
     nav.allowSlideSelect = self.allowSlideSelect;
     nav.editAfterSelectThumbnailImage = self.editAfterSelectThumbnailImage;
     nav.clipRatios = self.clipRatios;
@@ -685,8 +710,6 @@ double const ScalePhotoWidth = 1000;
     ZLPhotoBrowser *photoBrowser = [[ZLPhotoBrowser alloc] initWithStyle:UITableViewStylePlain];
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:photoBrowser];
     ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] initWithNibName:@"ZLThumbnailViewController" bundle:kZLPhotoBrowserBundle];
-    ZLAlbumListModel *m = [ZLPhotoManager getCameraRollAlbumList:self.allowSelectVideo allowSelectImage:self.allowSelectImage];
-    tvc.albumListModel = m;
     [nav pushViewController:tvc animated:YES];
     [self.sender presentViewController:nav animated:YES completion:nil];
 }
@@ -732,6 +755,15 @@ double const ScalePhotoWidth = 1000;
 - (void)pushEditVCWithModel:(ZLPhotoModel *)model
 {
     ZLEditViewController *vc = [[ZLEditViewController alloc] init];
+    ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
+    [nav.arrSelectedModels addObject:model];
+    vc.model = model;
+    [self.sender showDetailViewController:nav sender:nil];
+}
+
+- (void)pushEditVideoVCWithModel:(ZLPhotoModel *)model
+{
+    ZLEditVideoController *vc = [[ZLEditVideoController alloc] init];
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:vc];
     [nav.arrSelectedModels addObject:model];
     vc.model = model;

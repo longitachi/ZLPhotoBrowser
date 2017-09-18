@@ -25,7 +25,7 @@
 "ZLPhotoBrowserLoadingText" = "加载中，请稍后";
 "ZLPhotoBrowserHandleText" = "正在处理...";
 
-"ZLPhotoBrowserSaveImageErrorText" = "保存图片到相册失败";
+"ZLPhotoBrowserSaveImageErrorText" = "图片保存失败";
 "ZLPhotoBrowserMaxSelectCountText" = "最多只能选择%ld张图片";
 "ZLPhotoBrowserMaxVideoDurationText" = "不能选择超过%ld秒的视频";
 
@@ -36,3 +36,4 @@
 "ZLPhotoBrowseriCloudVideoText" = "iCloud无法同步";
 
 "ZLPhotoBrowserLoadNetImageFailed" = "图片加载失败";
+"ZLPhotoBrowserSaveVideoFailed" = "视频保存失败";

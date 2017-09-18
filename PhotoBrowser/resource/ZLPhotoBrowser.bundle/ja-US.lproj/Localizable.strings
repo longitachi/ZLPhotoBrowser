@@ -25,7 +25,7 @@
 "ZLPhotoBrowserLoadingText" = "ロード中，お待ち下さい";
 "ZLPhotoBrowserHandleText" = "後ほど...";
 
-"ZLPhotoBrowserSaveImageErrorText" = "アルバムには写真を保存する";
+"ZLPhotoBrowserSaveImageErrorText" = "画像の保存に失敗しました";
 "ZLPhotoBrowserMaxSelectCountText" = "最大選択数: %ld";
 "ZLPhotoBrowserMaxVideoDurationText" = "%ldsより長い動画は選択できません";
 
@@ -36,4 +36,4 @@
 "ZLPhotoBrowseriCloudVideoText" = "iCloudから同期できません";
 
 "ZLPhotoBrowserLoadNetImageFailed" = "ロード失敗";
-
+"ZLPhotoBrowserSaveVideoFailed" = "ビデオの保存に失敗しました";

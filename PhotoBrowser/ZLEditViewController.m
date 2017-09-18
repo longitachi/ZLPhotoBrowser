@@ -737,7 +737,6 @@
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (nav.editAfterSelectThumbnailImage &&
-        nav.allowEditImage &&
         nav.maxSelectCount == 1) {
         [nav.arrSelectedModels removeAllObjects];
     }
