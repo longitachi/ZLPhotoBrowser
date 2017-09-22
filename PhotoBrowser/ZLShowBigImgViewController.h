@@ -23,6 +23,9 @@
 //点击选择后的图片预览数组，预览相册图片时为 UIImage，预览网络图片时候为UIImage/NSUrl
 @property (nonatomic, strong) NSMutableArray *arrSelPhotos;
 
+/**预览 网络/本地 图片时候是否 隐藏底部工具栏和导航右上角按钮*/
+@property (nonatomic, assign) BOOL hideToolBar;
+
 //预览相册图片回调
 @property (nonatomic, copy) void (^btnDonePreviewBlock)(NSArray<UIImage *> *, NSArray<PHAsset *> *);
 

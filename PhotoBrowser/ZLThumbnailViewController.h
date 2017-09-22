@@ -12,14 +12,14 @@
 
 @interface ZLThumbnailViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet UIButton *btnEdit;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *verLeftSpace;
-@property (weak, nonatomic) IBOutlet UIButton *btnPreView;
-@property (weak, nonatomic) IBOutlet UIButton *btnOriginalPhoto;
-@property (weak, nonatomic) IBOutlet UILabel *labPhotosBytes;
-@property (weak, nonatomic) IBOutlet UIButton *btnDone;
+@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) UIView *bottomView;
+@property (nonatomic, strong) UIView *bline;
+@property (nonatomic, strong) UIButton *btnEdit;
+@property (nonatomic, strong) UIButton *btnPreView;
+@property (nonatomic, strong) UIButton *btnOriginalPhoto;
+@property (nonatomic, strong) UILabel *labPhotosBytes;
+@property (nonatomic, strong) UIButton *btnDone;
 
 //相册model
 @property (nonatomic, strong) ZLAlbumListModel *albumListModel;

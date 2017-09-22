@@ -28,7 +28,8 @@
     }
     
     weakify(self);
-    [ZLPhotoManager requestImageForAsset:model.headImageAsset size:CGSizeMake(GetViewWidth(self)*3, GetViewHeight(self)*3) completion:^(UIImage *image, NSDictionary *info) {
+    
+    [ZLPhotoManager requestImageForAsset:model.headImageAsset size:CGSizeMake(GetViewWidth(self)*2.5, GetViewHeight(self)*2.5) completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
         strongSelf.headImageView.image = image;
     }];

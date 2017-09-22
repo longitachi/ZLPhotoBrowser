@@ -247,7 +247,7 @@
     [self setupUI];
     [self analysisAssetImages];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
@@ -270,16 +270,25 @@
 {
     [super viewDidLayoutSubviews];
     
-    self.playerLayer.frame = CGRectMake(15, 30, kViewWidth-30, kViewHeight-160);
+    UIEdgeInsets inset = UIEdgeInsetsZero;
+    if (@available(iOS 11, *)) {
+        inset = self.view.safeAreaInsets;
+    }
     
-    self.editView.frame = CGRectMake((kViewWidth-kItemWidth*10)/2, kViewHeight-100, kItemWidth*10, kItemHeight);
+    self.playerLayer.frame = CGRectMake(15, inset.top>0?inset.top:30, kViewWidth-30, kViewHeight-160-inset.bottom);
+    
+    self.editView.frame = CGRectMake((kViewWidth-kItemWidth*10)/2, kViewHeight-100-inset.bottom, kItemWidth*10, kItemHeight);
     self.editView.validRect = self.editView.bounds;
-    self.collectionView.frame = CGRectMake(0, kViewHeight-100, kViewWidth, kItemHeight);
-    [self.collectionView setContentInset:UIEdgeInsetsMake(0, (kViewWidth-kItemWidth*10)/2, 0, (kViewWidth-kItemWidth*10)/2)];
-    [self.collectionView setContentOffset:CGPointMake(_offsetX-(kViewWidth-kItemWidth*10)/2, 0)];
+    self.collectionView.frame = CGRectMake(inset.left, kViewHeight-100-inset.bottom, kViewWidth-inset.left-inset.right, kItemHeight);
     
-    _bottomView.frame = CGRectMake(0, kViewHeight-44, kViewWidth, kItemHeight);
-    _doneBtn.frame = CGRectMake(kViewWidth - 70, 7, 60, 30);
+    CGFloat leftOffset = ((kViewWidth-kItemWidth*10)/2-inset.left);
+    CGFloat rightOffset = ((kViewWidth-kItemWidth*10)/2-inset.right);
+    [self.collectionView setContentInset:UIEdgeInsetsMake(0, leftOffset, 0, rightOffset)];
+    [self.collectionView setContentOffset:CGPointMake(_offsetX-leftOffset, 0)];
+    
+    _bottomView.frame = CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, kItemHeight);
+    _cancelBtn.frame = CGRectMake(10+inset.left, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
+    _doneBtn.frame = CGRectMake(kViewWidth-70-inset.right, 7, 60, 30);
 }
 
 #pragma mark - notifies
@@ -345,7 +354,6 @@
     [self.view addSubview:_bottomView];
     
     _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _cancelBtn.frame = CGRectMake(10, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
     _cancelBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [_cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_cancelBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];

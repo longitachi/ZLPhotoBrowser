@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -137,6 +137,7 @@
                 <outlet property="btnCamera" destination="Seh-ZL-uBR" id="yL8-H8-NKv"/>
                 <outlet property="btnCancel" destination="0gN-s7-KDC" id="MUt-WS-Vf4"/>
                 <outlet property="collectionView" destination="kyz-US-a4b" id="5ue-oG-KUP"/>
+                <outlet property="verBottomSpace" destination="J9p-km-kNZ" id="6WF-6U-ewk"/>
                 <outlet property="verColHeight" destination="AKH-PG-3Zh" id="Evt-Qw-br3"/>
             </connections>
             <point key="canvasLocation" x="172" y="368"/>

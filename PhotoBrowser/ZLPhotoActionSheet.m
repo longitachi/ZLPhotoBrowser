@@ -31,6 +31,7 @@ double const ScalePhotoWidth = 1000;
 @property (weak, nonatomic) IBOutlet UIView *baseView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *verColHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *verBottomSpace;
 
 
 @property (nonatomic, assign) BOOL animate;
@@ -265,7 +266,7 @@ double const ScalePhotoWidth = 1000;
     }];
 }
 
-- (void)previewPhotos:(NSArray *)photos index:(NSInteger)index complete:(nonnull void (^)(NSArray * _Nonnull))complete
+- (void)previewPhotos:(NSArray *)photos index:(NSInteger)index hideToolBar:(BOOL)hideToolBar complete:(nonnull void (^)(NSArray * _Nonnull))complete
 {
     [self.arrSelectedModels removeAllObjects];
     for (id obj in photos) {
@@ -280,6 +281,7 @@ double const ScalePhotoWidth = 1000;
         [self.arrSelectedModels addObject:model];
     }
     ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos index:index];
+    svc.hideToolBar = hideToolBar;
     __weak typeof(svc.navigationController) weakNav = svc.navigationController;
     [svc setPreviewNetImageBlock:^(NSArray *photos) {
         __strong typeof(weakNav) strongNav = weakNav;
@@ -346,8 +348,13 @@ double const ScalePhotoWidth = 1000;
     }
     
     if (self.animate) {
+        UIEdgeInsets inset = UIEdgeInsetsZero;
+        if (@available(iOS 11, *)) {
+            inset = self.sender.view.safeAreaInsets;
+            [self.verBottomSpace setConstant:inset.bottom];
+        }
         __block CGRect frame = self.baseView.frame;
-        frame.origin.y += kBaseViewHeight;
+        frame.origin.y = kViewHeight;
         self.baseView.frame = frame;
         [UIView animateWithDuration:0.2 animations:^{
             frame.origin.y -= kBaseViewHeight;
@@ -359,8 +366,12 @@ double const ScalePhotoWidth = 1000;
 - (void)hide
 {
     if (self.animate) {
+        UIEdgeInsets inset = UIEdgeInsetsZero;
+        if (@available(iOS 11, *)) {
+            inset = self.sender.view.safeAreaInsets;
+        }
         __block CGRect frame = self.baseView.frame;
-        frame.origin.y += kBaseViewHeight;
+        frame.origin.y += (kBaseViewHeight+inset.bottom);
         [UIView animateWithDuration:0.2 animations:^{
             self.baseView.frame = frame;
         } completion:^(BOOL finished) {
@@ -709,7 +720,7 @@ double const ScalePhotoWidth = 1000;
 {
     ZLPhotoBrowser *photoBrowser = [[ZLPhotoBrowser alloc] initWithStyle:UITableViewStylePlain];
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:photoBrowser];
-    ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] initWithNibName:@"ZLThumbnailViewController" bundle:kZLPhotoBrowserBundle];
+    ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] init];
     [nav pushViewController:tvc animated:YES];
     [self.sender presentViewController:nav animated:YES completion:nil];
 }

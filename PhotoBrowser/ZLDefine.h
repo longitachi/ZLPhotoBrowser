@@ -54,6 +54,9 @@
 #define weakify(var)   __weak typeof(var) weakSelf = var
 #define strongify(var) __strong typeof(var) strongSelf = var
 
+#define ZL_IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+#define ZL_IS_IPHONE_X (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 812.0f)
+
 #define kZLPhotoBrowserBundle [NSBundle bundleForClass:[self class]]
 
 // 图片路径

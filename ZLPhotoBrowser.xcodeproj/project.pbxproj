@@ -10,7 +10,6 @@
 		809FB34E0364A1AB7740E4D4 /* libPods-ZLPhotoBrowser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0927EACC681200867658B044 /* libPods-ZLPhotoBrowser.a */; };
 		FD028BD01CBE33BB009DD2FC /* ZLPhotoActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */; };
 		FD028BD11CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */; };
-		FD028BD21CBE33BB009DD2FC /* ZLThumbnailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD028BA31CBE33BB009DD2FC /* ZLThumbnailViewController.xib */; };
 		FD028BD31CBE33BB009DD2FC /* ToastUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BA51CBE33BB009DD2FC /* ToastUtils.m */; };
 		FD028BD51CBE33BB009DD2FC /* ZLBigImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BA91CBE33BB009DD2FC /* ZLBigImageCell.m */; };
 		FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BAE1CBE33BB009DD2FC /* ZLNoAuthorityViewController.m */; };
@@ -55,7 +54,6 @@
 		C219308794659F498CBCB00A /* Pods-ZLPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZLPhotoBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZLPhotoBrowser/Pods-ZLPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 		FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLPhotoActionSheet.xib; sourceTree = "<group>"; };
 		FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLPhotoBrowserCell.xib; sourceTree = "<group>"; };
-		FD028BA31CBE33BB009DD2FC /* ZLThumbnailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZLThumbnailViewController.xib; sourceTree = "<group>"; };
 		FD028BA41CBE33BB009DD2FC /* ToastUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToastUtils.h; sourceTree = "<group>"; };
 		FD028BA51CBE33BB009DD2FC /* ToastUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToastUtils.m; sourceTree = "<group>"; };
 		FD028BA81CBE33BB009DD2FC /* ZLBigImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLBigImageCell.h; sourceTree = "<group>"; };
@@ -198,7 +196,6 @@
 				FD028BED1CBE373F009DD2FC /* defaultphoto.png */,
 				FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */,
 				FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */,
-				FD028BA31CBE33BB009DD2FC /* ZLThumbnailViewController.xib */,
 			);
 			path = resource;
 			sourceTree = "<group>";
@@ -327,7 +324,6 @@
 				FD028BFF1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle in Resources */,
 				FD0787301C0D45A200D17B97 /* LaunchScreen.storyboard in Resources */,
 				FD028BF41CBE373F009DD2FC /* btn_original_circle@3x.png in Resources */,
-				FD028BD21CBE33BB009DD2FC /* ZLThumbnailViewController.xib in Resources */,
 				FD028BF71CBE373F009DD2FC /* btn_selected@3x.png in Resources */,
 				FD028BD01CBE33BB009DD2FC /* ZLPhotoActionSheet.xib in Resources */,
 				FD028BFB1CBE373F009DD2FC /* defaultphoto.png in Resources */,

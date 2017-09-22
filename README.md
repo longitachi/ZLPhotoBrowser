@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 [![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 ![Language](https://img.shields.io/badge/Language-%20Objective%20C%20-blue.svg)
+<a href="http://www.jianshu.com/u/a02909a8a93b"><img src="https://img.shields.io/badge/JianShu-@longitachi-red.svg?style=flat"></a>
 
 ----------------------------------------
 
@@ -15,7 +16,7 @@
 * [效果图](#效果图)
 
 ### <a id="功能介绍"></a>功能介绍
-- [x] 支持横竖屏
+- [x] 支持横竖屏 (已适配iPhone X)
 - [x] 预览快速选择、可设置预览最大数
 - [x] 直接进入相册选择
 - [x] 支持滑动多选
@@ -37,6 +38,7 @@
  
 ### 更新日志
 ```
+● 2.4.3: 适配iPhone X，优化初次启动进入相册速度，预览网络图片可设置是否显示底部工具条及导航右侧按钮;
 ● 2.4.2: 新增编辑视频功能;
 ● 2.4.1: 新增仿iPhone相册滑动多选功能;
 ● 2.4.0: 新增预览网络及本地图片api，并可进行选择删除;
@@ -49,13 +51,11 @@
          ③：支持控制video最大选择时长;
 ● 2.2.3: 新增图片编辑功能;
 ● 2.2.1: 新增3D Touch预览功能 (需设备支持);
-● 2.2.0: 优化内存问题;
-● 2.1.9: 新增选择及预览Live Photo功能 (iOS 9.0);
-● 2.1.7: 新增内部拍照按钮实时显示相机俘获画面功能;
 ```
 
 ### 框架支持
-最低支持：iOS8.0
+最低支持：iOS 8.0
+IDE：Xcode 9.0 及以上版本 (由于适配iPhone X使用iOS11api，所以请使用Xcode 9.0以上版本)
 
 ### <a id="使用方法"></a>使用方法
 
@@ -97,7 +97,13 @@ actionSheet.sender = self;
     //your codes
 }];
 
+//调用相册
 [actionSheet showPreviewAnimated:YES];
+
+//预览网络图片
+[actionSheet previewPhotos:arrNetImages index:0 hideToolBar:YES complete:^(NSArray * _Nonnull photos) {
+    //your codes
+}];
 ```
 
 ### <a id="问答"></a>问答
@@ -111,11 +117,18 @@ actionSheet.sender = self;
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/zh-hans.png)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/zh-hant.png)
 
+- iPhone X
+
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/iPhoneXPortrait.png)
+
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/IPhoneXLandscape.png)
+
 - 3DTouch预览效果图
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/forceTouch.gif)
 
 - 编辑视频预览图
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/editVideo.gif)
 
 - 编辑图片预览图

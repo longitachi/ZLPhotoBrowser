@@ -285,23 +285,32 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    
+    UIEdgeInsets inset = UIEdgeInsetsZero;
+    if (@available(iOS 11, *)) {
+        inset = self.view.safeAreaInsets;
+    }
+    
     CGFloat w = kViewWidth-20;
+    CGFloat maxH = kViewHeight-128-inset.bottom-inset.top-50;
     CGFloat h = w * self.model.asset.pixelHeight / self.model.asset.pixelWidth;
-    if (h > kViewHeight-180) {
-        h = kViewHeight-180;
+    if (h > maxH) {
+        h = maxH;
         w = h * self.model.asset.pixelWidth / self.model.asset.pixelHeight;
     }
     _imageView.frame = CGRectMake((kViewWidth-w)/2, (kViewHeight-h)/2-60, w, h);
     _gridLayer.frame = _imageView.bounds;
     [self clippingRatioDidChange];
-    _bottomView.frame = CGRectMake(0, kViewHeight-44, kViewWidth, 44);
+    
+    _bottomView.frame = CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, 44);
+    _cancelBtn.frame = CGRectMake(10+inset.left, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
     _saveBtn.frame = CGRectMake(kViewWidth/2-20, 7, 40, 30);
-    _doneBtn.frame = CGRectMake(kViewWidth - 70, 7, 60, 30);
+    _doneBtn.frame = CGRectMake(kViewWidth-70-inset.right, 7, 60, 30);
     
     _indicator.center = _imageView.center;
     
-    _rotateBtn.superview.frame = CGRectMake(kViewWidth-70, kViewHeight-128, 70, 80);
-    _menuScroll.frame = CGRectMake(0, kViewHeight-128, kViewWidth-70, 80);
+    _rotateBtn.superview.frame = CGRectMake(kViewWidth-70-inset.right, kViewHeight-128-inset.bottom, 70, 80);
+    _menuScroll.frame = CGRectMake(inset.left, kViewHeight-128-inset.bottom, kViewWidth-70-inset.left-inset.right, 80);
 }
 
 - (void)initUI
@@ -340,7 +349,6 @@
     [self.view addSubview:_bottomView];
     
     _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _cancelBtn.frame = CGRectMake(10, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
     _cancelBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [_cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_cancelBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];

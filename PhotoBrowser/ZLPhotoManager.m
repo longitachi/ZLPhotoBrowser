@@ -153,6 +153,13 @@ static BOOL _sortAscending;
     return m;
 }
 
++ (void)getCameraRollAlbumList:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage complete:(void (^)(ZLAlbumListModel *))complete
+{
+    if (complete) {
+        complete([self getCameraRollAlbumList:allowSelectVideo allowSelectImage:allowSelectImage]);
+    }
+}
+
 + (void)getPhotoAblumList:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage complete:(void (^)(NSArray<ZLAlbumListModel *> *))complete
 {
     if (!allowSelectImage && !allowSelectVideo) {

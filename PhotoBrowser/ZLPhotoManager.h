@@ -37,6 +37,12 @@
  */
 + (ZLAlbumListModel *)getCameraRollAlbumList:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage;
 
+
+/**
+ block 获取相机胶卷相册列表对象
+ */
++ (void)getCameraRollAlbumList:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage complete:(void (^)(ZLAlbumListModel *album))complete;
+
 /**
  * @brief 获取用户所有相册列表
  */

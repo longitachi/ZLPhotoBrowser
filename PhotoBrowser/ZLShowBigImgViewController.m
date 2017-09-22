@@ -21,7 +21,12 @@
 {
     UICollectionView *_collectionView;
     
+    
+    //自定义导航视图
+    UIView *_navView;
+    UIButton *_btnBack;
     UIButton *_navRightBtn;
+    UILabel *_indexLabel;
     
     //底部view
     UIView   *_bottomView;
@@ -63,21 +68,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor blackColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     _isFirstAppear = YES;
     _currentPage = self.selectIndex+1;
     _indexBeforeRotation = self.selectIndex;
-    self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
-    [self initNavBtns];
+    
     [self initCollectionView];
+    [self initNavView];
     [self initBottomView];
     [self resetDontBtnState];
     [self resetEditBtnState];
     [self resetOriginalBtnState];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,6 +92,7 @@
     if (!_isFirstAppear) {
         return;
     }
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [_collectionView setContentOffset:CGPointMake((kViewWidth+kItemMargin)*_indexBeforeRotation, 0)];
 }
 
@@ -102,19 +108,38 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    
+    UIEdgeInsets inset = UIEdgeInsetsMake(20, 0, 0, 0);
+    if (@available(iOS 11, *)) {
+        inset = self.view.safeAreaInsets;
+    }
     _layout.minimumLineSpacing = kItemMargin;
     _layout.sectionInset = UIEdgeInsetsMake(0, kItemMargin/2, 0, kItemMargin/2);
-    _layout.itemSize = self.view.bounds.size;
+    _layout.itemSize = CGSizeMake(kViewWidth, kViewHeight);
     [_collectionView setCollectionViewLayout:_layout];
     
     _collectionView.frame = CGRectMake(-kItemMargin/2, 0, kViewWidth+kItemMargin, kViewHeight);
     
     [_collectionView setContentOffset:CGPointMake((kViewWidth+kItemMargin)*_indexBeforeRotation, 0)];
     
-    CGRect frame = _hideNavBar?CGRectMake(0, kViewHeight, kViewWidth, 44):CGRectMake(0, kViewHeight-44, kViewWidth, 44);
+    //nav view
+    CGFloat navHeight = inset.top+44;
+    CGRect navFrame = _hideNavBar?CGRectMake(0, -navHeight, kViewWidth, navHeight):CGRectMake(0, 0, kViewWidth, navHeight);
+    _navView.frame = navFrame;
+    
+    _btnBack.frame = CGRectMake(inset.left, inset.top, 60, 44);
+    _indexLabel.frame = CGRectMake(kViewWidth/2-50, inset.top, 100, 44);
+    _navRightBtn.frame = CGRectMake(kViewWidth-40-inset.right, inset.top+(44-25)/2, 25, 25);
+    
+    //底部view
+    CGRect frame = _hideNavBar?CGRectMake(0, kViewHeight, kViewWidth, 44+inset.bottom):CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, 44+inset.bottom);
     _bottomView.frame = frame;
-    _btnEdit.frame = CGRectMake(kViewWidth/2-30, 7, 60, 30);
-    _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
+    
+    CGFloat btnOriWidth = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, 30);
+    _btnOriginalPhoto.frame = CGRectMake(12+inset.left, 7, btnOriWidth+25, 30);
+    self.labPhotosBytes.frame = CGRectMake(CGRectGetMaxX(_btnOriginalPhoto.frame)+5, 7, 80, 30);
+    _btnEdit.frame = CGRectMake(frame.size.width/2-30, 7, 60, 30);
+    _btnDone.frame = CGRectMake(frame.size.width-82-inset.right, 7, 70, 30);
 }
 
 #pragma mark - 设备旋转
@@ -146,15 +171,27 @@
     _arrSelPhotosBackup = arrSelPhotos.copy;
 }
 
-- (void)initNavBtns
+- (void)initNavView
 {
-    //left nav btn
-    UIImage *navBackImg = GetImageWithName(@"navBackBtn.png");
-                           
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[navBackImg imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(btnBack_Click)];
-    
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (!nav.showSelectBtn) {
+    _navView = [[UIView alloc] init];
+    _navView.backgroundColor = [nav.navBarColor colorWithAlphaComponent:.9];
+    [self.view addSubview:_navView];
+    
+    _btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_btnBack setImage:GetImageWithName(@"navBackBtn.png") forState:UIControlStateNormal];
+    [_btnBack setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
+    [_btnBack addTarget:self action:@selector(btnBack_Click) forControlEvents:UIControlEventTouchUpInside];
+    [_navView addSubview:_btnBack];
+    
+    _indexLabel = [[UILabel alloc] init];
+    _indexLabel.font = [UIFont systemFontOfSize:18];
+    _indexLabel.textColor = kNavBar_tintColor;
+    _indexLabel.textAlignment = NSTextAlignmentCenter;
+    _indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
+    [_navView addSubview:_indexLabel];
+    
+    if (!nav.showSelectBtn || self.hideToolBar) {
         return;
     }
     
@@ -166,7 +203,7 @@
     [_navRightBtn setBackgroundImage:normalImg forState:UIControlStateNormal];
     [_navRightBtn setBackgroundImage:selImg forState:UIControlStateSelected];
     [_navRightBtn addTarget:self action:@selector(navRightBtn_Click:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_navRightBtn];
+    [_navView addSubview:_navRightBtn];
     
     if (self.models.count == 1) {
         _navRightBtn.selected = self.models.firstObject.isSelected;
@@ -186,19 +223,21 @@
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
     _collectionView.pagingEnabled = YES;
+    _collectionView.scrollsToTop = NO;
+    _collectionView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:_collectionView];
 }
 
 - (void)initBottomView
 {
+    if (self.hideToolBar) return;
+    
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
     _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, kViewHeight - 44, kViewWidth, 44)];
     _bottomView.backgroundColor = kBottomView_color;
     
     _btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
-    CGFloat btnOriWidth = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, 30);
-    _btnOriginalPhoto.frame = CGRectMake(12, 7, btnOriWidth+25, 30);
     [_btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
     _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
     [_btnOriginalPhoto setTitleColor:kDoneButton_bgColor forState: UIControlStateNormal];
@@ -212,7 +251,7 @@
     [self getPhotosBytes];
     [_bottomView addSubview:_btnOriginalPhoto];
     
-    self.labPhotosBytes = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_btnOriginalPhoto.frame)+5, 7, 80, 30)];
+    self.labPhotosBytes = [[UILabel alloc] init];
     self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
     self.labPhotosBytes.textColor = kDoneButton_bgColor;
     [_bottomView addSubview:self.labPhotosBytes];
@@ -461,13 +500,15 @@
 {
     _hideNavBar = !_hideNavBar;
     
-    [self.navigationController setNavigationBarHidden:_hideNavBar animated:YES];
-    [[UIApplication sharedApplication] setStatusBarHidden:_hideNavBar withAnimation:UIStatusBarAnimationSlide];
-    
-    CGRect frame = _hideNavBar?CGRectMake(0, kViewHeight, kViewWidth, 44):CGRectMake(0, kViewHeight-44, kViewWidth, 44);
-    [UIView animateWithDuration:0.3 animations:^{
-        _bottomView.frame = frame;
-    }];
+    UIEdgeInsets inset = UIEdgeInsetsZero;
+    if (@available(iOS 11, *)) {
+        inset = self.view.safeAreaInsets;
+    }
+    CGFloat navHeight = inset.top+44;
+    CGRect navFrame = _hideNavBar?CGRectMake(0, -navHeight, kViewWidth, navHeight):CGRectMake(0, 0, kViewWidth, navHeight);
+    CGRect frame = _hideNavBar?CGRectMake(0, kViewHeight, kViewWidth, 44+inset.bottom):CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, 44+inset.bottom);
+    _navView.frame = navFrame;
+    _bottomView.frame = frame;
 }
 
 #pragma mark - UICollectionDataSource
@@ -516,15 +557,7 @@
 {
     if (scrollView == (UIScrollView *)_collectionView) {
         ZLPhotoModel *m = [self getCurrentPageModel];
-        if (!m || [_modelIdentifile isEqualToString:m.asset.localIdentifier]) return;
-        _modelIdentifile = m.asset.localIdentifier;
-        //改变导航标题
-        self.title = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
-        
-        _navRightBtn.selected = m.isSelected;
-        
-        [self resetOriginalBtnState];
-        [self resetEditBtnState];
+        if (!m) return;
         
         if (m.type == ZLAssetMediaTypeGif ||
             m.type == ZLAssetMediaTypeLivePhoto ||
@@ -532,6 +565,17 @@
             ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
             [cell pausePlay];
         }
+        
+        if ([_modelIdentifile isEqualToString:m.asset.localIdentifier]) return;
+        
+        _modelIdentifile = m.asset.localIdentifier;
+        //改变导航标题
+        _indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
+        
+        _navRightBtn.selected = m.isSelected;
+        
+        [self resetOriginalBtnState];
+        [self resetEditBtnState];
     }
 }
 

@@ -458,8 +458,6 @@
 
 - (void)resetSubviewSize:(id)obj
 {
-    self.containerView.frame = CGRectMake(0, 0, kViewWidth, 0);
-    
     CGRect frame;
     
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
@@ -478,13 +476,13 @@
     if (orientation == UIDeviceOrientationLandscapeLeft ||
         orientation == UIDeviceOrientationLandscapeRight) {
         orientationIsUpOrDown = NO;
-        CGFloat height = MIN(kViewHeight, h);
+        CGFloat height = MIN(GetViewHeight(self), h);
         frame.origin = CGPointZero;
         frame.size.height = height;
         UIImage *image = self.imageView.image;
 
         CGFloat imageScale = image.size.width/image.size.height;
-        CGFloat screenScale = kViewWidth/kViewHeight;
+        CGFloat screenScale = kViewWidth/GetViewHeight(self);
 
         if (imageScale > screenScale) {
             frame.size.width = floorf(height * imageScale);
@@ -506,7 +504,7 @@
         UIImage *image = self.imageView.image;
         
         CGFloat imageScale = image.size.height/image.size.width;
-        CGFloat screenScale = kViewHeight/kViewWidth;
+        CGFloat screenScale = GetViewHeight(self)/kViewWidth;
         
         if (imageScale > screenScale) {
             frame.size.height = floorf(width * imageScale);
@@ -525,7 +523,7 @@
     
     CGSize contentSize;
     if (orientationIsUpOrDown) {
-        contentSize = CGSizeMake(width, MAX(kViewHeight, frame.size.height));
+        contentSize = CGSizeMake(width, MAX(GetViewHeight(self), frame.size.height));
         if (frame.size.height < GetViewHeight(self)) {
             self.containerView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);
         } else {

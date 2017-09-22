@@ -237,7 +237,7 @@
 {
     ZLAlbumListModel *model = self.arrayDataSources[index];
     
-    ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] initWithNibName:@"ZLThumbnailViewController" bundle:kZLPhotoBrowserBundle];
+    ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] init];
     tvc.albumListModel = model;
     
     [self.navigationController showViewController:tvc sender:self];

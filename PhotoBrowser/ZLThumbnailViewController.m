@@ -65,24 +65,34 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (ZLAlbumListModel *)albumListModel
-{
-    if (!_albumListModel) {
-        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-        _albumListModel = [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage];
-    }
-    return _albumListModel;
-}
-
 - (NSMutableArray<ZLPhotoModel *> *)arrDataSources
 {
     if (!_arrDataSources) {
         ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
         [hud show];
         ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-        [ZLPhotoManager markSelcectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
-        _arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
-        [hud hide];
+        if (!_albumListModel) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                weakify(self);
+                [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage complete:^(ZLAlbumListModel *album) {
+                    strongify(weakSelf);
+                    ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
+                    
+                    strongSelf.albumListModel = album;
+                    [ZLPhotoManager markSelcectModelInArr:strongSelf.albumListModel.models selArr:weakNav.arrSelectedModels];
+                    strongSelf.arrDataSources = [NSMutableArray arrayWithArray:strongSelf.albumListModel.models];
+                    [hud hide];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [strongSelf.collectionView reloadData];
+                        [strongSelf scrollToBottom];
+                    });
+                }];
+            });
+        } else {
+            [ZLPhotoManager markSelcectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
+            _arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
+            [hud hide];
+        }
     }
     return _arrDataSources;
 }
@@ -106,25 +116,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
     self.title = self.albumListModel.title;
     
-    self.btnDone.layer.masksToBounds = YES;
-    self.btnDone.layer.cornerRadius = 3.0f;
+    [self initNavBtn];
+    [self setupCollectionView];
+    [self setupBottomView];
     
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (self.albumListModel.isCameraRoll && nav.allowTakePhotoInLibrary && nav.allowSelectImage) {
         self.allowTakePhoto = YES;
-    }
-    
-    [self.btnEdit setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserEditText) forState:UIControlStateNormal];
-    [self.btnPreView setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText) forState:UIControlStateNormal];
-    [self.btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
-    [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
-    self.bottomView.backgroundColor = kBottomView_color;
-    
-    if (!nav.allowEditImage && !nav.allowEditVideo) {
-        [self.verLeftSpace setConstant:-5-self.btnEdit.bounds.size.width];
-        self.btnEdit.hidden = YES;
     }
     
     if (nav.allowSlideSelect) {
@@ -133,15 +134,13 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         [self.view addGestureRecognizer:pan];
     }
     
-    [self initNavBtn];
-    [self initCollectionView];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [self resetBottomBtnsStatus];
 }
 
@@ -154,6 +153,35 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    
+    UIEdgeInsets inset = UIEdgeInsetsZero;
+    if (@available(iOS 11, *)) {
+        inset = self.view.safeAreaInsets;
+    }
+    
+    CGFloat width = kViewWidth-inset.left-inset.right;
+    self.collectionView.frame = CGRectMake(inset.left, inset.top, width, kViewHeight-inset.top-inset.bottom-44);
+    
+    self.bottomView.frame = CGRectMake(inset.left, kViewHeight-44-inset.bottom, width, 44+inset.bottom);
+    self.bline.frame = CGRectMake(0, 0, width, 1/[UIScreen mainScreen].scale);
+    
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    CGFloat offsetX = 12;
+    if (nav.allowEditImage || nav.allowEditVideo) {
+        self.btnEdit.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserEditText), 15, YES, 30), 30);
+        offsetX = CGRectGetMaxX(self.btnEdit.frame) + 10;
+    }
+    self.btnPreView.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText), 15, YES, 30), 30);
+    offsetX = CGRectGetMaxX(self.btnPreView.frame) + 10;
+    
+    self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, 30)+self.btnOriginalPhoto.imageView.frame.size.width, 30);
+    offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
+    
+    self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 50, 30);
+    
+    CGFloat doneWidth = GetMatchValue(self.btnDone.currentTitle, 15, YES, 30);
+    doneWidth = MAX(70, doneWidth);
+    self.btnDone.frame = CGRectMake(width-doneWidth-12, 7, doneWidth, 30);
     
     if (!_isLayoutOK) {
         [self scrollToBottom];
@@ -173,8 +201,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (BOOL)forceTouchAvailable
 {
-    //@available(iOS 9.0, *)
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 9.0) {
+    if (@available(iOS 9.0, *)) {
         return self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable;
     } else {
         return NO;
@@ -239,17 +266,12 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     self.btnEdit.userInteractionEnabled = canEdit;
 }
 
-- (void)initCollectionView
+#pragma mark - ui
+- (void)setupCollectionView
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    CGFloat width = .0;
-    if (orientation == UIDeviceOrientationLandscapeLeft ||
-               orientation == UIDeviceOrientationLandscapeRight) {
-        width = kViewHeight;
-    } else {
-        width = kViewWidth;
-    }
+    
+    CGFloat width = MIN(kViewWidth, kViewHeight);
     
     NSInteger columnCount;
     
@@ -264,8 +286,11 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     layout.minimumLineSpacing = 1.5;
     layout.sectionInset = UIEdgeInsetsMake(3, 0, 3, 0);
     
-    self.collectionView.collectionViewLayout = layout;
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     self.collectionView.backgroundColor = [UIColor whiteColor];
+    self.collectionView.dataSource = self;
+    self.collectionView.delegate = self;
+    [self.view addSubview:self.collectionView];
     
     [self.collectionView registerClass:NSClassFromString(@"ZLTakePhotoCell") forCellWithReuseIdentifier:@"ZLTakePhotoCell"];
     [self.collectionView registerClass:NSClassFromString(@"ZLCollectionCell") forCellWithReuseIdentifier:@"ZLCollectionCell"];
@@ -274,6 +299,53 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     if (nav.allowForceTouch && [self forceTouchAvailable]) {
         [self registerForPreviewingWithDelegate:self sourceView:self.collectionView];
     }
+}
+
+- (void)setupBottomView
+{
+    self.bottomView = [[UIView alloc] init];
+    self.bottomView.backgroundColor = kBottomView_color;
+    [self.view addSubview:self.bottomView];
+    
+    self.bline = [[UIView alloc] init];
+    self.bline.backgroundColor = kRGB(232, 232, 232);
+    [self.bottomView addSubview:self.bline];
+    
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.allowEditImage || nav.allowEditVideo) {
+        self.btnEdit = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.btnEdit.titleLabel.font = [UIFont systemFontOfSize:15];
+        [self.btnEdit setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserEditText) forState:UIControlStateNormal];
+        [self.btnEdit addTarget:self action:@selector(btnEdit_Click:) forControlEvents:UIControlEventTouchUpInside];
+        [self.bottomView addSubview:self.btnEdit];
+    }
+    
+    self.btnPreView = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnPreView.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.btnPreView setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText) forState:UIControlStateNormal];
+    [self.btnPreView addTarget:self action:@selector(btnPreview_Click:) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomView addSubview:self.btnPreView];
+    
+    self.btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_original_circle.png") forState:UIControlStateNormal];
+    [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_selected.png") forState:UIControlStateSelected];
+    [self.btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
+    [self.btnOriginalPhoto addTarget:self action:@selector(btnOriginalPhoto_Click:) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomView addSubview:self.btnOriginalPhoto];
+    
+    self.labPhotosBytes = [[UILabel alloc] init];
+    self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
+    self.labPhotosBytes.textColor = kDoneButton_bgColor;
+    [self.bottomView addSubview:self.labPhotosBytes];
+    
+    self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnDone.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
+    self.btnDone.layer.masksToBounds = YES;
+    self.btnDone.layer.cornerRadius = 3.0f;
+    [self.btnDone addTarget:self action:@selector(btnDone_Click:) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomView addSubview:self.btnDone];
 }
 
 - (void)initNavBtn
@@ -289,7 +361,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 }
 
 #pragma mark - UIButton Action
-- (IBAction)btnEdit_Click:(id)sender {
+- (void)btnEdit_Click:(id)sender {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     ZLPhotoModel *m = nav.arrSelectedModels.firstObject;
     
@@ -306,7 +378,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     }
 }
 
-- (IBAction)btnPreview_Click:(id)sender
+- (void)btnPreview_Click:(id)sender
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     UIViewController *vc = [self getBigImageVCWithData:nav.arrSelectedModels index:nav.arrSelectedModels.count-1];
@@ -327,7 +399,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     return vc;
 }
 
-- (IBAction)btnOriginalPhoto_Click:(id)sender
+- (void)btnOriginalPhoto_Click:(id)sender
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     self.btnOriginalPhoto.selected = !self.btnOriginalPhoto.selected;
@@ -339,7 +411,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     }
 }
 
-- (IBAction)btnDone_Click:(id)sender
+- (void)btnDone_Click:(id)sender
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (nav.callSelectImageBlock) {
