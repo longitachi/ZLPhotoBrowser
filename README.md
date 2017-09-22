@@ -35,6 +35,11 @@
 - [x] 相册内图片自定义圆角弧度
 - [x] 自定义升序降序排列
 - [x] 多张拍照
+
+### Feature
+- [ ] 支持预览网络图片时长按下载
+
+> 如果在使用中有好的需求及建议，或者遇到什么bug，可以随时issue，我会及时的回复
  
 ### 更新日志
 ```
@@ -54,8 +59,9 @@
 ```
 
 ### 框架支持
-最低支持：iOS 8.0
-IDE：Xcode 9.0 及以上版本 (由于适配iPhone X使用iOS11api，所以请使用Xcode 9.0以上版本)
+最低支持：iOS 8.0 
+
+IDE：Xcode 9.0 及以上版本 (由于适配iPhone X使用iOS11api，所以请使用Xcode 9.0及以上版本)
 
 ### <a id="使用方法"></a>使用方法
 
@@ -72,14 +78,18 @@ IDE：Xcode 9.0 及以上版本 (由于适配iPhone X使用iOS11api，所以请�
   * 4.导入 \<ZLPhotoActionSheet.h\>
 
 第二步：
-- 在项目plist配置文件中添加如下键，值并设为YES
+- 在项目plist配置文件中添加如下键值对
 ```objc
 //如果不添加该键值对，则不支持多语言，相册名称默认为英文
-
 Localized resources can be mixed YES
 //或者右键plist文件Open As->Source Code 添加
 <key>CFBundleAllowMixedLocalizations</key>
 <true/>
+
+//相册使用权限描述
+Privacy - Photo Library Usage Description
+//相机使用权限描述
+Privacy - Camera Usage Description
 ```
 
 代码中调用
@@ -109,6 +119,9 @@ actionSheet.sender = self;
 ### <a id="问答"></a>问答
 * 关于 `@available(9.0, *)` 报错 ([#90](https://github.com/longitachi/ZLPhotoBrowser/issues/90))
 > 该错误会出现在XCode 9.0以下版本，把该代码替换为 `[UIDevice currentDevice].systemVersion.floatValue >= 9.0` 即可
+
+* 从 `pod 2.4.3` 以下版本更新到 `pod 2.4.3` 以上版本报如下错误 `Terminating app due to uncaught exception 'NSUnknownKeyException', reason: '[<ZLThumbnailViewController 0x15bed0d10> setValue:forUndefinedKey:]: this class is not key value coding-compliant for the key verLeftSpace.'`
+> 由于 `pod 2.4.3` 版本删除对应xib，所以请执行 `command+shift+k` clean项目，重启Xcode即可
 
 ### <a id="效果图"></a> 效果图
 - 多语言国际化效果图
