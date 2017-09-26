@@ -286,9 +286,11 @@
     [self.collectionView setContentInset:UIEdgeInsetsMake(0, leftOffset, 0, rightOffset)];
     [self.collectionView setContentOffset:CGPointMake(_offsetX-leftOffset, 0)];
     
-    _bottomView.frame = CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, kItemHeight);
-    _cancelBtn.frame = CGRectMake(10+inset.left, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
-    _doneBtn.frame = CGRectMake(kViewWidth-70-inset.right, 7, 60, 30);
+    CGFloat bottomViewH = 44;
+    CGFloat bottomBtnH = 30;
+    _bottomView.frame = CGRectMake(0, kViewHeight-bottomViewH-inset.bottom, kViewWidth, kItemHeight);
+    _cancelBtn.frame = CGRectMake(10+inset.left, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, bottomBtnH), bottomBtnH);
+    _doneBtn.frame = CGRectMake(kViewWidth-70-inset.right, 7, 60, bottomBtnH);
 }
 
 #pragma mark - notifies

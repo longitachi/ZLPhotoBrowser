@@ -159,29 +159,32 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         inset = self.view.safeAreaInsets;
     }
     
-    CGFloat width = kViewWidth-inset.left-inset.right;
-    self.collectionView.frame = CGRectMake(inset.left, inset.top, width, kViewHeight-inset.top-inset.bottom-44);
+    CGFloat bottomViewH = 44;
+    CGFloat bottomBtnH = 30;
     
-    self.bottomView.frame = CGRectMake(inset.left, kViewHeight-44-inset.bottom, width, 44+inset.bottom);
+    CGFloat width = kViewWidth-inset.left-inset.right;
+    self.collectionView.frame = CGRectMake(inset.left, 0, width, kViewHeight-inset.bottom-bottomViewH);
+    
+    self.bottomView.frame = CGRectMake(inset.left, kViewHeight-bottomViewH-inset.bottom, width, bottomViewH+inset.bottom);
     self.bline.frame = CGRectMake(0, 0, width, 1/[UIScreen mainScreen].scale);
     
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     CGFloat offsetX = 12;
     if (nav.allowEditImage || nav.allowEditVideo) {
-        self.btnEdit.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserEditText), 15, YES, 30), 30);
+        self.btnEdit.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserEditText), 15, YES, bottomBtnH), bottomBtnH);
         offsetX = CGRectGetMaxX(self.btnEdit.frame) + 10;
     }
-    self.btnPreView.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText), 15, YES, 30), 30);
+    self.btnPreView.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText), 15, YES, bottomBtnH), bottomBtnH);
     offsetX = CGRectGetMaxX(self.btnPreView.frame) + 10;
     
-    self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, 30)+self.btnOriginalPhoto.imageView.frame.size.width, 30);
+    self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+self.btnOriginalPhoto.imageView.frame.size.width, bottomBtnH);
     offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
     
-    self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 50, 30);
+    self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 50, bottomBtnH);
     
-    CGFloat doneWidth = GetMatchValue(self.btnDone.currentTitle, 15, YES, 30);
+    CGFloat doneWidth = GetMatchValue(self.btnDone.currentTitle, 15, YES, bottomBtnH);
     doneWidth = MAX(70, doneWidth);
-    self.btnDone.frame = CGRectMake(width-doneWidth-12, 7, doneWidth, 30);
+    self.btnDone.frame = CGRectMake(width-doneWidth-12, 7, doneWidth, bottomBtnH);
     
     if (!_isLayoutOK) {
         [self scrollToBottom];

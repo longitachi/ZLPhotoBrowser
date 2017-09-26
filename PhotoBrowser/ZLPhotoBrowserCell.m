@@ -11,6 +11,12 @@
 #import "ZLPhotoManager.h"
 #import "ZLDefine.h"
 
+@interface ZLPhotoBrowserCell ()
+
+@property (nonatomic, copy) NSString *identifier;
+
+@end
+
 @implementation ZLPhotoBrowserCell
 
 - (void)awakeFromNib {
@@ -29,9 +35,13 @@
     
     weakify(self);
     
-    [ZLPhotoManager requestImageForAsset:model.headImageAsset size:CGSizeMake(GetViewWidth(self)*2.5, GetViewHeight(self)*2.5) completion:^(UIImage *image, NSDictionary *info) {
+    self.identifier = model.headImageAsset.localIdentifier;
+    [ZLPhotoManager requestImageForAsset:model.headImageAsset size:CGSizeMake(GetViewHeight(self)*2.5, GetViewHeight(self)*2.5) completion:^(UIImage *image, NSDictionary *info) {
         strongify(weakSelf);
-        strongSelf.headImageView.image = image;
+        
+        if ([strongSelf.identifier isEqualToString:model.headImageAsset.localIdentifier]) {
+            strongSelf.headImageView.image = image?:GetImageWithName(@"defaultphoto.png");
+        }
     }];
     
     self.labTitle.text = model.title;

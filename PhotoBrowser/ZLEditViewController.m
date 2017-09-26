@@ -302,10 +302,13 @@
     _gridLayer.frame = _imageView.bounds;
     [self clippingRatioDidChange];
     
-    _bottomView.frame = CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, 44);
-    _cancelBtn.frame = CGRectMake(10+inset.left, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
-    _saveBtn.frame = CGRectMake(kViewWidth/2-20, 7, 40, 30);
-    _doneBtn.frame = CGRectMake(kViewWidth-70-inset.right, 7, 60, 30);
+    CGFloat bottomViewH = 44;
+    CGFloat bottomBtnH = 30;
+    
+    _bottomView.frame = CGRectMake(0, kViewHeight-bottomViewH-inset.bottom, kViewWidth, bottomViewH);
+    _cancelBtn.frame = CGRectMake(10+inset.left, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, bottomBtnH), bottomBtnH);
+    _saveBtn.frame = CGRectMake(kViewWidth/2-20, 7, 40, bottomBtnH);
+    _doneBtn.frame = CGRectMake(kViewWidth-70-inset.right, 7, 60, bottomBtnH);
     
     _indicator.center = _imageView.center;
     

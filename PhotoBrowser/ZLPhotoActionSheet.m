@@ -346,13 +346,12 @@ double const ScalePhotoWidth = 1000;
         self.senderTabBarIsShow = YES;
         self.sender.tabBarController.tabBar.hidden = YES;
     }
-    
+    UIEdgeInsets inset = UIEdgeInsetsZero;
+    if (@available(iOS 11, *)) {
+        inset = self.sender.view.safeAreaInsets;
+        [self.verBottomSpace setConstant:inset.bottom];
+    }
     if (self.animate) {
-        UIEdgeInsets inset = UIEdgeInsetsZero;
-        if (@available(iOS 11, *)) {
-            inset = self.sender.view.safeAreaInsets;
-            [self.verBottomSpace setConstant:inset.bottom];
-        }
         __block CGRect frame = self.baseView.frame;
         frame.origin.y = kViewHeight;
         self.baseView.frame = frame;
@@ -635,10 +634,10 @@ double const ScalePhotoWidth = 1000;
 - (BOOL)shouldDirectEdit:(ZLPhotoModel *)model
 {
     //当前点击图片可编辑
-    BOOL editImage = self.editAfterSelectThumbnailImage && self.allowEditImage && self.maxSelectCount == 1 && (model.type == ZLAssetMediaTypeImage || model.type == ZLAssetMediaTypeGif || model.type == ZLAssetMediaTypeLivePhoto);
+    BOOL editImage = self.editAfterSelectThumbnailImage && self.allowEditImage && self.maxSelectCount == 1 && model.type < ZLAssetMediaTypeVideo;
     //当前点击视频可编辑
     BOOL editVideo = self.editAfterSelectThumbnailImage && self.allowEditVideo && model.type == ZLAssetMediaTypeVideo && self.maxSelectCount == 1 && round(model.asset.duration) >= self.maxEditVideoTime;
-    //当前为选择图片 或已经选择了一张并且点击的是已选择的图片
+    //当前未选择图片 或已经选择了一张并且点击的是已选择的图片
     BOOL flag = self.arrSelectedModels.count == 0 || (self.arrSelectedModels.count == 1 && [self.arrSelectedModels.firstObject.asset.localIdentifier isEqualToString:model.asset.localIdentifier]);
     
     if (editImage && flag) {
