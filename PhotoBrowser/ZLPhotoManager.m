@@ -144,8 +144,8 @@ static BOOL _sortAscending;
     __block ZLAlbumListModel *m;
     [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *  _Nonnull collection, NSUInteger idx, BOOL * _Nonnull stop) {
         //获取相册内asset result
-        PHFetchResult<PHAsset *> *result = [PHAsset fetchAssetsInAssetCollection:collection options:option];
         if (collection.assetCollectionSubtype == 209) {
+            PHFetchResult<PHAsset *> *result = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             m = [self getAlbumModeWithTitle:collection.localizedTitle result:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage];
             m.isCameraRoll = YES;
         }

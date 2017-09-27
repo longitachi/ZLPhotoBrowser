@@ -34,9 +34,9 @@
     return self;
 }
 
-- (UIImage *)imageWithColor:(UIColor*)color
+- (UIImage *)imageWithColor:(UIColor *)color
 {
-    CGRect rect=CGRectMake(0,0, 1, 1);
+    CGRect rect = CGRectMake(0, 0, 1, 1);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [color CGColor]);

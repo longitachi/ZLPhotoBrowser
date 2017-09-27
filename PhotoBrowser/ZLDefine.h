@@ -169,7 +169,7 @@ GetCustomClipRatio() {
 }
 
 static inline NSDictionary * GetClipRatio(NSInteger value1, NSInteger value2) {
-    return @{ClippingRatioValue1: @(value1), ClippingRatioValue2: @(value2), ClippingRatioTitleFormat:@"%g : %g"};
+    return @{ClippingRatioValue1: @(value1), ClippingRatioValue2: @(value2), ClippingRatioTitleFormat: @"%g : %g"};
 }
 
 #endif /* ZLDefine_h */

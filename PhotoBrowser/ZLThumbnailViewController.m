@@ -83,12 +83,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                     strongSelf.arrDataSources = [NSMutableArray arrayWithArray:strongSelf.albumListModel.models];
                     [hud hide];
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        strongSelf.allowTakePhoto = YES;
                         [strongSelf.collectionView reloadData];
                         [strongSelf scrollToBottom];
                     });
                 }];
             });
         } else {
+            if (nav.allowTakePhotoInLibrary && nav.allowSelectImage) {
+                self.allowTakePhoto = YES;
+            }
             [ZLPhotoManager markSelcectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
             _arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
             [hud hide];
@@ -124,9 +128,6 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [self setupBottomView];
     
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (self.albumListModel.isCameraRoll && nav.allowTakePhotoInLibrary && nav.allowSelectImage) {
-        self.allowTakePhoto = YES;
-    }
     
     if (nav.allowSlideSelect) {
         //添加滑动选择手势

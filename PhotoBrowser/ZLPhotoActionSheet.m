@@ -786,29 +786,28 @@ double const ScalePhotoWidth = 1000;
     weakify(self);
     [picker dismissViewControllerAnimated:YES completion:^{
         strongify(weakSelf);
-        if (strongSelf.selectImageBlock) {
-            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
-            [hud show];
-            
-            [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (suc) {
-                        ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
-                        [strongSelf handleDataArray:model];
-                    } else {
-                        ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
-                    }
-                    [hud hide];
-                });
-            }];
-        }
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+        [hud show];
+        
+        [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (suc) {
+                    ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
+                    [strongSelf handleDataArray:model];
+                } else {
+                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
+                }
+                [hud hide];
+            });
+        }];
     }];
 }
 
 - (void)handleDataArray:(ZLPhotoModel *)model
 {
     [self.arrDataSources insertObject:model atIndex:0];
+    [self.arrDataSources removeLastObject];
     if (self.maxSelectCount > 1 && self.arrSelectedModels.count < self.maxSelectCount) {
         model.selected = YES;
         [self.arrSelectedModels addObject:model];
