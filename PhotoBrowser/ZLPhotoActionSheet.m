@@ -249,8 +249,9 @@ double const ScalePhotoWidth = 1000;
     }
 }
 
-- (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index
+- (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index isOriginal:(BOOL)isOriginal
 {
+    self.isSelectOriginalPhoto = isOriginal;
     self.arrSelectedAssets = [NSMutableArray arrayWithArray:assets];
     ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos index:index];
     weakify(self);

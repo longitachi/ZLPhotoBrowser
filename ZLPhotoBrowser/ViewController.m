@@ -46,6 +46,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSArray *arrDataSources;
 
+@property (nonatomic, assign) BOOL isOriginal;
 
 @end
 
@@ -126,6 +127,7 @@
     [actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
         strongify(weakSelf);
         strongSelf.arrDataSources = images;
+        strongSelf.isOriginal = isOriginal;
         strongSelf.lastSelectAssets = assets.mutableCopy;
         strongSelf.lastSelectPhotos = images.mutableCopy;
         [strongSelf.collectionView reloadData];
@@ -173,7 +175,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[self getPas] previewSelectedPhotos:self.lastSelectPhotos assets:self.lastSelectAssets index:indexPath.row];
+    [[self getPas] previewSelectedPhotos:self.lastSelectPhotos assets:self.lastSelectAssets index:indexPath.row isOriginal:self.isOriginal];
 }
 
 - (IBAction)btnPreviewNetImageClick:(id)sender

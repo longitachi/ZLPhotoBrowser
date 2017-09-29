@@ -83,7 +83,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                     strongSelf.arrDataSources = [NSMutableArray arrayWithArray:strongSelf.albumListModel.models];
                     [hud hide];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        strongSelf.allowTakePhoto = YES;
+                        if (weakNav.allowTakePhotoInLibrary && weakNav.allowSelectImage) {
+                            strongSelf.allowTakePhoto = YES;
+                        }
                         [strongSelf.collectionView reloadData];
                         [strongSelf scrollToBottom];
                     });

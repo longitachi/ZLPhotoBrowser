@@ -194,8 +194,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param photos 已选择的uiimage照片数组
  @param assets 已选择的phasset照片数组
  @param index 点击的照片索引
+ @param isOriginal 是否为原图
  */
-- (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index;
+- (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index isOriginal:(BOOL)isOriginal;
 
 
 /**
