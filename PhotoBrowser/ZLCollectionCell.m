@@ -241,10 +241,15 @@
 
 - (void)startCapture
 {
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    
     if (![UIImagePickerController isSourceTypeAvailable:
-         UIImagePickerControllerSourceTypeCamera]) {
+         UIImagePickerControllerSourceTypeCamera] ||
+        status == AVAuthorizationStatusRestricted ||
+        status == AVAuthorizationStatusDenied) {
         return;
     }
+    
     
     if (self.session && [self.session isRunning]) {
         return;
@@ -277,9 +282,7 @@
     [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
     [self.contentView.layer insertSublayer:self.previewLayer atIndex:0];
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.session startRunning];
-    });
+    [self.session startRunning];
 }
 
 - (AVCaptureDevice *)backCamera {

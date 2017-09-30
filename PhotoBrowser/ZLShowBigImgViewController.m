@@ -500,15 +500,8 @@
 {
     _hideNavBar = !_hideNavBar;
     
-    UIEdgeInsets inset = UIEdgeInsetsZero;
-    if (@available(iOS 11, *)) {
-        inset = self.view.safeAreaInsets;
-    }
-    CGFloat navHeight = inset.top+44;
-    CGRect navFrame = _hideNavBar?CGRectMake(0, -navHeight, kViewWidth, navHeight):CGRectMake(0, 0, kViewWidth, navHeight);
-    CGRect frame = _hideNavBar?CGRectMake(0, kViewHeight, kViewWidth, 44+inset.bottom):CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, 44+inset.bottom);
-    _navView.frame = navFrame;
-    _bottomView.frame = frame;
+    _navView.hidden = _hideNavBar;
+    _bottomView.hidden = _hideNavBar;
 }
 
 #pragma mark - UICollectionDataSource

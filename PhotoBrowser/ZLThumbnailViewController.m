@@ -29,7 +29,6 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 @interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIViewControllerPreviewingDelegate>
 {
     BOOL _isLayoutOK;
-    BOOL _haveTakePic;
     
     //设备旋转前的第一个可视indexPath
     NSIndexPath *_visibleIndexPath;
@@ -92,7 +91,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                 }];
             });
         } else {
-            if (nav.allowTakePhotoInLibrary && nav.allowSelectImage) {
+            if (nav.allowTakePhotoInLibrary && nav.allowSelectImage && self.albumListModel.isCameraRoll) {
                 self.allowTakePhoto = YES;
             }
             [ZLPhotoManager markSelcectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
@@ -621,11 +620,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         cell.layer.masksToBounds = YES;
         cell.layer.cornerRadius = nav.cellCornerRadio;
         if (nav.showCaptureImageOnTakePhotoBtn) {
-            if (!_isLayoutOK || _haveTakePic) {
-                [cell restartCapture];
-            } else {
-                [cell startCapture];
-            }
+            [cell startCapture];
         }
         return cell;
     }
