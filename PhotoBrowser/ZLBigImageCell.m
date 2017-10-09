@@ -45,6 +45,11 @@
             strongify(weakSelf);
             if (strongSelf.singleTapCallBack) strongSelf.singleTapCallBack();
         };
+        self.previewView.longPressCallBack = ^{
+            strongify(weakSelf);
+            if (strongSelf.longPressCallBack) 
+                strongSelf.longPressCallBack();
+        };
     }
     return self;
 }
@@ -102,6 +107,7 @@
     if (!_imageGifView) {
         _imageGifView = [[ZLPreviewImageAndGif alloc] initWithFrame:self.bounds];
         _imageGifView.singleTapCallBack = self.singleTapCallBack;
+        _imageGifView.longPressCallBack = self.longPressCallBack;
     }
     return _imageGifView;
 }
@@ -216,7 +222,8 @@
 
 - (UIImage *)image
 {
-    if (self.model.type == ZLAssetMediaTypeImage) {
+    if (self.model.type == ZLAssetMediaTypeImage ||
+        self.model.type == ZLAssetMediaTypeNetImage) {
         return self.imageGifView.imageView.image;
     }
     return nil;
@@ -437,6 +444,11 @@
  */
 - (void)loadImage:(id)obj
 {
+    if (!_longPressGesture) {
+        self.longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
+        self.longPressGesture.minimumPressDuration = .5;
+        [self addGestureRecognizer:self.longPressGesture];
+    }
     if ([obj isKindOfClass:UIImage.class]) {
         self.imageView.image = obj;
         [self resetSubviewSize:obj];
@@ -547,6 +559,15 @@
 }
 
 #pragma mark - 手势点击事件
+- (void)longPressAction:(UILongPressGestureRecognizer *)ges
+{
+    if (ges.state == UIGestureRecognizerStateBegan) {
+        if (self.longPressCallBack) {
+            self.longPressCallBack();
+        }
+    }
+}
+
 - (void)doubleTapAction:(UITapGestureRecognizer *)tap
 {
     UIScrollView *scrollView = self.scrollView;

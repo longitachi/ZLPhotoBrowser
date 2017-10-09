@@ -429,6 +429,28 @@
     [self resetEditBtnState];
 }
 
+- (void)showDownloadAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *save = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserSaveText) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+        [hud show];
+        
+        ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
+        
+        [ZLPhotoManager saveImageToAblum:cell.previewView.image completion:^(BOOL suc, PHAsset *asset) {
+            [hud hide];
+            if (!suc) {
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
+            }
+        }];
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:save];
+    [alert addAction:cancel];
+    [self showDetailViewController:alert sender:nil];
+}
+
 #pragma mark - 更新按钮、导航条等显示状态
 - (void)resetDontBtnState
 {
@@ -540,6 +562,10 @@
     cell.singleTapCallBack = ^() {
         strongify(weakSelf);
         [strongSelf handlerSingleTap];
+    };
+    cell.longPressCallBack = ^{
+        strongify(weakSelf);
+        [strongSelf showDownloadAlert];
     };
     
     return cell;
