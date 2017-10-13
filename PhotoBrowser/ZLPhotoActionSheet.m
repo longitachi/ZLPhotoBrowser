@@ -465,7 +465,7 @@ double const ScalePhotoWidth = 1000;
             
             strongify(weakSelf);
             if (image) {
-                [photos replaceObjectAtIndex:i withObject:[self scaleImage:image]];
+                [photos replaceObjectAtIndex:i withObject:[strongSelf scaleImage:image]];
                 [assets replaceObjectAtIndex:i withObject:model.asset];
             }
             

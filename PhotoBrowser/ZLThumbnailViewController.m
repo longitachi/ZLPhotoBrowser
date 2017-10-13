@@ -78,6 +78,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                     ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
                     
                     strongSelf.albumListModel = album;
+                    strongSelf.title = album.title;
                     [ZLPhotoManager markSelcectModelInArr:strongSelf.albumListModel.models selArr:weakNav.arrSelectedModels];
                     strongSelf.arrDataSources = [NSMutableArray arrayWithArray:strongSelf.albumListModel.models];
                     [hud hide];
@@ -188,7 +189,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     doneWidth = MAX(70, doneWidth);
     self.btnDone.frame = CGRectMake(width-doneWidth-12, 7, doneWidth, bottomBtnH);
     
-    if (!_isLayoutOK) {
+    if (!_isLayoutOK && self.albumListModel) {
         [self scrollToBottom];
     } else if (_switchOrientation) {
         _switchOrientation = NO;
