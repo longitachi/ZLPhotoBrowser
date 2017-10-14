@@ -51,8 +51,8 @@
 #define kDoneButton_bgColor kRGB(80, 180, 234)
 #define kButtonUnable_textColor kRGB(200, 200, 200)
 
-#define weakify(var)   __weak typeof(var) weakSelf = var
-#define strongify(var) __strong typeof(var) strongSelf = var
+#define zl_weakify(var)   __weak typeof(var) weakSelf = var
+#define zl_strongify(var) __strong typeof(var) strongSelf = var
 
 #define ZL_IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 #define ZL_IS_IPHONE_X (IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 812.0f)

@@ -379,10 +379,10 @@
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     [hud show];
     
-    weakify(self);
+    zl_weakify(self);
     [ZLPhotoManager requestVideoForAsset:self.model.asset completion:^(AVPlayerItem *item, NSDictionary *info) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            strongify(weakSelf);
+            zl_strongify(weakSelf);
             if (!item) return;
             AVPlayer *player = [AVPlayer playerWithPlayerItem:item];
             strongSelf.playerLayer.player = player;
@@ -394,7 +394,7 @@
     
     [ZLPhotoManager analysisEverySecondsImageForAsset:self.model.asset interval:_interval size:CGSizeMake(kItemWidth*5, kItemHeight*5) complete:^(AVAsset *avAsset, NSArray<UIImage *> *images) {
         [hud hide];
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         strongSelf->_avAsset = avAsset;
         [strongSelf.arrImages addObjectsFromArray:images];
         [strongSelf.collectionView reloadData];

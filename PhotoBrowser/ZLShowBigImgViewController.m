@@ -508,9 +508,9 @@
     NSArray *arr = nav.showSelectBtn?nav.arrSelectedModels:@[self.models[_currentPage-1]];
     
     if (arr.count) {
-        weakify(self);
+        zl_weakify(self);
         [ZLPhotoManager getPhotosBytesWithArray:arr completion:^(NSString *photosBytes) {
-            strongify(weakSelf);
+            zl_strongify(weakSelf);
             strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
         }];
     } else {
@@ -558,13 +558,13 @@
     cell.showGif = nav.allowSelectGif;
     cell.showLivePhoto = nav.allowSelectLivePhoto;
     cell.model = model;
-    weakify(self);
+    zl_weakify(self);
     cell.singleTapCallBack = ^() {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         [strongSelf handlerSingleTap];
     };
     cell.longPressCallBack = ^{
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         [strongSelf showDownloadAlert];
     };
     

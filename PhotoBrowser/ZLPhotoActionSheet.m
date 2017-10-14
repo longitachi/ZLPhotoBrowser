@@ -254,10 +254,10 @@ double const ScalePhotoWidth = 1000;
     self.isSelectOriginalPhoto = isOriginal;
     self.arrSelectedAssets = [NSMutableArray arrayWithArray:assets];
     ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos index:index];
-    weakify(self);
+    zl_weakify(self);
     __weak typeof(svc.navigationController) weakNav = svc.navigationController;
     [svc setBtnDonePreviewBlock:^(NSArray<UIImage *> *photos, NSArray<PHAsset *> *assets) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         strongSelf.arrSelectedAssets = assets.mutableCopy;
         __strong typeof(weakNav) strongNav = weakNav;
         if (strongSelf.selectImageBlock) {
@@ -457,13 +457,13 @@ double const ScalePhotoWidth = 1000;
         [assets addObject:@""];
     }
     
-    weakify(self);
+    zl_weakify(self);
     for (int i = 0; i < self.arrSelectedModels.count; i++) {
         ZLPhotoModel *model = self.arrSelectedModels[i];
         [ZLPhotoManager requestSelectedImageForAsset:model isOriginal:self.isSelectOriginalPhoto allowSelectGif:self.allowSelectGif completion:^(UIImage *image, NSDictionary *info) {
             if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
             
-            strongify(weakSelf);
+            zl_strongify(weakSelf);
             if (image) {
                 [photos replaceObjectAtIndex:i withObject:[strongSelf scaleImage:image]];
                 [assets replaceObjectAtIndex:i withObject:model.asset];
@@ -522,10 +522,10 @@ double const ScalePhotoWidth = 1000;
     
     ZLPhotoModel *model = self.arrDataSources[indexPath.row];
     
-    weakify(self);
+    zl_weakify(self);
     __weak typeof(cell) weakCell = cell;
     cell.selectedBlock = ^(BOOL selected) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         __strong typeof(weakCell) strongCell = weakCell;
         if (!selected) {
             //选中
@@ -661,10 +661,10 @@ double const ScalePhotoWidth = 1000;
 - (ZLImageNavigationController *)getImageNavWithRootVC:(UIViewController *)rootVC
 {
     ZLImageNavigationController *nav = [[ZLImageNavigationController alloc] initWithRootViewController:rootVC];
-    weakify(self);
+    zl_weakify(self);
     __weak typeof(ZLImageNavigationController *) weakNav = nav;
     [nav setCallSelectImageBlock:^{
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         strongSelf.isSelectOriginalPhoto = weakNav.isSelectOriginalPhoto;
         [strongSelf.arrSelectedModels removeAllObjects];
         [strongSelf.arrSelectedModels addObjectsFromArray:weakNav.arrSelectedModels];
@@ -672,7 +672,7 @@ double const ScalePhotoWidth = 1000;
     }];
     
     [nav setCallSelectClipImageBlock:^(UIImage *image, PHAsset *asset){
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         if (strongSelf.selectImageBlock) {
             strongSelf.selectImageBlock(@[image], @[asset], NO);
         }
@@ -681,7 +681,7 @@ double const ScalePhotoWidth = 1000;
     }];
     
     [nav setCancelBlock:^{
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         [strongSelf hide];
     }];
 
@@ -733,9 +733,9 @@ double const ScalePhotoWidth = 1000;
     
     svc.models = models;
     svc.selectIndex = index;
-    weakify(self);
+    zl_weakify(self);
     [svc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         [ZLPhotoManager markSelcectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
         strongSelf.isSelectOriginalPhoto = isOriginal;
         [strongSelf.arrSelectedModels removeAllObjects];
@@ -784,9 +784,9 @@ double const ScalePhotoWidth = 1000;
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    weakify(self);
+    zl_weakify(self);
     [picker dismissViewControllerAnimated:YES completion:^{
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
         ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
         [hud show];

@@ -33,11 +33,11 @@
         self.headImageView.layer.cornerRadius = self.cornerRadio;
     }
     
-    weakify(self);
+    zl_weakify(self);
     
     self.identifier = model.headImageAsset.localIdentifier;
     [ZLPhotoManager requestImageForAsset:model.headImageAsset size:CGSizeMake(GetViewHeight(self)*2.5, GetViewHeight(self)*2.5) completion:^(UIImage *image, NSDictionary *info) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         
         if ([strongSelf.identifier isEqualToString:model.headImageAsset.localIdentifier]) {
             strongSelf.headImageView.image = image?:GetImageWithName(@"defaultphoto.png");

@@ -123,9 +123,9 @@
     
     actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn&&self.maxSelCountTextField.text.integerValue>1 ? self.lastSelectAssets : nil;
     
-    weakify(self);
+    zl_weakify(self);
     [actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         strongSelf.arrDataSources = images;
         strongSelf.isOriginal = isOriginal;
         strongSelf.lastSelectAssets = assets.mutableCopy;

@@ -156,9 +156,9 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-        weakify(self);
+        zl_weakify(self);
         [ZLPhotoManager getPhotoAblumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage complete:^(NSArray<ZLAlbumListModel *> *albums) {
-            strongify(weakSelf);
+            zl_strongify(weakSelf);
             strongSelf.arrayDataSources = [NSMutableArray arrayWithArray:albums];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [strongSelf.tableView reloadData];

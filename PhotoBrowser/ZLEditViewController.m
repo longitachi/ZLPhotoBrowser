@@ -395,10 +395,10 @@
     CGSize size = CGSizeMake(width*scale, width*scale*self.model.asset.pixelHeight/self.model.asset.pixelWidth);
     
     [_indicator startAnimating];
-    weakify(self);
+    zl_weakify(self);
     [ZLPhotoManager requestImageForAsset:self.model.asset size:size completion:^(UIImage *image, NSDictionary *info) {
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
-            strongify(weakSelf);
+            zl_strongify(weakSelf);
             [strongSelf->_indicator stopAnimating];
             strongSelf->_imageView.image = image;
             

@@ -40,13 +40,13 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.previewView];
-        weakify(self);
+        zl_weakify(self);
         self.previewView.singleTapCallBack = ^() {
-            strongify(weakSelf);
+            zl_strongify(weakSelf);
             if (strongSelf.singleTapCallBack) strongSelf.singleTapCallBack();
         };
         self.previewView.longPressCallBack = ^{
-            strongify(weakSelf);
+            zl_strongify(weakSelf);
             if (strongSelf.longPressCallBack) 
                 strongSelf.longPressCallBack();
         };
@@ -403,10 +403,10 @@
 - (void)loadGifImage:(PHAsset *)asset
 {
     [self.indicator startAnimating];
-    weakify(self);
+    zl_weakify(self);
     
     [ZLPhotoManager requestOriginalImageDataForAsset:asset completion:^(NSData *data, NSDictionary *info) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             strongSelf.imageView.image = [ZLPhotoManager transformToGifImageWithData:data];
             [strongSelf resumeGif];
@@ -427,9 +427,9 @@
     CGFloat scale = 2;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
     CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
-    weakify(self);
+    zl_weakify(self);
     self.imageRequestID = [ZLPhotoManager requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         strongSelf.imageView.image = image;
         [strongSelf resetSubviewSize:asset];
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
@@ -454,9 +454,9 @@
         [self resetSubviewSize:obj];
     } else {
         [self.indicator startAnimating];
-        weakify(self);
+        zl_weakify(self);
         [self.imageView sd_setImageWithURL:obj placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-            strongify(weakSelf);
+            zl_strongify(weakSelf);
             [strongSelf.indicator stopAnimating];
             if (error) {
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadNetImageFailed));
@@ -674,9 +674,9 @@
     CGFloat scale = 2;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
     CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
-    weakify(self);
+    zl_weakify(self);
     self.imageRequestID = [ZLPhotoManager requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         strongSelf.imageView.image = image;
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             [strongSelf.indicator stopAnimating];
@@ -686,9 +686,9 @@
 
 - (void)loadLivePhoto:(PHAsset *)asset
 {
-    weakify(self);
+    zl_weakify(self);
     [ZLPhotoManager requestLivePhotoForAsset:asset completion:^(PHLivePhoto *lv, NSDictionary *info) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         if (lv) {
             strongSelf.lpView.livePhoto = lv;
             [strongSelf.lpView startPlaybackWithStyle:PHLivePhotoViewPlaybackStyleFull];
@@ -822,9 +822,9 @@
     CGFloat scale = 2;
     CGFloat width = MIN(kViewWidth, kMaxImageWidth);
     CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
-    weakify(self);
+    zl_weakify(self);
     self.imageRequestID = [ZLPhotoManager requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         strongSelf.imageView.image = image;
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             [strongSelf.indicator stopAnimating];
@@ -861,10 +861,10 @@
     [super singleTapAction];
     
     if (!_playLayer) {
-        weakify(self);
+        zl_weakify(self);
         [ZLPhotoManager requestVideoForAsset:self.asset completion:^(AVPlayerItem *item, NSDictionary *info) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                strongify(weakSelf);
+                zl_strongify(weakSelf);
                 if (!item) {
                     [strongSelf initVideoLoadFailedFromiCloudUI];
                     return;

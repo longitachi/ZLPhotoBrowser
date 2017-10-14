@@ -72,13 +72,12 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
         if (!_albumListModel) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                weakify(self);
+                zl_weakify(self);
                 [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage complete:^(ZLAlbumListModel *album) {
-                    strongify(weakSelf);
+                    zl_strongify(weakSelf);
                     ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
                     
                     strongSelf.albumListModel = album;
-                    strongSelf.title = album.title;
                     [ZLPhotoManager markSelcectModelInArr:strongSelf.albumListModel.models selArr:weakNav.arrSelectedModels];
                     strongSelf.arrDataSources = [NSMutableArray arrayWithArray:strongSelf.albumListModel.models];
                     [hud hide];
@@ -86,6 +85,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                         if (weakNav.allowTakePhotoInLibrary && weakNav.allowSelectImage) {
                             strongSelf.allowTakePhoto = YES;
                         }
+                        strongSelf.title = album.title;
                         [strongSelf.collectionView reloadData];
                         [strongSelf scrollToBottom];
                     });
@@ -183,7 +183,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+self.btnOriginalPhoto.imageView.frame.size.width, bottomBtnH);
     offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
     
-    self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 50, bottomBtnH);
+    self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 60, bottomBtnH);
     
     CGFloat doneWidth = GetMatchValue(self.btnDone.currentTitle, 15, YES, bottomBtnH);
     doneWidth = MAX(70, doneWidth);
@@ -396,9 +396,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLShowBigImgViewController *vc = [[ZLShowBigImgViewController alloc] init];
     vc.models = data.copy;
     vc.selectIndex = index;
-    weakify(self);
+    zl_weakify(self);
     [vc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         [ZLPhotoManager markSelcectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
         [strongSelf.collectionView reloadData];
     }];
@@ -635,11 +635,11 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         model = self.arrDataSources[indexPath.row-1];
     }
 
-    weakify(self);
+    zl_weakify(self);
     __weak typeof(cell) weakCell = cell;
     
     cell.selectedBlock = ^(BOOL selected) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         __strong typeof(weakCell) strongCell = weakCell;
         
         ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
@@ -797,9 +797,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    weakify(self);
+    zl_weakify(self);
     [picker dismissViewControllerAnimated:YES completion:^{
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
         ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
         [hud show];
@@ -849,9 +849,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)getOriginalImageBytes
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    weakify(self);
+    zl_weakify(self);
     [ZLPhotoManager getPhotosBytesWithArray:nav.arrSelectedModels completion:^(NSString *photosBytes) {
-        strongify(weakSelf);
+        zl_strongify(weakSelf);
         strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
     }];
 }
