@@ -128,6 +128,26 @@
 @property (nonatomic, strong) UIColor *navBarColor;
 
 /**
+ 导航标题颜色，默认 rgb(255, 255, 255)
+ */
+@property (nonatomic, strong) UIColor *navTitleColor;
+
+/**
+ 底部工具条底色，默认 rgb(255, 255, 255)
+ */
+@property (nonatomic, strong) UIColor *bottomViewBgColor;
+
+/**
+ 底部工具栏按钮 可交互 状态标题颜色，底部 toolbar 按钮可交互状态title颜色均使用这个，确定按钮 可交互 的背景色为这个，默认rgb(80, 180, 234)
+ */
+@property (nonatomic, strong) UIColor *bottomBtnsNormalTitleColor;
+
+/**
+ 底部工具栏按钮 不可交互 状态标题颜色，底部 toolbar 按钮不可交互状态颜色均使用这个，确定按钮 不可交互 的背景色为这个，默认rgb(200, 200, 200)
+ */
+@property (nonatomic, strong) UIColor *bottomBtnsDisableBgColor;
+
+/**
  是否在已选择的图片上方覆盖一层已选中遮罩层，默认 NO
  */
 @property (nonatomic, assign) BOOL showSelectedMask;

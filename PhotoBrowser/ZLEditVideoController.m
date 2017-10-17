@@ -350,6 +350,7 @@
 
 - (void)creatBottomView
 {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     //下方视图
     _bottomView = [[UIView alloc] init];
     _bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7];
@@ -364,7 +365,7 @@
     
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
-    [_doneBtn setBackgroundColor:kDoneButton_bgColor];
+    [_doneBtn setBackgroundColor:nav.bottomBtnsNormalTitleColor];
     [_doneBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _doneBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     _doneBtn.layer.masksToBounds = YES;

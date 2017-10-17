@@ -24,6 +24,12 @@
 double const ScalePhotoWidth = 1000;
 
 @interface ZLPhotoActionSheet () <UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPhotoLibraryChangeObserver>
+{
+    CGPoint _panBeginPoint;
+    ZLCollectionCell *_panCell;
+    UIImageView *_panView;
+    ZLPhotoModel *_panModel;
+}
 
 @property (weak, nonatomic) IBOutlet UIButton *btnCamera;
 @property (weak, nonatomic) IBOutlet UIButton *btnAblum;
@@ -111,6 +117,13 @@ double const ScalePhotoWidth = 1000;
     _maxEditVideoTime = MAX(maxEditVideoTime, 10);
 }
 
+- (void)setCustomImageNames:(NSArray<NSString *> *)customImageNames
+{
+    _customImageNames = customImageNames;
+    [[NSUserDefaults standardUserDefaults] setValue:customImageNames forKey:ZLCustomImageNames];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (instancetype)init
 {
     self = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
@@ -138,6 +151,7 @@ double const ScalePhotoWidth = 1000;
         self.allowEditVideo = NO;
         self.maxEditVideoTime = 10;
         self.allowSlideSelect = YES;
+        self.allowDragSelect = NO;
         self.editAfterSelectThumbnailImage = NO;
         self.allowMixSelect = YES;
         self.showCaptureImageOnTakePhotoBtn = YES;
@@ -145,7 +159,8 @@ double const ScalePhotoWidth = 1000;
         self.showSelectBtn = NO;
         self.showSelectedMask = NO;
         self.selectedMaskColor = [UIColor blackColor];
-        
+        self.bottomBtnsNormalTitleColor = kBottomBtnsNormalTitleColor;
+        self.bottomViewBgColor = [UIColor blackColor];
         if (![self judgeIsHavePhotoAblumAuthority]) {
             //注册实施监听相册变化
             [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
@@ -216,6 +231,9 @@ double const ScalePhotoWidth = 1000;
     
     if (!self.maxPreviewCount) {
         self.verColHeight.constant = .0;
+    } else if (self.maxSelectCount && self.allowDragSelect) {
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
+        [self.baseView addGestureRecognizer:pan];
     }
     
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
@@ -333,12 +351,13 @@ double const ScalePhotoWidth = 1000;
 {
     self.hidden = ![self judgeIsHavePhotoAblumAuthority] || !self.preview;
     [self changeCancelBtnTitle];
-    [self.collectionView setContentOffset:CGPointZero];
+//    [self.collectionView setContentOffset:CGPointZero];
 }
 
 - (void)show
 {
     self.frame = self.sender.view.bounds;
+    [self.collectionView setContentOffset:CGPointZero];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     if (!self.superview) {
         [self.sender.view addSubview:self];
@@ -385,11 +404,90 @@ double const ScalePhotoWidth = 1000;
     if (self.senderTabBarIsShow) {
         self.sender.tabBarController.tabBar.hidden = NO;
     }
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:ZLCustomImageNames];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [self hide];
+}
+
+- (void)panAction:(UIPanGestureRecognizer *)pan
+{
+    CGPoint point = [pan locationInView:self.baseView];
+    if (pan.state == UIGestureRecognizerStateBegan) {
+        if (!CGRectContainsPoint(self.collectionView.frame, point)) {
+            _panBeginPoint = CGPointZero;
+            return;
+        }
+        _panBeginPoint = [pan locationInView:self.collectionView];
+        
+    } else if (pan.state == UIGestureRecognizerStateChanged) {
+        if (CGPointEqualToPoint(_panBeginPoint, CGPointZero)) return;
+        
+        CGPoint cp = [pan locationInView:self.collectionView];
+        
+        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:_panBeginPoint];
+        
+        if (!indexPath) return;
+        
+        if (!_panView) {
+            if (cp.y > _panBeginPoint.y) {
+                _panBeginPoint = CGPointZero;
+                return;
+            }
+            
+            _panModel = self.arrDataSources[indexPath.row];
+            
+            ZLCollectionCell *cell = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+            _panCell = cell;
+            _panView = [[UIImageView alloc] initWithFrame:cell.bounds];
+            _panView.image = cell.imageView.image;
+            
+            cell.imageView.image = nil;
+            
+            [self addSubview:_panView];
+        }
+        
+        _panView.center = [self convertPoint:point fromView:self.baseView];
+    } else if (pan.state == UIGestureRecognizerStateCancelled ||
+               pan.state == UIGestureRecognizerStateEnded) {
+        if (!_panView) return;
+        
+        CGRect panViewRect = [self.baseView convertRect:_panView.frame fromView:self];
+        BOOL callBack = NO;
+        if (CGRectGetMidY(panViewRect) < -10) {
+            //如果往上拖动距离中心点与collectionview间距大于10，则回调
+            [self requestSelPhotos:nil data:@[_panModel] hideAfterCallBack:NO];
+            callBack = YES;
+        }
+        
+        _panModel = nil;
+        if (!callBack) {
+            CGRect toRect = [self convertRect:_panCell.frame fromView:self.collectionView];
+            [UIView animateWithDuration:0.25 animations:^{
+                _panView.frame = toRect;
+            } completion:^(BOOL finished) {
+                _panCell.imageView.image = _panView.image;
+                _panCell = nil;
+                [_panView removeFromSuperview];
+                _panView = nil;
+            }];
+        } else {
+            _panCell.imageView.image = _panView.image;
+            _panCell.imageView.frame = CGRectZero;
+            _panCell.imageView.center = _panCell.contentView.center;
+            [_panView removeFromSuperview];
+            _panView = nil;
+            [UIView animateWithDuration:0.25 animations:^{
+                _panCell.imageView.frame = _panCell.contentView.frame;
+            } completion:^(BOOL finished) {
+                _panCell = nil;
+            }];
+        }
+    }
 }
 
 #pragma mark - UIButton Action
@@ -427,7 +525,7 @@ double const ScalePhotoWidth = 1000;
 - (IBAction)btnCancel_Click:(id)sender
 {
     if (self.arrSelectedModels.count) {
-        [self requestSelPhotos:nil];
+        [self requestSelPhotos:nil data:self.arrSelectedModels hideAfterCallBack:YES];
         return;
     }
     [self hide];
@@ -437,7 +535,7 @@ double const ScalePhotoWidth = 1000;
 {
     if (self.arrSelectedModels.count > 0) {
         [self.btnCancel setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), self.arrSelectedModels.count] forState:UIControlStateNormal];
-        [self.btnCancel setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
+        [self.btnCancel setTitleColor:self.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
     } else {
         [self.btnCancel setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
         [self.btnCancel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -445,21 +543,21 @@ double const ScalePhotoWidth = 1000;
 }
 
 #pragma mark - 请求所选择图片、回调
-- (void)requestSelPhotos:(UIViewController *)vc
+- (void)requestSelPhotos:(UIViewController *)vc data:(NSArray<ZLPhotoModel *> *)data hideAfterCallBack:(BOOL)hide
 {
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     [hud show];
     
-    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:self.arrSelectedModels.count];
-    NSMutableArray *assets = [NSMutableArray arrayWithCapacity:self.arrSelectedModels.count];
-    for (int i = 0; i < self.arrSelectedModels.count; i++) {
+    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:data.count];
+    NSMutableArray *assets = [NSMutableArray arrayWithCapacity:data.count];
+    for (int i = 0; i < data.count; i++) {
         [photos addObject:@""];
         [assets addObject:@""];
     }
     
     zl_weakify(self);
-    for (int i = 0; i < self.arrSelectedModels.count; i++) {
-        ZLPhotoModel *model = self.arrSelectedModels[i];
+    for (int i = 0; i < data.count; i++) {
+        ZLPhotoModel *model = data[i];
         [ZLPhotoManager requestSelectedImageForAsset:model isOriginal:self.isSelectOriginalPhoto allowSelectGif:self.allowSelectGif completion:^(UIImage *image, NSDictionary *info) {
             if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
             
@@ -477,8 +575,10 @@ double const ScalePhotoWidth = 1000;
             if (strongSelf.selectImageBlock) {
                 strongSelf.selectImageBlock(photos, assets, strongSelf.isSelectOriginalPhoto);
             }
-            [strongSelf hide];
-            [vc dismissViewControllerAnimated:YES completion:nil];
+            if (hide) {
+                [strongSelf hide];
+                [vc dismissViewControllerAnimated:YES completion:nil];
+            }
         }];
     }
 }
@@ -668,7 +768,7 @@ double const ScalePhotoWidth = 1000;
         strongSelf.isSelectOriginalPhoto = weakNav.isSelectOriginalPhoto;
         [strongSelf.arrSelectedModels removeAllObjects];
         [strongSelf.arrSelectedModels addObjectsFromArray:weakNav.arrSelectedModels];
-        [strongSelf requestSelPhotos:weakNav];
+        [strongSelf requestSelPhotos:weakNav data:strongSelf.arrSelectedModels hideAfterCallBack:YES];
     }];
     
     [nav setCallSelectClipImageBlock:^(UIImage *image, PHAsset *asset){
@@ -707,6 +807,10 @@ double const ScalePhotoWidth = 1000;
     nav.showSelectBtn = self.showSelectBtn;
     nav.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
     nav.navBarColor = self.navBarColor;
+    nav.navTitleColor = self.navTitleColor;
+    nav.bottomBtnsNormalTitleColor = self.bottomBtnsNormalTitleColor;
+    nav.bottomBtnsDisableBgColor = self.bottomBtnsDisableBgColor;
+    nav.bottomViewBgColor = self.bottomViewBgColor;
     nav.showSelectedMask = self.showSelectedMask;
     nav.selectedMaskColor = self.selectedMaskColor;
     [nav.arrSelectedModels removeAllObjects];
@@ -815,7 +919,7 @@ double const ScalePhotoWidth = 1000;
     } else if (self.maxSelectCount == 1 && !self.arrSelectedModels.count) {
         model.selected = YES;
         [self.arrSelectedModels addObject:model];
-        [self requestSelPhotos:nil];
+        [self requestSelPhotos:nil data:self.arrSelectedModels hideAfterCallBack:YES];
         return;
     }
     [self.collectionView reloadData];

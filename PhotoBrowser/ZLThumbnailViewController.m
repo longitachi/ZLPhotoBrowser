@@ -243,9 +243,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         }
         self.btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
         [self.btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), nav.arrSelectedModels.count] forState:UIControlStateNormal];
-        [self.btnOriginalPhoto setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
-        [self.btnPreView setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
-        self.btnDone.backgroundColor = kDoneButton_bgColor;
+        [self.btnOriginalPhoto setTitleColor:nav.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
+        [self.btnPreView setTitleColor:nav.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
+        self.btnDone.backgroundColor = nav.bottomBtnsNormalTitleColor;
         [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     } else {
         self.btnOriginalPhoto.selected = NO;
@@ -254,10 +254,10 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         self.btnDone.enabled = NO;
         self.labPhotosBytes.text = nil;
         [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateDisabled];
-        [self.btnOriginalPhoto setTitleColor:kButtonUnable_textColor forState:UIControlStateDisabled];
-        [self.btnPreView setTitleColor:kButtonUnable_textColor forState:UIControlStateDisabled];
-        self.btnDone.backgroundColor = kButtonUnable_textColor;
-        [self.btnDone setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+        [self.btnOriginalPhoto setTitleColor:nav.bottomBtnsDisableBgColor forState:UIControlStateDisabled];
+        [self.btnPreView setTitleColor:nav.bottomBtnsDisableBgColor forState:UIControlStateDisabled];
+        self.btnDone.backgroundColor = nav.bottomBtnsDisableBgColor;
+        [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
     }
     
     BOOL canEdit = NO;
@@ -268,7 +268,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto))) ||
         (nav.allowEditVideo && m.type == ZLAssetMediaTypeVideo && round(m.asset.duration) >= nav.maxEditVideoTime);
     }
-    [self.btnEdit setTitleColor:canEdit?kDoneButton_bgColor:kButtonUnable_textColor forState:UIControlStateNormal];
+    [self.btnEdit setTitleColor:canEdit?nav.bottomBtnsNormalTitleColor:nav.bottomBtnsDisableBgColor forState:UIControlStateNormal];
     self.btnEdit.userInteractionEnabled = canEdit;
 }
 
@@ -309,15 +309,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (void)setupBottomView
 {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
     self.bottomView = [[UIView alloc] init];
-    self.bottomView.backgroundColor = kBottomView_color;
+    self.bottomView.backgroundColor = nav.bottomViewBgColor;
     [self.view addSubview:self.bottomView];
     
     self.bline = [[UIView alloc] init];
     self.bline.backgroundColor = kRGB(232, 232, 232);
     [self.bottomView addSubview:self.bline];
     
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (nav.allowEditImage || nav.allowEditVideo) {
         self.btnEdit = [UIButton buttonWithType:UIButtonTypeCustom];
         self.btnEdit.titleLabel.font = [UIFont systemFontOfSize:15];
@@ -342,7 +343,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     
     self.labPhotosBytes = [[UILabel alloc] init];
     self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
-    self.labPhotosBytes.textColor = kDoneButton_bgColor;
+    self.labPhotosBytes.textColor = nav.bottomBtnsNormalTitleColor;
     [self.bottomView addSubview:self.labPhotosBytes];
     
     self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -356,12 +357,13 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (void)initNavBtn
 {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat width = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 16, YES, 44);
     btn.frame = CGRectMake(0, 0, width, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [btn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
-    [btn setTitleColor:kNavBar_tintColor forState:UIControlStateNormal];
+    [btn setTitleColor:nav.navTitleColor forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
 }

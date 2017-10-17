@@ -39,6 +39,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *maxVideoDurationTextField;
 @property (weak, nonatomic) IBOutlet UISwitch *allowSlideSelectSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowEditVideoSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *allowDragSelectSwitch;
 
 
 @property (nonatomic, strong) NSMutableArray<UIImage *> *lastSelectPhotos;
@@ -95,6 +96,7 @@
     actionSheet.allowEditVideo = self.allowEditVideoSwitch.isOn;
     actionSheet.allowSlideSelect = self.allowSlideSelectSwitch.isOn;
     actionSheet.allowMixSelect = self.mixSelectSwitch.isOn;
+    actionSheet.allowDragSelect = self.allowDragSelectSwitch.isOn;
     //设置相册内部显示拍照按钮
     actionSheet.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
     //设置在内部拍照按钮上实时显示相机俘获画面
@@ -108,7 +110,7 @@
     //设置照片cell弧度
     actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
     //单选模式是否显示选择按钮
-    actionSheet.showSelectBtn = YES;
+    actionSheet.showSelectBtn = NO;
     //是否在选择图片后直接进入编辑界面
     actionSheet.editAfterSelectThumbnailImage = self.editAfterSelectImageSwitch.isOn;
     //设置编辑比例
@@ -117,6 +119,7 @@
     actionSheet.showSelectedMask = self.maskSwitch.isOn;
     //遮罩层颜色
 //    actionSheet.selectedMaskColor = [UIColor orangeColor];
+    actionSheet.customImageNames = @[@"btn_unselected"];
 #pragma required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;

@@ -19,13 +19,6 @@
 		FD028BDC1CBE33BB009DD2FC /* ZLProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BB81CBE33BB009DD2FC /* ZLProgressHUD.m */; };
 		FD028BDE1CBE33BB009DD2FC /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */; };
 		FD028BDF1CBE33BB009DD2FC /* ZLThumbnailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */; };
-		FD028BF21CBE373F009DD2FC /* btn_original_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE41CBE373F009DD2FC /* btn_original_circle.png */; };
-		FD028BF31CBE373F009DD2FC /* btn_original_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE51CBE373F009DD2FC /* btn_original_circle@2x.png */; };
-		FD028BF41CBE373F009DD2FC /* btn_original_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE61CBE373F009DD2FC /* btn_original_circle@3x.png */; };
-		FD028BF51CBE373F009DD2FC /* btn_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE71CBE373F009DD2FC /* btn_selected.png */; };
-		FD028BF61CBE373F009DD2FC /* btn_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE81CBE373F009DD2FC /* btn_selected@2x.png */; };
-		FD028BF71CBE373F009DD2FC /* btn_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BE91CBE373F009DD2FC /* btn_selected@3x.png */; };
-		FD028BFB1CBE373F009DD2FC /* defaultphoto.png in Resources */ = {isa = PBXBuildFile; fileRef = FD028BED1CBE373F009DD2FC /* defaultphoto.png */; };
 		FD028BFF1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */; };
 		FD0787221C0D45A200D17B97 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787211C0D45A200D17B97 /* main.m */; };
 		FD0787251C0D45A200D17B97 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787241C0D45A200D17B97 /* AppDelegate.m */; };
@@ -73,13 +66,6 @@
 		FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImgViewController.m; sourceTree = "<group>"; };
 		FD028BBD1CBE33BB009DD2FC /* ZLThumbnailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLThumbnailViewController.h; sourceTree = "<group>"; };
 		FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLThumbnailViewController.m; sourceTree = "<group>"; };
-		FD028BE41CBE373F009DD2FC /* btn_original_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_original_circle.png; sourceTree = "<group>"; };
-		FD028BE51CBE373F009DD2FC /* btn_original_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_original_circle@2x.png"; sourceTree = "<group>"; };
-		FD028BE61CBE373F009DD2FC /* btn_original_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_original_circle@3x.png"; sourceTree = "<group>"; };
-		FD028BE71CBE373F009DD2FC /* btn_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_selected.png; sourceTree = "<group>"; };
-		FD028BE81CBE373F009DD2FC /* btn_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_selected@2x.png"; sourceTree = "<group>"; };
-		FD028BE91CBE373F009DD2FC /* btn_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_selected@3x.png"; sourceTree = "<group>"; };
-		FD028BED1CBE373F009DD2FC /* defaultphoto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultphoto.png; sourceTree = "<group>"; };
 		FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZLPhotoBrowser.bundle; sourceTree = "<group>"; };
 		FD07871D1C0D45A200D17B97 /* ZLPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZLPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD0787211C0D45A200D17B97 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -187,13 +173,6 @@
 			isa = PBXGroup;
 			children = (
 				FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */,
-				FD028BE41CBE373F009DD2FC /* btn_original_circle.png */,
-				FD028BE51CBE373F009DD2FC /* btn_original_circle@2x.png */,
-				FD028BE61CBE373F009DD2FC /* btn_original_circle@3x.png */,
-				FD028BE71CBE373F009DD2FC /* btn_selected.png */,
-				FD028BE81CBE373F009DD2FC /* btn_selected@2x.png */,
-				FD028BE91CBE373F009DD2FC /* btn_selected@3x.png */,
-				FD028BED1CBE373F009DD2FC /* defaultphoto.png */,
 				FD028BA11CBE33BB009DD2FC /* ZLPhotoActionSheet.xib */,
 				FD028BA21CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib */,
 			);
@@ -323,17 +302,10 @@
 			files = (
 				FD028BFF1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle in Resources */,
 				FD0787301C0D45A200D17B97 /* LaunchScreen.storyboard in Resources */,
-				FD028BF41CBE373F009DD2FC /* btn_original_circle@3x.png in Resources */,
-				FD028BF71CBE373F009DD2FC /* btn_selected@3x.png in Resources */,
 				FD028BD01CBE33BB009DD2FC /* ZLPhotoActionSheet.xib in Resources */,
-				FD028BFB1CBE373F009DD2FC /* defaultphoto.png in Resources */,
-				FD028BF21CBE373F009DD2FC /* btn_original_circle.png in Resources */,
-				FD028BF31CBE373F009DD2FC /* btn_original_circle@2x.png in Resources */,
 				FD07872D1C0D45A200D17B97 /* Assets.xcassets in Resources */,
 				FD07872B1C0D45A200D17B97 /* Main.storyboard in Resources */,
 				FD028BD11CBE33BB009DD2FC /* ZLPhotoBrowserCell.xib in Resources */,
-				FD028BF51CBE373F009DD2FC /* btn_selected.png in Resources */,
-				FD028BF61CBE373F009DD2FC /* btn_selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

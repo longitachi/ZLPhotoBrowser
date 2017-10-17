@@ -26,8 +26,6 @@
 {
     self = [super initWithRootViewController:rootViewController];
     if (self) {
-        [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: kNavBar_tintColor}];
-        [self.navigationBar setTintColor:kNavBar_tintColor];
         self.navigationBar.barStyle = UIBarStyleBlack;
         self.navigationBar.translucent = YES;
     }
@@ -71,6 +69,27 @@
 {
     _navBarColor = navBarColor?:kNavBar_color;
     [self.navigationBar setBackgroundImage:[self imageWithColor:_navBarColor] forBarMetrics:UIBarMetricsDefault];
+}
+
+- (void)setNavTitleColor:(UIColor *)navTitleColor
+{
+    _navTitleColor = navTitleColor?:kNavBar_tintColor;
+    [self.navigationBar setTintColor:kNavBar_tintColor];
+}
+
+- (void)setBottomViewBgColor:(UIColor *)bottomViewBgColor
+{
+    _bottomViewBgColor = bottomViewBgColor?:kBottomViewBgColor;
+}
+
+- (void)setBottomBtnsNormalTitleColor:(UIColor *)bottomBtnsNormalTitleColor
+{
+    _bottomBtnsNormalTitleColor = bottomBtnsNormalTitleColor?:kBottomBtnsNormalTitleColor;
+}
+
+- (void)setBottomBtnsDisableBgColor:(UIColor *)bottomBtnsDisableBgColor
+{
+    _bottomBtnsDisableBgColor = bottomBtnsDisableBgColor?:kBottomBtnsDisableTitleColor;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -169,12 +188,13 @@
 
 - (void)initNavBtn
 {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat width = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 16, YES, 44);
     btn.frame = CGRectMake(0, 0, width, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [btn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
-    [btn setTitleColor:kNavBar_tintColor forState:UIControlStateNormal];
+    [btn setTitleColor:nav.navTitleColor forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
 }

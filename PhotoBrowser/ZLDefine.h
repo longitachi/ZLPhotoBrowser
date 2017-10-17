@@ -46,10 +46,10 @@
 
 #define kNavBar_color kRGB(19, 153, 231)
 #define kNavBar_tintColor kRGB(255, 255, 255)
-#define kBottomView_color kRGB(255, 255, 255)
+#define kBottomViewBgColor kRGB(255, 255, 255)
 #define kDoneButton_textColor kRGB(255, 255, 255)
-#define kDoneButton_bgColor kRGB(80, 180, 234)
-#define kButtonUnable_textColor kRGB(200, 200, 200)
+#define kBottomBtnsNormalTitleColor kRGB(80, 180, 234)
+#define kBottomBtnsDisableTitleColor kRGB(200, 200, 200)
 
 #define zl_weakify(var)   __weak typeof(var) weakSelf = var
 #define zl_strongify(var) __strong typeof(var) strongSelf = var
@@ -64,8 +64,10 @@
 #define kZLPhotoBrowserFrameworkSrcName(file) [@"Frameworks/ZLPhotoBrowser.framework/ZLPhotoBrowser.bundle" stringByAppendingPathComponent:file]
 
 #define kViewWidth      [[UIScreen mainScreen] bounds].size.width
-
 #define kViewHeight     [[UIScreen mainScreen] bounds].size.height
+
+//自定义图片名称存于plist中的key
+#define ZLCustomImageNames @"ZLCustomImageNames"
 
 ////////ZLShowBigImgViewController
 #define kItemMargin 40
@@ -102,6 +104,10 @@ static inline NSString *  GetLocalLanguageTextValue (NSString *key) {
 }
 
 static inline UIImage * GetImageWithName (NSString *name) {
+    NSArray *names = [[NSUserDefaults standardUserDefaults] valueForKey:ZLCustomImageNames];
+    if ([names containsObject:name]) {
+        return [UIImage imageNamed:name];
+    }
     return [UIImage imageNamed:kZLPhotoBrowserSrcName(name)]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(name)];
 }
 

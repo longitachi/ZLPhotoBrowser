@@ -5,7 +5,7 @@
 //  Created by long on 15/11/25.
 //  Copyright © 2015年 long. All rights reserved.
 //
-//pods version 2.4.6 - 2017.10.9 update
+//pods version 2.4.8 - 2017.10.17 update
 
 #import <UIKit/UIKit.h>
 #import "ZLDefine.h"
@@ -99,6 +99,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL allowSlideSelect;
 
 /**
+ 预览界面是否允许拖拽选择 默认 NO
+ */
+@property (nonatomic, assign) BOOL allowDragSelect;
+
+/**
  根据需要设置自身需要的裁剪比例
  
  @discussion e.g.:1:1，请使用ZLDefine中所提供方法 GetClipRatio(NSInteger value1, NSInteger value2)，该数组可不设置，有默认比例，为（Custom, 1:1, 4:3, 3:2, 16:9）
@@ -138,6 +143,26 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIColor *navBarColor;
 
 /**
+ 导航标题颜色，默认 rgb(255, 255, 255)
+ */
+@property (nonatomic, strong) UIColor *navTitleColor;
+
+/**
+ 底部工具条底色，默认 rgb(255, 255, 255)
+ */
+@property (nonatomic, strong) UIColor *bottomViewBgColor;
+
+/**
+ 底部工具栏按钮 可交互 状态标题颜色，底部 toolbar 按钮可交互状态title颜色均使用这个，确定按钮 可交互 的背景色为这个，默认rgb(80, 180, 234)
+ */
+@property (nonatomic, strong) UIColor *bottomBtnsNormalTitleColor;
+
+/**
+ 底部工具栏按钮 不可交互 状态标题颜色，底部 toolbar 按钮不可交互状态颜色均使用这个，确定按钮 不可交互 的背景色为这个，默认rgb(200, 200, 200)
+ */
+@property (nonatomic, strong) UIColor *bottomBtnsDisableBgColor;
+
+/**
  是否在已选择的图片上方覆盖一层已选中遮罩层，默认 NO
  */
 @property (nonatomic, assign) BOOL showSelectedMask;
@@ -146,6 +171,12 @@ NS_ASSUME_NONNULL_BEGIN
  遮罩层颜色，内部会默认调整颜色的透明度为0.2， 默认 blackColor
  */
 @property (nonatomic, strong) UIColor *selectedMaskColor;
+
+/**
+ 支持开发者自定义图片，但是所自定义图片资源名称必须与被替换的bundle中的图片名称一致
+ @example: 开发者需要替换选中与未选中的图片资源，则需要传入的数组为 @[@"btn_selected", @"btn_unselected"]，则框架内会使用开发者项目中的图片资源，而其他图片则用框架bundle中的资源
+ */
+@property (nonatomic, strong) NSArray<NSString *> *customImageNames;
 
 /**
  选择照片回调，回调解析好的图片、对应的asset对象、是否原图

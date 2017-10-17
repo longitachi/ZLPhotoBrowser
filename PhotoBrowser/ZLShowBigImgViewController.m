@@ -186,7 +186,7 @@
     
     _indexLabel = [[UILabel alloc] init];
     _indexLabel.font = [UIFont systemFontOfSize:18];
-    _indexLabel.textColor = kNavBar_tintColor;
+    _indexLabel.textColor = nav.navTitleColor;
     _indexLabel.textAlignment = NSTextAlignmentCenter;
     _indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
     [_navView addSubview:_indexLabel];
@@ -235,12 +235,12 @@
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
     _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, kViewHeight - 44, kViewWidth, 44)];
-    _bottomView.backgroundColor = kBottomView_color;
+    _bottomView.backgroundColor = nav.bottomViewBgColor;
     
     _btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
     _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_btnOriginalPhoto setTitleColor:kDoneButton_bgColor forState: UIControlStateNormal];
+    [_btnOriginalPhoto setTitleColor:nav.bottomBtnsNormalTitleColor forState: UIControlStateNormal];
     UIImage *normalImg = GetImageWithName(@"btn_original_circle.png");
     UIImage *selImg = GetImageWithName(@"btn_selected.png");
     [_btnOriginalPhoto setImage:normalImg forState:UIControlStateNormal];
@@ -253,14 +253,14 @@
     
     self.labPhotosBytes = [[UILabel alloc] init];
     self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
-    self.labPhotosBytes.textColor = kDoneButton_bgColor;
+    self.labPhotosBytes.textColor = nav.bottomBtnsNormalTitleColor;
     [_bottomView addSubview:self.labPhotosBytes];
     
     //编辑
     _btnEdit = [UIButton buttonWithType:UIButtonTypeCustom];
     [_btnEdit setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserEditText) forState:UIControlStateNormal];
     _btnEdit.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_btnEdit setTitleColor:kDoneButton_bgColor forState:UIControlStateNormal];
+    [_btnEdit setTitleColor:nav.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
     _btnEdit.frame = CGRectMake(kViewWidth/2-30, 7, 60, 30);
     [_btnEdit addTarget:self action:@selector(btnEdit_Click:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_btnEdit];
@@ -271,7 +271,7 @@
     _btnDone.layer.masksToBounds = YES;
     _btnDone.layer.cornerRadius = 3.0f;
     [_btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_btnDone setBackgroundColor:kDoneButton_bgColor];
+    [_btnDone setBackgroundColor:nav.bottomBtnsNormalTitleColor];
     _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
     [_btnDone addTarget:self action:@selector(btnDone_Click:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_btnDone];
