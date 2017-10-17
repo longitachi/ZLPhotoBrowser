@@ -160,7 +160,6 @@ double const ScalePhotoWidth = 1000;
         self.showSelectedMask = NO;
         self.selectedMaskColor = [UIColor blackColor];
         self.bottomBtnsNormalTitleColor = kBottomBtnsNormalTitleColor;
-        self.bottomViewBgColor = [UIColor blackColor];
         if (![self judgeIsHavePhotoAblumAuthority]) {
             //注册实施监听相册变化
             [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
