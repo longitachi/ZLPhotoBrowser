@@ -40,7 +40,7 @@
         zl_strongify(weakSelf);
         
         if ([strongSelf.identifier isEqualToString:model.headImageAsset.localIdentifier]) {
-            strongSelf.headImageView.image = image?:GetImageWithName(@"defaultphoto.png");
+            strongSelf.headImageView.image = image?:GetImageWithName(@"defaultphoto");
         }
     }];
     

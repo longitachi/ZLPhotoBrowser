@@ -49,6 +49,7 @@ double const ScalePhotoWidth = 1000;
 
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
 @property (nonatomic, assign) UIStatusBarStyle previousStatusBarStyle;
+@property (nonatomic, assign) BOOL previousStatusBarIsHidden;
 @property (nonatomic, assign) BOOL senderTabBarIsShow;
 @property (nonatomic, strong) UILabel *placeholderLabel;
 
@@ -225,6 +226,7 @@ double const ScalePhotoWidth = 1000;
     self.animate = animate;
     self.preview = preview;
     self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
+    self.previousStatusBarIsHidden = [UIApplication sharedApplication].isStatusBarHidden;
     
     [ZLPhotoManager setSortAscending:self.sortAscending];
     
@@ -365,6 +367,7 @@ double const ScalePhotoWidth = 1000;
         self.senderTabBarIsShow = YES;
         self.sender.tabBarController.tabBar.hidden = YES;
     }
+    
     UIEdgeInsets inset = UIEdgeInsetsZero;
     if (@available(iOS 11, *)) {
         inset = self.sender.view.safeAreaInsets;
@@ -394,10 +397,16 @@ double const ScalePhotoWidth = 1000;
             self.baseView.frame = frame;
         } completion:^(BOOL finished) {
             self.hidden = YES;
+            if (self.previousStatusBarIsHidden) {
+                [UIApplication sharedApplication].statusBarHidden = YES;
+            }
             [self removeFromSuperview];
         }];
     } else {
         self.hidden = YES;
+        if (self.previousStatusBarIsHidden) {
+            [UIApplication sharedApplication].statusBarHidden = YES;
+        }
         [self removeFromSuperview];
     }
     if (self.senderTabBarIsShow) {

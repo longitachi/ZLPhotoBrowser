@@ -139,7 +139,7 @@
         _placeholderView = [[UIView alloc] initWithFrame:self.view.bounds];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 80)];
-        imageView.image = GetImageWithName(@"defaultphoto.png");
+        imageView.image = GetImageWithName(@"defaultphoto");
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.center = CGPointMake(kViewWidth/2, kViewHeight/2-90);
         [_placeholderView addSubview:imageView];

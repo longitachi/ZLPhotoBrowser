@@ -92,6 +92,7 @@
     if (!_isFirstAppear) {
         return;
     }
+    [UIApplication sharedApplication].statusBarHidden = NO;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [_collectionView setContentOffset:CGPointMake((kViewWidth+kItemMargin)*_indexBeforeRotation, 0)];
 }
@@ -179,7 +180,7 @@
     [self.view addSubview:_navView];
     
     _btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnBack setImage:GetImageWithName(@"navBackBtn.png") forState:UIControlStateNormal];
+    [_btnBack setImage:GetImageWithName(@"navBackBtn") forState:UIControlStateNormal];
     [_btnBack setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
     [_btnBack addTarget:self action:@selector(btnBack_Click) forControlEvents:UIControlEventTouchUpInside];
     [_navView addSubview:_btnBack];
@@ -198,8 +199,8 @@
     //right nav btn
     _navRightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _navRightBtn.frame = CGRectMake(0, 0, 25, 25);
-    UIImage *normalImg = GetImageWithName(@"btn_circle.png");
-    UIImage *selImg = GetImageWithName(@"btn_selected.png");
+    UIImage *normalImg = GetImageWithName(@"btn_circle");
+    UIImage *selImg = GetImageWithName(@"btn_selected");
     [_navRightBtn setBackgroundImage:normalImg forState:UIControlStateNormal];
     [_navRightBtn setBackgroundImage:selImg forState:UIControlStateSelected];
     [_navRightBtn addTarget:self action:@selector(navRightBtn_Click:) forControlEvents:UIControlEventTouchUpInside];
@@ -241,8 +242,8 @@
     [_btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
     _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
     [_btnOriginalPhoto setTitleColor:nav.bottomBtnsNormalTitleColor forState: UIControlStateNormal];
-    UIImage *normalImg = GetImageWithName(@"btn_original_circle.png");
-    UIImage *selImg = GetImageWithName(@"btn_selected.png");
+    UIImage *normalImg = GetImageWithName(@"btn_original_circle");
+    UIImage *selImg = GetImageWithName(@"btn_selected");
     [_btnOriginalPhoto setImage:normalImg forState:UIControlStateNormal];
     [_btnOriginalPhoto setImage:selImg forState:UIControlStateSelected];
     [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];

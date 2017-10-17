@@ -119,7 +119,6 @@
     actionSheet.showSelectedMask = self.maskSwitch.isOn;
     //遮罩层颜色
 //    actionSheet.selectedMaskColor = [UIColor orangeColor];
-    actionSheet.customImageNames = @[@"btn_unselected"];
 #pragma required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;

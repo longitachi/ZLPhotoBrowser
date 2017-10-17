@@ -143,6 +143,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [UIApplication sharedApplication].statusBarHidden = NO;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     [self resetBottomBtnsStatus];
 }
@@ -335,8 +336,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     
     self.btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
-    [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_original_circle.png") forState:UIControlStateNormal];
-    [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_selected.png") forState:UIControlStateSelected];
+    [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_original_circle") forState:UIControlStateNormal];
+    [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_selected") forState:UIControlStateSelected];
     [self.btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
     [self.btnOriginalPhoto addTarget:self action:@selector(btnOriginalPhoto_Click:) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomView addSubview:self.btnOriginalPhoto];
