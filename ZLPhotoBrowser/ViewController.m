@@ -60,6 +60,8 @@
     YYFPSLabel *label = [[YYFPSLabel alloc] initWithFrame:CGRectMake(kViewWidth - 100, 30, 100, 30)];
     [[UIApplication sharedApplication].keyWindow addSubview:label];
     [self initCollectionView];
+    
+//    [UIApplication sharedApplication].statusBarHidden = YES;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

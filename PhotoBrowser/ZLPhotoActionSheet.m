@@ -582,6 +582,7 @@ double const ScalePhotoWidth = 1000;
             [hud hide];
             if (strongSelf.selectImageBlock) {
                 strongSelf.selectImageBlock(photos, assets, strongSelf.isSelectOriginalPhoto);
+                [strongSelf.arrSelectedModels removeAllObjects];
             }
             if (hide) {
                 [strongSelf hide];
@@ -784,8 +785,8 @@ double const ScalePhotoWidth = 1000;
         if (strongSelf.selectImageBlock) {
             strongSelf.selectImageBlock(@[image], @[asset], NO);
         }
-        [strongSelf hide];
         [weakNav dismissViewControllerAnimated:YES completion:nil];
+        [strongSelf hide];
     }];
     
     [nav setCancelBlock:^{

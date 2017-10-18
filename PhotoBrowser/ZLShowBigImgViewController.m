@@ -89,11 +89,13 @@
 {
     [super viewWillAppear:animated];
     
+    [UIApplication sharedApplication].statusBarHidden = NO;
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
     if (!_isFirstAppear) {
         return;
     }
-    [UIApplication sharedApplication].statusBarHidden = NO;
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
     [_collectionView setContentOffset:CGPointMake((kViewWidth+kItemMargin)*_indexBeforeRotation, 0)];
 }
 

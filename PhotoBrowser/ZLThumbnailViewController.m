@@ -297,6 +297,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     self.collectionView.backgroundColor = [UIColor whiteColor];
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
+    if (@available(iOS 11.0, *)) {
+        [self.collectionView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentAlways];
+    }
     [self.view addSubview:self.collectionView];
     
     [self.collectionView registerClass:NSClassFromString(@"ZLTakePhotoCell") forCellWithReuseIdentifier:@"ZLTakePhotoCell"];

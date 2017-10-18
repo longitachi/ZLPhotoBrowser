@@ -135,7 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  已选择的asset对象数组
  */
-@property (nonatomic, strong) NSMutableArray<PHAsset *> *arrSelectedAssets;
+@property (nonatomic, strong, nullable) NSMutableArray<PHAsset *> *arrSelectedAssets;
 
 /**
  导航条颜色，默认 rgb(19, 153, 231)

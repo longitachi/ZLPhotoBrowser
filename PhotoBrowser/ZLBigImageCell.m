@@ -472,8 +472,7 @@
 {
     CGRect frame;
     
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    
+    BOOL isLandscape = UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation);
     CGFloat w, h;
     if ([obj isKindOfClass:PHAsset.class]) {
         w = [(PHAsset *)obj pixelWidth];
@@ -485,8 +484,7 @@
     
     CGFloat width = MIN(kViewWidth, w);
     BOOL orientationIsUpOrDown = YES;
-    if (orientation == UIDeviceOrientationLandscapeLeft ||
-        orientation == UIDeviceOrientationLandscapeRight) {
+    if (isLandscape) {
         orientationIsUpOrDown = NO;
         CGFloat height = MIN(GetViewHeight(self), h);
         frame.origin = CGPointZero;
