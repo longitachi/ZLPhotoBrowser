@@ -159,6 +159,7 @@ double const ScalePhotoWidth = 1000;
         self.sortAscending = YES;
         self.showSelectBtn = NO;
         self.showSelectedMask = NO;
+        self.shouldAnialysisAsset = YES;
         self.selectedMaskColor = [UIColor blackColor];
         self.bottomBtnsNormalTitleColor = kBottomBtnsNormalTitleColor;
         if (![self judgeIsHavePhotoAblumAuthority]) {
@@ -556,8 +557,25 @@ double const ScalePhotoWidth = 1000;
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     [hud show];
     
-    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:data.count];
-    NSMutableArray *assets = [NSMutableArray arrayWithCapacity:data.count];
+    if (!self.shouldAnialysisAsset) {
+        NSMutableArray *assets = [NSMutableArray arrayWithCapacity:data.count];
+        for (ZLPhotoModel *m in data) {
+            [assets addObject:m.asset];
+        }
+        [hud hide];
+        if (self.selectImageBlock) {
+            self.selectImageBlock(nil, assets, self.isSelectOriginalPhoto);
+            [self.arrSelectedModels removeAllObjects];
+        }
+        if (hide) {
+            [self hide];
+            [vc dismissViewControllerAnimated:YES completion:nil];
+        }
+        return;
+    }
+    
+    __block NSMutableArray *photos = [NSMutableArray arrayWithCapacity:data.count];
+    __block NSMutableArray *assets = [NSMutableArray arrayWithCapacity:data.count];
     for (int i = 0; i < data.count; i++) {
         [photos addObject:@""];
         [assets addObject:@""];
@@ -585,6 +603,7 @@ double const ScalePhotoWidth = 1000;
                 [strongSelf.arrSelectedModels removeAllObjects];
             }
             if (hide) {
+                [strongSelf.arrDataSources removeAllObjects];
                 [strongSelf hide];
                 [vc dismissViewControllerAnimated:YES completion:nil];
             }
@@ -597,16 +616,28 @@ double const ScalePhotoWidth = 1000;
  */
 - (UIImage *)scaleImage:(UIImage *)image
 {
-    CGSize size = CGSizeMake(ScalePhotoWidth, ScalePhotoWidth * image.size.height / image.size.width);
-    if (image.size.width < size.width
-        ) {
+    NSData *data = UIImageJPEGRepresentation(image, 1);
+
+    if (data.length < 0.2*(1024*1024)) {
+        //小于200k不缩放
         return image;
     }
-    UIGraphicsBeginImageContext(size);
-    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
+    
+    double scale = _isSelectOriginalPhoto ? (data.length>(1024*1024)?.7:.9) : (data.length>(1024*1024)?.5:.7);
+    NSData *d = UIImageJPEGRepresentation(image, scale);
+    
+    return [UIImage imageWithData:d];
+    
+//    CGSize size = CGSizeMake(ScalePhotoWidth, ScalePhotoWidth * image.size.height / image.size.width);
+//    if (image.size.width < size.width
+//        ) {
+//        return image;
+//    }
+//    UIGraphicsBeginImageContext(size);
+//    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+//    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    return newImage;
 }
 
 #pragma mark - UICollectionDataSource

@@ -179,10 +179,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSArray<NSString *> *customImageNames;
 
 /**
+ 回调时候是否允许框架解析图片，默认YES
+ 
+ 如果选择了大量图片，框架一下解析大量图片会耗费一些内存，开发者此时可置为NO，拿到assets数组后自行解析，该值为NO时，回调的图片数组为nil
+ */
+@property (nonatomic, assign) BOOL shouldAnialysisAsset;
+
+
+/**
  选择照片回调，回调解析好的图片、对应的asset对象、是否原图
  pod 2.2.6版本之后 统一通过selectImageBlock回调
  */
-@property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *images, NSArray<PHAsset *> *assets, BOOL isOriginal);
+@property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *__nullable images, NSArray<PHAsset *> *assets, BOOL isOriginal);
 
 - (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
 

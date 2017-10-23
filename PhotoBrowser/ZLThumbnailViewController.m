@@ -184,7 +184,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+self.btnOriginalPhoto.imageView.frame.size.width, bottomBtnH);
     offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
     
-    self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 60, bottomBtnH);
+    self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 80, bottomBtnH);
     
     CGFloat doneWidth = GetMatchValue(self.btnDone.currentTitle, 15, YES, bottomBtnH);
     doneWidth = MAX(70, doneWidth);
