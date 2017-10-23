@@ -356,7 +356,10 @@ static BOOL _sortAscending;
 
 + (void)requestOriginalImageForAsset:(PHAsset *)asset completion:(void (^)(UIImage *, NSDictionary *))completion
 {
-    [self requestImageForAsset:asset size:PHImageManagerMaximumSize resizeMode:PHImageRequestOptionsResizeModeExact completion:completion];
+    CGFloat scale = 3;
+    CGFloat width = MIN(kViewWidth, kMaxImageWidth);
+    CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
+    [self requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast completion:completion];
 }
 
 + (PHImageRequestID)requestImageForAsset:(PHAsset *)asset size:(CGSize)size completion:(void (^)(UIImage *, NSDictionary *))completion
@@ -432,7 +435,6 @@ static BOOL _sortAscending;
 + (void)getPhotosBytesWithArray:(NSArray<ZLPhotoModel *> *)photos completion:(void (^)(NSString *photosBytes))completion
 {
     __block NSInteger dataLength = 0;
-    
     __block NSInteger count = photos.count;
     
     __weak typeof(self) weakSelf = self;

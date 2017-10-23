@@ -145,7 +145,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [super viewWillAppear:animated];
     [UIApplication sharedApplication].statusBarHidden = NO;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    [self resetBottomBtnsStatus];
+    [self resetBottomBtnsStatus:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -230,7 +230,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     }
 }
 
-- (void)resetBottomBtnsStatus
+- (void)resetBottomBtnsStatus:(BOOL)getBytes
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (nav.arrSelectedModels.count > 0) {
@@ -238,7 +238,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         self.btnPreView.enabled = YES;
         self.btnDone.enabled = YES;
         if (nav.isSelectOriginalPhoto) {
-            [self getOriginalImageBytes];
+            if (getBytes) [self getOriginalImageBytes];
         } else {
             self.labPhotosBytes.text = nil;
         }
@@ -488,7 +488,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             ZLCollectionCell *c = (ZLCollectionCell *)cell;
             c.btnSelect.selected = m.isSelected;
             c.topView.hidden = nav.showSelectedMask ? !m.isSelected : YES;
-            [self resetBottomBtnsStatus];
+            [self resetBottomBtnsStatus:NO];
         }
     } else if (pan.state == UIGestureRecognizerStateChanged) {
         if (!_beginSelect ||
@@ -567,7 +567,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             c.btnSelect.selected = m.isSelected;
             c.topView.hidden = nav.showSelectedMask ? !m.isSelected : YES;
             
-            [self resetBottomBtnsStatus];
+            [self resetBottomBtnsStatus:NO];
         }
     } else if (pan.state == UIGestureRecognizerStateEnded ||
                pan.state == UIGestureRecognizerStateCancelled) {
@@ -575,6 +575,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         _selectType = SlideSelectTypeNone;
         [self.arrSlideIndexPath removeAllObjects];
         [self.dicOriSelectStatus removeAllObjects];
+        [self resetBottomBtnsStatus:YES];
     }
 }
 
@@ -673,7 +674,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         if (weakNav.showSelectedMask) {
             strongCell.topView.hidden = !model.isSelected;
         }
-        [strongSelf resetBottomBtnsStatus];
+        [strongSelf resetBottomBtnsStatus:YES];
     };
     
     cell.allSelectGif = nav.allowSelectGif;
@@ -844,7 +845,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     }
     [self.collectionView reloadData];
     [self scrollToBottom];
-    [self resetBottomBtnsStatus];
+    [self resetBottomBtnsStatus:YES];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
