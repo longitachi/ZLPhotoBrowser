@@ -398,16 +398,12 @@ double const ScalePhotoWidth = 1000;
             self.baseView.frame = frame;
         } completion:^(BOOL finished) {
             self.hidden = YES;
-            if (self.previousStatusBarIsHidden) {
-                [UIApplication sharedApplication].statusBarHidden = YES;
-            }
+            [UIApplication sharedApplication].statusBarHidden = self.previousStatusBarIsHidden;
             [self removeFromSuperview];
         }];
     } else {
         self.hidden = YES;
-        if (self.previousStatusBarIsHidden) {
-            [UIApplication sharedApplication].statusBarHidden = YES;
-        }
+        [UIApplication sharedApplication].statusBarHidden = self.previousStatusBarIsHidden;
         [self removeFromSuperview];
     }
     if (self.senderTabBarIsShow) {
