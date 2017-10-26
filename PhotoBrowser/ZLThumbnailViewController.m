@@ -181,10 +181,12 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     self.btnPreView.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText), 15, YES, bottomBtnH), bottomBtnH);
     offsetX = CGRectGetMaxX(self.btnPreView.frame) + 10;
     
-    self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+self.btnOriginalPhoto.imageView.frame.size.width, bottomBtnH);
-    offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
-    
-    self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 80, bottomBtnH);
+    if (nav.allowSelectOriginal) {
+        self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+self.btnOriginalPhoto.imageView.frame.size.width, bottomBtnH);
+        offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
+        
+        self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 80, bottomBtnH);
+    }
     
     CGFloat doneWidth = GetMatchValue(self.btnDone.currentTitle, 15, YES, bottomBtnH);
     doneWidth = MAX(70, doneWidth);
@@ -337,18 +339,20 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [self.btnPreView addTarget:self action:@selector(btnPreview_Click:) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomView addSubview:self.btnPreView];
     
-    self.btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
-    [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_original_circle") forState:UIControlStateNormal];
-    [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_selected") forState:UIControlStateSelected];
-    [self.btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
-    [self.btnOriginalPhoto addTarget:self action:@selector(btnOriginalPhoto_Click:) forControlEvents:UIControlEventTouchUpInside];
-    [self.bottomView addSubview:self.btnOriginalPhoto];
-    
-    self.labPhotosBytes = [[UILabel alloc] init];
-    self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
-    self.labPhotosBytes.textColor = nav.bottomBtnsNormalTitleColor;
-    [self.bottomView addSubview:self.labPhotosBytes];
+    if (nav.allowSelectOriginal) {
+        self.btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
+        [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_original_circle") forState:UIControlStateNormal];
+        [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_selected") forState:UIControlStateSelected];
+        [self.btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
+        [self.btnOriginalPhoto addTarget:self action:@selector(btnOriginalPhoto_Click:) forControlEvents:UIControlEventTouchUpInside];
+        [self.bottomView addSubview:self.btnOriginalPhoto];
+        
+        self.labPhotosBytes = [[UILabel alloc] init];
+        self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
+        self.labPhotosBytes.textColor = nav.bottomBtnsNormalTitleColor;
+        [self.bottomView addSubview:self.labPhotosBytes];
+    }
     
     self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnDone.titleLabel.font = [UIFont systemFontOfSize:15];

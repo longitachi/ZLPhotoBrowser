@@ -150,6 +150,7 @@ double const ScalePhotoWidth = 1000;
         self.allowForceTouch = YES;
         self.allowEditImage = YES;
         self.allowEditVideo = NO;
+        self.allowSelectOriginal = YES;
         self.maxEditVideoTime = 10;
         self.allowSlideSelect = YES;
         self.allowDragSelect = NO;
@@ -585,7 +586,7 @@ double const ScalePhotoWidth = 1000;
             
             zl_strongify(weakSelf);
             if (image) {
-                [photos replaceObjectAtIndex:i withObject:[strongSelf scaleImage:image]];
+                [photos replaceObjectAtIndex:i withObject:[ZLPhotoManager scaleImage:image original:strongSelf->_isSelectOriginalPhoto]];
                 [assets replaceObjectAtIndex:i withObject:model.asset];
             }
             
@@ -605,35 +606,6 @@ double const ScalePhotoWidth = 1000;
             }
         }];
     }
-}
-
-/**
- * @brief 这里对拿到的图片进行缩放，不然原图直接返回的话会造成内存暴涨
- */
-- (UIImage *)scaleImage:(UIImage *)image
-{
-    NSData *data = UIImageJPEGRepresentation(image, 1);
-
-    if (data.length < 0.2*(1024*1024)) {
-        //小于200k不缩放
-        return image;
-    }
-    
-    double scale = _isSelectOriginalPhoto ? (data.length>(1024*1024)?.7:.9) : (data.length>(1024*1024)?.5:.7);
-    NSData *d = UIImageJPEGRepresentation(image, scale);
-    
-    return [UIImage imageWithData:d];
-    
-//    CGSize size = CGSizeMake(ScalePhotoWidth, ScalePhotoWidth * image.size.height / image.size.width);
-//    if (image.size.width < size.width
-//        ) {
-//        return image;
-//    }
-//    UIGraphicsBeginImageContext(size);
-//    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-//    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    return newImage;
 }
 
 #pragma mark - UICollectionDataSource
@@ -833,6 +805,7 @@ double const ScalePhotoWidth = 1000;
     nav.allowForceTouch = self.allowForceTouch;
     nav.allowEditImage = self.allowEditImage;
     nav.allowEditVideo = self.allowEditVideo;
+    nav.allowSelectOriginal = self.allowSelectOriginal;
     nav.maxEditVideoTime = self.maxEditVideoTime;
     nav.allowSlideSelect = self.allowSlideSelect;
     nav.editAfterSelectThumbnailImage = self.editAfterSelectThumbnailImage;

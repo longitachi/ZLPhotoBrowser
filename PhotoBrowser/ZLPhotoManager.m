@@ -387,6 +387,80 @@ static BOOL _sortAscending;
     }];
 }
 
++ (void)anialysisAssets:(NSArray<PHAsset *> *)assets original:(BOOL)original completion:(void (^)(NSArray<UIImage *> *))completion
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    
+    dispatch_queue_t queue = dispatch_queue_create(nil, 0);
+    
+    dispatch_semaphore_t sem = dispatch_semaphore_create(1);
+    
+    for (int i = 0; i < assets.count; i++) {
+        PHAsset *asset = assets[i];
+        
+        dispatch_async(queue, ^{
+            dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+            zl_weakify(self);
+            if (original) {
+                [self requestOriginalImageForAsset:asset completion:^(UIImage *image, NSDictionary *info) {
+                    if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+                    dispatch_semaphore_signal(sem);
+                    zl_strongify(weakSelf);
+                    
+                    [arr addObject:[strongSelf scaleImage:image original:original]];
+                    if (i == assets.count-1) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (completion) completion(arr);
+                        });
+                    }
+                }];
+            } else {
+                CGFloat scale = 2;
+                CGFloat width = MIN(kViewWidth, kMaxImageWidth);
+                CGSize size = CGSizeMake(width*scale, width*scale*asset.pixelHeight/asset.pixelWidth);
+                [self requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
+                    if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+                    dispatch_semaphore_signal(sem);
+                    zl_strongify(weakSelf);
+                    
+                    [arr addObject:[strongSelf scaleImage:image original:original]];
+                    if (i == assets.count-1) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (completion) completion(arr);
+                        });
+                    }
+                }];
+            }
+        });
+    }
+}
+
++ (UIImage *)scaleImage:(UIImage *)image original:(BOOL)original
+{
+    NSData *data = UIImageJPEGRepresentation(image, 1);
+    
+    if (data.length < 0.2*(1024*1024)) {
+        //小于200k不缩放
+        return image;
+    }
+    
+    double scale = original ? (data.length>(1024*1024)?.7:.9) : (data.length>(1024*1024)?.5:.7);
+    NSData *d = UIImageJPEGRepresentation(image, scale);
+    
+    return [UIImage imageWithData:d];
+    
+    //    CGSize size = CGSizeMake(ScalePhotoWidth, ScalePhotoWidth * image.size.height / image.size.width);
+    //    if (image.size.width < size.width
+    //        ) {
+    //        return image;
+    //    }
+    //    UIGraphicsBeginImageContext(size);
+    //    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    //    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    //    UIGraphicsEndImageContext();
+    //    return newImage;
+}
+
 #pragma mark - 获取asset对应的图片
 + (PHImageRequestID)requestImageForAsset:(PHAsset *)asset size:(CGSize)size resizeMode:(PHImageRequestOptionsResizeMode)resizeMode completion:(void (^)(UIImage *, NSDictionary *))completion
 {

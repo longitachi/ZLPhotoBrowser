@@ -13,6 +13,8 @@
 #import "YYFPSLabel.h"
 #import <Photos/Photos.h>
 #import "ZLPhotoModel.h"
+#import "ZLPhotoManager.h"
+#import "ZLProgressHUD.h"
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
@@ -40,6 +42,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *allowSlideSelectSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowEditVideoSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowDragSelectSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *allowAnialysisAssetSwitch;
 
 
 @property (nonatomic, strong) NSMutableArray<UIImage *> *lastSelectPhotos;
@@ -121,6 +124,8 @@
     actionSheet.showSelectedMask = self.maskSwitch.isOn;
     //遮罩层颜色
 //    actionSheet.selectedMaskColor = [UIColor orangeColor];
+    //允许框架解析图片
+    actionSheet.shouldAnialysisAsset = self.allowAnialysisAssetSwitch.isOn;
 #pragma required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;
@@ -136,9 +141,29 @@
         strongSelf.lastSelectPhotos = images.mutableCopy;
         [strongSelf.collectionView reloadData];
         NSLog(@"image:%@", images);
+        //解析图片
+        if (!strongSelf.allowAnialysisAssetSwitch.isOn) {
+            [strongSelf anialysisAssets:assets original:isOriginal];
+        }
     }];
     
     return actionSheet;
+}
+
+- (void)anialysisAssets:(NSArray<PHAsset *> *)assets original:(BOOL)original
+{
+    ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+    //该hud自动15s消失，请使用自己项目中的hud控件
+    [hud show];
+    
+    zl_weakify(self);
+    [ZLPhotoManager anialysisAssets:assets original:original completion:^(NSArray<UIImage *> *images) {
+        zl_strongify(weakSelf);
+        [hud hide];
+        strongSelf.arrDataSources = images;
+        [strongSelf.collectionView reloadData];
+        NSLog(@"%@", images);
+    }];
 }
 
 - (IBAction)btnSelectPhotoPreview:(id)sender

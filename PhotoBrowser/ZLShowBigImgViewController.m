@@ -240,24 +240,26 @@
     _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, kViewHeight - 44, kViewWidth, 44)];
     _bottomView.backgroundColor = nav.bottomViewBgColor;
     
-    _btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
-    _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_btnOriginalPhoto setTitleColor:nav.bottomBtnsNormalTitleColor forState: UIControlStateNormal];
-    UIImage *normalImg = GetImageWithName(@"btn_original_circle");
-    UIImage *selImg = GetImageWithName(@"btn_selected");
-    [_btnOriginalPhoto setImage:normalImg forState:UIControlStateNormal];
-    [_btnOriginalPhoto setImage:selImg forState:UIControlStateSelected];
-    [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];
-    [_btnOriginalPhoto addTarget:self action:@selector(btnOriginalImage_Click:) forControlEvents:UIControlEventTouchUpInside];
-    _btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
-    [self getPhotosBytes];
-    [_bottomView addSubview:_btnOriginalPhoto];
-    
-    self.labPhotosBytes = [[UILabel alloc] init];
-    self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
-    self.labPhotosBytes.textColor = nav.bottomBtnsNormalTitleColor;
-    [_bottomView addSubview:self.labPhotosBytes];
+    if (nav.allowSelectOriginal) {
+        _btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
+        _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_btnOriginalPhoto setTitleColor:nav.bottomBtnsNormalTitleColor forState: UIControlStateNormal];
+        UIImage *normalImg = GetImageWithName(@"btn_original_circle");
+        UIImage *selImg = GetImageWithName(@"btn_selected");
+        [_btnOriginalPhoto setImage:normalImg forState:UIControlStateNormal];
+        [_btnOriginalPhoto setImage:selImg forState:UIControlStateSelected];
+        [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];
+        [_btnOriginalPhoto addTarget:self action:@selector(btnOriginalImage_Click:) forControlEvents:UIControlEventTouchUpInside];
+        _btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
+        [self getPhotosBytes];
+        [_bottomView addSubview:_btnOriginalPhoto];
+        
+        self.labPhotosBytes = [[UILabel alloc] init];
+        self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
+        self.labPhotosBytes.textColor = nav.bottomBtnsNormalTitleColor;
+        [_bottomView addSubview:self.labPhotosBytes];
+    }
     
     //编辑
     _btnEdit = [UIButton buttonWithType:UIButtonTypeCustom];

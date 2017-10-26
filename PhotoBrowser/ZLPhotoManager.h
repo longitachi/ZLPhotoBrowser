@@ -85,6 +85,22 @@
  */
 + (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *item, NSDictionary *info))completion;
 
+#pragma mark - 逐个解析asset方法
+/**
+ 自行解析图片方法
+ 
+ 使用顺序单个解析，缓解了框架同时解析大量图片造成的内存暴涨
+ 如果一下选择20张及以上照片(原图)建议使用自行解析
+ 
+ 请求到图片后做了一个大小的压缩（原图时并未压缩尺寸）来缓解内存的占用
+ */
++ (void)anialysisAssets:(NSArray<PHAsset *> *)assets original:(BOOL)original completion:(void (^)(NSArray<UIImage *> *images))completion;
+
+/**
+ @brief 缩放图片
+ */
++ (UIImage *)scaleImage:(UIImage *)image original:(BOOL)original;
+
 /**
  * @brief 将系统mediatype转换为自定义mediatype
  */
@@ -109,7 +125,6 @@
  * @brief 将image data转换为gif图片，sdwebimage
  */
 + (UIImage *)transformToGifImageWithData:(NSData *)data;
-
 
 #pragma mark - 编辑视频相关
 

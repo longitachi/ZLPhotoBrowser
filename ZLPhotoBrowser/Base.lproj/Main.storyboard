@@ -328,14 +328,27 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jZ0-Sd-tHI">
-                                <rect key="frame" x="132" y="424" width="51" height="31"/>
+                                <rect key="frame" x="129" y="424" width="51" height="31"/>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="拖拽选择：(预览)" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQz-Uf-uuX">
-                                <rect key="frame" x="5" y="431.5" width="119" height="16"/>
+                                <rect key="frame" x="5" y="431.5" width="116" height="16"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="框架解析(选大量图片时候建议设为NO):" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAh-wU-YRx">
+                                <rect key="frame" x="178" y="421" width="128" height="33"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="33" id="LMY-GW-kNk"/>
+                                    <constraint firstAttribute="width" constant="128" id="xbQ-nW-OHv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xpA-nw-3Dn">
+                                <rect key="frame" x="306" y="422" width="51" height="31"/>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -381,6 +394,7 @@
                             <constraint firstItem="K7d-f0-eIT" firstAttribute="centerY" secondItem="uNM-gP-QYz" secondAttribute="centerY" id="RAL-16-Ofq"/>
                             <constraint firstItem="Evl-Bd-C9L" firstAttribute="top" secondItem="4oL-Z2-vkl" secondAttribute="bottom" constant="5" id="SPb-NA-t5X"/>
                             <constraint firstItem="xya-0J-AN0" firstAttribute="top" secondItem="BEa-rv-p7S" secondAttribute="bottom" constant="8" id="TqL-OY-VQ3"/>
+                            <constraint firstItem="xpA-nw-3Dn" firstAttribute="leading" secondItem="iAh-wU-YRx" secondAttribute="trailing" id="Ufz-AE-53f"/>
                             <constraint firstItem="TUY-jt-bqO" firstAttribute="leading" secondItem="Fxh-33-PAU" secondAttribute="trailing" id="UxB-2H-yXR"/>
                             <constraint firstItem="Wtq-xO-0A6" firstAttribute="centerY" secondItem="xya-0J-AN0" secondAttribute="centerY" id="VQk-kJ-gh1"/>
                             <constraint firstItem="UCZ-0U-zgB" firstAttribute="centerY" secondItem="uNM-gP-QYz" secondAttribute="centerY" id="Vxo-Uc-q9N"/>
@@ -400,7 +414,7 @@
                             <constraint firstItem="nk7-IE-yev" firstAttribute="leading" secondItem="hsi-R0-Eqj" secondAttribute="trailing" id="fWH-8j-RtR"/>
                             <constraint firstItem="LjF-dH-WXK" firstAttribute="centerY" secondItem="hPV-Y9-eQj" secondAttribute="centerY" id="fYd-fM-sFC"/>
                             <constraint firstItem="e0h-PZ-c3F" firstAttribute="centerX" secondItem="Evl-Bd-C9L" secondAttribute="centerX" id="fo4-ah-BVE"/>
-                            <constraint firstItem="jZ0-Sd-tHI" firstAttribute="centerX" secondItem="3W0-H9-SAb" secondAttribute="centerX" id="fvX-Iw-FNd"/>
+                            <constraint firstItem="jZ0-Sd-tHI" firstAttribute="centerX" secondItem="3W0-H9-SAb" secondAttribute="centerX" constant="-3" id="fvX-Iw-FNd"/>
                             <constraint firstItem="4YD-xx-bqj" firstAttribute="top" secondItem="TUY-jt-bqO" secondAttribute="bottom" constant="5" id="gBq-Jd-vNb"/>
                             <constraint firstItem="2Nl-ET-2sh" firstAttribute="centerY" secondItem="4oL-Z2-vkl" secondAttribute="centerY" id="i0K-pw-bS1"/>
                             <constraint firstItem="Fg3-GH-IKp" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="2" id="iWq-Jb-2ba"/>
@@ -424,6 +438,7 @@
                             <constraint firstItem="hPV-Y9-eQj" firstAttribute="top" secondItem="uNM-gP-QYz" secondAttribute="bottom" constant="5" id="qG0-a1-9dh"/>
                             <constraint firstItem="piz-kA-4cg" firstAttribute="centerX" secondItem="P4q-bG-BAf" secondAttribute="centerX" id="rJn-69-uIm"/>
                             <constraint firstItem="TUY-jt-bqO" firstAttribute="centerX" secondItem="e0h-PZ-c3F" secondAttribute="centerX" id="u0c-vy-70V"/>
+                            <constraint firstItem="xpA-nw-3Dn" firstAttribute="top" secondItem="RJr-bl-GBN" secondAttribute="bottom" constant="2" id="u6k-2j-Uyn"/>
                             <constraint firstItem="NjN-9v-DId" firstAttribute="leading" secondItem="Yz2-hh-rct" secondAttribute="trailing" id="ug9-q7-Bgt"/>
                             <constraint firstItem="e0h-PZ-c3F" firstAttribute="leading" secondItem="VXy-lM-zZt" secondAttribute="trailing" id="uiY-vu-43w"/>
                             <constraint firstItem="QLU-I5-2f9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3W0-H9-SAb" secondAttribute="trailing" constant="5" id="uqy-CC-KN4"/>
@@ -433,11 +448,14 @@
                             <constraint firstItem="6xI-Sj-Yic" firstAttribute="centerX" secondItem="wab-ZW-dME" secondAttribute="centerX" id="wYc-0V-eqW"/>
                             <constraint firstItem="ZAF-og-ov7" firstAttribute="centerY" secondItem="YEs-lA-VzA" secondAttribute="centerY" id="wZq-0T-iAK"/>
                             <constraint firstItem="Evl-Bd-C9L" firstAttribute="leading" secondItem="klC-uY-29q" secondAttribute="trailing" id="xo1-Jq-orH"/>
+                            <constraint firstItem="iAh-wU-YRx" firstAttribute="centerY" secondItem="xpA-nw-3Dn" secondAttribute="centerY" id="zQG-KT-Mlj"/>
                             <constraint firstItem="RJr-bl-GBN" firstAttribute="centerX" secondItem="xya-0J-AN0" secondAttribute="centerX" id="zb0-Rl-jbe"/>
+                            <constraint firstItem="xpA-nw-3Dn" firstAttribute="centerX" secondItem="RJr-bl-GBN" secondAttribute="centerX" id="zfq-Ae-vYe"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="主界面" id="xm7-Su-be1"/>
                     <connections>
+                        <outlet property="allowAnialysisAssetSwitch" destination="xpA-nw-3Dn" id="PCy-TA-Btl"/>
                         <outlet property="allowDragSelectSwitch" destination="jZ0-Sd-tHI" id="e15-lR-hft"/>
                         <outlet property="allowEditSwitch" destination="NjN-9v-DId" id="gPJ-0K-Uo3"/>
                         <outlet property="allowEditVideoSwitch" destination="RJr-bl-GBN" id="Num-al-f1y"/>

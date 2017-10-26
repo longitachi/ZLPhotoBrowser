@@ -5,7 +5,7 @@
 //  Created by long on 15/11/25.
 //  Copyright © 2015年 long. All rights reserved.
 //
-//pods version 2.5.0 - 2017.10.23 update
+//pods version 2.5.0.1 - 2017.10.26 update
 
 #import <UIKit/UIKit.h>
 #import "ZLDefine.h"
@@ -80,6 +80,11 @@ NS_ASSUME_NONNULL_BEGIN
  是否允许编辑视频，选择一张时候才允许编辑，默认NO
  */
 @property (nonatomic, assign) BOOL allowEditVideo;
+
+/**
+ 是否允许选择原图，默认YES
+ */
+@property (nonatomic, assign) BOOL allowSelectOriginal;
 
 /**
  编辑视频时最大裁剪时间，单位：秒，默认10s 且最低10s
