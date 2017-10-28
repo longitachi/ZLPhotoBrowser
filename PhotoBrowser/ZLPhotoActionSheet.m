@@ -372,7 +372,12 @@ double const ScalePhotoWidth = 1000;
     
     UIEdgeInsets inset = UIEdgeInsetsZero;
     if (@available(iOS 11, *)) {
+        double flag = .0;
+        if (self.senderTabBarIsShow) {
+            flag = 49;
+        }
         inset = self.sender.view.safeAreaInsets;
+        inset.bottom -= flag;
         [self.verBottomSpace setConstant:inset.bottom];
     }
     if (self.animate) {
