@@ -163,16 +163,25 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         inset = self.view.safeAreaInsets;
     }
     
-    CGFloat bottomViewH = 44;
+    BOOL showBottomView = YES;
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.editAfterSelectThumbnailImage && nav.maxSelectCount == 1 && (nav.allowEditImage || nav.allowEditVideo)) {
+        //点击后直接编辑则不需要下方工具条
+        showBottomView = NO;
+        inset.bottom = 0;
+    }
+    
+    CGFloat bottomViewH = showBottomView ? 44 : 0;
     CGFloat bottomBtnH = 30;
     
     CGFloat width = kViewWidth-inset.left-inset.right;
     self.collectionView.frame = CGRectMake(inset.left, 0, width, kViewHeight-inset.bottom-bottomViewH);
     
+    if (!showBottomView) return;
+    
     self.bottomView.frame = CGRectMake(inset.left, kViewHeight-bottomViewH-inset.bottom, width, bottomViewH+inset.bottom);
     self.bline.frame = CGRectMake(0, 0, width, 1/[UIScreen mainScreen].scale);
     
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     CGFloat offsetX = 12;
     if (nav.allowEditImage || nav.allowEditVideo) {
         self.btnEdit.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserEditText), 15, YES, bottomBtnH), bottomBtnH);
@@ -316,6 +325,11 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)setupBottomView
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
+    if (nav.editAfterSelectThumbnailImage && nav.maxSelectCount == 1 && (nav.allowEditImage || nav.allowEditVideo)) {
+        //点击后直接编辑则不需要下方工具条
+        return;
+    }
     
     self.bottomView = [[UIView alloc] init];
     self.bottomView.backgroundColor = nav.bottomViewBgColor;
@@ -733,7 +747,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     BOOL editImage = nav.editAfterSelectThumbnailImage && nav.allowEditImage && nav.maxSelectCount == 1 && (model.type == ZLAssetMediaTypeImage || model.type == ZLAssetMediaTypeGif || model.type == ZLAssetMediaTypeLivePhoto);
     //当前点击视频可编辑
     BOOL editVideo = nav.editAfterSelectThumbnailImage && nav.allowEditVideo && model.type == ZLAssetMediaTypeVideo && nav.maxSelectCount == 1 && round(model.asset.duration) >= nav.maxEditVideoTime;
-    //当前为选择图片 或已经选择了一张并且点击的是已选择的图片
+    //当前未选择图片 或 已经选择了一张并且点击的是已选择的图片
     BOOL flag = nav.arrSelectedModels.count == 0 || (nav.arrSelectedModels.count == 1 && [nav.arrSelectedModels.firstObject.asset.localIdentifier isEqualToString:model.asset.localIdentifier]);
     
     if (editImage && flag) {
@@ -842,10 +856,12 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         [nav.arrSelectedModels addObject:model];
         self.albumListModel = [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage];
     } else if (nav.maxSelectCount == 1 && !nav.arrSelectedModels.count) {
-        model.selected = YES;
-        [nav.arrSelectedModels addObject:model];
-        [self btnDone_Click:nil];
-        return;
+        if (![self shouldDirectEdit:model]) {
+            model.selected = YES;
+            [nav.arrSelectedModels addObject:model];
+            [self btnDone_Click:nil];
+            return;
+        }
     }
     [self.collectionView reloadData];
     [self scrollToBottom];

@@ -115,11 +115,11 @@
     //设置照片cell弧度
     actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
     //单选模式是否显示选择按钮
-    actionSheet.showSelectBtn = NO;
+//    actionSheet.showSelectBtn = YES;
     //是否在选择图片后直接进入编辑界面
     actionSheet.editAfterSelectThumbnailImage = self.editAfterSelectImageSwitch.isOn;
     //设置编辑比例
-//    actionSheet.clipRatios = @[GetClipRatio(4, 3)];
+//    actionSheet.clipRatios = @[GetClipRatio(1, 1)];
     //是否在已选择照片上显示遮罩层
     actionSheet.showSelectedMask = self.maskSwitch.isOn;
     //遮罩层颜色

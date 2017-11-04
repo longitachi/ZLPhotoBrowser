@@ -243,6 +243,7 @@ double const ScalePhotoWidth = 1000;
     if (status == PHAuthorizationStatusRestricted ||
         status == PHAuthorizationStatusDenied) {
         [self showNoAuthorityVC];
+        return;
     } else if (status == PHAuthorizationStatusNotDetermined) {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             
@@ -255,17 +256,11 @@ double const ScalePhotoWidth = 1000;
         if (status == PHAuthorizationStatusAuthorized) {
             [self loadPhotoFromAlbum];
             [self show];
-        } else if (status == PHAuthorizationStatusRestricted ||
-                   status == PHAuthorizationStatusDenied) {
-            [self showNoAuthorityVC];
         }
     } else {
         if (status == PHAuthorizationStatusAuthorized) {
             [self.sender.view addSubview:self];
             [self btnPhotoLibrary_Click:nil];
-        } else if (status == PHAuthorizationStatusRestricted ||
-                   status == PHAuthorizationStatusDenied) {
-            [self showNoAuthorityVC];
         }
     }
 }
@@ -365,7 +360,8 @@ double const ScalePhotoWidth = 1000;
     if (!self.superview) {
         [self.sender.view addSubview:self];
     }
-    if (self.sender.tabBarController.tabBar.hidden == NO) {
+    
+    if (self.sender.tabBarController.tabBar && self.sender.tabBarController.tabBar.hidden == NO) {
         self.senderTabBarIsShow = YES;
         self.sender.tabBarController.tabBar.hidden = YES;
     }
@@ -931,10 +927,12 @@ double const ScalePhotoWidth = 1000;
         model.selected = YES;
         [self.arrSelectedModels addObject:model];
     } else if (self.maxSelectCount == 1 && !self.arrSelectedModels.count) {
-        model.selected = YES;
-        [self.arrSelectedModels addObject:model];
-        [self requestSelPhotos:nil data:self.arrSelectedModels hideAfterCallBack:YES];
-        return;
+        if (![self shouldDirectEdit:model]) {
+            model.selected = YES;
+            [self.arrSelectedModels addObject:model];
+            [self requestSelPhotos:nil data:self.arrSelectedModels hideAfterCallBack:YES];
+            return;
+        }
     }
     [self.collectionView reloadData];
     [self changeCancelBtnTitle];

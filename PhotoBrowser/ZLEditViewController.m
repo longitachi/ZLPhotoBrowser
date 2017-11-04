@@ -290,14 +290,18 @@
         inset = self.view.safeAreaInsets;
     }
     
+    BOOL hideClipRatioView = [self shouldHideClipRatioView];
+    //隐藏时 底部工具条高44，间距设置4即可，不隐藏时，比例view高度80，则为128
+    CGFloat flag = hideClipRatioView ? 48 : 128;
+    
     CGFloat w = kViewWidth-20;
-    CGFloat maxH = kViewHeight-128-inset.bottom-inset.top-50;
+    CGFloat maxH = kViewHeight-flag-inset.bottom-inset.top-50;
     CGFloat h = w * self.model.asset.pixelHeight / self.model.asset.pixelWidth;
     if (h > maxH) {
         h = maxH;
         w = h * self.model.asset.pixelWidth / self.model.asset.pixelHeight;
     }
-    _imageView.frame = CGRectMake((kViewWidth-w)/2, (kViewHeight-h)/2-60, w, h);
+    _imageView.frame = CGRectMake((kViewWidth-w)/2, (kViewHeight-flag-h)/2, w, h);
     _gridLayer.frame = _imageView.bounds;
     [self clippingRatioDidChange];
     
@@ -313,6 +317,20 @@
     
     _rotateBtn.superview.frame = CGRectMake(kViewWidth-70-inset.right, kViewHeight-128-inset.bottom, 70, 80);
     _menuScroll.frame = CGRectMake(inset.left, kViewHeight-128-inset.bottom, kViewWidth-70-inset.left-inset.right, 80);
+}
+
+//当裁剪比例只有 custom 或者 1:1 的时候隐藏比例视图
+- (BOOL)shouldHideClipRatioView
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    if (nav.clipRatios.count <= 1) {
+        NSInteger value1 = [nav.clipRatios.firstObject[ClippingRatioValue1] integerValue];
+        NSInteger value2 = [nav.clipRatios.firstObject[ClippingRatioValue2] integerValue];
+        if ((value1==0 && value2==0) || (value1==1 && value2==1)) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)initUI
@@ -427,6 +445,9 @@
 
 - (void)setCropMenu
 {
+    if ([self shouldHideClipRatioView]) {
+        return;
+    }
     //这只是初始坐标，实际坐标在viewdidlayoutsubviews里面布局
     _menuScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kViewWidth-70, 80)];
     _menuScroll.backgroundColor = [UIColor clearColor];
