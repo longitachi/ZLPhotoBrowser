@@ -18,6 +18,7 @@
 #import "ToastUtils.h"
 #import "ZLEditViewController.h"
 #import "ZLEditVideoController.h"
+#import "NSBundle+ZLPhotoBrowser.h"
 
 #define kBaseViewHeight (self.maxPreviewCount ? 300 : 142)
 
@@ -94,6 +95,7 @@ double const ScalePhotoWidth = 1000;
     return _placeholderLabel;
 }
 
+#pragma mark - setter
 - (void)setArrSelectedAssets:(NSMutableArray<PHAsset *> *)arrSelectedAssets
 {
     _arrSelectedAssets = arrSelectedAssets;
@@ -123,6 +125,13 @@ double const ScalePhotoWidth = 1000;
     _customImageNames = customImageNames;
     [[NSUserDefaults standardUserDefaults] setValue:customImageNames forKey:ZLCustomImageNames];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)setLanguageType:(ZLLanguageType)languageType
+{
+    [[NSUserDefaults standardUserDefaults] setValue:@(languageType) forKey:ZLLanguageTypeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [NSBundle resetLanguage];
 }
 
 - (instancetype)init
@@ -163,6 +172,7 @@ double const ScalePhotoWidth = 1000;
         self.shouldAnialysisAsset = YES;
         self.selectedMaskColor = [UIColor blackColor];
         self.bottomBtnsNormalTitleColor = kBottomBtnsNormalTitleColor;
+        self.languageType = ZLLanguageSystem;
         if (![self judgeIsHavePhotoAblumAuthority]) {
             //注册实施监听相册变化
             [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];

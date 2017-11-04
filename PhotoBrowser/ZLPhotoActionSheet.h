@@ -190,6 +190,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) BOOL shouldAnialysisAsset;
 
+/**
+ 框架语言，默认 ZLLanguageSystem (跟随系统语言)
+ 仅切换框架内定义的语言，由于相册名字根据系统语言进行获取，所以相册列表界面为当前系统语言
+ */
+@property (nonatomic, assign) ZLLanguageType languageType;
 
 /**
  选择照片回调，回调解析好的图片、对应的asset对象、是否原图

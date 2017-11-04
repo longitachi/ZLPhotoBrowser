@@ -68,6 +68,8 @@
 
 //自定义图片名称存于plist中的key
 #define ZLCustomImageNames @"ZLCustomImageNames"
+//设置框架语言的key
+#define ZLLanguageTypeKey @"ZLLanguageTypeKey"
 
 ////////ZLShowBigImgViewController
 #define kItemMargin 40
@@ -78,6 +80,19 @@
 #define ClippingRatioValue1 @"value1"
 #define ClippingRatioValue2 @"value2"
 #define ClippingRatioTitleFormat @"titleFormat"
+
+typedef NS_ENUM(NSUInteger, ZLLanguageType) {
+    //跟随系统语言，默认
+    ZLLanguageSystem,
+    //中文简体
+    ZLLanguageChineseSimplified,
+    //中文繁体
+    ZLLanguageChineseTraditional,
+    //英文
+    ZLLanguageEnglish,
+    //日文
+    ZLLanguageJapanese,
+};
 
 static inline void SetViewWidth (UIView *view, CGFloat width) {
     CGRect frame = view.frame;

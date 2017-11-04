@@ -43,6 +43,8 @@
 @property (weak, nonatomic) IBOutlet UISwitch *allowEditVideoSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowDragSelectSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *allowAnialysisAssetSwitch;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *languageSegment;
+
 
 
 @property (nonatomic, strong) NSMutableArray<UIImage *> *lastSelectPhotos;
@@ -126,6 +128,7 @@
 //    actionSheet.selectedMaskColor = [UIColor orangeColor];
     //允许框架解析图片
     actionSheet.shouldAnialysisAsset = self.allowAnialysisAssetSwitch.isOn;
+    actionSheet.languageType = self.languageSegment.selectedSegmentIndex;
 #pragma required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;

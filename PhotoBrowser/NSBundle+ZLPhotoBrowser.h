@@ -12,6 +12,8 @@
 
 + (instancetype)zlPhotoBrowserBundle;
 
++ (void)resetLanguage;
+
 + (NSString *)zlLocalizedStringForKey:(NSString *)key;
 
 + (NSString *)zlLocalizedStringForKey:(NSString *)key value:(NSString *)value;

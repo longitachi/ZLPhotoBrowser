@@ -39,7 +39,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="o85-e2-mBb">
-                                <rect key="frame" x="0.0" y="492" width="375" height="175"/>
+                                <rect key="frame" x="0.0" y="519.5" width="375" height="147.5"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DUd-zh-ixV">
                                     <size key="itemSize" width="50" height="50"/>
@@ -154,7 +154,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2pn-vv-JDz">
-                                <rect key="frame" x="50" y="453" width="97" height="29"/>
+                                <rect key="frame" x="50" y="480.5" width="97" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="选择照片(预览)">
                                     <color key="titleColor" red="0.074509803921568626" green="0.59999999999999998" blue="0.90588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -212,7 +212,7 @@
                                 </connections>
                             </switch>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b3h-9z-Ett">
-                                <rect key="frame" x="228" y="453" width="97" height="29"/>
+                                <rect key="frame" x="228" y="480.5" width="97" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="选择照片(相册)">
                                     <color key="titleColor" red="0.074509803920000006" green="0.59999999999999998" blue="0.90588235289999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -349,6 +349,19 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xpA-nw-3Dn">
                                 <rect key="frame" x="306" y="422" width="51" height="31"/>
                             </switch>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="913-rw-Eyd">
+                                <rect key="frame" x="16" y="455" width="344" height="26"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="s7l-tf-GIV"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="系统语言"/>
+                                    <segment title="中文简"/>
+                                    <segment title="中文繁"/>
+                                    <segment title="英文"/>
+                                    <segment title="日文"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -383,7 +396,6 @@
                             <constraint firstItem="nk7-IE-yev" firstAttribute="centerY" secondItem="hsi-R0-Eqj" secondAttribute="centerY" id="JQi-Xb-eLJ"/>
                             <constraint firstItem="C0s-7T-CJa" firstAttribute="leading" secondItem="4YD-xx-bqj" secondAttribute="trailing" constant="5" id="K2G-De-Ew4"/>
                             <constraint firstItem="0LY-v4-YJP" firstAttribute="trailing" secondItem="hsi-R0-Eqj" secondAttribute="trailing" id="KcW-TU-BNe"/>
-                            <constraint firstItem="2pn-vv-JDz" firstAttribute="top" secondItem="bQz-Uf-uuX" secondAttribute="bottom" constant="5.5" id="MIw-A4-e12"/>
                             <constraint firstItem="o85-e2-mBb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="MXV-aw-Q89"/>
                             <constraint firstItem="P4q-bG-BAf" firstAttribute="leading" secondItem="fWp-EP-dGk" secondAttribute="trailing" constant="-6" id="N2h-0f-X6Y"/>
                             <constraint firstItem="uNM-gP-QYz" firstAttribute="leading" secondItem="UCZ-0U-zgB" secondAttribute="trailing" id="NVR-9h-G1h"/>
@@ -391,6 +403,7 @@
                             <constraint firstItem="QLU-I5-2f9" firstAttribute="centerY" secondItem="RJr-bl-GBN" secondAttribute="centerY" id="OdJ-Eg-vzQ"/>
                             <constraint firstItem="VXy-lM-zZt" firstAttribute="centerY" secondItem="e0h-PZ-c3F" secondAttribute="centerY" id="PJu-Wq-okD"/>
                             <constraint firstItem="Yz2-hh-rct" firstAttribute="centerY" secondItem="NjN-9v-DId" secondAttribute="centerY" id="Pre-We-oqo"/>
+                            <constraint firstItem="913-rw-Eyd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="PyW-cg-Gme"/>
                             <constraint firstItem="K7d-f0-eIT" firstAttribute="centerY" secondItem="uNM-gP-QYz" secondAttribute="centerY" id="RAL-16-Ofq"/>
                             <constraint firstItem="Evl-Bd-C9L" firstAttribute="top" secondItem="4oL-Z2-vkl" secondAttribute="bottom" constant="5" id="SPb-NA-t5X"/>
                             <constraint firstItem="xya-0J-AN0" firstAttribute="top" secondItem="BEa-rv-p7S" secondAttribute="bottom" constant="8" id="TqL-OY-VQ3"/>
@@ -407,6 +420,7 @@
                             <constraint firstItem="3W0-H9-SAb" firstAttribute="top" secondItem="4YD-xx-bqj" secondAttribute="bottom" constant="1" id="Zj0-OX-6Oh"/>
                             <constraint firstItem="2pn-vv-JDz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="50" id="a3Z-Gi-oZa"/>
                             <constraint firstItem="wab-ZW-dME" firstAttribute="leading" secondItem="K7d-f0-eIT" secondAttribute="trailing" constant="5" id="afg-2x-Ixw"/>
+                            <constraint firstAttribute="trailing" secondItem="913-rw-Eyd" secondAttribute="trailing" constant="15" id="bq6-bn-ikB"/>
                             <constraint firstItem="esi-FE-DpA" firstAttribute="centerY" secondItem="piz-kA-4cg" secondAttribute="centerY" id="cLf-Ku-PxE"/>
                             <constraint firstItem="RJr-bl-GBN" firstAttribute="leading" secondItem="QLU-I5-2f9" secondAttribute="trailing" id="cNw-bq-rh5"/>
                             <constraint firstItem="BEa-rv-p7S" firstAttribute="centerX" secondItem="YEs-lA-VzA" secondAttribute="centerX" id="e9u-re-MCJ"/>
@@ -424,6 +438,7 @@
                             <constraint firstItem="YEs-lA-VzA" firstAttribute="centerX" secondItem="NjN-9v-DId" secondAttribute="centerX" id="kgB-Qy-4dk"/>
                             <constraint firstItem="xya-0J-AN0" firstAttribute="leading" secondItem="Wtq-xO-0A6" secondAttribute="trailing" id="kzs-of-A3D"/>
                             <constraint firstItem="0LY-v4-YJP" firstAttribute="top" secondItem="hsi-R0-Eqj" secondAttribute="bottom" constant="20" id="l5B-NL-d0X"/>
+                            <constraint firstItem="913-rw-Eyd" firstAttribute="top" secondItem="jZ0-Sd-tHI" secondAttribute="bottom" id="lHd-1P-COf"/>
                             <constraint firstItem="BEa-rv-p7S" firstAttribute="top" secondItem="YEs-lA-VzA" secondAttribute="bottom" constant="5" id="lJ7-99-Pld"/>
                             <constraint firstAttribute="leadingMargin" secondItem="2Nl-ET-2sh" secondAttribute="leading" id="laA-xW-vtd"/>
                             <constraint firstItem="4YD-xx-bqj" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="6" id="lsy-MT-oH5"/>
@@ -437,6 +452,7 @@
                             <constraint firstItem="piz-kA-4cg" firstAttribute="leading" secondItem="esi-FE-DpA" secondAttribute="trailing" id="pvd-Z1-yau"/>
                             <constraint firstItem="hPV-Y9-eQj" firstAttribute="top" secondItem="uNM-gP-QYz" secondAttribute="bottom" constant="5" id="qG0-a1-9dh"/>
                             <constraint firstItem="piz-kA-4cg" firstAttribute="centerX" secondItem="P4q-bG-BAf" secondAttribute="centerX" id="rJn-69-uIm"/>
+                            <constraint firstItem="2pn-vv-JDz" firstAttribute="top" secondItem="913-rw-Eyd" secondAttribute="bottom" constant="0.5" id="sSz-c1-rG3"/>
                             <constraint firstItem="TUY-jt-bqO" firstAttribute="centerX" secondItem="e0h-PZ-c3F" secondAttribute="centerX" id="u0c-vy-70V"/>
                             <constraint firstItem="xpA-nw-3Dn" firstAttribute="top" secondItem="RJr-bl-GBN" secondAttribute="bottom" constant="2" id="u6k-2j-Uyn"/>
                             <constraint firstItem="NjN-9v-DId" firstAttribute="leading" secondItem="Yz2-hh-rct" secondAttribute="trailing" id="ug9-q7-Bgt"/>
@@ -464,6 +480,7 @@
                         <outlet property="collectionView" destination="o85-e2-mBb" id="Mj4-6s-Yvd"/>
                         <outlet property="cornerRadioTextField" destination="TUY-jt-bqO" id="hb3-6z-nEh"/>
                         <outlet property="editAfterSelectImageSwitch" destination="C0s-7T-CJa" id="qft-r4-6Sv"/>
+                        <outlet property="languageSegment" destination="913-rw-Eyd" id="Wn1-1m-OvV"/>
                         <outlet property="maskSwitch" destination="xya-0J-AN0" id="xeg-mu-WpG"/>
                         <outlet property="maxSelCountTextField" destination="e0h-PZ-c3F" id="sXF-u9-5x8"/>
                         <outlet property="maxVideoDurationTextField" destination="BEa-rv-p7S" id="fWx-lV-Y0C"/>

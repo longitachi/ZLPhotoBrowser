@@ -380,6 +380,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)initNavBtn
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
+    nav.viewControllers.firstObject.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserBackText) style:UIBarButtonItemStylePlain target:nil action:nil];
+    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat width = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 16, YES, 44);
     btn.frame = CGRectMake(0, 0, width, 44);

@@ -165,7 +165,7 @@
     self.title = GetLocalLanguageTextValue(ZLPhotoBrowserPhotoText);
     
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserBackText) style:UIBarButtonItemStylePlain target:nil action:nil];
+//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserBackText) style:UIBarButtonItemStylePlain target:nil action:nil];
     [self initNavBtn];
     
     if (@available(iOS 11.0, *)) {
