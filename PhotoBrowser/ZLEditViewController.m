@@ -315,8 +315,14 @@
     
     _indicator.center = _imageView.center;
     
-    _rotateBtn.superview.frame = CGRectMake(kViewWidth-70-inset.right, kViewHeight-128-inset.bottom, 70, 80);
-    _menuScroll.frame = CGRectMake(inset.left, kViewHeight-128-inset.bottom, kViewWidth-70-inset.left-inset.right, 80);
+    
+    if (hideClipRatioView) {
+        _rotateBtn.hidden = YES;
+        _menuScroll.hidden = YES;
+    } else {
+        _rotateBtn.superview.frame = CGRectMake(kViewWidth-70-inset.right, kViewHeight-128-inset.bottom, 70, 80);
+        _menuScroll.frame = CGRectMake(inset.left, kViewHeight-128-inset.bottom, kViewWidth-70-inset.left-inset.right, 80);
+    }
 }
 
 //当裁剪比例只有 custom 或者 1:1 的时候隐藏比例视图
@@ -445,9 +451,6 @@
 
 - (void)setCropMenu
 {
-    if ([self shouldHideClipRatioView]) {
-        return;
-    }
     //这只是初始坐标，实际坐标在viewdidlayoutsubviews里面布局
     _menuScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kViewWidth-70, 80)];
     _menuScroll.backgroundColor = [UIColor clearColor];
