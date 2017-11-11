@@ -214,8 +214,10 @@
 
 - (void)dealloc
 {
-    [self.session stopRunning];
-    self.session = nil;
+    if ([_session isRunning]) {
+        [_session stopRunning];
+    }
+    _session = nil;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -250,10 +252,19 @@
         return;
     }
     
+    [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+        if (!granted) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.session stopRunning];
+                [self.previewLayer removeFromSuperlayer];
+            });
+        }
+    }];
     
     if (self.session && [self.session isRunning]) {
         return;
     }
+    
     [self.session stopRunning];
     [self.session removeInput:self.videoInput];
     [self.session removeOutput:self.stillImageOutPut];
@@ -264,6 +275,7 @@
     self.session = [[AVCaptureSession alloc] init];
     self.videoInput = [AVCaptureDeviceInput deviceInputWithDevice:[self backCamera] error:nil];
     self.stillImageOutPut = [[AVCaptureStillImageOutput alloc] init];
+    
     //这是输出流的设置参数AVVideoCodecJPEG参数表示以JPEG的图片格式输出图片
     NSDictionary *dicOutputSetting = [NSDictionary dictionaryWithObject:AVVideoCodecJPEG forKey:AVVideoCodecKey];
     [self.stillImageOutPut setOutputSettings:dicOutputSetting];

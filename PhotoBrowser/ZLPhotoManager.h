@@ -25,6 +25,10 @@
  */
 + (void)saveImageToAblum:(UIImage *)image completion:(void (^)(BOOL suc, PHAsset *asset))completion;
 
+/**
+ * @brief 保存视频到系统相册
+ */
++ (void)saveVideoToAblum:(NSURL *)url completion:(void (^)(BOOL suc, PHAsset *asset))completion;
 
 /**
  * @brief 在全部照片中获取指定个数、排序方式的部分照片，在跳往预览大图界面时候video和gif均为no，不受参数影响
@@ -107,6 +111,11 @@
 + (ZLAssetMediaType)transformAssetType:(PHAsset *)asset;
 
 /**
+ * @brief 转换视频时长
+ */
++ (NSString *)getDuration:(PHAsset *)asset;
+
+/**
  * @brief 判断图片是否存储在本地/或者已经从iCloud上下载到本地
  */
 + (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset;
@@ -141,5 +150,21 @@
  @param range 需要到处的视频间隔
  */
 + (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range complete:(void (^)(BOOL isSuc, PHAsset *asset))complete;
+
+#pragma mark - 相册、相机、麦克风权限相关
+/**
+ 是否有相册访问权限
+ */
++ (BOOL)havePhotoLibraryAuthority;
+
+/**
+ 是否有相机访问权限
+ */
++ (BOOL)haveCameraAuthority;
+
+/**
+ 是否有麦克风访问权限
+ */
++ (BOOL)haveMicrophoneAuthority;
 
 @end

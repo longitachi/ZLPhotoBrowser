@@ -19,6 +19,7 @@
 #import "ZLForceTouchPreviewController.h"
 #import "ZLEditViewController.h"
 #import "ZLEditVideoController.h"
+#import "ZLCustomCamera.h"
 
 typedef NS_ENUM(NSUInteger, SlideSelectType) {
     SlideSelectTypeNone,
@@ -715,16 +716,6 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (self.allowTakePhoto && ((nav.sortAscending && indexPath.row >= self.arrDataSources.count) || (!nav.sortAscending && indexPath.row == 0))) {
         //拍照
-        AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-        if (status == AVAuthorizationStatusRestricted ||
-            status == AVAuthorizationStatusDenied) {
-            NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoCameraAuthorityText), [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]];
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *action = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOKText) style:UIAlertActionStyleDefault handler:nil];
-            [alert addAction:action];
-            [self presentViewController:alert animated:YES completion:nil];
-            return;
-        }
         [self takePhoto];
         return;
     }
@@ -809,30 +800,61 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (void)takePhoto
 {
-    //拍照
-    if ([UIImagePickerController isSourceTypeAvailable:
-         UIImagePickerControllerSourceTypeCamera])
-    {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.allowsEditing = NO;
-        picker.videoQuality = UIImagePickerControllerQualityTypeLow;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        [self showDetailViewController:picker sender:self];
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    
+    if (![ZLPhotoManager haveCameraAuthority]) {
+        NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoCameraAuthorityText), kAPPName];
+        ShowAlert(message, self);
+        return;
+    }
+    if (nav.useSystemCamera) {
+        //系统相机拍照
+        if ([UIImagePickerController isSourceTypeAvailable:
+             UIImagePickerControllerSourceTypeCamera]){
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.delegate = self;
+            picker.allowsEditing = NO;
+            picker.videoQuality = UIImagePickerControllerQualityTypeLow;
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self showDetailViewController:picker sender:nil];
+        }
+    } else {
+        if (![ZLPhotoManager haveMicrophoneAuthority]) {
+            NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoMicrophoneAuthorityText), kAPPName];
+            ShowAlert(message, self);
+            return;
+        }
+        ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
+        camera.allowRecordVideo = nav.allowRecordVideo;
+        camera.sessionPreset = nav.sessionPreset;
+        camera.circleProgressColor = nav.bottomBtnsNormalTitleColor;
+        camera.maxRecordDuration = nav.maxRecordDuration;
+        zl_weakify(self);
+        camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {
+            zl_strongify(weakSelf);
+            [strongSelf saveImage:image videoUrl:videoUrl];
+        };
+        [self showDetailViewController:camera sender:nil];
     }
 }
 
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    zl_weakify(self);
     [picker dismissViewControllerAnimated:YES completion:^{
-        zl_strongify(weakSelf);
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
-        [hud show];
-        
+        [self saveImage:image videoUrl:nil];
+    }];
+}
+
+- (void)saveImage:(UIImage *)image videoUrl:(NSURL *)videoUrl
+{
+    ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+    [hud show];
+    zl_weakify(self);
+    if (image) {
         [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
+            zl_strongify(weakSelf);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (suc) {
                     ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
@@ -843,7 +865,21 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                 [hud hide];
             });
         }];
-    }];
+    } else if (videoUrl) {
+        [ZLPhotoManager saveVideoToAblum:videoUrl completion:^(BOOL suc, PHAsset *asset) {
+            zl_strongify(weakSelf);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (suc) {
+                    ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
+                    model.duration = [ZLPhotoManager getDuration:asset];
+                    [strongSelf handleDataArray:model];
+                } else {
+                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
+                }
+                [hud hide];
+            });
+        }];
+    }
 }
 
 - (void)handleDataArray:(ZLPhotoModel *)model

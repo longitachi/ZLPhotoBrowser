@@ -27,6 +27,7 @@
 #define ZLPhotoBrowserMaxSelectCountText @"ZLPhotoBrowserMaxSelectCountText"
 #define ZLPhotoBrowserNoCameraAuthorityText @"ZLPhotoBrowserNoCameraAuthorityText"
 #define ZLPhotoBrowserNoAblumAuthorityText @"ZLPhotoBrowserNoAblumAuthorityText"
+#define ZLPhotoBrowserNoMicrophoneAuthorityText @"ZLPhotoBrowserNoMicrophoneAuthorityText"
 #define ZLPhotoBrowseriCloudPhotoText @"ZLPhotoBrowseriCloudPhotoText"
 #define ZLPhotoBrowserGifPreviewText @"ZLPhotoBrowserGifPreviewText"
 #define ZLPhotoBrowserVideoPreviewText @"ZLPhotoBrowserVideoPreviewText"
@@ -56,6 +57,7 @@
 
 #define ZL_IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 #define ZL_IS_IPHONE_X (ZL_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 812.0f)
+#define ZL_SafeAreaBottom (ZL_IS_IPHONE_X ? 34 : 0)
 
 #define kZLPhotoBrowserBundle [NSBundle bundleForClass:[self class]]
 
@@ -65,6 +67,9 @@
 
 #define kViewWidth      [[UIScreen mainScreen] bounds].size.width
 #define kViewHeight     [[UIScreen mainScreen] bounds].size.height
+
+//app名字
+#define kAPPName [[NSBundle mainBundle].infoDictionary valueForKey:@"CFBundleDisplayName"]
 
 //自定义图片名称存于plist中的key
 #define ZLCustomImageNames @"ZLCustomImageNames"
@@ -94,23 +99,31 @@ typedef NS_ENUM(NSUInteger, ZLLanguageType) {
     ZLLanguageJapanese,
 };
 
-static inline void SetViewWidth (UIView *view, CGFloat width) {
+typedef NS_ENUM(NSUInteger, ZLCaptureSessionPreset) {
+    ZLCaptureSessionPreset325x288,
+    ZLCaptureSessionPreset640x480,
+    ZLCaptureSessionPreset1280x720,
+    ZLCaptureSessionPreset1920x1080,
+    ZLCaptureSessionPreset3840x2160,
+};
+
+static inline void SetViewWidth(UIView *view, CGFloat width) {
     CGRect frame = view.frame;
     frame.size.width = width;
     view.frame = frame;
 }
 
-static inline CGFloat GetViewWidth (UIView *view) {
+static inline CGFloat GetViewWidth(UIView *view) {
     return view.frame.size.width;
 }
 
-static inline void SetViewHeight (UIView *view, CGFloat height) {
+static inline void SetViewHeight(UIView *view, CGFloat height) {
     CGRect frame = view.frame;
     frame.size.height = height;
     view.frame = frame;
 }
 
-static inline CGFloat GetViewHeight (UIView *view) {
+static inline CGFloat GetViewHeight(UIView *view) {
     return view.frame.size.height;
 }
 
@@ -118,7 +131,7 @@ static inline NSString *  GetLocalLanguageTextValue (NSString *key) {
     return [NSBundle zlLocalizedStringForKey:key];
 }
 
-static inline UIImage * GetImageWithName (NSString *name) {
+static inline UIImage * GetImageWithName(NSString *name) {
     NSArray *names = [[NSUserDefaults standardUserDefaults] valueForKey:ZLCustomImageNames];
     if ([names containsObject:name]) {
         return [UIImage imageNamed:name];
@@ -126,7 +139,7 @@ static inline UIImage * GetImageWithName (NSString *name) {
     return [UIImage imageNamed:kZLPhotoBrowserSrcName(name)]?:[UIImage imageNamed:kZLPhotoBrowserFrameworkSrcName(name)];
 }
 
-static inline CGFloat GetMatchValue (NSString *text, CGFloat fontSize, BOOL isHeightFixed, CGFloat fixedValue) {
+static inline CGFloat GetMatchValue(NSString *text, CGFloat fontSize, BOOL isHeightFixed, CGFloat fixedValue) {
     CGSize size;
     if (isHeightFixed) {
         size = CGSizeMake(MAXFLOAT, fixedValue);
@@ -146,7 +159,14 @@ static inline CGFloat GetMatchValue (NSString *text, CGFloat fontSize, BOOL isHe
     }
 }
 
-static inline CABasicAnimation * GetPositionAnimation (id fromValue, id toValue, CFTimeInterval duration, NSString *keyPath) {
+static inline void ShowAlert(NSString *message, UIViewController *sender) {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOKText) style:UIAlertActionStyleDefault handler:nil];
+    [alert addAction:action];
+    [sender presentViewController:alert animated:YES completion:nil];
+}
+
+static inline CABasicAnimation * GetPositionAnimation(id fromValue, id toValue, CFTimeInterval duration, NSString *keyPath) {
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
     animation.fromValue = fromValue;
     animation.toValue   = toValue;

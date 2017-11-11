@@ -8,6 +8,8 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>ZLPhotoBrowser</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>是否允许访问你的麦克风？</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

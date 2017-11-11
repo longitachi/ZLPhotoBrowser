@@ -9,7 +9,6 @@
 #import "ZLPhotoManager.h"
 #import "ZLDefine.h"
 #import <AVFoundation/AVFoundation.h>
-#define CollectionName [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]
 
 static BOOL _sortAscending;
 
@@ -104,7 +103,7 @@ static BOOL _sortAscending;
     //找是否已经创建自定义相册
     PHFetchResult<PHAssetCollection *> *collectionResult = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     for (PHAssetCollection *collection in collectionResult) {
-        if ([collection.localizedTitle isEqualToString:CollectionName]) {
+        if ([collection.localizedTitle isEqualToString:kAPPName]) {
             return collection;
         }
     }
@@ -112,10 +111,10 @@ static BOOL _sortAscending;
     __block NSString *collectionId = nil;
     NSError *error = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
-        collectionId = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:CollectionName].placeholderForCreatedAssetCollection.localIdentifier;
+        collectionId = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:kAPPName].placeholderForCreatedAssetCollection.localIdentifier;
     } error:&error];
     if (error) {
-        NSLog(@"创建相册：%@失败", CollectionName);
+        NSLog(@"创建相册：%@失败", kAPPName);
         return nil;
     }
     return [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[collectionId] options:nil].lastObject;
@@ -734,6 +733,36 @@ static BOOL _sortAscending;
                 break;
         }
     }];
+}
+
+#pragma mark - 权限相关
++ (BOOL)havePhotoLibraryAuthority
+{
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusAuthorized) {
+        return YES;
+    }
+    return NO;
+}
+
++ (BOOL)haveCameraAuthority
+{
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if (status == AVAuthorizationStatusRestricted ||
+        status == AVAuthorizationStatusDenied) {
+        return NO;
+    }
+    return YES;
+}
+
++ (BOOL)haveMicrophoneAuthority
+{
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    if (status == AVAuthorizationStatusRestricted ||
+        status == AVAuthorizationStatusDenied) {
+        return NO;
+    }
+    return YES;
 }
 
 @end

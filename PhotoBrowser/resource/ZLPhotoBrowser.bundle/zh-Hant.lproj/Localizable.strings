@@ -31,6 +31,7 @@
 
 "ZLPhotoBrowserNoCameraAuthorityText" = "請在iPhone的\"設置-隱私-相機\"選項中，允許%@訪問你的相機";
 "ZLPhotoBrowserNoAblumAuthorityText" = "請在iPhone的\"設置-隱私-相冊\"選項中，允許%@訪問你的相冊";
+"ZLPhotoBrowserNoMicrophoneAuthorityText" = "請在iPhone的\"設置-隱私-相冊\"選項中，允許%@訪問你的麥克風";
 
 "ZLPhotoBrowseriCloudPhotoText" = "請在系統相冊中下載到本地后重新嘗試";
 "ZLPhotoBrowseriCloudVideoText" = "iCloud無法同步";

@@ -19,6 +19,7 @@
 #import "ZLEditViewController.h"
 #import "ZLEditVideoController.h"
 #import "NSBundle+ZLPhotoBrowser.h"
+#import "ZLCustomCamera.h"
 
 #define kBaseViewHeight (self.maxPreviewCount ? 300 : 142)
 
@@ -134,6 +135,11 @@ double const ScalePhotoWidth = 1000;
     [NSBundle resetLanguage];
 }
 
+- (void)setMaxRecordDuration:(NSInteger)maxRecordDuration
+{
+    _maxRecordDuration = MAX(maxRecordDuration, 1);
+}
+
 - (instancetype)init
 {
     self = [[kZLPhotoBrowserBundle loadNibNamed:@"ZLPhotoActionSheet" owner:self options:nil] lastObject];
@@ -173,7 +179,11 @@ double const ScalePhotoWidth = 1000;
         self.selectedMaskColor = [UIColor blackColor];
         self.bottomBtnsNormalTitleColor = kBottomBtnsNormalTitleColor;
         self.languageType = ZLLanguageSystem;
-        if (![self judgeIsHavePhotoAblumAuthority]) {
+        self.useSystemCamera = NO;
+        self.allowRecordVideo = YES;
+        self.sessionPreset = ZLCaptureSessionPreset1280x720;
+        self.maxRecordDuration = 10;
+        if (![ZLPhotoManager havePhotoLibraryAuthority]) {
             //注册实施监听相册变化
             [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
         }
@@ -317,34 +327,6 @@ double const ScalePhotoWidth = 1000;
     }];
 }
 
-#pragma mark - 判断软件是否有相册、相机访问权限
-- (BOOL)judgeIsHavePhotoAblumAuthority
-{
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusAuthorized) {
-        return YES;
-    }
-    return NO;
-}
-
-- (BOOL)judgeIsHaveCameraAuthority
-{
-    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    if (status == AVAuthorizationStatusRestricted ||
-        status == AVAuthorizationStatusDenied) {
-        return NO;
-    }
-    return YES;
-}
-
-- (void)showAlertWithTitle:(NSString *)title message:(NSString *)message
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOKText) style:UIAlertActionStyleDefault handler:nil];
-    [alert addAction:action];
-    [self.sender presentViewController:alert animated:YES completion:nil];
-}
-
 - (void)loadPhotoFromAlbum
 {
     [self.arrDataSources removeAllObjects];
@@ -357,7 +339,7 @@ double const ScalePhotoWidth = 1000;
 #pragma mark - 显示隐藏视图及相关动画
 - (void)resetSubViewState
 {
-    self.hidden = ![self judgeIsHavePhotoAblumAuthority] || !self.preview;
+    self.hidden = ![ZLPhotoManager havePhotoLibraryAuthority] || !self.preview;
     [self changeCancelBtnTitle];
 //    [self.collectionView setContentOffset:CGPointZero];
 }
@@ -510,28 +492,47 @@ double const ScalePhotoWidth = 1000;
 #pragma mark - UIButton Action
 - (IBAction)btnCamera_Click:(id)sender
 {
-    if (![self judgeIsHaveCameraAuthority]) {
-        NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoCameraAuthorityText), [[NSBundle mainBundle].infoDictionary valueForKey:(__bridge NSString *)kCFBundleNameKey]];
-        [self showAlertWithTitle:nil message:message];
+    if (![ZLPhotoManager haveCameraAuthority]) {
+        NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoCameraAuthorityText), kAPPName];
+        ShowAlert(message, self.sender);
         [self hide];
         return;
     }
-    //拍照
-    if ([UIImagePickerController isSourceTypeAvailable:
-         UIImagePickerControllerSourceTypeCamera])
-    {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.allowsEditing = NO;
-        picker.videoQuality = UIImagePickerControllerQualityTypeLow;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        [self.sender presentViewController:picker animated:YES completion:nil];
+    if (self.useSystemCamera) {
+        //系统相机拍照
+        if ([UIImagePickerController isSourceTypeAvailable:
+             UIImagePickerControllerSourceTypeCamera]){
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.delegate = self;
+            picker.allowsEditing = NO;
+            picker.videoQuality = UIImagePickerControllerQualityTypeLow;
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self.sender showDetailViewController:picker sender:nil];
+        }
+    } else {
+        if (![ZLPhotoManager haveMicrophoneAuthority]) {
+            NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoMicrophoneAuthorityText), kAPPName];
+            ShowAlert(message, self.sender);
+            [self hide];
+            return;
+        }
+        ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
+        camera.allowRecordVideo = self.allowRecordVideo;
+        camera.sessionPreset = self.sessionPreset;
+        camera.circleProgressColor = self.bottomBtnsNormalTitleColor;
+        camera.maxRecordDuration = self.maxRecordDuration;
+        zl_weakify(self);
+        camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {
+            zl_strongify(weakSelf);
+            [strongSelf saveImage:image videoUrl:videoUrl];
+        };
+        [self.sender showDetailViewController:camera sender:nil];
     }
 }
 
 - (IBAction)btnPhotoLibrary_Click:(id)sender
 {
-    if (![self judgeIsHavePhotoAblumAuthority]) {
+    if (![ZLPhotoManager havePhotoLibraryAuthority]) {
         [self showNoAuthorityVC];
     } else {
         self.animate = NO;
@@ -833,6 +834,10 @@ double const ScalePhotoWidth = 1000;
     nav.bottomViewBgColor = self.bottomViewBgColor;
     nav.showSelectedMask = self.showSelectedMask;
     nav.selectedMaskColor = self.selectedMaskColor;
+    nav.useSystemCamera = self.useSystemCamera;
+    nav.allowRecordVideo = self.allowRecordVideo;
+    nav.sessionPreset = self.sessionPreset;
+    nav.maxRecordDuration = self.maxRecordDuration;
     [nav.arrSelectedModels removeAllObjects];
     [nav.arrSelectedModels addObjectsFromArray:self.arrSelectedModels];
     
@@ -846,7 +851,7 @@ double const ScalePhotoWidth = 1000;
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:photoBrowser];
     ZLThumbnailViewController *tvc = [[ZLThumbnailViewController alloc] init];
     [nav pushViewController:tvc animated:YES];
-    [self.sender presentViewController:nav animated:YES completion:nil];
+    [self.sender showDetailViewController:nav sender:nil];
 }
 
 //查看大图界面
@@ -908,14 +913,20 @@ double const ScalePhotoWidth = 1000;
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    zl_weakify(self);
     [picker dismissViewControllerAnimated:YES completion:^{
-        zl_strongify(weakSelf);
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
-        [hud show];
-        
+        [self saveImage:image videoUrl:nil];
+    }];
+}
+
+- (void)saveImage:(UIImage *)image videoUrl:(NSURL *)videoUrl
+{
+    ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+    [hud show];
+    zl_weakify(self);
+    if (image) {
         [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
+            zl_strongify(weakSelf);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (suc) {
                     ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
@@ -926,7 +937,21 @@ double const ScalePhotoWidth = 1000;
                 [hud hide];
             });
         }];
-    }];
+    } else if (videoUrl) {
+        [ZLPhotoManager saveVideoToAblum:videoUrl completion:^(BOOL suc, PHAsset *asset) {
+            zl_strongify(weakSelf);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (suc) {
+                    ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
+                    model.duration = [ZLPhotoManager getDuration:asset];
+                    [strongSelf handleDataArray:model];
+                } else {
+                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
+                }
+                [hud hide];
+            });
+        }];
+    }
 }
 
 - (void)handleDataArray:(ZLPhotoModel *)model

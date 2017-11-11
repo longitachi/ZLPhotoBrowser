@@ -31,6 +31,7 @@
 
 "ZLPhotoBrowserNoCameraAuthorityText" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
 "ZLPhotoBrowserNoAblumAuthorityText" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";
+"ZLPhotoBrowserNoMicrophoneAuthorityText" = "Please allow %@ to access your device's microphone in \"Settings\"->\"Privacy\"->\"Camera\"";
 
 "ZLPhotoBrowseriCloudPhotoText" = "Retry after download in photo ablum";
 "ZLPhotoBrowseriCloudVideoText" = "Unable to sync from iCloud";

@@ -197,6 +197,26 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) ZLLanguageType languageType;
 
 /**
+ 使用系统相机，默认NO（系统相机则只能进行拍照）
+ */
+@property (nonatomic, assign) BOOL useSystemCamera;
+
+/**
+ 是否允许录制视频(当useSystemCamera为YES时无效)，默认YES
+ */
+@property (nonatomic, assign) BOOL allowRecordVideo;
+
+/**
+ 最大录制时长，默认 10s，最小为 1s
+ */
+@property (nonatomic, assign) NSInteger maxRecordDuration;
+
+/**
+ 视频清晰度，默认ZLCaptureSessionPreset1280x720
+ */
+@property (nonatomic, assign) ZLCaptureSessionPreset sessionPreset;
+
+/**
  选择照片回调，回调解析好的图片、对应的asset对象、是否原图
  pod 2.2.6版本之后 统一通过selectImageBlock回调
  */

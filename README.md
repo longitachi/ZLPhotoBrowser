@@ -35,7 +35,7 @@
 - [x] 预览网络及本地照片(支持长按保存至相册)
 - [x] 相册内图片自定义圆角弧度
 - [x] 自定义升序降序排列
-- [x] 多张拍照
+- [x] 支持点击拍照及长按录制视频 (仿微信)
 - [x] 开发者可自定义资源图片
 
 ### Feature
@@ -44,6 +44,8 @@
  
 ### 更新日志
 ```
+● 2.5.1: ①：新增自定义相机(仿微信)，开发者可选使用自定义相机或系统相机;
+         ②：支持录制视频，可设置最大录制时长及清晰度;
 ● 2.5.0.2: 新增自行切换框架语言api; 编辑图片界面当只有一个比例且为custom或1:1状态下隐藏比例切换工具条;
 ● 2.5.0.1: 提供逐个解析图片api，方便 shouldAnialysisAsset 为 NO 时的使用; 提供控制是否可以选择原图参数;
 ● 2.5.0: 新增选择后是否自动解析图片参数 shouldAnialysisAsset (针对需要选择大量图片的功能，框架一次解析大量图片时，会导致内存瞬间大幅增高，建议此时置该参数为NO，然后拿到asset后自行逐个解析); 修改图片压缩方式，确保原图尺寸不变
@@ -96,6 +98,8 @@ Localized resources can be mixed YES
 Privacy - Photo Library Usage Description
 //相机使用权限描述
 Privacy - Camera Usage Description
+//麦克风使用权限描述
+Privacy - Microphone Usage Description
 ```
 
 代码中调用
@@ -153,6 +157,10 @@ actionSheet.sender = self;
 - 编辑图片预览图
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/edit.gif)
+
+- 自定义相机效果图及介绍
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/customCamera.gif)
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/introduce.png)
 
 - 滑动多选预览图
 

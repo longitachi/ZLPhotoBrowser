@@ -708,7 +708,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_playLayer removeObserver:self forKeyPath:@"status"];
 }
 
 - (void)layoutSubviews
@@ -801,7 +800,6 @@
     if (_playLayer) {
         _playLayer.player = nil;
         [_playLayer removeFromSuperlayer];
-        [_playLayer removeObserver:self forKeyPath:@"status"];
         _playLayer = nil;
     }
     
@@ -871,7 +869,6 @@
                 [strongSelf.layer addSublayer:strongSelf.playLayer];
                 strongSelf.playLayer.player = player;
                 [strongSelf switchVideoStatus];
-                [strongSelf.playLayer addObserver:strongSelf forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
                 [[NSNotificationCenter defaultCenter] addObserver:strongSelf selector:@selector(playFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:player.currentItem];
             });
         }];
@@ -908,19 +905,6 @@
     self.playBtn.hidden = NO;
     self.imageView.hidden = NO;
     [self.playLayer.player seekToTime:kCMTimeZero];
-}
-
-//监听获得消息
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
-{
-    AVPlayerItem *playerItem = (AVPlayerItem *)object;
-    
-    if ([keyPath isEqualToString:@"status"]) {
-        if ([playerItem status] == AVPlayerStatusReadyToPlay) {
-            //status 点进去看 有三种状态
-            self.imageView.hidden = YES;
-        }
-    }
 }
 
 @end

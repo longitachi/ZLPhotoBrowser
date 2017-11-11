@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZLDefine.h"
 
 @class ZLPhotoModel;
 @class PHAsset;
@@ -161,6 +162,26 @@
  遮罩层颜色，内部会默认调整颜色的透明度为0.2， 默认 blackColor
  */
 @property (nonatomic, strong) UIColor *selectedMaskColor;
+
+/**
+ 使用系统相机，默认NO（系统相机则只能进行拍照）
+ */
+@property (nonatomic, assign) BOOL useSystemCamera;
+
+/**
+ 是否允许录制视频(当useSystemCamera为YES时无效)，默认YES
+ */
+@property (nonatomic, assign) BOOL allowRecordVideo;
+
+/**
+ 视频清晰度，默认ZLCaptureSessionPreset1280x720
+ */
+@property (nonatomic, assign) ZLCaptureSessionPreset sessionPreset;
+
+/**
+ 最大录制时长，默认 10s
+ */
+@property (nonatomic, assign) NSInteger maxRecordDuration;
 
 /**
  点击确定选择照片回调

@@ -11,7 +11,6 @@
 #import "ZLPhotoManager.h"
 #import "ZLPhotoModel.h"
 #import "ZLThumbnailViewController.h"
-#import "ZLDefine.h"
 #import <SDWebImage/SDWebImageManager.h>
 
 @implementation ZLImageNavigationController
@@ -74,7 +73,8 @@
 - (void)setNavTitleColor:(UIColor *)navTitleColor
 {
     _navTitleColor = navTitleColor?:kNavBar_tintColor;
-    [self.navigationBar setTintColor:kNavBar_tintColor];
+    [self.navigationBar setTintColor:_navTitleColor];
+    [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: _navTitleColor}];
 }
 
 - (void)setBottomViewBgColor:(UIColor *)bottomViewBgColor
