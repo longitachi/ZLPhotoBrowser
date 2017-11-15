@@ -91,7 +91,7 @@
 {
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
     
-#pragma optional
+#pragma mark - optional
     //以下参数为自定义参数，均可不设置，有默认值
     actionSheet.sortAscending = self.sortSegment.selectedSegmentIndex==0;
     actionSheet.allowSelectImage = self.selImageSwitch.isOn;
@@ -129,7 +129,9 @@
     //允许框架解析图片
     actionSheet.shouldAnialysisAsset = self.allowAnialysisAssetSwitch.isOn;
     actionSheet.languageType = self.languageSegment.selectedSegmentIndex;
-#pragma required
+//    actionSheet.useSystemCamera = YES;
+//    actionSheet.sessionPreset = ZLCaptureSessionPreset1920x1080;
+#pragma mark - required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;
     

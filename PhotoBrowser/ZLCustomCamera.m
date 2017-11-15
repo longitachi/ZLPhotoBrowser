@@ -36,10 +36,6 @@
  */
 - (void)onRetake;
 /**
- 调整焦距
- */
-- (void)onAdjustFocus:(CGFloat)zoomFactor;
-/**
  点击确定
  */
 - (void)onOkClick;
@@ -50,10 +46,8 @@
 
 @interface CameraToolView : UIView <CAAnimationDelegate, UIGestureRecognizerDelegate>
 {
-    //避免动画及长按收拾触发两次
+    //避免动画及长按手势触发两次
     BOOL _stopRecord;
-    //是否触发了长按手势的录制，如果触发，则pan手势有效
-    BOOL _hadTriggerRecord;
     BOOL _layoutOK;
 }
 
@@ -104,6 +98,7 @@
 {
     [super layoutSubviews];
     if (_layoutOK) return;
+    
     _layoutOK = YES;
     CGFloat height = GetViewHeight(self);
     self.bottomView.frame = CGRectMake(0, 0, height*kBottomViewScale, height*kBottomViewScale);
@@ -131,10 +126,6 @@
         longG.minimumPressDuration = .3;
         longG.delegate = self;
         [self.bottomView addGestureRecognizer:longG];
-        
-        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
-        pan.delegate = self;
-        [self.bottomView addGestureRecognizer:pan];
     }
 }
 
@@ -194,7 +185,6 @@
         {
             //此处不启动动画，由vc界面开始录制之后启动
             _stopRecord = NO;
-            _hadTriggerRecord = YES;
             if (self.delegate && [self.delegate respondsToSelector:@selector(onStartRecord)]) {
                 [self.delegate performSelector:@selector(onStartRecord)];
             }
@@ -203,8 +193,6 @@
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:
         {
-            _hadTriggerRecord = NO;
-            
             if (_stopRecord) return;
             _stopRecord = YES;
             [self stopAnimate];
@@ -219,26 +207,9 @@
     }
 }
 
-- (void)panAction:(UIPanGestureRecognizer *)pan
-{
-    if (!_hadTriggerRecord) return;
-    
-    CGRect caremaViewRect = [self convertRect:self.bottomView.frame toView:self.superview];
-    CGPoint lp = [pan locationInView:self];
-    CGPoint point = [self convertPoint:lp toView:self.superview];
-    
-    CGFloat zoomFactor = (CGRectGetMidY(caremaViewRect)-point.y)/CGRectGetMidY(caremaViewRect) * 10;
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onAdjustFocus:)]) {
-        [self.delegate performSelector:@selector(onAdjustFocus:) withObject:@(MIN(MAX(zoomFactor, 1), 10))];
-    }
-}
-
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(nonnull UIGestureRecognizer *)otherGestureRecognizer
 {
-    if (([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] && [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]])
-        ||
-        ([otherGestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] && [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]])) {
+    if (([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] && [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]])) {
         return YES;
     }
     return NO;
@@ -358,8 +329,6 @@
 {
     //拖拽手势开始的录制
     BOOL _dragStart;
-    //长按手势开始的录制
-    BOOL _longPressStart;
     BOOL _layoutOK;
 }
 
@@ -402,6 +371,8 @@
     if ([_session isRunning]) {
         [_session stopRunning];
     }
+    
+    [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 //    NSLog(@"%s", __func__);
 }
@@ -413,13 +384,13 @@
     [self setupCamera];
     [self observeDeviceMotion];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-    
     [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
         if (granted) {
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
                 if (!granted) {
                     [self onDismiss];
+                } else {
+                    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive) name:UIApplicationWillResignActiveNotification object:nil];
                 }
             }];
         } else {
@@ -440,7 +411,7 @@
 {
     self.motionManager = [[CMMotionManager alloc] init];
     // 提供设备运动数据到指定的时间间隔
-    self.motionManager.deviceMotionUpdateInterval = .3;
+    self.motionManager.deviceMotionUpdateInterval = .5;
     
     if (self.motionManager.deviceMotionAvailable) {  // 确定是否使用任何可用的态度参考帧来决定设备的运动是否可用
         // 启动设备的运动更新，通过给定的队列向给定的处理程序提供数据。
@@ -543,12 +514,6 @@
     if (self.allowRecordVideo) {
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(adjustCameraFocus:)];
         [self.view addGestureRecognizer:pan];
-        //设置
-        for (UIGestureRecognizer *ges in self.toolView.bottomView.gestureRecognizers) {
-            if ([ges isKindOfClass:[UIPanGestureRecognizer class]]) {
-                [ges requireGestureRecognizerToFail:pan];
-            }
-        }
     }
 }
 
@@ -682,6 +647,7 @@
 #pragma mark - 手势调整焦距
 - (void)adjustCameraFocus:(UIPanGestureRecognizer *)pan
 {
+    //TODO: 录像中，点击屏幕聚焦，暂时没有思路，1.若添加tap手势 无法解决pan和tap之间的冲突； 2.使用系统touchesBegan方法，触发pan手势后 touchesBegan 无效
     CGRect caremaViewRect = [self.toolView convertRect:self.toolView.bottomView.frame toView:self.view];
     CGPoint point = [pan locationInView:self.view];
     
@@ -803,7 +769,6 @@
 //开始录制
 - (void)onStartRecord
 {
-    _longPressStart = YES;
     AVCaptureConnection *movieConnection = [self.movieFileOutPut connectionWithMediaType:AVMediaTypeVideo];
     movieConnection.videoOrientation = self.orientation;
     [movieConnection setVideoScaleAndCropFactor:1.0];
@@ -816,15 +781,9 @@
 //结束录制
 - (void)onFinishRecord
 {
-    _longPressStart = NO;
     [self.movieFileOutPut stopRecording];
     [self.session stopRunning];
     [self setVideoZoomFactor:1];
-}
-
-- (void)onAdjustFocus:(CGFloat)zoomFactor
-{
-    [self setVideoZoomFactor:zoomFactor];
 }
 
 //重新拍照或录制

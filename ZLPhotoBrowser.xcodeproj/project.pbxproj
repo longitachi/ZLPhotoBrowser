@@ -284,6 +284,11 @@
 					FD07871C1C0D45A200D17B97 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 47UY3G7UH6;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};

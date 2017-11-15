@@ -159,6 +159,7 @@ actionSheet.sender = self;
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/edit.gif)
 
 - 自定义相机效果图及介绍
+
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/customCamera.gif)
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/introduce.png)
 
