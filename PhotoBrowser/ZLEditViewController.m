@@ -262,6 +262,11 @@
 
 @implementation ZLEditViewController
 
+- (void)dealloc
+{
+//    NSLog(@"---- %s", __FUNCTION__);
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -328,10 +333,10 @@
 //当裁剪比例只有 custom 或者 1:1 的时候隐藏比例视图
 - (BOOL)shouldHideClipRatioView
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.clipRatios.count <= 1) {
-        NSInteger value1 = [nav.clipRatios.firstObject[ClippingRatioValue1] integerValue];
-        NSInteger value2 = [nav.clipRatios.firstObject[ClippingRatioValue2] integerValue];
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    if (configuration.clipRatios.count <= 1) {
+        NSInteger value1 = [configuration.clipRatios.firstObject[ClippingRatioValue1] integerValue];
+        NSInteger value2 = [configuration.clipRatios.firstObject[ClippingRatioValue2] integerValue];
         if ((value1==0 && value2==0) || (value1==1 && value2==1)) {
             return YES;
         }
@@ -369,7 +374,7 @@
 
 - (void)creatBottomView
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     //下方视图
     _bottomView = [[UIView alloc] init];
     _bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7];
@@ -391,7 +396,7 @@
     
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
-    [_doneBtn setBackgroundColor:nav.bottomBtnsNormalTitleColor];
+    [_doneBtn setBackgroundColor:configuration.bottomBtnsNormalTitleColor];
     [_doneBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _doneBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     _doneBtn.layer.masksToBounds = YES;
@@ -471,11 +476,10 @@
     CGFloat W = 70;
     CGFloat x = 0;
     
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     //如需要其他比例，请按照格式自行设置
-    NSArray *ratios = nav.clipRatios;
     
-    for(NSDictionary *info in ratios){
+    for(NSDictionary *info in configuration.clipRatios){
         CGFloat val1 = [info[@"value1"] floatValue];
         CGFloat val2 = [info[@"value2"] floatValue];
         
@@ -771,8 +775,10 @@
 - (void)cancelBtn_click
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.editAfterSelectThumbnailImage &&
-        nav.maxSelectCount == 1) {
+    ZLPhotoConfiguration *configuration = nav.configuration;
+    
+    if (configuration.editAfterSelectThumbnailImage &&
+        configuration.maxSelectCount == 1) {
         [nav.arrSelectedModels removeAllObjects];
     }
     UIViewController *vc = [self.navigationController popViewControllerAnimated:NO];

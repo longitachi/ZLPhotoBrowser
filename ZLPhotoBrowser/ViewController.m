@@ -15,6 +15,7 @@
 #import "ZLPhotoModel.h"
 #import "ZLPhotoManager.h"
 #import "ZLProgressHUD.h"
+#import "ZLPhotoConfiguration.h"
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
@@ -91,50 +92,61 @@
 {
     ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
     
-#pragma mark - optional
+#pragma mark - 参数配置 optional，可直接使用 defaultPhotoConfiguration
+    ZLPhotoConfiguration *configuration = [ZLPhotoConfiguration defaultPhotoConfiguration];
     //以下参数为自定义参数，均可不设置，有默认值
-    actionSheet.sortAscending = self.sortSegment.selectedSegmentIndex==0;
-    actionSheet.allowSelectImage = self.selImageSwitch.isOn;
-    actionSheet.allowSelectGif = self.selGifSwitch.isOn;
-    actionSheet.allowSelectVideo = self.selVideoSwitch.isOn;
-    actionSheet.allowSelectLivePhoto = self.selLivePhotoSwitch.isOn;
-    actionSheet.allowForceTouch = self.allowForceTouchSwitch.isOn;
-    actionSheet.allowEditImage = self.allowEditSwitch.isOn;
-    actionSheet.allowEditVideo = self.allowEditVideoSwitch.isOn;
-    actionSheet.allowSlideSelect = self.allowSlideSelectSwitch.isOn;
-    actionSheet.allowMixSelect = self.mixSelectSwitch.isOn;
-    actionSheet.allowDragSelect = self.allowDragSelectSwitch.isOn;
+    configuration.sortAscending = self.sortSegment.selectedSegmentIndex==0;
+    configuration.allowSelectImage = self.selImageSwitch.isOn;
+    configuration.allowSelectGif = self.selGifSwitch.isOn;
+    configuration.allowSelectVideo = self.selVideoSwitch.isOn;
+    configuration.allowSelectLivePhoto = self.selLivePhotoSwitch.isOn;
+    configuration.allowForceTouch = self.allowForceTouchSwitch.isOn;
+    configuration.allowEditImage = self.allowEditSwitch.isOn;
+    configuration.allowEditVideo = self.allowEditVideoSwitch.isOn;
+    configuration.allowSlideSelect = self.allowSlideSelectSwitch.isOn;
+    configuration.allowMixSelect = self.mixSelectSwitch.isOn;
+    configuration.allowDragSelect = self.allowDragSelectSwitch.isOn;
     //设置相册内部显示拍照按钮
-    actionSheet.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
+    configuration.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
     //设置在内部拍照按钮上实时显示相机俘获画面
-    actionSheet.showCaptureImageOnTakePhotoBtn = self.showCaptureImageSwitch.isOn;
+    configuration.showCaptureImageOnTakePhotoBtn = self.showCaptureImageSwitch.isOn;
     //设置照片最大预览数
-    actionSheet.maxPreviewCount = self.previewTextField.text.integerValue;
+    configuration.maxPreviewCount = self.previewTextField.text.integerValue;
     //设置照片最大选择数
-    actionSheet.maxSelectCount = self.maxSelCountTextField.text.integerValue;
+    configuration.maxSelectCount = self.maxSelCountTextField.text.integerValue;
     //设置允许选择的视频最大时长
-    actionSheet.maxVideoDuration = self.maxVideoDurationTextField.text.integerValue;
+    configuration.maxVideoDuration = self.maxVideoDurationTextField.text.integerValue;
     //设置照片cell弧度
-    actionSheet.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
+    configuration.cellCornerRadio = self.cornerRadioTextField.text.floatValue;
     //单选模式是否显示选择按钮
-//    actionSheet.showSelectBtn = YES;
+//    configuration.showSelectBtn = YES;
     //是否在选择图片后直接进入编辑界面
-    actionSheet.editAfterSelectThumbnailImage = self.editAfterSelectImageSwitch.isOn;
+    configuration.editAfterSelectThumbnailImage = self.editAfterSelectImageSwitch.isOn;
     //设置编辑比例
-//    actionSheet.clipRatios = @[GetClipRatio(1, 1)];
+//    configuration.clipRatios = @[GetClipRatio(1, 1)];
     //是否在已选择照片上显示遮罩层
-    actionSheet.showSelectedMask = self.maskSwitch.isOn;
-    //遮罩层颜色
-//    actionSheet.selectedMaskColor = [UIColor orangeColor];
-    //允许框架解析图片
-    actionSheet.shouldAnialysisAsset = self.allowAnialysisAssetSwitch.isOn;
-    actionSheet.languageType = self.languageSegment.selectedSegmentIndex;
-//    actionSheet.useSystemCamera = YES;
-//    actionSheet.sessionPreset = ZLCaptureSessionPreset1920x1080;
+    configuration.showSelectedMask = self.maskSwitch.isOn;
+    //颜色，状态栏样式
+//    configuration.selectedMaskColor = [UIColor purpleColor];
+//    configuration.navBarColor = [UIColor orangeColor];
+//    configuration.navTitleColor = [UIColor blackColor];
+//    configuration.bottomBtnsNormalTitleColor = kRGB(80, 160, 100);
+//    configuration.bottomBtnsDisableBgColor = kRGB(190, 30, 90);
+//    configuration.bottomViewBgColor = [UIColor blackColor];
+//    configuration.statusBarStyle = UIStatusBarStyleDefault;
+    //是否允许框架解析图片
+    configuration.shouldAnialysisAsset = self.allowAnialysisAssetSwitch.isOn;
+    //框架语言
+    configuration.languageType = self.languageSegment.selectedSegmentIndex;
+    //是否使用系统相机
+//    configuration.useSystemCamera = YES;
+//    configuration.sessionPreset = ZLCaptureSessionPreset1920x1080;
+    
 #pragma mark - required
+    actionSheet.configuration = configuration;
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;
-    
+    //记录上次选择的图片
     actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn&&self.maxSelCountTextField.text.integerValue>1 ? self.lastSelectAssets : nil;
     
     zl_weakify(self);

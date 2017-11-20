@@ -8,6 +8,7 @@
 
 #import "NSBundle+ZLPhotoBrowser.h"
 #import "ZLPhotoActionSheet.h"
+#import "ZLDefine.h"
 
 @implementation NSBundle (ZLPhotoBrowser)
 

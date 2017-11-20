@@ -44,6 +44,7 @@
  
 ### 更新日志
 ```
+● 2.5.2: 提取相册配置参数独立为'ZLPhotoConfiguration'对象; 新增状态栏样式api; 优化部分代码;
 ● 2.5.1: ①：新增自定义相机(仿微信)，开发者可选使用自定义相机或系统相机;
          ②：支持录制视频，可设置最大录制时长及清晰度;
 ● 2.5.0.2: 新增自行切换框架语言api; 编辑图片界面当只有一个比例且为custom或1:1状态下隐藏比例切换工具条;
@@ -62,8 +63,6 @@
 ● 2.2.6: ①：可混合选择image、gif、livephoto、video类型;
          ②：支持video、gif、livephoto类型的多选;
          ③：支持控制video最大选择时长;
-● 2.2.3: 新增图片编辑功能;
-● 2.2.1: 新增3D Touch预览功能 (需设备支持);
 ```
 
 ### 框架支持
@@ -106,22 +105,25 @@ Privacy - Microphone Usage Description
 ```objc
 #import "ZLPhotoActionSheet.h"
     
-ZLPhotoActionSheet *actionSheet = [[ZLPhotoActionSheet alloc] init];
-//设置照片最大预览数
-actionSheet.maxPreviewCount = 20;
-//设置照片最大选择数
-actionSheet.maxSelectCount = 10;
-actionSheet.sender = self;
+ZLPhotoActionSheet *ac = [[ZLPhotoActionSheet alloc] init];
 
-[actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
+//相册参数配置
+ZLPhotoConfiguration *configuration = [ZLPhotoConfiguration defaultPhotoConfiguration];
+ac.configuration = configuration;
+
+//如调用的方法无sender参数，则该参数必传
+ac.sender = self;
+
+//选择回调
+[ac setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
     //your codes
 }];
 
 //调用相册
-[actionSheet showPreviewAnimated:YES];
+[ac showPreviewAnimated:YES];
 
 //预览网络图片
-[actionSheet previewPhotos:arrNetImages index:0 hideToolBar:YES complete:^(NSArray * _Nonnull photos) {
+[ac previewPhotos:arrNetImages index:0 hideToolBar:YES complete:^(NSArray * _Nonnull photos) {
     //your codes
 }];
 ```

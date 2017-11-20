@@ -61,8 +61,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (void)dealloc
 {
-//    NSLog(@"---- %s", __FUNCTION__);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    NSLog(@"---- %s", __FUNCTION__);
 }
 
 - (NSMutableArray<ZLPhotoModel *> *)arrDataSources
@@ -70,11 +70,14 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     if (!_arrDataSources) {
         ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
         [hud show];
+        
         ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        ZLPhotoConfiguration *configuration = nav.configuration;
+        
         if (!_albumListModel) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 zl_weakify(self);
-                [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage complete:^(ZLAlbumListModel *album) {
+                [ZLPhotoManager getCameraRollAlbumList:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage complete:^(ZLAlbumListModel *album) {
                     zl_strongify(weakSelf);
                     ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
                     
@@ -83,7 +86,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                     strongSelf.arrDataSources = [NSMutableArray arrayWithArray:strongSelf.albumListModel.models];
                     [hud hide];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (weakNav.allowTakePhotoInLibrary && weakNav.allowSelectImage) {
+                        if (configuration.allowTakePhotoInLibrary && configuration.allowSelectImage) {
                             strongSelf.allowTakePhoto = YES;
                         }
                         strongSelf.title = album.title;
@@ -93,7 +96,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                 }];
             });
         } else {
-            if (nav.allowTakePhotoInLibrary && nav.allowSelectImage && self.albumListModel.isCameraRoll) {
+            if (configuration.allowTakePhotoInLibrary && configuration.allowSelectImage && self.albumListModel.isCameraRoll) {
                 self.allowTakePhoto = YES;
             }
             [ZLPhotoManager markSelcectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
@@ -130,9 +133,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [self setupCollectionView];
     [self setupBottomView];
     
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     
-    if (nav.allowSlideSelect) {
+    if (configuration.allowSlideSelect) {
         //添加滑动选择手势
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
         [self.view addGestureRecognizer:pan];
@@ -165,8 +168,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     }
     
     BOOL showBottomView = YES;
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.editAfterSelectThumbnailImage && nav.maxSelectCount == 1 && (nav.allowEditImage || nav.allowEditVideo)) {
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    if (configuration.editAfterSelectThumbnailImage && configuration.maxSelectCount == 1 && (configuration.allowEditImage || configuration.allowEditVideo)) {
         //点击后直接编辑则不需要下方工具条
         showBottomView = NO;
         inset.bottom = 0;
@@ -184,14 +187,14 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     self.bline.frame = CGRectMake(0, 0, width, 1/[UIScreen mainScreen].scale);
     
     CGFloat offsetX = 12;
-    if (nav.allowEditImage || nav.allowEditVideo) {
+    if (configuration.allowEditImage || configuration.allowEditVideo) {
         self.btnEdit.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserEditText), 15, YES, bottomBtnH), bottomBtnH);
         offsetX = CGRectGetMaxX(self.btnEdit.frame) + 10;
     }
     self.btnPreView.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText), 15, YES, bottomBtnH), bottomBtnH);
     offsetX = CGRectGetMaxX(self.btnPreView.frame) + 10;
     
-    if (nav.allowSelectOriginal) {
+    if (configuration.allowSelectOriginal) {
         self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+self.btnOriginalPhoto.imageView.frame.size.width, bottomBtnH);
         offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
         
@@ -229,8 +232,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (void)scrollToBottom
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (!nav.sortAscending) {
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    if (!configuration.sortAscending) {
         return;
     }
     if (self.arrDataSources.count > 0) {
@@ -245,6 +248,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)resetBottomBtnsStatus:(BOOL)getBytes
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = nav.configuration;
+    
     if (nav.arrSelectedModels.count > 0) {
         self.btnOriginalPhoto.enabled = YES;
         self.btnPreView.enabled = YES;
@@ -256,10 +261,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         }
         self.btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
         [self.btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), nav.arrSelectedModels.count] forState:UIControlStateNormal];
-        [self.btnOriginalPhoto setTitleColor:nav.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
-        [self.btnPreView setTitleColor:nav.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
-        self.btnDone.backgroundColor = nav.bottomBtnsNormalTitleColor;
-        [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.btnOriginalPhoto setTitleColor:configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
+        [self.btnPreView setTitleColor:configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
+        self.btnDone.backgroundColor = configuration.bottomBtnsNormalTitleColor;
     } else {
         self.btnOriginalPhoto.selected = NO;
         self.btnOriginalPhoto.enabled = NO;
@@ -267,21 +271,20 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         self.btnDone.enabled = NO;
         self.labPhotosBytes.text = nil;
         [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateDisabled];
-        [self.btnOriginalPhoto setTitleColor:nav.bottomBtnsDisableBgColor forState:UIControlStateDisabled];
-        [self.btnPreView setTitleColor:nav.bottomBtnsDisableBgColor forState:UIControlStateDisabled];
-        self.btnDone.backgroundColor = nav.bottomBtnsDisableBgColor;
-        [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
+        [self.btnOriginalPhoto setTitleColor:configuration.bottomBtnsDisableBgColor forState:UIControlStateDisabled];
+        [self.btnPreView setTitleColor:configuration.bottomBtnsDisableBgColor forState:UIControlStateDisabled];
+        self.btnDone.backgroundColor = configuration.bottomBtnsDisableBgColor;
     }
     
     BOOL canEdit = NO;
     if (nav.arrSelectedModels.count == 1) {
         ZLPhotoModel *m = nav.arrSelectedModels.firstObject;
-        canEdit = (nav.allowEditImage && ((m.type == ZLAssetMediaTypeImage) ||
-        (m.type == ZLAssetMediaTypeGif && !nav.allowSelectGif) ||
-        (m.type == ZLAssetMediaTypeLivePhoto && !nav.allowSelectLivePhoto))) ||
-        (nav.allowEditVideo && m.type == ZLAssetMediaTypeVideo && round(m.asset.duration) >= nav.maxEditVideoTime);
+        canEdit = (configuration.allowEditImage && ((m.type == ZLAssetMediaTypeImage) ||
+        (m.type == ZLAssetMediaTypeGif && !configuration.allowSelectGif) ||
+        (m.type == ZLAssetMediaTypeLivePhoto && !configuration.allowSelectLivePhoto))) ||
+        (configuration.allowEditVideo && m.type == ZLAssetMediaTypeVideo && round(m.asset.duration) >= configuration.maxEditVideoTime);
     }
-    [self.btnEdit setTitleColor:canEdit?nav.bottomBtnsNormalTitleColor:nav.bottomBtnsDisableBgColor forState:UIControlStateNormal];
+    [self.btnEdit setTitleColor:canEdit?configuration.bottomBtnsNormalTitleColor:configuration.bottomBtnsDisableBgColor forState:UIControlStateNormal];
     self.btnEdit.userInteractionEnabled = canEdit;
 }
 
@@ -317,30 +320,30 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [self.collectionView registerClass:NSClassFromString(@"ZLTakePhotoCell") forCellWithReuseIdentifier:@"ZLTakePhotoCell"];
     [self.collectionView registerClass:NSClassFromString(@"ZLCollectionCell") forCellWithReuseIdentifier:@"ZLCollectionCell"];
     //注册3d touch
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.allowForceTouch && [self forceTouchAvailable]) {
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    if (configuration.allowForceTouch && [self forceTouchAvailable]) {
         [self registerForPreviewingWithDelegate:self sourceView:self.collectionView];
     }
 }
 
 - (void)setupBottomView
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     
-    if (nav.editAfterSelectThumbnailImage && nav.maxSelectCount == 1 && (nav.allowEditImage || nav.allowEditVideo)) {
+    if (configuration.editAfterSelectThumbnailImage && configuration.maxSelectCount == 1 && (configuration.allowEditImage || configuration.allowEditVideo)) {
         //点击后直接编辑则不需要下方工具条
         return;
     }
     
     self.bottomView = [[UIView alloc] init];
-    self.bottomView.backgroundColor = nav.bottomViewBgColor;
+    self.bottomView.backgroundColor = configuration.bottomViewBgColor;
     [self.view addSubview:self.bottomView];
     
     self.bline = [[UIView alloc] init];
     self.bline.backgroundColor = kRGB(232, 232, 232);
     [self.bottomView addSubview:self.bline];
     
-    if (nav.allowEditImage || nav.allowEditVideo) {
+    if (configuration.allowEditImage || configuration.allowEditVideo) {
         self.btnEdit = [UIButton buttonWithType:UIButtonTypeCustom];
         self.btnEdit.titleLabel.font = [UIFont systemFontOfSize:15];
         [self.btnEdit setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserEditText) forState:UIControlStateNormal];
@@ -354,7 +357,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [self.btnPreView addTarget:self action:@selector(btnPreview_Click:) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomView addSubview:self.btnPreView];
     
-    if (nav.allowSelectOriginal) {
+    if (configuration.allowSelectOriginal) {
         self.btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
         self.btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
         [self.btnOriginalPhoto setImage:GetImageWithName(@"btn_original_circle") forState:UIControlStateNormal];
@@ -365,12 +368,13 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         
         self.labPhotosBytes = [[UILabel alloc] init];
         self.labPhotosBytes.font = [UIFont systemFontOfSize:15];
-        self.labPhotosBytes.textColor = nav.bottomBtnsNormalTitleColor;
+        self.labPhotosBytes.textColor = configuration.bottomBtnsNormalTitleColor;
         [self.bottomView addSubview:self.labPhotosBytes];
     }
     
     self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnDone.titleLabel.font = [UIFont systemFontOfSize:15];
+    [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
     [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
     self.btnDone.layer.masksToBounds = YES;
     self.btnDone.layer.cornerRadius = 3.0f;
@@ -381,7 +385,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)initNavBtn
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    
+    ZLPhotoConfiguration *configuration = nav.configuration;
     nav.viewControllers.firstObject.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserBackText) style:UIBarButtonItemStylePlain target:nil action:nil];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -389,7 +393,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     btn.frame = CGRectMake(0, 0, width, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [btn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
-    [btn setTitleColor:nav.navTitleColor forState:UIControlStateNormal];
+    [btn setTitleColor:configuration.navTitleColor forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
 }
@@ -473,9 +477,11 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     CGPoint point = [pan locationInView:self.collectionView];
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
     UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
-    BOOL asc = !self.allowTakePhoto || nav.sortAscending;
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = nav.configuration;
+    
+    BOOL asc = !self.allowTakePhoto || configuration.sortAscending;
     
     if (pan.state == UIGestureRecognizerStateBegan) {
         _beginSelect = !indexPath ? NO : ![cell isKindOfClass:ZLTakePhotoCell.class];
@@ -488,9 +494,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             _beginSlideIndexPath = indexPath;
             
             if (!m.isSelected && [self canAddModel:m]) {
-                if (nav.editAfterSelectThumbnailImage &&
-                    nav.maxSelectCount == 1 &&
-                    (nav.allowEditImage || nav.allowEditVideo)) {
+                if (configuration.editAfterSelectThumbnailImage &&
+                    configuration.maxSelectCount == 1 &&
+                    (configuration.allowEditImage || configuration.allowEditVideo)) {
                     [self shouldDirectEdit:m];
                     _selectType = SlideSelectTypeNone;
                     return;
@@ -509,7 +515,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             }
             ZLCollectionCell *c = (ZLCollectionCell *)cell;
             c.btnSelect.selected = m.isSelected;
-            c.topView.hidden = nav.showSelectedMask ? !m.isSelected : YES;
+            c.topView.hidden = configuration.showSelectedMask ? !m.isSelected : YES;
             [self resetBottomBtnsStatus:NO];
         }
     } else if (pan.state == UIGestureRecognizerStateChanged) {
@@ -587,7 +593,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             
             ZLCollectionCell *c = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:path];
             c.btnSelect.selected = m.isSelected;
-            c.topView.hidden = nav.showSelectedMask ? !m.isSelected : YES;
+            c.topView.hidden = configuration.showSelectedMask ? !m.isSelected : YES;
             
             [self resetBottomBtnsStatus:NO];
         }
@@ -604,13 +610,15 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (BOOL)canAddModel:(ZLPhotoModel *)model
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.arrSelectedModels.count >= nav.maxSelectCount) {
-        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), nav.maxSelectCount);
+    ZLPhotoConfiguration *configuration =nav.configuration;
+    
+    if (nav.arrSelectedModels.count >= configuration.maxSelectCount) {
+        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), configuration.maxSelectCount);
         return NO;
     }
     if (nav.arrSelectedModels.count > 0) {
         ZLPhotoModel *sm = nav.arrSelectedModels.firstObject;
-        if (!nav.allowMixSelect &&
+        if (!configuration.allowMixSelect &&
             ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
             return NO;
@@ -620,8 +628,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
         return NO;
     }
-    if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > nav.maxVideoDuration) {
-        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), nav.maxVideoDuration);
+    if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > configuration.maxVideoDuration) {
+        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), configuration.maxVideoDuration);
         return NO;
     }
     return YES;
@@ -643,13 +651,13 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     
-    if (self.allowTakePhoto && ((nav.sortAscending && indexPath.row >= self.arrDataSources.count) || (!nav.sortAscending && indexPath.row == 0))) {
+    if (self.allowTakePhoto && ((configuration.sortAscending && indexPath.row >= self.arrDataSources.count) || (!configuration.sortAscending && indexPath.row == 0))) {
         ZLTakePhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLTakePhotoCell" forIndexPath:indexPath];
         cell.layer.masksToBounds = YES;
-        cell.layer.cornerRadius = nav.cellCornerRadio;
-        if (nav.showCaptureImageOnTakePhotoBtn) {
+        cell.layer.cornerRadius = configuration.cellCornerRadio;
+        if (configuration.showCaptureImageOnTakePhotoBtn) {
             [cell startCapture];
         }
         return cell;
@@ -658,7 +666,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLCollectionCell" forIndexPath:indexPath];
     
     ZLPhotoModel *model;
-    if (!self.allowTakePhoto || nav.sortAscending) {
+    if (!self.allowTakePhoto || configuration.sortAscending) {
         model = self.arrDataSources[indexPath.row];
     } else {
         model = self.arrDataSources[indexPath.row-1];
@@ -692,19 +700,18 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                 }
             }
         }
-        
-        if (weakNav.showSelectedMask) {
+        if (configuration.showSelectedMask) {
             strongCell.topView.hidden = !model.isSelected;
         }
         [strongSelf resetBottomBtnsStatus:YES];
     };
     
-    cell.allSelectGif = nav.allowSelectGif;
-    cell.allSelectLivePhoto = nav.allowSelectLivePhoto;
-    cell.showSelectBtn = nav.showSelectBtn;
-    cell.cornerRadio = nav.cellCornerRadio;
-    cell.showMask = nav.showSelectedMask;
-    cell.maskColor = nav.selectedMaskColor;
+    cell.allSelectGif = configuration.allowSelectGif;
+    cell.allSelectLivePhoto = configuration.allowSelectLivePhoto;
+    cell.showSelectBtn = configuration.showSelectBtn;
+    cell.cornerRadio = configuration.cellCornerRadio;
+    cell.showMask = configuration.showSelectedMask;
+    cell.maskColor = configuration.selectedMaskColor;
     cell.model = model;
 
     return cell;
@@ -713,15 +720,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (self.allowTakePhoto && ((nav.sortAscending && indexPath.row >= self.arrDataSources.count) || (!nav.sortAscending && indexPath.row == 0))) {
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    
+    if (self.allowTakePhoto && ((configuration.sortAscending && indexPath.row >= self.arrDataSources.count) || (!configuration.sortAscending && indexPath.row == 0))) {
         //拍照
         [self takePhoto];
         return;
     }
     
     NSInteger index = indexPath.row;
-    if (self.allowTakePhoto && !nav.sortAscending) {
+    if (self.allowTakePhoto && !configuration.sortAscending) {
         index = indexPath.row - 1;
     }
     ZLPhotoModel *model = self.arrDataSources[index];
@@ -737,10 +745,11 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (BOOL)shouldDirectEdit:(ZLPhotoModel *)model
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = nav.configuration;
     //当前点击图片可编辑
-    BOOL editImage = nav.editAfterSelectThumbnailImage && nav.allowEditImage && nav.maxSelectCount == 1 && (model.type == ZLAssetMediaTypeImage || model.type == ZLAssetMediaTypeGif || model.type == ZLAssetMediaTypeLivePhoto);
+    BOOL editImage = configuration.editAfterSelectThumbnailImage && configuration.allowEditImage && configuration.maxSelectCount == 1 && (model.type == ZLAssetMediaTypeImage || model.type == ZLAssetMediaTypeGif || model.type == ZLAssetMediaTypeLivePhoto);
     //当前点击视频可编辑
-    BOOL editVideo = nav.editAfterSelectThumbnailImage && nav.allowEditVideo && model.type == ZLAssetMediaTypeVideo && nav.maxSelectCount == 1 && round(model.asset.duration) >= nav.maxEditVideoTime;
+    BOOL editVideo = configuration.editAfterSelectThumbnailImage && configuration.allowEditVideo && model.type == ZLAssetMediaTypeVideo && configuration.maxSelectCount == 1 && round(model.asset.duration) >= configuration.maxEditVideoTime;
     //当前未选择图片 或 已经选择了一张并且点击的是已选择的图片
     BOOL flag = nav.arrSelectedModels.count == 0 || (nav.arrSelectedModels.count == 1 && [nav.arrSelectedModels.firstObject.asset.localIdentifier isEqualToString:model.asset.localIdentifier]);
     
@@ -752,7 +761,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         [self btnEdit_Click:nil];
     }
     
-    return nav.editAfterSelectThumbnailImage && nav.maxSelectCount == 1 && (nav.allowEditImage || nav.allowEditVideo);
+    return configuration.editAfterSelectThumbnailImage && configuration.maxSelectCount == 1 && (configuration.allowEditImage || configuration.allowEditVideo);
 }
 
 /**
@@ -761,20 +770,21 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (UIViewController *)getMatchVCWithModel:(ZLPhotoModel *)model
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = nav.configuration;
     
     if (nav.arrSelectedModels.count > 0) {
         ZLPhotoModel *sm = nav.arrSelectedModels.firstObject;
-        if (!nav.allowMixSelect &&
+        if (!configuration.allowMixSelect &&
             ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
             return nil;
         }
     }
     
-    BOOL allowSelImage = !(model.type==ZLAssetMediaTypeVideo)?YES:nav.allowMixSelect;
-    BOOL allowSelVideo = model.type==ZLAssetMediaTypeVideo?YES:nav.allowMixSelect;
+    BOOL allowSelImage = !(model.type==ZLAssetMediaTypeVideo)?YES:configuration.allowMixSelect;
+    BOOL allowSelVideo = model.type==ZLAssetMediaTypeVideo?YES:configuration.allowMixSelect;
     
-    NSArray *arr = [ZLPhotoManager getPhotoInResult:self.albumListModel.result allowSelectVideo:allowSelVideo allowSelectImage:allowSelImage allowSelectGif:nav.allowSelectGif allowSelectLivePhoto:nav.allowSelectLivePhoto];
+    NSArray *arr = [ZLPhotoManager getPhotoInResult:self.albumListModel.result allowSelectVideo:allowSelVideo allowSelectImage:allowSelImage allowSelectGif:configuration.allowSelectGif allowSelectLivePhoto:configuration.allowSelectLivePhoto];
     
     NSMutableArray *selIdentifiers = [NSMutableArray array];
     for (ZLPhotoModel *m in nav.arrSelectedModels) {
@@ -800,14 +810,14 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (void)takePhoto
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     
     if (![ZLPhotoManager haveCameraAuthority]) {
         NSString *message = [NSString stringWithFormat:GetLocalLanguageTextValue(ZLPhotoBrowserNoCameraAuthorityText), kAPPName];
         ShowAlert(message, self);
         return;
     }
-    if (nav.useSystemCamera) {
+    if (configuration.useSystemCamera) {
         //系统相机拍照
         if ([UIImagePickerController isSourceTypeAvailable:
              UIImagePickerControllerSourceTypeCamera]){
@@ -825,10 +835,10 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             return;
         }
         ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
-        camera.allowRecordVideo = nav.allowRecordVideo;
-        camera.sessionPreset = nav.sessionPreset;
-        camera.circleProgressColor = nav.bottomBtnsNormalTitleColor;
-        camera.maxRecordDuration = nav.maxRecordDuration;
+        camera.allowRecordVideo = configuration.allowRecordVideo;
+        camera.sessionPreset = configuration.sessionPreset;
+        camera.circleProgressColor = configuration.bottomBtnsNormalTitleColor;
+        camera.maxRecordDuration = configuration.maxRecordDuration;
         zl_weakify(self);
         camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {
             zl_strongify(weakSelf);
@@ -885,16 +895,18 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)handleDataArray:(ZLPhotoModel *)model
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.sortAscending) {
+    ZLPhotoConfiguration *configuration = nav.configuration;
+    
+    if (configuration.sortAscending) {
         [self.arrDataSources addObject:model];
     } else {
         [self.arrDataSources insertObject:model atIndex:0];
     }
-    if (nav.maxSelectCount > 1 && nav.arrSelectedModels.count < nav.maxSelectCount) {
+    if (configuration.maxSelectCount > 1 && nav.arrSelectedModels.count < configuration.maxSelectCount) {
         model.selected = YES;
         [nav.arrSelectedModels addObject:model];
-        self.albumListModel = [ZLPhotoManager getCameraRollAlbumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage];
-    } else if (nav.maxSelectCount == 1 && !nav.arrSelectedModels.count) {
+        self.albumListModel = [ZLPhotoManager getCameraRollAlbumList:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage];
+    } else if (configuration.maxSelectCount == 1 && !nav.arrSelectedModels.count) {
         if (![self shouldDirectEdit:model]) {
             model.selected = YES;
             [nav.arrSelectedModels addObject:model];
@@ -942,15 +954,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     
     ZLForceTouchPreviewController *vc = [[ZLForceTouchPreviewController alloc] init];
     
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    
     NSInteger index = indexPath.row;
-    if (self.allowTakePhoto && !nav.sortAscending) {
+    if (self.allowTakePhoto && !configuration.sortAscending) {
         index = indexPath.row - 1;
     }
     ZLPhotoModel *model = self.arrDataSources[index];
     vc.model = model;
-    vc.allowSelectGif = nav.allowSelectGif;
-    vc.allowSelectLivePhoto = nav.allowSelectLivePhoto;
+    vc.allowSelectGif = configuration.allowSelectGif;
+    vc.allowSelectLivePhoto = configuration.allowSelectLivePhoto;
     
     vc.preferredContentSize = [self getSize:model];
     

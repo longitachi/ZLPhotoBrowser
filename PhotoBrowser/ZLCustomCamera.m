@@ -374,7 +374,7 @@
     
     [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    NSLog(@"%s", __func__);
+//    NSLog(@"---- %s", __FUNCTION__);
 }
 
 - (void)viewDidLoad {

@@ -232,6 +232,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    NSLog(@"---- %s", __FUNCTION__);
 }
 
 - (NSMutableArray<UIImage *> *)arrImages
@@ -349,7 +350,7 @@
 
 - (void)creatBottomView
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     //下方视图
     _bottomView = [[UIView alloc] init];
     _bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7];
@@ -364,7 +365,7 @@
     
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
-    [_doneBtn setBackgroundColor:nav.bottomBtnsNormalTitleColor];
+    [_doneBtn setBackgroundColor:configuration.bottomBtnsNormalTitleColor];
     [_doneBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _doneBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     _doneBtn.layer.masksToBounds = YES;
@@ -389,8 +390,8 @@
         });
     }];
     
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    _interval = nav.maxEditVideoTime/10.0;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    _interval = configuration.maxEditVideoTime/10.0;
     
     [ZLPhotoManager analysisEverySecondsImageForAsset:self.model.asset interval:_interval size:CGSizeMake(kItemWidth*5, kItemHeight*5) complete:^(AVAsset *avAsset, NSArray<UIImage *> *images) {
         [hud hide];
@@ -408,8 +409,10 @@
     [self stopTimer];
     
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.editAfterSelectThumbnailImage &&
-        nav.maxSelectCount == 1) {
+    ZLPhotoConfiguration *configuration = nav.configuration;
+    
+    if (configuration.editAfterSelectThumbnailImage &&
+        configuration.maxSelectCount == 1) {
         [nav.arrSelectedModels removeAllObjects];
     }
     

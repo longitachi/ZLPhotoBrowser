@@ -45,13 +45,6 @@
 
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
-#define kNavBar_color kRGB(19, 153, 231)
-#define kNavBar_tintColor kRGB(255, 255, 255)
-#define kBottomViewBgColor kRGB(255, 255, 255)
-#define kDoneButton_textColor kRGB(255, 255, 255)
-#define kBottomBtnsNormalTitleColor kRGB(80, 180, 234)
-#define kBottomBtnsDisableTitleColor kRGB(200, 200, 200)
-
 #define zl_weakify(var)   __weak typeof(var) weakSelf = var
 #define zl_strongify(var) __strong typeof(var) strongSelf = var
 

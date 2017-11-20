@@ -27,9 +27,12 @@
 @property (nonatomic, assign) BOOL hideToolBar;
 
 //预览相册图片回调
-@property (nonatomic, copy) void (^btnDonePreviewBlock)(NSArray<UIImage *> *, NSArray<PHAsset *> *);
+@property (nonatomic, copy) void (^previewSelectedImageBlock)(NSArray<UIImage *> *arrP, NSArray<PHAsset *> *arrA);
 
 //预览网络图片回调
 @property (nonatomic, copy) void (^previewNetImageBlock)(NSArray *photos);
+
+//预览 相册/网络 图片时候，点击返回回调
+@property (nonatomic, copy) void (^cancelPreviewBlock)(void);
 
 @end

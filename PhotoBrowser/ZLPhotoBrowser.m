@@ -31,6 +31,24 @@
     return self;
 }
 
+- (NSMutableArray<ZLPhotoModel *> *)arrSelectedModels
+{
+    if (!_arrSelectedModels) {
+        _arrSelectedModels = [NSMutableArray array];
+    }
+    return _arrSelectedModels;
+}
+
+- (void)setConfiguration:(ZLPhotoConfiguration *)configuration
+{
+    _configuration = configuration;
+    
+    [UIApplication sharedApplication].statusBarStyle = self.configuration.statusBarStyle;
+    [self.navigationBar setBackgroundImage:[self imageWithColor:configuration.navBarColor] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationBar setTintColor:configuration.navTitleColor];
+    [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: configuration.navTitleColor}];
+}
+
 - (UIImage *)imageWithColor:(UIColor *)color
 {
     CGRect rect = CGRectMake(0, 0, 1, 1);
@@ -43,60 +61,11 @@
     return theImage;
 }
 
-- (NSMutableArray<ZLPhotoModel *> *)arrSelectedModels
-{
-    if (!_arrSelectedModels) {
-        _arrSelectedModels = [NSMutableArray array];
-    }
-    return _arrSelectedModels;
-}
-
-- (NSArray<NSDictionary *> *)clipRatios
-{
-    if (_clipRatios) {
-        return _clipRatios;
-    } else {
-        return @[GetCustomClipRatio(),
-                 GetClipRatio(1, 1),
-                 GetClipRatio(4, 3),
-                 GetClipRatio(3, 2),
-                 GetClipRatio(16, 9)];
-    }
-}
-
-- (void)setNavBarColor:(UIColor *)navBarColor
-{
-    _navBarColor = navBarColor?:kNavBar_color;
-    [self.navigationBar setBackgroundImage:[self imageWithColor:_navBarColor] forBarMetrics:UIBarMetricsDefault];
-}
-
-- (void)setNavTitleColor:(UIColor *)navTitleColor
-{
-    _navTitleColor = navTitleColor?:kNavBar_tintColor;
-    [self.navigationBar setTintColor:_navTitleColor];
-    [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: _navTitleColor}];
-}
-
-- (void)setBottomViewBgColor:(UIColor *)bottomViewBgColor
-{
-    _bottomViewBgColor = bottomViewBgColor?:kBottomViewBgColor;
-}
-
-- (void)setBottomBtnsNormalTitleColor:(UIColor *)bottomBtnsNormalTitleColor
-{
-    _bottomBtnsNormalTitleColor = bottomBtnsNormalTitleColor?:kBottomBtnsNormalTitleColor;
-}
-
-- (void)setBottomBtnsDisableBgColor:(UIColor *)bottomBtnsDisableBgColor
-{
-    _bottomBtnsDisableBgColor = bottomBtnsDisableBgColor?:kBottomBtnsDisableTitleColor;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-}
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    [UIApplication sharedApplication].statusBarStyle = self.configuration.statusBarStyle;
+//}
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -178,9 +147,9 @@
     [super viewWillAppear:animated];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
         zl_weakify(self);
-        [ZLPhotoManager getPhotoAblumList:nav.allowSelectVideo allowSelectImage:nav.allowSelectImage complete:^(NSArray<ZLAlbumListModel *> *albums) {
+        [ZLPhotoManager getPhotoAblumList:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage complete:^(NSArray<ZLAlbumListModel *> *albums) {
             zl_strongify(weakSelf);
             strongSelf.arrayDataSources = [NSMutableArray arrayWithArray:albums];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -192,13 +161,14 @@
 
 - (void)initNavBtn
 {
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat width = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 16, YES, 44);
     btn.frame = CGRectMake(0, 0, width, 44);
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [btn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
-    [btn setTitleColor:nav.navTitleColor forState:UIControlStateNormal];
+    [btn setTitleColor:configuration.navTitleColor forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(navRightBtn_Click) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
 }
@@ -242,8 +212,9 @@
     
     ZLAlbumListModel *albumModel = self.arrayDataSources[indexPath.row];
     
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    cell.cornerRadio = nav.cellCornerRadio;
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    
+    cell.cornerRadio = configuration.cellCornerRadio;
     
     cell.model = albumModel;
     
