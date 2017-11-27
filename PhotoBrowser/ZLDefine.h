@@ -43,6 +43,20 @@
 #define ZLPhotoBrowserLoadNetImageFailed @"ZLPhotoBrowserLoadNetImageFailed"
 #define ZLPhotoBrowserSaveVideoFailed @"ZLPhotoBrowserSaveVideoFailed"
 
+#define ZLPhotoBrowserCameraRoll @"ZLPhotoBrowserCameraRoll"
+#define ZLPhotoBrowserPanoramas @"ZLPhotoBrowserPanoramas"
+#define ZLPhotoBrowserVideos @"ZLPhotoBrowserVideos"
+#define ZLPhotoBrowserFavorites @"ZLPhotoBrowserFavorites"
+#define ZLPhotoBrowserTimelapses @"ZLPhotoBrowserTimelapses"
+#define ZLPhotoBrowserRecentlyAdded @"ZLPhotoBrowserRecentlyAdded"
+#define ZLPhotoBrowserBursts @"ZLPhotoBrowserBursts"
+#define ZLPhotoBrowserSlomoVideos @"ZLPhotoBrowserSlomoVideos"
+#define ZLPhotoBrowserSelfPortraits @"ZLPhotoBrowserSelfPortraits"
+#define ZLPhotoBrowserScreenshots @"ZLPhotoBrowserScreenshots"
+#define ZLPhotoBrowserDepthEffect @"ZLPhotoBrowserDepthEffect"
+#define ZLPhotoBrowserLivePhotos @"ZLPhotoBrowserLivePhotos"
+#define ZLPhotoBrowserAnimated @"ZLPhotoBrowserAnimated"
+
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 #define zl_weakify(var)   __weak typeof(var) weakSelf = var
@@ -98,6 +112,12 @@ typedef NS_ENUM(NSUInteger, ZLCaptureSessionPreset) {
     ZLCaptureSessionPreset1280x720,
     ZLCaptureSessionPreset1920x1080,
     ZLCaptureSessionPreset3840x2160,
+};
+
+typedef NS_ENUM(NSUInteger, ZLExportVideoType) {
+    ZLExportVideoTypeMov,
+    ZLExportVideoTypeMp4,
+    ZLExportVideoType3gp,
 };
 
 static inline void SetViewWidth(UIView *view, CGFloat width) {

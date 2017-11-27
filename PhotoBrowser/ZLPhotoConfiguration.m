@@ -63,6 +63,7 @@
     configuration.allowRecordVideo = YES;
     configuration.maxRecordDuration = 10;
     configuration.sessionPreset = ZLCaptureSessionPreset1280x720;
+    configuration.exportVideoType = ZLExportVideoTypeMov;
     
     return configuration;
 }

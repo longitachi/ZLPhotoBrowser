@@ -121,7 +121,7 @@
 /**
  根据需要设置自身需要的裁剪比例
  
- @discussion e.g.:1:1，请使用ZLDefine中所提供方法 GetClipRatio(NSInteger value1, NSInteger value2)，该数组可不设置，有默认比例，为（Custom, 1:1, 4:3, 3:2, 16:9）
+ @discussion e.g.:1:1，请使用ZLDefine中所提供方法 GetClipRatio(NSInteger value1, NSInteger value2)，该数组可不设置，有默认比例，为（Custom, 1:1, 4:3, 3:2, 16:9），如果所设置比例只有一个且 为 Custom 或 1:1，则编辑图片界面隐藏下方比例工具条
  */
 @property (nonatomic, strong) NSArray<NSDictionary *> *clipRatios;
 
@@ -220,5 +220,10 @@
  视频清晰度，默认ZLCaptureSessionPreset1280x720
  */
 @property (nonatomic, assign) ZLCaptureSessionPreset sessionPreset;
+
+/**
+ 录制视频及编辑视频时候的视频导出格式，默认ZLExportVideoTypeMov
+ */
+@property (nonatomic, assign) ZLExportVideoType exportVideoType;
 
 @end

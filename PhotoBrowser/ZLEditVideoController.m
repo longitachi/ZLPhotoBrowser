@@ -74,10 +74,17 @@
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if (CGRectContainsPoint(_leftView.frame, point)) {
+    //扩大下有效范围
+    CGRect left = _leftView.frame;
+    left.origin.x -= kItemWidth/2;
+    left.size.width += kItemWidth/2;
+    CGRect right = _rightView.frame;
+    right.size.width += kItemWidth/2;
+    
+    if (CGRectContainsPoint(left, point)) {
         return _leftView;
     }
-    if (CGRectContainsPoint(_rightView.frame, point)) {
+    if (CGRectContainsPoint(right, point)) {
         return _rightView;
     }
     return nil;
@@ -431,20 +438,25 @@
     
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
+    zl_weakify(self);
     __weak typeof(nav) weakNav = nav;
-    [ZLPhotoManager exportEditVideoForAsset:_avAsset range:[self getTimeRange] complete:^(BOOL isSuc, PHAsset *asset) {
-        [hud hide];
-        if (isSuc) {
-            __strong typeof(weakNav) strongNav = weakNav;
-            ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
-            [strongNav.arrSelectedModels removeAllObjects];
-            [strongNav.arrSelectedModels addObject:model];
-            if (strongNav.callSelectImageBlock) {
-                strongNav.callSelectImageBlock();
+    [ZLPhotoManager exportEditVideoForAsset:_avAsset range:[self getTimeRange] type:nav.configuration.exportVideoType complete:^(BOOL isSuc, PHAsset *asset) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hide];
+            if (isSuc) {
+                __strong typeof(weakNav) strongNav = weakNav;
+                ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
+                [strongNav.arrSelectedModels removeAllObjects];
+                [strongNav.arrSelectedModels addObject:model];
+                if (strongNav.callSelectImageBlock) {
+                    strongNav.callSelectImageBlock();
+                }
+            } else {
+                zl_strongify(weakSelf);
+                [strongSelf startTimer];
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
             }
-        } else {
-            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
-        }
+        });
     }];
 }
 
@@ -467,6 +479,7 @@
 {
     [_timer invalidate];
     [_indicatorLine removeFromSuperview];
+    [self.playerLayer.player pause];
 }
 
 - (CMTime)getStartTime
@@ -494,7 +507,6 @@
 - (void)editViewValidRectChanged
 {
     [self stopTimer];
-    [self.playerLayer.player pause];
     [self.playerLayer.player seekToTime:[self getStartTime] toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
 }
 
@@ -510,7 +522,6 @@
         return;
     }
     [self stopTimer];
-    [self.playerLayer.player pause];
     [self.playerLayer.player seekToTime:[self getStartTime] toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
 }
 

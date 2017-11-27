@@ -837,6 +837,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
         camera.allowRecordVideo = configuration.allowRecordVideo;
         camera.sessionPreset = configuration.sessionPreset;
+        camera.videoType = configuration.exportVideoType;
         camera.circleProgressColor = configuration.bottomBtnsNormalTitleColor;
         camera.maxRecordDuration = configuration.maxRecordDuration;
         zl_weakify(self);

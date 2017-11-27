@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Photos/Photos.h>
 #import "ZLPhotoModel.h"
+#import "ZLDefine.h"
 
 @class ZLAlbumListModel;
 
@@ -149,7 +150,7 @@
  
  @param range 需要到处的视频间隔
  */
-+ (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range complete:(void (^)(BOOL isSuc, PHAsset *asset))complete;
++ (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(BOOL isSuc, PHAsset *asset))complete;
 
 #pragma mark - 相册、相机、麦克风权限相关
 /**

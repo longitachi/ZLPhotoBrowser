@@ -38,3 +38,18 @@
 
 "ZLPhotoBrowserLoadNetImageFailed" = "ロード失敗";
 "ZLPhotoBrowserSaveVideoFailed" = "ビデオの保存に失敗しました";
+
+
+"ZLPhotoBrowserCameraRoll" = "カメラロール";
+"ZLPhotoBrowserPanoramas" = "パノラマ";
+"ZLPhotoBrowserVideos" = "ビデオ";
+"ZLPhotoBrowserFavorites" = "お気に入り";
+"ZLPhotoBrowserTimelapses" = "タイムラプス";
+"ZLPhotoBrowserRecentlyAdded" = "最後に追加した項目";
+"ZLPhotoBrowserBursts" = "バースト";
+"ZLPhotoBrowserSlomoVideos" = "スローモーション";
+"ZLPhotoBrowserSelfPortraits" = "セルフイー";
+"ZLPhotoBrowserScreenshots" = "スクリーンショット";
+"ZLPhotoBrowserDepthEffect" = "ポートレート";
+"ZLPhotoBrowserLivePhotos" = "Live Photos";
+"ZLPhotoBrowserAnimated" = "アニメーション";

@@ -141,9 +141,11 @@
     //是否使用系统相机
 //    configuration.useSystemCamera = YES;
 //    configuration.sessionPreset = ZLCaptureSessionPreset1920x1080;
+//    configuration.exportVideoType = ZLExportVideoTypeMp4;
+    
+    actionSheet.configuration = configuration;
     
 #pragma mark - required
-    actionSheet.configuration = configuration;
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;
     //记录上次选择的图片

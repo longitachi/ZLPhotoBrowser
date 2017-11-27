@@ -21,6 +21,8 @@
 
 @property (nonatomic, assign) ZLCaptureSessionPreset sessionPreset;
 
+@property (nonatomic, assign) ZLExportVideoType videoType;
+
 //录制视频时候进度条颜色
 @property (nonatomic, strong) UIColor *circleProgressColor;
 

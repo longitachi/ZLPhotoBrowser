@@ -38,3 +38,18 @@
 
 "ZLPhotoBrowserLoadNetImageFailed" = "圖片加載失敗";
 "ZLPhotoBrowserSaveVideoFailed" = "視頻保存失敗";
+
+
+"ZLPhotoBrowserCameraRoll" = "所有照片";
+"ZLPhotoBrowserPanoramas" = "全景照片";
+"ZLPhotoBrowserVideos" = "視頻";
+"ZLPhotoBrowserFavorites" = "個人收藏";
+"ZLPhotoBrowserTimelapses" = "延時攝影";
+"ZLPhotoBrowserRecentlyAdded" = "最近添加";
+"ZLPhotoBrowserBursts" = "連拍快照";
+"ZLPhotoBrowserSlomoVideos" = "慢動作";
+"ZLPhotoBrowserSelfPortraits" = "自拍";
+"ZLPhotoBrowserScreenshots" = "屏幕快照";
+"ZLPhotoBrowserDepthEffect" = "人像";
+"ZLPhotoBrowserLivePhotos" = "Live Photo";
+"ZLPhotoBrowserAnimated" = "動圖";

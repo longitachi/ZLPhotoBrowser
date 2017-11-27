@@ -38,3 +38,18 @@
 
 "ZLPhotoBrowserLoadNetImageFailed" = "loading failed";
 "ZLPhotoBrowserSaveVideoFailed" = "Failed to save the video";
+
+
+"ZLPhotoBrowserCameraRoll" = "Camera Roll";
+"ZLPhotoBrowserPanoramas" = "Panoramas";
+"ZLPhotoBrowserVideos" = "Videos";
+"ZLPhotoBrowserFavorites" = "Favorites";
+"ZLPhotoBrowserTimelapses" = "Time-Lapse";
+"ZLPhotoBrowserRecentlyAdded" = "Recently Added";
+"ZLPhotoBrowserBursts" = "Bursts";
+"ZLPhotoBrowserSlomoVideos" = "Slo-mo";
+"ZLPhotoBrowserSelfPortraits" = "Selfies";
+"ZLPhotoBrowserScreenshots" = "Screenshots";
+"ZLPhotoBrowserDepthEffect" = "Depth Effect";
+"ZLPhotoBrowserLivePhotos" = "Live Photo";
+"ZLPhotoBrowserAnimated" = "Animated";

@@ -816,7 +816,9 @@
 - (NSURL *)getVideoFileUrl
 {
     NSString *filePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO).firstObject;
-    filePath = [NSTemporaryDirectory() stringByAppendingString:[NSString stringWithFormat:@"%@.mov", [self getUniqueStrByUUID]]];
+    NSString *format = self.videoType == ZLExportVideoTypeMov ? @"mov" : self.videoType == ZLExportVideoTypeMp4 ? @"mp4" : @"3gp";
+    
+    filePath = [NSTemporaryDirectory() stringByAppendingString:[NSString stringWithFormat:@"%@.%@", [self getUniqueStrByUUID], format]];
     return [NSURL fileURLWithPath:filePath];
 }
 

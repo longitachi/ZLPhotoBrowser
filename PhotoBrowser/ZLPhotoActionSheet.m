@@ -18,7 +18,6 @@
 #import "ZLEditVideoController.h"
 #import "ZLCustomCamera.h"
 #import "ZLDefine.h"
-#import "ZLPhotoConfiguration.h"
 
 #define kBaseViewHeight (self.configuration.maxPreviewCount ? 300 : 142)
 
@@ -93,6 +92,14 @@ double const ScalePhotoWidth = 1000;
         _placeholderLabel.hidden = YES;
     }
     return _placeholderLabel;
+}
+
+- (ZLPhotoConfiguration *)configuration
+{
+    if (!_configuration) {
+        _configuration = [ZLPhotoConfiguration defaultPhotoConfiguration];
+    }
+    return _configuration;
 }
 
 #pragma mark - setter
@@ -174,7 +181,6 @@ double const ScalePhotoWidth = 1000;
 
 - (void)showPreview:(BOOL)preview animate:(BOOL)animate
 {
-    NSAssert(self.configuration != nil, @"相册框架配置 configuration 对象不能为空");
     NSAssert(self.sender != nil, @"sender 对象不能为空");
     
     if (!self.configuration.allowSelectImage && self.arrSelectedModels.count) {
@@ -467,6 +473,7 @@ double const ScalePhotoWidth = 1000;
         ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
         camera.allowRecordVideo = self.configuration.allowRecordVideo;
         camera.sessionPreset = self.configuration.sessionPreset;
+        camera.videoType = self.configuration.exportVideoType;
         camera.circleProgressColor = self.configuration.bottomBtnsNormalTitleColor;
         camera.maxRecordDuration = self.configuration.maxRecordDuration;
         zl_weakify(self);

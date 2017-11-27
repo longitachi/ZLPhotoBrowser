@@ -44,6 +44,7 @@
  
 ### 更新日志
 ```
+● 2.5.3: 拍摄视频及编辑视频支持多种格式(mov, mp4, 3gp); 新增相册名字等多语言，以完善手动设置语言时相册名字跟随系统的问题; 简化相册调用，configuration 由必传参数修改为非必传参数;
 ● 2.5.2: 提取相册配置参数独立为'ZLPhotoConfiguration'对象; 新增状态栏样式api; 优化部分代码;
 ● 2.5.1: ①：新增自定义相机(仿微信)，开发者可选使用自定义相机或系统相机;
          ②：支持录制视频，可设置最大录制时长及清晰度;
@@ -60,9 +61,6 @@
 ● 2.3.2: 新增设置导航颜色api，适配横屏，适配iPad;
 ● 2.2.9: 新增单选模式下选择图片后直接进入编辑界面功能，提供设置裁剪比例api;
 ● 2.2.8: 更新编辑图片功能，增加裁剪比例选项(1:1, 3:4, 2:3, 9:16,等比例，开发者可根据需求，按照规则自行添加所需比例);
-● 2.2.6: ①：可混合选择image、gif、livephoto、video类型;
-         ②：支持video、gif、livephoto类型的多选;
-         ③：支持控制video最大选择时长;
 ```
 
 ### 框架支持
@@ -107,9 +105,9 @@ Privacy - Microphone Usage Description
     
 ZLPhotoActionSheet *ac = [[ZLPhotoActionSheet alloc] init];
 
-//相册参数配置
-ZLPhotoConfiguration *configuration = [ZLPhotoConfiguration defaultPhotoConfiguration];
-ac.configuration = configuration;
+//相册参数配置，configuration有默认值，可直接使用并对其属性进行修改
+ac.configuration.maxSelectCount = 5;
+ac.configuration.maxPreviewCount = 10;
 
 //如调用的方法无sender参数，则该参数必传
 ac.sender = self;

@@ -8,18 +8,19 @@
 //pods version 2.5.1.1 - 2017.11.15 update
 
 #import <UIKit/UIKit.h>
+#import "ZLPhotoConfiguration.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class ZLPhotoModel;
 @class PHAsset;
-@class ZLPhotoConfiguration;
+
 
 @interface ZLPhotoActionSheet : UIView
 
 @property (nonatomic, weak) UIViewController *sender;
 
-/**相册框架配置*/
+/**相册框架配置，默认为 [ZLPhotoConfiguration defaultPhotoConfiguration]*/
 @property (nonatomic, strong) ZLPhotoConfiguration *configuration;
 
 /**

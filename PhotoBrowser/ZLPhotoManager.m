@@ -7,7 +7,6 @@
 //
 
 #import "ZLPhotoManager.h"
-#import "ZLDefine.h"
 #import <AVFoundation/AVFoundation.h>
 
 static BOOL _sortAscending;
@@ -145,7 +144,7 @@ static BOOL _sortAscending;
         //获取相册内asset result
         if (collection.assetCollectionSubtype == 209) {
             PHFetchResult<PHAsset *> *result = [PHAsset fetchAssetsInAssetCollection:collection options:option];
-            m = [self getAlbumModeWithTitle:collection.localizedTitle result:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage];
+            m = [self getAlbumModeWithTitle:[self getCollectionTitle:collection] result:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage];
             m.isCameraRoll = YES;
         }
     }];
@@ -201,6 +200,9 @@ static BOOL _sortAscending;
      PHAssetCollectionSubtypeSmartAlbumUserLibrary = 209,///所有照片
      PHAssetCollectionSubtypeSmartAlbumSelfPortraits NS_AVAILABLE_IOS(9_0) = 210,///自拍
      PHAssetCollectionSubtypeSmartAlbumScreenshots NS_AVAILABLE_IOS(9_0) = 211,///屏幕快照
+     PHAssetCollectionSubtypeSmartAlbumDepthEffect PHOTOS_AVAILABLE_IOS_TVOS(10_2, 10_1) = 212,///人像
+     PHAssetCollectionSubtypeSmartAlbumLivePhotos PHOTOS_AVAILABLE_IOS_TVOS(10_3, 10_2) = 213,//livephotos
+     PHAssetCollectionSubtypeSmartAlbumAnimated = 214,///动图
      = 1000000201///最近删除知道值为（1000000201）但没找到对应的TypedefName
      // Used for fetching, if you don't care about the exact subtype
      PHAssetCollectionSubtypeAny = NSIntegerMax /////所有类型
@@ -211,23 +213,90 @@ static BOOL _sortAscending;
             //过滤PHCollectionList对象
             if (![collection isKindOfClass:PHAssetCollection.class]) return;
             //过滤最近删除
-            if (collection.assetCollectionSubtype > 213) return;
+            if (collection.assetCollectionSubtype > 215) return;
             //获取相册内asset result
             PHFetchResult<PHAsset *> *result = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (!result.count) return;
             
+            NSString *title = [self getCollectionTitle:collection];
+            
             if (collection.assetCollectionSubtype == 209) {
-                ZLAlbumListModel *m = [self getAlbumModeWithTitle:collection.localizedTitle result:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage];
+                ZLAlbumListModel *m = [self getAlbumModeWithTitle:title result:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage];
                 m.isCameraRoll = YES;
                 [arrAlbum insertObject:m atIndex:0];
-                
             } else {
-                [arrAlbum addObject:[self getAlbumModeWithTitle:collection.localizedTitle result:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage]];
+                [arrAlbum addObject:[self getAlbumModeWithTitle:title result:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage]];
             }
         }];
     }
     
     if (complete) complete(arrAlbum);
+}
+
++ (NSString *)getCollectionTitle:(PHAssetCollection *)collection
+{
+    if (collection.assetCollectionType == PHAssetCollectionTypeAlbum) {
+        //用户相册
+        return collection.localizedTitle;
+    }
+    
+    //系统相册
+    ZLLanguageType type = [[[NSUserDefaults standardUserDefaults] valueForKey:ZLLanguageTypeKey] integerValue];
+    
+    NSString *title = @"";
+    if (type == ZLLanguageSystem) {
+        title = collection.localizedTitle;
+    } else {
+        switch (collection.assetCollectionSubtype) {
+            case PHAssetCollectionSubtypeSmartAlbumUserLibrary:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserCameraRoll);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumPanoramas:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserPanoramas);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumVideos:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserVideos);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumFavorites:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserFavorites);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumTimelapses:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserTimelapses);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumRecentlyAdded:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserRecentlyAdded);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumBursts:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserBursts);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumSlomoVideos:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserSlomoVideos);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumSelfPortraits:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserSelfPortraits);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumScreenshots:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserScreenshots);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumDepthEffect:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserDepthEffect);
+                break;
+            case PHAssetCollectionSubtypeSmartAlbumLivePhotos:
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserLivePhotos);
+                break;
+                
+            default:
+                break;
+        }
+        
+        if (@available(iOS 11, *)) {
+            if (collection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumAnimated) {
+                title = GetLocalLanguageTextValue(ZLPhotoBrowserAnimated);
+            }
+        }
+    }
+    
+    return title;
 }
 
 //获取相册列表model
@@ -689,11 +758,9 @@ static BOOL _sortAscending;
     }];
 }
 
-+ (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range complete:(void (^)(BOOL, PHAsset *))complete
++ (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(BOOL, PHAsset *))complete
 {
-    NSTimeInterval interval = [[[NSDate alloc] init] timeIntervalSince1970];
-    
-    NSString *exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%f.mov", interval]];
+    NSString *exportFilePath = [self getVideoExportFilePath:type];
     
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetPassthrough];
     
@@ -715,7 +782,6 @@ static BOOL _sortAscending;
                 
             case AVAssetExportSessionStatusCompleted:{
                 NSLog(@"Export completed");
-                dispatch_async(dispatch_get_main_queue(), ^{
                     [self saveVideoToAblum:exportFileUrl completion:^(BOOL isSuc, PHAsset *asset) {
                         if (complete) complete(isSuc, asset);
                         if (isSuc) {
@@ -724,7 +790,6 @@ static BOOL _sortAscending;
                             NSLog(@"导出视频失败");
                         }
                     }];
-                });
             }
                 break;
                 
@@ -733,6 +798,17 @@ static BOOL _sortAscending;
                 break;
         }
     }];
+}
+
++ (NSString *)getVideoExportFilePath:(ZLExportVideoType)type
+{
+    NSTimeInterval interval = [[[NSDate alloc] init] timeIntervalSince1970];
+    
+    NSString *format = type == ZLExportVideoTypeMov ? @"mov" : type == ZLExportVideoTypeMp4 ? @"mp4" : @"3gp";
+    
+    NSString *exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%f.%@", interval, format]];
+    
+    return exportFilePath;
 }
 
 #pragma mark - 权限相关
