@@ -66,7 +66,7 @@
 #define ZL_IS_IPHONE_X (ZL_IS_IPHONE && [[UIScreen mainScreen] bounds].size.height == 812.0f)
 #define ZL_SafeAreaBottom (ZL_IS_IPHONE_X ? 34 : 0)
 
-#define kZLPhotoBrowserBundle [NSBundle bundleForClass:[self class]]
+#define kZLPhotoBrowserBundle [NSBundle bundleForClass:[ZLPhotoActionSheet class]]
 
 // 图片路径
 #define kZLPhotoBrowserSrcName(file) [@"ZLPhotoBrowser.bundle" stringByAppendingPathComponent:file]
