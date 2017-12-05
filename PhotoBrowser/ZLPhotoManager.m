@@ -712,9 +712,7 @@ static BOOL _sortAscending;
             }
         }];
     } else {
-        CGFloat width = MIN(kViewWidth, kMaxImageWidth);
-        CGSize size = CGSizeMake(width, width*asset.pixelHeight/asset.pixelWidth);
-        [self requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
+        [self requestOriginalImageDataForAsset:asset completion:^(NSData *data, NSDictionary *info) {
             if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
             if (complete) {
                 NSURL *url = info[@"PHImageFileURLKey"];
@@ -786,6 +784,41 @@ static BOOL _sortAscending;
 
 + (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(BOOL, PHAsset *))complete
 {
+    [self export:asset range:range type:type complete:^(NSString *exportFilePath, NSError *error) {
+        if (!error) {
+            [self saveVideoToAblum:[NSURL URLWithString:exportFilePath] completion:^(BOOL isSuc, PHAsset *asset) {
+                if (complete) complete(isSuc, asset);
+                if (isSuc) {
+                    NSLog(@"导出的的视频路径: %@", exportFilePath);
+                } else {
+                    NSLog(@"导出视频失败");
+                }
+            }];
+        } else {
+            if (complete) {
+                complete(NO, nil);
+            }
+        }
+    }];
+}
+
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type complete:(void (^)(NSString *, NSError *))complete
+{
+    PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
+    options.version = PHVideoRequestOptionsVersionOriginal;
+    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+    options.networkAccessAllowed = YES;
+    [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+        [self export:asset range:CMTimeRangeMake(kCMTimeZero, kCMTimePositiveInfinity) type:type complete:^(NSString *exportFilePath, NSError *error) {
+            if (complete) {
+                complete(exportFilePath, error);
+            }
+        }];
+    }];
+}
+
++ (void)export:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(NSString *exportFilePath, NSError *error))complete
+{
     NSString *exportFilePath = [self getVideoExportFilePath:type];
     
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetPassthrough];
@@ -797,7 +830,7 @@ static BOOL _sortAscending;
     exportSession.timeRange = range;
     
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
-        
+        BOOL suc = NO;
         switch ([exportSession status]) {
             case AVAssetExportSessionStatusFailed:
                 NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
@@ -808,20 +841,17 @@ static BOOL _sortAscending;
                 
             case AVAssetExportSessionStatusCompleted:{
                 NSLog(@"Export completed");
-                    [self saveVideoToAblum:exportFileUrl completion:^(BOOL isSuc, PHAsset *asset) {
-                        if (complete) complete(isSuc, asset);
-                        if (isSuc) {
-                            NSLog(@"导出的的视频路径: %@", exportFilePath);
-                        } else {
-                            NSLog(@"导出视频失败");
-                        }
-                    }];
+                suc = YES;
             }
                 break;
                 
             default:
                 NSLog(@"Export other");
                 break;
+        }
+        
+        if (complete) {
+            complete(suc?exportFilePath:nil, suc?nil:exportSession.error);
         }
     }];
 }

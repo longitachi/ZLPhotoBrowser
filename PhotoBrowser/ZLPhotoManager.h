@@ -152,11 +152,17 @@
 + (void)analysisEverySecondsImageForAsset:(PHAsset *)asset interval:(NSTimeInterval)interval size:(CGSize)size complete:(void (^)(AVAsset *avAsset, NSArray<UIImage *> *images))complete;
 
 /**
- 导出视频并保存到相册
+ 导出编辑的片段视频并保存到相册
  
  @param range 需要到处的视频间隔
  */
 + (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(BOOL isSuc, PHAsset *asset))complete;
+
+
+/**
+ 导出视频
+ */
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
 
 #pragma mark - 相册、相机、麦克风权限相关
 /**

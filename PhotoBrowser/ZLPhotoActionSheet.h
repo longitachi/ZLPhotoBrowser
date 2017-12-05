@@ -5,7 +5,7 @@
 //  Created by long on 15/11/25.
 //  Copyright © 2015年 long. All rights reserved.
 //
-//pods version 2.5.1.1 - 2017.11.15 update
+//pods version 2.5.4 - 2017.12.5 update
 
 #import <UIKit/UIKit.h>
 #import "ZLPhotoConfiguration.h"
