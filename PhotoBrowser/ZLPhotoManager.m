@@ -243,7 +243,8 @@ static BOOL _sortAscending;
     //系统相册
     ZLLanguageType type = [[[NSUserDefaults standardUserDefaults] valueForKey:ZLLanguageTypeKey] integerValue];
     
-    NSString *title = @"";
+    NSString *title = nil;
+    
     if (type == ZLLanguageSystem) {
         title = collection.localizedTitle;
     } else {
@@ -290,13 +291,14 @@ static BOOL _sortAscending;
         }
         
         if (@available(iOS 11, *)) {
-            if (collection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumAnimated) {
+//            PHAssetCollectionSubtypeSmartAlbumAnimated 为动图，但是貌似苹果返回的结果有bug，动图的subtype值为 215，即PHAssetCollectionSubtypeSmartAlbumLongExposures
+            if (collection.assetCollectionSubtype == 215) {
                 title = GetLocalLanguageTextValue(ZLPhotoBrowserAnimated);
             }
         }
     }
     
-    return title;
+    return title?:collection.localizedTitle;
 }
 
 //获取相册列表model
@@ -431,12 +433,12 @@ static BOOL _sortAscending;
     [self requestImageForAsset:asset size:CGSizeMake(asset.pixelWidth, asset.pixelHeight) resizeMode:PHImageRequestOptionsResizeModeNone completion:completion];
 }
 
-+ (PHImageRequestID)requestImageForAsset:(PHAsset *)asset size:(CGSize)size completion:(void (^)(UIImage *, NSDictionary *))completion
++ (PHImageRequestID)requestImageForAsset:(PHAsset *)asset size:(CGSize)size completion:(void (^)(UIImage *image, NSDictionary *info))completion
 {
     return [self requestImageForAsset:asset size:size resizeMode:PHImageRequestOptionsResizeModeFast completion:completion];
 }
 
-+ (void)requestLivePhotoForAsset:(PHAsset *)asset completion:(void (^)(PHLivePhoto *, NSDictionary *))completion
++ (void)requestLivePhotoForAsset:(PHAsset *)asset completion:(void (^)(PHLivePhoto *livePhoto, NSDictionary *info))completion
 {
     PHLivePhotoRequestOptions *option = [[PHLivePhotoRequestOptions alloc] init];
     option.version = PHImageRequestOptionsVersionCurrent;
@@ -448,7 +450,7 @@ static BOOL _sortAscending;
     }];
 }
 
-+ (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *, NSDictionary *))completion
++ (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *item, NSDictionary *info))completion
 {
     [[PHCachingImageManager defaultManager] requestPlayerItemForVideo:asset options:nil resultHandler:^(AVPlayerItem * _Nullable playerItem, NSDictionary * _Nullable info) {
         if (completion) completion(playerItem, info);
@@ -696,6 +698,30 @@ static BOOL _sortAscending;
     
     CFRelease(cfFrameProperties);
     return frameDuration;
+}
+
++ (void)requestAssetFileUrl:(PHAsset *)asset complete:(void (^)(NSString *))complete
+{
+    ZLAssetMediaType type = [self transformAssetType:asset];
+    if (type == ZLAssetMediaTypeVideo) {
+        [self requestVideoForAsset:asset completion:^(AVPlayerItem *item, NSDictionary *info) {
+            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+            NSArray *arr = [info[@"PHImageFileSandboxExtensionTokenKey"] componentsSeparatedByString:@";"];
+            if (complete) {
+                complete(arr.lastObject);
+            }
+        }];
+    } else {
+        CGFloat width = MIN(kViewWidth, kMaxImageWidth);
+        CGSize size = CGSizeMake(width, width*asset.pixelHeight/asset.pixelWidth);
+        [self requestImageForAsset:asset size:size completion:^(UIImage *image, NSDictionary *info) {
+            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+            if (complete) {
+                NSURL *url = info[@"PHImageFileURLKey"];
+                complete(url.absoluteString);
+            }
+        }];
+    }
 }
 
 #pragma mark - 编辑视频相关

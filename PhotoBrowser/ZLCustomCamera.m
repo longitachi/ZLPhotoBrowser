@@ -397,6 +397,10 @@
             [self onDismiss];
         }
     }];
+    
+    //暂停其他音乐，
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -798,10 +802,10 @@
 //确定选择
 - (void)onOkClick
 {
+    [self.playerView reset];
     if (self.doneBlock) {
         self.doneBlock(self.takedImage, self.videoUrl);
     }
-    
     [self onDismiss];
 }
 

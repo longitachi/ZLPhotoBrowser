@@ -245,7 +245,6 @@
     
     UIView *_bottomView;
     UIButton *_cancelBtn;
-    UIButton *_saveBtn;
     UIButton *_doneBtn;
     
     //旋转比例按钮
@@ -315,7 +314,6 @@
     
     _bottomView.frame = CGRectMake(0, kViewHeight-bottomViewH-inset.bottom, kViewWidth, bottomViewH);
     _cancelBtn.frame = CGRectMake(10+inset.left, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, bottomBtnH), bottomBtnH);
-    _saveBtn.frame = CGRectMake(kViewWidth/2-20, 7, 40, bottomBtnH);
     _doneBtn.frame = CGRectMake(kViewWidth-70-inset.right, 7, 60, bottomBtnH);
     
     _indicator.center = _imageView.center;
@@ -386,13 +384,6 @@
     [_cancelBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
     [_cancelBtn addTarget:self action:@selector(cancelBtn_click) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_cancelBtn];
-    
-    _saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _saveBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    [_saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_saveBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserSaveText) forState:UIControlStateNormal];
-    [_saveBtn addTarget:self action:@selector(saveBtn_click) forControlEvents:UIControlEventTouchUpInside];
-    [_bottomView addSubview:_saveBtn];
     
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
@@ -787,26 +778,30 @@
     }
 }
 
-- (void)saveBtn_click
-{
-    //保存到相册
-    ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
-    [hud show];
-    [ZLPhotoManager saveImageToAblum:[self clipImage] completion:^(BOOL suc, PHAsset *asset) {
-        [hud hide];
-        if (!suc) {
-            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
-        }
-    }];
-}
-
 - (void)btnDone_click
 {
     //确定裁剪，返回
+    ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+    [hud show];
+    
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    if (nav.callSelectClipImageBlock) {
-        nav.callSelectClipImageBlock([self clipImage], self.model.asset);
-    }
+    
+    __weak typeof(nav) weakNav = nav;
+    
+    UIImage *image = [self clipImage];
+    [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hide];
+            if (suc) {
+                __strong typeof(weakNav) strongNav = weakNav;
+                if (strongNav.callSelectClipImageBlock) {
+                    strongNav.callSelectClipImageBlock(image, asset);
+                }
+            } else {
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
+            }
+        });
+    }];
 }
 
 - (UIImage *)clipImage

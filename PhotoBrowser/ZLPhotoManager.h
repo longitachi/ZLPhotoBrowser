@@ -136,6 +136,12 @@
  */
 + (UIImage *)transformToGifImageWithData:(NSData *)data;
 
+
+/**
+ 获取对应asset的路径
+ */
++ (void)requestAssetFileUrl:(PHAsset *)asset complete:(void (^)(NSString *filePath))complete;
+
 #pragma mark - 编辑视频相关
 
 /**
