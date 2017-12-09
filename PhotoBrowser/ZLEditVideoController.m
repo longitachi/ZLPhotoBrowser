@@ -441,22 +441,20 @@
     zl_weakify(self);
     __weak typeof(nav) weakNav = nav;
     [ZLPhotoManager exportEditVideoForAsset:_avAsset range:[self getTimeRange] type:nav.configuration.exportVideoType complete:^(BOOL isSuc, PHAsset *asset) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [hud hide];
-            if (isSuc) {
-                __strong typeof(weakNav) strongNav = weakNav;
-                ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
-                [strongNav.arrSelectedModels removeAllObjects];
-                [strongNav.arrSelectedModels addObject:model];
-                if (strongNav.callSelectImageBlock) {
-                    strongNav.callSelectImageBlock();
-                }
-            } else {
-                zl_strongify(weakSelf);
-                [strongSelf startTimer];
-                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
+        [hud hide];
+        if (isSuc) {
+            __strong typeof(weakNav) strongNav = weakNav;
+            ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
+            [strongNav.arrSelectedModels removeAllObjects];
+            [strongNav.arrSelectedModels addObject:model];
+            if (strongNav.callSelectImageBlock) {
+                strongNav.callSelectImageBlock();
             }
-        });
+        } else {
+            zl_strongify(weakSelf);
+            [strongSelf startTimer];
+            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
+        }
     }];
 }
 

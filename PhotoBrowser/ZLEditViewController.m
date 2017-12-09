@@ -142,17 +142,15 @@
     
     CGPoint center = _iconView.center;
     CGFloat W, H;
-    if(_ratio.ratio!=0){
-        if(_ratio.isLandscape){
+    if (_ratio.ratio != 0) {
+        if(_ratio.isLandscape) {
             W = 50;
             H = 50*_ratio.ratio;
-        }
-        else{
+        } else {
             W = 50/_ratio.ratio;
             H = 50;
         }
-    }
-    else{
+    } else {
         CGFloat maxW  = MAX(_iconView.image.size.width, _iconView.image.size.height);
         W = 50 * _iconView.image.size.width / maxW;
         H = 50 * _iconView.image.size.height / maxW;
@@ -477,7 +475,7 @@
         ZLRatio *ratio = [[ZLRatio alloc] initWithValue1:val1 value2:val2];
         ratio.titleFormat = info[@"titleFormat"];
         
-        ratio.isLandscape = NO;
+        ratio.isLandscape = val1 > val2;
         
         ZLRatioMenuItem *view = [[ZLRatioMenuItem alloc] initWithFrame:CGRectMake(x, 0, W, _menuScroll.frame.size.height) target:self action:@selector(tappedMenu:)];
         view.ratio = ratio;

@@ -127,7 +127,7 @@
     
     //nav view
     CGFloat navHeight = inset.top+44;
-    CGRect navFrame = _hideNavBar?CGRectMake(0, -navHeight, kViewWidth, navHeight):CGRectMake(0, 0, kViewWidth, navHeight);
+    CGRect navFrame = CGRectMake(0, 0, kViewWidth, navHeight);
     _navView.frame = navFrame;
     
     _btnBack.frame = CGRectMake(inset.left, inset.top, 60, 44);
@@ -135,7 +135,7 @@
     _navRightBtn.frame = CGRectMake(kViewWidth-40-inset.right, inset.top+(44-25)/2, 25, 25);
     
     //底部view
-    CGRect frame = _hideNavBar?CGRectMake(0, kViewHeight, kViewWidth, 44+inset.bottom):CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, 44+inset.bottom);
+    CGRect frame = CGRectMake(0, kViewHeight-44-inset.bottom, kViewWidth, 44+inset.bottom);
     _bottomView.frame = frame;
     
     CGFloat btnOriWidth = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, 30);

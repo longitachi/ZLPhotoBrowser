@@ -784,44 +784,51 @@ static BOOL _sortAscending;
 
 + (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(BOOL, PHAsset *))complete
 {
-    [self export:asset range:range type:type complete:^(NSString *exportFilePath, NSError *error) {
+    [self export:asset range:range type:type presetName:AVAssetExportPresetPassthrough complete:^(NSString *exportFilePath, NSError *error) {
         if (!error) {
             [self saveVideoToAblum:[NSURL URLWithString:exportFilePath] completion:^(BOOL isSuc, PHAsset *asset) {
-                if (complete) complete(isSuc, asset);
-                if (isSuc) {
-                    NSLog(@"导出的的视频路径: %@", exportFilePath);
-                } else {
-                    NSLog(@"导出视频失败");
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (complete) complete(isSuc, asset);
+                });
             }];
         } else {
-            if (complete) {
-                complete(NO, nil);
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (complete) complete(NO, nil);
+            });
         }
     }];
 }
 
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type complete:(void (^)(NSString *, NSError *))complete
 {
+    [self exportVideoForAsset:asset type:type presetName:AVAssetExportPresetMediumQuality complete:complete];
+}
+
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName complete:(void (^)(NSString *, NSError *))complete
+{
+    if (asset.mediaType != PHAssetMediaTypeVideo) {
+        if (complete) complete(nil, [NSError errorWithDomain:@"导出失败" code:-1 userInfo:@{@"message": @"导出对象不是视频对象"}]);
+        return;
+    }
+    
     PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
     options.version = PHVideoRequestOptionsVersionOriginal;
     options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
     options.networkAccessAllowed = YES;
     [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-        [self export:asset range:CMTimeRangeMake(kCMTimeZero, kCMTimePositiveInfinity) type:type complete:^(NSString *exportFilePath, NSError *error) {
-            if (complete) {
-                complete(exportFilePath, error);
-            }
+        [self export:asset range:CMTimeRangeMake(kCMTimeZero, kCMTimePositiveInfinity) type:type presetName:presetName complete:^(NSString *exportFilePath, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (complete) complete(exportFilePath, error);
+            });
         }];
     }];
 }
 
-+ (void)export:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(NSString *exportFilePath, NSError *error))complete
++ (void)export:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type presetName:(NSString *)presetName complete:(void (^)(NSString *exportFilePath, NSError *error))complete
 {
     NSString *exportFilePath = [self getVideoExportFilePath:type];
     
-    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetPassthrough];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:presetName];
     
     NSURL *exportFileUrl = [NSURL fileURLWithPath:exportFilePath];
     

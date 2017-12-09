@@ -160,9 +160,21 @@
 
 
 /**
- 导出视频
+ 导出视频，视频压缩设置默认为 AVAssetExportPresetMediumQuality
+ 
+ @param asset 需要导出视频的asset
+ @param type 视频导出格式
  */
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
+
+/**
+ 导出视频
+
+ @param asset 需要导出视频的asset
+ @param type 视频导出格式
+ @param presetName 视频压缩设置
+ */
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
 
 #pragma mark - 相册、相机、麦克风权限相关
 /**
