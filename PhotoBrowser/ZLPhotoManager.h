@@ -176,6 +176,13 @@
  */
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
 
+
+/**
+ 获取保存视频的路径
+ */
++ (NSString *)getVideoExportFilePath:(ZLExportVideoType)type;
+
+
 #pragma mark - 相册、相机、麦克风权限相关
 /**
  是否有相册访问权限

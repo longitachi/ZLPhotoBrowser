@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMotion/CoreMotion.h>
 #import "ZLPlayer.h"
+#import "ZLPhotoManager.h"
 
 
 #define kTopViewScale .5
@@ -777,7 +778,7 @@
     movieConnection.videoOrientation = self.orientation;
     [movieConnection setVideoScaleAndCropFactor:1.0];
     if (![self.movieFileOutPut isRecording]) {
-        NSURL *url = [self getVideoFileUrl];
+        NSURL *url = [NSURL fileURLWithPath:[ZLPhotoManager getVideoExportFilePath:self.videoType]];
         [self.movieFileOutPut startRecordingToOutputFileURL:url recordingDelegate:self];
     }
 }
@@ -815,30 +816,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self dismissViewControllerAnimated:YES completion:nil];
     });
-}
-
-- (NSURL *)getVideoFileUrl
-{
-    NSString *filePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO).firstObject;
-    NSString *format = self.videoType == ZLExportVideoTypeMov ? @"mov" : self.videoType == ZLExportVideoTypeMp4 ? @"mp4" : @"3gp";
-    
-    filePath = [NSTemporaryDirectory() stringByAppendingString:[NSString stringWithFormat:@"%@.%@", [self getUniqueStrByUUID], format]];
-    return [NSURL fileURLWithPath:filePath];
-}
-
-- (NSString *)getUniqueStrByUUID
-{
-    CFUUIDRef uuidObj = CFUUIDCreate(nil);//create a new UUID
-    
-    //get the string representation of the UUID
-    CFStringRef uuidString = CFUUIDCreateString(nil, uuidObj);
-    
-    NSString *str = [NSString stringWithString:(__bridge NSString *)uuidString];
-    
-    CFRelease(uuidObj);
-    CFRelease(uuidString);
-    
-    return [str lowercaseString];
 }
 
 - (void)playVideo

@@ -116,9 +116,9 @@ typedef NS_ENUM(NSUInteger, ZLCaptureSessionPreset) {
 };
 
 typedef NS_ENUM(NSUInteger, ZLExportVideoType) {
+    //default
     ZLExportVideoTypeMov,
     ZLExportVideoTypeMp4,
-    ZLExportVideoType3gp,
 };
 
 static inline void SetViewWidth(UIView *view, CGFloat width) {

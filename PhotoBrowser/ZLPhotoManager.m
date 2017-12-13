@@ -833,7 +833,7 @@ static BOOL _sortAscending;
     NSURL *exportFileUrl = [NSURL fileURLWithPath:exportFilePath];
     
     exportSession.outputURL = exportFileUrl;
-    exportSession.outputFileType = AVFileTypeQuickTimeMovie;
+    exportSession.outputFileType = (type == ZLExportVideoTypeMov ? AVFileTypeQuickTimeMovie : AVFileTypeMPEG4);
     exportSession.timeRange = range;
     
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
@@ -865,13 +865,26 @@ static BOOL _sortAscending;
 
 + (NSString *)getVideoExportFilePath:(ZLExportVideoType)type
 {
-    NSTimeInterval interval = [[[NSDate alloc] init] timeIntervalSince1970];
+    NSString *format = (type == ZLExportVideoTypeMov ? @"mov" : @"mp4");
     
-    NSString *format = type == ZLExportVideoTypeMov ? @"mov" : type == ZLExportVideoTypeMp4 ? @"mp4" : @"3gp";
-    
-    NSString *exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%f.%@", interval, format]];
+    NSString *exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", [self getUniqueStrByUUID], format]];
     
     return exportFilePath;
+}
+
++ (NSString *)getUniqueStrByUUID
+{
+    CFUUIDRef uuidObj = CFUUIDCreate(nil);//create a new UUID
+    
+    //get the string representation of the UUID
+    CFStringRef uuidString = CFUUIDCreateString(nil, uuidObj);
+    
+    NSString *str = [NSString stringWithString:(__bridge NSString *)uuidString];
+    
+    CFRelease(uuidObj);
+    CFRelease(uuidString);
+    
+    return [str lowercaseString];
 }
 
 #pragma mark - 权限相关
