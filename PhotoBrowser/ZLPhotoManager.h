@@ -178,6 +178,43 @@
 
 
 /**
+ 导出指定尺寸的视频，视频区域为以视频中心为中点（视频质量未压缩）
+
+ @param asset 需要导出视频的asset
+ @param type 视频导出格式
+ @param renderSize 指定的尺寸大小
+ */
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
+
+
+/**
+ 导出指定尺寸视频，并添加水印，视频区域为以视频中心为中点（视频质量未压缩）
+ 
+ @discussion（由于文字水印在开发过程中遇到对同一个视频导出时候，有的文字显示，有的不显示的文字，所以暂不支持文字水印）
+
+ @param asset 需要导出视频的asset
+ @param type 视频导出格式
+ @param renderSize 指定的尺寸大小，如要导出全尺寸视频，可将该值设置的大些如:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)
+ @param watermarkImage 水印图片
+ @param location 水印位置
+ @param imageSize 水印大小
+ */
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
+
+
+/**
+ 导出全尺寸视频，并添加水印（支持设置压缩系数）
+
+ @param asset 需要导出视频的asset
+ @param type 视频导出格式
+ @param presetName 视频压缩设置
+ @param watermarkImage 水印图片
+ @param location 水印位置
+ @param imageSize 水印大小
+ */
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
+
+/**
  获取保存视频的路径
  */
 + (NSString *)getVideoExportFilePath:(ZLExportVideoType)type;

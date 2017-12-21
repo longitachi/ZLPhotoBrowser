@@ -18,6 +18,7 @@
 #import "ZLEditVideoController.h"
 #import "ZLCustomCamera.h"
 #import "ZLDefine.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 #define kBaseViewHeight (self.configuration.maxPreviewCount ? 300 : 142)
 
@@ -137,7 +138,11 @@ double const ScalePhotoWidth = 1000;
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self.btnCamera setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCameraText) forState:UIControlStateNormal];
+    if (!self.configuration.allowSelectImage && self.configuration.allowRecordVideo) {
+        [self.btnCamera setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCameraRecordText) forState:UIControlStateNormal];
+    } else {
+        [self.btnCamera setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCameraText) forState:UIControlStateNormal];
+    }
     [self.btnAblum setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserAblumText) forState:UIControlStateNormal];
     [self.btnCancel setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
     [self resetSubViewState];
@@ -452,6 +457,11 @@ double const ScalePhotoWidth = 1000;
         [self hide];
         return;
     }
+    if (!self.configuration.allowSelectImage &&
+        !self.configuration.allowRecordVideo) {
+        ShowAlert(@"allowSelectImage与allowRecordVideo不能同时为NO", self.sender);
+        return;
+    }
     if (self.configuration.useSystemCamera) {
         //系统相机拍照
         if ([UIImagePickerController isSourceTypeAvailable:
@@ -459,8 +469,16 @@ double const ScalePhotoWidth = 1000;
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             picker.delegate = self;
             picker.allowsEditing = NO;
-            picker.videoQuality = UIImagePickerControllerQualityTypeLow;
+            picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            NSArray *a1 = self.configuration.allowSelectImage?@[(NSString *)kUTTypeImage]:@[];
+            NSArray *a2 = self.configuration.allowRecordVideo?@[(NSString *)kUTTypeMovie]:@[];
+            NSMutableArray *arr = [NSMutableArray array];
+            [arr addObjectsFromArray:a1];
+            [arr addObjectsFromArray:a2];
+            
+            picker.mediaTypes = arr;
+            picker.videoMaximumDuration = self.configuration.maxRecordDuration;
             [self.sender showDetailViewController:picker sender:nil];
         }
     } else {
@@ -471,6 +489,7 @@ double const ScalePhotoWidth = 1000;
             return;
         }
         ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
+        camera.allowTakePhoto = self.configuration.allowSelectImage;
         camera.allowRecordVideo = self.configuration.allowRecordVideo;
         camera.sessionPreset = self.configuration.sessionPreset;
         camera.videoType = self.configuration.exportVideoType;
@@ -839,8 +858,9 @@ double const ScalePhotoWidth = 1000;
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
     [picker dismissViewControllerAnimated:YES completion:^{
-        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        [self saveImage:image videoUrl:nil];
+        UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+        NSURL *url = [info valueForKey:UIImagePickerControllerMediaURL];
+        [self saveImage:image videoUrl:url];
     }];
 }
 

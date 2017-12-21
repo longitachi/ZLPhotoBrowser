@@ -20,6 +20,7 @@
 #import "ZLEditViewController.h"
 #import "ZLEditVideoController.h"
 #import "ZLCustomCamera.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 typedef NS_ENUM(NSUInteger, SlideSelectType) {
     SlideSelectTypeNone,
@@ -195,7 +196,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     offsetX = CGRectGetMaxX(self.btnPreView.frame) + 10;
     
     if (configuration.allowSelectOriginal) {
-        self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+self.btnOriginalPhoto.imageView.frame.size.width, bottomBtnH);
+        self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+25, bottomBtnH);
         offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
         
         self.labPhotosBytes.frame = CGRectMake(offsetX, 7, 80, bottomBtnH);
@@ -817,6 +818,11 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         ShowAlert(message, self);
         return;
     }
+    if (!configuration.allowSelectImage &&
+        !configuration.allowRecordVideo) {
+        ShowAlert(@"allowSelectImage与allowRecordVideo不能同时为NO", self);
+        return;
+    }
     if (configuration.useSystemCamera) {
         //系统相机拍照
         if ([UIImagePickerController isSourceTypeAvailable:
@@ -824,8 +830,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             UIImagePickerController *picker = [[UIImagePickerController alloc] init];
             picker.delegate = self;
             picker.allowsEditing = NO;
-            picker.videoQuality = UIImagePickerControllerQualityTypeLow;
+            picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            NSArray *a1 = configuration.allowSelectImage?@[(NSString *)kUTTypeImage]:@[];
+            NSArray *a2 = configuration.allowRecordVideo?@[(NSString *)kUTTypeMovie]:@[];
+            NSMutableArray *arr = [NSMutableArray array];
+            [arr addObjectsFromArray:a1];
+            [arr addObjectsFromArray:a2];
+            
+            picker.mediaTypes = arr;
+            picker.videoMaximumDuration = configuration.maxRecordDuration;
             [self showDetailViewController:picker sender:nil];
         }
     } else {
@@ -835,6 +849,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             return;
         }
         ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
+        camera.allowTakePhoto = configuration.allowSelectImage;
         camera.allowRecordVideo = configuration.allowRecordVideo;
         camera.sessionPreset = configuration.sessionPreset;
         camera.videoType = configuration.exportVideoType;
@@ -854,7 +869,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 {
     [picker dismissViewControllerAnimated:YES completion:^{
         UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        [self saveImage:image videoUrl:nil];
+        NSURL *url = [info valueForKey:UIImagePickerControllerMediaURL];
+        [self saveImage:image videoUrl:url];
     }];
 }
 

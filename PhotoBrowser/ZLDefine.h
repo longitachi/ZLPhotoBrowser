@@ -13,6 +13,7 @@
 #import "NSBundle+ZLPhotoBrowser.h"
 
 #define ZLPhotoBrowserCameraText @"ZLPhotoBrowserCameraText"
+#define ZLPhotoBrowserCameraRecordText @"ZLPhotoBrowserCameraRecordText"
 #define ZLPhotoBrowserAblumText @"ZLPhotoBrowserAblumText"
 #define ZLPhotoBrowserCancelText @"ZLPhotoBrowserCancelText"
 #define ZLPhotoBrowserOriginalText @"ZLPhotoBrowserOriginalText"
@@ -107,6 +108,7 @@ typedef NS_ENUM(NSUInteger, ZLLanguageType) {
     ZLLanguageJapanese,
 };
 
+//录制视频及拍照分辨率
 typedef NS_ENUM(NSUInteger, ZLCaptureSessionPreset) {
     ZLCaptureSessionPreset325x288,
     ZLCaptureSessionPreset640x480,
@@ -115,10 +117,20 @@ typedef NS_ENUM(NSUInteger, ZLCaptureSessionPreset) {
     ZLCaptureSessionPreset3840x2160,
 };
 
+//导出视频类型
 typedef NS_ENUM(NSUInteger, ZLExportVideoType) {
     //default
     ZLExportVideoTypeMov,
     ZLExportVideoTypeMp4,
+};
+
+//导出视频水印位置
+typedef NS_ENUM(NSUInteger, ZLWatermarkLocation) {
+    ZLWatermarkLocationTopLeft,
+    ZLWatermarkLocationTopRight,
+    ZLWatermarkLocationCenter,
+    ZLWatermarkLocationBottomLeft,
+    ZLWatermarkLocationBottomRight,
 };
 
 static inline void SetViewWidth(UIView *view, CGFloat width) {

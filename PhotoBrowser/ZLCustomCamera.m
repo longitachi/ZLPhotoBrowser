@@ -54,6 +54,7 @@
 
 @property (nonatomic, weak) id<CameraToolViewDelegate> delegate;
 
+@property (nonatomic, assign) BOOL allowTakePhoto;
 @property (nonatomic, assign) BOOL allowRecordVideo;
 @property (nonatomic, strong) UIColor *circleProgressColor;
 @property (nonatomic, assign) NSInteger maxRecordDuration;
@@ -119,6 +120,15 @@
     self.doneBtn.layer.cornerRadius = height*kBottomViewScale/2;
 }
 
+- (void)setAllowTakePhoto:(BOOL)allowTakePhoto
+{
+    _allowTakePhoto = allowTakePhoto;
+    if (allowTakePhoto) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)];
+        [self.bottomView addGestureRecognizer:tap];
+    }
+}
+
 - (void)setAllowRecordVideo:(BOOL)allowRecordVideo
 {
     _allowRecordVideo = allowRecordVideo;
@@ -142,9 +152,6 @@
     self.topView.backgroundColor = [UIColor whiteColor];
     self.topView.userInteractionEnabled = NO;
     [self addSubview:self.topView];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)];
-    [self.bottomView addGestureRecognizer:tap];
     
     self.dismissBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.dismissBtn.frame = CGRectMake(60, self.bounds.size.height/2-25/2, 25, 25);
@@ -459,6 +466,9 @@
     [UIApplication sharedApplication].statusBarHidden = YES;
     [self.session startRunning];
     [self setFocusCursorWithPoint:self.view.center];
+    if (!self.allowTakePhoto && !self.allowRecordVideo) {
+        ShowAlert(@"allowTakePhoto与allowRecordVideo不能同时为NO", self);
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -499,6 +509,7 @@
     
     self.toolView = [[CameraToolView alloc] init];
     self.toolView.delegate = self;
+    self.toolView.allowTakePhoto = self.allowTakePhoto;
     self.toolView.allowRecordVideo = self.allowRecordVideo;
     self.toolView.circleProgressColor = self.circleProgressColor;
     self.toolView.maxRecordDuration = self.maxRecordDuration;
@@ -846,10 +857,12 @@
 - (void)captureOutput:(AVCaptureFileOutput *)output didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray<AVCaptureConnection *> *)connections error:(NSError *)error
 {
     if (CMTimeGetSeconds(output.recordedDuration) < 1) {
-        //视频长度小于1s 则拍照
-        NSLog(@"视频长度小于0.5s，按拍照处理");
-        [self onTakePicture];
-        return;
+        if (self.allowTakePhoto) {
+            //视频长度小于1s 允许拍照则拍照，不允许拍照，则保存小于1s的视频
+            NSLog(@"视频长度小于1s，按拍照处理");
+            [self onTakePicture];
+            return;
+        }
     }
     
     self.videoUrl = outputFileURL;
