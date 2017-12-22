@@ -784,7 +784,7 @@ static BOOL _sortAscending;
 
 + (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(BOOL, PHAsset *))complete
 {
-    [self export:asset range:range type:type presetName:AVAssetExportPresetPassthrough renderSize:CGSizeZero watermarkImage:nil watermarkLocation:ZLWatermarkLocationCenter imageSize:CGSizeZero complete:^(NSString *exportFilePath, NSError *error) {
+    [self export:asset range:range type:type presetName:AVAssetExportPresetPassthrough renderSize:CGSizeZero watermarkImage:nil watermarkLocation:ZLWatermarkLocationCenter imageSize:CGSizeZero effectImage:nil birthRate:0 velocity:0 complete:^(NSString *exportFilePath, NSError *error) {
         if (!error) {
             [self saveVideoToAblum:[NSURL URLWithString:exportFilePath] completion:^(BOOL isSuc, PHAsset *asset) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -806,22 +806,7 @@ static BOOL _sortAscending;
 
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName complete:(void (^)(NSString *, NSError *))complete
 {
-    if (asset.mediaType != PHAssetMediaTypeVideo) {
-        if (complete) complete(nil, [NSError errorWithDomain:@"导出失败" code:-1 userInfo:@{@"message": @"导出对象不是视频对象"}]);
-        return;
-    }
-    
-    PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
-    options.version = PHVideoRequestOptionsVersionOriginal;
-    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
-    options.networkAccessAllowed = YES;
-    [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-        [self export:asset range:CMTimeRangeMake(kCMTimeZero, kCMTimePositiveInfinity) type:type presetName:presetName renderSize:CGSizeZero watermarkImage:nil watermarkLocation:ZLWatermarkLocationCenter imageSize:CGSizeZero complete:^(NSString *exportFilePath, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (complete) complete(exportFilePath, error);
-            });
-        }];
-    }];
+    [self export:asset type:type presetName:presetName renderSize:CGSizeZero watermarkImage:nil watermarkLocation:ZLWatermarkLocationCenter imageSize:CGSizeZero effectImage:nil birthRate:0 velocity:0 complete:complete];
 }
 
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize complete:(void (^)(NSString *, NSError *))complete
@@ -829,19 +814,24 @@ static BOOL _sortAscending;
     [self exportVideoForAsset:asset type:type renderSize:renderSize watermarkImage:nil watermarkLocation:ZLWatermarkLocationCenter imageSize:CGSizeZero complete:complete];
 }
 
-#pragma mark - 视频加水印
+#pragma mark - 视频加水印及粒子效果
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *, NSError *))complete
 {
-    [self export:asset type:type presetName:AVAssetExportPresetHighestQuality renderSize:renderSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize complete:complete];
+    [self export:asset type:type presetName:AVAssetExportPresetHighestQuality renderSize:renderSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize effectImage:nil birthRate:0 velocity:0 complete:complete];
 }
 
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *, NSError *))complete
 {
-    [self export:asset type:type presetName:presetName renderSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize complete:complete];
+    [self export:asset type:type presetName:presetName renderSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize effectImage:nil birthRate:0 velocity:0 complete:complete];
+}
+
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity complete:(void (^)(NSString *, NSError *))complete
+{
+    [self export:asset type:type presetName:presetName renderSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) watermarkImage:nil watermarkLocation:ZLWatermarkLocationCenter imageSize:CGSizeZero effectImage:effectImage birthRate:birthRate velocity:velocity complete:complete];
 }
 
 //privite
-+ (void)export:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *, NSError *))complete
++ (void)export:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity complete:(void (^)(NSString *, NSError *))complete
 {
     if (asset.mediaType != PHAssetMediaTypeVideo) {
         if (complete) complete(nil, [NSError errorWithDomain:@"导出失败" code:-1 userInfo:@{@"message": @"导出对象不是视频对象"}]);
@@ -853,7 +843,7 @@ static BOOL _sortAscending;
     options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
     options.networkAccessAllowed = YES;
     [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-        [self export:asset range:CMTimeRangeMake(kCMTimeZero, kCMTimePositiveInfinity) type:type presetName:presetName renderSize:renderSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize complete:^(NSString *exportFilePath, NSError *error) {
+        [self export:asset range:CMTimeRangeMake(kCMTimeZero, kCMTimePositiveInfinity) type:type presetName:presetName renderSize:renderSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize effectImage:effectImage birthRate:birthRate velocity:velocity complete:^(NSString *exportFilePath, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (complete) complete(exportFilePath, error);
             });
@@ -861,7 +851,7 @@ static BOOL _sortAscending;
     }];
 }
 
-+ (void)export:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type presetName:(NSString *)presetName renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete
++ (void)export:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type presetName:(NSString *)presetName renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity complete:(void (^)(NSString *exportFilePath, NSError *error))complete
 {
     NSString *exportFilePath = [self getVideoExportFilePath:type];
     
@@ -874,10 +864,10 @@ static BOOL _sortAscending;
     exportSession.timeRange = range;
 //        exportSession.shouldOptimizeForNetworkUse = YES;
     if (!CGSizeEqualToSize(renderSize, CGSizeZero)) {
-        AVMutableVideoComposition *com = [self getVideoComposition:asset renderSize:renderSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize];
+        AVMutableVideoComposition *com = [self getVideoComposition:asset renderSize:renderSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize effectImage:effectImage birthRate:birthRate velocity:velocity];
         if (!com) {
             if (complete) {
-                complete(nil, [NSError errorWithDomain:@"视频裁剪导出失败" code:-1 userInfo:@{@"message": @"视频对象格式可能有错误，可能为无声视频，暂不支持"}]);
+                complete(nil, [NSError errorWithDomain:@"视频裁剪导出失败" code:-1 userInfo:@{@"message": @"视频对象格式可能有错误，没有检测到视频通道"}]);
             }
             return;
         }
@@ -914,7 +904,7 @@ static BOOL _sortAscending;
     }];
 }
 
-+ (AVMutableVideoComposition *)getVideoComposition:(AVAsset *)asset renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize
++ (AVMutableVideoComposition *)getVideoComposition:(AVAsset *)asset renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity
 {
     AVMutableComposition *composition = [AVMutableComposition composition];
     //视频通道
@@ -929,13 +919,15 @@ static BOOL _sortAscending;
     AVAssetTrack *videoTrack = [asset tracksWithMediaType:AVMediaTypeVideo].firstObject;
     AVAssetTrack *audioTrack = [asset tracksWithMediaType:AVMediaTypeAudio].firstObject;
     
-    if (!videoTrack || !audioTrack) {
+    if (!videoTrack) {
         return nil;
     }
-    [assetVideoTrack insertTimeRange:timeRange ofTrack:[asset tracksWithMediaType:AVMediaTypeVideo].firstObject atTime:kCMTimeZero error:&error];
+    [assetVideoTrack insertTimeRange:timeRange ofTrack:videoTrack atTime:kCMTimeZero error:&error];
     NSLog(@"%@", error);
-    [assetAudioTrack insertTimeRange:timeRange ofTrack:[asset tracksWithMediaType:AVMediaTypeAudio].firstObject atTime:kCMTimeZero error:&error];
-    NSLog(@"%@", error);
+    if (audioTrack) {
+        [assetAudioTrack insertTimeRange:timeRange ofTrack:audioTrack atTime:kCMTimeZero error:&error];
+        NSLog(@"%@", error);
+    }
     
     if (error) {
         return nil;
@@ -948,7 +940,7 @@ static BOOL _sortAscending;
     AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:assetVideoTrack];
     [layerInstruction setOpacity:0.0 atTime:assetVideoTrack.timeRange.duration];
     //视频旋转，获取视频旋转角度，然后旋转对应角度，保持视频方向正确
-    CGFloat degree = [self getVideoDegree:[asset tracksWithMediaType:AVMediaTypeVideo].firstObject];
+    CGFloat degree = [self getVideoDegree:videoTrack];
     CGSize naturalSize = assetVideoTrack.naturalSize;
     
     CGAffineTransform mixedTransform =  CGAffineTransformIdentity;
@@ -1000,8 +992,8 @@ static BOOL _sortAscending;
     videoComposition.instructions = @[instruction];
     
     //添加水印
-    if (watermarkImage) {
-        [self addWatermark:videoComposition renderSize:cropSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize];
+    if (watermarkImage || effectImage) {
+        [self addWatermark:videoComposition renderSize:cropSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize effectImage:effectImage birthRate:birthRate velocity:velocity];
     }
     
     return videoComposition;
@@ -1022,7 +1014,7 @@ static BOOL _sortAscending;
     return degree;
 }
 
-+ (void)addWatermark:(AVMutableVideoComposition *)videoCom renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize
++ (void)addWatermark:(AVMutableVideoComposition *)videoCom renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity
 {
 //    CATextLayer *titleLayer = [CATextLayer layer];
 //    [titleLayer setFont:(__bridge CFTypeRef)[UIFont systemFontOfSize:25].fontName];
@@ -1037,31 +1029,40 @@ static BOOL _sortAscending;
 //    titleLayer.frame = CGRectMake(20, 0, renderSize.width-40, 100);
 //    titleLayer.backgroundColor = [UIColor whiteColor].CGColor;
     
-    //图片
-    CALayer *imageLayer = [CALayer layer];
-    imageLayer.contents = (id)watermarkImage.CGImage;
-    //坐标起点为左下角，向右为x正，向上为y正
-    switch (location) {
-        case ZLWatermarkLocationTopLeft:
-            imageLayer.frame = CGRectMake(10, renderSize.height-imageSize.height-10, imageSize.width, imageSize.height);
-            break;
-        case ZLWatermarkLocationTopRight:
-            imageLayer.frame = CGRectMake(renderSize.width-imageSize.width-10, renderSize.height-imageSize.height-10, imageSize.width, imageSize.height);
-            break;
-        case ZLWatermarkLocationBottomLeft:
-            imageLayer.frame = CGRectMake(10, 10, imageSize.width, imageSize.height);
-            break;
-        case ZLWatermarkLocationBottomRight:
-            imageLayer.frame = CGRectMake(renderSize.width-imageSize.width-10, 10, imageSize.width, imageSize.height);
-            break;
-        case ZLWatermarkLocationCenter:
-            imageLayer.frame = CGRectMake((renderSize.width-imageSize.width)/2, (renderSize.height-imageSize.height)/2, imageSize.width, imageSize.height);
-            break;
-    }
-    
     CALayer *overlayLayer = [CALayer layer];
     overlayLayer.frame = (CGRect){CGPointZero, renderSize};
-    [overlayLayer addSublayer:imageLayer];
+    
+    //水印图片
+    if (watermarkImage) {
+        CALayer *imageLayer = [CALayer layer];
+        imageLayer.contents = (id)watermarkImage.CGImage;
+        //坐标起点为左下角，向右为x正，向上为y正
+        switch (location) {
+            case ZLWatermarkLocationTopLeft:
+                imageLayer.frame = CGRectMake(10, renderSize.height-imageSize.height-10, imageSize.width, imageSize.height);
+                break;
+            case ZLWatermarkLocationTopRight:
+                imageLayer.frame = CGRectMake(renderSize.width-imageSize.width-10, renderSize.height-imageSize.height-10, imageSize.width, imageSize.height);
+                break;
+            case ZLWatermarkLocationBottomLeft:
+                imageLayer.frame = CGRectMake(10, 10, imageSize.width, imageSize.height);
+                break;
+            case ZLWatermarkLocationBottomRight:
+                imageLayer.frame = CGRectMake(renderSize.width-imageSize.width-10, 10, imageSize.width, imageSize.height);
+                break;
+            case ZLWatermarkLocationCenter:
+                imageLayer.frame = CGRectMake((renderSize.width-imageSize.width)/2, (renderSize.height-imageSize.height)/2, imageSize.width, imageSize.height);
+                break;
+        }
+        
+        [overlayLayer addSublayer:imageLayer];
+    }
+    
+    //粒子特效
+    if (effectImage) {
+        CAEmitterLayer *effectLayer = [self getEmitterLayerWithEffectImage:effectImage birthRate:birthRate velocity:velocity emitterSize:renderSize];
+        [overlayLayer addSublayer:effectLayer];
+    }
     
     CALayer *parentLayer = [CALayer layer];
     CALayer *videoLayer = [CALayer layer];
@@ -1074,54 +1075,66 @@ static BOOL _sortAscending;
     videoCom.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithPostProcessingAsVideoLayer:videoLayer inLayer:parentLayer];
 }
 
-+ (void)applyVideoEffectsToComposition:(AVMutableVideoComposition *)composition WithWaterprintImage:(UIImage*)img withTitleText:(NSString*)titleText size:(CGSize)size iconSize:(CGSize)iconSize {
++ (CAEmitterLayer *)getEmitterLayerWithEffectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity emitterSize:(CGSize)emitterSize
+{
+    CAEmitterLayer *emitterLayer = [CAEmitterLayer layer];
     
-    //添加水印  也可以添加多个
-    CGFloat imgLayerWidth = iconSize.width;
-    CGFloat imgLayerHeight = iconSize.height;
-    CALayer *imgLayer = [CALayer layer];
-    imgLayer.contents = (id)img.CGImage;
-    imgLayer.frame = CGRectMake(size.width - imgLayerWidth, size.height - imgLayerWidth - 25, imgLayerWidth, imgLayerHeight);
+    //发射模式
+    emitterLayer.renderMode = kCAEmitterLayerSurface;
+    emitterLayer.emitterPosition = CGPointMake(emitterSize.width/2, emitterSize.height);
+    //发射源的形状
+    emitterLayer.emitterShape = kCAEmitterLayerLine;
+    //发射源的尺寸大小
+    emitterLayer.emitterSize = emitterSize;
+    //    emitterLayer.emitterDepth = 0.5;
     
-    //添加文字
-    UIFont *font = [UIFont systemFontOfSize:30.0];
-    CATextLayer *subtitle1Text = [[CATextLayer alloc] init];
-    [subtitle1Text setFontSize:30];
-    [subtitle1Text setString:titleText];
-    [subtitle1Text setAlignmentMode:kCAAlignmentLeft];
-    [subtitle1Text setForegroundColor:[[UIColor whiteColor] CGColor]];
-    subtitle1Text.backgroundColor = [UIColor blackColor].CGColor;
-    //    [subtitle1Text setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5].CGColor];
-    CGSize textSize = [titleText sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName, nil]];
-    CGFloat txtH = textSize.height + 10;
-    CGFloat txtY = size.height - txtH - imgLayerWidth - 25;
-    [subtitle1Text setFrame:CGRectMake(imgLayer.frame.origin.x + 5, txtY, imgLayerWidth, txtH)];
+    //create a particle template
+    CAEmitterCell *cell = [[CAEmitterCell alloc] init];
+    cell.contents = (__bridge id)effectImage.CGImage;
+    //每秒创建的粒子个数
+    cell.birthRate = birthRate;
+    //每个粒子的存在时间
+    cell.lifetime = 30.0;
     
-    //把文字和图标都添加到layer
-    CALayer *overlayLayer = [CALayer layer];
-    [overlayLayer addSublayer:subtitle1Text];
-    [overlayLayer addSublayer:imgLayer];
-    overlayLayer.frame = CGRectMake(0, 0, size.width, size.height);
-    [overlayLayer setMasksToBounds:YES];
-    CALayer *parentLayer = [CALayer layer];
-    CALayer *videoLayer = [CALayer layer];
-    parentLayer.frame = CGRectMake(0, 0, size.width, size.height);
-    videoLayer.frame = CGRectMake(0, 0, size.width, size.height);
-    [parentLayer addSublayer:videoLayer];
-    [parentLayer addSublayer:overlayLayer];
+    //粒子透明度变化到0的速度，单位为秒
+//    cell.alphaSpeed = -0.4;
+    //粒子的扩散速度
+    cell.velocity = velocity;
+    //粒子向外扩散区域大小
+    cell.velocityRange = emitterSize.height;
+    //粒子y方向的加速度分量
+    cell.yAcceleration = 10;
+    //粒子的扩散角度，设置成2*M_PI则会从360°向外扩散
+    cell.emissionRange = 0.5*M_PI;
+    cell.spinRange = 0.25*M_PI;
+    //粒子起始缩放比例
+    cell.scale = 0.2;
+    cell.scaleRange = 0.2f;
+    //粒子缩放从0~0.5的速度
+//    cell.scaleSpeed = 0.5;
     
-    //设置封面
-    //    CABasicAnimation *anima = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    //    anima.fromValue = [NSNumber numberWithFloat:1.0f];
-    //    anima.toValue = [NSNumber numberWithFloat:0.0f];
-    //    anima.repeatCount = 0;
-    //    anima.duration = 5.0f;  //5s之后消失
-    //    [anima setRemovedOnCompletion:NO];
-    //    [anima setFillMode:kCAFillModeForwards];
-    //    anima.beginTime = AVCoreAnimationBeginTimeAtZero;
-    //    [coverImgLayer addAnimation:anima forKey:@"opacityAniamtion"];
-    composition.animationTool = [AVVideoCompositionCoreAnimationTool
-                                 videoCompositionCoreAnimationToolWithPostProcessingAsVideoLayer:videoLayer inLayer:parentLayer];
+    cell.color = [UIColor whiteColor].CGColor;
+//    cell.redRange = 2.0f;
+//    cell.blueRange = 2.0f;
+//    cell.greenRange = 2.0f;
+    
+    emitterLayer.shadowOpacity = 1.0;
+    emitterLayer.shadowRadius  = 0.0;
+    emitterLayer.shadowOffset  = CGSizeMake(0.0, 0.0);
+    //粒子边缘的颜色
+    emitterLayer.shadowColor = [UIColor whiteColor].CGColor;
+    
+    // 形成遮罩
+//    UIImage *image      = [UIImage imageNamed:@"alpha"];
+//    CALayer *movedMask          = [CALayer layer];
+//    movedMask.frame    = (CGRect){CGPointZero, image.size};
+//    movedMask.contents = (__bridge id)(image.CGImage);
+//    movedMask.position = self.containerView.center;
+//    emitterLayer.mask    = movedMask;
+    
+    emitterLayer.emitterCells = @[cell];
+    
+    return emitterLayer;
 }
 
 + (NSString *)getVideoExportFilePath:(ZLExportVideoType)type

@@ -142,7 +142,7 @@
  */
 + (void)requestAssetFileUrl:(PHAsset *)asset complete:(void (^)(NSString *filePath))complete;
 
-#pragma mark - 编辑视频相关
+#pragma mark - 编辑、导出视频相关
 
 /**
  解析视频，获取每秒对应的一帧图片
@@ -186,7 +186,7 @@
  */
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
 
-
+#pragma mark - 导出视频加水印、粒子效果
 /**
  导出指定尺寸视频，并添加水印，视频区域为以视频中心为中点（视频质量未压缩）
  
@@ -213,6 +213,20 @@
  @param imageSize 水印大小
  */
 + (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
+
+
+/**
+ 给视频加粒子特效，目前仅支持粒子从屏幕上方向下发射，e.g.:下雪特效，需传入一张雪花图片。
+ 
+ @param asset 需要导出视频的asset
+ @param type 视频导出格式
+ @param presetName 视频压缩设置
+ @param effectImage 粒子图片（建议一倍图尺寸不超过200*200）
+ @param birthRate 粒子每秒创建数量（建议30~50）
+ @param velocity 粒子扩散速度
+ */
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
+
 
 /**
  获取保存视频的路径
