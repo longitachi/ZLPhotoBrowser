@@ -151,6 +151,10 @@ ac.sender = self;
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/forceTouch.gif)
 
+- 导出视频添加粒子特效(雪花效果)
+
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/snowEffect.gif)
+
 - 编辑视频预览图
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/editVideo.gif)
