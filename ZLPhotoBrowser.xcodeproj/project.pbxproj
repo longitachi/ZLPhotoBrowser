@@ -36,6 +36,7 @@
 		FD7852511EF4FD5300C69E84 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD7852501EF4FD5300C69E84 /* PhotosUI.framework */; };
 		FD7B52731EFCB81600FB9087 /* ZLEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */; };
 		FD92FA6D1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = FD92FA6C1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m */; };
+		FDABF1611FEE60BC0068E6ED /* UIImage+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FDABF1601FEE60BC0068E6ED /* UIImage+ZLPhotoBrowser.m */; };
 		FDC48B7F1FB5587C002815C8 /* ZLCustomCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC48B7E1FB5587B002815C8 /* ZLCustomCamera.m */; };
 		FDC48B821FB5588E002815C8 /* ZLPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC48B801FB5588D002815C8 /* ZLPlayer.m */; };
 		FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FDD979E21EF8C62300DD9DA4 /* ImageCell.m */; };
@@ -98,6 +99,8 @@
 		FD7B52721EFCB81600FB9087 /* ZLEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLEditViewController.m; sourceTree = "<group>"; };
 		FD92FA6B1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+EnlargeTouchArea.h"; sourceTree = "<group>"; };
 		FD92FA6C1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EnlargeTouchArea.m"; sourceTree = "<group>"; };
+		FDABF15F1FEE60BC0068E6ED /* UIImage+ZLPhotoBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+ZLPhotoBrowser.h"; sourceTree = "<group>"; };
+		FDABF1601FEE60BC0068E6ED /* UIImage+ZLPhotoBrowser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ZLPhotoBrowser.m"; sourceTree = "<group>"; };
 		FDC48B7D1FB5587B002815C8 /* ZLCustomCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLCustomCamera.h; sourceTree = "<group>"; };
 		FDC48B7E1FB5587B002815C8 /* ZLCustomCamera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLCustomCamera.m; sourceTree = "<group>"; };
 		FDC48B801FB5588D002815C8 /* ZLPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLPlayer.m; sourceTree = "<group>"; };
@@ -180,6 +183,8 @@
 				FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */,
 				FD92FA6B1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.h */,
 				FD92FA6C1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m */,
+				FDABF15F1FEE60BC0068E6ED /* UIImage+ZLPhotoBrowser.h */,
+				FDABF1601FEE60BC0068E6ED /* UIImage+ZLPhotoBrowser.m */,
 			);
 			path = PhotoBrowser;
 			sourceTree = "<group>";
@@ -398,6 +403,7 @@
 				FD22D71F1E9E25D1008FCC4E /* ZLPhotoModel.m in Sources */,
 				FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */,
 				FDDB9EBB1E6D2EF6008ED9F1 /* YYFPSLabel.m in Sources */,
+				FDABF1611FEE60BC0068E6ED /* UIImage+ZLPhotoBrowser.m in Sources */,
 				FD92FA6D1F32B4CE00D7B8C1 /* UIButton+EnlargeTouchArea.m in Sources */,
 				FDC48B821FB5588E002815C8 /* ZLPlayer.m in Sources */,
 				FD028BD91CBE33BB009DD2FC /* ZLPhotoBrowser.m in Sources */,

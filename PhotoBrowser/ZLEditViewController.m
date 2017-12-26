@@ -13,6 +13,7 @@
 #import "ToastUtils.h"
 #import "ZLProgressHUD.h"
 #import "ZLPhotoBrowser.h"
+#import "UIImage+ZLPhotoBrowser.h"
 
 //裁剪代码借鉴与CLImageEditor github:https://github.com/yackle/CLImageEditor
 
@@ -243,10 +244,13 @@
     
     UIView *_bottomView;
     UIButton *_cancelBtn;
+    UIButton *_rotateImageBtn;
     UIButton *_doneBtn;
+    //计算imageView尺寸时是否交换宽高（旋转图片90°及270°时候值为YES）
+    BOOL _exchangeImageWH;
     
     //旋转比例按钮
-    UIButton *_rotateBtn;
+    UIButton *_rotateRatioBtn;
     //比例底滚动视图
     UIScrollView *_menuScroll;
 }
@@ -293,17 +297,8 @@
     }
     
     BOOL hideClipRatioView = [self shouldHideClipRatioView];
-    //隐藏时 底部工具条高44，间距设置4即可，不隐藏时，比例view高度80，则为128
-    CGFloat flag = hideClipRatioView ? 48 : 128;
     
-    CGFloat w = kViewWidth-20;
-    CGFloat maxH = kViewHeight-flag-inset.bottom-inset.top-50;
-    CGFloat h = w * self.model.asset.pixelHeight / self.model.asset.pixelWidth;
-    if (h > maxH) {
-        h = maxH;
-        w = h * self.model.asset.pixelWidth / self.model.asset.pixelHeight;
-    }
-    _imageView.frame = CGRectMake((kViewWidth-w)/2, (kViewHeight-flag-h)/2, w, h);
+    _imageView.frame = [self getImageViewFrame];
     _gridLayer.frame = _imageView.bounds;
     [self clippingRatioDidChange];
     
@@ -312,16 +307,17 @@
     
     _bottomView.frame = CGRectMake(0, kViewHeight-bottomViewH-inset.bottom, kViewWidth, bottomViewH);
     _cancelBtn.frame = CGRectMake(10+inset.left, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, bottomBtnH), bottomBtnH);
+    _rotateImageBtn.frame = CGRectMake(kViewWidth/2-20, 2, 40, 40);
     _doneBtn.frame = CGRectMake(kViewWidth-70-inset.right, 7, 60, bottomBtnH);
     
     _indicator.center = _imageView.center;
     
     
     if (hideClipRatioView) {
-        _rotateBtn.hidden = YES;
+        _rotateRatioBtn.hidden = YES;
         _menuScroll.hidden = YES;
     } else {
-        _rotateBtn.superview.frame = CGRectMake(kViewWidth-70-inset.right, kViewHeight-128-inset.bottom, 70, 80);
+        _rotateRatioBtn.superview.frame = CGRectMake(kViewWidth-70-inset.right, kViewHeight-128-inset.bottom, 70, 80);
         _menuScroll.frame = CGRectMake(inset.left, kViewHeight-128-inset.bottom, kViewWidth-70-inset.left-inset.right, 80);
     }
 }
@@ -338,6 +334,31 @@
         }
     }
     return NO;
+}
+
+- (CGRect)getImageViewFrame
+{
+    UIEdgeInsets inset = UIEdgeInsetsZero;
+    if (@available(iOS 11, *)) {
+        inset = self.view.safeAreaInsets;
+    }
+    
+    BOOL hideClipRatioView = [self shouldHideClipRatioView];
+    //隐藏时 底部工具条高44，间距设置4即可，不隐藏时，比例view高度80，则为128
+    CGFloat flag = hideClipRatioView ? 48 : 128;
+    
+    CGFloat w = kViewWidth-20-inset.left-inset.right;
+    CGFloat maxH = kViewHeight-flag-inset.bottom-inset.top-50;
+    
+    CGFloat imgW = _exchangeImageWH ? self.model.asset.pixelHeight : self.model.asset.pixelWidth;
+    CGFloat imgH = _exchangeImageWH ? self.model.asset.pixelWidth : self.model.asset.pixelHeight;
+    
+    CGFloat h = w * imgH / imgW;
+    if (h > maxH) {
+        h = maxH;
+        w = h * imgW / imgH;
+    }
+    return CGRectMake((kViewWidth-w)/2, (kViewHeight-flag-h)/2, w, h);
 }
 
 - (void)initUI
@@ -382,6 +403,11 @@
     [_cancelBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
     [_cancelBtn addTarget:self action:@selector(cancelBtn_click) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_cancelBtn];
+    
+    _rotateImageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_rotateImageBtn setImage:GetImageWithName(@"zl_rotateimage") forState:UIControlStateNormal];
+    [_rotateImageBtn addTarget:self action:@selector(rotateImageBtn_click) forControlEvents:UIControlEventTouchUpInside];
+    [_bottomView addSubview:_rotateImageBtn];
     
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
@@ -455,12 +481,12 @@
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:.8];
     [self.view addSubview:view];
-    _rotateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _rotateBtn.frame = CGRectMake(15, 20, 40, 40);
-    _rotateBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [_rotateBtn setBackgroundImage:GetImageWithName(@"btn_rotate") forState:UIControlStateNormal];
-    [_rotateBtn addTarget:self action:@selector(pushedRotateBtn:) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:_rotateBtn];
+    _rotateRatioBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _rotateRatioBtn.frame = CGRectMake(15, 20, 40, 40);
+    _rotateRatioBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [_rotateRatioBtn setBackgroundImage:GetImageWithName(@"btn_rotate") forState:UIControlStateNormal];
+    [_rotateRatioBtn addTarget:self action:@selector(pushedRotateBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [view addSubview:_rotateRatioBtn];
     
     CGFloat W = 70;
     CGFloat x = 0;
@@ -774,6 +800,34 @@
     if (!vc) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+- (void)rotateImageBtn_click
+{
+    UIImage *newImage = [_imageView.image rotate:UIImageOrientationLeft];
+
+    _exchangeImageWH = !_exchangeImageWH;
+
+    [_gridLayer removeFromSuperlayer];
+    _ltView.hidden = YES;
+    _lbView.hidden = YES;
+    _rtView.hidden = YES;
+    _rbView.hidden = YES;
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        _imageView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+    } completion:^(BOOL finished) {
+        _imageView.image = newImage;
+        _imageView.frame = [self getImageViewFrame];
+        _imageView.transform = CGAffineTransformIdentity;
+    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_imageView.layer addSublayer:_gridLayer];
+        _ltView.hidden = NO;
+        _lbView.hidden = NO;
+        _rtView.hidden = NO;
+        _rbView.hidden = NO;
+    });
 }
 
 - (void)btnDone_click

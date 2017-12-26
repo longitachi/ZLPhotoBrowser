@@ -483,9 +483,8 @@
     }
     
     CGFloat width = MIN(kViewWidth, w);
-    BOOL orientationIsUpOrDown = YES;
+    
     if (isLandscape) {
-        orientationIsUpOrDown = NO;
         CGFloat height = MIN(GetViewHeight(self), h);
         frame.origin = CGPointZero;
         frame.size.height = height;
@@ -532,7 +531,7 @@
     
     
     CGSize contentSize;
-    if (orientationIsUpOrDown) {
+    if (!isLandscape) {
         contentSize = CGSizeMake(width, MAX(GetViewHeight(self), frame.size.height));
         if (frame.size.height < GetViewHeight(self)) {
             self.containerView.center = CGPointMake(GetViewWidth(self)/2, GetViewHeight(self)/2);

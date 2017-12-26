@@ -928,7 +928,7 @@ double const ScalePhotoWidth = 1000;
 {
     CGFloat width  = (CGFloat)asset.pixelWidth;
     CGFloat height = (CGFloat)asset.pixelHeight;
-    CGFloat scale = MAX(0.5, width/height);
+    CGFloat scale = MIN(1.7, MAX(0.5, width/height));
     
     return CGSizeMake(self.collectionView.frame.size.height*scale, self.collectionView.frame.size.height);
 }
