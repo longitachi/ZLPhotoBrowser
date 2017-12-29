@@ -122,6 +122,8 @@
 //    actionSheet.configuration.showSelectBtn = YES;
     //是否在选择图片后直接进入编辑界面
     actionSheet.configuration.editAfterSelectThumbnailImage = self.editAfterSelectImageSwitch.isOn;
+    //是否保存编辑后的图片
+//    actionSheet.configuration.saveNewImageAfterEdit = NO;
     //设置编辑比例
 //    actionSheet.configuration.clipRatios = @[GetClipRatio(7, 1)];
     //是否在已选择照片上显示遮罩层
@@ -142,6 +144,7 @@
 //    actionSheet.configuration.useSystemCamera = YES;
 //    actionSheet.configuration.sessionPreset = ZLCaptureSessionPreset1920x1080;
 //    actionSheet.configuration.exportVideoType = ZLExportVideoTypeMp4;
+//    actionSheet.configuration.allowRecordVideo = NO;
     
 #pragma mark - required
     //如果调用的方法没有传sender，则该属性必须提前赋值

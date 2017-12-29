@@ -133,6 +133,11 @@
 @property (nonatomic, assign) BOOL editAfterSelectThumbnailImage;
 
 /**
+ 编辑图片后是否保存编辑后的图片至相册，默认YES
+ */
+@property (nonatomic, assign) BOOL saveNewImageAfterEdit;
+
+/**
  是否在相册内部拍照按钮上面实时显示相机俘获的影像 默认 YES
  */
 @property (nonatomic, assign) BOOL showCaptureImageOnTakePhotoBtn;

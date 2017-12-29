@@ -46,6 +46,7 @@
                                  GetClipRatio(3, 2),
                                  GetClipRatio(16, 9)];
     configuration.editAfterSelectThumbnailImage = NO;
+    configuration.saveNewImageAfterEdit = YES;
     configuration.showCaptureImageOnTakePhotoBtn = YES;
     configuration.sortAscending = YES;
     configuration.showSelectBtn = NO;

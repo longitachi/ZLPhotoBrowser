@@ -13,7 +13,7 @@
 
 @property (nonatomic, assign) CFTimeInterval maxRecordTime;
 
-//TODO: 添加是否允许拍照
+//是否允许拍照
 @property (nonatomic, assign) BOOL allowTakePhoto;
 //是否允许录制视频
 @property (nonatomic, assign) BOOL allowRecordVideo;
