@@ -2,6 +2,17 @@
 
 -----
 
+## [2.6.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.2) (2018-01-03)
+
+#### Add
+* 新增编辑图片后可选是否保存新图片参数.
+* 添加取消选择图片回调.
+
+#### Fix
+* 优化编辑图片时候的旋转操作，避免了快速连续点击时导致图片裁剪区域显示错误的问题.
+
+---
+
 ## [2.6.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.1) (2017-12-26)
 
 #### Add

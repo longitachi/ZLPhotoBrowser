@@ -95,14 +95,6 @@ double const ScalePhotoWidth = 1000;
     return _placeholderLabel;
 }
 
-- (ZLPhotoConfiguration *)configuration
-{
-    if (!_configuration) {
-        _configuration = [ZLPhotoConfiguration defaultPhotoConfiguration];
-    }
-    return _configuration;
-}
-
 #pragma mark - setter
 - (void)setArrSelectedAssets:(NSMutableArray<PHAsset *> *)arrSelectedAssets
 {
@@ -123,6 +115,8 @@ double const ScalePhotoWidth = 1000;
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumInteritemSpacing = 3;
         layout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5);
+        
+        _configuration = [ZLPhotoConfiguration defaultPhotoConfiguration];
         
         self.collectionView.collectionViewLayout = layout;
         self.collectionView.backgroundColor = [UIColor whiteColor];
@@ -520,6 +514,8 @@ double const ScalePhotoWidth = 1000;
         [self requestSelPhotos:nil data:self.arrSelectedModels hideAfterCallBack:YES];
         return;
     }
+    
+    if (self.cancleBlock) self.cancleBlock();
     [self hide];
 }
 
@@ -776,6 +772,7 @@ double const ScalePhotoWidth = 1000;
     
     [nav setCancelBlock:^{
         zl_strongify(weakSelf);
+        if (strongSelf.cancleBlock) strongSelf.cancleBlock();
         [strongSelf hide];
     }];
 

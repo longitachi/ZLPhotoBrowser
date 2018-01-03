@@ -248,6 +248,8 @@
     UIButton *_doneBtn;
     //计算imageView尺寸时是否交换宽高（旋转图片90°及270°时候值为YES）
     BOOL _exchangeImageWH;
+    //是否正在旋转图片
+    BOOL _isRotatingImage;
     
     //旋转比例按钮
     UIButton *_rotateRatioBtn;
@@ -804,6 +806,12 @@
 
 - (void)rotateImageBtn_click
 {
+    if (_isRotatingImage) {
+        //旋转过程中不接受再次旋转
+        return;
+    }
+    _isRotatingImage = YES;
+    
     UIImage *newImage = [_imageView.image rotate:UIImageOrientationLeft];
 
     _exchangeImageWH = !_exchangeImageWH;
@@ -820,14 +828,20 @@
         _imageView.image = newImage;
         _imageView.frame = [self getImageViewFrame];
         _imageView.transform = CGAffineTransformIdentity;
+        _isRotatingImage = NO;
     }];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [_imageView.layer addSublayer:_gridLayer];
-        _ltView.hidden = NO;
-        _lbView.hidden = NO;
-        _rtView.hidden = NO;
-        _rbView.hidden = NO;
-    });
+    
+    [self.class cancelPreviousPerformRequestsWithTarget:self selector:@selector(showGridLayer) object:nil];
+    [self performSelector:@selector(showGridLayer) withObject:nil afterDelay:0.5];
+}
+
+- (void)showGridLayer
+{
+    [_imageView.layer addSublayer:_gridLayer];
+    _ltView.hidden = NO;
+    _lbView.hidden = NO;
+    _rtView.hidden = NO;
+    _rbView.hidden = NO;
 }
 
 - (void)btnDone_click
