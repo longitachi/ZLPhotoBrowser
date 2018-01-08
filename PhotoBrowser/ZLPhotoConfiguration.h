@@ -35,7 +35,7 @@
 @property (nonatomic, assign) NSInteger maxSelectCount;
 
 /**
- 预览图最大显示数 默认20张
+ 预览图最大显示数 默认20张，该值为0时将不显示上方预览图，仅显示 '拍照、相册、取消' 按钮
  */
 @property (nonatomic, assign) NSInteger maxPreviewCount;
 
@@ -202,9 +202,14 @@
 
 /**
  框架语言，默认 ZLLanguageSystem (跟随系统语言)
- 仅切换框架内定义的语言，由于相册名字根据系统语言进行获取，所以相册列表界面为当前系统语言
  */
 @property (nonatomic, assign) ZLLanguageType languageType;
+
+/**
+ 支持开发者自定义多语言提示，但是所自定义多语言的key必须与原key一致
+ @example: 开发者需要替换 key: "ZLPhotoBrowserLoadingText"，value:"正在处理..." 的多语言，则需要传入的字典为 @{@"ZLPhotoBrowserLoadingText": @"需要替换的文字"}，而其他多语言则用框架中的（更改时请注意多语言中包含的占位符，如%ld、%@）
+ */
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customLanguageKeyValue;
 
 /**
  使用系统相机，默认NO（系统相机则只能进行拍照）

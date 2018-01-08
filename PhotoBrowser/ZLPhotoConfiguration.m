@@ -14,6 +14,7 @@
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:ZLCustomImageNames];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:ZLLanguageTypeKey];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:ZLCustomLanguageKeyValue];
     [[NSUserDefaults standardUserDefaults] synchronize];
 //    NSLog(@"---- %s", __FUNCTION__);
 }
@@ -72,19 +73,11 @@
 - (void)setMaxSelectCount:(NSInteger)maxSelectCount
 {
     _maxSelectCount = MAX(maxSelectCount, 1);
-    
-    if (maxSelectCount > 1) {
-        _showSelectBtn = YES;
-    }
 }
 
-- (void)setShowSelectBtn:(BOOL)showSelectBtn
+- (BOOL)showSelectBtn
 {
-    if (self.maxSelectCount > 1) {
-        _showSelectBtn = YES;
-    } else {
-        _showSelectBtn = showSelectBtn;
-    }
+    return _maxSelectCount > 1 ? YES : _showSelectBtn;
 }
 
 - (void)setAllowSelectLivePhoto:(BOOL)allowSelectLivePhoto
@@ -103,7 +96,6 @@
 
 - (void)setCustomImageNames:(NSArray<NSString *> *)customImageNames
 {
-    _customImageNames = customImageNames;
     [[NSUserDefaults standardUserDefaults] setValue:customImageNames forKey:ZLCustomImageNames];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -113,6 +105,12 @@
     [[NSUserDefaults standardUserDefaults] setValue:@(languageType) forKey:ZLLanguageTypeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [NSBundle resetLanguage];
+}
+
+- (void)setCustomLanguageKeyValue:(NSDictionary<NSString *,NSString *> *)customLanguageKeyValue
+{
+    [[NSUserDefaults standardUserDefaults] setValue:customLanguageKeyValue forKey:ZLCustomLanguageKeyValue];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)setMaxRecordDuration:(NSInteger)maxRecordDuration

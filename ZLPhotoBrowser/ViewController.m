@@ -140,6 +140,9 @@
     actionSheet.configuration.shouldAnialysisAsset = self.allowAnialysisAssetSwitch.isOn;
     //框架语言
     actionSheet.configuration.languageType = self.languageSegment.selectedSegmentIndex;
+    //自定义多语言
+//    actionSheet.configuration.customLanguageKeyValue = @{@"ZLPhotoBrowserCameraText": @"没错，我就是一个相机"};
+    
     //是否使用系统相机
 //    actionSheet.configuration.useSystemCamera = YES;
 //    actionSheet.configuration.sessionPreset = ZLCaptureSessionPreset1920x1080;
@@ -166,6 +169,10 @@
             [strongSelf anialysisAssets:assets original:isOriginal];
         }
     }];
+    
+    actionSheet.cancleBlock = ^{
+        NSLog(@"取消选择图片");
+    };
     
     return actionSheet;
 }

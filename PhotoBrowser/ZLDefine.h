@@ -84,6 +84,8 @@
 #define ZLCustomImageNames @"ZLCustomImageNames"
 //设置框架语言的key
 #define ZLLanguageTypeKey @"ZLLanguageTypeKey"
+//自定义多语言key value存于plist中的key
+#define ZLCustomLanguageKeyValue @"ZLCustomLanguageKeyValue"
 
 ////////ZLShowBigImgViewController
 #define kItemMargin 40
@@ -154,6 +156,10 @@ static inline CGFloat GetViewHeight(UIView *view) {
 }
 
 static inline NSString *  GetLocalLanguageTextValue (NSString *key) {
+    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] valueForKey:ZLCustomLanguageKeyValue];
+    if ([dic.allKeys containsObject:key]) {
+        return dic[key];
+    }
     return [NSBundle zlLocalizedStringForKey:key];
 }
 
