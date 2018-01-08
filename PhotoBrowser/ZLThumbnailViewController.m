@@ -87,7 +87,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                     strongSelf.arrDataSources = [NSMutableArray arrayWithArray:strongSelf.albumListModel.models];
                     [hud hide];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (configuration.allowTakePhotoInLibrary && configuration.allowSelectImage) {
+                        if (configuration.allowTakePhotoInLibrary && (configuration.allowSelectImage || configuration.allowRecordVideo)) {
                             strongSelf.allowTakePhoto = YES;
                         }
                         strongSelf.title = album.title;
@@ -97,7 +97,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                 }];
             });
         } else {
-            if (configuration.allowTakePhotoInLibrary && configuration.allowSelectImage && self.albumListModel.isCameraRoll) {
+            if (configuration.allowTakePhotoInLibrary && (configuration.allowSelectImage || configuration.allowRecordVideo) && self.albumListModel.isCameraRoll) {
                 self.allowTakePhoto = YES;
             }
             [ZLPhotoManager markSelcectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
