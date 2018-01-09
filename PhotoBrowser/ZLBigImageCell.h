@@ -42,6 +42,7 @@
 @class ZLPreviewImageAndGif;
 @class ZLPreviewLivePhoto;
 @class ZLPreviewVideo;
+@class ZLPreviewNetVideo;
 
 //预览大图，image、gif、livephoto、video
 @interface ZLPreviewView : UIView
@@ -52,6 +53,7 @@
 @property (nonatomic, strong) ZLPreviewImageAndGif *imageGifView;
 @property (nonatomic, strong) ZLPreviewLivePhoto *livePhotoView;
 @property (nonatomic, strong) ZLPreviewVideo *videoView;
+@property (nonatomic, strong) ZLPreviewNetVideo *netVideoView;
 @property (nonatomic, strong) ZLPhotoModel *model;
 @property (nonatomic, copy)   void (^singleTapCallBack)(void);
 @property (nonatomic, copy)   void (^longPressCallBack)(void);
@@ -100,7 +102,7 @@
 
 @end
 
-//---------------image与gif---------------
+//---------------image、gif、net image---------------
 @interface ZLPreviewImageAndGif : ZLBasePreviewView
 
 @property (nonatomic, strong) UIView *containerView;
@@ -142,3 +144,17 @@
 
 @end
 
+
+//---------------net video---------------
+@interface ZLPreviewNetVideo : ZLBasePreviewView
+
+@property (nonatomic, strong) AVPlayerLayer *playLayer;
+@property (nonatomic, strong) UIButton *playBtn;
+
+- (void)loadNetVideo:(NSURL *)url;
+
+- (void)seekToZero;
+
+- (void)stopPlayNetVideo;
+
+@end

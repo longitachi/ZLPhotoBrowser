@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, ZLAssetMediaType) {
     ZLAssetMediaTypeVideo,
     ZLAssetMediaTypeAudio,
     ZLAssetMediaTypeNetImage,
+    ZLAssetMediaTypeNetVideo,
 };
 
 @interface ZLPhotoModel : NSObject

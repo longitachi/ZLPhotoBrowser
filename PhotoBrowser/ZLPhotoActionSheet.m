@@ -253,15 +253,24 @@ double const ScalePhotoWidth = 1000;
 
 - (void)previewPhotos:(NSArray *)photos index:(NSInteger)index hideToolBar:(BOOL)hideToolBar complete:(nonnull void (^)(NSArray * _Nonnull))complete
 {
+    NSArray *imageExtensions = @[@"jpg", @"jpeg", @"png", @"gif"];
     [self.arrSelectedModels removeAllObjects];
     for (id obj in photos) {
         ZLPhotoModel *model = [[ZLPhotoModel alloc] init];
         if ([obj isKindOfClass:UIImage.class]) {
             model.image = obj;
+            model.type = ZLAssetMediaTypeNetImage;
         } else if ([obj isKindOfClass:NSURL.class]) {
             model.url = obj;
+            if ([imageExtensions containsObject:((NSURL *)obj).absoluteString.pathExtension]) {
+                model.type = ZLAssetMediaTypeNetImage;
+            } else {
+                model.type = ZLAssetMediaTypeNetVideo;
+            }
+        } else if ([obj isKindOfClass:PHAsset.class]) {
+            model.asset = obj;
+            model.type = [ZLPhotoManager transformAssetType:obj];
         }
-        model.type = ZLAssetMediaTypeNetImage;
         model.selected = YES;
         [self.arrSelectedModels addObject:model];
     }

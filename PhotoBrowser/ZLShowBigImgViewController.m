@@ -155,10 +155,14 @@
 - (void)setModels:(NSArray<ZLPhotoModel *> *)models
 {
     _models = models;
-    //如果预览网络图片则返回
-    if (models.firstObject.type == ZLAssetMediaTypeNetImage) {
-        return;
+    //如果预览数组中存在网络图片/视频则返回
+    for (ZLPhotoModel *m in models) {
+        if (m.type == ZLAssetMediaTypeNetImage ||
+            m.type == ZLAssetMediaTypeNetVideo) {
+            return;
+        }
     }
+    
     if (self.arrSelPhotos) {
         _arrSelAssets = [NSMutableArray array];
         for (ZLPhotoModel *m in models) {
@@ -285,9 +289,9 @@
     
     [self.view addSubview:_bottomView];
     
-    if (self.arrSelPhotos) {
-        //预览用户已确定选择的照片，隐藏原图按钮
-        _btnOriginalPhoto.hidden = YES;
+    if (self.arrSelPhotos.count && !_arrSelAssets.count) {
+        //预览本地/网络 图片/视频时，隐藏原图按钮
+        [_btnOriginalPhoto removeFromSuperview];
     }
     if (!configuration.allowEditImage && !configuration.allowEditVideo) {
         _btnEdit.hidden = YES;
@@ -605,7 +609,8 @@
         
         if (m.type == ZLAssetMediaTypeGif ||
             m.type == ZLAssetMediaTypeLivePhoto ||
-            m.type == ZLAssetMediaTypeVideo) {
+            m.type == ZLAssetMediaTypeVideo ||
+            m.type == ZLAssetMediaTypeNetVideo) {
             ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
             [cell pausePlay];
         }

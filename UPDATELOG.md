@@ -2,6 +2,18 @@
 
 -----
 
+## [2.6.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.3) (2018-01-10)
+
+#### Add
+* 新增自定义多语言文本功能.
+* 新增预览网络视频功能.
+
+#### Fix
+* 解决最大选择数为1时候，设置是否显示选择按钮无效的问题.
+* 解决不允许选择照片，但允许选择及拍摄视频时，相册内部拍照按钮不显示的bug. [#175](https://github.com/longitachi/ZLPhotoBrowser/issues/175)
+
+---
+
 ## [2.6.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.2) (2018-01-03)
 
 #### Add
