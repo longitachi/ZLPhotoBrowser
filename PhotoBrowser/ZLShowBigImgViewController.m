@@ -568,12 +568,13 @@
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [((ZLBigImageCell *)cell).previewView resetScale];
+    [((ZLBigImageCell *)cell) resetCellStatus];
     ((ZLBigImageCell *)cell).willDisplaying = YES;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    [((ZLBigImageCell *)cell) resetCellStatus];
     [((ZLBigImageCell *)cell).previewView handlerEndDisplaying];
 }
 

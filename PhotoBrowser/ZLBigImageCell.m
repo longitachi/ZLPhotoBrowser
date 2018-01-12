@@ -237,12 +237,17 @@
 
 - (void)resetScale
 {
-    [self.imageGifView resetScale];
+    if (self.model.type == ZLAssetMediaTypeImage ||
+        self.model.type == ZLAssetMediaTypeGif ||
+        self.model.type == ZLAssetMediaTypeNetImage) {
+        [self.imageGifView resetScale];
+    }
 }
 
 - (UIImage *)image
 {
     if (self.model.type == ZLAssetMediaTypeImage ||
+        self.model.type == ZLAssetMediaTypeGif ||
         self.model.type == ZLAssetMediaTypeNetImage) {
         return self.imageGifView.imageView.image;
     }
@@ -324,8 +329,9 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    
     self.scrollView.frame = self.bounds;
-    [self.scrollView setZoomScale:1.0];
+    [self resetScale];
     if (_loadOK) {
         [self resetSubviewSize:self.asset?:self.imageView.image];
     }

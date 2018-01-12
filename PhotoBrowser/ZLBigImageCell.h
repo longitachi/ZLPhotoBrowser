@@ -27,6 +27,11 @@
 
 
 /**
+ 重置缩放比例
+ */
+- (void)resetCellStatus;
+
+/**
  界面停止滑动后，加载gif和livephoto，保持界面流畅
  */
 - (void)reloadGifLivePhoto;
