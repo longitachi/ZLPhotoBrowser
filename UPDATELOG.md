@@ -2,6 +2,20 @@
 
 -----
 
+
+## [2.6.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.4) (2018-01-17)
+
+#### Add
+* 优化部分代码，提升性能.
+
+#### Fix
+* 解决无权限视图中右上角返回按钮设置颜色无效的bug.
+* 解决放大后继续滑动图片导致缩放比例不正确的bug. [#181](https://github.com/longitachi/ZLPhotoBrowser/issues/181)
+* 解决当 ZLPhotoActionSheet 对象为类属性时通过特定操作出现bug及显示的问题. [#184](https://github.com/longitachi/ZLPhotoBrowser/issues/184)
+* 解决iOS8系统下，保存编辑视频出错的bug. [#185](https://github.com/longitachi/ZLPhotoBrowser/issues/185)
+
+---
+
 ## [2.6.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.3) (2018-01-10)
 
 #### Add

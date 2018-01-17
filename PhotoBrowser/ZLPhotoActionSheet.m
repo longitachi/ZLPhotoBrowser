@@ -230,8 +230,15 @@ double const ScalePhotoWidth = 1000;
 - (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index isOriginal:(BOOL)isOriginal
 {
     self.isSelectOriginalPhoto = isOriginal;
-    self.arrSelectedAssets = [NSMutableArray arrayWithArray:assets];
-    ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos index:index];
+    //将assets转换为对应类型的model
+    NSMutableArray<ZLPhotoModel *> *models = [NSMutableArray arrayWithCapacity:assets.count];
+    for (PHAsset *asset in assets) {
+        ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:[ZLPhotoManager transformAssetType:asset] duration:nil];
+        model.selected = YES;
+        [models addObject:model];
+    }
+    ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos models:models index:index];
+    
     zl_weakify(self);
     __weak typeof(svc.navigationController) weakNav = svc.navigationController;
     svc.previewSelectedImageBlock = ^(NSArray<UIImage *> *arrP, NSArray<PHAsset *> *arrA) {
@@ -254,7 +261,8 @@ double const ScalePhotoWidth = 1000;
 - (void)previewPhotos:(NSArray *)photos index:(NSInteger)index hideToolBar:(BOOL)hideToolBar complete:(nonnull void (^)(NSArray * _Nonnull))complete
 {
     NSArray *imageExtensions = @[@"jpg", @"jpeg", @"png", @"gif"];
-    [self.arrSelectedModels removeAllObjects];
+    //转换为对应类型的model对象
+    NSMutableArray<ZLPhotoModel *> *models = [NSMutableArray arrayWithCapacity:photos.count];
     for (id obj in photos) {
         ZLPhotoModel *model = [[ZLPhotoModel alloc] init];
         if ([obj isKindOfClass:UIImage.class]) {
@@ -272,9 +280,9 @@ double const ScalePhotoWidth = 1000;
             model.type = [ZLPhotoManager transformAssetType:obj];
         }
         model.selected = YES;
-        [self.arrSelectedModels addObject:model];
+        [models addObject:model];
     }
-    ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos index:index];
+    ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos models:models index:index];
     svc.hideToolBar = hideToolBar;
     
     zl_weakify(self);
@@ -297,7 +305,7 @@ double const ScalePhotoWidth = 1000;
     [self.arrDataSources removeAllObjects];
     
     [self.arrDataSources addObjectsFromArray:[ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:NO limitCount:self.configuration.maxPreviewCount allowSelectVideo:self.configuration.allowSelectVideo allowSelectImage:self.configuration.allowSelectImage allowSelectGif:self.configuration.allowSelectGif allowSelectLivePhoto:self.configuration.allowSelectLivePhoto]];
-    [ZLPhotoManager markSelcectModelInArr:self.arrDataSources selArr:self.arrSelectedModels];
+    [ZLPhotoManager markSelectModelInArr:self.arrDataSources selArr:self.arrSelectedModels];
     [self.collectionView reloadData];
 }
 
@@ -815,7 +823,7 @@ double const ScalePhotoWidth = 1000;
     zl_weakify(self);
     [svc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
         zl_strongify(weakSelf);
-        [ZLPhotoManager markSelcectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
+        [ZLPhotoManager markSelectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
         strongSelf.isSelectOriginalPhoto = isOriginal;
         [strongSelf.arrSelectedModels removeAllObjects];
         [strongSelf.arrSelectedModels addObjectsFromArray:selectedModels];
@@ -826,14 +834,13 @@ double const ScalePhotoWidth = 1000;
     [self.sender showDetailViewController:nav sender:nil];
 }
 
-- (ZLShowBigImgViewController *)pushBigImageToPreview:(NSArray *)photos index:(NSInteger)index
+- (ZLShowBigImgViewController *)pushBigImageToPreview:(NSArray *)photos models:(NSArray<ZLPhotoModel *> *)models index:(NSInteger)index
 {
     ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:svc];
-    nav.configuration.showSelectBtn = YES;
     svc.selectIndex = index;
     svc.arrSelPhotos = [NSMutableArray arrayWithArray:photos];
-    svc.models = self.arrSelectedModels;
+    svc.models = models;
     
     self.preview = NO;
     [self.sender.view addSubview:self];

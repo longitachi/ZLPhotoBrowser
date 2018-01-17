@@ -610,8 +610,11 @@ static BOOL _sortAscending;
     return bytes;
 }
 
-+ (void)markSelcectModelInArr:(NSArray<ZLPhotoModel *> *)dataArr selArr:(NSArray<ZLPhotoModel *> *)selArr
++ (void)markSelectModelInArr:(NSArray<ZLPhotoModel *> *)dataArr selArr:(NSArray<ZLPhotoModel *> *)selArr
 {
+    if (!selArr.count) {
+        return;
+    }
     NSMutableArray *selIdentifiers = [NSMutableArray array];
     for (ZLPhotoModel *m in selArr) {
         [selIdentifiers addObject:m.asset.localIdentifier];
@@ -786,7 +789,7 @@ static BOOL _sortAscending;
 {
     [self export:asset range:range type:type presetName:AVAssetExportPresetPassthrough renderSize:CGSizeZero watermarkImage:nil watermarkLocation:ZLWatermarkLocationCenter imageSize:CGSizeZero effectImage:nil birthRate:0 velocity:0 complete:^(NSString *exportFilePath, NSError *error) {
         if (!error) {
-            [self saveVideoToAblum:[NSURL URLWithString:exportFilePath] completion:^(BOOL isSuc, PHAsset *asset) {
+            [self saveVideoToAblum:[NSURL fileURLWithPath:exportFilePath] completion:^(BOOL isSuc, PHAsset *asset) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (complete) complete(isSuc, asset);
                 });

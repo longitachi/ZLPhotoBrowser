@@ -199,7 +199,7 @@
     _indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", _currentPage, self.models.count];
     [_navView addSubview:_indexLabel];
     
-    if (!configuration.showSelectBtn || self.hideToolBar) {
+    if (self.hideToolBar || (!configuration.showSelectBtn && !self.arrSelPhotos.count)) {
         return;
     }
     
@@ -593,8 +593,13 @@
         zl_strongify(weakSelf);
         [strongSelf handlerSingleTap];
     };
+    __weak typeof(cell) weakCell = cell;
     cell.longPressCallBack = ^{
         zl_strongify(weakSelf);
+        __strong typeof(weakCell) strongCell = weakCell;
+        if (!strongCell.previewView.image) {
+            return;
+        }
         [strongSelf showDownloadAlert];
     };
     

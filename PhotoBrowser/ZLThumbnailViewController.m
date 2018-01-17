@@ -83,7 +83,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                     ZLImageNavigationController *weakNav = (ZLImageNavigationController *)strongSelf.navigationController;
                     
                     strongSelf.albumListModel = album;
-                    [ZLPhotoManager markSelcectModelInArr:strongSelf.albumListModel.models selArr:weakNav.arrSelectedModels];
+                    [ZLPhotoManager markSelectModelInArr:strongSelf.albumListModel.models selArr:weakNav.arrSelectedModels];
                     strongSelf.arrDataSources = [NSMutableArray arrayWithArray:strongSelf.albumListModel.models];
                     [hud hide];
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -100,7 +100,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             if (configuration.allowTakePhotoInLibrary && (configuration.allowSelectImage || configuration.allowRecordVideo) && self.albumListModel.isCameraRoll) {
                 self.allowTakePhoto = YES;
             }
-            [ZLPhotoManager markSelcectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
+            [ZLPhotoManager markSelectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
             _arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
             [hud hide];
         }
@@ -432,7 +432,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     zl_weakify(self);
     [vc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
         zl_strongify(weakSelf);
-        [ZLPhotoManager markSelcectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
+        [ZLPhotoManager markSelectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
         [strongSelf.collectionView reloadData];
     }];
     return vc;

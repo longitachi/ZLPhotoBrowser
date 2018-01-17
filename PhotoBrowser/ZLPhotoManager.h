@@ -129,7 +129,7 @@
 /**
  * @brief 标记源数组中已被选择的model
  */
-+ (void)markSelcectModelInArr:(NSArray<ZLPhotoModel *> *)dataArr selArr:(NSArray<ZLPhotoModel *> *)selArr;
++ (void)markSelectModelInArr:(NSArray<ZLPhotoModel *> *)dataArr selArr:(NSArray<ZLPhotoModel *> *)selArr;
 
 /**
  * @brief 将image data转换为gif图片，sdwebimage
