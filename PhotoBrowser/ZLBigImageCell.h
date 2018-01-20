@@ -113,6 +113,8 @@
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressGesture;
+@property (nonatomic, assign) BOOL loadOK;
+
 @property (nonatomic, copy)   void (^longPressCallBack)(void);
 
 - (void)loadGifImage:(PHAsset *)asset;

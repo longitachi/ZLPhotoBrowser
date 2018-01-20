@@ -319,9 +319,7 @@
 
 //!!!!: ZLPreviewImageAndGif
 @interface ZLPreviewImageAndGif () <UIScrollViewDelegate>
-{
-    BOOL _loadOK;
-}
+
 @end
 
 @implementation ZLPreviewImageAndGif
@@ -332,7 +330,7 @@
     
     self.scrollView.frame = self.bounds;
     [self resetScale];
-    if (_loadOK) {
+    if (self.loadOK) {
         [self resetSubviewSize:self.asset?:self.imageView.image];
     }
 }
@@ -460,7 +458,7 @@
         [strongSelf resetSubviewSize:asset];
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             [strongSelf.indicator stopAnimating];
-            strongSelf->_loadOK = YES;
+            strongSelf.loadOK = YES;
         }
     }];
 }
@@ -487,7 +485,7 @@
             if (error) {
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadNetImageFailed));
             } else {
-                strongSelf->_loadOK = YES;
+                strongSelf.loadOK = YES;
                 [strongSelf resetSubviewSize:image];
             }
         }];
