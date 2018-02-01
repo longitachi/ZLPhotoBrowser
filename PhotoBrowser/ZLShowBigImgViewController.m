@@ -492,22 +492,24 @@
     ZLPhotoConfiguration *configuration = nav.configuration;
     
     if (!configuration.allowEditImage && !configuration.allowEditVideo) return;
-
-    ZLPhotoModel *m = self.models[_currentPage-1];
-    BOOL flag = [m.asset.localIdentifier isEqualToString:nav.arrSelectedModels.firstObject.asset.localIdentifier];
     
-    if ((nav.arrSelectedModels.count == 0 ||
-         (nav.arrSelectedModels.count <= 1 && flag)) &&
+    if (self.models.count > _currentPage-1) {
+        ZLPhotoModel *m = self.models[_currentPage-1];
+        BOOL flag = [m.asset.localIdentifier isEqualToString:nav.arrSelectedModels.firstObject.asset.localIdentifier];
         
-        ((configuration.allowEditImage &&
-         (m.type == ZLAssetMediaTypeImage ||
-         (m.type == ZLAssetMediaTypeGif && !configuration.allowSelectGif) ||
-         (m.type == ZLAssetMediaTypeLivePhoto && !configuration.allowSelectLivePhoto))) ||
-        
-        (configuration.allowEditVideo && m.type == ZLAssetMediaTypeVideo && round(m.asset.duration) >= configuration.maxEditVideoTime))) {
-        _btnEdit.hidden = NO;
-    } else {
-        _btnEdit.hidden = YES;
+        if ((nav.arrSelectedModels.count == 0 ||
+             (nav.arrSelectedModels.count <= 1 && flag)) &&
+            
+            ((configuration.allowEditImage &&
+              (m.type == ZLAssetMediaTypeImage ||
+               (m.type == ZLAssetMediaTypeGif && !configuration.allowSelectGif) ||
+               (m.type == ZLAssetMediaTypeLivePhoto && !configuration.allowSelectLivePhoto))) ||
+             
+             (configuration.allowEditVideo && m.type == ZLAssetMediaTypeVideo && round(m.asset.duration) >= configuration.maxEditVideoTime))) {
+                _btnEdit.hidden = NO;
+            } else {
+                _btnEdit.hidden = YES;
+            }
     }
 }
 
@@ -515,15 +517,17 @@
 {
     ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     
-    ZLPhotoModel *m = self.models[_currentPage-1];
-    if ((m.type == ZLAssetMediaTypeImage) ||
-         (m.type == ZLAssetMediaTypeGif && !configuration.allowSelectGif) ||
-         (m.type == ZLAssetMediaTypeLivePhoto && !configuration.allowSelectLivePhoto)) {
+    if (self.models.count > _currentPage-1) {
+        ZLPhotoModel *m = self.models[_currentPage-1];
+        if ((m.type == ZLAssetMediaTypeImage) ||
+            (m.type == ZLAssetMediaTypeGif && !configuration.allowSelectGif) ||
+            (m.type == ZLAssetMediaTypeLivePhoto && !configuration.allowSelectLivePhoto)) {
             _btnOriginalPhoto.hidden = NO;
             self.labPhotosBytes.hidden = NO;
-    } else {
-        _btnOriginalPhoto.hidden = YES;
-        self.labPhotosBytes.hidden = YES;
+        } else {
+            _btnOriginalPhoto.hidden = YES;
+            self.labPhotosBytes.hidden = YES;
+        }
     }
 }
 
