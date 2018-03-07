@@ -915,7 +915,9 @@ double const ScalePhotoWidth = 1000;
 - (void)handleDataArray:(ZLPhotoModel *)model
 {
     [self.arrDataSources insertObject:model atIndex:0];
-    [self.arrDataSources removeLastObject];
+    if (self.arrDataSources.count > self.configuration.maxPreviewCount) {
+        [self.arrDataSources removeLastObject];
+    }
     if (self.configuration.maxSelectCount > 1 && self.arrSelectedModels.count < self.configuration.maxSelectCount) {
         model.selected = YES;
         [self.arrSelectedModels addObject:model];

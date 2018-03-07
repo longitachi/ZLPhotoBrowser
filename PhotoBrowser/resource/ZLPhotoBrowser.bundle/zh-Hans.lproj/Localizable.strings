@@ -31,7 +31,7 @@
 "ZLPhotoBrowserMaxVideoDurationText" = "不能选择超过%ld秒的视频";
 
 "ZLPhotoBrowserNoCameraAuthorityText" = "请在iPhone的\"设置-隐私-相机\"选项中，允许%@访问你的相机";
-"ZLPhotoBrowserNoAblumAuthorityText" = "请在iPhone的\"设置-隐私-相机\"选项中，允许%@访问你的相册";
+"ZLPhotoBrowserNoAblumAuthorityText" = "请在iPhone的\"设置-隐私-相机\"选项中，允许%@访问你的照片";
 "ZLPhotoBrowserNoMicrophoneAuthorityText" = "请在iPhone的\"设置-隐私-相机\"选项中，允许%@访问你的麦克风";
 
 "ZLPhotoBrowseriCloudPhotoText" = "请在系统相册中下载到本地后重新尝试";

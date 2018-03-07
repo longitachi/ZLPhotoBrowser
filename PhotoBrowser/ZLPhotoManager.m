@@ -749,7 +749,7 @@ static BOOL _sortAscending;
     
     //每秒的第一帧
     NSMutableArray *arr = [NSMutableArray array];
-    for (int i = 0; i < duration; i += interval) {
+    for (float i = 0; i < duration; i += interval) {
         /*
          CMTimeMake(a,b) a当前第几帧, b每秒钟多少帧
          */

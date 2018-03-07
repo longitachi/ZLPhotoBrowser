@@ -871,8 +871,12 @@
         }];
     } else {
         [hud hide];
-        if (nav.callSelectClipImageBlock) {
-            nav.callSelectClipImageBlock(image, self.model.asset);
+        if (image) {
+            if (nav.callSelectClipImageBlock) {
+                nav.callSelectClipImageBlock(image, self.model.asset);
+            }
+        } else {
+            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
         }
     }
 }

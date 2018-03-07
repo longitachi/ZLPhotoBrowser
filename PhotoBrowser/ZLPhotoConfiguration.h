@@ -212,12 +212,12 @@
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customLanguageKeyValue;
 
 /**
- 使用系统相机，默认NO（系统相机则只能进行拍照）
+ 使用系统相机，默认NO
  */
 @property (nonatomic, assign) BOOL useSystemCamera;
 
 /**
- 是否允许录制视频(当useSystemCamera为YES时无效)，默认YES
+ 是否允许录制视频，默认YES
  */
 @property (nonatomic, assign) BOOL allowRecordVideo;
 
