@@ -212,15 +212,17 @@ static BOOL _sortAscending;
         [album enumerateObjectsUsingBlock:^(PHAssetCollection * _Nonnull collection, NSUInteger idx, BOOL *stop) {
             //过滤PHCollectionList对象
             if (![collection isKindOfClass:PHAssetCollection.class]) return;
-            //过滤最近删除
-            if (collection.assetCollectionSubtype > 215) return;
+            //过滤最近删除和已隐藏
+            if (collection.assetCollectionSubtype > 215 ||
+                collection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumAllHidden) return;
             //获取相册内asset result
             PHFetchResult<PHAsset *> *result = [PHAsset fetchAssetsInAssetCollection:collection options:option];
             if (!result.count) return;
             
             NSString *title = [self getCollectionTitle:collection];
             
-            if (collection.assetCollectionSubtype == 209) {
+            if (collection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumUserLibrary) {
+                //所有照片
                 ZLAlbumListModel *m = [self getAlbumModeWithTitle:title result:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage];
                 m.isCameraRoll = YES;
                 [arrAlbum insertObject:m atIndex:0];
@@ -1019,21 +1021,23 @@ static BOOL _sortAscending;
 
 + (void)addWatermark:(AVMutableVideoComposition *)videoCom renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity
 {
-//    CATextLayer *titleLayer = [CATextLayer layer];
-//    [titleLayer setFont:(__bridge CFTypeRef)[UIFont systemFontOfSize:25].fontName];
-//    titleLayer.contentsScale = 2;
-//    [titleLayer setFont:@"HiraKakuProN-W3"];
-//    titleLayer.fontSize = 70;
-//    titleLayer.wrapped = YES;
-//    titleLayer.string = @"test";
-//    titleLayer.masksToBounds = YES;
-//    titleLayer.foregroundColor = [[UIColor blueColor] CGColor];
-//    titleLayer.alignmentMode = kCAAlignmentCenter;
-//    titleLayer.frame = CGRectMake(20, 0, renderSize.width-40, 100);
-//    titleLayer.backgroundColor = [UIColor whiteColor].CGColor;
+    CATextLayer *titleLayer = [CATextLayer layer];
+    [titleLayer setFont:(__bridge CFTypeRef)[UIFont systemFontOfSize:25].fontName];
+    titleLayer.contentsScale = 2;
+    [titleLayer setFont:@"HiraKakuProN-W3"];
+    titleLayer.fontSize = 70;
+    titleLayer.wrapped = YES;
+    titleLayer.string = @"just for test";
+    titleLayer.masksToBounds = YES;
+    titleLayer.foregroundColor = [[UIColor blueColor] CGColor];
+    titleLayer.alignmentMode = kCAAlignmentCenter;
+    titleLayer.frame = CGRectMake(20, 100, renderSize.width-40, 100);
+    titleLayer.backgroundColor = [UIColor whiteColor].CGColor;
     
     CALayer *overlayLayer = [CALayer layer];
     overlayLayer.frame = (CGRect){CGPointZero, renderSize};
+    
+    [overlayLayer addSublayer:titleLayer];
     
     //水印图片
     if (watermarkImage) {

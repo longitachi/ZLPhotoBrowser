@@ -243,8 +243,7 @@
                               [NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514184259027&di=a2e54cf2d5affe17acdaf1fbf19ff0af&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201212%2F25%2F20121225173302_wTjN8.jpeg"],
                               [NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504756336591&di=56a3c8866c95891cbb9c43f907b4f954&imgtype=0&src=http%3A%2F%2Ff5.topitme.com%2F5%2Fa0%2F42%2F111173677859242a05o.jpg"],
                               [NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514778897&di=286a86139915c2b6a7a06a70df787c68&imgtype=jpg&er=1&src=http%3A%2F%2Ff9.topitme.com%2F9%2Fa1%2Fc6%2F1135106720ee0c6a19o.jpg"],
-                              [NSURL URLWithString:@"http://img.zcool.cn/community/018003591d063cb5b3086ed4627878.gif"],
-                              [NSURL URLWithString:@"http://220.249.244.215/vcloud1049.tc.qq.com/1049_M0118400004UfUx20ce5G81001520858.f20.mp4?sha=6156D76260AA7CE2BDBC40927FE209A6321E8274&vkey=8BC842ED66D0AC5632DCD08B8A2EA0316B190E540796000B255A84810C0119A2B56BFF8EF02D406C9BD8C41AEA4A940CE51683AB942022715326A0466B8D06C576417E18A19E175581B51F599627B5335342163C4A5C33A1&ocid=2654999980&ocid=587994540&ocid=190660362"]];
+                              [NSURL URLWithString:@"http://img.zcool.cn/community/018003591d063cb5b3086ed4627878.gif"]];
     [[self getPas] previewPhotos:arrNetImages index:0 hideToolBar:YES complete:^(NSArray * _Nonnull photos) {
         NSLog(@"%@", photos);
     }];
