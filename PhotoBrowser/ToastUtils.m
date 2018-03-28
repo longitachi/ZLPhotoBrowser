@@ -59,6 +59,7 @@ static UILabel *toastView = nil;
     if (toastView.superview != [UIApplication sharedApplication].keyWindow) {
         [toastView removeFromSuperview];
         [[UIApplication sharedApplication].keyWindow addSubview:toastView];
+        [[UIApplication sharedApplication].keyWindow bringSubviewToFront:toastView];
     }
     
     CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;

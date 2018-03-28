@@ -833,7 +833,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
             NSArray *a1 = configuration.allowSelectImage?@[(NSString *)kUTTypeImage]:@[];
-            NSArray *a2 = configuration.allowRecordVideo?@[(NSString *)kUTTypeMovie]:@[];
+            NSArray *a2 = (configuration.allowSelectVideo && configuration.allowRecordVideo)?@[(NSString *)kUTTypeMovie]:@[];
             NSMutableArray *arr = [NSMutableArray array];
             [arr addObjectsFromArray:a1];
             [arr addObjectsFromArray:a2];
@@ -850,7 +850,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         }
         ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
         camera.allowTakePhoto = configuration.allowSelectImage;
-        camera.allowRecordVideo = configuration.allowRecordVideo;
+        camera.allowRecordVideo = configuration.allowSelectVideo && configuration.allowRecordVideo;
         camera.sessionPreset = configuration.sessionPreset;
         camera.videoType = configuration.exportVideoType;
         camera.circleProgressColor = configuration.bottomBtnsNormalTitleColor;

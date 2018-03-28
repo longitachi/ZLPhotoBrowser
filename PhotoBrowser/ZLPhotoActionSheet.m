@@ -483,7 +483,7 @@ double const ScalePhotoWidth = 1000;
             picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
             NSArray *a1 = self.configuration.allowSelectImage?@[(NSString *)kUTTypeImage]:@[];
-            NSArray *a2 = self.configuration.allowRecordVideo?@[(NSString *)kUTTypeMovie]:@[];
+            NSArray *a2 = (self.configuration.allowSelectVideo && self.configuration.allowRecordVideo)?@[(NSString *)kUTTypeMovie]:@[];
             NSMutableArray *arr = [NSMutableArray array];
             [arr addObjectsFromArray:a1];
             [arr addObjectsFromArray:a2];
@@ -501,7 +501,7 @@ double const ScalePhotoWidth = 1000;
         }
         ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
         camera.allowTakePhoto = self.configuration.allowSelectImage;
-        camera.allowRecordVideo = self.configuration.allowRecordVideo;
+        camera.allowRecordVideo = self.configuration.allowSelectVideo && self.configuration.allowRecordVideo;
         camera.sessionPreset = self.configuration.sessionPreset;
         camera.videoType = self.configuration.exportVideoType;
         camera.circleProgressColor = self.configuration.bottomBtnsNormalTitleColor;
