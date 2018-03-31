@@ -2,6 +2,12 @@
 
 -----
 
+## [2.6.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.5) (2018-03-31)
+
+#### Fix
+* 优化预览网络图片/视频时根据url后缀判断的类型方式. [#221](https://github.com/longitachi/ZLPhotoBrowser/issues/221)
+
+---
 
 ## [2.6.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.4) (2018-01-17)
 

@@ -89,14 +89,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  提供 混合预览照片及视频的方法， 相册PHAsset / 网络、本地图片 / 网络、本地视频，（需先设置 sender 参数）
  
- @warning 由于 NSURL 框架内需要区分是图片还是视频，所以url后缀为 jpg/png/jpeg/gif 等格式按照图片处理，后缀在以上四种之外的NSURL对象均按视频处理
+ @warning photos 内对象请调用 ZLDefine 中 GetDictForPreviewPhoto 方法，e.g.: GetDictForPreviewPhoto(image, ZLPreviewPhotoTypeUIImage)
  
- @param photos 接收对象 PHAsset / UIImage / NSURL(网络图片/视频url 或 本地图片/视频url)
+ @param photos 接收对象 ZLDefine 中 GetDictForPreviewPhoto 生成的字典
  @param index 点击的照片/视频索引
  @param hideToolBar 是否隐藏底部工具栏和导航右上角选择按钮
  @param complete 回调 (数组内为接收的 PHAsset / UIImage / NSURL 对象)
  */
-- (void)previewPhotos:(NSArray *)photos index:(NSInteger)index hideToolBar:(BOOL)hideToolBar complete:(void (^)(NSArray *photos))complete;
+- (void)previewPhotos:(NSArray<NSDictionary *> *)photos index:(NSInteger)index hideToolBar:(BOOL)hideToolBar complete:(void (^)(NSArray *photos))complete;
 
 NS_ASSUME_NONNULL_END
 

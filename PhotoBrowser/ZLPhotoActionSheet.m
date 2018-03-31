@@ -258,26 +258,31 @@ double const ScalePhotoWidth = 1000;
     };
 }
 
-- (void)previewPhotos:(NSArray *)photos index:(NSInteger)index hideToolBar:(BOOL)hideToolBar complete:(nonnull void (^)(NSArray * _Nonnull))complete
+- (void)previewPhotos:(NSArray<NSDictionary *> *)photos index:(NSInteger)index hideToolBar:(BOOL)hideToolBar complete:(void (^)(NSArray * _Nonnull))complete
 {
-    NSArray *imageExtensions = @[@"jpg", @"jpeg", @"png", @"gif"];
     //转换为对应类型的model对象
     NSMutableArray<ZLPhotoModel *> *models = [NSMutableArray arrayWithCapacity:photos.count];
-    for (id obj in photos) {
+    for (NSDictionary *dic in photos) {
         ZLPhotoModel *model = [[ZLPhotoModel alloc] init];
-        if ([obj isKindOfClass:UIImage.class]) {
-            model.image = obj;
-            model.type = ZLAssetMediaTypeNetImage;
-        } else if ([obj isKindOfClass:NSURL.class]) {
-            model.url = obj;
-            if ([imageExtensions containsObject:((NSURL *)obj).absoluteString.pathExtension]) {
+        ZLPreviewPhotoType type = [dic[ZLPreviewPhotoTyp] integerValue];
+        id obj = dic[ZLPreviewPhotoObj];
+        switch (type) {
+            case ZLPreviewPhotoTypePHAsset:
+                model.asset = obj;
+                model.type = [ZLPhotoManager transformAssetType:obj];
+                break;
+            case ZLPreviewPhotoTypeUIImage:
+                model.image = obj;
                 model.type = ZLAssetMediaTypeNetImage;
-            } else {
+                break;
+            case ZLPreviewPhotoTypeURLImage:
+                model.url = obj;
+                model.type = ZLAssetMediaTypeNetImage;
+                break;
+            case ZLPreviewPhotoTypeURLVideo:
+                model.url = obj;
                 model.type = ZLAssetMediaTypeNetVideo;
-            }
-        } else if ([obj isKindOfClass:PHAsset.class]) {
-            model.asset = obj;
-            model.type = [ZLPhotoManager transformAssetType:obj];
+                break;
         }
         model.selected = YES;
         [models addObject:model];

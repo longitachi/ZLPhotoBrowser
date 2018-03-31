@@ -97,6 +97,9 @@
 #define ClippingRatioValue2 @"value2"
 #define ClippingRatioTitleFormat @"titleFormat"
 
+#define ZLPreviewPhotoObj @"ZLPreviewPhotoObj"
+#define ZLPreviewPhotoTyp @"ZLPreviewPhotoTyp"
+
 typedef NS_ENUM(NSUInteger, ZLLanguageType) {
     //跟随系统语言，默认
     ZLLanguageSystem,
@@ -134,6 +137,22 @@ typedef NS_ENUM(NSUInteger, ZLWatermarkLocation) {
     ZLWatermarkLocationBottomLeft,
     ZLWatermarkLocationBottomRight,
 };
+
+//混合预览图片时，图片类型
+typedef NS_ENUM(NSUInteger, ZLPreviewPhotoType) {
+    ZLPreviewPhotoTypePHAsset,
+    ZLPreviewPhotoTypeUIImage,
+    ZLPreviewPhotoTypeURLImage,
+    ZLPreviewPhotoTypeURLVideo,
+};
+
+
+static inline NSDictionary * GetDictForPreviewPhoto(id obj, ZLPreviewPhotoType type) {
+    if (nil == obj) {
+        @throw [NSException exceptionWithName:@"error" reason:@"预览对象不能为空" userInfo:nil];
+    }
+    return @{ZLPreviewPhotoObj: obj, ZLPreviewPhotoTyp: @(type)};
+}
 
 static inline void SetViewWidth(UIView *view, CGFloat width) {
     CGRect frame = view.frame;
@@ -236,8 +255,7 @@ static inline NSInteger GetDuration (NSString *duration) {
 }
 
 
-static inline NSDictionary *
-GetCustomClipRatio() {
+static inline NSDictionary * GetCustomClipRatio() {
     return @{ClippingRatioValue1: @(0), ClippingRatioValue2: @(0), ClippingRatioTitleFormat: @"Custom"};
 }
 
