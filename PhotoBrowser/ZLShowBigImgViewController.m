@@ -474,6 +474,13 @@
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:save];
     [alert addAction:cancel];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)  {
+        alert.popoverPresentationController.sourceView = self.view;
+        alert.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(self.view.frame),
+                                                                    CGRectGetMidY(self.view.frame),
+                                                                    2, 2);
+        alert.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+    }
     [self showDetailViewController:alert sender:nil];
 }
 
