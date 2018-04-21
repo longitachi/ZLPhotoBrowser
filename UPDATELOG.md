@@ -2,7 +2,20 @@
 
 -----
 
+## [2.6.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.6) (2018-04-21)
+
+#### Add
+* 新增隐藏裁剪图片界面比例工具条功能.
+
+#### Fix
+* 解决iOS11之前预览网络视频crash的bug. [#216](https://github.com/longitachi/ZLPhotoBrowser/issues/216)
+
+---
+
 ## [2.6.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.5) (2018-03-31)
+
+#### Add
+* 新增隐藏"已隐藏"照片及相册的功能.
 
 #### Fix
 * 优化预览网络图片/视频时根据url后缀判断的类型方式. [#221](https://github.com/longitachi/ZLPhotoBrowser/issues/221)

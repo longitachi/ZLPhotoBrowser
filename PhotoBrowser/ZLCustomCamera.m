@@ -47,6 +47,15 @@
 
 @interface CameraToolView : UIView <CAAnimationDelegate, UIGestureRecognizerDelegate>
 {
+    struct {
+        unsigned int takePic : 1;
+        unsigned int startRecord : 1;
+        unsigned int finishRecord : 1;
+        unsigned int retake : 1;
+        unsigned int okClick : 1;
+        unsigned int dismiss : 1;
+    } _delegateFlag;
+    
     //避免动画及长按手势触发两次
     BOOL _stopRecord;
     BOOL _layoutOK;
@@ -94,6 +103,17 @@
         [self setupUI];
     }
     return self;
+}
+
+- (void)setDelegate:(id<CameraToolViewDelegate>)delegate
+{
+    _delegate = delegate;
+    _delegateFlag.takePic = [delegate respondsToSelector:@selector(onTakePicture)];
+    _delegateFlag.startRecord = [delegate respondsToSelector:@selector(onStartRecord)];
+    _delegateFlag.finishRecord = [delegate respondsToSelector:@selector(onFinishRecord)];
+    _delegateFlag.retake = [delegate respondsToSelector:@selector(onRetake)];
+    _delegateFlag.okClick = [delegate respondsToSelector:@selector(onOkClick)];
+    _delegateFlag.dismiss = [delegate respondsToSelector:@selector(onDismiss)];
 }
 
 - (void)layoutSubviews
@@ -181,9 +201,7 @@
 - (void)tapAction:(UITapGestureRecognizer *)tap
 {
     [self stopAnimate];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onTakePicture)]) {
-        [self.delegate performSelector:@selector(onTakePicture)];
-    }
+    if (_delegateFlag.takePic) [self.delegate performSelector:@selector(onTakePicture)];
 }
 
 - (void)longPressAction:(UILongPressGestureRecognizer *)longG
@@ -193,9 +211,7 @@
         {
             //此处不启动动画，由vc界面开始录制之后启动
             _stopRecord = NO;
-            if (self.delegate && [self.delegate respondsToSelector:@selector(onStartRecord)]) {
-                [self.delegate performSelector:@selector(onStartRecord)];
-            }
+            if (_delegateFlag.startRecord) [self.delegate performSelector:@selector(onStartRecord)];
         }
             break;
         case UIGestureRecognizerStateCancelled:
@@ -204,9 +220,7 @@
             if (_stopRecord) return;
             _stopRecord = YES;
             [self stopAnimate];
-            if (self.delegate && [self.delegate respondsToSelector:@selector(onFinishRecord)]) {
-                [self.delegate performSelector:@selector(onFinishRecord)];
-            }
+            if (_delegateFlag.finishRecord) [self.delegate performSelector:@selector(onFinishRecord)];
         }
             break;
             
@@ -266,9 +280,7 @@
     
     _stopRecord = YES;
     [self stopAnimate];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onFinishRecord)]) {
-        [self.delegate performSelector:@selector(onFinishRecord)];
-    }
+    if (_delegateFlag.finishRecord) [self.delegate performSelector:@selector(onFinishRecord)];
 }
 
 - (void)showCancelDoneBtn
@@ -307,24 +319,18 @@
 #pragma mark - btn actions
 - (void)dismissVC
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onDismiss)]) {
-        [self.delegate performSelector:@selector(onDismiss)];
-    }
+    if (_delegateFlag.dismiss) [self.delegate performSelector:@selector(onDismiss)];
 }
 
 - (void)retake
 {
     [self resetUI];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onRetake)]) {
-        [self.delegate performSelector:@selector(onRetake)];
-    }
+    if (_delegateFlag.retake) [self.delegate performSelector:@selector(onRetake)];
 }
 
 - (void)doneClick
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onOkClick)]) {
-        [self.delegate performSelector:@selector(onOkClick)];
-    }
+    if (_delegateFlag.okClick) [self.delegate performSelector:@selector(onOkClick)];
 }
 
 @end
@@ -815,10 +821,11 @@
 - (void)onOkClick
 {
     [self.playerView reset];
-    if (self.doneBlock) {
-        self.doneBlock(self.takedImage, self.videoUrl);
-    }
-    [self onDismiss];
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.doneBlock) {
+            self.doneBlock(self.takedImage, self.videoUrl);
+        }
+    }];
 }
 
 //dismiss
