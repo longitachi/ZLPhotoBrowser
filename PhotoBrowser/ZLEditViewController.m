@@ -298,7 +298,9 @@
         inset = self.view.safeAreaInsets;
     }
     
-    BOOL hideClipRatioView = [self shouldHideClipRatioView];
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    
+    BOOL hideClipRatioView = configuration.hideClipRatiosToolBar ?: [self shouldHideClipRatioView];
     
     _imageView.frame = [self getImageViewFrame];
     _gridLayer.frame = _imageView.bounds;
