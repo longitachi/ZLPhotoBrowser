@@ -939,8 +939,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
-    [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
 }
 
 - (void)layoutSubviews
@@ -1010,6 +1008,9 @@
 
 - (void)seekToZero
 {
+    [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+    [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+    
     AVPlayer *player = self.playLayer.player;
     [player.currentItem seekToTime:kCMTimeZero];
 }
