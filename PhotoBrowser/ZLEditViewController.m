@@ -466,12 +466,22 @@
 
 - (UIImage *)scaleImage:(UIImage *)image toSize:(CGSize)size
 {
-    UIGraphicsBeginImageContext(size);
-    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    UIImage *newImage=UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return  newImage;
+    NSData *data = UIImageJPEGRepresentation(image, 1.0);
+    return [self scaledlmageWithData:data withSize:size scale:1.0 orientation:image.imageOrientation];
 }
+
+- (UIImage *)scaledlmageWithData:(NSData *)data withSize:(CGSize)size scale:(CGFloat)scale orientation:(UIImageOrientation)orientation {
+    CGFloat maxPixelSize = MAX(size.width, size.height);
+    CGImageSourceRef sourceRef = CGImageSourceCreateWithData((__bridge CFDataRef)data, nil);
+    NSDictionary *options = @{(__bridge id)kCGImageSourceCreateThumbnailFromImageAlways:(__bridge id)kCFBooleanTrue,
+                              (__bridge id)kCGImageSourceThumbnailMaxPixelSize:[NSNumber numberWithFloat:maxPixelSize]};
+    CGImageRef imageRef = CGImageSourceCreateThumbnailAtIndex(sourceRef, 0, (__bridge CFDictionaryRef)options);
+    UIImage *resultlmage = [UIImage imageWithCGImage:imageRef scale:scale orientation:orientation];
+    CGImageRelease(imageRef);
+    CFRelease(sourceRef);
+    return resultlmage;
+}
+
 
 - (void)setCropMenu
 {
