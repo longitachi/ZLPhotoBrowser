@@ -227,3 +227,58 @@ ac.sender = self;
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/原图功能.gif)
 
+English Read me
+
+ZLPhotoBrowser
+
+Introduction
+
+Functions
+Usage
+
+
+Functions
+- Multiple orientations support: Portrait, Landscape
+- Adaption with iPhone X
+- Supports quick selection in preview list, can set maximum preview numbers (drag selection supported)
+- Select from album directly (slide to select multiple images is supported)
+- Cut-out images (cut-out proportion can be customized)
+- Edit videos
+- View and select gif, LivePhoto(iOS 9.0+), video
+- 3D Touch preview image, gif, LivePhoto, video
+- Select image, gif, LivePhoto, video assembly
+- Download photos from iCloud online
+- Control to select video max play time
+- Internationalization (current supported: Simple Chinese, English, Japanese, Traditional Chinese. Can follow system or changed in code. Can specify the other language)
+- Including camera cell in album, rendering captured image in real time
+- Able to have a mask on selected items
+- Preview selected items
+- Preview images/videos saved locally or online (long press to save image to album is supported)
+- Customize radius of images in album
+- Able to sort ascending items or descending items
+- Click to take photos or long press to record videos is supported (just like WeChat)
+- Can customize resource images
+- Able to Export video (Can specify video size or add an image watermark or particle effects. PS: text watermark is not supported currently)
+
+Requirements
+iOS 8.0+
+Xcode 9.0+
+
+Usage
+Step1
+ - Manually
+ 	1. Drag PhotoBrowser/ folder into your project
+ 	2. Import Photos.framework and PhotosUI.framework
+ 	3. This repo relays on SDWebImage, so you also need it
+ 	4. Import "ZLPhotoActionSheet.h" at where you wanna use it
+
+  - Cocoapods
+  	1. add `pod 'ZLPhotoBrowser'`
+  	2. `pod setup`
+  	3. `pod install` or `pod update`
+  	4. import <ZLPhotoActionSheet.h>
+
+Step2
+ add description in info.plist
+ 
+
