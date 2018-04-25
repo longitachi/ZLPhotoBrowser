@@ -12,6 +12,7 @@
 * [功能介绍](#功能介绍)
 * [更新日志](#更新日志)
 * [使用方法(支持cocoapods安装)](#使用方法)
+* [English Document](#English)
 * [问答](#问答)
 * [效果图](#效果图)
 
@@ -40,8 +41,6 @@
 ### Feature
 
 > 如果您在使用中有好的需求及建议，或者遇到什么bug，欢迎随时issue，我会及时的回复
-
-> 另外。。。求英语不错的大佬闲来无事、又心情好的时候，帮翻译一份英文版的README（更新日志、问答、效果图可不要）
  
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
@@ -128,6 +127,60 @@ ac.sender = self;
 [ac previewPhotos:arrNetImages index:0 hideToolBar:YES complete:^(NSArray * _Nonnull photos) {
     //your codes
 }];
+```
+
+------------------
+### <a id="English"></a>English
+> 可能有翻译不正确的地方，还请英语大佬校准校准
+
+#### Functions
+- [x] Multiple orientations support: Portrait, Landscape
+- [x] Adaption with iPhone X
+- [x] Supports quick selection in preview list, can set maximum preview numbers (drag selection supported)
+- [x] Select from album directly (slide to select multiple images is supported)
+- [x] Cut-out images (cut-out proportion can be customized)
+- [x] Edit videos
+- [x] View and select gif, LivePhoto(iOS 9.0+), video
+- [x] 3D Touch preview image, gif, LivePhoto, video
+- [x] Select image, gif, LivePhoto, video assembly
+- [x] Download photos from iCloud online
+- [x] Control to select video max play time
+- [x] Internationalization (current supported: Simple Chinese, English, Japanese, Traditional Chinese. Can follow system or changed in code. Can specify the other language)
+- [x] Including camera cell in album, rendering captured image in real time
+- [x] Able to have a mask on selected items
+- [x] Preview selected items
+- [x] Preview images/videos saved locally or online (long press to save image to album is supported)
+- [x] Customize radius of images in album
+- [x] Able to sort ascending items or descending items
+- [x] Click to take photos or long press to record videos is supported (just like WeChat)
+- [x] Can customize resource images
+- [x] Able to Export video (Can specify video size or add an image watermark or particle effects. PS: text watermark is not supported currently)
+
+#### Requirements
+iOS 8.0+
+Xcode 9.0+
+
+#### Usage
+Step1
+ * Manually
+  * 1. Drag PhotoBrowser/ folder into your project
+  * 2. Import Photos.framework and PhotosUI.framework
+  *	3. This repo relays on SDWebImage, so you also need it
+  *	4. Import "ZLPhotoActionSheet.h" at where you wanna use it
+
+ * Cocoapods
+  * 1. add `pod 'ZLPhotoBrowser'`
+  *	2. `pod setup`
+  *	3. `pod install` or `pod update`
+  *	4. import <ZLPhotoActionSheet.h>
+
+Step2
+ * add description in info.plist
+```objc
+Localized resources can be mixed YES
+Privacy - Photo Library Usage Description
+Privacy - Camera Usage Description
+Privacy - Microphone Usage Description
 ```
 
 ### <a id="问答"></a>问答
@@ -226,59 +279,5 @@ ac.sender = self;
 - 原图功能效果图
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/原图功能.gif)
-
-English Read me
-
-ZLPhotoBrowser
-
-Introduction
-
-Functions
-Usage
-
-
-Functions
-- Multiple orientations support: Portrait, Landscape
-- Adaption with iPhone X
-- Supports quick selection in preview list, can set maximum preview numbers (drag selection supported)
-- Select from album directly (slide to select multiple images is supported)
-- Cut-out images (cut-out proportion can be customized)
-- Edit videos
-- View and select gif, LivePhoto(iOS 9.0+), video
-- 3D Touch preview image, gif, LivePhoto, video
-- Select image, gif, LivePhoto, video assembly
-- Download photos from iCloud online
-- Control to select video max play time
-- Internationalization (current supported: Simple Chinese, English, Japanese, Traditional Chinese. Can follow system or changed in code. Can specify the other language)
-- Including camera cell in album, rendering captured image in real time
-- Able to have a mask on selected items
-- Preview selected items
-- Preview images/videos saved locally or online (long press to save image to album is supported)
-- Customize radius of images in album
-- Able to sort ascending items or descending items
-- Click to take photos or long press to record videos is supported (just like WeChat)
-- Can customize resource images
-- Able to Export video (Can specify video size or add an image watermark or particle effects. PS: text watermark is not supported currently)
-
-Requirements
-iOS 8.0+
-Xcode 9.0+
-
-Usage
-Step1
- - Manually
- 	1. Drag PhotoBrowser/ folder into your project
- 	2. Import Photos.framework and PhotosUI.framework
- 	3. This repo relays on SDWebImage, so you also need it
- 	4. Import "ZLPhotoActionSheet.h" at where you wanna use it
-
-  - Cocoapods
-  	1. add `pod 'ZLPhotoBrowser'`
-  	2. `pod setup`
-  	3. `pod install` or `pod update`
-  	4. import <ZLPhotoActionSheet.h>
-
-Step2
- add description in info.plist
  
 
