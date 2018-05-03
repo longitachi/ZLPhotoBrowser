@@ -14,6 +14,7 @@
 #import "ZLPhotoModel.h"
 #import "ZLProgressHUD.h"
 #import "ToastUtils.h"
+#import <objc/runtime.h>
 
 #define kItemWidth kItemHeight * 2/3
 #define kItemHeight 50
@@ -219,18 +220,24 @@
     
     //下方collectionview偏移量
     CGFloat _offsetX;
+    BOOL _orientationChanged;
     
     UIView *_indicatorLine;
     
     AVAsset *_avAsset;
     
     NSTimeInterval _interval;
+    
+    NSInteger _measureCount;
+    NSOperationQueue *_queue;
+    NSMutableDictionary<NSString *, UIImage *> *_imageCache;
+    NSMutableDictionary<NSString *, NSBlockOperation *> *_opCache;
 }
 
-@property (nonatomic, strong) NSMutableArray<UIImage *> *arrImages;
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) ZLEditFrameView *editView;
+@property (nonatomic, strong) AVAssetImageGenerator *generator;
 
 @end
 
@@ -238,16 +245,23 @@
 
 - (void)dealloc
 {
+    [_queue cancelAllOperations];
+    [self stopTimer];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 //    NSLog(@"---- %s", __FUNCTION__);
 }
 
-- (NSMutableArray<UIImage *> *)arrImages
+- (AVAssetImageGenerator *)generator
 {
-    if (!_arrImages) {
-        _arrImages = [NSMutableArray array];
+    if (!_generator) {
+        _generator = [[AVAssetImageGenerator alloc] initWithAsset:_avAsset];
+        _generator.maximumSize = CGSizeMake(kItemWidth*4, kItemHeight*4);
+        _generator.appliesPreferredTrackTransform = YES;
+        _generator.requestedTimeToleranceBefore = kCMTimeZero;
+        _generator.requestedTimeToleranceAfter = kCMTimeZero;
+        _generator.apertureMode = AVAssetImageGeneratorApertureModeProductionAperture;
     }
-    return _arrImages;
+    return _generator;
 }
 
 - (void)viewDidLoad {
@@ -255,9 +269,15 @@
     [self setupUI];
     [self analysisAssetImages];
     
+    _queue = [[NSOperationQueue alloc] init];
+    _queue.maxConcurrentOperationCount = 3;
+    
+    _imageCache = [NSMutableDictionary dictionary];
+    _opCache = [NSMutableDictionary dictionary];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -305,14 +325,15 @@
 - (void)deviceOrientationChanged:(NSNotification *)notify
 {
     _offsetX = self.collectionView.contentOffset.x + self.collectionView.contentInset.left;
+    _orientationChanged = YES;
 }
 
-- (void)enterBackground
+- (void)appResignActive
 {
     [self stopTimer];
 }
 
-- (void)enterForeground
+- (void)appBecomeActive
 {
     [self startTimer];
 }
@@ -384,8 +405,12 @@
 #pragma mark - 解析视频每一帧图片
 - (void)analysisAssetImages
 {
-    ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
-    [hud show];
+    float duration = roundf(self.model.asset.duration);
+    
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    _interval = configuration.maxEditVideoTime/10.0;
+    
+    _measureCount = (NSInteger)(duration / _interval);
     
     zl_weakify(self);
     [ZLPhotoManager requestVideoForAsset:self.model.asset completion:^(AVPlayerItem *item, NSDictionary *info) {
@@ -394,19 +419,20 @@
             if (!item) return;
             AVPlayer *player = [AVPlayer playerWithPlayerItem:item];
             strongSelf.playerLayer.player = player;
+            [strongSelf startTimer];
         });
     }];
     
-    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
-    _interval = configuration.maxEditVideoTime/10.0;
-    
-    [ZLPhotoManager analysisEverySecondsImageForAsset:self.model.asset interval:_interval size:CGSizeMake(kItemWidth*5, kItemHeight*5) complete:^(AVAsset *avAsset, NSArray<UIImage *> *images) {
-        [hud hide];
+    PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
+    options.version = PHVideoRequestOptionsVersionOriginal;
+    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+    options.networkAccessAllowed = YES;
+    [[PHImageManager defaultManager] requestAVAssetForVideo:self.model.asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
         zl_strongify(weakSelf);
-        strongSelf->_avAsset = avAsset;
-        [strongSelf.arrImages addObjectsFromArray:images];
-        [strongSelf.collectionView reloadData];
-        [strongSelf startTimer];
+        strongSelf->_avAsset = asset;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf.collectionView reloadData];
+        });
     }];
 }
 
@@ -461,6 +487,8 @@
 #pragma mark - timer
 - (void)startTimer
 {
+    [self stopTimer];
+    
     CGFloat duration = _interval * self.editView.validRect.size.width / (kItemWidth);
     _timer = [NSTimer scheduledTimerWithTimeInterval:duration target:self selector:@selector(playPartVideo:) userInfo:nil repeats:YES];
     [_timer fire];
@@ -476,6 +504,7 @@
 - (void)stopTimer
 {
     [_timer invalidate];
+    _timer = nil;
     [_indicatorLine removeFromSuperview];
     [self.playerLayer.player pause];
 }
@@ -516,7 +545,8 @@
 #pragma mark - scroll view delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (!self.playerLayer.player) {
+    if (!self.playerLayer.player || _orientationChanged) {
+        _orientationChanged = NO;
         return;
     }
     [self stopTimer];
@@ -538,16 +568,74 @@
 #pragma mark - collection view data sources
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.arrImages.count;
+    return _measureCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZLEditVideoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ZLEditVideoCell" forIndexPath:indexPath];
     
-    cell.imageView.image = self.arrImages[indexPath.row];
+    UIImage *image = _imageCache[@(indexPath.row).stringValue];
+    if (image) {
+        cell.imageView.image = image;
+    }
     
     return cell;
+}
+
+static const char _ZLOperationCellKey;
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (!_avAsset) return;
+    
+    if (_imageCache[@(indexPath.row).stringValue] || _opCache[@(indexPath.row).stringValue]) {
+        return;
+    }
+    
+     NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
+        NSInteger row = indexPath.row;
+        NSInteger i = row  * _interval;
+        
+        CMTime time = CMTimeMake((i+0.35) * _avAsset.duration.timescale, _avAsset.duration.timescale);
+        
+        NSError *error = nil;
+        CGImageRef cgImg = [self.generator copyCGImageAtTime:time actualTime:NULL error:&error];
+        if (!error && cgImg) {
+            UIImage *image = [UIImage imageWithCGImage:cgImg];
+            CGImageRelease(cgImg);
+
+            [_imageCache setValue:image forKey:@(row).stringValue];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+
+                NSIndexPath *nowIndexPath = [collectionView indexPathForCell:cell];
+                if (row == nowIndexPath.row) {
+                    [(ZLEditVideoCell *)cell imageView].image = image;
+                } else {
+                    UIImage *cacheImage = _imageCache[@(nowIndexPath.row).stringValue];
+                    if (cacheImage) {
+                        [(ZLEditVideoCell *)cell imageView].image = cacheImage;
+                    }
+                }
+            });
+            [_opCache removeObjectForKey:@(row).stringValue];
+        }
+        objc_removeAssociatedObjects(cell);
+    }];
+    [_queue addOperation:op];
+    [_opCache setValue:op forKey:@(indexPath.row).stringValue];
+    
+    objc_setAssociatedObject(cell, &_ZLOperationCellKey, op, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSBlockOperation *op = objc_getAssociatedObject(cell, &_ZLOperationCellKey);
+    if (op) {
+        [op cancel];
+        objc_removeAssociatedObjects(cell);
+        [_opCache removeObjectForKey:@(indexPath.row).stringValue];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

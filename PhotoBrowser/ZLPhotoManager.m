@@ -567,16 +567,23 @@ static BOOL _sortAscending;
 
 + (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset
 {
-    PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
-    option.networkAccessAllowed = NO;
-    option.synchronous = YES;
-    
-    __block BOOL isInLocalAblum = YES;
-    
-    [[PHCachingImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-        isInLocalAblum = imageData ? YES : NO;
-    }];
-    return isInLocalAblum;
+    __block BOOL result = NO;
+    if (@available(iOS 9.0, *)) {
+        // https://stackoverflow.com/questions/31966571/check-given-phasset-is-icloud-asset
+        NSArray *resourceArray = [PHAssetResource assetResourcesForAsset:asset];
+        if (resourceArray.count) {
+            result = [[resourceArray.firstObject valueForKey:@"locallyAvailable"] boolValue];
+        }
+    } else {
+        PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
+        option.networkAccessAllowed = NO;
+        option.synchronous = YES;
+        
+        [[PHCachingImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            result = imageData ? YES : NO;
+        }];
+    }
+    return result;
 }
 
 + (void)getPhotosBytesWithArray:(NSArray<ZLPhotoModel *> *)photos completion:(void (^)(NSString *photosBytes))completion

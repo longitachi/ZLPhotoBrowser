@@ -2,6 +2,13 @@
 
 -----
 
+## [2.6.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.7) (2018-05-03)
+
+#### Add
+* 优化视频编辑界面，极大减少进入时的等待时间. [#234](https://github.com/longitachi/ZLPhotoBrowser/issues/234)
+
+---
+
 ## [2.6.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.6) (2018-04-21)
 
 #### Add
