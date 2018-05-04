@@ -447,6 +447,8 @@
     [ZLPhotoManager requestImageForAsset:self.model.asset size:size completion:^(UIImage *image, NSDictionary *info) {
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             zl_strongify(weakSelf);
+            //当图片还在加载中，点编辑，再点确认 会崩溃到这里 此时strongSelf 为nil
+            if(!strongSelf) return;
             [strongSelf->_indicator stopAnimating];
             strongSelf->_imageView.image = image;
             
