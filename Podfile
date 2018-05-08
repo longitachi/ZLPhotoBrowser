@@ -4,4 +4,5 @@ inhibit_all_warnings!
 
 target 'ZLPhotoBrowser' do
 	pod 'SDWebImage'
+	pod 'GPUImage'
 end

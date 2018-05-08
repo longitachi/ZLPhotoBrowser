@@ -1,0 +1,1 @@
+../../../GPUImage/framework/Source/GPUImageHighPassFilter.h

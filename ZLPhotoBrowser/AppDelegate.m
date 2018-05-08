@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ZLImageEditTool.h"
 
 @interface AppDelegate ()
 
@@ -20,7 +21,8 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    
+    ZLImageEditType type = ZLImageEditTypeFilter | ZLImageEditTypeClip;
+    NSLog(@"%lu, %@", (unsigned long)type, @(type).stringValue);
     return YES;
 }
 

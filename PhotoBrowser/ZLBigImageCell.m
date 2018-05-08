@@ -935,6 +935,9 @@
 
 //!!!!: ZLPreviewNetVideo
 @implementation ZLPreviewNetVideo
+{
+    BOOL _observerIsRemoved;
+}
 
 - (void)dealloc
 {
@@ -1004,12 +1007,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:player.currentItem];
     [player.currentItem addObserver:self forKeyPath:@"playbackBufferEmpty" options:NSKeyValueObservingOptionNew context:nil];
     [player.currentItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
+    _observerIsRemoved = NO;
 }
 
 - (void)seekToZero
 {
-    [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
-    [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+    if (!_observerIsRemoved) {
+        [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+        [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+        _observerIsRemoved = YES;
+    }
     
     AVPlayer *player = self.playLayer.player;
     [player.currentItem seekToTime:kCMTimeZero];
