@@ -20,6 +20,8 @@
 		FD028BDE1CBE33BB009DD2FC /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBC1CBE33BB009DD2FC /* ZLShowBigImgViewController.m */; };
 		FD028BDF1CBE33BB009DD2FC /* ZLThumbnailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */; };
 		FD028BFF1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */; };
+		FD05D82420A3312200F60A2F /* ZLBrushBoardImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FD05D82320A3312200F60A2F /* ZLBrushBoardImageView.m */; };
+		FD05D82720A3373600F60A2F /* ZLDrawItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FD05D82620A3373600F60A2F /* ZLDrawItem.m */; };
 		FD0787221C0D45A200D17B97 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787211C0D45A200D17B97 /* main.m */; };
 		FD0787251C0D45A200D17B97 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787241C0D45A200D17B97 /* AppDelegate.m */; };
 		FD0787281C0D45A200D17B97 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0787271C0D45A200D17B97 /* ViewController.m */; };
@@ -27,10 +29,14 @@
 		FD07872D1C0D45A200D17B97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD07872C1C0D45A200D17B97 /* Assets.xcassets */; };
 		FD0787301C0D45A200D17B97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD07872E1C0D45A200D17B97 /* LaunchScreen.storyboard */; };
 		FD07877E1C0D47DA00D17B97 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD07877D1C0D47DA00D17B97 /* Photos.framework */; };
+		FD0EB28E209EB73F002F08F4 /* ZLFilterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0EB28D209EB73F002F08F4 /* ZLFilterItem.m */; };
+		FD0EB291209EC3F4002F08F4 /* ZLFilterTool.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0EB290209EC3F4002F08F4 /* ZLFilterTool.m */; };
+		FD0EB294209F51FD002F08F4 /* ZLClipItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0EB293209F51FD002F08F4 /* ZLClipItem.m */; };
 		FD10CECE1EA86AF60041095C /* ZLCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD10CECD1EA86AF60041095C /* ZLCollectionCell.m */; };
 		FD1A38BC1F6BCCF8009B4C3F /* ZLEditVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD1A38BB1F6BCCF8009B4C3F /* ZLEditVideoController.m */; };
 		FD22D71F1E9E25D1008FCC4E /* ZLPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FD22D71E1E9E25D1008FCC4E /* ZLPhotoModel.m */; };
 		FD22D7221E9E2EDC008FCC4E /* ZLPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD22D7211E9E2EDC008FCC4E /* ZLPhotoManager.m */; };
+		FD2CC6C2209DCA9E00F4E6C7 /* ZLImageEditTool.m in Sources */ = {isa = PBXBuildFile; fileRef = FD2CC6C1209DCA9E00F4E6C7 /* ZLImageEditTool.m */; };
 		FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */; };
 		FD7003DF1FBD2EAB000D9FD4 /* ZLPhotoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7003DE1FBD2EAB000D9FD4 /* ZLPhotoConfiguration.m */; };
 		FD7852511EF4FD5300C69E84 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD7852501EF4FD5300C69E84 /* PhotosUI.framework */; };
@@ -71,6 +77,10 @@
 		FD028BBD1CBE33BB009DD2FC /* ZLThumbnailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLThumbnailViewController.h; sourceTree = "<group>"; };
 		FD028BBE1CBE33BB009DD2FC /* ZLThumbnailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLThumbnailViewController.m; sourceTree = "<group>"; };
 		FD028BFE1CBE4BDE009DD2FC /* ZLPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZLPhotoBrowser.bundle; sourceTree = "<group>"; };
+		FD05D82220A3312200F60A2F /* ZLBrushBoardImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLBrushBoardImageView.h; sourceTree = "<group>"; };
+		FD05D82320A3312200F60A2F /* ZLBrushBoardImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLBrushBoardImageView.m; sourceTree = "<group>"; };
+		FD05D82520A3373600F60A2F /* ZLDrawItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLDrawItem.h; sourceTree = "<group>"; };
+		FD05D82620A3373600F60A2F /* ZLDrawItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLDrawItem.m; sourceTree = "<group>"; };
 		FD07871D1C0D45A200D17B97 /* ZLPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZLPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD0787211C0D45A200D17B97 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FD0787231C0D45A200D17B97 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -82,6 +92,12 @@
 		FD07872F1C0D45A200D17B97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FD0787311C0D45A200D17B97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD07877D1C0D47DA00D17B97 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		FD0EB28C209EB73F002F08F4 /* ZLFilterItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLFilterItem.h; sourceTree = "<group>"; };
+		FD0EB28D209EB73F002F08F4 /* ZLFilterItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLFilterItem.m; sourceTree = "<group>"; };
+		FD0EB28F209EC3F4002F08F4 /* ZLFilterTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLFilterTool.h; sourceTree = "<group>"; };
+		FD0EB290209EC3F4002F08F4 /* ZLFilterTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLFilterTool.m; sourceTree = "<group>"; };
+		FD0EB292209F51FD002F08F4 /* ZLClipItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLClipItem.h; sourceTree = "<group>"; };
+		FD0EB293209F51FD002F08F4 /* ZLClipItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLClipItem.m; sourceTree = "<group>"; };
 		FD10CECD1EA86AF60041095C /* ZLCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLCollectionCell.m; sourceTree = "<group>"; };
 		FD10CECF1EA882490041095C /* ZLCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLCollectionCell.h; sourceTree = "<group>"; };
 		FD1A38BA1F6BCCF8009B4C3F /* ZLEditVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLEditVideoController.h; sourceTree = "<group>"; };
@@ -90,6 +106,8 @@
 		FD22D71E1E9E25D1008FCC4E /* ZLPhotoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoModel.m; sourceTree = "<group>"; };
 		FD22D7201E9E2EDC008FCC4E /* ZLPhotoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLPhotoManager.h; sourceTree = "<group>"; };
 		FD22D7211E9E2EDC008FCC4E /* ZLPhotoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoManager.m; sourceTree = "<group>"; };
+		FD2CC6C0209DCA9E00F4E6C7 /* ZLImageEditTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLImageEditTool.h; sourceTree = "<group>"; };
+		FD2CC6C1209DCA9E00F4E6C7 /* ZLImageEditTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLImageEditTool.m; sourceTree = "<group>"; };
 		FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ZLPhotoBrowser.h"; sourceTree = "<group>"; };
 		FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ZLPhotoBrowser.m"; sourceTree = "<group>"; };
 		FD7003DD1FBD2EAB000D9FD4 /* ZLPhotoConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLPhotoConfiguration.h; sourceTree = "<group>"; };
@@ -142,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				FD028B8F1CBE33BB009DD2FC /* resource */,
+				FD2CC6BF209DCA8B00F4E6C7 /* ZLImageEditTools */,
 				FD028BA41CBE33BB009DD2FC /* ToastUtils.h */,
 				FD028BA51CBE33BB009DD2FC /* ToastUtils.m */,
 				FD028BA81CBE33BB009DD2FC /* ZLBigImageCell.h */,
@@ -259,6 +278,25 @@
 			path = ZLPhotoBrowser;
 			sourceTree = "<group>";
 		};
+		FD2CC6BF209DCA8B00F4E6C7 /* ZLImageEditTools */ = {
+			isa = PBXGroup;
+			children = (
+				FD2CC6C0209DCA9E00F4E6C7 /* ZLImageEditTool.h */,
+				FD2CC6C1209DCA9E00F4E6C7 /* ZLImageEditTool.m */,
+				FD0EB292209F51FD002F08F4 /* ZLClipItem.h */,
+				FD0EB293209F51FD002F08F4 /* ZLClipItem.m */,
+				FD0EB28C209EB73F002F08F4 /* ZLFilterItem.h */,
+				FD0EB28D209EB73F002F08F4 /* ZLFilterItem.m */,
+				FD05D82520A3373600F60A2F /* ZLDrawItem.h */,
+				FD05D82620A3373600F60A2F /* ZLDrawItem.m */,
+				FD0EB28F209EC3F4002F08F4 /* ZLFilterTool.h */,
+				FD0EB290209EC3F4002F08F4 /* ZLFilterTool.m */,
+				FD05D82220A3312200F60A2F /* ZLBrushBoardImageView.h */,
+				FD05D82320A3312200F60A2F /* ZLBrushBoardImageView.m */,
+			);
+			path = ZLImageEditTools;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -270,8 +308,7 @@
 				FD0787191C0D45A200D17B97 /* Sources */,
 				FD07871A1C0D45A200D17B97 /* Frameworks */,
 				FD07871B1C0D45A200D17B97 /* Resources */,
-				450EF2829FCF82D38E543A53 /* [CP] Embed Pods Frameworks */,
-				4489D3B02D8B17B9B2F78F0A /* [CP] Copy Pods Resources */,
+				75DDF8194E82CF60C5EE5D09 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -337,34 +374,30 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4489D3B02D8B17B9B2F78F0A /* [CP] Copy Pods Resources */ = {
+		75DDF8194E82CF60C5EE5D09 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ZLPhotoBrowser/Pods-ZLPhotoBrowser-resources.sh",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_amatorka.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_miss_etikate.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_soft_elegance_1.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_soft_elegance_2.png",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_amatorka.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_miss_etikate.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_soft_elegance_1.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_soft_elegance_2.png",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZLPhotoBrowser/Pods-ZLPhotoBrowser-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		450EF2829FCF82D38E543A53 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZLPhotoBrowser/Pods-ZLPhotoBrowser-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E65071590C04A06729C48919 /* [CP] Check Pods Manifest.lock */ = {
@@ -394,13 +427,18 @@
 			files = (
 				FDD979E61EF8F35700DD9DA4 /* ZLForceTouchPreviewController.m in Sources */,
 				FD7003DF1FBD2EAB000D9FD4 /* ZLPhotoConfiguration.m in Sources */,
+				FD05D82420A3312200F60A2F /* ZLBrushBoardImageView.m in Sources */,
 				FD028BD31CBE33BB009DD2FC /* ToastUtils.m in Sources */,
 				FD028BD51CBE33BB009DD2FC /* ZLBigImageCell.m in Sources */,
 				FD0787281C0D45A200D17B97 /* ViewController.m in Sources */,
+				FD0EB291209EC3F4002F08F4 /* ZLFilterTool.m in Sources */,
+				FD2CC6C2209DCA9E00F4E6C7 /* ZLImageEditTool.m in Sources */,
 				FD7B52731EFCB81600FB9087 /* ZLEditViewController.m in Sources */,
 				FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */,
 				FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */,
+				FD05D82720A3373600F60A2F /* ZLDrawItem.m in Sources */,
 				FD22D71F1E9E25D1008FCC4E /* ZLPhotoModel.m in Sources */,
+				FD0EB28E209EB73F002F08F4 /* ZLFilterItem.m in Sources */,
 				FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */,
 				FDDB9EBB1E6D2EF6008ED9F1 /* YYFPSLabel.m in Sources */,
 				FDABF1611FEE60BC0068E6ED /* UIImage+ZLPhotoBrowser.m in Sources */,
@@ -414,6 +452,7 @@
 				FD028BDC1CBE33BB009DD2FC /* ZLProgressHUD.m in Sources */,
 				FD028BD81CBE33BB009DD2FC /* ZLPhotoActionSheet.m in Sources */,
 				FD028BDE1CBE33BB009DD2FC /* ZLShowBigImgViewController.m in Sources */,
+				FD0EB294209F51FD002F08F4 /* ZLClipItem.m in Sources */,
 				FD22D7221E9E2EDC008FCC4E /* ZLPhotoManager.m in Sources */,
 				FDDB9EBA1E6D2EF6008ED9F1 /* YYWeakProxy.m in Sources */,
 				FDC48B7F1FB5587C002815C8 /* ZLCustomCamera.m in Sources */,
@@ -549,7 +588,7 @@
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.ABCD;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -564,7 +603,7 @@
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.ABCD;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
