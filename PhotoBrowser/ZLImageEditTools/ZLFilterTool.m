@@ -7,7 +7,6 @@
 //
 
 #import "ZLFilterTool.h"
-#import <GPUImage.h>
 
 @implementation ZLFilterTool
 

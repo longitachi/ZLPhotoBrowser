@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ZLFilterItem.h"
-#import <GPUImage.h>
+#import <GPUImage/GPUImage.h>
 
 @interface ZLFilterTool : NSObject
 
