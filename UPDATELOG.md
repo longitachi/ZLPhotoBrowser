@@ -2,6 +2,18 @@
 
 -----
 
+## [2.6.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.8) (2018-05-10)
+
+#### Add
+* 重构图片编辑界面，添加滤镜功能
+
+#### Fix
+* 解决相册图片列表界面底部工具栏消失的bug.[#238](https://github.com/longitachi/ZLPhotoBrowser/issues/238)
+* 解决预览网络视频崩溃的bug. [#240](https://github.com/longitachi/ZLPhotoBrowser/issues/240)
+
+
+---
+
 ## [2.6.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.7) (2018-05-03)
 
 #### Add

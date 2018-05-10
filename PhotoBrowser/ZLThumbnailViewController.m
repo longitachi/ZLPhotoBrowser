@@ -127,6 +127,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.automaticallyAdjustsScrollViewInsets = true;
+    self.edgesForExtendedLayout = UIRectEdgeAll;
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = self.albumListModel.title;
     

@@ -13,8 +13,6 @@
 #import "ToastUtils.h"
 #import "ZLProgressHUD.h"
 #import "ZLPhotoBrowser.h"
-#import "UIImage+ZLPhotoBrowser.h"
-#import <GPUImage.h>
 #import "ZLImageEditTool.h"
 
 //!!!!: edit vc
@@ -24,7 +22,6 @@
     
     ZLImageEditTool *_editTool;
 }
-
 
 @end
 

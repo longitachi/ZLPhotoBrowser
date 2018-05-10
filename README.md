@@ -20,7 +20,7 @@
 - [x] 支持横竖屏 (已适配iPhone X)
 - [x] 预览快速选择、可设置预览最大数 (支持拖拽选择)
 - [x] 直接进入相册选择 （支持滑动多选）
-- [x] 裁剪图片 (可自定义裁剪比例)
+- [x] 编辑图片 (支持多种滤镜，可自定义裁剪比例)
 - [x] 编辑视频
 - [x] 查看、选择gif、LivePhoto(iOS9.0)、video
 - [x] 3D Touch预览image、gif、LivePhoto、video
@@ -45,6 +45,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 2.6.8: 重构编辑图片功能，添加滤镜;
 ● 2.6.7: 优化视频编辑界面，极大减少进入时的等待时间;
 ● 2.6.6: Fix #216; 新增隐藏裁剪图片界面比例工具条功能;
 ● 2.6.5: 新增隐藏"已隐藏"照片及相册的功能; Fix #221, 优化预览网络图片/视频时根据url后缀判断的类型方式;
@@ -78,7 +79,7 @@ IDE：Xcode 9.0 及以上版本 (由于适配iPhone X使用iOS11api，所以请�
 * Manually 
   * 1.直接把PhotoBrowser文件夹拖入到您的工程中
   * 2.导入 Photos.framework及PhotosUI.framework
-  * 3.项目依赖 `SDWebImage`，所以需要导入该框架
+  * 3.项目依赖 `SDWebImage`、`GPUImage` 所以需要导入这两个框架
   * 4.导入 "ZLPhotoActionSheet.h"
 * Cocoapods
   * 1.在Podfile 中添加 `pod 'ZLPhotoBrowser'`
@@ -139,7 +140,7 @@ ac.sender = self;
 - [x] Adaption with iPhone X
 - [x] Supports quick selection in preview list, can set maximum preview numbers (drag selection supported)
 - [x] Select from album directly (slide to select multiple images is supported)
-- [x] Cut-out images (cut-out proportion can be customized)
+- [x] Edit images (image filter, cut-out proportion can be customized)
 - [x] Edit videos
 - [x] View and select gif, LivePhoto(iOS 9.0+), video
 - [x] 3D Touch preview image, gif, LivePhoto, video
@@ -166,7 +167,7 @@ Step1
  * Manually
   * 1. Drag PhotoBrowser/ folder into your project
   * 2. Import Photos.framework and PhotosUI.framework
-  *	3. This repo relays on SDWebImage, so you also need it
+  *	3. This repo relays on SDWebImage and GPUImage, so you also need it
   *	4. Import "ZLPhotoActionSheet.h" at where you wanna use it
 
  * Cocoapods
