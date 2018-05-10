@@ -128,9 +128,19 @@
 //!!!!: ZLClipItem
 @implementation ZLClipItem
 
-- (id)initWithFrame:(CGRect)frame image:(UIImage *)image target:(id)target action:(SEL)action
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [self initWithFrame:frame];
+    return [self initWithFrame:CGRectZero image:nil target:nil action:nil];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    return [self initWithFrame:CGRectZero image:nil target:nil action:nil];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image target:(id)target action:(SEL)action
+{
+    self = [super initWithFrame:frame];
     if(self){
         UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:target action:action];
         [self addGestureRecognizer:gesture];

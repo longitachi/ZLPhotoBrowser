@@ -22,8 +22,7 @@
 
 - (void)dealloc
 {
-    [[GPUImageContext sharedImageProcessingContext].framebufferCache purgeAllUnassignedFramebuffers];
-    NSLog(@"%s", __func__);
+//    NSLog(@"%s", __func__);
 }
 
 - (instancetype)initWithFrame:(CGRect)frame

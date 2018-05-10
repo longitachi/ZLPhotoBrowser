@@ -41,7 +41,10 @@
 
 @property (nonatomic, strong) ZLClipRatio *ratio;
 
-- (id)initWithFrame:(CGRect)frame image:(UIImage *)image target:(id)target action:(SEL)action;
+- (instancetype)initWithFrame:(CGRect)frame
+                        image:(UIImage *)image
+                       target:(id)target
+                       action:(SEL)action NS_DESIGNATED_INITIALIZER;
 
 - (void)refreshViews;
 

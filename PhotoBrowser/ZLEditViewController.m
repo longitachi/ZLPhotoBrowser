@@ -32,7 +32,7 @@
 
 - (void)dealloc
 {
-    NSLog(@"---- %s", __FUNCTION__);
+//    NSLog(@"---- %s", __FUNCTION__);
 }
 
 - (void)viewDidLoad {
@@ -99,7 +99,8 @@
 - (void)loadEditTool
 {
     ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
-    _editTool = [[ZLImageEditTool alloc] initWithEditType:ZLImageEditTypeClip | ZLImageEditTypeRotate | ZLImageEditTypeFilter image:_oriImage configuration:configuration];
+    ZLImageEditType editType = ZLImageEditTypeClip | ZLImageEditTypeRotate | ZLImageEditTypeFilter;
+    _editTool = [[ZLImageEditTool alloc] initWithEditType:editType image:_oriImage configuration:configuration];
     zl_weakify(self);
     _editTool.cancelEditBlock = ^{
         zl_strongify(weakSelf);

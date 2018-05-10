@@ -13,6 +13,8 @@
 #import "ZLFilterTool.h"
 #import "UIImage+ZLPhotoBrowser.h"
 #import "UIButton+EnlargeTouchArea.h"
+#import "ZLBrushBoardImageView.h"
+#import "ZLDrawItem.h"
 
 @interface ZLImageEditTool ()
 {
@@ -35,19 +37,25 @@
     CGSize _originSize;
 }
 
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) ZLBrushBoardImageView *imageView;
 
 @property (nonatomic, strong) UIButton *cancelBtn;
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIView *bottomView;
 
 @property (nonatomic, strong) UIButton *filterBtn;
+
+@property (nonatomic, strong) UIButton *drawBtn;
+@property (nonatomic, strong) UIButton *revokeBtn;
+
 @property (nonatomic, strong) UIButton *rotateBtn;
+
 @property (nonatomic, strong) UIButton *clipBtn;
 @property (nonatomic, strong) UIButton *rotateRatioBtn;
 
 @property (nonatomic, strong) UIScrollView *clipMenu;
 @property (nonatomic, strong) UIScrollView *filterMenu;
+@property (nonatomic, strong) UIScrollView *drawMenu;
 
 @property (nonatomic, strong) ZLGridLayar *gridLayer;
 
@@ -56,6 +64,7 @@
 @property (nonatomic, assign) CGRect clippingRect;
 
 @property (nonatomic, strong) ZLFilterItem *selectFilterItem;
+@property (nonatomic, strong) ZLDrawItem *selectDrawItem;
 
 @end
 
@@ -63,9 +72,8 @@
 
 - (void)dealloc
 {
-    //GPUImageContext.sharedImageProcessingContext().framebufferCache.purgeAllUnassignedFramebuffers()
     [[GPUImageContext sharedImageProcessingContext].framebufferCache purgeAllUnassignedFramebuffers];
-    NSLog(@"---- %s", __FUNCTION__);
+//    NSLog(@"---- %s", __FUNCTION__);
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -141,6 +149,10 @@
         self.filterBtn.frame = CGRectMake(bx-bottomBtnW/2, 2, bottomBtnW, bottomBtnW);
         bx += disW;
     }
+    if (_type & ZLImageEditTypeDraw) {
+        self.drawBtn.frame = CGRectMake(bx-bottomBtnW/2, 2, bottomBtnW, bottomBtnW);
+        bx += disW;
+    }
     if (_type & ZLImageEditTypeRotate) {
         self.rotateBtn.frame = CGRectMake(bx-bottomBtnW/2, 2, bottomBtnW, bottomBtnW);
         bx += disW;
@@ -153,6 +165,8 @@
     CGFloat menuMaxY = CGRectGetMinY(self.bottomView.frame);
     
     _filterMenu.frame = CGRectMake(inset.left, menuMaxY-80, kViewWidth-inset.left-inset.right, 80);
+    _drawMenu.frame = CGRectMake(inset.left+30, menuMaxY-40, kViewWidth-inset.left-inset.right-30-60, 40);
+    _revokeBtn.frame = CGRectMake(kViewWidth-60-inset.right, menuMaxY-40, 40, 40);
     
     BOOL hideClipRatioView = _configuration.hideClipRatiosToolBar ?: [self shouldHideClipRatioView];
     
@@ -177,7 +191,7 @@
     BOOL showMenu = NO;
     if (_selectToolType & ZLImageEditTypeClip) {
         showMenu = ![self shouldHideClipRatioView];
-    } else if (_selectToolType & ZLImageEditTypeFilter) {
+    } else if (_selectToolType & (ZLImageEditTypeFilter | ZLImageEditTypeDraw)) {
         showMenu =  YES;
     }
     
@@ -227,7 +241,7 @@
     [self.cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.cancelBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
     [self.cancelBtn addTarget:self action:@selector(cancelBtn_click) forControlEvents:UIControlEventTouchUpInside];
-    [self.cancelBtn setEnlargeEdgeWithTop:0 right:30 bottom:30 left:0];
+    [self.cancelBtn setEnlargeEdgeWithTop:0 right:10 bottom:10 left:0];
     [self addSubview:self.cancelBtn];
     
     self.doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -237,11 +251,11 @@
     self.doneBtn.layer.masksToBounds = YES;
     self.doneBtn.layer.cornerRadius = 3.0f;
     [self.doneBtn addTarget:self action:@selector(btnDone_click) forControlEvents:UIControlEventTouchUpInside];
-    [self.doneBtn setEnlargeEdgeWithTop:0 right:0 bottom:30 left:30];
+    [self.doneBtn setEnlargeEdgeWithTop:0 right:0 bottom:10 left:10];
     [self addSubview:_doneBtn];
     
     //imageView
-    self.imageView = [[UIImageView alloc] init];
+    self.imageView = [[ZLBrushBoardImageView alloc] init];
     self.imageView.image = _editImage;
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self addSubview:self.imageView];
@@ -251,10 +265,8 @@
     self.imageView.userInteractionEnabled = YES;
     [self.imageView addGestureRecognizer:panGesture];
     
-    
     //下方视图
     self.bottomView = [[UIView alloc] init];
-    self.bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7];
     [self addSubview:self.bottomView];
     
     {
@@ -277,6 +289,13 @@
             [self.filterBtn setImage:GetImageWithName(@"zl_filter") forState:UIControlStateNormal];
             [self.filterBtn addTarget:self action:@selector(filterBtn_click) forControlEvents:UIControlEventTouchUpInside];
             [self.bottomView addSubview:self.filterBtn];
+        }
+        
+        if (_type & ZLImageEditTypeDraw) {
+            self.drawBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.drawBtn setImage:GetImageWithName(@"zl_draw") forState:UIControlStateNormal];
+            [self.drawBtn addTarget:self action:@selector(drawBtn_click) forControlEvents:UIControlEventTouchUpInside];
+            [self.bottomView addSubview:self.drawBtn];
         }
     }
     
@@ -310,6 +329,7 @@
     return count;
 }
 
+#pragma mark - menu
 - (void)setupFilterMenu
 {
     if (_filterMenu) return;
@@ -339,6 +359,38 @@
         x += W;
     }
     _filterMenu.contentSize = CGSizeMake(MAX(x, _filterMenu.frame.size.width+1), 0);
+}
+
+- (void)setupDrawMenu
+{
+    if (_drawMenu) return;
+    
+    //这只是初始坐标，实际坐标在viewdidlayoutsubviews里面布局
+    _drawMenu = [[UIScrollView alloc] initWithFrame:CGRectZero];
+    _drawMenu.backgroundColor = [UIColor clearColor];
+    _drawMenu.showsHorizontalScrollIndicator = NO;
+    _drawMenu.clipsToBounds = NO;
+    [self addSubview:_drawMenu];
+    
+    self.revokeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.revokeBtn setImage:GetImageWithName(@"zl_revoke") forState:UIControlStateNormal];
+    [self.revokeBtn addTarget:self action:@selector(revokeBtn_click) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.revokeBtn];
+    
+    CGFloat W = 40;
+    CGFloat H = 40;
+    CGFloat x = 0;
+    
+    for (int i = ZLDrawItemColorTypeWhite; i <= ZLDrawItemColorTypePurple; i++) {
+        ZLDrawItem *item = [[ZLDrawItem alloc] initWithFrame:CGRectMake(x, 0, W, H) colorType:i target:self action:@selector(tapDrawColor:)];
+        [_drawMenu addSubview:item];
+        
+        if (!self.selectDrawItem) {
+            self.selectDrawItem = item;
+        }
+        x += W;
+    }
+    _drawMenu.contentSize = CGSizeMake(MAX(x, _drawMenu.frame.size.width+1), 0);
 }
 
 - (void)setupClipMenu
@@ -426,18 +478,7 @@
 
 - (void)clipBtn_click
 {
-    if (_selectToolType & ZLImageEditTypeClip) {
-        _selectToolType = 0;
-    } else {
-        _selectToolType = ZLImageEditTypeClip;
-    }
-    
-    if (self.editImage) {
-        [self setupClipMenu];
-    }
-    
-    [self switchTool];
-    [self setNeedsLayout];
+    [self switchTool:ZLImageEditTypeClip];
 }
 
 - (void)rotateImageBtn_click
@@ -493,22 +534,40 @@
 
 - (void)filterBtn_click
 {
-    if (_selectToolType & ZLImageEditTypeFilter) {
-        _selectToolType = 0;
-    } else {
-        _selectToolType = ZLImageEditTypeFilter;
-    }
-    
-    if (self.editImage) {
-        [self setupFilterMenu];
-    }
-    
-    [self switchTool];
-    [self setNeedsLayout];
+    [self switchTool:ZLImageEditTypeFilter];
 }
 
-- (void)switchTool
+- (void)drawBtn_click
 {
+    [self switchTool:ZLImageEditTypeDraw];
+}
+
+- (void)switchTool:(ZLImageEditType)type
+{
+    if (_selectToolType & type) {
+        _selectToolType = 0;
+    } else {
+        _selectToolType = type;
+    }
+    
+    if (!self.editImage) return;
+    
+    switch (_selectToolType) {
+        case ZLImageEditTypeClip:
+            [self setupClipMenu];
+            break;
+        case ZLImageEditTypeFilter:
+            [self setupFilterMenu];
+            break;
+        case ZLImageEditTypeDraw:
+            [self setupDrawMenu];
+            break;
+        default:
+            break;
+    }
+    
+    [self setNeedsLayout];
+    
     if (_selectToolType == 0) {
         _filterMenu.hidden = YES;
         _clipMenu.hidden = YES;
@@ -519,14 +578,26 @@
     }
     if (_selectToolType & ZLImageEditTypeFilter) {
         _filterMenu.hidden = NO;
+        _drawMenu.hidden = YES;
         _clipMenu.hidden = YES;
         _rotateRatioBtn.superview.hidden = YES;
+        self.imageView.drawEnable = NO;
         [self switchCircleAndGridLayerShowStatus:NO];
         [self switchBtnStatus:self.filterBtn];
+    } else if (_selectToolType & ZLImageEditTypeDraw) {
+        _filterMenu.hidden = YES;
+        _drawMenu.hidden = NO;
+        _clipMenu.hidden = YES;
+        _rotateRatioBtn.superview.hidden = YES;
+        self.imageView.drawEnable = YES;
+        [self switchCircleAndGridLayerShowStatus:NO];
+        [self switchBtnStatus:self.drawBtn];
     } else if (_selectToolType & ZLImageEditTypeClip) {
         _filterMenu.hidden = YES;
+        _drawMenu.hidden = YES;
         _clipMenu.hidden = NO;
         _rotateRatioBtn.superview.hidden = NO;
+        self.imageView.drawEnable = NO;
         [self switchCircleAndGridLayerShowStatus:YES];
         [self switchBtnStatus:self.clipBtn];
     }
@@ -534,7 +605,8 @@
 
 - (void)switchBtnStatus:(UIButton *)btn
 {
-    NSArray *arr = @[self.filterBtn, self.rotateBtn, self.clipBtn];
+    UIButton *b = [UIButton new];
+    NSArray *arr = @[self.filterBtn?: b, self.drawBtn?: b, self.rotateBtn?: b, self.clipBtn?: b];
     for (UIButton *b in arr) {
         if (b == btn) {
             [b setBackgroundColor:[UIColor colorWithWhite:1 alpha:.15]];
@@ -561,6 +633,7 @@
 - (void)tapFilter:(UITapGestureRecognizer *)sender
 {
     ZLFilterItem *item = (ZLFilterItem *)sender.view;
+    if (self.selectFilterItem == item) return;
     
     self.selectFilterItem = item;
     
@@ -575,6 +648,30 @@
         _selectFilterItem = selectFilterItem;
         _selectFilterItem.backgroundColor = [UIColor colorWithWhite:1 alpha:.15];
     }
+}
+
+#pragma mark - draw
+- (void)tapDrawColor:(UITapGestureRecognizer *)sender
+{
+    ZLDrawItem *item = (ZLDrawItem *)sender.view;
+    if (self.selectDrawItem == item) return;
+    
+    self.selectDrawItem = item;
+}
+
+- (void)setSelectDrawItem:(ZLDrawItem *)selectDrawItem
+{
+    if (selectDrawItem != _selectDrawItem) {
+        _selectDrawItem.selected = NO;
+        _selectDrawItem = selectDrawItem;
+        _selectDrawItem.selected = YES;
+        self.imageView.drawColor = _selectDrawItem.color;
+    }
+}
+
+- (void)revokeBtn_click
+{
+    [self.imageView revoke];
 }
 
 #pragma mark - 裁剪
@@ -795,6 +892,10 @@
 
 - (void)panGridView:(UIPanGestureRecognizer*)sender
 {
+    if (_selectToolType != ZLImageEditTypeClip) {
+        return;
+    }
+    
     static BOOL dragging = NO;
     static CGRect initialRect;
     
