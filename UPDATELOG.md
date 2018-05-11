@@ -2,7 +2,7 @@
 
 -----
 
-## [2.6.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.8) (2018-05-10)
+## [2.6.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.9) (2018-05-11)
 
 #### Add
 * 重构图片编辑界面，添加滤镜功能

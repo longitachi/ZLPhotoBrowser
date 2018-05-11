@@ -45,7 +45,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
-● 2.6.8: 重构编辑图片功能，添加滤镜;
+● 2.6.9: 重构编辑图片功能，添加滤镜;
 ● 2.6.7: 优化视频编辑界面，极大减少进入时的等待时间;
 ● 2.6.6: Fix #216; 新增隐藏裁剪图片界面比例工具条功能;
 ● 2.6.5: 新增隐藏"已隐藏"照片及相册的功能; Fix #221, 优化预览网络图片/视频时根据url后缀判断的类型方式;
@@ -220,6 +220,10 @@ Privacy - Microphone Usage Description
 - 编辑图片预览图
 
 ![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/edit.gif)
+
+- 滤镜
+
+![image](https://github.com/longitachi/ZLPhotoBrowser/blob/master/效果图/filter.png)
 
 - 自定义相机效果图及介绍
 
