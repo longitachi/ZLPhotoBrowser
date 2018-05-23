@@ -656,13 +656,13 @@
         [captureDevice setFocusPointOfInterest:point];
     }
     //曝光模式
-//    if ([captureDevice isExposureModeSupported:exposureMode]) {
-//        [captureDevice setExposureMode:AVCaptureExposureModeAutoExpose];
-//    }
-//    //曝光点
-//    if ([captureDevice isExposurePointOfInterestSupported]) {
-//        [captureDevice setExposurePointOfInterest:point];
-//    }
+    if ([captureDevice isExposureModeSupported:exposureMode]) {
+        [captureDevice setExposureMode:AVCaptureExposureModeAutoExpose];
+    }
+    //曝光点
+    if ([captureDevice isExposurePointOfInterestSupported]) {
+        [captureDevice setExposurePointOfInterest:point];
+    }
     [captureDevice unlockForConfiguration];
 }
 
