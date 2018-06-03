@@ -755,7 +755,7 @@
 {
     if (!_playBtn) {
         _playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_playBtn setBackgroundImage:GetImageWithName(@"playVideo") forState:UIControlStateNormal];
+        [_playBtn setBackgroundImage:GetImageWithName(@"zl_playVideo") forState:UIControlStateNormal];
         _playBtn.frame = CGRectMake(0, 0, 80, 80);
         _playBtn.center = self.center;
         [_playBtn addTarget:self action:@selector(playBtnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -770,7 +770,7 @@
         NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
         //创建图片附件
         NSTextAttachment *attach = [[NSTextAttachment alloc]init];
-        attach.image = GetImageWithName(@"videoLoadFailed");
+        attach.image = GetImageWithName(@"zl_videoLoadFailed");
         attach.bounds = CGRectMake(0, -10, 30, 30);
         //创建属性字符串 通过图片附件
         NSAttributedString *attrStr = [NSAttributedString attributedStringWithAttachment:attach];
@@ -965,7 +965,7 @@
 {
     if (!_playBtn) {
         _playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_playBtn setBackgroundImage:GetImageWithName(@"playVideo") forState:UIControlStateNormal];
+        [_playBtn setBackgroundImage:GetImageWithName(@"zl_playVideo") forState:UIControlStateNormal];
         _playBtn.frame = CGRectMake(0, 0, 80, 80);
         _playBtn.center = self.center;
         [_playBtn addTarget:self action:@selector(playBtnClick) forControlEvents:UIControlEventTouchUpInside];

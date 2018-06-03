@@ -63,11 +63,9 @@
     if (!_btnSelect) {
         _btnSelect = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnSelect.frame = CGRectMake(GetViewWidth(self.contentView)-26, 5, 23, 23);
-        [_btnSelect setBackgroundImage:GetImageWithName(@"btn_unselected") forState:UIControlStateNormal];
-        [_btnSelect setBackgroundImage:GetImageWithName(@"btn_selected") forState:UIControlStateSelected];
+        [_btnSelect setBackgroundImage:GetImageWithName(@"zl_btn_unselected") forState:UIControlStateNormal];
+        [_btnSelect setBackgroundImage:GetImageWithName(@"zl_btn_selected") forState:UIControlStateSelected];
         [_btnSelect addTarget:self action:@selector(btnSelectClick:) forControlEvents:UIControlEventTouchUpInside];
-        //扩大点击区域
-        [_btnSelect setEnlargeEdgeWithTop:0 right:0 bottom:20 left:20];
         [self.contentView addSubview:self.btnSelect];
     }
     return _btnSelect;
@@ -76,7 +74,7 @@
 - (UIImageView *)videoBottomView
 {
     if (!_videoBottomView) {
-        _videoBottomView = [[UIImageView alloc] initWithImage:GetImageWithName(@"videoView")];
+        _videoBottomView = [[UIImageView alloc] initWithImage:GetImageWithName(@"zl_videoView")];
         _videoBottomView.frame = CGRectMake(0, GetViewHeight(self)-15, GetViewWidth(self), 15);
         [self.contentView addSubview:_videoBottomView];
     }
@@ -87,7 +85,7 @@
 {
     if (!_videoImageView) {
         _videoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 1, 16, 12)];
-        _videoImageView.image = GetImageWithName(@"video");
+        _videoImageView.image = GetImageWithName(@"zl_video");
         [self.videoBottomView addSubview:_videoImageView];
     }
     return _videoImageView;
@@ -97,7 +95,7 @@
 {
     if (!_liveImageView) {
         _liveImageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, -1, 15, 15)];
-        _liveImageView.image = GetImageWithName(@"livePhoto");
+        _liveImageView.image = GetImageWithName(@"zl_livePhoto");
         [self.videoBottomView addSubview:_liveImageView];
     }
     return _liveImageView;
@@ -162,7 +160,12 @@
     self.btnSelect.hidden = !self.showSelectBtn;
     self.btnSelect.enabled = self.showSelectBtn;
     self.btnSelect.selected = model.isSelected;
-
+    
+    if (self.showSelectBtn) {
+        //扩大点击区域
+        [_btnSelect setEnlargeEdgeWithTop:0 right:0 bottom:20 left:20];
+    }
+    
     CGSize size;
     size.width = GetViewWidth(self) * 1.7;
     size.height = GetViewHeight(self) * 1.7;
@@ -224,7 +227,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.imageView = [[UIImageView alloc] initWithImage:GetImageWithName(@"takePhoto")];
+        self.imageView = [[UIImageView alloc] initWithImage:GetImageWithName(@"zl_takePhoto")];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         CGFloat width = GetViewHeight(self)/3;
         self.imageView.frame = CGRectMake(0, 0, width, width);

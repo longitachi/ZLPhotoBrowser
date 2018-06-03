@@ -189,7 +189,7 @@
     [self.view addSubview:_navView];
     
     _btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_btnBack setImage:GetImageWithName(@"navBackBtn") forState:UIControlStateNormal];
+    [_btnBack setImage:GetImageWithName(@"zl_navBackBtn") forState:UIControlStateNormal];
     [_btnBack setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
     [_btnBack addTarget:self action:@selector(btnBack_Click) forControlEvents:UIControlEventTouchUpInside];
     [_navView addSubview:_btnBack];
@@ -208,8 +208,8 @@
     //right nav btn
     _navRightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _navRightBtn.frame = CGRectMake(0, 0, 25, 25);
-    UIImage *normalImg = GetImageWithName(@"btn_circle");
-    UIImage *selImg = GetImageWithName(@"btn_selected");
+    UIImage *normalImg = GetImageWithName(@"zl_btn_circle");
+    UIImage *selImg = GetImageWithName(@"zl_btn_selected");
     [_navRightBtn setBackgroundImage:normalImg forState:UIControlStateNormal];
     [_navRightBtn setBackgroundImage:selImg forState:UIControlStateSelected];
     [_navRightBtn addTarget:self action:@selector(navRightBtn_Click:) forControlEvents:UIControlEventTouchUpInside];
@@ -253,8 +253,8 @@
         [_btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
         _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
         [_btnOriginalPhoto setTitleColor:configuration.bottomBtnsNormalTitleColor forState: UIControlStateNormal];
-        UIImage *normalImg = GetImageWithName(@"btn_original_circle");
-        UIImage *selImg = GetImageWithName(@"btn_selected");
+        UIImage *normalImg = GetImageWithName(@"zl_btn_original_circle");
+        UIImage *selImg = GetImageWithName(@"zl_btn_selected");
         [_btnOriginalPhoto setImage:normalImg forState:UIControlStateNormal];
         [_btnOriginalPhoto setImage:selImg forState:UIControlStateSelected];
         [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];

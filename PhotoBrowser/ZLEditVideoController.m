@@ -97,14 +97,14 @@
     self.layer.borderWidth = 2;
     self.layer.borderColor = [UIColor clearColor].CGColor;
     
-    _leftView = [[UIImageView alloc] initWithImage:GetImageWithName(@"ic_left")];
+    _leftView = [[UIImageView alloc] initWithImage:GetImageWithName(@"zl_ic_left")];
     _leftView.userInteractionEnabled = YES;
     _leftView.tag = 0;
     UIPanGestureRecognizer *lg = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
     [_leftView addGestureRecognizer:lg];
     [self addSubview:_leftView];
     
-    _rightView = [[UIImageView alloc] initWithImage:GetImageWithName(@"ic_right")];
+    _rightView = [[UIImageView alloc] initWithImage:GetImageWithName(@"zl_ic_right")];
     _rightView.userInteractionEnabled = YES;
     _rightView.tag = 1;
     UIPanGestureRecognizer *rg = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];

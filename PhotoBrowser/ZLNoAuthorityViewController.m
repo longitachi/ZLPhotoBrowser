@@ -31,7 +31,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = GetLocalLanguageTextValue(ZLPhotoBrowserPhotoText);
     
-    _imageView = [[UIImageView alloc] initWithImage:GetImageWithName(@"lock")];
+    _imageView = [[UIImageView alloc] initWithImage:GetImageWithName(@"zl_lock")];
     _imageView.clipsToBounds = YES;
     _imageView.contentMode = UIViewContentModeScaleAspectFit;
     _imageView.frame = CGRectMake((kViewWidth-kViewWidth/3)/2, 100, kViewWidth/3, kViewWidth/3);

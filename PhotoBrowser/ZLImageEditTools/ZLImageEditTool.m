@@ -422,7 +422,7 @@
     _rotateRatioBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _rotateRatioBtn.frame = CGRectMake(15, 20, 40, 40);
     _rotateRatioBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [_rotateRatioBtn setBackgroundImage:GetImageWithName(@"btn_rotate") forState:UIControlStateNormal];
+    [_rotateRatioBtn setBackgroundImage:GetImageWithName(@"zl_btn_rotate") forState:UIControlStateNormal];
     [_rotateRatioBtn addTarget:self action:@selector(rotateRadioBtn_click) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:_rotateRatioBtn];
     
