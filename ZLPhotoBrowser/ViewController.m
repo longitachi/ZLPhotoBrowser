@@ -142,13 +142,15 @@
     actionSheet.configuration.languageType = self.languageSegment.selectedSegmentIndex;
     //自定义多语言
 //    actionSheet.configuration.customLanguageKeyValue = @{@"ZLPhotoBrowserCameraText": @"没错，我就是一个相机"};
+    //自定义图片
+//    actionSheet.configuration.customImageNames = @[@"zl_navBack"];
     
     //是否使用系统相机
 //    actionSheet.configuration.useSystemCamera = YES;
 //    actionSheet.configuration.sessionPreset = ZLCaptureSessionPreset1920x1080;
 //    actionSheet.configuration.exportVideoType = ZLExportVideoTypeMp4;
 //    actionSheet.configuration.allowRecordVideo = NO;
-    
+//    actionSheet.configuration.maxVideoDuration = 5;
 #pragma mark - required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;

@@ -916,23 +916,33 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     ZLPhotoConfiguration *configuration = nav.configuration;
     
+    BOOL (^shouldSelect)(void) = ^BOOL() {
+        if (model.type == ZLAssetMediaTypeVideo) {
+            return (model.asset.duration <= configuration.maxVideoDuration);
+        }
+        return YES;
+    };
+    
     if (configuration.sortAscending) {
         [self.arrDataSources addObject:model];
     } else {
         [self.arrDataSources insertObject:model atIndex:0];
     }
-    if (configuration.maxSelectCount > 1 && nav.arrSelectedModels.count < configuration.maxSelectCount) {
-        model.selected = YES;
+    
+    BOOL sel = shouldSelect();
+    if (configuration.maxSelectCount > 1 && nav.arrSelectedModels.count < configuration.maxSelectCount && sel) {
+        model.selected = sel;
         [nav.arrSelectedModels addObject:model];
-        self.albumListModel = [ZLPhotoManager getCameraRollAlbumList:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage];
-    } else if (configuration.maxSelectCount == 1 && !nav.arrSelectedModels.count) {
+    } else if (configuration.maxSelectCount == 1 && !nav.arrSelectedModels.count && sel) {
         if (![self shouldDirectEdit:model]) {
-            model.selected = YES;
+            model.selected = sel;
             [nav.arrSelectedModels addObject:model];
             [self btnDone_Click:nil];
             return;
         }
     }
+    
+    self.albumListModel = [ZLPhotoManager getCameraRollAlbumList:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage];
     [self.collectionView reloadData];
     [self scrollToBottom];
     [self resetBottomBtnsStatus:YES];
