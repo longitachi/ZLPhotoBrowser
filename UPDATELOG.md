@@ -2,6 +2,23 @@
 
 -----
 
+## [2.7.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.1) (2018-06-20)
+
+#### Add
+* 可自定义导航返回按钮图片
+
+#### Fix
+* 解决录制视频大于最大选择时长时自动选择的bug.[#264](https://github.com/longitachi/ZLPhotoBrowser/issues/264)
+
+---
+
+## [2.7.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.0) (2018-06-03)
+
+#### Add
+* 所有图片资源加上前缀
+
+---
+
 ## [2.6.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.6.9) (2018-05-11)
 
 #### Add
@@ -10,7 +27,6 @@
 #### Fix
 * 解决相册图片列表界面底部工具栏消失的bug.[#238](https://github.com/longitachi/ZLPhotoBrowser/issues/238)
 * 解决预览网络视频崩溃的bug. [#240](https://github.com/longitachi/ZLPhotoBrowser/issues/240)
-
 
 ---
 
