@@ -942,6 +942,11 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (!_observerIsRemoved) {
+        [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+        [self.playLayer.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+        _observerIsRemoved = YES;
+    }
 }
 
 - (void)layoutSubviews
