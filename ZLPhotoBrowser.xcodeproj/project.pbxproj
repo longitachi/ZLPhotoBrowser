@@ -584,6 +584,7 @@
 			baseConfigurationReference = C219308794659F498CBCB00A /* Pods-ZLPhotoBrowser.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULE_DEBUGGING = NO;
 				DEVELOPMENT_TEAM = 47UY3G7UH6;
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -599,6 +600,7 @@
 			baseConfigurationReference = 562538332CF28C3D81959D16 /* Pods-ZLPhotoBrowser.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULE_DEBUGGING = NO;
 				DEVELOPMENT_TEAM = 47UY3G7UH6;
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
