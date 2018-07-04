@@ -2,6 +2,13 @@
 
 -----
 
+## [2.7.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.1) (2018-07-04)
+
+#### Fix
+* merge request [#276](https://github.com/longitachi/ZLPhotoBrowser/issues/276)
+
+---
+
 ## [2.7.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.1) (2018-06-20)
 
 #### Add
