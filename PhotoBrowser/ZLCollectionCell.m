@@ -202,7 +202,12 @@
 
 
 //////////////////////////////////////
+
+#if __has_feature(modules)
 @import AVFoundation;
+#else
+#import <AVFoundation/AVFoundation.h>
+#endif
 
 @interface ZLTakePhotoCell ()
 
