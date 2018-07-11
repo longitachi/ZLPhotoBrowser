@@ -197,7 +197,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     self.btnPreView.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserPreviewText), 15, YES, bottomBtnH), bottomBtnH);
     offsetX = CGRectGetMaxX(self.btnPreView.frame) + 10;
     
-    if (configuration.allowSelectOriginal) {
+    if (configuration.allowSelectOriginal && configuration.allowSelectImage) {
         self.btnOriginalPhoto.frame = CGRectMake(offsetX, 7, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText), 15, YES, bottomBtnH)+25, bottomBtnH);
         offsetX = CGRectGetMaxX(self.btnOriginalPhoto.frame) + 5;
         
