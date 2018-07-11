@@ -841,6 +841,8 @@ double const ScalePhotoWidth = 1000;
 
 - (ZLShowBigImgViewController *)pushBigImageToPreview:(NSArray *)photos models:(NSArray<ZLPhotoModel *> *)models index:(NSInteger)index
 {
+    [self.arrSelectedModels addObjectsFromArray:models];
+    
     ZLShowBigImgViewController *svc = [[ZLShowBigImgViewController alloc] init];
     ZLImageNavigationController *nav = [self getImageNavWithRootVC:svc];
     svc.selectIndex = index;
