@@ -45,6 +45,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 2.7.3: Fix #269, #274;
 ● 2.7.1: 支持自定义导航返回按钮图片;
 ● 2.7.0: 图片资源加上前缀，解决9.0无法选择图片问题; 
 ● 2.6.9: 重构编辑图片功能，添加滤镜;

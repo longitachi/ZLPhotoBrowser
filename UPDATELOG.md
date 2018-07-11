@@ -2,7 +2,15 @@
 
 -----
 
-## [2.7.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.1) (2018-07-04)
+## [2.7.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.3) (2018-07-11)
+
+#### Fix
+* 解决预览已选择图片多张状态下仍显示编辑按钮，确定按钮已选择个数不正确及crash的bug，.[#269](https://github.com/longitachi/ZLPhotoBrowser/issues/269)
+* 解决选择视频时仍显示原图按钮的bug.[#274](https://github.com/longitachi/ZLPhotoBrowser/issues/274)
+
+---
+
+## [2.7.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.2) (2018-07-04)
 
 #### Fix
 * merge request [#276](https://github.com/longitachi/ZLPhotoBrowser/issues/276)
