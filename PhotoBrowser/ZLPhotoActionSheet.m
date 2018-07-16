@@ -237,6 +237,8 @@ double const ScalePhotoWidth = 1000;
         model.selected = YES;
         [models addObject:model];
     }
+    
+    [self.arrSelectedModels removeAllObjects];
     ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos models:models index:index];
     
     zl_weakify(self);
@@ -287,6 +289,8 @@ double const ScalePhotoWidth = 1000;
         model.selected = YES;
         [models addObject:model];
     }
+    
+    [self.arrSelectedModels removeAllObjects];
     ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos models:models index:index];
     svc.hideToolBar = hideToolBar;
     
