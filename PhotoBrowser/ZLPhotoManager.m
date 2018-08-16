@@ -1029,23 +1029,23 @@ static BOOL _sortAscending;
 
 + (void)addWatermark:(AVMutableVideoComposition *)videoCom renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity
 {
-    CATextLayer *titleLayer = [CATextLayer layer];
-    [titleLayer setFont:(__bridge CFTypeRef)[UIFont systemFontOfSize:25].fontName];
-    titleLayer.contentsScale = 2;
-    [titleLayer setFont:@"HiraKakuProN-W3"];
-    titleLayer.fontSize = 70;
-    titleLayer.wrapped = YES;
-    titleLayer.string = @"just for test";
-    titleLayer.masksToBounds = YES;
-    titleLayer.foregroundColor = [[UIColor blueColor] CGColor];
-    titleLayer.alignmentMode = kCAAlignmentCenter;
-    titleLayer.frame = CGRectMake(20, 100, renderSize.width-40, 100);
-    titleLayer.backgroundColor = [UIColor whiteColor].CGColor;
+//    CATextLayer *titleLayer = [CATextLayer layer];
+//    [titleLayer setFont:(__bridge CFTypeRef)[UIFont systemFontOfSize:25].fontName];
+//    titleLayer.contentsScale = 2;
+//    [titleLayer setFont:@"HiraKakuProN-W3"];
+//    titleLayer.fontSize = 70;
+//    titleLayer.wrapped = YES;
+//    titleLayer.string = @"just for test";
+//    titleLayer.masksToBounds = YES;
+//    titleLayer.foregroundColor = [[UIColor blueColor] CGColor];
+//    titleLayer.alignmentMode = kCAAlignmentCenter;
+//    titleLayer.frame = CGRectMake(20, 100, renderSize.width-40, 100);
+//    titleLayer.backgroundColor = [UIColor whiteColor].CGColor;
     
     CALayer *overlayLayer = [CALayer layer];
     overlayLayer.frame = (CGRect){CGPointZero, renderSize};
     
-    [overlayLayer addSublayer:titleLayer];
+//    [overlayLayer addSublayer:titleLayer];
     
     //水印图片
     if (watermarkImage) {

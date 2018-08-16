@@ -400,13 +400,17 @@
     
     [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
         if (granted) {
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
-                if (!granted) {
-                    [self onDismiss];
-                } else {
-                    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-                }
-            }];
+            if (self.allowRecordVideo) {
+                [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+                    if (!granted) {
+                        [self onDismiss];
+                    } else {
+                        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+                    }
+                }];
+            } else {
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+            }
         } else {
             [self onDismiss];
         }
@@ -554,7 +558,11 @@
     
     //音频输入流
     AVCaptureDevice *audioCaptureDevice = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio].firstObject;
-    AVCaptureDeviceInput *audioInput = [[AVCaptureDeviceInput alloc] initWithDevice:audioCaptureDevice error:nil];
+    AVCaptureDeviceInput *audioInput = nil;
+    if (self.allowRecordVideo) {
+        audioInput = [[AVCaptureDeviceInput alloc] initWithDevice:audioCaptureDevice error:nil];
+    }
+    
     
     //视频输出流
     //设置视频格式
@@ -571,7 +579,7 @@
     if ([self.session canAddInput:self.videoInput]) {
         [self.session addInput:self.videoInput];
     }
-    if ([self.session canAddInput:audioInput]) {
+    if (audioInput && [self.session canAddInput:audioInput]) {
         [self.session addInput:audioInput];
     }
     //将输出流添加到session
