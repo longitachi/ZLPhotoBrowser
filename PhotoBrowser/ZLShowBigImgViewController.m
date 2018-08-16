@@ -16,14 +16,13 @@
 #import "ZLPhotoManager.h"
 #import "ZLEditViewController.h"
 #import "ZLEditVideoController.h"
+#import "ZLAnimateTransition.h"
+#import "ZLInteractiveTrasition.h"
 
-@interface ZLShowBigImgViewController () <UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ZLShowBigImgViewController () <UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate>
 {
     UICollectionView *_collectionView;
     
-    
-    //自定义导航视图
-    UIView *_navView;
     UIButton *_btnBack;
     UIButton *_navRightBtn;
     UILabel *_indexLabel;
@@ -34,10 +33,7 @@
     UIButton *_btnDone;
     //编辑按钮
     UIButton *_btnEdit;
-    
-    //双击的scrollView
-    UIScrollView *_selectScrollView;
-    NSInteger _currentPage;
+
     
     NSArray *_arrSelPhotosBackup;
     NSMutableArray *_arrSelAssets;
@@ -52,8 +48,14 @@
     UICollectionViewFlowLayout *_layout;
     
     NSString *_modelIdentifile;
+    
+    ZLInteractiveTrasition *_interactiveTransition;
+    BOOL _shouldStartDismiss;
+    NSInteger _panCount;
 }
 
+@property (nonatomic, assign) BOOL interactive;
+@property (nonatomic, strong) ZLInteractiveTrasition *trasition;
 @property (nonatomic, strong) UILabel *labPhotosBytes;
 
 @end
@@ -81,6 +83,12 @@
     [self resetDontBtnState];
     [self resetEditBtnState];
     [self resetOriginalBtnState];
+    
+    if (self.canInteractivePop) {
+        self.navigationController.delegate = self;
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
+        [self.view addGestureRecognizer:pan];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
 }
@@ -178,6 +186,14 @@
 {
     _arrSelPhotos = arrSelPhotos;
     _arrSelPhotosBackup = arrSelPhotos.copy;
+}
+
+- (ZLInteractiveTrasition *)trasition
+{
+    if (!_trasition) {
+        _trasition = [[ZLInteractiveTrasition alloc] init];
+    }
+    return _trasition;
 }
 
 - (void)initNavView
@@ -453,6 +469,59 @@
     [self resetEditBtnState];
 }
 
+#pragma mark - panAction
+- (void)panAction:(UIPanGestureRecognizer *)pan
+{
+    CGPoint p = [pan translationInView:self.view];
+    
+    if (pan.state == UIGestureRecognizerStateBegan) {
+        _shouldStartDismiss = p.y >= 0;
+        _panCount = 0;
+    } else if (pan.state == UIGestureRecognizerStateChanged) {
+        if (!_shouldStartDismiss) return;
+        
+        _panCount++;
+        
+        if (_panCount == 1 && (p.y < 0 || atan(fabs(p.x)/fabs(p.y)) > M_PI_2/3)) {
+            // 不满足下拉手势返回
+            _shouldStartDismiss = NO;
+        } else if (_panCount == 1) {
+            _shouldStartDismiss = YES;
+            self.interactive = YES;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        
+        if (_shouldStartDismiss) {
+            CGFloat percent = 0;
+            percent = p.y / (self.view.superview.frame.size.height);
+            percent = MAX(percent, 0);
+            [self.trasition updatePercent:percent];
+            [self.trasition updateInteractiveTransition:percent];
+        }
+    } else if (pan.state == UIGestureRecognizerStateCancelled ||
+               pan.state == UIGestureRecognizerStateEnded) {
+        if (!_shouldStartDismiss) return;
+        
+        CGPoint vel = [pan velocityInView:self.view];
+        
+        CGFloat percent = 0;
+        percent = p.y / (self.view.superview.frame.size.height);
+        percent = MAX(percent, 0);
+        
+        BOOL dismiss = vel.y > 300 || (percent > 0.4 && vel.y > -300);
+        
+        if (dismiss) {
+            [self.trasition finishInteractiveTransition];
+            [self.trasition finishAnimate];
+        } else {
+            [self.trasition cancelInteractiveTransition];
+            [self.trasition cancelAnimate];
+        }
+        self.trasition = nil;
+        self.interactive = NO;
+    }
+}
+
 - (void)showDownloadAlert
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -674,6 +743,21 @@
     _currentPage = str.integerValue + 1;
     ZLPhotoModel *model = self.models[_currentPage-1];
     return model;
+}
+
+#pragma mark - nav delegate
+- (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
+                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController
+{
+    return self.interactive ? self.trasition : nil;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                            animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                         fromViewController:(UIViewController *)fromVC
+                                                           toViewController:(UIViewController *)toVC
+{
+    return self.interactive ? [ZLAnimateTransition new] : nil;
 }
 
 @end
