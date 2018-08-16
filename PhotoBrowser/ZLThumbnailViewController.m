@@ -21,6 +21,7 @@
 #import "ZLEditVideoController.h"
 #import "ZLCustomCamera.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "ZLInteractiveAnimateProtocol.h"
 
 typedef NS_ENUM(NSUInteger, SlideSelectType) {
     SlideSelectTypeNone,
@@ -28,7 +29,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     SlideSelectTypeCancel,
 };
 
-@interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIViewControllerPreviewingDelegate>
+@interface ZLThumbnailViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIViewControllerPreviewingDelegate, ZLInteractiveAnimateProtocol>
 {
     BOOL _isLayoutOK;
     
@@ -431,6 +432,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLShowBigImgViewController *vc = [[ZLShowBigImgViewController alloc] init];
     vc.models = data.copy;
     vc.selectIndex = index;
+    vc.canInteractivePop = YES;
     zl_weakify(self);
     [vc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
         zl_strongify(weakSelf);
@@ -1021,6 +1023,17 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     }
     
     return CGSizeMake(w, h);
+}
+
+#pragma mark - ZLInteractiveAnimateProtocol
+- (void)scrollToIndex:(NSInteger)index
+{
+    if (index < 0 || index > self.arrDataSources.count-1) {
+        return;
+    }
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
 }
 
 @end
