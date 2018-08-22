@@ -49,6 +49,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     NSIndexPath *_beginSlideIndexPath;
     /**最后滑动经过的index，开始的indexPath不计入，优化拖动手势计算，避免单个cell中冗余计算多次*/
     NSInteger _lastSlideIndex;
+    
+    /**预览所选择图片，手势返回时候不调用scrollToIndex*/
+    BOOL _isPreviewPush;
 }
 
 @property (nonatomic, strong) NSMutableArray<ZLPhotoModel *> *arrDataSources;
@@ -160,6 +163,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 {
     [super viewDidAppear:animated];
     _isLayoutOK = YES;
+    _isPreviewPush = NO;
 }
 
 - (void)viewDidLayoutSubviews
@@ -422,6 +426,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (void)btnPreview_Click:(id)sender
 {
+    _isPreviewPush = YES;
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     UIViewController *vc = [self getBigImageVCWithData:nav.arrSelectedModels index:nav.arrSelectedModels.count-1];
     [self.navigationController showViewController:vc sender:nil];
@@ -1028,7 +1033,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 #pragma mark - ZLInteractiveAnimateProtocol
 - (void)scrollToIndex:(NSInteger)index
 {
-    if (index < 0 || index > self.arrDataSources.count-1) {
+    if (_isPreviewPush || index < 0 || index > self.arrDataSources.count-1) {
         return;
     }
     
