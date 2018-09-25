@@ -14,6 +14,7 @@ typedef NS_ENUM(NSUInteger, ZLImageEditType) {
     ZLImageEditTypeClip     = 1 << 1,
     ZLImageEditTypeRotate   = 1 << 2,
     ZLImageEditTypeFilter   = 1 << 3,
+    // 下面这两种暂时无效
     ZLImageEditTypeDraw     = 1 << 4,
     ZLImageEditTypeMosaic   = 1 << 5,
 };

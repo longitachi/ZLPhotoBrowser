@@ -96,8 +96,7 @@
 - (void)loadEditTool
 {
     ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
-    ZLImageEditType editType = ZLImageEditTypeClip | ZLImageEditTypeRotate | ZLImageEditTypeFilter;
-    _editTool = [[ZLImageEditTool alloc] initWithEditType:editType image:_oriImage configuration:configuration];
+    _editTool = [[ZLImageEditTool alloc] initWithEditType:configuration.editType image:_oriImage configuration:configuration];
     zl_weakify(self);
     _editTool.cancelEditBlock = ^{
         zl_strongify(weakSelf);

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ZLDefine.h"
+#import "ZLImageEditTool.h"
 
 @class PHAsset;
 
@@ -90,6 +91,11 @@
  是否允许编辑视频，选择一张时候才允许编辑，默认NO
  */
 @property (nonatomic, assign) BOOL allowEditVideo;
+
+/**
+ 编辑类型，至少要有一种，默认 ZLImageEditTypeClip | ZLImageEditTypeRotate | ZLImageEditTypeFilter
+ */
+@property (nonatomic, assign) ZLImageEditType editType;
 
 /**
  是否允许选择原图，默认YES
