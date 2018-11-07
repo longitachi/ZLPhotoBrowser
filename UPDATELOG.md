@@ -2,6 +2,17 @@
 
 -----
 
+## [2.7.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.5) (2018-11-07)
+
+#### Add
+* 编辑图片支持自定义工具类型.
+
+#### Fix
+* 视频加水印可能报错.[#314](https://github.com/longitachi/ZLPhotoBrowser/issues/314)
+* 查看大图界面选择照片后，下拉返回上个界面未刷新选中状态.[#318](https://github.com/longitachi/ZLPhotoBrowser/issues/318)
+
+---
+
 ## [2.7.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.4) (2018-08-16)
 
 #### Add
