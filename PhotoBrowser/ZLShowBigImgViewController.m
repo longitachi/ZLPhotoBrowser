@@ -396,6 +396,18 @@
 
 - (void)btnBack_Click
 {
+    [self callBack];
+    
+    UIViewController *vc = [self.navigationController popViewControllerAnimated:YES];
+    //由于collectionView的frame的width是大于该界面的width，所以设置这个颜色是为了pop时候隐藏collectionView的黑色背景
+    _collectionView.backgroundColor = [UIColor clearColor];
+    if (!vc) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void)callBack
+{
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     if (self.btnBackBlock) {
         self.btnBackBlock(nav.arrSelectedModels, nav.isSelectOriginalPhoto);
@@ -403,13 +415,6 @@
     
     if (self.cancelPreviewBlock) {
         self.cancelPreviewBlock();
-    }
-    
-    UIViewController *vc = [self.navigationController popViewControllerAnimated:YES];
-    //由于collectionView的frame的width是大于该界面的width，所以设置这个颜色是为了pop时候隐藏collectionView的黑色背景
-    _collectionView.backgroundColor = [UIColor clearColor];
-    if (!vc) {
-        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
@@ -488,6 +493,7 @@
         } else if (_panCount == 1) {
             _shouldStartDismiss = YES;
             self.interactive = YES;
+            [self callBack];
             [self.navigationController popViewControllerAnimated:YES];
         }
         

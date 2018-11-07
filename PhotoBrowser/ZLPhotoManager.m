@@ -951,7 +951,7 @@ static BOOL _sortAscending;
     instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition.duration);
     
     //处理视频旋转
-    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:assetVideoTrack];
+    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
     [layerInstruction setOpacity:0.0 atTime:assetVideoTrack.timeRange.duration];
     //视频旋转，获取视频旋转角度，然后旋转对应角度，保持视频方向正确
     CGFloat degree = [self getVideoDegree:videoTrack];
