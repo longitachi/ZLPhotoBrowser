@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ZLImageEditTool.h"
+#import <FLEX/FLEX.h>
 
 @interface AppDelegate ()
 
@@ -23,6 +24,9 @@
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     ZLImageEditType type = ZLImageEditTypeFilter | ZLImageEditTypeClip;
     NSLog(@"%lu, %@", (unsigned long)type, @(type).stringValue);
+    
+    [[FLEXManager sharedManager] showExplorer];
+    
     return YES;
 }
 

@@ -1,1 +1,0 @@
-../../../GPUImage/framework/Source/GPUImageCrosshatchFilter.h

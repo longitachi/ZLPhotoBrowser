@@ -572,8 +572,9 @@ static BOOL _sortAscending;
         // https://stackoverflow.com/questions/31966571/check-given-phasset-is-icloud-asset
         // 这个api虽然是9.0出的，但是9.0会全部返回NO，未知原因，暂时先改为10.0
         NSArray *resourceArray = [PHAssetResource assetResourcesForAsset:asset];
-        if (resourceArray.count) {
-            result = [[resourceArray.firstObject valueForKey:@"locallyAvailable"] boolValue];
+        for (id obj in resourceArray) {
+            result = [[obj valueForKey:@"locallyAvailable"] boolValue];
+            if (result) break;
         }
     } else {
         PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];

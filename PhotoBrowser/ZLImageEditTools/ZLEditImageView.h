@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZLBrushBoardImageView : UIImageView
+@interface ZLEditImageView : UIImageView
 
 @property (nonatomic, strong) UIColor *drawColor;
 
 @property (nonatomic, assign) BOOL drawEnable;
 
+- (void)rotate;
 - (void)revoke;
 
 @end
