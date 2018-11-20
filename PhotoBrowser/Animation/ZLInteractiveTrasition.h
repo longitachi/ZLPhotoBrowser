@@ -10,6 +10,8 @@
 
 @interface ZLInteractiveTrasition : UIPercentDrivenInteractiveTransition
 
+@property (nonatomic, assign, readonly) BOOL isStartTransition;
+
 - (void)updatePercent:(CGFloat)percent;
 - (void)cancelAnimate;
 - (void)finishAnimate;

@@ -12,6 +12,8 @@
 
 @interface ZLInteractiveTrasition ()
 
+@property (nonatomic, assign, readwrite) BOOL isStartTransition;
+
 @property (nonatomic, strong) UIView *shadowView;
 @property (nonatomic, weak) id<UIViewControllerContextTransitioning> transitionContext;
 
@@ -21,6 +23,8 @@
 
 - (void)startInteractiveTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
+    self.isStartTransition = YES;
+    
     self.transitionContext = transitionContext;
     [self beginAnimate];
 }
@@ -67,6 +71,8 @@
 
 - (void)finishAnimate
 {
+    self.isStartTransition = NO;
+    
     UIView *fromView = [self.transitionContext viewForKey:UITransitionContextFromViewKey];
     
     CGRect frame = fromView.frame;
@@ -83,6 +89,8 @@
 
 - (void)cancelAnimate
 {
+    self.isStartTransition = NO;
+    
     UIViewController *fromVC = [self.transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     ZLShowBigImgViewController *imageVC = (ZLShowBigImgViewController *)fromVC;
     

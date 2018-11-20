@@ -494,7 +494,9 @@
             _shouldStartDismiss = YES;
             self.interactive = YES;
             [self callBack];
-            [self.navigationController popViewControllerAnimated:YES];
+            if (!self.trasition.isStartTransition) {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         }
         
         if (_shouldStartDismiss) {
@@ -506,7 +508,7 @@
         }
     } else if (pan.state == UIGestureRecognizerStateCancelled ||
                pan.state == UIGestureRecognizerStateEnded) {
-        if (!_shouldStartDismiss) return;
+        if (!_shouldStartDismiss || !self.trasition.isStartTransition) return;
         
         CGPoint vel = [pan velocityInView:self.view];
         
