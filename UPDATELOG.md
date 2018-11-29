@@ -2,6 +2,13 @@
 
 -----
 
+## [2.7.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.6) (2018-11-29)
+
+#### Add
+* 预览大图界面支持precent情况下的下拉返回;
+
+---
+
 ## [2.7.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.5) (2018-11-07)
 
 #### Add
