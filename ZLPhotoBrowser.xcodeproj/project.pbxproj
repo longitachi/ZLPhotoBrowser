@@ -38,6 +38,7 @@
 		FD22D71F1E9E25D1008FCC4E /* ZLPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FD22D71E1E9E25D1008FCC4E /* ZLPhotoModel.m */; };
 		FD22D7221E9E2EDC008FCC4E /* ZLPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD22D7211E9E2EDC008FCC4E /* ZLPhotoManager.m */; };
 		FD2CC6C2209DCA9E00F4E6C7 /* ZLImageEditTool.m in Sources */ = {isa = PBXBuildFile; fileRef = FD2CC6C1209DCA9E00F4E6C7 /* ZLImageEditTool.m */; };
+		FD3349BE21AF85B000DFC59E /* ZLPullDownInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3349BD21AF85B000DFC59E /* ZLPullDownInteractiveTransition.m */; };
 		FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */; };
 		FD7003DF1FBD2EAB000D9FD4 /* ZLPhotoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = FD7003DE1FBD2EAB000D9FD4 /* ZLPhotoConfiguration.m */; };
 		FD7852511EF4FD5300C69E84 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD7852501EF4FD5300C69E84 /* PhotosUI.framework */; };
@@ -112,6 +113,8 @@
 		FD22D7211E9E2EDC008FCC4E /* ZLPhotoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoManager.m; sourceTree = "<group>"; };
 		FD2CC6C0209DCA9E00F4E6C7 /* ZLImageEditTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLImageEditTool.h; sourceTree = "<group>"; };
 		FD2CC6C1209DCA9E00F4E6C7 /* ZLImageEditTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLImageEditTool.m; sourceTree = "<group>"; };
+		FD3349BC21AF85B000DFC59E /* ZLPullDownInteractiveTransition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLPullDownInteractiveTransition.h; sourceTree = "<group>"; };
+		FD3349BD21AF85B000DFC59E /* ZLPullDownInteractiveTransition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLPullDownInteractiveTransition.m; sourceTree = "<group>"; };
 		FD3771171DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ZLPhotoBrowser.h"; sourceTree = "<group>"; };
 		FD3771181DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ZLPhotoBrowser.m"; sourceTree = "<group>"; };
 		FD7003DD1FBD2EAB000D9FD4 /* ZLPhotoConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLPhotoConfiguration.h; sourceTree = "<group>"; };
@@ -294,6 +297,8 @@
 				FDA5DD5E21251E3C004FA6A9 /* ZLAnimateTransition.m */,
 				FD1DA94E21205EAB00D3FD64 /* ZLInteractiveTrasition.h */,
 				FD1DA94F21205EAB00D3FD64 /* ZLInteractiveTrasition.m */,
+				FD3349BC21AF85B000DFC59E /* ZLPullDownInteractiveTransition.h */,
+				FD3349BD21AF85B000DFC59E /* ZLPullDownInteractiveTransition.m */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -477,6 +482,7 @@
 				FD22D7221E9E2EDC008FCC4E /* ZLPhotoManager.m in Sources */,
 				FDDB9EBA1E6D2EF6008ED9F1 /* YYWeakProxy.m in Sources */,
 				FDC48B7F1FB5587C002815C8 /* ZLCustomCamera.m in Sources */,
+				FD3349BE21AF85B000DFC59E /* ZLPullDownInteractiveTransition.m in Sources */,
 				FD028BDA1CBE33BB009DD2FC /* ZLPhotoBrowserCell.m in Sources */,
 				FD10CECE1EA86AF60041095C /* ZLCollectionCell.m in Sources */,
 				FD1DA95021205EAB00D3FD64 /* ZLInteractiveTrasition.m in Sources */,
@@ -611,7 +617,7 @@
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTest;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -627,7 +633,7 @@
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTest;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

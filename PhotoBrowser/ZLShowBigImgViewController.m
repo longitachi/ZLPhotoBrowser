@@ -18,8 +18,9 @@
 #import "ZLEditVideoController.h"
 #import "ZLAnimateTransition.h"
 #import "ZLInteractiveTrasition.h"
+#import "ZLPullDownInteractiveTransition.h"
 
-@interface ZLShowBigImgViewController () <UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate>
+@interface ZLShowBigImgViewController () <UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
 {
     UICollectionView *_collectionView;
     
@@ -55,8 +56,9 @@
 }
 
 @property (nonatomic, assign) BOOL interactive;
-@property (nonatomic, strong) ZLInteractiveTrasition *trasition;
+@property (nonatomic, strong) ZLInteractiveTrasition *popTrasition;
 @property (nonatomic, strong) UILabel *labPhotosBytes;
+@property (nonatomic, strong) ZLPullDownInteractiveTransition *dismissTrasition;
 
 @end
 
@@ -84,7 +86,10 @@
     [self resetEditBtnState];
     [self resetOriginalBtnState];
     
-    if (self.canInteractivePop) {
+    if (!self.isPush) {
+        self.dismissTrasition = [[ZLPullDownInteractiveTransition alloc] initWithViewController:self type:ZLDismissTypeDismiss];
+        self.navigationController.transitioningDelegate = self;
+    } else {
         self.navigationController.delegate = self;
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
         [self.view addGestureRecognizer:pan];
@@ -188,12 +193,12 @@
     _arrSelPhotosBackup = arrSelPhotos.copy;
 }
 
-- (ZLInteractiveTrasition *)trasition
+- (ZLInteractiveTrasition *)popTrasition
 {
-    if (!_trasition) {
-        _trasition = [[ZLInteractiveTrasition alloc] init];
+    if (!_popTrasition) {
+        _popTrasition = [[ZLInteractiveTrasition alloc] init];
     }
-    return _trasition;
+    return _popTrasition;
 }
 
 - (void)initNavView
@@ -494,7 +499,7 @@
             _shouldStartDismiss = YES;
             self.interactive = YES;
             [self callBack];
-            if (!self.trasition.isStartTransition) {
+            if (!self.popTrasition.isStartTransition) {
                 [self.navigationController popViewControllerAnimated:YES];
             }
         }
@@ -503,12 +508,12 @@
             CGFloat percent = 0;
             percent = p.y / (self.view.superview.frame.size.height);
             percent = MAX(percent, 0);
-            [self.trasition updatePercent:percent];
-            [self.trasition updateInteractiveTransition:percent];
+            [self.popTrasition updatePercent:percent];
+            [self.popTrasition updateInteractiveTransition:percent];
         }
     } else if (pan.state == UIGestureRecognizerStateCancelled ||
                pan.state == UIGestureRecognizerStateEnded) {
-        if (!_shouldStartDismiss || !self.trasition.isStartTransition) return;
+        if (!_shouldStartDismiss || !self.popTrasition.isStartTransition) return;
         
         CGPoint vel = [pan velocityInView:self.view];
         
@@ -519,13 +524,13 @@
         BOOL dismiss = vel.y > 300 || (percent > 0.4 && vel.y > -300);
         
         if (dismiss) {
-            [self.trasition finishInteractiveTransition];
-            [self.trasition finishAnimate];
+            [self.popTrasition finishInteractiveTransition];
+            [self.popTrasition finishAnimate];
         } else {
-            [self.trasition cancelInteractiveTransition];
-            [self.trasition cancelAnimate];
+            [self.popTrasition cancelInteractiveTransition];
+            [self.popTrasition cancelAnimate];
         }
-        self.trasition = nil;
+        self.popTrasition = nil;
         self.interactive = NO;
     }
 }
@@ -757,7 +762,7 @@
 - (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
                                    interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController
 {
-    return self.interactive ? self.trasition : nil;
+    return self.interactive ? self.popTrasition : nil;
 }
 
 - (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
@@ -766,6 +771,17 @@
                                                            toViewController:(UIViewController *)toVC
 {
     return self.interactive ? [ZLAnimateTransition new] : nil;
+}
+
+#pragma mark - UIViewControllerTransitioningDelegate
+- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator
+{
+    return self.dismissTrasition.interactive ? self.dismissTrasition : nil;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return self.dismissTrasition.interactive ? [ZLAnimateTransition new] : nil;
 }
 
 @end

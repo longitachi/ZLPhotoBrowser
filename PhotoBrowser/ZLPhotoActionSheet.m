@@ -852,6 +852,7 @@ double const ScalePhotoWidth = 1000;
     svc.selectIndex = index;
     svc.arrSelPhotos = [NSMutableArray arrayWithArray:photos];
     svc.models = models;
+    svc.isPush = NO;
     
     self.preview = NO;
     [self.sender.view addSubview:self];

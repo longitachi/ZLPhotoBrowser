@@ -22,7 +22,7 @@
 @property (nonatomic, strong) NSArray<ZLPhotoModel *> *models;
 
 @property (nonatomic, assign) NSInteger selectIndex; //选中的图片下标
-@property (nonatomic, assign) BOOL canInteractivePop; //默认NO
+@property (nonatomic, assign) BOOL isPush;
 
 @property (nonatomic, copy) void (^btnBackBlock)(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal);
 
