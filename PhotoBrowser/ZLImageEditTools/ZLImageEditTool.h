@@ -10,7 +10,7 @@
 
 @class ZLPhotoConfiguration;
 
-typedef NS_ENUM(NSUInteger, ZLImageEditType) {
+typedef NS_OPTIONS(NSUInteger, ZLImageEditType) {
     ZLImageEditTypeClip     = 1 << 1,
     ZLImageEditTypeRotate   = 1 << 2,
     ZLImageEditTypeFilter   = 1 << 3,

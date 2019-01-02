@@ -623,9 +623,6 @@ static BOOL _sortAscending;
 
 + (void)markSelectModelInArr:(NSArray<ZLPhotoModel *> *)dataArr selArr:(NSArray<ZLPhotoModel *> *)selArr
 {
-    if (!selArr.count) {
-        return;
-    }
     NSMutableArray *selIdentifiers = [NSMutableArray array];
     for (ZLPhotoModel *m in selArr) {
         [selIdentifiers addObject:m.asset.localIdentifier];
