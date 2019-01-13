@@ -47,7 +47,9 @@
 - (void)setVideoUrl:(NSURL *)videoUrl
 {
     _player = [AVPlayer playerWithURL:videoUrl];
-    _player.automaticallyWaitsToMinimizeStalling = NO;
+    if (@available(iOS 10.0, *)) {
+        _player.automaticallyWaitsToMinimizeStalling = NO;
+    }
     [_player addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playFinished) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     
