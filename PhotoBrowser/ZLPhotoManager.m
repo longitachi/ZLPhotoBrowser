@@ -8,6 +8,7 @@
 
 #import "ZLPhotoManager.h"
 #import <AVFoundation/AVFoundation.h>
+#import "ZLDefine.h"
 
 static BOOL _sortAscending;
 
@@ -86,7 +87,7 @@ static BOOL _sortAscending;
 
 + (PHAsset *)getAssetFromlocalIdentifier:(NSString *)localIdentifier{
     if(localIdentifier == nil){
-        NSLog(@"Cannot get asset from localID because it is nil");
+        ZLLoggerDebug(@"Cannot get asset from localID because it is nil");
         return nil;
     }
     PHFetchResult *result = [PHAsset fetchAssetsWithLocalIdentifiers:@[localIdentifier] options:nil];
@@ -113,7 +114,7 @@ static BOOL _sortAscending;
         collectionId = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:kAPPName].placeholderForCreatedAssetCollection.localIdentifier;
     } error:&error];
     if (error) {
-        NSLog(@"创建相册：%@失败", kAPPName);
+        ZLLoggerDebug(@"创建相册：%@失败", kAPPName);
         return nil;
     }
     return [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[collectionId] options:nil].lastObject;
@@ -776,10 +777,10 @@ static BOOL _sortAscending;
                 [arrImages addObject:[UIImage imageWithCGImage:image]];
                 break;
             case AVAssetImageGeneratorFailed:
-                NSLog(@"第%ld秒图片解析失败", count);
+                ZLLoggerDebug(@"第%ld秒图片解析失败", count);
                 break;
             case AVAssetImageGeneratorCancelled:
-                NSLog(@"取消解析视频图片");
+                ZLLoggerDebug(@"取消解析视频图片");
                 break;
         }
         
@@ -889,20 +890,20 @@ static BOOL _sortAscending;
         BOOL suc = NO;
         switch ([exportSession status]) {
             case AVAssetExportSessionStatusFailed:
-                NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
+                ZLLoggerDebug(@"Export failed: %@", [[exportSession error] localizedDescription]);
                 break;
             case AVAssetExportSessionStatusCancelled:
-                NSLog(@"Export canceled");
+                ZLLoggerDebug(@"Export canceled");
                 break;
                 
             case AVAssetExportSessionStatusCompleted:{
-                NSLog(@"Export completed");
+                ZLLoggerDebug(@"Export completed");
                 suc = YES;
             }
                 break;
                 
             default:
-                NSLog(@"Export other");
+                ZLLoggerDebug(@"Export other");
                 break;
         }
         
@@ -934,10 +935,10 @@ static BOOL _sortAscending;
         return nil;
     }
     [assetVideoTrack insertTimeRange:timeRange ofTrack:videoTrack atTime:kCMTimeZero error:&error];
-    NSLog(@"%@", error);
+    ZLLoggerDebug(@"%@", error);
     if (audioTrack) {
         [assetAudioTrack insertTimeRange:timeRange ofTrack:audioTrack atTime:kCMTimeZero error:&error];
-        NSLog(@"%@", error);
+        ZLLoggerDebug(@"%@", error);
     }
     
     if (error) {

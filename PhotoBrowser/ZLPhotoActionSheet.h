@@ -33,7 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
  选择照片回调，回调解析好的图片、对应的asset对象、是否原图
  pod 2.2.6版本之后 统一通过selectImageBlock回调
  */
-@property (nonatomic, copy) void (^selectImageBlock)(NSArray<UIImage *> *_Nullable images, NSArray<PHAsset *> *assets, BOOL isOriginal);
+@property (nonatomic, copy, nullable) void (^selectImageBlock)(NSArray<UIImage *> *_Nullable images, NSArray<PHAsset *> *assets, BOOL isOriginal);
+
+/**
+ 选择照片回调，如果存在解析失败的图片，则单独把失败的asset及对应的选择时的index回调出去
+ */
+@property (nonatomic, copy, nullable) void (^selectImageRequestErrorBlock)(NSArray<PHAsset *> *errorAssets, NSArray<NSNumber *> *errorIndex);
 
 /**
  取消选择回调
@@ -50,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
  @warning 需提前赋值 sender 对象
  @param animate 是否显示动画效果
  */
-- (void)showPreviewAnimated:(BOOL)animate;
+- (void)showPreviewAnimated:(BOOL)animate NS_SWIFT_NAME(showPreview(animate:));
 
 
 /**
@@ -59,20 +64,20 @@ NS_ASSUME_NONNULL_BEGIN
  @param animate 是否显示动画效果
  @param sender 调用该对象的控制器
  */
-- (void)showPreviewAnimated:(BOOL)animate sender:(UIViewController *)sender;
+- (void)showPreviewAnimated:(BOOL)animate sender:(UIViewController *)sender NS_SWIFT_NAME(showPreview(animate:sender:));
 
 
 /**
  直接进入相册选择界面
  */
-- (void)showPhotoLibrary;
+- (void)showPhotoLibrary NS_SWIFT_NAME(showPhotoLibrary());
 
 /**
  直接进入相册选择界面
  
  @param sender 调用该对象的控制器
  */
-- (void)showPhotoLibraryWithSender:(UIViewController *)sender;
+- (void)showPhotoLibraryWithSender:(UIViewController *)sender NS_SWIFT_NAME(showPhotoLibrary(sender:));
 
 
 /**

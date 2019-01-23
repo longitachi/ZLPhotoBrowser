@@ -58,6 +58,12 @@
 #define ZLPhotoBrowserLivePhotos @"ZLPhotoBrowserLivePhotos"
 #define ZLPhotoBrowserAnimated @"ZLPhotoBrowserAnimated"
 
+#if DEBUG
+#define ZLLoggerDebug(format, ...) NSLog(format, ##__VA_ARGS__)
+#else
+#define ZLLoggerDebug(format, ...)
+#endif
+
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
 #define zl_weakify(var)   __weak typeof(var) weakSelf = var

@@ -172,6 +172,10 @@
         }
     }];
     
+    actionSheet.selectImageRequestErrorBlock = ^(NSArray<PHAsset *> * _Nonnull errorAssets, NSArray<NSNumber *> * _Nonnull errorIndex) {
+        NSLog(@"图片解析出错的索引为: %@, 对应assets为: %@", errorIndex, errorAssets);
+    };
+    
     actionSheet.cancleBlock = ^{
         NSLog(@"取消选择图片");
     };

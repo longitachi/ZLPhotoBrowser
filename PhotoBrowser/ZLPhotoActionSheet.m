@@ -182,11 +182,6 @@ double const ScalePhotoWidth = 1000;
 {
     NSAssert(self.sender != nil, @"sender 对象不能为空");
     
-    if (!self.configuration.allowSelectImage && self.arrSelectedModels.count) {
-        [self.arrSelectedAssets removeAllObjects];
-        [self.arrSelectedModels removeAllObjects];
-    }
-    
     self.animate = animate;
     self.preview = preview;
     self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
@@ -581,31 +576,50 @@ double const ScalePhotoWidth = 1000;
     
     __block NSMutableArray *photos = [NSMutableArray arrayWithCapacity:data.count];
     __block NSMutableArray *assets = [NSMutableArray arrayWithCapacity:data.count];
+    __block NSMutableArray *errorAssets = [NSMutableArray array];
+    __block NSMutableArray *errorIndexs = [NSMutableArray array];
     for (int i = 0; i < data.count; i++) {
         [photos addObject:@""];
         [assets addObject:@""];
     }
     
     zl_weakify(self);
+    __block NSInteger doneCount = 0;
     for (int i = 0; i < data.count; i++) {
         ZLPhotoModel *model = data[i];
         [ZLPhotoManager requestSelectedImageForAsset:model isOriginal:self.isSelectOriginalPhoto allowSelectGif:self.configuration.allowSelectGif completion:^(UIImage *image, NSDictionary *info) {
             if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
             
+            doneCount++;
             zl_strongify(weakSelf);
+            
             if (image) {
                 [photos replaceObjectAtIndex:i withObject:[ZLPhotoManager scaleImage:image original:strongSelf->_isSelectOriginalPhoto]];
                 [assets replaceObjectAtIndex:i withObject:model.asset];
+            } else {
+                [errorAssets addObject:model.asset];
+                [errorIndexs addObject:@(i)];
             }
             
-            for (id obj in photos) {
-                if ([obj isKindOfClass:[NSString class]]) return;
+            if (doneCount < data.count) {
+                return;
             }
+            
+            NSMutableIndexSet *set = [[NSMutableIndexSet alloc] init];
+            for (NSNumber *errorIndex in errorIndexs) {
+                [set addIndex:errorIndex.integerValue];
+            }
+            
+            [photos removeObjectsAtIndexes:set];
+            [assets removeObjectsAtIndexes:set];
             
             [hud hide];
             if (strongSelf.selectImageBlock) {
                 strongSelf.selectImageBlock(photos, assets, strongSelf.isSelectOriginalPhoto);
                 [strongSelf.arrSelectedModels removeAllObjects];
+            }
+            if (errorAssets.count > 0 && strongSelf.selectImageRequestErrorBlock) {
+                strongSelf.selectImageRequestErrorBlock(errorAssets, errorIndexs);
             }
             if (hide) {
                 [strongSelf.arrDataSources removeAllObjects];

@@ -741,7 +741,7 @@
             }
             [self.session commitConfiguration];
         } else if (error) {
-            NSLog(@"切换前后摄像头失败");
+            ZLLoggerDebug(@"切换前后摄像头失败");
         }
     }
 }
@@ -771,7 +771,7 @@
     AVCaptureConnection * videoConnection = [self.imageOutPut connectionWithMediaType:AVMediaTypeVideo];
     videoConnection.videoOrientation = self.orientation;
     if (!videoConnection) {
-        NSLog(@"take photo failed!");
+        ZLLoggerDebug(@"take photo failed!");
         return;
     }
     
@@ -874,7 +874,7 @@
     if (CMTimeGetSeconds(output.recordedDuration) < 1) {
         if (self.allowTakePhoto) {
             //视频长度小于1s 允许拍照则拍照，不允许拍照，则保存小于1s的视频
-            NSLog(@"视频长度小于1s，按拍照处理");
+            ZLLoggerDebug(@"视频长度小于1s，按拍照处理");
             [self onTakePicture];
             return;
         }
