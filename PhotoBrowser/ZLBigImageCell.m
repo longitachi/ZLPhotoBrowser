@@ -194,7 +194,8 @@
                self.model.type == ZLAssetMediaTypeLivePhoto) {
         [self.livePhotoView loadLivePhoto:self.model.asset];
     } else if (self.model.type == ZLAssetMediaTypeVideo) {
-        [self.videoView loadVideo:self.model.asset];
+        // 暂时不用这种界面停止滑动在加载视频的方法，因为未解决 force touch 预览视频进入界面后直接加载视频和gif的情况
+//        [self.videoView loadVideo:self.model.asset];
     }
 }
 
@@ -850,6 +851,7 @@
         zl_strongify(weakSelf);
         strongSelf.imageView.image = image;
     }];
+    [self loadVideo:asset];
 }
 
 - (void)loadVideo:(PHAsset *)asset
