@@ -243,7 +243,7 @@
 
 - (IBAction)btnPreviewNetImageClick:(id)sender
 {
-    NSArray *arrNetImages = @[GetDictForPreviewPhoto([NSURL URLWithString:@"https://jilulu.xyz/out.mp4"], ZLPreviewPhotoTypeURLVideo),
+    NSArray *arrNetImages = @[GetDictForPreviewPhoto([NSURL URLWithString:@"http://i4.chuimg.com/e60dc2d230f111e98f2c02420a00040d_720w_1280h.mp4"], ZLPreviewPhotoTypeURLVideo),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842025734.jpg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842034354.jpg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514184259027&di=a2e54cf2d5affe17acdaf1fbf19ff0af&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201212%2F25%2F20121225173302_wTjN8.jpeg"], ZLPreviewPhotoTypeURLImage),

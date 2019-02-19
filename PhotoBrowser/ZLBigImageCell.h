@@ -32,12 +32,7 @@
 /**
  界面停止滑动后，加载gif和livephoto，保持界面流畅
  */
-- (void)reloadGifLivePhoto;
-
-/**
- 界面滑动时，停止播放gif、livephoto、video
- */
-- (void)pausePlay;
+- (void)reloadGifLivePhotoVideo;
 
 @end
 
@@ -75,8 +70,6 @@
 
 - (void)resumePlay;
 
-- (void)pausePlay;
-
 - (UIImage *)image;
 
 @end
@@ -93,6 +86,8 @@
 @property (nonatomic, copy)   void (^singleTapCallBack)(void);
 
 - (void)placeSubviews;
+- (void)controllerScrollViewDidScroll;
+- (CGSize)requestImageSize:(PHAsset *)asset;
 
 - (void)singleTapAction;
 
@@ -130,8 +125,6 @@
 
 - (void)loadLivePhoto:(PHAsset *)asset;
 
-- (void)stopPlayLivePhoto;
-
 @end
 
 
@@ -141,6 +134,8 @@
 @property (nonatomic, strong) AVPlayerLayer *playLayer;
 @property (nonatomic, strong) UILabel *icloudLoadFailedLabel;
 @property (nonatomic, strong) UIButton *playBtn;
+
+- (void)loadVideo:(PHAsset *)asset;
 
 - (BOOL)haveLoadVideo;
 
