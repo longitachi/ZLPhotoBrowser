@@ -64,7 +64,7 @@
     imageView.frame = (CGRect){CGPointZero, [self getSize]};
     [self.view addSubview:imageView];
     
-    [ZLPhotoManager requestImageForAsset:self.model.asset size:CGSizeMake(size.width*2, size.height*2) completion:^(UIImage *img, NSDictionary *info) {
+    [ZLPhotoManager requestImageForAsset:self.model.asset size:CGSizeMake(size.width*2, size.height*2) progressHandler:nil completion:^(UIImage *img, NSDictionary *info) {
         imageView.image = img;
     }];
 }
@@ -76,7 +76,7 @@
     imageView.frame = (CGRect){CGPointZero, [self getSize]};
     [self.view addSubview:imageView];
     
-    [ZLPhotoManager requestOriginalImageDataForAsset:self.model.asset completion:^(NSData *data, NSDictionary *info) {
+    [ZLPhotoManager requestOriginalImageDataForAsset:self.model.asset progressHandler:nil completion:^(NSData *data, NSDictionary *info) {
         imageView.image = [ZLPhotoManager transformToGifImageWithData:data];
     }];
 }

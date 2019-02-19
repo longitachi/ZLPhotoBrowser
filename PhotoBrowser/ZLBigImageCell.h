@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <PhotosUI/PhotosUI.h>
 
-@class ZLPhotoModel;
-@class PHAsset;
-@class ZLPreviewView;
+@class ZLPhotoModel, PHAsset, ZLPreviewView, ZLProgressView;
 
 @interface ZLBigImageCell : UICollectionViewCell
 
@@ -44,10 +42,7 @@
 @end
 
 
-@class ZLPreviewImageAndGif;
-@class ZLPreviewLivePhoto;
-@class ZLPreviewVideo;
-@class ZLPreviewNetVideo;
+@class ZLPreviewImageAndGif, ZLPreviewLivePhoto, ZLPreviewVideo, ZLPreviewNetVideo;
 
 //预览大图，image、gif、livephoto、video
 @interface ZLPreviewView : UIView
@@ -91,11 +86,13 @@
 @interface ZLBasePreviewView : UIView
 
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) UIActivityIndicatorView *indicator;
+@property (nonatomic, strong) ZLProgressView *indicator;
 @property (nonatomic, strong) PHAsset *asset;
 @property (nonatomic, assign) PHImageRequestID imageRequestID;
 @property (nonatomic, strong) UITapGestureRecognizer *singleTap;
 @property (nonatomic, copy)   void (^singleTapCallBack)(void);
+
+- (void)placeSubviews;
 
 - (void)singleTapAction;
 

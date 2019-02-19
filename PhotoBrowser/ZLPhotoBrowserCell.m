@@ -36,7 +36,7 @@
     zl_weakify(self);
     
     self.identifier = model.headImageAsset.localIdentifier;
-    [ZLPhotoManager requestImageForAsset:model.headImageAsset size:CGSizeMake(GetViewHeight(self)*2.5, GetViewHeight(self)*2.5) completion:^(UIImage *image, NSDictionary *info) {
+    [ZLPhotoManager requestImageForAsset:model.headImageAsset size:CGSizeMake(GetViewHeight(self)*2.5, GetViewHeight(self)*2.5) progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
         zl_strongify(weakSelf);
         
         if ([strongSelf.identifier isEqualToString:model.headImageAsset.localIdentifier]) {

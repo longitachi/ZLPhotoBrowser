@@ -176,7 +176,7 @@
     }
     self.identifier = model.asset.localIdentifier;
     self.imageView.image = nil;
-    self.imageRequestID = [ZLPhotoManager requestImageForAsset:model.asset size:size completion:^(UIImage *image, NSDictionary *info) {
+    self.imageRequestID = [ZLPhotoManager requestImageForAsset:model.asset size:size progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
         zl_strongify(weakSelf);
         
         if ([strongSelf.identifier isEqualToString:model.asset.localIdentifier]) {

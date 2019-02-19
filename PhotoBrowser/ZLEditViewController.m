@@ -84,7 +84,7 @@
     
     [_indicator startAnimating];
     zl_weakify(self);
-    [ZLPhotoManager requestImageForAsset:self.model.asset size:size completion:^(UIImage *image, NSDictionary *info) {
+    [ZLPhotoManager requestImageForAsset:self.model.asset size:size progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             zl_strongify(weakSelf);
             [strongSelf->_indicator stopAnimating];
