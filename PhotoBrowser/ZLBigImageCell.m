@@ -814,9 +814,17 @@
     
     [self addSubview:self.imageView];
     [self addSubview:self.indicator];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 - (void)controllerScrollViewDidScroll
+{
+    if (_playLayer.player && _playLayer.player.rate != 0) {
+        [self playBtnClick];
+    }
+}
+
+- (void)appDidEnterBackground:(NSNotification *)notify
 {
     if (_playLayer.player && _playLayer.player.rate != 0) {
         [self playBtnClick];
@@ -990,6 +998,14 @@
     [self.layer addSublayer:self.playLayer];
     [self addSubview:self.playBtn];
     [self addSubview:self.indicator];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+}
+
+- (void)appDidEnterBackground:(NSNotification *)notify
+{
+    if (_playLayer.player && _playLayer.player.rate != 0) {
+        [self playBtnClick];
+    }
 }
 
 - (void)loadNetVideo:(NSURL *)url
