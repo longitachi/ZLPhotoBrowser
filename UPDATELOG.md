@@ -2,6 +2,15 @@
 
 -----
 
+## [2.7.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.8) (2019-02-20)
+
+#### Add
+* 添加iCloud图片加载进度条;
+* 支持iCloud视频播放;
+* 优化部分体验;
+
+---
+
 ## [2.7.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.6) (2018-11-29)
 
 #### Add

@@ -50,7 +50,6 @@
     
     NSString *_modelIdentifile;
     
-    ZLInteractiveTrasition *_interactiveTransition;
     BOOL _shouldStartDismiss;
     NSInteger _panCount;
 }
