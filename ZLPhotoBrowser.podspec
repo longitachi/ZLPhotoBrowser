@@ -16,5 +16,4 @@ Pod::Spec.new do |s|
   s.frameworks   = 'UIKit','Photos','PhotosUI'
 
   s.dependency 'SDWebImage'
-  s.dependency 'GPUImage'
 end

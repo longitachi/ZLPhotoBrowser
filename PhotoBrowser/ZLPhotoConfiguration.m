@@ -41,7 +41,7 @@
     configuration.maxVideoDuration = 120;
     configuration.allowSlideSelect = YES;
     configuration.allowDragSelect = NO;
-    configuration.editType = ZLImageEditTypeClip | ZLImageEditTypeRotate | ZLImageEditTypeFilter;
+//    configuration.editType = ZLImageEditTypeClip;
     configuration.clipRatios = @[GetCustomClipRatio(),
                                  GetClipRatio(1, 1),
                                  GetClipRatio(4, 3),
@@ -119,15 +119,15 @@
     _maxRecordDuration = MAX(maxRecordDuration, 1);
 }
 
-- (void)setEditType:(ZLImageEditType)editType
-{
-    assert(editType != 0);
-    
-    if (editType == 0) {
-        _editType = ZLImageEditTypeClip | ZLImageEditTypeRotate | ZLImageEditTypeFilter;
-    } else {
-        _editType = editType;
-    }
-}
+//- (void)setEditType:(ZLImageEditType)editType
+//{
+//    assert(editType != 0);
+//
+//    if (editType == 0) {
+//        _editType = ZLImageEditTypeClip;
+//    } else {
+//        _editType = editType;
+//    }
+//}
 
 @end

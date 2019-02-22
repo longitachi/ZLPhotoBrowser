@@ -93,9 +93,11 @@
 @property (nonatomic, assign) BOOL allowEditVideo;
 
 /**
- 编辑类型，至少要有一种，默认 ZLImageEditTypeClip | ZLImageEditTypeRotate | ZLImageEditTypeFilter
+ @warning: 2.7.9 版本移除滤镜功能，暂时只留下裁剪功能，进入编辑界面后可直接进行裁剪
+ 
+ //编辑类型，至少要有一种，默认 ZLImageEditTypeClip | ZLImageEditTypeRotate
  */
-@property (nonatomic, assign) ZLImageEditType editType;
+//@property (nonatomic, assign) ZLImageEditType editType;
 
 /**
  是否允许选择原图，默认YES

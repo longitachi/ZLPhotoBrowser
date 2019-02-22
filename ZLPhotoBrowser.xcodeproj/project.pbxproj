@@ -29,8 +29,6 @@
 		FD07872D1C0D45A200D17B97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD07872C1C0D45A200D17B97 /* Assets.xcassets */; };
 		FD0787301C0D45A200D17B97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD07872E1C0D45A200D17B97 /* LaunchScreen.storyboard */; };
 		FD07877E1C0D47DA00D17B97 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD07877D1C0D47DA00D17B97 /* Photos.framework */; };
-		FD0EB28E209EB73F002F08F4 /* ZLFilterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0EB28D209EB73F002F08F4 /* ZLFilterItem.m */; };
-		FD0EB291209EC3F4002F08F4 /* ZLFilterTool.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0EB290209EC3F4002F08F4 /* ZLFilterTool.m */; };
 		FD0EB294209F51FD002F08F4 /* ZLClipItem.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0EB293209F51FD002F08F4 /* ZLClipItem.m */; };
 		FD10CECE1EA86AF60041095C /* ZLCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD10CECD1EA86AF60041095C /* ZLCollectionCell.m */; };
 		FD171ED721F8767A00EC3903 /* ZLProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = FD171ED621F8767A00EC3903 /* ZLProgressView.m */; };
@@ -96,10 +94,6 @@
 		FD07872F1C0D45A200D17B97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FD0787311C0D45A200D17B97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD07877D1C0D47DA00D17B97 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
-		FD0EB28C209EB73F002F08F4 /* ZLFilterItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLFilterItem.h; sourceTree = "<group>"; };
-		FD0EB28D209EB73F002F08F4 /* ZLFilterItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLFilterItem.m; sourceTree = "<group>"; };
-		FD0EB28F209EC3F4002F08F4 /* ZLFilterTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLFilterTool.h; sourceTree = "<group>"; };
-		FD0EB290209EC3F4002F08F4 /* ZLFilterTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLFilterTool.m; sourceTree = "<group>"; };
 		FD0EB292209F51FD002F08F4 /* ZLClipItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLClipItem.h; sourceTree = "<group>"; };
 		FD0EB293209F51FD002F08F4 /* ZLClipItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLClipItem.m; sourceTree = "<group>"; };
 		FD10CECD1EA86AF60041095C /* ZLCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLCollectionCell.m; sourceTree = "<group>"; };
@@ -315,12 +309,8 @@
 				FD2CC6C1209DCA9E00F4E6C7 /* ZLImageEditTool.m */,
 				FD0EB292209F51FD002F08F4 /* ZLClipItem.h */,
 				FD0EB293209F51FD002F08F4 /* ZLClipItem.m */,
-				FD0EB28C209EB73F002F08F4 /* ZLFilterItem.h */,
-				FD0EB28D209EB73F002F08F4 /* ZLFilterItem.m */,
 				FD05D82520A3373600F60A2F /* ZLDrawItem.h */,
 				FD05D82620A3373600F60A2F /* ZLDrawItem.m */,
-				FD0EB28F209EC3F4002F08F4 /* ZLFilterTool.h */,
-				FD0EB290209EC3F4002F08F4 /* ZLFilterTool.m */,
 				FD05D82220A3312200F60A2F /* ZLBrushBoardImageView.h */,
 				FD05D82320A3312200F60A2F /* ZLBrushBoardImageView.m */,
 			);
@@ -338,7 +328,6 @@
 				FD0787191C0D45A200D17B97 /* Sources */,
 				FD07871A1C0D45A200D17B97 /* Frameworks */,
 				FD07871B1C0D45A200D17B97 /* Resources */,
-				75DDF8194E82CF60C5EE5D09 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -404,32 +393,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		75DDF8194E82CF60C5EE5D09 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ZLPhotoBrowser/Pods-ZLPhotoBrowser-resources.sh",
-				"${PODS_ROOT}/GPUImage/framework/Resources/lookup.png",
-				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_amatorka.png",
-				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_miss_etikate.png",
-				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_soft_elegance_1.png",
-				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_soft_elegance_2.png",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup.png",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_amatorka.png",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_miss_etikate.png",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_soft_elegance_1.png",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/lookup_soft_elegance_2.png",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZLPhotoBrowser/Pods-ZLPhotoBrowser-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		E65071590C04A06729C48919 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -461,14 +424,12 @@
 				FD028BD31CBE33BB009DD2FC /* ToastUtils.m in Sources */,
 				FD028BD51CBE33BB009DD2FC /* ZLBigImageCell.m in Sources */,
 				FD0787281C0D45A200D17B97 /* ViewController.m in Sources */,
-				FD0EB291209EC3F4002F08F4 /* ZLFilterTool.m in Sources */,
 				FD2CC6C2209DCA9E00F4E6C7 /* ZLImageEditTool.m in Sources */,
 				FD7B52731EFCB81600FB9087 /* ZLEditViewController.m in Sources */,
 				FD028BD71CBE33BB009DD2FC /* ZLNoAuthorityViewController.m in Sources */,
 				FDD979E31EF8C62300DD9DA4 /* ImageCell.m in Sources */,
 				FD05D82720A3373600F60A2F /* ZLDrawItem.m in Sources */,
 				FD22D71F1E9E25D1008FCC4E /* ZLPhotoModel.m in Sources */,
-				FD0EB28E209EB73F002F08F4 /* ZLFilterItem.m in Sources */,
 				FDA5DD6021251E3C004FA6A9 /* ZLAnimateTransition.m in Sources */,
 				FD3771191DB8C04B00CAD645 /* NSBundle+ZLPhotoBrowser.m in Sources */,
 				FDDB9EBB1E6D2EF6008ED9F1 /* YYFPSLabel.m in Sources */,
