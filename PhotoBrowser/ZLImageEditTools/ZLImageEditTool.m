@@ -8,9 +8,7 @@
 
 #import "ZLImageEditTool.h"
 #import "ZLPhotoConfiguration.h"
-#import "ZLFilterItem.h"
 #import "ZLClipItem.h"
-#import "ZLFilterTool.h"
 #import "UIImage+ZLPhotoBrowser.h"
 #import "UIButton+EnlargeTouchArea.h"
 #import "ZLBrushBoardImageView.h"
@@ -19,6 +17,7 @@
 @interface ZLImageEditTool ()
 {
     NSInteger _layoutCount;
+    BOOL _isFirst;
     
     ZLImageEditType _type;
     ZLPhotoConfiguration *_configuration;
@@ -43,8 +42,6 @@
 @property (nonatomic, strong) UIButton *doneBtn;
 @property (nonatomic, strong) UIView *bottomView;
 
-@property (nonatomic, strong) UIButton *filterBtn;
-
 @property (nonatomic, strong) UIButton *drawBtn;
 @property (nonatomic, strong) UIButton *revokeBtn;
 
@@ -54,7 +51,6 @@
 @property (nonatomic, strong) UIButton *rotateRatioBtn;
 
 @property (nonatomic, strong) UIScrollView *clipMenu;
-@property (nonatomic, strong) UIScrollView *filterMenu;
 @property (nonatomic, strong) UIScrollView *drawMenu;
 
 @property (nonatomic, strong) ZLGridLayar *gridLayer;
@@ -63,7 +59,6 @@
 @property (nonatomic, strong) ZLClipRatio *selectClipRatio;
 @property (nonatomic, assign) CGRect clippingRect;
 
-@property (nonatomic, strong) ZLFilterItem *selectFilterItem;
 @property (nonatomic, strong) ZLDrawItem *selectDrawItem;
 
 @end
@@ -72,7 +67,6 @@
 
 - (void)dealloc
 {
-    [[GPUImageContext sharedImageProcessingContext].framebufferCache purgeAllUnassignedFramebuffers];
 //    NSLog(@"---- %s", __FUNCTION__);
 }
 
@@ -80,7 +74,6 @@
 {
     return [self initWithEditType:ZLImageEditTypeDraw |
                                   ZLImageEditTypeMosaic |
-                                  ZLImageEditTypeFilter |
                                   ZLImageEditTypeClip |
                                   ZLImageEditTypeRotate
                             image:nil
@@ -91,7 +84,6 @@
 {
     return [self initWithEditType:ZLImageEditTypeDraw |
                                   ZLImageEditTypeMosaic |
-                                  ZLImageEditTypeFilter |
                                   ZLImageEditTypeClip |
                                   ZLImageEditTypeRotate
                             image:nil
@@ -129,9 +121,9 @@
         inset = self.superview.safeAreaInsets;
     }
     
-    self.cancelBtn.frame = CGRectMake(15+inset.left, inset.top+10, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
+    self.cancelBtn.frame = CGRectMake(15+inset.left, inset.top+5, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
     CGFloat doneBtnW = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), 15, YES, 30);
-    self.doneBtn.frame = CGRectMake(kViewWidth-doneBtnW-inset.right-15, inset.top+10, doneBtnW, 30);
+    self.doneBtn.frame = CGRectMake(kViewWidth-doneBtnW-inset.right-15, inset.top+5, doneBtnW, 30);
     
     [self setImageViewFrame:_layoutCount != 1];
     if (_selectToolType & ZLImageEditTypeClip) {
@@ -145,10 +137,7 @@
     
     CGFloat bx = disW;
     CGFloat bottomBtnW = 40;
-    if (_type & ZLImageEditTypeFilter) {
-        self.filterBtn.frame = CGRectMake(bx-bottomBtnW/2, 2, bottomBtnW, bottomBtnW);
-        bx += disW;
-    }
+    
     if (_type & ZLImageEditTypeDraw) {
         self.drawBtn.frame = CGRectMake(bx-bottomBtnW/2, 2, bottomBtnW, bottomBtnW);
         bx += disW;
@@ -164,7 +153,6 @@
     
     CGFloat menuMaxY = CGRectGetMinY(self.bottomView.frame);
     
-    _filterMenu.frame = CGRectMake(inset.left, menuMaxY-80, kViewWidth-inset.left-inset.right, 80);
     _drawMenu.frame = CGRectMake(inset.left+30, menuMaxY-40, kViewWidth-inset.left-inset.right-30-60, 40);
     _revokeBtn.frame = CGRectMake(kViewWidth-60-inset.right, menuMaxY-40, 40, 40);
     
@@ -176,6 +164,12 @@
     } else {
         _rotateRatioBtn.superview.frame = CGRectMake(kViewWidth-70-inset.right, menuMaxY-80, 70, 80);
         _clipMenu.frame = CGRectMake(inset.left, menuMaxY-80, kViewWidth-70-inset.left-inset.right, 80);
+    }
+    
+    // 暂时只留下裁剪功能
+    if (_layoutCount == 1 && _selectToolType != ZLImageEditTypeClip) {
+        [self clipBtn_click];
+        self.clipBtn.userInteractionEnabled = NO;
     }
 }
 
@@ -191,8 +185,6 @@
     BOOL showMenu = NO;
     if (_selectToolType & ZLImageEditTypeClip) {
         showMenu = ![self shouldHideClipRatioView];
-    } else if (_selectToolType & (ZLImageEditTypeFilter | ZLImageEditTypeDraw)) {
-        showMenu =  YES;
     }
     
     //隐藏时 底部工具条高44，间距设置4即可，不隐藏时，比例view高度80，则为128
@@ -200,7 +192,7 @@
     
     CGFloat diffXMarigin = showMenu ? 40 : 20;
     CGFloat w = kViewWidth-diffXMarigin-inset.left-inset.right;
-    CGFloat maxH = kViewHeight-flag-inset.bottom-inset.top-50;
+    CGFloat maxH = kViewHeight-flag-inset.bottom-inset.top-80;
     
     CGFloat imgW = _exchangeImageWH ? _originSize.height : _originSize.width;
     CGFloat imgH = _exchangeImageWH ? _originSize.width : _originSize.height;
@@ -284,13 +276,6 @@
             [self.bottomView addSubview:self.rotateBtn];
         }
         
-        if (_type & ZLImageEditTypeFilter) {
-            self.filterBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.filterBtn setImage:GetImageWithName(@"zl_filter") forState:UIControlStateNormal];
-            [self.filterBtn addTarget:self action:@selector(filterBtn_click) forControlEvents:UIControlEventTouchUpInside];
-            [self.bottomView addSubview:self.filterBtn];
-        }
-        
         if (_type & ZLImageEditTypeDraw) {
             self.drawBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             [self.drawBtn setImage:GetImageWithName(@"zl_draw") forState:UIControlStateNormal];
@@ -319,7 +304,7 @@
 
 - (NSInteger)toolCount
 {
-    NSArray *arr = @[@(ZLImageEditTypeClip), @(ZLImageEditTypeRotate), @(ZLImageEditTypeFilter), @(ZLImageEditTypeDraw), @(ZLImageEditTypeMosaic)];
+    NSArray *arr = @[@(ZLImageEditTypeClip), @(ZLImageEditTypeRotate), @(ZLImageEditTypeDraw), @(ZLImageEditTypeMosaic)];
     NSInteger count = 0;
     for (NSNumber *num in arr) {
         if (_type & num.integerValue) {
@@ -330,36 +315,6 @@
 }
 
 #pragma mark - menu
-- (void)setupFilterMenu
-{
-    if (_filterMenu) return;
-    
-    //这只是初始坐标，实际坐标在viewdidlayoutsubviews里面布局
-    _filterMenu = [[UIScrollView alloc] initWithFrame:CGRectZero];
-    _filterMenu.backgroundColor = [UIColor clearColor];
-    _filterMenu.showsHorizontalScrollIndicator = NO;
-    _filterMenu.clipsToBounds = NO;
-    [self addSubview:_filterMenu];
-    
-    CGFloat W = 70;
-    CGFloat H = 80;
-    CGFloat x = 0;
-    
-    CGSize  imgSize = self.editImage.size;
-    CGFloat maxW = MIN(imgSize.width, imgSize.height);
-    UIImage *iconImage = [self scaleImage:self.editImage toSize:CGSizeMake(W * imgSize.width/maxW, W * imgSize.height/maxW)];
-    
-    for (int i = ZLFilterTypeOriginal; i <= ZLFilterTypeColorInvert; i++) {
-        ZLFilterItem *item = [[ZLFilterItem alloc] initWithFrame:CGRectMake(x, 0, W, H) Image:iconImage filterType:i target:self action:@selector(tapFilter:)];
-        [_filterMenu addSubview:item];
-        
-        if (!self.selectFilterItem) {
-            self.selectFilterItem = item;
-        }
-        x += W;
-    }
-    _filterMenu.contentSize = CGSizeMake(MAX(x, _filterMenu.frame.size.width+1), 0);
-}
 
 - (void)setupDrawMenu
 {
@@ -532,11 +487,6 @@
     }
 }
 
-- (void)filterBtn_click
-{
-    [self switchTool:ZLImageEditTypeFilter];
-}
-
 - (void)drawBtn_click
 {
     [self switchTool:ZLImageEditTypeDraw];
@@ -544,20 +494,17 @@
 
 - (void)switchTool:(ZLImageEditType)type
 {
+    if (!self.editImage) return;
+    
     if (_selectToolType & type) {
         _selectToolType = 0;
     } else {
         _selectToolType = type;
     }
     
-    if (!self.editImage) return;
-    
     switch (_selectToolType) {
         case ZLImageEditTypeClip:
             [self setupClipMenu];
-            break;
-        case ZLImageEditTypeFilter:
-            [self setupFilterMenu];
             break;
         case ZLImageEditTypeDraw:
             [self setupDrawMenu];
@@ -569,23 +516,13 @@
     [self setNeedsLayout];
     
     if (_selectToolType == 0) {
-        _filterMenu.hidden = YES;
         _clipMenu.hidden = YES;
         _rotateRatioBtn.superview.hidden = YES;
         [self switchBtnStatus:nil];
         [self switchCircleAndGridLayerShowStatus:NO];
         return;
     }
-    if (_selectToolType & ZLImageEditTypeFilter) {
-        _filterMenu.hidden = NO;
-        _drawMenu.hidden = YES;
-        _clipMenu.hidden = YES;
-        _rotateRatioBtn.superview.hidden = YES;
-        self.imageView.drawEnable = NO;
-        [self switchCircleAndGridLayerShowStatus:NO];
-        [self switchBtnStatus:self.filterBtn];
-    } else if (_selectToolType & ZLImageEditTypeDraw) {
-        _filterMenu.hidden = YES;
+    if (_selectToolType & ZLImageEditTypeDraw) {
         _drawMenu.hidden = NO;
         _clipMenu.hidden = YES;
         _rotateRatioBtn.superview.hidden = YES;
@@ -593,7 +530,6 @@
         [self switchCircleAndGridLayerShowStatus:NO];
         [self switchBtnStatus:self.drawBtn];
     } else if (_selectToolType & ZLImageEditTypeClip) {
-        _filterMenu.hidden = YES;
         _drawMenu.hidden = YES;
         _clipMenu.hidden = NO;
         _rotateRatioBtn.superview.hidden = NO;
@@ -606,7 +542,7 @@
 - (void)switchBtnStatus:(UIButton *)btn
 {
     UIButton *b = [UIButton new];
-    NSArray *arr = @[self.filterBtn?: b, self.drawBtn?: b, self.rotateBtn?: b, self.clipBtn?: b];
+    NSArray *arr = @[self.drawBtn?: b, self.rotateBtn?: b, self.clipBtn?: b];
     for (UIButton *b in arr) {
         if (b == btn) {
             [b setBackgroundColor:[UIColor colorWithWhite:1 alpha:.15]];
@@ -627,27 +563,6 @@
     _lbView.hidden = !show;
     _rtView.hidden = !show;
     _rbView.hidden = !show;
-}
-
-#pragma mark - 滤镜
-- (void)tapFilter:(UITapGestureRecognizer *)sender
-{
-    ZLFilterItem *item = (ZLFilterItem *)sender.view;
-    if (self.selectFilterItem == item) return;
-    
-    self.selectFilterItem = item;
-    
-    //加滤镜
-    self.imageView.image = [ZLFilterTool filterImage:_editImage filterType:item.filterType];
-}
-
-- (void)setSelectFilterItem:(ZLFilterItem *)selectFilterItem
-{
-    if (selectFilterItem != _selectFilterItem) {
-        _selectFilterItem.backgroundColor = [UIColor clearColor];
-        _selectFilterItem = selectFilterItem;
-        _selectFilterItem.backgroundColor = [UIColor colorWithWhite:1 alpha:.15];
-    }
 }
 
 #pragma mark - draw
