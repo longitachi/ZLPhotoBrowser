@@ -11,7 +11,7 @@
 ### 框架整体介绍
 * [功能介绍](#功能介绍)
 * [更新日志](#更新日志)
-* [使用方法(支持cocoapods安装)](#使用方法)
+* [使用方法(支持cocoapods/carthage安装)](#使用方法)
 * [English Document](#English)
 * [问答](#问答)
 * [效果图](#效果图)
@@ -38,6 +38,9 @@
 - [x] 开发者可自定义资源图片
 - [x] 支持导出视频 (可指定导出视频尺寸、添加图片水印、粒子特效 ps:文字水印暂不支持)
 
+###
+下载完Demo请执行`carthage update --platform iOS`
+
 ### Feature
 
 > 如果您在使用中有好的需求及建议，或者遇到什么bug，欢迎随时issue，我会及时的回复
@@ -45,6 +48,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 2.7.9: 支持carthage; 去除GPUImage滤镜;
 ● 2.7.8: 添加iCloud图片加载进度条，支持iCloud视频播放;
 ● 2.7.6: 预览大图界面支持precent情况下的下拉返回;
 ● 2.7.5: 编辑图片支持自定义工具类型; bug fixed;
@@ -82,12 +86,16 @@ IDE：Xcode 9.0 及以上版本 (由于适配iPhone X使用iOS11api，所以请�
   * 1.直接把PhotoBrowser文件夹拖入到您的工程中
   * 2.导入 Photos.framework及PhotosUI.framework
   * 3.项目依赖 `SDWebImage`、`GPUImage` 所以需要导入这两个框架
-  * 4.导入 "ZLPhotoActionSheet.h"
+  * 4.导入 "ZLPhotoBrowser.h"
 * Cocoapods
   * 1.在Podfile 中添加 `pod 'ZLPhotoBrowser'`
   * 2.执行 `pod setup`
   * 3.执行 `pod install` 或 `pod update`
-  * 4.导入 \<ZLPhotoActionSheet.h\>
+  * 4.导入 \<ZLPhotoBrowser/ZLPhotoBrowser.h\>
+* Carthage
+  * 1.在Cartfile 中添加 `github "longitachi/ZLPhotoBrowser"`
+  * 2.执行 `carthage update`
+  * 3.导入 \<ZLPhotoBrowser/ZLPhotoBrowser.h\>
 
 第二步：
 - 在项目plist配置文件中添加如下键值对
@@ -108,7 +116,7 @@ Privacy - Microphone Usage Description
 
 代码中调用
 ```objc
-#import "ZLPhotoActionSheet.h"
+#import <ZLPhotoBrowser/ZLPhotoBrowser.h>
     
 ZLPhotoActionSheet *ac = [[ZLPhotoActionSheet alloc] init];
 
@@ -169,14 +177,18 @@ Step1
  * Manually
   * 1. Drag PhotoBrowser/ folder into your project
   * 2. Import Photos.framework and PhotosUI.framework
-  *	3. This repo relays on SDWebImage and GPUImage, so you also need it
-  *	4. Import "ZLPhotoActionSheet.h" at where you wanna use it
+  * 3. This repo relays on SDWebImage and GPUImage, so you also need it
+  * 4. Import "ZLPhotoActionSheet.h" at where you wanna use it
 
  * Cocoapods
-  * 1. add `pod 'ZLPhotoBrowser'`
-  *	2. `pod setup`
-  *	3. `pod install` or `pod update`
-  *	4. import <ZLPhotoActionSheet.h>
+  * 1. Add `pod 'ZLPhotoBrowser'` to your Podfile
+  * 2. `pod setup`
+  * 3. `pod install` or `pod update`
+  * 4. import `<ZLPhotoBrowser/ZLPhotoBrowser.h>`
+* Carthage
+  * 1.Add `github "longitachi/ZLPhotoBrowser"` to your Cartfile 
+  * 2.Run `carthage update --platform ios` and add the framework to your project.
+  * 3.import `<ZLPhotoBrowser/ZLPhotoBrowser.h>`
 
 Step2
  * add description in info.plist

@@ -2,6 +2,14 @@
 
 -----
 
+## [2.7.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.9) (2019-02-20)
+
+#### Add
+* 支持carthage集成;
+* 删除滤镜功能;
+
+---
+
 ## [2.7.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.8) (2019-02-20)
 
 #### Add
