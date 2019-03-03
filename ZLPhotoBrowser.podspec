@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '8.0'
   s.source       = {:git => 'https://github.com/longitachi/ZLPhotoBrowser.git', :tag => s.version}
-  s.source_files = 'PhotoBrowser/**/*.{h,m}'
-  s.resources    = 'PhotoBrowser/resource/*.{png,xib,nib,bundle}'
+  s.source_files = 'ZLPhotoBrowser/PhotoBrowser/**/*.{h,m}'
+  s.resources    = 'ZLPhotoBrowser/PhotoBrowser/resource/*.{png,xib,nib,bundle}'
 
   s.requires_arc = true
   s.frameworks   = 'UIKit','Photos','PhotosUI'

@@ -64,6 +64,11 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+
+Carthage/Build
+Carthage/Checkouts
+
+
 ### Objective-C Patch ###
 
 
