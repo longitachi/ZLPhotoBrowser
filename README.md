@@ -48,7 +48,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
-● 2.7.9: 支持carthage; 去除GPUImage滤镜;
+● 3.0.0: 支持carthage; 去除GPUImage滤镜;
 ● 2.7.8: 添加iCloud图片加载进度条，支持iCloud视频播放;
 ● 2.7.6: 预览大图界面支持precent情况下的下拉返回;
 ● 2.7.5: 编辑图片支持自定义工具类型; bug fixed;
