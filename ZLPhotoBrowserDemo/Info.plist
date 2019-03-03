@@ -45,6 +45,11 @@
 	<string>是否允许访问你的相册？</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>是否允许访问你的麦克风？</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>是否允许访问你的相机？</string>
 </dict>

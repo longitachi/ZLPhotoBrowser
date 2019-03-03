@@ -1,0 +1,16 @@
+language: objective-c
+osx_image: xcode10.1
+xcode_workspace: ZLPhotoBrowser
+xcode_scheme: ZLPhotoBrowser
+xcode_sdk: iphonesimulator12.1
+before_install:
+  - xcodebuild -showsdks
+  - brew update
+  - brew outdated carthage || brew upgrade carthage
+before_script:
+  - carthage bootstrap
+before_deploy:
+  - carthage build --no-skip-current
+  - carthage archive $FRAMEWORK_NAME
+script:
+    - xcodebuild clean build -sdk iphonesimulator12.1 -workspace ZLPhotoBrowser.xcworkspace -scheme ZLPhotoBrowser CODE_SIGNING_REQUIRED=NO

@@ -13,6 +13,7 @@
 		FD20426F222BA86100CEAC7B /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD20426E222BA86100CEAC7B /* PhotosUI.framework */; };
 		FD204271222BA8BF00CEAC7B /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD204270222BA8BF00CEAC7B /* SDWebImage.framework */; };
 		FD204275222BAFAA00CEAC7B /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD204270222BA8BF00CEAC7B /* SDWebImage.framework */; };
+		FD204277222BB79D00CEAC7B /* FLEX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD204276222BB79D00CEAC7B /* FLEX.framework */; };
 		FD3897342220015C007A6D3E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3897332220015C007A6D3E /* AppDelegate.m */; };
 		FD3897372220015C007A6D3E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3897362220015C007A6D3E /* ViewController.m */; };
 		FD38973A2220015C007A6D3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD3897382220015C007A6D3E /* Main.storyboard */; };
@@ -116,6 +117,7 @@
 		FD20426C222BA85C00CEAC7B /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		FD20426E222BA86100CEAC7B /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		FD204270222BA8BF00CEAC7B /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
+		FD204276222BB79D00CEAC7B /* FLEX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLEX.framework; path = Carthage/Build/iOS/FLEX.framework; sourceTree = "<group>"; };
 		FD3897212220014C007A6D3E /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZLPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD3897252220014C007A6D3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD3897302220015C007A6D3E /* ZLPhotoBrowserDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZLPhotoBrowserDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,6 +215,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD204277222BB79D00CEAC7B /* FLEX.framework in Frameworks */,
 				FD204271222BA8BF00CEAC7B /* SDWebImage.framework in Frameworks */,
 				FD20426F222BA86100CEAC7B /* PhotosUI.framework in Frameworks */,
 				FD20426D222BA85C00CEAC7B /* Photos.framework in Frameworks */,
@@ -371,6 +374,7 @@
 		FDFB9438222283AC005FE1B6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FD204276222BB79D00CEAC7B /* FLEX.framework */,
 				FD204270222BA8BF00CEAC7B /* SDWebImage.framework */,
 				FD20426E222BA86100CEAC7B /* PhotosUI.framework */,
 				FD20426C222BA85C00CEAC7B /* Photos.framework */,
@@ -530,6 +534,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/SDWebImage.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FLEX.framework",
 			);
 			outputFileListPaths = (
 			);
