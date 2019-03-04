@@ -13,8 +13,6 @@
 		FD418FC1222D1D9C00FF46A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD418FC0222D1D9C00FF46A9 /* Assets.xcassets */; };
 		FD418FC4222D1D9C00FF46A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD418FC2222D1D9C00FF46A9 /* LaunchScreen.storyboard */; };
 		FD418FC7222D1D9C00FF46A9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FD418FC6222D1D9C00FF46A9 /* main.m */; };
-		FD41903E222D1EEA00FF46A9 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD419037222D1EEA00FF46A9 /* ZLPhotoBrowser.framework */; };
-		FD41903F222D1EEA00FF46A9 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FD419037222D1EEA00FF46A9 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FD419088222D1EFF00FF46A9 /* ZLCustomCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = FD419045222D1EFF00FF46A9 /* ZLCustomCamera.h */; };
 		FD419089222D1EFF00FF46A9 /* ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD419046222D1EFF00FF46A9 /* ZLPhotoBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD41908A222D1EFF00FF46A9 /* ZLBigImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD419047222D1EFF00FF46A9 /* ZLBigImageCell.m */; };
@@ -112,8 +110,6 @@
 		FD4190E6222D1EFF00FF46A9 /* ZLPhotoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = FD419087222D1EFF00FF46A9 /* ZLPhotoConfiguration.m */; };
 		FD4190E7222D1EFF00FF46A9 /* ZLPhotoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = FD419087222D1EFF00FF46A9 /* ZLPhotoConfiguration.m */; };
 		FD4190EB222D1F5A00FF46A9 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */; };
-		FD4190EC222D1F5A00FF46A9 /* FLEX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190EA222D1F5A00FF46A9 /* FLEX.framework */; };
-		FD4190ED222D1F5F00FF46A9 /* FLEX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190EA222D1F5A00FF46A9 /* FLEX.framework */; };
 		FD4190EE222D1F6100FF46A9 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */; };
 		FD4190F0222D1F8300FF46A9 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190EF222D1F8300FF46A9 /* Photos.framework */; };
 		FD4190F2222D1F8A00FF46A9 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190F1222D1F8A00FF46A9 /* PhotosUI.framework */; };
@@ -124,10 +120,12 @@
 		FD4190FD222D201700FF46A9 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FD4190F9222D201700FF46A9 /* YYWeakProxy.m */; };
 		FD4190FF222D27B400FF46A9 /* ZLPhotoBrowser.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FD4190FE222D279700FF46A9 /* ZLPhotoBrowser.xcconfig */; };
 		FD419100222D27B500FF46A9 /* ZLPhotoBrowser.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FD4190FE222D279700FF46A9 /* ZLPhotoBrowser.xcconfig */; };
+		FD41913D222D31F400FF46A9 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD419037222D1EEA00FF46A9 /* ZLPhotoBrowser.framework */; };
+		FD41913E222D31F400FF46A9 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FD419037222D1EEA00FF46A9 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FD41903C222D1EEA00FF46A9 /* PBXContainerItemProxy */ = {
+		FD41913F222D31F400FF46A9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FD418FAC222D1D9B00FF46A9 /* Project object */;
 			proxyType = 1;
@@ -137,13 +135,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FD419043222D1EEA00FF46A9 /* Embed Frameworks */ = {
+		FD419141222D31F400FF46A9 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FD41903F222D1EEA00FF46A9 /* ZLPhotoBrowser.framework in Embed Frameworks */,
+				FD41913E222D31F400FF46A9 /* ZLPhotoBrowser.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -228,7 +226,6 @@
 		FD419086222D1EFF00FF46A9 /* ZLEditVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLEditVideoController.m; sourceTree = "<group>"; };
 		FD419087222D1EFF00FF46A9 /* ZLPhotoConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoConfiguration.m; sourceTree = "<group>"; };
 		FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
-		FD4190EA222D1F5A00FF46A9 /* FLEX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLEX.framework; path = Carthage/Build/iOS/FLEX.framework; sourceTree = "<group>"; };
 		FD4190EF222D1F8300FF46A9 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		FD4190F1222D1F8A00FF46A9 /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		FD4190F5222D201600FF46A9 /* ImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCell.m; sourceTree = "<group>"; };
@@ -245,11 +242,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD41913D222D31F400FF46A9 /* ZLPhotoBrowser.framework in Frameworks */,
 				FD4190EB222D1F5A00FF46A9 /* SDWebImage.framework in Frameworks */,
 				FD4190F4222D1F9400FF46A9 /* Photos.framework in Frameworks */,
 				FD4190F3222D1F9100FF46A9 /* PhotosUI.framework in Frameworks */,
-				FD4190EC222D1F5A00FF46A9 /* FLEX.framework in Frameworks */,
-				FD41903E222D1EEA00FF46A9 /* ZLPhotoBrowser.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,7 +256,6 @@
 				FD4190F2222D1F8A00FF46A9 /* PhotosUI.framework in Frameworks */,
 				FD4190F0222D1F8300FF46A9 /* Photos.framework in Frameworks */,
 				FD4190EE222D1F6100FF46A9 /* SDWebImage.framework in Frameworks */,
-				FD4190ED222D1F5F00FF46A9 /* FLEX.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,7 +413,6 @@
 			children = (
 				FD4190F1222D1F8A00FF46A9 /* PhotosUI.framework */,
 				FD4190EF222D1F8300FF46A9 /* Photos.framework */,
-				FD4190EA222D1F5A00FF46A9 /* FLEX.framework */,
 				FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */,
 			);
 			name = Frameworks;
@@ -476,13 +470,13 @@
 				FD418FB0222D1D9B00FF46A9 /* Sources */,
 				FD418FB1222D1D9B00FF46A9 /* Frameworks */,
 				FD418FB2222D1D9B00FF46A9 /* Resources */,
+				FD419141222D31F400FF46A9 /* Embed Frameworks */,
 				FD418FCD222D1E7A00FF46A9 /* ShellScript */,
-				FD419043222D1EEA00FF46A9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FD41903D222D1EEA00FF46A9 /* PBXTargetDependency */,
+				FD419140222D31F400FF46A9 /* PBXTargetDependency */,
 			);
 			name = ZLPhotoBrowser;
 			productName = ZLPhotoBrowser;
@@ -581,7 +575,6 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/SDWebImage.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/FLEX.framework",
 			);
 			outputFileListPaths = (
 			);
@@ -675,10 +668,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FD41903D222D1EEA00FF46A9 /* PBXTargetDependency */ = {
+		FD419140222D31F400FF46A9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FD419036222D1EEA00FF46A9 /* ZLPhotoBrowserFramework */;
-			targetProxy = FD41903C222D1EEA00FF46A9 /* PBXContainerItemProxy */;
+			targetProxy = FD41913F222D31F400FF46A9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -824,6 +817,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -847,6 +841,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = ZLPhotoBrowser/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

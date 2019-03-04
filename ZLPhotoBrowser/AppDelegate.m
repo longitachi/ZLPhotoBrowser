@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import <FLEX/FLEX.h>
 
 @interface AppDelegate ()
 
@@ -21,8 +20,6 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    
-    [[FLEXManager sharedManager] showExplorer];
     
     return YES;
 }
