@@ -64,12 +64,11 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+### Objective-C Patch ###
+
 
 Carthage/Build
 Carthage/Checkouts
-
-
-### Objective-C Patch ###
 
 
 # End of https://www.gitignore.io/api/cocoapods,objective-c

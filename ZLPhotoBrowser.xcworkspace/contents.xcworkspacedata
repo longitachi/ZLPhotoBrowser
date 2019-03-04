@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Carthage/Checkouts/SDWebImage/SDWebImage.xcodeproj">
+      location = "group:ZLPhotoBrowser.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:ZLPhotoBrowser.xcodeproj">
+      location = "group:Carthage/Checkouts/SDWebImage/SDWebImage.xcodeproj">
    </FileRef>
 </Workspace>

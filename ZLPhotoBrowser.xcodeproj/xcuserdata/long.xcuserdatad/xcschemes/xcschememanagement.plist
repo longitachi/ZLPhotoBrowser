@@ -4,17 +4,15 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>ZLPhotoBrowser.xcscheme_^#shared#^_</key>
+		<key>ZLPhotoBrowser.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
+		<key>ZLPhotoBrowserFramework.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>7</integer>
-		</dict>
-		<key>ZLPhotoBrowserDemo.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<true/>
-			<key>orderHint</key>
-			<integer>0</integer>
 		</dict>
 	</dict>
 </dict>

@@ -7,10 +7,15 @@
 //
 
 #import "ViewController.h"
+#import "ZLPhotoActionSheet.h"
+#import "ZLDefine.h"
 #import "ImageCell.h"
 #import "YYFPSLabel.h"
 #import <Photos/Photos.h>
-#import <ZLPhotoBrowser/ZLPhotoBrowser.h>
+#import "ZLPhotoModel.h"
+#import "ZLPhotoManager.h"
+#import "ZLProgressHUD.h"
+#import "ZLPhotoConfiguration.h"
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
