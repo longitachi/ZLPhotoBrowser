@@ -501,7 +501,7 @@
         [self resetSubviewSize:obj];
     } else {
         zl_weakify(self);
-        [self.imageView sd_setImageWithURL:obj placeholderImage:nil options:SDWebImageProgressiveDownload progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        [self.imageView sd_setImageWithURL:obj placeholderImage:nil options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             zl_strongify(weakSelf);
             dispatch_async(dispatch_get_main_queue(), ^{
                 float progress = (float)receivedSize / (float)expectedSize;
