@@ -39,6 +39,7 @@
 
 "ZLPhotoBrowserLoadNetImageFailed" = "ロード失敗";
 "ZLPhotoBrowserSaveVideoFailed" = "ビデオの保存に失敗しました";
+"ZLPhotoBrowserRequestTimeout" = "要求タイムアウト";
 
 
 "ZLPhotoBrowserCameraRoll" = "カメラロール";

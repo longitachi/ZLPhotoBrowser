@@ -61,6 +61,7 @@
     configuration.selectedMaskColor = [UIColor blackColor];
     configuration.customImageNames = nil;
     configuration.shouldAnialysisAsset = YES;
+    configuration.timeout = 20;
     configuration.languageType = ZLLanguageSystem;
     configuration.useSystemCamera = NO;
     configuration.allowRecordVideo = YES;

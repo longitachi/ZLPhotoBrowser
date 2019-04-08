@@ -9,6 +9,13 @@
 #import "ZLProgressHUD.h"
 #import "ZLDefine.h"
 
+@interface ZLProgressHUD ()
+{
+    BOOL _isHide;
+}
+
+@end
+
 @implementation ZLProgressHUD
 
 - (instancetype)init
@@ -49,14 +56,26 @@
 
 - (void)show
 {
+    [self showWithTimeout:100];
+}
+
+- (void)showWithTimeout:(NSTimeInterval)timeout
+{
+    _isHide = NO;
     [[UIApplication sharedApplication].keyWindow addSubview:self];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self hide];
-    });
+    if (timeout < 100) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (!self->_isHide && self.timeoutBlock) {
+                self.timeoutBlock();
+            }
+            [self hide];
+        });
+    }
 }
 
 - (void)hide
 {
+    _isHide = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self removeFromSuperview];
     });

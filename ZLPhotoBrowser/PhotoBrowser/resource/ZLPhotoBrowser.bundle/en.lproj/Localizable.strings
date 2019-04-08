@@ -39,6 +39,7 @@
 
 "ZLPhotoBrowserLoadNetImageFailed" = "loading failed";
 "ZLPhotoBrowserSaveVideoFailed" = "Failed to save the video";
+"ZLPhotoBrowserRequestTimeout" = "Request timed out";
 
 
 "ZLPhotoBrowserCameraRoll" = "Camera Roll";

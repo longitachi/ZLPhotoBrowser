@@ -214,6 +214,11 @@
 @property (nonatomic, assign) BOOL shouldAnialysisAsset;
 
 /**
+ 解析图片超时时间，默认20s
+ */
+@property (nonatomic, assign) NSTimeInterval timeout;
+
+/**
  框架语言，默认 ZLLanguageSystem (跟随系统语言)
  */
 @property (nonatomic, assign) ZLLanguageType languageType;

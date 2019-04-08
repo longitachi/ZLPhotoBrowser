@@ -585,25 +585,29 @@ static BOOL _sortAscending;
 
 + (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset
 {
-    __block BOOL result = NO;
-    if (@available(iOS 10.0, *)) {
-        // https://stackoverflow.com/questions/31966571/check-given-phasset-is-icloud-asset
-        // 这个api虽然是9.0出的，但是9.0会全部返回NO，未知原因，暂时先改为10.0
-        NSArray *resourceArray = [PHAssetResource assetResourcesForAsset:asset];
-        for (id obj in resourceArray) {
-            result = [[obj valueForKey:@"locallyAvailable"] boolValue];
-            if (result) break;
-        }
-    } else {
-        PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
-        option.networkAccessAllowed = NO;
-        option.synchronous = YES;
-        
-        [[PHCachingImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            result = imageData ? YES : NO;
-        }];
-    }
-    return result;
+    return YES;
+//    __block BOOL isInLocal = YES;
+//    //    if (@available(iOS 10.0, *)) {
+//    //        // https://stackoverflow.com/questions/31966571/check-given-phasset-is-icloud-asset
+//    //        // 这个api虽然是9.0出的，但是9.0会全部返回NO，未知原因，暂时先改为10.0
+//    //        NSArray *resourceArray = [PHAssetResource assetResourcesForAsset:asset];
+//    //        for (id obj in resourceArray) {
+//    //            result = [[obj valueForKey:@"locallyAvailable"] boolValue];
+//    //            if (result) break;
+//    //        }
+//    //    } else {
+//    PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
+//    option.resizeMode = PHImageRequestOptionsResizeModeFast;
+//    option.networkAccessAllowed = NO;
+//    option.synchronous = YES;
+//
+//    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+//        if ([[info objectForKey:PHImageResultIsInCloudKey] boolValue]) {
+//            isInLocal = NO;
+//        }
+//    }];
+//    //    }
+//    return isInLocal;
 }
 
 + (void)getPhotosBytesWithArray:(NSArray<ZLPhotoModel *> *)photos completion:(void (^)(NSString *photosBytes))completion
@@ -891,7 +895,7 @@ static BOOL _sortAscending;
     exportSession.outputURL = exportFileUrl;
     exportSession.outputFileType = (type == ZLExportVideoTypeMov ? AVFileTypeQuickTimeMovie : AVFileTypeMPEG4);
     exportSession.timeRange = range;
-//        exportSession.shouldOptimizeForNetworkUse = YES;
+    //        exportSession.shouldOptimizeForNetworkUse = YES;
     if (!CGSizeEqualToSize(renderSize, CGSizeZero)) {
         AVMutableVideoComposition *com = [self getVideoComposition:asset renderSize:renderSize watermarkImage:watermarkImage watermarkLocation:location imageSize:imageSize effectImage:effectImage birthRate:birthRate velocity:velocity];
         if (!com) {
@@ -1045,23 +1049,23 @@ static BOOL _sortAscending;
 
 + (void)addWatermark:(AVMutableVideoComposition *)videoCom renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity
 {
-//    CATextLayer *titleLayer = [CATextLayer layer];
-//    [titleLayer setFont:(__bridge CFTypeRef)[UIFont systemFontOfSize:25].fontName];
-//    titleLayer.contentsScale = 2;
-//    [titleLayer setFont:@"HiraKakuProN-W3"];
-//    titleLayer.fontSize = 70;
-//    titleLayer.wrapped = YES;
-//    titleLayer.string = @"just for test";
-//    titleLayer.masksToBounds = YES;
-//    titleLayer.foregroundColor = [[UIColor blueColor] CGColor];
-//    titleLayer.alignmentMode = kCAAlignmentCenter;
-//    titleLayer.frame = CGRectMake(20, 100, renderSize.width-40, 100);
-//    titleLayer.backgroundColor = [UIColor whiteColor].CGColor;
+    //    CATextLayer *titleLayer = [CATextLayer layer];
+    //    [titleLayer setFont:(__bridge CFTypeRef)[UIFont systemFontOfSize:25].fontName];
+    //    titleLayer.contentsScale = 2;
+    //    [titleLayer setFont:@"HiraKakuProN-W3"];
+    //    titleLayer.fontSize = 70;
+    //    titleLayer.wrapped = YES;
+    //    titleLayer.string = @"just for test";
+    //    titleLayer.masksToBounds = YES;
+    //    titleLayer.foregroundColor = [[UIColor blueColor] CGColor];
+    //    titleLayer.alignmentMode = kCAAlignmentCenter;
+    //    titleLayer.frame = CGRectMake(20, 100, renderSize.width-40, 100);
+    //    titleLayer.backgroundColor = [UIColor whiteColor].CGColor;
     
     CALayer *overlayLayer = [CALayer layer];
     overlayLayer.frame = (CGRect){CGPointZero, renderSize};
     
-//    [overlayLayer addSublayer:titleLayer];
+    //    [overlayLayer addSublayer:titleLayer];
     
     //水印图片
     if (watermarkImage) {
@@ -1128,7 +1132,7 @@ static BOOL _sortAscending;
     cell.lifetime = 30.0;
     
     //粒子透明度变化到0的速度，单位为秒
-//    cell.alphaSpeed = -0.4;
+    //    cell.alphaSpeed = -0.4;
     //粒子的扩散速度
     cell.velocity = velocity;
     //粒子向外扩散区域大小
@@ -1142,12 +1146,12 @@ static BOOL _sortAscending;
     cell.scale = 0.2;
     cell.scaleRange = 0.2f;
     //粒子缩放从0~0.5的速度
-//    cell.scaleSpeed = 0.5;
+    //    cell.scaleSpeed = 0.5;
     
     cell.color = [UIColor whiteColor].CGColor;
-//    cell.redRange = 2.0f;
-//    cell.blueRange = 2.0f;
-//    cell.greenRange = 2.0f;
+    //    cell.redRange = 2.0f;
+    //    cell.blueRange = 2.0f;
+    //    cell.greenRange = 2.0f;
     
     emitterLayer.shadowOpacity = 1.0;
     emitterLayer.shadowRadius  = 0.0;
@@ -1156,12 +1160,12 @@ static BOOL _sortAscending;
     emitterLayer.shadowColor = [UIColor whiteColor].CGColor;
     
     // 形成遮罩
-//    UIImage *image      = [UIImage imageNamed:@"alpha"];
-//    CALayer *movedMask          = [CALayer layer];
-//    movedMask.frame    = (CGRect){CGPointZero, image.size};
-//    movedMask.contents = (__bridge id)(image.CGImage);
-//    movedMask.position = self.containerView.center;
-//    emitterLayer.mask    = movedMask;
+    //    UIImage *image      = [UIImage imageNamed:@"alpha"];
+    //    CALayer *movedMask          = [CALayer layer];
+    //    movedMask.frame    = (CGRect){CGPointZero, image.size};
+    //    movedMask.contents = (__bridge id)(image.CGImage);
+    //    movedMask.position = self.containerView.center;
+    //    emitterLayer.mask    = movedMask;
     
     emitterLayer.emitterCells = @[cell];
     

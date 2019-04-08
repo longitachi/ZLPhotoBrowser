@@ -10,7 +10,11 @@
 
 @interface ZLProgressHUD : UIView
 
+@property (nonatomic, copy, nullable) void (^timeoutBlock)(void);
+
 - (void)show;
+
+- (void)showWithTimeout:(NSTimeInterval)timeout;
 
 - (void)hide;
 

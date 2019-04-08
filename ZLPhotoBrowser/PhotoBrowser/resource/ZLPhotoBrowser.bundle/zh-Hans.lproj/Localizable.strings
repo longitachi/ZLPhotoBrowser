@@ -39,6 +39,7 @@
 
 "ZLPhotoBrowserLoadNetImageFailed" = "图片加载失败";
 "ZLPhotoBrowserSaveVideoFailed" = "视频保存失败";
+"ZLPhotoBrowserRequestTimeout" = "请求超时";
 
 
 "ZLPhotoBrowserCameraRoll" = "所有照片";

@@ -555,7 +555,14 @@ double const ScalePhotoWidth = 1000;
 - (void)requestSelPhotos:(UIViewController *)vc data:(NSArray<ZLPhotoModel *> *)data hideAfterCallBack:(BOOL)hide
 {
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
-    [hud show];
+    
+    __block BOOL isTimeOut = NO;
+    hud.timeoutBlock = ^{
+        ShowToast(@"%@", GetLocalLanguageTextValue(@"ZLPhotoBrowserRequestTimeout"));
+        isTimeOut = YES;
+    };
+    
+    [hud showWithTimeout:self.configuration.timeout];
     
     if (!self.configuration.shouldAnialysisAsset) {
         NSMutableArray *assets = [NSMutableArray arrayWithCapacity:data.count];
@@ -588,7 +595,7 @@ double const ScalePhotoWidth = 1000;
     for (int i = 0; i < data.count; i++) {
         ZLPhotoModel *model = data[i];
         [ZLPhotoManager requestSelectedImageForAsset:model isOriginal:self.isSelectOriginalPhoto allowSelectGif:self.configuration.allowSelectGif completion:^(UIImage *image, NSDictionary *info) {
-            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+            if (isTimeOut || [[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
             
             doneCount++;
             zl_strongify(weakSelf);

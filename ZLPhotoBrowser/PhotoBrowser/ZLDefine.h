@@ -43,6 +43,7 @@
 #define ZLPhotoBrowserMaxVideoDurationText @"ZLPhotoBrowserMaxVideoDurationText"
 #define ZLPhotoBrowserLoadNetImageFailed @"ZLPhotoBrowserLoadNetImageFailed"
 #define ZLPhotoBrowserSaveVideoFailed @"ZLPhotoBrowserSaveVideoFailed"
+#define ZLPhotoBrowserRequestTimeout @"ZLPhotoBrowserRequestTimeout"
 
 #define ZLPhotoBrowserCameraRoll @"ZLPhotoBrowserCameraRoll"
 #define ZLPhotoBrowserPanoramas @"ZLPhotoBrowserPanoramas"
