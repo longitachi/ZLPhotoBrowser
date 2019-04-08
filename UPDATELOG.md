@@ -2,7 +2,15 @@
 
 -----
 
-## [2.7.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/2.7.9) (2019-02-20)
+## [3.0.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.1) (2019-02-20)
+
+#### Add
+* 压缩bundle内图片;
+* 支持直接选择iCloud照片，并添加解析图片超时时间属性;
+
+---
+
+## [3.0.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.0) (2019-02-20)
 
 #### Add
 * 支持carthage集成;
