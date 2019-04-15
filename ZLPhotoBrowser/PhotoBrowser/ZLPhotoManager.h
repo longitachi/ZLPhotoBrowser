@@ -221,7 +221,7 @@
  
  @param asset 需要导出视频的asset
  @param type 视频导出格式
- @param presetName 视频压缩设置
+ @param presetName 视频压缩设置 (值为AVAssetExportPresetPassthrough时候，粒子效果无效)
  @param effectImage 粒子图片（建议一倍图尺寸不超过200*200）
  @param birthRate 粒子每秒创建数量（建议30~50）
  @param velocity 粒子扩散速度

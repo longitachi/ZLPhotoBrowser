@@ -595,10 +595,12 @@ double const ScalePhotoWidth = 1000;
     for (int i = 0; i < data.count; i++) {
         ZLPhotoModel *model = data[i];
         [ZLPhotoManager requestSelectedImageForAsset:model isOriginal:self.isSelectOriginalPhoto allowSelectGif:self.configuration.allowSelectGif completion:^(UIImage *image, NSDictionary *info) {
+            zl_strongify(weakSelf);
+            if (!strongSelf) return;
+            
             if (isTimeOut || [[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
             
             doneCount++;
-            zl_strongify(weakSelf);
             
             if (image) {
                 [photos replaceObjectAtIndex:i withObject:[ZLPhotoManager scaleImage:image original:strongSelf->_isSelectOriginalPhoto]];
