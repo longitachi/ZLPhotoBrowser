@@ -87,6 +87,7 @@
     [ZLPhotoManager requestImageForAsset:self.model.asset size:size progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             zl_strongify(weakSelf);
+            if (!strongSelf) return;
             [strongSelf->_indicator stopAnimating];
             strongSelf->_editTool.editImage = image;
         }

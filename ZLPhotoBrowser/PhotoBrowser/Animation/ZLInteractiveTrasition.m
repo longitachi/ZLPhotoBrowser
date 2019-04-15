@@ -23,6 +23,10 @@
 
 - (void)startInteractiveTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
+    if (self.beginTransitionBlock) {
+        self.beginTransitionBlock();
+    }
+    
     self.isStartTransition = YES;
     
     self.transitionContext = transitionContext;
@@ -36,7 +40,6 @@
     
     UIViewController *fromVC = [self.transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     ZLShowBigImgViewController *imageVC = (ZLShowBigImgViewController *)fromVC;
-    imageVC->_navView.hidden = YES;
     
     NSInteger index = imageVC->_currentPage-1;
     
@@ -91,9 +94,6 @@
 {
     self.isStartTransition = NO;
     
-    UIViewController *fromVC = [self.transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    ZLShowBigImgViewController *imageVC = (ZLShowBigImgViewController *)fromVC;
-    
     UIView *fromView = [self.transitionContext viewForKey:UITransitionContextFromViewKey];
     
     CGRect frame = fromView.frame;
@@ -103,7 +103,9 @@
         fromView.frame = frame;
         self.shadowView.alpha = 1;
     } completion:^(BOOL finished) {
-        imageVC->_navView.hidden = NO;
+        if (self.cancelTransitionBlock) {
+            self.cancelTransitionBlock();
+        }
         [self.shadowView removeFromSuperview];
         [self.transitionContext completeTransition:!self.transitionContext.transitionWasCancelled];
     }];

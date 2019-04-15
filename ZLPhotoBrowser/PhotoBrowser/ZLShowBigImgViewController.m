@@ -196,6 +196,17 @@
 {
     if (!_popTrasition) {
         _popTrasition = [[ZLInteractiveTrasition alloc] init];
+        
+        zl_weakify(self);
+        _popTrasition.beginTransitionBlock = ^{
+            zl_strongify(weakSelf);
+            strongSelf->_navView.hidden = YES;
+        };
+        
+        _popTrasition.cancelTransitionBlock = ^{
+            zl_strongify(weakSelf);
+            strongSelf->_navView.hidden = strongSelf->_hideNavBar;
+        };
     }
     return _popTrasition;
 }
@@ -512,7 +523,16 @@
         }
     } else if (pan.state == UIGestureRecognizerStateCancelled ||
                pan.state == UIGestureRecognizerStateEnded) {
-        if (!_shouldStartDismiss || !self.popTrasition.isStartTransition) return;
+        if (_shouldStartDismiss && !self.popTrasition.isStartTransition) {
+            // 快速拖动时候可能会走这里
+            [self.popTrasition cancelInteractiveTransition];
+            [self.popTrasition cancelAnimate];
+            self.popTrasition = nil;
+            self.interactive = NO;
+            return;
+        }
+        
+        if (_panCount == 0 || (!_shouldStartDismiss || !self.popTrasition.isStartTransition)) return;
         
         CGPoint vel = [pan velocityInView:self.view];
         

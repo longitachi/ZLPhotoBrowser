@@ -339,7 +339,7 @@
 
 //--------------------------------------------------------//
 //--------------------------------------------------------//
-@interface ZLCustomCamera () <CameraToolViewDelegate, AVCaptureFileOutputRecordingDelegate>
+@interface ZLCustomCamera () <CameraToolViewDelegate, AVCaptureFileOutputRecordingDelegate, UIGestureRecognizerDelegate>
 {
     //拖拽手势开始的录制
     BOOL _dragStart;
@@ -508,7 +508,7 @@
     if (_layoutOK) return;
     _layoutOK = YES;
     
-    self.toolView.frame = CGRectMake(0, kViewHeight-130-ZL_SafeAreaBottom, kViewWidth, 100);
+    self.toolView.frame = CGRectMake(0, kViewHeight-130-ZL_SafeAreaBottom(), kViewWidth, 100);
     self.previewLayer.frame = self.view.layer.bounds;
     self.toggleCameraBtn.frame = CGRectMake(kViewWidth-50, 20, 30, 30);
 }
@@ -537,8 +537,13 @@
     [self.toggleCameraBtn addTarget:self action:@selector(btnToggleCameraAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.toggleCameraBtn];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(adjustFocusPoint:)];
+    tap.delegate = self;
+    [self.view addGestureRecognizer:tap];
+    
     if (self.allowRecordVideo) {
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(adjustCameraFocus:)];
+        pan.maximumNumberOfTouches = 1;
         [self.view addGestureRecognizer:pan];
     }
 }
@@ -625,15 +630,17 @@
     }
 }
 
-#pragma mark - 点击屏幕设置聚焦点
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+#pragma mark - 设置聚焦点
+- (void)adjustFocusPoint:(UITapGestureRecognizer *)tap
 {
     if (!self.session.isRunning) return;
     
-    CGPoint point = [touches.anyObject locationInView:self.view];
-    if (point.y > [UIScreen mainScreen].bounds.size.height-150-ZL_SafeAreaBottom) {
+    CGPoint point = [tap locationInView:self.view];
+    
+    if (point.y > CGRectGetMinY(self.toolView.frame)) {
         return;
     }
+    
     [self setFocusCursorWithPoint:point];
 }
 
@@ -685,7 +692,6 @@
 #pragma mark - 手势调整焦距
 - (void)adjustCameraFocus:(UIPanGestureRecognizer *)pan
 {
-    //TODO: 录像中，点击屏幕聚焦，暂时没有思路，1.若添加tap手势 无法解决pan和tap之间的冲突； 2.使用系统touchesBegan方法，触发pan手势后 touchesBegan 无效
     CGRect caremaViewRect = [self.toolView convertRect:self.toolView.bottomView.frame toView:self.view];
     CGPoint point = [pan locationInView:self.view];
     
@@ -719,6 +725,12 @@
     if (error) return;
     captureDevice.videoZoomFactor = zoomFactor;
     [captureDevice unlockForConfiguration];
+}
+
+#pragma mark - gesture delegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
 }
 
 #pragma mark - 切换前后相机
