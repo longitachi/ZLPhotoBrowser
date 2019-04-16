@@ -532,7 +532,7 @@
             return;
         }
         
-        if (_panCount == 0 || (!_shouldStartDismiss || !self.popTrasition.isStartTransition)) return;
+        if (_panCount == 0 || (!_shouldStartDismiss && !self.popTrasition.isStartTransition)) return;
         
         CGPoint vel = [pan velocityInView:self.view];
         

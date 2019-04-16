@@ -77,7 +77,7 @@
         }
     } else if (pan.state == UIGestureRecognizerStateCancelled ||
                pan.state == UIGestureRecognizerStateEnded) {
-        if (self.panCount == 0 || (!self.shouldStartInteractive || !self.hadStartDismiss)) return;
+        if (self.panCount == 0 || (!self.shouldStartInteractive && !self.hadStartDismiss)) return;
         
         CGPoint vel = [pan velocityInView:self.viewController.view];
         
