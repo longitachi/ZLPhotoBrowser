@@ -80,8 +80,8 @@
 #define kViewHeight     [[UIScreen mainScreen] bounds].size.height
 
 //app名字
-#define kInfoDict [NSBundle mainBundle].localizedInfoDictionary ?: [NSBundle mainBundle].infoDictionary
-#define kAPPName [kInfoDict valueForKey:@"CFBundleDisplayName"] ?: [kInfoDict valueForKey:@"CFBundleName"]
+#define kZL_LOCALIZED_APP_NAME [[NSBundle mainBundle].localizedInfoDictionary objectForKey:@"CFBundleDisplayName"]
+#define kAPPName kZL_LOCALIZED_APP_NAME ?: [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"] ?: [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleName"]
 
 //自定义图片名称存于plist中的key
 #define ZLCustomImageNames @"ZLCustomImageNames"

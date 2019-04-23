@@ -247,8 +247,6 @@
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842025734.jpg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842034354.jpg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514184259027&di=a2e54cf2d5affe17acdaf1fbf19ff0af&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201212%2F25%2F20121225173302_wTjN8.jpeg"], ZLPreviewPhotoTypeURLImage),
-                              GetDictForPreviewPhoto([NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504756336591&di=56a3c8866c95891cbb9c43f907b4f954&imgtype=0&src=http%3A%2F%2Ff5.topitme.com%2F5%2Fa0%2F42%2F111173677859242a05o.jpg"], ZLPreviewPhotoTypeURLImage),
-                              GetDictForPreviewPhoto([NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514778897&di=286a86139915c2b6a7a06a70df787c68&imgtype=jpg&er=1&src=http%3A%2F%2Ff9.topitme.com%2F9%2Fa1%2Fc6%2F1135106720ee0c6a19o.jpg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://img.zcool.cn/community/018003591d063cb5b3086ed4627878.gif"], ZLPreviewPhotoTypeURLImage)];
     [[self getPas] previewPhotos:arrNetImages index:0 hideToolBar:NO complete:^(NSArray * _Nonnull photos) {
         NSLog(@"%@", photos);

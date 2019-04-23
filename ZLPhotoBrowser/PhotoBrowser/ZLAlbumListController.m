@@ -11,13 +11,25 @@
 #import "ZLPhotoManager.h"
 #import "ZLPhotoModel.h"
 #import "ZLThumbnailViewController.h"
-#import <SDWebImage/SDWebImageManager.h>
 
 @implementation ZLImageNavigationController
 
+static NSHashTable *_sd_operations = nil;
+
++ (NSHashTable<id<SDWebImageOperation>> *)sd_operations
+{
+    if (!_sd_operations) {
+        _sd_operations = [NSHashTable hashTableWithOptions:NSPointerFunctionsWeakMemory];
+    }
+    return _sd_operations;
+}
+
 - (void)dealloc
 {
-    [[SDWebImageManager sharedManager] cancelAll];
+    for (id<SDWebImageOperation> op in ZLImageNavigationController.sd_operations.allObjects) {
+        [op cancel];
+    }
+    [ZLImageNavigationController.sd_operations removeAllObjects];
 //    NSLog(@"---- %s", __FUNCTION__);
 }
 

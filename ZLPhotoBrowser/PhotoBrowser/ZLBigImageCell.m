@@ -501,7 +501,8 @@
         [self resetSubviewSize:obj];
     } else {
         zl_weakify(self);
-        [self.imageView sd_setImageWithURL:obj placeholderImage:nil options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        self.imageView.image = nil;
+        id<SDWebImageOperation> op = [SDWebImageManager.sharedManager loadImageWithURL:obj options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             zl_strongify(weakSelf);
             dispatch_async(dispatch_get_main_queue(), ^{
                 float progress = (float)receivedSize / (float)expectedSize;
@@ -512,16 +513,20 @@
                     strongSelf.indicator.hidden = NO;
                 }
             });
-        } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             zl_strongify(weakSelf);
             strongSelf.indicator.hidden = YES;
             if (error) {
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadNetImageFailed));
             } else {
+                strongSelf.imageView.image = image;
                 strongSelf.loadOK = YES;
                 [strongSelf resetSubviewSize:image];
             }
         }];
+
+        [ZLImageNavigationController.sd_operations addObject:op];
+        ZLLoggerDebug(@"---- %@", ZLImageNavigationController.sd_operations.allObjects);
     }
 }
 
