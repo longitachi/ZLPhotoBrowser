@@ -2,7 +2,7 @@
 
 -----
 
-## [3.0.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.2) (2019-05-09)
+## [3.0.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.3) (2019-05-09)
 
 #### Add
 * 依赖库SDWebImage升级为5.0.2以上; 
