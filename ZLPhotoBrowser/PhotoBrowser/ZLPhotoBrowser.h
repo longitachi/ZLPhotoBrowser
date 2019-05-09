@@ -18,6 +18,7 @@
 #import "ZLPhotoActionSheet.h"
 #import "ZLPhotoManager.h"
 #import "ZLProgressHUD.h"
+#import "ZLCustomCamera.h"
 
 
 

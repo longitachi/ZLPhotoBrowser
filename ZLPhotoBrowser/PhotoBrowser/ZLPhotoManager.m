@@ -488,14 +488,14 @@ static BOOL _sortAscending;
         
         dispatch_async(queue, ^{
             dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-            zl_weakify(self);
+            @zl_weakify(self);
             if (original) {
                 [self requestOriginalImageForAsset:asset progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
                     if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
                     dispatch_semaphore_signal(sem);
-                    zl_strongify(weakSelf);
+                    @zl_strongify(self);
                     
-                    [arr addObject:[strongSelf scaleImage:image original:original]];
+                    [arr addObject:[self scaleImage:image original:original]];
                     if (i == assets.count-1) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if (completion) completion(arr);
@@ -509,9 +509,9 @@ static BOOL _sortAscending;
                 [self requestImageForAsset:asset size:size progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
                     if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
                     dispatch_semaphore_signal(sem);
-                    zl_strongify(weakSelf);
+                    @zl_strongify(self);
                     
-                    [arr addObject:[strongSelf scaleImage:image original:original]];
+                    [arr addObject:[self scaleImage:image original:original]];
                     if (i == assets.count-1) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             if (completion) completion(arr);

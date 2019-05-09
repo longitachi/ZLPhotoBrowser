@@ -412,14 +412,14 @@
     
     _measureCount = (NSInteger)(duration / _interval);
     
-    zl_weakify(self);
+    @zl_weakify(self);
     [ZLPhotoManager requestVideoForAsset:self.model.asset completion:^(AVPlayerItem *item, NSDictionary *info) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            zl_strongify(weakSelf);
+            @zl_strongify(self);
             if (!item) return;
             AVPlayer *player = [AVPlayer playerWithPlayerItem:item];
-            strongSelf.playerLayer.player = player;
-            [strongSelf startTimer];
+            self.playerLayer.player = player;
+            [self startTimer];
         });
     }];
     
@@ -428,10 +428,10 @@
     options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
     options.networkAccessAllowed = YES;
     [[PHImageManager defaultManager] requestAVAssetForVideo:self.model.asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-        zl_strongify(weakSelf);
-        strongSelf->_avAsset = asset;
+        @zl_strongify(self);
+        self->_avAsset = asset;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [strongSelf.collectionView reloadData];
+            [self.collectionView reloadData];
         });
     }];
 }
@@ -464,7 +464,7 @@
     
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
-    zl_weakify(self);
+    @zl_weakify(self);
     __weak typeof(nav) weakNav = nav;
     [ZLPhotoManager exportEditVideoForAsset:_avAsset range:[self getTimeRange] type:nav.configuration.exportVideoType complete:^(BOOL isSuc, PHAsset *asset) {
         [hud hide];
@@ -477,8 +477,8 @@
                 strongNav.callSelectImageBlock();
             }
         } else {
-            zl_strongify(weakSelf);
-            [strongSelf startTimer];
+            @zl_strongify(self);
+            [self startTimer];
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
         }
     }];

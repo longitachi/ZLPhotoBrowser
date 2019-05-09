@@ -7,15 +7,10 @@
 //
 
 #import "ViewController.h"
-#import "ZLPhotoActionSheet.h"
-#import "ZLDefine.h"
 #import "ImageCell.h"
 #import "YYFPSLabel.h"
 #import <Photos/Photos.h>
-#import "ZLPhotoModel.h"
-#import "ZLPhotoManager.h"
-#import "ZLProgressHUD.h"
-#import "ZLPhotoConfiguration.h"
+#import "ZLPhotoBrowser.h"
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
@@ -157,18 +152,18 @@
     //记录上次选择的图片
     actionSheet.arrSelectedAssets = self.rememberLastSelSwitch.isOn&&self.maxSelCountTextField.text.integerValue>1 ? self.lastSelectAssets : nil;
     
-    zl_weakify(self);
+    @zl_weakify(self);
     [actionSheet setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
-        zl_strongify(weakSelf);
-        strongSelf.arrDataSources = images;
-        strongSelf.isOriginal = isOriginal;
-        strongSelf.lastSelectAssets = assets.mutableCopy;
-        strongSelf.lastSelectPhotos = images.mutableCopy;
-        [strongSelf.collectionView reloadData];
+        @zl_strongify(self);
+        self.arrDataSources = images;
+        self.isOriginal = isOriginal;
+        self.lastSelectAssets = assets.mutableCopy;
+        self.lastSelectPhotos = images.mutableCopy;
+        [self.collectionView reloadData];
         NSLog(@"image:%@", images);
         //解析图片
-        if (!strongSelf.allowAnialysisAssetSwitch.isOn) {
-            [strongSelf anialysisAssets:assets original:isOriginal];
+        if (!self.allowAnialysisAssetSwitch.isOn) {
+            [self anialysisAssets:assets original:isOriginal];
         }
     }];
     
@@ -189,13 +184,13 @@
     //该hud自动15s消失，请使用自己项目中的hud控件
     [hud show];
     
-    zl_weakify(self);
+    @zl_weakify(self);
     [ZLPhotoManager anialysisAssets:assets original:original completion:^(NSArray<UIImage *> *images) {
-        zl_strongify(weakSelf);
+        @zl_strongify(self);
         [hud hide];
-        strongSelf.arrDataSources = images;
-        strongSelf.lastSelectPhotos = images.mutableCopy;
-        [strongSelf.collectionView reloadData];
+        self.arrDataSources = images;
+        self.lastSelectPhotos = images.mutableCopy;
+        [self.collectionView reloadData];
         NSLog(@"%@", images);
     }];
 }
@@ -220,6 +215,65 @@
         [a showPhotoLibrary];
     }
 }
+
+- (IBAction)showCamera:(id)sender
+{
+    ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
+    
+    @zl_weakify(self);
+    camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {
+        @zl_strongify(self);
+        [self saveImage:image videoUrl:videoUrl];
+    };
+    
+    [self showDetailViewController:camera sender:nil];
+}
+
+- (void)saveImage:(UIImage *)image videoUrl:(NSURL *)videoUrl
+{
+    ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
+    [hud show];
+    @zl_weakify(self);
+    if (image) {
+        [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
+            @zl_strongify(self);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (suc) {
+                    self.arrDataSources = @[image];
+                    self.lastSelectPhotos = @[image].mutableCopy;
+                    self.lastSelectAssets = @[asset].mutableCopy;
+                    [self.collectionView reloadData];
+                } else {
+                    ZLLoggerDebug(@"图片保存失败");
+                }
+                [hud hide];
+            });
+        }];
+    } else if (videoUrl) {
+        [ZLPhotoManager saveVideoToAblum:videoUrl completion:^(BOOL suc, PHAsset *asset) {
+            @zl_strongify(self);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (suc) {
+                    [ZLPhotoManager requestImageForAsset:asset size:CGSizeMake(300, 300) progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
+                        @zl_strongify(self);
+                        if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
+                            return;
+                        }
+                        self.arrDataSources = @[image];
+                        self.lastSelectPhotos = @[image].mutableCopy;
+                        self.lastSelectAssets = @[asset].mutableCopy;
+                        [self.collectionView reloadData];
+                        [hud hide];
+                    }];
+                } else {
+                    ZLLoggerDebug(@"视频保存失败");
+                    [hud hide];
+                }
+            });
+        }];
+    }
+}
+
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {

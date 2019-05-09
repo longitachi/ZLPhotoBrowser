@@ -170,21 +170,21 @@
     size.width = GetViewWidth(self) * 1.7;
     size.height = GetViewHeight(self) * 1.7;
     
-    zl_weakify(self);
+    @zl_weakify(self);
     if (model.asset && self.imageRequestID >= PHInvalidImageRequestID) {
         [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
     }
     self.identifier = model.asset.localIdentifier;
     self.imageView.image = nil;
     self.imageRequestID = [ZLPhotoManager requestImageForAsset:model.asset size:size progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
-        zl_strongify(weakSelf);
+        @zl_strongify(self);
         
-        if ([strongSelf.identifier isEqualToString:model.asset.localIdentifier]) {
-            strongSelf.imageView.image = image;
+        if ([self.identifier isEqualToString:model.asset.localIdentifier]) {
+            self.imageView.image = image;
         }
         
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
-            strongSelf.imageRequestID = -1;
+            self.imageRequestID = -1;
         }
     }];
 }

@@ -236,22 +236,22 @@ double const ScalePhotoWidth = 1000;
     [self.arrSelectedModels removeAllObjects];
     ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos models:models index:index];
     
-    zl_weakify(self);
+    @zl_weakify(self);
     __weak typeof(svc.navigationController) weakNav = svc.navigationController;
     svc.previewSelectedImageBlock = ^(NSArray<UIImage *> *arrP, NSArray<PHAsset *> *arrA) {
-        zl_strongify(weakSelf);
-        strongSelf.arrSelectedAssets = assets.mutableCopy;
+        @zl_strongify(self);
+        self.arrSelectedAssets = assets.mutableCopy;
         __strong typeof(weakNav) strongNav = weakNav;
-        if (strongSelf.selectImageBlock) {
-            strongSelf.selectImageBlock(arrP, arrA, NO);
+        if (self.selectImageBlock) {
+            self.selectImageBlock(arrP, arrA, NO);
         }
-        [strongSelf hide];
+        [self hide];
         [strongNav dismissViewControllerAnimated:YES completion:nil];
     };
     
     svc.cancelPreviewBlock = ^{
-        zl_strongify(weakSelf);
-        [strongSelf hide];
+        @zl_strongify(self);
+        [self hide];
     };
 }
 
@@ -289,18 +289,18 @@ double const ScalePhotoWidth = 1000;
     ZLShowBigImgViewController *svc = [self pushBigImageToPreview:photos models:models index:index];
     svc.hideToolBar = hideToolBar;
     
-    zl_weakify(self);
+    @zl_weakify(self);
     __weak typeof(svc.navigationController) weakNav = svc.navigationController;
     [svc setPreviewNetImageBlock:^(NSArray *photos) {
-        zl_strongify(weakSelf);
+        @zl_strongify(self);
         __strong typeof(weakNav) strongNav = weakNav;
         if (complete) complete(photos);
-        [strongSelf hide];
+        [self hide];
         [strongNav dismissViewControllerAnimated:YES completion:nil];
     }];
     svc.cancelPreviewBlock = ^{
-        zl_strongify(weakSelf);
-        [strongSelf hide];
+        @zl_strongify(self);
+        [self hide];
     };
 }
 
@@ -510,10 +510,10 @@ double const ScalePhotoWidth = 1000;
         camera.videoType = self.configuration.exportVideoType;
         camera.circleProgressColor = self.configuration.bottomBtnsNormalTitleColor;
         camera.maxRecordDuration = self.configuration.maxRecordDuration;
-        zl_weakify(self);
+        @zl_weakify(self);
         camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {
-            zl_strongify(weakSelf);
-            [strongSelf saveImage:image videoUrl:videoUrl];
+            @zl_strongify(self);
+            [self saveImage:image videoUrl:videoUrl];
         };
         [self.sender showDetailViewController:camera sender:nil];
     }
@@ -590,20 +590,20 @@ double const ScalePhotoWidth = 1000;
         [assets addObject:@""];
     }
     
-    zl_weakify(self);
+    @zl_weakify(self);
     __block NSInteger doneCount = 0;
     for (int i = 0; i < data.count; i++) {
         ZLPhotoModel *model = data[i];
         [ZLPhotoManager requestSelectedImageForAsset:model isOriginal:self.isSelectOriginalPhoto allowSelectGif:self.configuration.allowSelectGif completion:^(UIImage *image, NSDictionary *info) {
-            zl_strongify(weakSelf);
-            if (!strongSelf) return;
+            @zl_strongify(self);
+            if (!self) return;
             
             if (isTimeOut || [[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
             
             doneCount++;
             
             if (image) {
-                [photos replaceObjectAtIndex:i withObject:[ZLPhotoManager scaleImage:image original:strongSelf->_isSelectOriginalPhoto]];
+                [photos replaceObjectAtIndex:i withObject:[ZLPhotoManager scaleImage:image original:self->_isSelectOriginalPhoto]];
                 [assets replaceObjectAtIndex:i withObject:model.asset];
             } else {
                 [errorAssets addObject:model.asset];
@@ -623,16 +623,16 @@ double const ScalePhotoWidth = 1000;
             [assets removeObjectsAtIndexes:set];
             
             [hud hide];
-            if (strongSelf.selectImageBlock) {
-                strongSelf.selectImageBlock(photos, assets, strongSelf.isSelectOriginalPhoto);
-                [strongSelf.arrSelectedModels removeAllObjects];
+            if (self.selectImageBlock) {
+                self.selectImageBlock(photos, assets, self.isSelectOriginalPhoto);
+                [self.arrSelectedModels removeAllObjects];
             }
-            if (errorAssets.count > 0 && strongSelf.selectImageRequestErrorBlock) {
-                strongSelf.selectImageRequestErrorBlock(errorAssets, errorIndexs);
+            if (errorAssets.count > 0 && self.selectImageRequestErrorBlock) {
+                self.selectImageRequestErrorBlock(errorAssets, errorIndexs);
             }
             if (hide) {
-                [strongSelf.arrDataSources removeAllObjects];
-                [strongSelf hide];
+                [self.arrDataSources removeAllObjects];
+                [self hide];
                 [vc dismissViewControllerAnimated:YES completion:nil];
             }
         }];
@@ -661,20 +661,20 @@ double const ScalePhotoWidth = 1000;
     
     ZLPhotoModel *model = self.arrDataSources[indexPath.row];
     
-    zl_weakify(self);
+    @zl_weakify(self);
     __weak typeof(cell) weakCell = cell;
     cell.selectedBlock = ^(BOOL selected) {
-        zl_strongify(weakSelf);
+        @zl_strongify(self);
         __strong typeof(weakCell) strongCell = weakCell;
         if (!selected) {
             //选中
-            if (strongSelf.arrSelectedModels.count >= strongSelf.configuration.maxSelectCount) {
-                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), strongSelf.configuration.maxSelectCount);
+            if (self.arrSelectedModels.count >= self.configuration.maxSelectCount) {
+                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxSelectCountText), self.configuration.maxSelectCount);
                 return;
             }
-            if (strongSelf.arrSelectedModels.count > 0) {
-                ZLPhotoModel *sm = strongSelf.arrSelectedModels.firstObject;
-                if (!strongSelf.configuration.allowMixSelect &&
+            if (self.arrSelectedModels.count > 0) {
+                ZLPhotoModel *sm = self.arrSelectedModels.firstObject;
+                if (!self.configuration.allowMixSelect &&
                     ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
                     ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
                     return;
@@ -684,31 +684,31 @@ double const ScalePhotoWidth = 1000;
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowseriCloudPhotoText));
                 return;
             }
-            if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > strongSelf.configuration.maxVideoDuration) {
-                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), strongSelf.configuration.maxVideoDuration);
+            if (model.type == ZLAssetMediaTypeVideo && GetDuration(model.duration) > self.configuration.maxVideoDuration) {
+                ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoDurationText), self.configuration.maxVideoDuration);
                 return;
             }
             
-            if (![strongSelf shouldDirectEdit:model]) {
+            if (![self shouldDirectEdit:model]) {
                 model.selected = YES;
-                [strongSelf.arrSelectedModels addObject:model];
+                [self.arrSelectedModels addObject:model];
                 strongCell.btnSelect.selected = YES;
             }
         } else {
             strongCell.btnSelect.selected = NO;
             model.selected = NO;
-            for (ZLPhotoModel *m in strongSelf.arrSelectedModels) {
+            for (ZLPhotoModel *m in self.arrSelectedModels) {
                 if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
-                    [strongSelf.arrSelectedModels removeObject:m];
+                    [self.arrSelectedModels removeObject:m];
                     break;
                 }
             }
         }
         
-        if (strongSelf.configuration.showSelectedMask) {
+        if (self.configuration.showSelectedMask) {
             strongCell.topView.hidden = !model.isSelected;
         }
-        [strongSelf changeCancelBtnTitle];
+        [self changeCancelBtnTitle];
     };
     
     cell.allSelectGif = self.configuration.allowSelectGif;
@@ -800,29 +800,29 @@ double const ScalePhotoWidth = 1000;
 - (ZLImageNavigationController *)getImageNavWithRootVC:(UIViewController *)rootVC
 {
     ZLImageNavigationController *nav = [[ZLImageNavigationController alloc] initWithRootViewController:rootVC];
-    zl_weakify(self);
+    @zl_weakify(self);
     __weak typeof(ZLImageNavigationController *) weakNav = nav;
     [nav setCallSelectImageBlock:^{
-        zl_strongify(weakSelf);
-        strongSelf.isSelectOriginalPhoto = weakNav.isSelectOriginalPhoto;
-        [strongSelf.arrSelectedModels removeAllObjects];
-        [strongSelf.arrSelectedModels addObjectsFromArray:weakNav.arrSelectedModels];
-        [strongSelf requestSelPhotos:weakNav data:strongSelf.arrSelectedModels hideAfterCallBack:YES];
+        @zl_strongify(self);
+        self.isSelectOriginalPhoto = weakNav.isSelectOriginalPhoto;
+        [self.arrSelectedModels removeAllObjects];
+        [self.arrSelectedModels addObjectsFromArray:weakNav.arrSelectedModels];
+        [self requestSelPhotos:weakNav data:self.arrSelectedModels hideAfterCallBack:YES];
     }];
     
     [nav setCallSelectClipImageBlock:^(UIImage *image, PHAsset *asset){
-        zl_strongify(weakSelf);
-        if (strongSelf.selectImageBlock) {
-            strongSelf.selectImageBlock(@[image], @[asset], NO);
+        @zl_strongify(self);
+        if (self.selectImageBlock) {
+            self.selectImageBlock(@[image], @[asset], NO);
         }
         [weakNav dismissViewControllerAnimated:YES completion:nil];
-        [strongSelf hide];
+        [self hide];
     }];
     
     [nav setCancelBlock:^{
-        zl_strongify(weakSelf);
-        if (strongSelf.cancleBlock) strongSelf.cancleBlock();
-        [strongSelf hide];
+        @zl_strongify(self);
+        if (self.cancleBlock) self.cancleBlock();
+        [self hide];
     }];
 
     nav.isSelectOriginalPhoto = self.isSelectOriginalPhoto;
@@ -852,15 +852,15 @@ double const ScalePhotoWidth = 1000;
     
     svc.models = models;
     svc.selectIndex = index;
-    zl_weakify(self);
+    @zl_weakify(self);
     [svc setBtnBackBlock:^(NSArray<ZLPhotoModel *> *selectedModels, BOOL isOriginal) {
-        zl_strongify(weakSelf);
-        [ZLPhotoManager markSelectModelInArr:strongSelf.arrDataSources selArr:selectedModels];
-        strongSelf.isSelectOriginalPhoto = isOriginal;
-        [strongSelf.arrSelectedModels removeAllObjects];
-        [strongSelf.arrSelectedModels addObjectsFromArray:selectedModels];
-        [strongSelf.collectionView reloadData];
-        [strongSelf changeCancelBtnTitle];
+        @zl_strongify(self);
+        [ZLPhotoManager markSelectModelInArr:self.arrDataSources selArr:selectedModels];
+        self.isSelectOriginalPhoto = isOriginal;
+        [self.arrSelectedModels removeAllObjects];
+        [self.arrSelectedModels addObjectsFromArray:selectedModels];
+        [self.collectionView reloadData];
+        [self changeCancelBtnTitle];
     }];
     
     [self.sender showDetailViewController:nav sender:nil];
@@ -916,14 +916,14 @@ double const ScalePhotoWidth = 1000;
 {
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     [hud show];
-    zl_weakify(self);
+    @zl_weakify(self);
     if (image) {
         [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
-            zl_strongify(weakSelf);
+            @zl_strongify(self);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (suc) {
                     ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
-                    [strongSelf handleDataArray:model];
+                    [self handleDataArray:model];
                 } else {
                     ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
                 }
@@ -932,12 +932,12 @@ double const ScalePhotoWidth = 1000;
         }];
     } else if (videoUrl) {
         [ZLPhotoManager saveVideoToAblum:videoUrl completion:^(BOOL suc, PHAsset *asset) {
-            zl_strongify(weakSelf);
+            @zl_strongify(self);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (suc) {
                     ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
                     model.duration = [ZLPhotoManager getDuration:asset];
-                    [strongSelf handleDataArray:model];
+                    [self handleDataArray:model];
                 } else {
                     ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
                 }
@@ -949,11 +949,11 @@ double const ScalePhotoWidth = 1000;
 
 - (void)handleDataArray:(ZLPhotoModel *)model
 {
-    zl_weakify(self);
+    @zl_weakify(self);
     BOOL (^shouldSelect)(void) = ^BOOL() {
-        zl_strongify(weakSelf);
+        @zl_strongify(self);
         if (model.type == ZLAssetMediaTypeVideo) {
-            return (model.asset.duration <= strongSelf.configuration.maxVideoDuration);
+            return (model.asset.duration <= self.configuration.maxVideoDuration);
         }
         return YES;
     };

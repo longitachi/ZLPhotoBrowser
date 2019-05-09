@@ -391,6 +391,20 @@
 //    NSLog(@"---- %s", __FUNCTION__);
 }
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.allowTakePhoto = YES;
+        self.allowRecordVideo = YES;
+        self.maxRecordDuration = 15;
+        self.sessionPreset = ZLCaptureSessionPreset1280x720;
+        self.videoType = ZLExportVideoTypeMp4;
+        self.circleProgressColor = kRGB(80, 180, 234);
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

@@ -83,13 +83,13 @@
     CGSize size = CGSizeMake(width*scale, width*scale*self.model.asset.pixelHeight/self.model.asset.pixelWidth);
     
     [_indicator startAnimating];
-    zl_weakify(self);
+    @zl_weakify(self);
     [ZLPhotoManager requestImageForAsset:self.model.asset size:size progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
-            zl_strongify(weakSelf);
-            if (!strongSelf) return;
-            [strongSelf->_indicator stopAnimating];
-            strongSelf->_editTool.editImage = image;
+            @zl_strongify(self);
+            if (!self) return;
+            [self->_indicator stopAnimating];
+            self->_editTool.editImage = image;
         }
     }];
 }
@@ -98,24 +98,24 @@
 {
     ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     _editTool = [[ZLImageEditTool alloc] initWithEditType:ZLImageEditTypeClip image:_oriImage configuration:configuration];
-    zl_weakify(self);
+    @zl_weakify(self);
     _editTool.cancelEditBlock = ^{
-        zl_strongify(weakSelf);
-        ZLImageNavigationController *nav = (ZLImageNavigationController *)strongSelf.navigationController;
+        @zl_strongify(self);
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
         ZLPhotoConfiguration *configuration = nav.configuration;
         
         if (configuration.editAfterSelectThumbnailImage &&
             configuration.maxSelectCount == 1) {
             [nav.arrSelectedModels removeAllObjects];
         }
-        UIViewController *vc = [strongSelf.navigationController popViewControllerAnimated:NO];
+        UIViewController *vc = [self.navigationController popViewControllerAnimated:NO];
         if (!vc) {
-            [strongSelf dismissViewControllerAnimated:YES completion:nil];
+            [self dismissViewControllerAnimated:YES completion:nil];
         }
     };
     _editTool.doneEditBlock = ^(UIImage *image) {
-        zl_strongify(weakSelf);
-        [strongSelf saveImage:image];
+        @zl_strongify(self);
+        [self saveImage:image];
     };
     [self.view addSubview:_editTool];
 }

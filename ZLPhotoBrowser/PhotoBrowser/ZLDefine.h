@@ -67,8 +67,40 @@
 
 #define kRGB(r, g, b)   [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 
-#define zl_weakify(var)   __weak typeof(var) weakSelf = var
-#define zl_strongify(var) __strong typeof(var) strongSelf = var
+
+#ifndef zl_weakify
+    #if DEBUG
+        #if __has_feature(objc_arc)
+        #define zl_weakify(object) autoreleasepool{} __weak __typeof__(object) weak##_##object = object;
+        #else
+        #define zl_weakify(object) autoreleasepool{} __block __typeof__(object) block##_##object = object;
+        #endif
+    #else
+        #if __has_feature(objc_arc)
+        #define zl_weakify(object) try{} @finally{} {} __weak __typeof__(object) weak##_##object = object;
+        #else
+        #define zl_weakify(object) try{} @finally{} {} __block __typeof__(object) block##_##object = object;
+        #endif
+    #endif
+#endif
+
+#ifndef zl_strongify
+    #if DEBUG
+        #if __has_feature(objc_arc)
+        #define zl_strongify(object) autoreleasepool{} __typeof__(object) object = weak##_##object;
+        #else
+        #define zl_strongify(object) autoreleasepool{} __typeof__(object) object = block##_##object;
+        #endif
+    #else
+        #if __has_feature(objc_arc)
+        #define zl_strongify(object) try{} @finally{} __typeof__(object) object = weak##_##object;
+        #else
+        #define zl_strongify(object) try{} @finally{} __typeof__(object) object = block##_##object;
+        #endif
+    #endif
+#endif
+
+
 
 #define kZLPhotoBrowserBundle [NSBundle bundleForClass:[self class]]
 

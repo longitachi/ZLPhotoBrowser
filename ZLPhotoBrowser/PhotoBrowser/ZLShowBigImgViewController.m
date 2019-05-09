@@ -197,15 +197,15 @@
     if (!_popTrasition) {
         _popTrasition = [[ZLInteractiveTrasition alloc] init];
         
-        zl_weakify(self);
+        @zl_weakify(self);
         _popTrasition.beginTransitionBlock = ^{
-            zl_strongify(weakSelf);
-            strongSelf->_navView.hidden = YES;
+            @zl_strongify(self);
+            self->_navView.hidden = YES;
         };
         
         _popTrasition.cancelTransitionBlock = ^{
-            zl_strongify(weakSelf);
-            strongSelf->_navView.hidden = strongSelf->_hideNavBar;
+            @zl_strongify(self);
+            self->_navView.hidden = self->_hideNavBar;
         };
     }
     return _popTrasition;
@@ -647,10 +647,10 @@
     NSArray *arr = configuration.showSelectBtn?nav.arrSelectedModels:@[self.models[_currentPage-1]];
     
     if (arr.count) {
-        zl_weakify(self);
+        @zl_weakify(self);
         [ZLPhotoManager getPhotosBytesWithArray:arr completion:^(NSString *photosBytes) {
-            zl_strongify(weakSelf);
-            strongSelf.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
+            @zl_strongify(self);
+            self.labPhotosBytes.text = [NSString stringWithFormat:@"(%@)", photosBytes];
         }];
     } else {
         self.labPhotosBytes.text = nil;
@@ -698,19 +698,19 @@
     cell.showGif = configuration.allowSelectGif;
     cell.showLivePhoto = configuration.allowSelectLivePhoto;
     cell.model = model;
-    zl_weakify(self);
+    @zl_weakify(self);
     cell.singleTapCallBack = ^() {
-        zl_strongify(weakSelf);
-        [strongSelf handlerSingleTap];
+        @zl_strongify(self);
+        [self handlerSingleTap];
     };
     __weak typeof(cell) weakCell = cell;
     cell.longPressCallBack = ^{
-        zl_strongify(weakSelf);
+        @zl_strongify(self);
         __strong typeof(weakCell) strongCell = weakCell;
         if (!strongCell.previewView.image) {
             return;
         }
-        [strongSelf showDownloadAlert];
+        [self showDownloadAlert];
     };
     
     return cell;
