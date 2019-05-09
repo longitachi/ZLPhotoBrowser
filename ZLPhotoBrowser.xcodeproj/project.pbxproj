@@ -108,7 +108,7 @@
 		FD644751225AEF43003724CF /* ZLPullDownInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F7225AEF42003724CF /* ZLPullDownInteractiveTransition.m */; };
 		FD644752225AEF43003724CF /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F8225AEF42003724CF /* ZLShowBigImgViewController.m */; };
 		FD644753225AEF43003724CF /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F8225AEF42003724CF /* ZLShowBigImgViewController.m */; };
-		FD644754225AEF43003724CF /* NSBundle+ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446F9225AEF42003724CF /* NSBundle+ZLPhotoBrowser.h */; };
+		FD644754225AEF43003724CF /* NSBundle+ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446F9225AEF42003724CF /* NSBundle+ZLPhotoBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD644755225AEF43003724CF /* ZLBrushBoardImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446FA225AEF42003724CF /* ZLBrushBoardImageView.h */; };
 		FD644756225AEF43003724CF /* ZLThumbnailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446FB225AEF42003724CF /* ZLThumbnailViewController.m */; };
 		FD644757225AEF43003724CF /* ZLThumbnailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446FB225AEF42003724CF /* ZLThumbnailViewController.m */; };
@@ -436,6 +436,7 @@
 				FD644747225AEF43003724CF /* ZLPhotoManager.h in Headers */,
 				FD644721225AEF43003724CF /* ZLDefine.h in Headers */,
 				FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */,
+				FD644754225AEF43003724CF /* NSBundle+ZLPhotoBrowser.h in Headers */,
 				FD644702225AEF43003724CF /* ZLCustomCamera.h in Headers */,
 				FD64474C225AEF43003724CF /* ZLForceTouchPreviewController.h in Headers */,
 				FD644755225AEF43003724CF /* ZLBrushBoardImageView.h in Headers */,
@@ -455,7 +456,6 @@
 				FD644722225AEF43003724CF /* ZLEditVideoController.h in Headers */,
 				FD644719225AEF43003724CF /* ZLNoAuthorityViewController.h in Headers */,
 				FD644711225AEF43003724CF /* ZLPlayer.h in Headers */,
-				FD644754225AEF43003724CF /* NSBundle+ZLPhotoBrowser.h in Headers */,
 				FD644726225AEF43003724CF /* ZLThumbnailViewController.h in Headers */,
 				FD64470B225AEF43003724CF /* ZLEditViewController.h in Headers */,
 				FD64475D225AEF43003724CF /* ZLProgressView.h in Headers */,
