@@ -30,7 +30,7 @@ static NSHashTable *_sd_operations = nil;
         [op cancel];
     }
     [ZLImageNavigationController.sd_operations removeAllObjects];
-//    NSLog(@"---- %s", __FUNCTION__);
+    NSLog(@"---- %s", __FUNCTION__);
 }
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController

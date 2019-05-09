@@ -122,6 +122,7 @@
 		FD64475F225AEF43003724CF /* ZLEditVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD644700225AEF42003724CF /* ZLEditVideoController.m */; };
 		FD644760225AEF43003724CF /* ZLPhotoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = FD644701225AEF42003724CF /* ZLPhotoConfiguration.m */; };
 		FD644761225AEF43003724CF /* ZLPhotoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = FD644701225AEF42003724CF /* ZLPhotoConfiguration.m */; };
+		FDE2378822807F1F00D013B5 /* SDWebImageMapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDE2378722807F1F00D013B5 /* SDWebImageMapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -235,6 +236,7 @@
 		FD6446FF225AEF42003724CF /* ZLProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLProgressView.h; sourceTree = "<group>"; };
 		FD644700225AEF42003724CF /* ZLEditVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLEditVideoController.m; sourceTree = "<group>"; };
 		FD644701225AEF42003724CF /* ZLPhotoConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoConfiguration.m; sourceTree = "<group>"; };
+		FDE2378722807F1F00D013B5 /* SDWebImageMapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImageMapKit.framework; path = Carthage/Build/iOS/SDWebImageMapKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,8 +244,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD41913D222D31F400FF46A9 /* ZLPhotoBrowser.framework in Frameworks */,
+				FDE2378822807F1F00D013B5 /* SDWebImageMapKit.framework in Frameworks */,
 				FD4190EB222D1F5A00FF46A9 /* SDWebImage.framework in Frameworks */,
+				FD41913D222D31F400FF46A9 /* ZLPhotoBrowser.framework in Frameworks */,
 				FD4190F4222D1F9400FF46A9 /* Photos.framework in Frameworks */,
 				FD4190F3222D1F9100FF46A9 /* PhotosUI.framework in Frameworks */,
 			);
@@ -316,6 +319,7 @@
 		FD4190E8222D1F5900FF46A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FDE2378722807F1F00D013B5 /* SDWebImageMapKit.framework */,
 				FD4190F1222D1F8A00FF46A9 /* PhotosUI.framework */,
 				FD4190EF222D1F8300FF46A9 /* Photos.framework */,
 				FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */,
@@ -575,6 +579,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/SDWebImage.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SDWebImageMapKit.framework",
 			);
 			outputFileListPaths = (
 			);
@@ -825,7 +830,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTest;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -849,7 +854,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTest;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

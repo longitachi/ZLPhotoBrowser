@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.frameworks   = 'UIKit','Photos','PhotosUI'
 
-  s.dependency 'SDWebImage', '~> 4.4.6'
+  s.dependency 'SDWebImage', '~> 5.0.2'
 end

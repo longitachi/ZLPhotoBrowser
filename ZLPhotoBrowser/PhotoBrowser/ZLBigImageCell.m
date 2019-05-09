@@ -13,6 +13,7 @@
 #import "ZLPhotoModel.h"
 #import "ZLAlbumListController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIImage+Metadata.h>
 #import "ToastUtils.h"
 #import "ZLProgressView.h"
 
@@ -201,7 +202,8 @@
 
 - (void)resumePlay
 {
-    if (self.model.type == ZLAssetMediaTypeGif) {
+    if (self.model.type == ZLAssetMediaTypeGif ||
+        self.model.type == ZLAssetMediaTypeNetImage) {
         [self.imageGifView resumeGif];
     }
 }
@@ -272,7 +274,7 @@
 - (UIImageView *)imageView
 {
     if (!_imageView) {
-        _imageView = [[UIImageView alloc] init];
+        _imageView = [[SDAnimatedImageView alloc] init];
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
 //        _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
@@ -322,6 +324,8 @@
 
 - (void)loadNormalImage:(PHAsset *)asset
 {
+    self.imageView.image = nil;
+    
     if (self.asset && self.imageRequestID >= 0) {
         [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
     }
@@ -414,23 +418,12 @@
 
 - (void)resumeGif
 {
-    CALayer *layer = self.imageView.layer;
-    if (layer.speed != 0) return;
-    CFTimeInterval pausedTime = [layer timeOffset];
-    layer.speed = 1.0;
-    layer.timeOffset = 0.0;
-    layer.beginTime = 0.0;
-    CFTimeInterval timeSincePause = [layer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
-    layer.beginTime = timeSincePause;
+    [self.imageView startAnimating];
 }
 
 - (void)pauseGif
 {
-    CALayer *layer = self.imageView.layer;
-    if (layer.speed == .0) return;
-    CFTimeInterval pausedTime = [layer convertTime:CACurrentMediaTime() fromLayer:nil];
-    layer.speed = 0.0;
-    layer.timeOffset = pausedTime;
+    [self.imageView stopAnimating];
 }
 
 - (void)loadGifImage:(PHAsset *)asset
@@ -451,8 +444,7 @@
         zl_strongify(weakSelf);
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
             strongSelf.indicator.hidden = YES;
-            strongSelf.imageView.image = [ZLPhotoManager transformToGifImageWithData:data];
-            [strongSelf resumeGif];
+            strongSelf.imageView.image = [SDAnimatedImage imageWithData:data];
             [strongSelf resetSubviewSize:asset];
         }
     }];
@@ -502,7 +494,8 @@
     } else {
         zl_weakify(self);
         self.imageView.image = nil;
-        id<SDWebImageOperation> op = [SDWebImageManager.sharedManager loadImageWithURL:obj options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        
+        id<SDWebImageOperation> op = [SDWebImageManager.sharedManager loadImageWithURL:obj options:(SDWebImageHighPriority | SDWebImageQueryMemoryData) progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             zl_strongify(weakSelf);
             dispatch_async(dispatch_get_main_queue(), ^{
                 float progress = (float)receivedSize / (float)expectedSize;
@@ -519,7 +512,11 @@
             if (error) {
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadNetImageFailed));
             } else {
-                strongSelf.imageView.image = image;
+                if (image.sd_isAnimated) {
+                    strongSelf.imageView.image = [SDAnimatedImage imageWithData:data];
+                } else {
+                    strongSelf.imageView.image = image;
+                }
                 strongSelf.loadOK = YES;
                 [strongSelf resetSubviewSize:image];
             }

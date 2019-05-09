@@ -750,6 +750,7 @@
 {
     ZLPhotoModel *m = [self getCurrentPageModel];
     if (m.type == ZLAssetMediaTypeGif ||
+        m.type == ZLAssetMediaTypeNetImage ||
         m.type == ZLAssetMediaTypeLivePhoto ||
         m.type == ZLAssetMediaTypeVideo) {
         ZLBigImageCell *cell = (ZLBigImageCell *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage-1 inSection:0]];
