@@ -19,6 +19,11 @@
 #import "ZLPhotoManager.h"
 #import "ZLProgressHUD.h"
 #import "ZLCustomCamera.h"
+#import "ZLPhotoConfiguration.h"
+#import "ZLDefine.h"
+#import "ZLProgressHUD.h"
+#import "NSBundle+ZLPhotoBrowser.h"
+#import "ZLPhotoModel.h"
 
 
 
