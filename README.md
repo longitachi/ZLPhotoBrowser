@@ -49,7 +49,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
-● 3.0.3: 依赖库SDWebImage升级为5.0.2以上; 解决图片浏览器关闭时取消所有sd图片请求的bug;
+● 3.0.3: 依赖库SDWebImage升级为5.0.2以上; 解决图片浏览器关闭时取消所有sd图片请求的bug; 支持直接调用相机;
 ● 3.0.0: 压缩bundle内图片; 支持直接选择iCloud照片，并添加解析图片超时时间属性;
 ● 3.0.0: 支持carthage; 去除GPUImage滤镜;
 ● 2.7.8: 添加iCloud图片加载进度条，支持iCloud视频播放;

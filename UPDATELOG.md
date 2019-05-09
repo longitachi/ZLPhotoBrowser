@@ -6,6 +6,7 @@
 
 #### Add
 * 依赖库SDWebImage升级为5.0.2以上; 
+* 支持直接调用相机;
 
 ### Fix
 * 解决图片浏览器关闭时取消所有sd图片请求的bug.[#366](https://github.com/longitachi/ZLPhotoBrowser/issues/366)
