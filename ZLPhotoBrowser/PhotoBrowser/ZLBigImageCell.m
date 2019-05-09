@@ -867,7 +867,17 @@
 - (void)loadVideo:(PHAsset *)asset
 {
     @zl_weakify(self);
-    [ZLPhotoManager requestVideoForAsset:asset completion:^(AVPlayerItem *item, NSDictionary *info) {
+    [ZLPhotoManager requestVideoForAsset:asset progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+        @zl_strongify(self);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.indicator.progress = progress;
+            if (progress >= 1) {
+                self.indicator.hidden = YES;
+            } else {
+                self.indicator.hidden = NO;
+            }
+        });
+    } completion:^(AVPlayerItem *item, NSDictionary *info) {
         dispatch_async(dispatch_get_main_queue(), ^{
             @zl_strongify(self);
 //            if (!item) {

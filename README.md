@@ -41,6 +41,7 @@
 
 ###
 下载完Demo请执行`carthage update --platform iOS`
+如果Demo报 `Duplicate interface definition for class''`  请到`Build Phases -> Headers`中，把`Public`中的头文件拖到`Protect`中即可
 
 ### Feature
 
@@ -121,25 +122,37 @@ Privacy - Microphone Usage Description
     
 ZLPhotoActionSheet *ac = [[ZLPhotoActionSheet alloc] init];
 
-//相册参数配置，configuration有默认值，可直接使用并对其属性进行修改
+// 相册参数配置，configuration有默认值，可直接使用并对其属性进行修改
 ac.configuration.maxSelectCount = 5;
 ac.configuration.maxPreviewCount = 10;
 
 //如调用的方法无sender参数，则该参数必传
 ac.sender = self;
 
-//选择回调
+// 选择回调
 [ac setSelectImageBlock:^(NSArray<UIImage *> * _Nonnull images, NSArray<PHAsset *> * _Nonnull assets, BOOL isOriginal) {
     //your codes
 }];
 
-//调用相册
+// 调用相册
 [ac showPreviewAnimated:YES];
 
-//预览网络图片
+// 预览网络图片
 [ac previewPhotos:arrNetImages index:0 hideToolBar:YES complete:^(NSArray * _Nonnull photos) {
-    //your codes
+    // your codes
 }];
+
+
+// 直接调用相机
+ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
+
+
+camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {
+    // 自己需要在这个地方进行图片或者视频的保存
+};
+
+[self showDetailViewController:camera sender:nil];
+
 ```
 
 ------------------

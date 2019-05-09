@@ -38,7 +38,7 @@
 		FD64470B225AEF43003724CF /* ZLEditViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446C5225AEF42003724CF /* ZLEditViewController.h */; };
 		FD64470C225AEF43003724CF /* ZLImageEditTool.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446C6225AEF42003724CF /* ZLImageEditTool.m */; };
 		FD64470D225AEF43003724CF /* ZLImageEditTool.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446C6225AEF42003724CF /* ZLImageEditTool.m */; };
-		FD64470E225AEF43003724CF /* ToastUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446C7225AEF42003724CF /* ToastUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD64470E225AEF43003724CF /* ToastUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446C7225AEF42003724CF /* ToastUtils.h */; };
 		FD64470F225AEF43003724CF /* ZLClipItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446C8225AEF42003724CF /* ZLClipItem.h */; };
 		FD644710225AEF43003724CF /* UIImage+ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446C9225AEF42003724CF /* UIImage+ZLPhotoBrowser.h */; };
 		FD644711225AEF43003724CF /* ZLPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446CA225AEF42003724CF /* ZLPlayer.h */; };
@@ -429,20 +429,20 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD64474C225AEF43003724CF /* ZLForceTouchPreviewController.h in Headers */,
 				FD644727225AEF43003724CF /* ZLPhotoActionSheet.h in Headers */,
-				FD64470E225AEF43003724CF /* ToastUtils.h in Headers */,
-				FD644703225AEF43003724CF /* ZLPhotoBrowser.h in Headers */,
-				FD64475A225AEF43003724CF /* ZLProgressHUD.h in Headers */,
-				FD644747225AEF43003724CF /* ZLPhotoManager.h in Headers */,
-				FD644721225AEF43003724CF /* ZLDefine.h in Headers */,
 				FD644723225AEF43003724CF /* ZLPhotoModel.h in Headers */,
 				FD644743225AEF43003724CF /* ZLImageEditTool.h in Headers */,
-				FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */,
-				FD644754225AEF43003724CF /* NSBundle+ZLPhotoBrowser.h in Headers */,
+				FD644747225AEF43003724CF /* ZLPhotoManager.h in Headers */,
 				FD644702225AEF43003724CF /* ZLCustomCamera.h in Headers */,
-				FD64474C225AEF43003724CF /* ZLForceTouchPreviewController.h in Headers */,
+				FD644754225AEF43003724CF /* NSBundle+ZLPhotoBrowser.h in Headers */,
+				FD64475A225AEF43003724CF /* ZLProgressHUD.h in Headers */,
+				FD644703225AEF43003724CF /* ZLPhotoBrowser.h in Headers */,
+				FD644721225AEF43003724CF /* ZLDefine.h in Headers */,
+				FD64470E225AEF43003724CF /* ToastUtils.h in Headers */,
 				FD644755225AEF43003724CF /* ZLBrushBoardImageView.h in Headers */,
 				FD644718225AEF43003724CF /* ZLCollectionCell.h in Headers */,
+				FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */,
 				FD644735225AEF43003724CF /* ZLBigImageCell.h in Headers */,
 				FD644712225AEF43003724CF /* ZLDrawItem.h in Headers */,
 				FD64472E225AEF43003724CF /* ZLShowBigImgViewController.h in Headers */,
