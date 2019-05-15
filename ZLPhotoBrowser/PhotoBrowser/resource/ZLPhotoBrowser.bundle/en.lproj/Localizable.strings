@@ -29,6 +29,8 @@
 "ZLPhotoBrowserSaveImageErrorText" = "Failed to save the image";
 "ZLPhotoBrowserMaxSelectCountText" = "Max select count: %ld";
 "ZLPhotoBrowserMaxVideoDurationText" = "Unable to select video with a duration longer than %lds";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Video max select count: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "Video min select count: %ld";
 
 "ZLPhotoBrowserNoCameraAuthorityText" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
 "ZLPhotoBrowserNoAblumAuthorityText" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";

@@ -109,6 +109,8 @@
     actionSheet.configuration.maxPreviewCount = self.previewTextField.text.integerValue;
     //设置照片最大选择数
     actionSheet.configuration.maxSelectCount = self.maxSelCountTextField.text.integerValue;
+    actionSheet.configuration.maxVideoSelectCountInMix = 3;
+    actionSheet.configuration.minVideoSelectCountInMix = 1;
     //设置允许选择的视频最大时长
     actionSheet.configuration.maxVideoDuration = self.maxVideoDurationTextField.text.integerValue;
     //设置照片cell弧度

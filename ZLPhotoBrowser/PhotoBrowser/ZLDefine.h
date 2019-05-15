@@ -58,6 +58,9 @@
 #define ZLPhotoBrowserDepthEffect @"ZLPhotoBrowserDepthEffect"
 #define ZLPhotoBrowserLivePhotos @"ZLPhotoBrowserLivePhotos"
 #define ZLPhotoBrowserAnimated @"ZLPhotoBrowserAnimated"
+#define ZLPhotoBrowserMaxVideoSelectCountInMix @"ZLPhotoBrowserMaxVideoSelectCountInMix"
+#define ZLPhotoBrowserMinVideoSelectCountInMix @"ZLPhotoBrowserMinVideoSelectCountInMix"
+
 
 #if DEBUG
 #define ZLLoggerDebug(format, ...) NSLog(format, ##__VA_ARGS__)

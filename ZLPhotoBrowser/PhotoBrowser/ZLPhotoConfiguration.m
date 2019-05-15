@@ -25,6 +25,8 @@
     
     configuration.statusBarStyle = UIStatusBarStyleLightContent;
     configuration.maxSelectCount = 9;
+    configuration.maxVideoSelectCountInMix = 9;
+    configuration.minVideoSelectCountInMix = 0;
     configuration.maxPreviewCount = 20;
     configuration.cellCornerRadio = .0;
     configuration.allowMixSelect = YES;
@@ -74,7 +76,31 @@
 
 - (void)setMaxSelectCount:(NSInteger)maxSelectCount
 {
+    BOOL changeMaxVideoSelectCount = self.maxVideoSelectCountInMix == _maxSelectCount;
+    
     _maxSelectCount = MAX(maxSelectCount, 1);
+    
+    if (changeMaxVideoSelectCount) {
+        self.maxVideoSelectCountInMix = _maxSelectCount;
+    } else if (_maxSelectCount < self.maxVideoSelectCountInMix) {
+        self.maxVideoSelectCountInMix = _maxSelectCount;
+    }
+    
+    if (self.minVideoSelectCountInMix > _maxSelectCount) {
+        self.minVideoSelectCountInMix = _maxSelectCount;
+    }
+}
+
+- (void)setMaxVideoSelectCountInMix:(NSInteger)maxVideoSelectCountInMix
+{
+    _maxVideoSelectCountInMix = MAX(MIN(self.maxSelectCount, maxVideoSelectCountInMix), 0);
+    NSAssert(_maxVideoSelectCountInMix >= self.minVideoSelectCountInMix, @"混合选择中，最大视频选择数量不能小于最小视频选择数量");
+}
+
+- (void)setMinVideoSelectCountInMix:(NSInteger)minVideoSelectCountInMix
+{
+    _minVideoSelectCountInMix = MAX(MIN(self.maxSelectCount, minVideoSelectCountInMix), 0);
+    NSAssert(_minVideoSelectCountInMix <= self.maxVideoSelectCountInMix, @"混合选择中，最小视频选择数量不能大于最大视频选择数量");
 }
 
 - (BOOL)showSelectBtn

@@ -36,6 +36,16 @@
 @property (nonatomic, assign) NSInteger maxSelectCount;
 
 /**
+ 混合选择时 视频最大数量，默认等同最大选择数 9
+ */
+@property (nonatomic, assign) NSInteger maxVideoSelectCountInMix;
+
+/**
+ 混合选择时 视频最大数量，默认为0
+ */
+@property (nonatomic, assign) NSInteger minVideoSelectCountInMix;
+
+/**
  预览图最大显示数 默认20张，该值为0时将不显示上方预览图，仅显示 '拍照、相册、取消' 按钮
  */
 @property (nonatomic, assign) NSInteger maxPreviewCount;

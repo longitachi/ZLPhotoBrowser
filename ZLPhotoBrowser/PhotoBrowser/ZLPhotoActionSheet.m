@@ -554,6 +554,10 @@ double const ScalePhotoWidth = 1000;
 #pragma mark - 请求所选择图片、回调
 - (void)requestSelPhotos:(UIViewController *)vc data:(NSArray<ZLPhotoModel *> *)data hideAfterCallBack:(BOOL)hide
 {
+    if (![self checkSelectVideoCount]) {
+        return;
+    }
+    
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     
     __block BOOL isTimeOut = NO;
@@ -637,6 +641,36 @@ double const ScalePhotoWidth = 1000;
             }
         }];
     }
+}
+
+- (BOOL)checkSelectVideoCount
+{
+    if (!self.configuration.allowMixSelect) {
+        return YES;
+    }
+    
+    __block NSInteger videoCount = 0;
+    
+    [self.arrSelectedModels enumerateObjectsUsingBlock:^(ZLPhotoModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.type == ZLAssetMediaTypeVideo) {
+            videoCount++;
+        }
+    }];
+    
+    NSInteger min = self.configuration.minVideoSelectCountInMix;
+    NSInteger max = self.configuration.maxVideoSelectCountInMix;
+    
+    if (videoCount < min) {
+        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMinVideoSelectCountInMix), min);
+        return NO;
+    }
+    
+    if (videoCount > max) {
+        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoSelectCountInMix), max);
+        return NO;
+    }
+    
+    return YES;
 }
 
 #pragma mark - UICollectionDataSource
