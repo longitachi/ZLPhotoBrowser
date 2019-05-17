@@ -346,7 +346,9 @@
 
 @end
 
-@implementation ZLPreviewImageAndGif
+@implementation ZLPreviewImageAndGif {
+    __weak id<SDWebImageOperation> _combineOperation;
+}
 
 - (void)layoutSubviews
 {
@@ -493,9 +495,9 @@
         [self resetSubviewSize:obj];
     } else {
         @zl_weakify(self);
+        [self cancelCurrentImageLoad];
         self.imageView.image = nil;
-        
-        id<SDWebImageOperation> op = [SDWebImageManager.sharedManager loadImageWithURL:obj options:(SDWebImageHighPriority | SDWebImageQueryMemoryData) progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        _combineOperation = [SDWebImageManager.sharedManager loadImageWithURL:obj options:(SDWebImageHighPriority | SDWebImageQueryMemoryData) progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             @zl_strongify(self);
             dispatch_async(dispatch_get_main_queue(), ^{
                 float progress = (float)receivedSize / (float)expectedSize;
@@ -512,18 +514,11 @@
             if (error) {
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserLoadNetImageFailed));
             } else {
-                if (image.sd_isAnimated) {
-                    self.imageView.image = [SDAnimatedImage imageWithData:data];
-                } else {
-                    self.imageView.image = image;
-                }
+                self.imageView.image = image;
                 self.loadOK = YES;
                 [self resetSubviewSize:image];
             }
         }];
-
-        [ZLImageNavigationController.sd_operations addObject:op];
-        ZLLoggerDebug(@"---- %@", ZLImageNavigationController.sd_operations.allObjects);
     }
 }
 
@@ -662,6 +657,16 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self resumeGif];
+}
+
+- (void)cancelCurrentImageLoad {
+    if (_combineOperation && [_combineOperation conformsToProtocol:@protocol(SDWebImageOperation)]) {
+        [_combineOperation cancel];
+    }
+}
+
+- (void)dealloc {
+    [self cancelCurrentImageLoad];
 }
 
 @end
