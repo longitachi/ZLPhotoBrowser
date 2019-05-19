@@ -2,6 +2,18 @@
 
 -----
 
+## [3.0.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.4) (2019-05-19)
+
+#### Add
+* 添加视频选择最大最小个数限制;.
+
+### Fix
+* 解决网络gif图片无法播放的bug.[#372](https://github.com/longitachi/ZLPhotoBrowser/pull/372)
+* fix已知bug.[#371](https://github.com/longitachi/ZLPhotoBrowser/issues/371)
+
+---
+
+
 ## [3.0.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.3) (2019-05-09)
 
 #### Add
