@@ -44,13 +44,6 @@
  */
 @property (nonatomic, copy) void (^cancelBlock)(void);
 
-
-/**
- 取消sd正在下载的图片
- */
-@property (class, readonly) NSHashTable<id<SDWebImageOperation>> *sd_operations;
-
-
 @end
 
 
