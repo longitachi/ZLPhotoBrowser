@@ -9,6 +9,10 @@
 
 ----------------------------------------
 
+### 运行Demo
+下载完Demo请执行`carthage update --platform iOS`
+如果Demo报 `Duplicate interface definition for class''`  请到`Build Phases -> Headers`中，把`Public`中的头文件拖到`Protect`中即可
+
 ### 框架整体介绍
 * [功能介绍](#功能介绍)
 * [更新日志](#更新日志)
@@ -38,10 +42,6 @@
 - [x] 支持点击拍照及长按录制视频 (仿微信)
 - [x] 开发者可自定义资源图片
 - [x] 支持导出视频 (可指定导出视频尺寸、添加图片水印、粒子特效 ps:文字水印暂不支持)
-
-###
-下载完Demo请执行`carthage update --platform iOS`
-如果Demo报 `Duplicate interface definition for class''`  请到`Build Phases -> Headers`中，把`Public`中的头文件拖到`Protect`中即可
 
 ### Feature
 

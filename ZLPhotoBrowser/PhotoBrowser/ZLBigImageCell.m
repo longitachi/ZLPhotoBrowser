@@ -497,7 +497,7 @@
         @zl_weakify(self);
         [self cancelCurrentImageLoad];
         self.imageView.image = nil;
-        _combineOperation = [SDWebImageManager.sharedManager loadImageWithURL:obj options:(SDWebImageHighPriority | SDWebImageQueryMemoryData) progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        _combineOperation = [SDWebImageManager.sharedManager loadImageWithURL:obj options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             @zl_strongify(self);
             dispatch_async(dispatch_get_main_queue(), ^{
                 float progress = (float)receivedSize / (float)expectedSize;
