@@ -612,22 +612,15 @@ static BOOL _sortAscending;
 
 + (void)getPhotosBytesWithArray:(NSArray<ZLPhotoModel *> *)photos completion:(void (^)(NSString *photosBytes))completion
 {
-    __block NSInteger dataLength = 0;
-    __block NSInteger count = photos.count;
-    
-    __weak typeof(self) weakSelf = self;
+    NSInteger dataLength = 0;
     for (int i = 0; i < photos.count; i++) {
         ZLPhotoModel *model = photos[i];
-        [[PHCachingImageManager defaultManager] requestImageDataForAsset:model.asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            dataLength += imageData.length;
-            count--;
-            if (count <= 0) {
-                if (completion) {
-                    completion([strongSelf transformDataLength:dataLength]);
-                }
-            }
-        }];
+        PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:model.asset] firstObject];
+        long long fileSize = [[resource valueForKey:@"fileSize"] longLongValue];
+        dataLength += fileSize;
+    }
+    if (completion) {
+        completion([self transformDataLength:dataLength]);
     }
 }
 
