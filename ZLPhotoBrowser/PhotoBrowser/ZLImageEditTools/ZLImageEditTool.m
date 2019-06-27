@@ -121,9 +121,9 @@
         inset = self.superview.safeAreaInsets;
     }
     
-    self.cancelBtn.frame = CGRectMake(15+inset.left, inset.top+5, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30), 30);
-    CGFloat doneBtnW = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), 15, YES, 30);
-    self.doneBtn.frame = CGRectMake(kViewWidth-doneBtnW-inset.right-15, inset.top+5, doneBtnW, 30);
+    self.cancelBtn.frame = CGRectMake(15+inset.left, inset.top+5, GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 15, YES, 30)+20, 40);
+    CGFloat doneBtnW = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), 15, YES, 30)+20;
+    self.doneBtn.frame = CGRectMake(kViewWidth-doneBtnW-inset.right-15, inset.top+5, doneBtnW, 40);
     
     [self setImageViewFrame:_layoutCount != 1];
     if (_selectToolType & ZLImageEditTypeClip) {
