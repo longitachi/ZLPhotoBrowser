@@ -126,6 +126,7 @@
     //是否在已选择照片上显示遮罩层
     actionSheet.configuration.showSelectedMask = self.maskSwitch.isOn;
     //颜色，状态栏样式
+    //    actionSheet.configuration.previewTextColor = [UIColor brownColor];
     //    actionSheet.configuration.selectedMaskColor = [UIColor purpleColor];
     //    actionSheet.configuration.navBarColor = [UIColor orangeColor];
     //    actionSheet.configuration.navTitleColor = [UIColor blackColor];

@@ -56,6 +56,7 @@
     configuration.showSelectBtn = NO;
     configuration.navBarColor = kRGB(19, 153, 231);
     configuration.navTitleColor = [UIColor whiteColor];
+    configuration.previewTextColor = [UIColor blackColor];
     configuration.bottomViewBgColor = [UIColor whiteColor];
     configuration.bottomBtnsNormalTitleColor = kRGB(80, 180, 234);
     configuration.bottomBtnsDisableBgColor = kRGB(200, 200, 200);

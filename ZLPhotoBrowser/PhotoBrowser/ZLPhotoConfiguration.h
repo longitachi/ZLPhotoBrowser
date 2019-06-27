@@ -186,6 +186,11 @@
 @property (nonatomic, strong) UIColor *navTitleColor;
 
 /**
+ 预览选择模式下 拍照/相册/取消 的字体颜色 默认 blackColor
+ */
+@property (nonatomic, strong) UIColor *previewTextColor;
+
+/**
  底部工具条底色，默认 rgb(255, 255, 255)
  */
 @property (nonatomic, strong) UIColor *bottomViewBgColor;

@@ -132,6 +132,11 @@ double const ScalePhotoWidth = 1000;
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    
+    [self.btnCamera setTitleColor:self.configuration.previewTextColor forState:UIControlStateNormal];
+    [self.btnAblum setTitleColor:self.configuration.previewTextColor forState:UIControlStateNormal];
+    [self.btnCancel setTitleColor:self.configuration.previewTextColor forState:UIControlStateNormal];
+    
     if (!self.configuration.allowSelectImage && self.configuration.allowRecordVideo) {
         [self.btnCamera setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCameraRecordText) forState:UIControlStateNormal];
     } else {
@@ -547,7 +552,7 @@ double const ScalePhotoWidth = 1000;
         [self.btnCancel setTitleColor:self.configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
     } else {
         [self.btnCancel setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
-        [self.btnCancel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [self.btnCancel setTitleColor:self.configuration.previewTextColor forState:UIControlStateNormal];
     }
 }
 
