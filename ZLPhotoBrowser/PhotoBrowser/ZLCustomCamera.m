@@ -154,7 +154,7 @@
     _allowRecordVideo = allowRecordVideo;
     if (allowRecordVideo) {
         UILongPressGestureRecognizer *longG = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
-        longG.minimumPressDuration = .3;
+        longG.minimumPressDuration = 0.3;
         longG.delegate = self;
         [self.bottomView addGestureRecognizer:longG];
     }
@@ -596,6 +596,8 @@
     }
     
     self.movieFileOutPut = [[AVCaptureMovieFileOutput alloc] init];
+    // 解决视频录制超过10s没有声音的bug
+    self.movieFileOutPut.movieFragmentInterval = kCMTimeInvalid;
     
     //将视频及音频输入流添加到session
     if ([self.session canAddInput:self.videoInput]) {
@@ -858,7 +860,15 @@
 {
     [self.session startRunning];
     [self setFocusCursorWithPoint:self.view.center];
-    self.takedImageView.hidden = YES;
+    if (self.takedImage != nil) {
+        [UIView animateWithDuration:0.25 animations:^{
+            self.takedImageView.alpha = 0;
+        } completion:^(BOOL finished) {
+            self.takedImageView.hidden = YES;
+            self.takedImageView.alpha = 1;
+        }];
+    }
+    
     [self deleteVideo];
 }
 
@@ -887,6 +897,7 @@
         self.playerView = [[ZLPlayer alloc] initWithFrame:self.view.bounds];
         [self.view insertSubview:self.playerView belowSubview:self.toolView];
     }
+    self.playerView.hidden = NO;
     self.playerView.videoUrl = self.videoUrl;
     [self.playerView play];
 }
@@ -895,7 +906,12 @@
 {
     if (self.videoUrl) {
         [self.playerView reset];
-        self.playerView.alpha = 0;
+        [UIView animateWithDuration:0.25 animations:^{
+            self.playerView.alpha = 0;
+        } completion:^(BOOL finished) {
+            self.playerView.hidden = YES;
+            self.playerView.alpha = 1;
+        }];
         [[NSFileManager defaultManager] removeItemAtURL:self.videoUrl error:nil];
     }
 }
