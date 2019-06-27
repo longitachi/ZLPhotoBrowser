@@ -2,6 +2,18 @@
 
 -----
 
+## [3.0.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.5) (2019-06-27)
+
+#### Add
+* 预览快速选择界面文字颜色支持自定义; 
+* 编辑界面按钮增大;
+
+### Fix
+* 解决录制视频超过10s没有声音的bug.[#381](https://github.com/longitachi/ZLPhotoBrowser/issues/381)
+
+---
+
+
 ## [3.0.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.4) (2019-05-19)
 
 #### Add
