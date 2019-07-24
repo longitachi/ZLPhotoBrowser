@@ -24,10 +24,9 @@
 		FD4190FD222D201700FF46A9 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = FD4190F9222D201700FF46A9 /* YYWeakProxy.m */; };
 		FD4190FF222D27B400FF46A9 /* ZLPhotoBrowser.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FD4190FE222D279700FF46A9 /* ZLPhotoBrowser.xcconfig */; };
 		FD419100222D27B500FF46A9 /* ZLPhotoBrowser.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FD4190FE222D279700FF46A9 /* ZLPhotoBrowser.xcconfig */; };
-		FD41913D222D31F400FF46A9 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD419037222D1EEA00FF46A9 /* ZLPhotoBrowser.framework */; };
 		FD41913E222D31F400FF46A9 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FD419037222D1EEA00FF46A9 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FD644702225AEF43003724CF /* ZLCustomCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446BF225AEF42003724CF /* ZLCustomCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FD644703225AEF43003724CF /* ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446C0225AEF42003724CF /* ZLPhotoBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD644702225AEF43003724CF /* ZLCustomCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446BF225AEF42003724CF /* ZLCustomCamera.h */; };
+		FD644703225AEF43003724CF /* ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446C0225AEF42003724CF /* ZLPhotoBrowser.h */; };
 		FD644704225AEF43003724CF /* ZLBigImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446C1225AEF42003724CF /* ZLBigImageCell.m */; };
 		FD644705225AEF43003724CF /* ZLBigImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446C1225AEF42003724CF /* ZLBigImageCell.m */; };
 		FD644706225AEF43003724CF /* ZLInteractiveTrasition.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446C2225AEF42003724CF /* ZLInteractiveTrasition.h */; };
@@ -56,14 +55,14 @@
 		FD64471D225AEF43003724CF /* ZLAnimateTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446D2225AEF42003724CF /* ZLAnimateTransition.m */; };
 		FD64471E225AEF43003724CF /* ZLPhotoActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD6446D3225AEF42003724CF /* ZLPhotoActionSheet.xib */; };
 		FD64471F225AEF43003724CF /* ZLPhotoActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD6446D3225AEF42003724CF /* ZLPhotoActionSheet.xib */; };
-		FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D4225AEF42003724CF /* ZLPhotoConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FD644721225AEF43003724CF /* ZLDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D5225AEF42003724CF /* ZLDefine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D4225AEF42003724CF /* ZLPhotoConfiguration.h */; };
+		FD644721225AEF43003724CF /* ZLDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D5225AEF42003724CF /* ZLDefine.h */; };
 		FD644722225AEF43003724CF /* ZLEditVideoController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D7225AEF42003724CF /* ZLEditVideoController.h */; };
-		FD644723225AEF43003724CF /* ZLPhotoModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D8225AEF42003724CF /* ZLPhotoModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD644723225AEF43003724CF /* ZLPhotoModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D8225AEF42003724CF /* ZLPhotoModel.h */; };
 		FD644724225AEF43003724CF /* ZLProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446D9225AEF42003724CF /* ZLProgressView.m */; };
 		FD644725225AEF43003724CF /* ZLProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446D9225AEF42003724CF /* ZLProgressView.m */; };
 		FD644726225AEF43003724CF /* ZLThumbnailViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446DA225AEF42003724CF /* ZLThumbnailViewController.h */; };
-		FD644727225AEF43003724CF /* ZLPhotoActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446DB225AEF42003724CF /* ZLPhotoActionSheet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD644727225AEF43003724CF /* ZLPhotoActionSheet.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446DB225AEF42003724CF /* ZLPhotoActionSheet.h */; };
 		FD644728225AEF43003724CF /* ZLProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446DC225AEF42003724CF /* ZLProgressHUD.m */; };
 		FD644729225AEF43003724CF /* ZLProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446DC225AEF42003724CF /* ZLProgressHUD.m */; };
 		FD64472A225AEF43003724CF /* ZLPhotoBrowserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD6446DD225AEF42003724CF /* ZLPhotoBrowserCell.xib */; };
@@ -91,11 +90,11 @@
 		FD644740225AEF43003724CF /* UIImage+ZLPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446EA225AEF42003724CF /* UIImage+ZLPhotoBrowser.m */; };
 		FD644741225AEF43003724CF /* ToastUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446EB225AEF42003724CF /* ToastUtils.m */; };
 		FD644742225AEF43003724CF /* ToastUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446EB225AEF42003724CF /* ToastUtils.m */; };
-		FD644743225AEF43003724CF /* ZLImageEditTool.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446EC225AEF42003724CF /* ZLImageEditTool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD644743225AEF43003724CF /* ZLImageEditTool.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446EC225AEF42003724CF /* ZLImageEditTool.h */; };
 		FD644744225AEF43003724CF /* ZLEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446ED225AEF42003724CF /* ZLEditViewController.m */; };
 		FD644745225AEF43003724CF /* ZLEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446ED225AEF42003724CF /* ZLEditViewController.m */; };
 		FD644746225AEF43003724CF /* ZLAnimateTransition.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446EE225AEF42003724CF /* ZLAnimateTransition.h */; };
-		FD644747225AEF43003724CF /* ZLPhotoManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446EF225AEF42003724CF /* ZLPhotoManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD644747225AEF43003724CF /* ZLPhotoManager.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446EF225AEF42003724CF /* ZLPhotoManager.h */; };
 		FD644748225AEF43003724CF /* ZLCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F0225AEF42003724CF /* ZLCollectionCell.m */; };
 		FD644749225AEF43003724CF /* ZLCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F0225AEF42003724CF /* ZLCollectionCell.m */; };
 		FD64474A225AEF43003724CF /* ZLNoAuthorityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F1225AEF42003724CF /* ZLNoAuthorityViewController.m */; };
@@ -108,13 +107,13 @@
 		FD644751225AEF43003724CF /* ZLPullDownInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F7225AEF42003724CF /* ZLPullDownInteractiveTransition.m */; };
 		FD644752225AEF43003724CF /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F8225AEF42003724CF /* ZLShowBigImgViewController.m */; };
 		FD644753225AEF43003724CF /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F8225AEF42003724CF /* ZLShowBigImgViewController.m */; };
-		FD644754225AEF43003724CF /* NSBundle+ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446F9225AEF42003724CF /* NSBundle+ZLPhotoBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD644754225AEF43003724CF /* NSBundle+ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446F9225AEF42003724CF /* NSBundle+ZLPhotoBrowser.h */; };
 		FD644755225AEF43003724CF /* ZLBrushBoardImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446FA225AEF42003724CF /* ZLBrushBoardImageView.h */; };
 		FD644756225AEF43003724CF /* ZLThumbnailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446FB225AEF42003724CF /* ZLThumbnailViewController.m */; };
 		FD644757225AEF43003724CF /* ZLThumbnailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446FB225AEF42003724CF /* ZLThumbnailViewController.m */; };
 		FD644758225AEF43003724CF /* ZLPhotoActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446FC225AEF42003724CF /* ZLPhotoActionSheet.m */; };
 		FD644759225AEF43003724CF /* ZLPhotoActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446FC225AEF42003724CF /* ZLPhotoActionSheet.m */; };
-		FD64475A225AEF43003724CF /* ZLProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446FD225AEF42003724CF /* ZLProgressHUD.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD64475A225AEF43003724CF /* ZLProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446FD225AEF42003724CF /* ZLProgressHUD.h */; };
 		FD64475B225AEF43003724CF /* ZLPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446FE225AEF42003724CF /* ZLPhotoModel.m */; };
 		FD64475C225AEF43003724CF /* ZLPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446FE225AEF42003724CF /* ZLPhotoModel.m */; };
 		FD64475D225AEF43003724CF /* ZLProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446FF225AEF42003724CF /* ZLProgressView.h */; };
@@ -246,7 +245,6 @@
 			files = (
 				FDE2378822807F1F00D013B5 /* SDWebImageMapKit.framework in Frameworks */,
 				FD4190EB222D1F5A00FF46A9 /* SDWebImage.framework in Frameworks */,
-				FD41913D222D31F400FF46A9 /* ZLPhotoBrowser.framework in Frameworks */,
 				FD4190F4222D1F9400FF46A9 /* Photos.framework in Frameworks */,
 				FD4190F3222D1F9100FF46A9 /* PhotosUI.framework in Frameworks */,
 			);
@@ -439,10 +437,10 @@
 				FD64475A225AEF43003724CF /* ZLProgressHUD.h in Headers */,
 				FD644703225AEF43003724CF /* ZLPhotoBrowser.h in Headers */,
 				FD644721225AEF43003724CF /* ZLDefine.h in Headers */,
+				FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */,
 				FD64470E225AEF43003724CF /* ToastUtils.h in Headers */,
 				FD644755225AEF43003724CF /* ZLBrushBoardImageView.h in Headers */,
 				FD644718225AEF43003724CF /* ZLCollectionCell.h in Headers */,
-				FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */,
 				FD644735225AEF43003724CF /* ZLBigImageCell.h in Headers */,
 				FD644712225AEF43003724CF /* ZLDrawItem.h in Headers */,
 				FD64472E225AEF43003724CF /* ZLShowBigImgViewController.h in Headers */,
@@ -830,7 +828,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTTest;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.PhotoBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -854,7 +852,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.TTTTest;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.PhotoBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

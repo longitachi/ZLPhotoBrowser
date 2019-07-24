@@ -89,8 +89,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                     self.albumListModel = album;
                     [ZLPhotoManager markSelectModelInArr:self.albumListModel.models selArr:weakNav.arrSelectedModels];
                     self.arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
-                    [hud hide];
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        [hud hide];
                         if (configuration.allowTakePhotoInLibrary && (configuration.allowSelectImage || configuration.allowRecordVideo)) {
                             self.allowTakePhoto = YES;
                         }

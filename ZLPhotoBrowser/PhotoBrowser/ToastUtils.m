@@ -78,6 +78,7 @@ static UILabel *toastView = nil;
     [UIView animateWithDuration:showTime animations:^{
         toastView.alpha = 0;
     } completion:^(BOOL finished) {
+        [toastView removeFromSuperview];
     }];
 }
 

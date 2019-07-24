@@ -11,6 +11,8 @@
 #import "ZLPhotoModel.h"
 #import "ZLDefine.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ZLAlbumListModel;
 
 @interface ZLPhotoManager : NSObject
@@ -24,12 +26,12 @@
 /**
  * @brief 保存图片到系统相册
  */
-+ (void)saveImageToAblum:(UIImage *)image completion:(void (^)(BOOL suc, PHAsset *asset))completion;
++ (void)saveImageToAblum:(UIImage *)image completion:(void (^ _Nullable)(BOOL suc, PHAsset *asset))completion;
 
 /**
  * @brief 保存视频到系统相册
  */
-+ (void)saveVideoToAblum:(NSURL *)url completion:(void (^)(BOOL suc, PHAsset *asset))completion;
++ (void)saveVideoToAblum:(NSURL *)url completion:(void (^ _Nullable)(BOOL suc, PHAsset *asset))completion;
 
 /**
  * @brief 在全部照片中获取指定个数、排序方式的部分照片，在跳往预览大图界面时候video和gif均为no，不受参数影响
@@ -51,7 +53,7 @@
 /**
  * @brief 获取用户所有相册列表
  */
-+ (void)getPhotoAblumList:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage complete:(void (^)(NSArray<ZLAlbumListModel *> *))complete;
++ (void)getPhotoAblumList:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage complete:(void (^ _Nullable)(NSArray<ZLAlbumListModel *> *))complete;
 
 /**
  * @brief 将result中对象转换成ZLPhotoModel
@@ -67,29 +69,29 @@
 /**
  获取原图data，转换gif图
  */
-+ (void)requestOriginalImageDataForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(NSData *, NSDictionary *))completion;
++ (void)requestOriginalImageDataForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^ _Nullable)(NSData *, NSDictionary *))completion;
 
 /**
  * @brief 获取原图
  */
-+ (void)requestOriginalImageForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(UIImage *, NSDictionary *))completion;
++ (void)requestOriginalImageForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^ _Nullable)(UIImage *, NSDictionary *))completion;
 
 /**
  * @brief 根据传入size获取图片
  */
-+ (PHImageRequestID)requestImageForAsset:(PHAsset *)asset size:(CGSize)size progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(UIImage *, NSDictionary *))completion;
++ (PHImageRequestID)requestImageForAsset:(PHAsset *)asset size:(CGSize)size progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^ _Nullable)(UIImage *, NSDictionary *))completion;
 
 
 /**
  * @brief 获取live photo
  */
-+ (void)requestLivePhotoForAsset:(PHAsset *)asset completion:(void (^)(PHLivePhoto *livePhoto, NSDictionary *info))completion;
++ (void)requestLivePhotoForAsset:(PHAsset *)asset completion:(void (^ _Nullable)(PHLivePhoto *livePhoto, NSDictionary *info))completion API_AVAILABLE(ios(9.1));
 
 /**
  * @brief 获取视频
  */
-+ (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem *item, NSDictionary *info))completion;
-+ (void)requestVideoForAsset:(PHAsset *)asset progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(AVPlayerItem *item, NSDictionary *info))completion;
++ (void)requestVideoForAsset:(PHAsset *)asset completion:(void (^ _Nullable)(AVPlayerItem *item, NSDictionary *info))completion;
++ (void)requestVideoForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^ _Nullable)(AVPlayerItem *item, NSDictionary *info))completion;
 
 #pragma mark - 逐个解析asset方法
 /**
@@ -100,7 +102,7 @@
  
  请求到图片后做了一个大小的压缩（原图时并未压缩尺寸）来缓解内存的占用
  */
-+ (void)anialysisAssets:(NSArray<PHAsset *> *)assets original:(BOOL)original completion:(void (^)(NSArray<UIImage *> *images))completion;
++ (void)anialysisAssets:(NSArray<PHAsset *> *)assets original:(BOOL)original completion:(void (^ _Nullable)(NSArray<UIImage *> *images))completion;
 
 /**
  @brief 缩放图片
@@ -125,7 +127,7 @@
 /**
  * @brief 获取图片字节大小
  */
-+ (void)getPhotosBytesWithArray:(NSArray<ZLPhotoModel *> *)photos completion:(void (^)(NSString *photosBytes))completion;
++ (void)getPhotosBytesWithArray:(NSArray<ZLPhotoModel *> *)photos completion:(void (^ _Nullable)(NSString *photosBytes))completion;
 
 /**
  * @brief 标记源数组中已被选择的model
@@ -141,7 +143,7 @@
 /**
  获取对应asset的路径
  */
-+ (void)requestAssetFileUrl:(PHAsset *)asset complete:(void (^)(NSString *filePath))complete;
++ (void)requestAssetFileUrl:(PHAsset *)asset complete:(void (^ _Nullable)(NSString *filePath))complete;
 
 #pragma mark - 编辑、导出视频相关
 
@@ -150,14 +152,14 @@
 
  @param size 图片size
  */
-+ (void)analysisEverySecondsImageForAsset:(PHAsset *)asset interval:(NSTimeInterval)interval size:(CGSize)size complete:(void (^)(AVAsset *avAsset, NSArray<UIImage *> *images))complete;
++ (void)analysisEverySecondsImageForAsset:(PHAsset *)asset interval:(NSTimeInterval)interval size:(CGSize)size complete:(void (^ _Nullable)(AVAsset *avAsset, NSArray<UIImage *> *images))complete;
 
 /**
  导出编辑的片段视频并保存到相册
  
  @param range 需要到处的视频间隔
  */
-+ (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^)(BOOL isSuc, PHAsset *asset))complete;
++ (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^ _Nullable)(BOOL isSuc, PHAsset *asset))complete;
 
 
 /**
@@ -166,7 +168,7 @@
  @param asset 需要导出视频的asset
  @param type 视频导出格式
  */
-+ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type complete:(void (^ _Nullable)(NSString *exportFilePath, NSError *error))complete;
 
 /**
  导出视频
@@ -175,7 +177,7 @@
  @param type 视频导出格式
  @param presetName 视频压缩设置
  */
-+ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName complete:(void (^ _Nullable)(NSString *exportFilePath, NSError *error))complete;
 
 
 /**
@@ -185,7 +187,7 @@
  @param type 视频导出格式
  @param renderSize 指定的尺寸大小
  */
-+ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize complete:(void (^ _Nullable)(NSString *exportFilePath, NSError *error))complete;
 
 #pragma mark - 导出视频加水印、粒子效果
 /**
@@ -200,7 +202,7 @@
  @param location 水印位置
  @param imageSize 水印大小
  */
-+ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type renderSize:(CGSize)renderSize watermarkImage:(UIImage * _Nullable)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^ _Nullable)(NSString *exportFilePath, NSError *error))complete;
 
 
 /**
@@ -213,7 +215,7 @@
  @param location 水印位置
  @param imageSize 水印大小
  */
-+ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName watermarkImage:(UIImage *)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName watermarkImage:(UIImage * _Nullable)watermarkImage watermarkLocation:(ZLWatermarkLocation)location imageSize:(CGSize)imageSize complete:(void (^ _Nullable)(NSString *exportFilePath, NSError *error))complete;
 
 
 /**
@@ -226,7 +228,7 @@
  @param birthRate 粒子每秒创建数量（建议30~50）
  @param velocity 粒子扩散速度
  */
-+ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName effectImage:(UIImage *)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity complete:(void (^)(NSString *exportFilePath, NSError *error))complete;
++ (void)exportVideoForAsset:(PHAsset *)asset type:(ZLExportVideoType)type presetName:(NSString *)presetName effectImage:(UIImage * _Nullable)effectImage birthRate:(NSInteger)birthRate velocity:(CGFloat)velocity complete:(void (^ _Nullable)(NSString *exportFilePath, NSError *error))complete;
 
 
 /**
@@ -252,3 +254,5 @@
 + (BOOL)haveMicrophoneAuthority;
 
 @end
+
+NS_ASSUME_NONNULL_END

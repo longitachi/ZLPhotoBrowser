@@ -41,7 +41,7 @@
 @property (nonatomic, assign) NSInteger maxVideoSelectCountInMix;
 
 /**
- 混合选择时 视频最大数量，默认为0
+ 混合选择时 视频最小数量，默认为0
  */
 @property (nonatomic, assign) NSInteger minVideoSelectCountInMix;
 

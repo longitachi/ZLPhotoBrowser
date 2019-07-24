@@ -111,8 +111,7 @@
     return _imageGifView;
 }
 
-- (ZLPreviewLivePhoto *)livePhotoView
-{
+- (ZLPreviewLivePhoto *)livePhotoView API_AVAILABLE(ios(9.1)){
     if (!_livePhotoView) {
         _livePhotoView = [[ZLPreviewLivePhoto alloc] initWithFrame:self.bounds];
         _livePhotoView.singleTapCallBack = self.singleTapCallBack;
@@ -156,7 +155,13 @@
         }
             break;
         case ZLAssetMediaTypeLivePhoto: {
-            if (self.showLivePhoto) {
+            BOOL showLivePhoto = NO;
+            if (@available(iOS 9.1, *)) {
+                if (self.showLivePhoto) {
+                    showLivePhoto = YES;
+                }
+            }
+            if (showLivePhoto) {
                 [self addSubview:self.livePhotoView];
                 [self.livePhotoView loadNormalImage:model.asset];
             } else {

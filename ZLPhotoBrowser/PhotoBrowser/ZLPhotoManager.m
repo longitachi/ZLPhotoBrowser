@@ -363,7 +363,9 @@ static BOOL _sortAscending;
         case PHAssetMediaTypeImage:
             if ([[asset valueForKey:@"filename"] hasSuffix:@"GIF"])return ZLAssetMediaTypeGif;
             
-            if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive || asset.mediaSubtypes == 10) return ZLAssetMediaTypeLivePhoto;
+            if (@available(iOS 9.1, *)) {
+                if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive || asset.mediaSubtypes == 10) return ZLAssetMediaTypeLivePhoto;
+            }
             
             return ZLAssetMediaTypeImage;
         default:

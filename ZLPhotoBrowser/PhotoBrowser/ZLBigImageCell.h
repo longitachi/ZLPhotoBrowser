@@ -120,6 +120,7 @@
 
 
 //---------------livephoto---------------
+API_AVAILABLE(ios(9.1))
 @interface ZLPreviewLivePhoto : ZLBasePreviewView
 
 @property (nonatomic, strong) PHLivePhotoView *lpView;

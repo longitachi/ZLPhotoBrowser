@@ -83,15 +83,19 @@
 
 - (void)loadLivePhoto
 {
-    PHLivePhotoView *lpView = [[PHLivePhotoView alloc] init];
-    lpView.contentMode = UIViewContentModeScaleAspectFit;
-    lpView.frame = (CGRect){CGPointZero, [self getSize]};
-    [self.view addSubview:lpView];
-    
-    [ZLPhotoManager requestLivePhotoForAsset:self.model.asset completion:^(PHLivePhoto *lv, NSDictionary *info) {
-        lpView.livePhoto = lv;
-        [lpView startPlaybackWithStyle:PHLivePhotoViewPlaybackStyleFull];
-    }];
+    if (@available(iOS 9.1, *)) {
+        PHLivePhotoView *lpView = [[PHLivePhotoView alloc] init];
+        lpView.contentMode = UIViewContentModeScaleAspectFit;
+        lpView.frame = (CGRect){CGPointZero, [self getSize]};
+        [self.view addSubview:lpView];
+        
+        [ZLPhotoManager requestLivePhotoForAsset:self.model.asset completion:^(PHLivePhoto *lv, NSDictionary *info) {
+            lpView.livePhoto = lv;
+            [lpView startPlaybackWithStyle:PHLivePhotoViewPlaybackStyleFull];
+        }];
+    } else {
+        [self loadNormalImage];
+    }
 }
 
 - (void)loadVideo
