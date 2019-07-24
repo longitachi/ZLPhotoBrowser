@@ -525,7 +525,7 @@
     if (_layoutOK) return;
     _layoutOK = YES;
     
-    self.toolView.frame = CGRectMake(0, kViewHeight-130-ZL_SafeAreaBottom(), kViewWidth, 100);
+    self.toolView.frame = CGRectMake(0, kViewHeight-150-ZL_SafeAreaBottom(), kViewWidth, 100);
     self.previewLayer.frame = self.view.layer.bounds;
     self.toggleCameraBtn.frame = CGRectMake(kViewWidth-50, 20, 30, 30);
 }
@@ -617,7 +617,7 @@
     self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
     [self.view.layer setMasksToBounds:YES];
     
-    [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+    [self.previewLayer setVideoGravity:AVLayerVideoGravityResizeAspect];
     [self.view.layer insertSublayer:self.previewLayer atIndex:0];
 }
 
