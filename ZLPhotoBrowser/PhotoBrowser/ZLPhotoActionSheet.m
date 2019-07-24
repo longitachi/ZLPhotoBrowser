@@ -121,10 +121,6 @@ double const ScalePhotoWidth = 1000;
         self.collectionView.collectionViewLayout = layout;
         self.collectionView.backgroundColor = [UIColor whiteColor];
         [self.collectionView registerClass:NSClassFromString(@"ZLCollectionCell") forCellWithReuseIdentifier:@"ZLCollectionCell"];
-        if (![ZLPhotoManager havePhotoLibraryAuthority]) {
-            //注册实施监听相册变化
-            [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
-        }
     }
     return self;
 }
@@ -185,6 +181,11 @@ double const ScalePhotoWidth = 1000;
 
 - (void)showPreview:(BOOL)preview animate:(BOOL)animate
 {
+    if (![ZLPhotoManager havePhotoLibraryAuthority]) {
+        //注册实施监听相册变化
+        [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+    }
+    
     NSAssert(self.sender != nil, @"sender 对象不能为空");
     
     self.animate = animate;
@@ -229,6 +230,11 @@ double const ScalePhotoWidth = 1000;
 
 - (void)previewSelectedPhotos:(NSArray<UIImage *> *)photos assets:(NSArray<PHAsset *> *)assets index:(NSInteger)index isOriginal:(BOOL)isOriginal
 {
+    if (![ZLPhotoManager havePhotoLibraryAuthority]) {
+        //注册实施监听相册变化
+        [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+    }
+    
     self.isSelectOriginalPhoto = isOriginal;
     //将assets转换为对应类型的model
     NSMutableArray<ZLPhotoModel *> *models = [NSMutableArray arrayWithCapacity:assets.count];
