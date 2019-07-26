@@ -80,14 +80,17 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         ZLPhotoConfiguration *configuration = nav.configuration;
         
         if (!_albumListModel) {
+            ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+            @zl_weakify(self);
+            __weak typeof(nav) weakNav = nav;
+            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                @zl_weakify(self);
                 [ZLPhotoManager getCameraRollAlbumList:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage complete:^(ZLAlbumListModel *album) {
                     @zl_strongify(self);
-                    ZLImageNavigationController *weakNav = (ZLImageNavigationController *)self.navigationController;
+                    __strong typeof(weakNav) strongNav  = weakNav;
                     
                     self.albumListModel = album;
-                    [ZLPhotoManager markSelectModelInArr:self.albumListModel.models selArr:weakNav.arrSelectedModels];
+                    [ZLPhotoManager markSelectModelInArr:self.albumListModel.models selArr:strongNav.arrSelectedModels];
                     self.arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [hud hide];

@@ -20,6 +20,7 @@
     if (self) {
         self.navigationBar.barStyle = UIBarStyleBlack;
         self.navigationBar.translucent = YES;
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
     }
     return self;
 }
