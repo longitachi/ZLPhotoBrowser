@@ -530,7 +530,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             }
             ZLCollectionCell *c = (ZLCollectionCell *)cell;
             c.btnSelect.selected = m.isSelected;
-            c.topView.hidden = configuration.showSelectedMask ? !m.isSelected : YES;
+            c.maskView.hidden = configuration.showSelectedMask ? !m.isSelected : YES;
+            [self setCell:c indexLabelShow:m.isSelected index:nav.arrSelectedModels.count animate:NO];
             [self resetBottomBtnsStatus:NO];
         }
     } else if (pan.state == UIGestureRecognizerStateChanged) {
@@ -571,7 +572,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
                 case SlideSelectTypeSelect: {
                     if (inSection &&
                         !m.isSelected &&
-                        [self canAddModel:m]) m.selected = YES;
+                        [self canAddModel:m]) {
+                        m.selected = YES;
+                    }
                 }
                     break;
                 case SlideSelectTypeCancel: {
@@ -608,8 +611,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             
             ZLCollectionCell *c = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:path];
             c.btnSelect.selected = m.isSelected;
-            c.topView.hidden = configuration.showSelectedMask ? !m.isSelected : YES;
-            
+            c.maskView.hidden = configuration.showSelectedMask ? !m.isSelected : YES;
+            [self refreshCellIndex];
             [self resetBottomBtnsStatus:NO];
         }
     } else if (pan.state == UIGestureRecognizerStateEnded ||
@@ -666,6 +669,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
     
     if (self.allowTakePhoto && ((configuration.sortAscending && indexPath.row >= self.arrDataSources.count) || (!configuration.sortAscending && indexPath.row == 0))) {
@@ -689,19 +693,20 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 
     @zl_weakify(self);
     __weak typeof(cell) weakCell = cell;
-    
+    __weak typeof(nav) weakNav = nav;
     cell.selectedBlock = ^(BOOL selected) {
         @zl_strongify(self);
         __strong typeof(weakCell) strongCell = weakCell;
         
-        ZLImageNavigationController *weakNav = (ZLImageNavigationController *)self.navigationController;
+        __weak typeof(weakNav) strongNav = weakNav;
         if (!selected) {
             //选中
             if ([self canAddModel:model]) {
                 if (![self shouldDirectEdit:model]) {
                     model.selected = YES;
-                    [weakNav.arrSelectedModels addObject:model];
+                    [strongNav.arrSelectedModels addObject:model];
                     strongCell.btnSelect.selected = YES;
+                    [self setCell:strongCell indexLabelShow:YES index:strongNav.arrSelectedModels.count animate:YES];
                     [self shouldDirectEdit:model];
                 }
             }
@@ -710,13 +715,14 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             model.selected = NO;
             for (ZLPhotoModel *m in weakNav.arrSelectedModels) {
                 if ([m.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
-                    [weakNav.arrSelectedModels removeObject:m];
+                    [strongNav.arrSelectedModels removeObject:m];
                     break;
                 }
             }
+            [self refreshCellIndex];
         }
         if (configuration.showSelectedMask) {
-            strongCell.topView.hidden = !model.isSelected;
+            strongCell.maskView.hidden = !model.isSelected;
         }
         [self resetBottomBtnsStatus:YES];
     };
@@ -727,9 +733,59 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     cell.cornerRadio = configuration.cellCornerRadio;
     cell.showMask = configuration.showSelectedMask;
     cell.maskColor = configuration.selectedMaskColor;
+    cell.indexLabel.backgroundColor = configuration.indexLabelBgColor;
+    cell.showIndexLabel = NO;
+    if (configuration.showSelectedIndex) {
+        [nav.arrSelectedModels enumerateObjectsUsingBlock:^(ZLPhotoModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj.asset.localIdentifier isEqualToString:model.asset.localIdentifier]) {
+                [self setCell:cell indexLabelShow:YES index:idx+1 animate:NO];
+                *stop = YES;
+            }
+        }];
+    }
     cell.model = model;
-
+    
     return cell;
+}
+
+- (void)setCell:(ZLCollectionCell *)cell indexLabelShow:(BOOL)show index:(NSInteger)index animate:(BOOL)animate
+{
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    if (!configuration.showSelectedIndex) {
+        return;
+    }
+    cell.showIndexLabel = show;
+    cell.index = index;
+    if (animate) {
+        [cell.indexLabel.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
+    }
+}
+
+- (void)refreshCellIndex {
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    if (!configuration.showSelectedIndex) {
+        return;
+    }
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    NSArray<NSIndexPath *> *visibleIndexPaths = self.collectionView.indexPathsForVisibleItems;
+    [visibleIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.row >= self.arrDataSources.count) {
+            // 拍照按钮 return
+            return;
+        }
+        ZLCollectionCell *cell = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:obj];
+        ZLPhotoModel *m = self.arrDataSources[obj.row];
+        __block BOOL shouldShow = NO;
+        __block NSInteger index = 0;
+        [nav.arrSelectedModels enumerateObjectsUsingBlock:^(ZLPhotoModel * _Nonnull obj1, NSUInteger idx1, BOOL * _Nonnull stop) {
+            if ([obj1.asset.localIdentifier isEqualToString:m.asset.localIdentifier]) {
+                index = idx1 + 1;
+                shouldShow = YES;
+                *stop = YES;
+            }
+        }];
+        [self setCell:cell indexLabelShow:shouldShow index:index animate:NO];
+    }];
 }
 
 #pragma mark - UICollectionViewDelegate

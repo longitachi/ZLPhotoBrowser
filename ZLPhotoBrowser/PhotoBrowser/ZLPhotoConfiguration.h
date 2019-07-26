@@ -216,6 +216,16 @@
 @property (nonatomic, strong) UIColor *selectedMaskColor;
 
 /**
+ 是否显示选中图片的index 默认YES
+ */
+@property (nonatomic, assign) BOOL showSelectedIndex;
+
+/**
+ 选中图片右上角index background color
+ */
+@property (nonatomic, strong) UIColor *indexLabelBgColor;
+
+/**
  支持开发者自定义图片，但是所自定义图片资源名称必须与被替换的bundle中的图片名称一致
  @example: 开发者需要替换选中与未选中的图片资源，则需要传入的数组为 @[@"zl_btn_selected", @"zl_btn_unselected"]，则框架内会使用开发者项目中的图片资源，而其他图片则用框架bundle中的资源
  */

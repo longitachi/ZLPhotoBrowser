@@ -18,7 +18,8 @@
 @property (nonatomic, strong) UIImageView *videoImageView;
 @property (nonatomic, strong) UIImageView *liveImageView;
 @property (nonatomic, strong) UILabel *timeLabel;
-@property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UIView *maskView;
+@property (nonatomic, strong) UILabel *indexLabel;
 
 @property (nonatomic, assign) BOOL allSelectGif;
 @property (nonatomic, assign) BOOL allSelectLivePhoto;
@@ -27,6 +28,8 @@
 @property (nonatomic, strong) ZLPhotoModel *model;
 @property (nonatomic, strong) UIColor *maskColor;
 @property (nonatomic, assign) BOOL showMask;
+@property (nonatomic, assign) BOOL showIndexLabel;
+@property (nonatomic, assign) NSInteger index;
 
 @property (nonatomic, copy) void (^selectedBlock)(BOOL);
 

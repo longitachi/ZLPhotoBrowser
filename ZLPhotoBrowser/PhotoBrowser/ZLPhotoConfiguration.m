@@ -62,6 +62,8 @@
     configuration.bottomBtnsDisableBgColor = kRGB(200, 200, 200);
     configuration.showSelectedMask = NO;
     configuration.selectedMaskColor = [UIColor blackColor];
+    configuration.showSelectedIndex = YES;
+    configuration.indexLabelBgColor = [UIColor blackColor];
     configuration.customImageNames = nil;
     configuration.shouldAnialysisAsset = YES;
     configuration.timeout = 20;
