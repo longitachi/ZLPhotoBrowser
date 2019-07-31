@@ -39,6 +39,7 @@ xcuserdata/
 *.ipa
 *.dSYM.zip
 *.dSYM
+*.sketch
 
 # CocoaPods - Refactored to standalone file
 
