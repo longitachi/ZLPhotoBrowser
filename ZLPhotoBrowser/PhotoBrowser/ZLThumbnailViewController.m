@@ -272,9 +272,10 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         }
         self.btnOriginalPhoto.selected = nav.isSelectOriginalPhoto;
         [self.btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), nav.arrSelectedModels.count] forState:UIControlStateNormal];
+        [self.btnDone setTitleColor:configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
         [self.btnOriginalPhoto setTitleColor:configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
         [self.btnPreView setTitleColor:configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
-        self.btnDone.backgroundColor = configuration.bottomBtnsNormalTitleColor;
+        self.btnDone.backgroundColor = configuration.bottomBtnsNormalBgColor;
     } else {
         self.btnOriginalPhoto.selected = NO;
         self.btnOriginalPhoto.enabled = NO;
@@ -282,8 +283,9 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         self.btnDone.enabled = NO;
         self.labPhotosBytes.text = nil;
         [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateDisabled];
-        [self.btnOriginalPhoto setTitleColor:configuration.bottomBtnsDisableBgColor forState:UIControlStateDisabled];
-        [self.btnPreView setTitleColor:configuration.bottomBtnsDisableBgColor forState:UIControlStateDisabled];
+        [self.btnDone setTitleColor:configuration.bottomBtnsDisableTitleColor forState:UIControlStateDisabled];
+        [self.btnOriginalPhoto setTitleColor:configuration.bottomBtnsDisableTitleColor forState:UIControlStateDisabled];
+        [self.btnPreView setTitleColor:configuration.bottomBtnsDisableTitleColor forState:UIControlStateDisabled];
         self.btnDone.backgroundColor = configuration.bottomBtnsDisableBgColor;
     }
     
@@ -295,7 +297,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         (m.type == ZLAssetMediaTypeLivePhoto && !configuration.allowSelectLivePhoto))) ||
         (configuration.allowEditVideo && m.type == ZLAssetMediaTypeVideo && round(m.asset.duration) >= configuration.maxEditVideoTime);
     }
-    [self.btnEdit setTitleColor:canEdit?configuration.bottomBtnsNormalTitleColor:configuration.bottomBtnsDisableBgColor forState:UIControlStateNormal];
+    [self.btnEdit setTitleColor:canEdit?configuration.bottomBtnsNormalTitleColor:configuration.bottomBtnsDisableTitleColor forState:UIControlStateNormal];
     self.btnEdit.userInteractionEnabled = canEdit;
 }
 
@@ -322,6 +324,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     self.collectionView.dataSource = self;
+    self.collectionView.alwaysBounceVertical = YES;
     self.collectionView.delegate = self;
     if (@available(iOS 11.0, *)) {
         [self.collectionView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentAlways];
@@ -374,7 +377,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         self.btnOriginalPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
         self.btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
         [self.btnOriginalPhoto setImage:GetImageWithName(@"zl_btn_original_circle") forState:UIControlStateNormal];
-        [self.btnOriginalPhoto setImage:GetImageWithName(@"zl_btn_selected") forState:UIControlStateSelected];
+        [self.btnOriginalPhoto setImage:GetImageWithName(@"zl_btn_original_selected") forState:UIControlStateSelected];
         [self.btnOriginalPhoto setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserOriginalText) forState:UIControlStateNormal];
         [self.btnOriginalPhoto addTarget:self action:@selector(btnOriginalPhoto_Click:) forControlEvents:UIControlEventTouchUpInside];
         [self.bottomView addSubview:self.btnOriginalPhoto];
@@ -387,7 +390,6 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     
     self.btnDone = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnDone.titleLabel.font = [UIFont systemFontOfSize:15];
-    [self.btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
     [self.btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
     self.btnDone.layer.masksToBounds = YES;
     self.btnDone.layer.cornerRadius = 3.0f;
@@ -531,7 +533,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             ZLCollectionCell *c = (ZLCollectionCell *)cell;
             c.btnSelect.selected = m.isSelected;
             c.maskView.hidden = configuration.showSelectedMask ? !m.isSelected : YES;
-            [self setCell:c indexLabelShow:m.isSelected index:nav.arrSelectedModels.count animate:NO];
+            [self refreshCellIndex];
             [self resetBottomBtnsStatus:NO];
         }
     } else if (pan.state == UIGestureRecognizerStateChanged) {
@@ -923,7 +925,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
         camera.allowRecordVideo = configuration.allowSelectVideo && configuration.allowRecordVideo;
         camera.sessionPreset = configuration.sessionPreset;
         camera.videoType = configuration.exportVideoType;
-        camera.circleProgressColor = configuration.bottomBtnsNormalTitleColor;
+        camera.circleProgressColor = configuration.cameraProgressColor;
         camera.maxRecordDuration = configuration.maxRecordDuration;
         @zl_weakify(self);
         camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {

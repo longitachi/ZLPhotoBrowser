@@ -393,8 +393,8 @@
     
     _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_doneBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
-    [_doneBtn setBackgroundColor:configuration.bottomBtnsNormalTitleColor];
-    [_doneBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_doneBtn setBackgroundColor:configuration.bottomBtnsNormalBgColor];
+    [_doneBtn setTitleColor:configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
     _doneBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     _doneBtn.layer.masksToBounds = YES;
     _doneBtn.layer.cornerRadius = 3.0f;

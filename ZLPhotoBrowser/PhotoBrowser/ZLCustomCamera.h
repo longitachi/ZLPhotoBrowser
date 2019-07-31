@@ -25,7 +25,7 @@
 //视频格式 默认 ZLExportVideoTypeMp4
 @property (nonatomic, assign) ZLExportVideoType videoType;
 
-//录制视频时候进度条颜色 默认 RGB(80, 180, 234)
+//录制视频时候进度条颜色 默认 rgb(80, 169, 56)
 @property (nonatomic, strong) UIColor *circleProgressColor;
 
 /**

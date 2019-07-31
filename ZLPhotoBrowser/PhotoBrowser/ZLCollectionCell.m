@@ -128,7 +128,7 @@
     }
     
     if (self.showMask) {
-        self.maskView.backgroundColor = [self.maskColor colorWithAlphaComponent:.2];
+        self.maskView.backgroundColor = self.maskColor;
         self.maskView.hidden = !model.isSelected;
     }
     

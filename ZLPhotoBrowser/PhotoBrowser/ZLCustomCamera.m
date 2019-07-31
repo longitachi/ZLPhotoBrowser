@@ -400,7 +400,7 @@
         self.maxRecordDuration = 15;
         self.sessionPreset = ZLCaptureSessionPreset1280x720;
         self.videoType = ZLExportVideoTypeMp4;
-        self.circleProgressColor = kRGB(80, 180, 234);
+        self.circleProgressColor = kRGB(80, 169, 56);
     }
     return self;
 }
@@ -545,7 +545,7 @@
     self.focusCursorImageView = [[UIImageView alloc] initWithImage:GetImageWithName(@"zl_focus")];
     self.focusCursorImageView.contentMode = UIViewContentModeScaleAspectFit;
     self.focusCursorImageView.clipsToBounds = YES;
-    self.focusCursorImageView.frame = CGRectMake(0, 0, 80, 80);
+    self.focusCursorImageView.frame = CGRectMake(0, 0, 70, 70);
     self.focusCursorImageView.alpha = 0;
     [self.view addSubview:self.focusCursorImageView];
     
@@ -668,7 +668,7 @@
 {
     self.focusCursorImageView.center = point;
     self.focusCursorImageView.alpha = 1;
-    self.focusCursorImageView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+    self.focusCursorImageView.transform = CGAffineTransformMakeScale(1.2, 1.2);
     [UIView animateWithDuration:0.5 animations:^{
         self.focusCursorImageView.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {

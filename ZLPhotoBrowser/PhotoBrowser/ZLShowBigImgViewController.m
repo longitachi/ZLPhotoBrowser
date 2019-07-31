@@ -303,7 +303,7 @@
         _btnOriginalPhoto.titleLabel.font = [UIFont systemFontOfSize:15];
         [_btnOriginalPhoto setTitleColor:configuration.bottomBtnsNormalTitleColor forState: UIControlStateNormal];
         UIImage *normalImg = GetImageWithName(@"zl_btn_original_circle");
-        UIImage *selImg = GetImageWithName(@"zl_btn_selected");
+        UIImage *selImg = GetImageWithName(@"zl_btn_original_selected");
         [_btnOriginalPhoto setImage:normalImg forState:UIControlStateNormal];
         [_btnOriginalPhoto setImage:selImg forState:UIControlStateSelected];
         [_btnOriginalPhoto setImageEdgeInsets:UIEdgeInsetsMake(0, -5, 0, 5)];
@@ -333,7 +333,7 @@
     _btnDone.layer.masksToBounds = YES;
     _btnDone.layer.cornerRadius = 3.0f;
     [_btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_btnDone setBackgroundColor:configuration.bottomBtnsNormalTitleColor];
+    [_btnDone setBackgroundColor:configuration.bottomBtnsNormalBgColor];
     _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
     [_btnDone addTarget:self action:@selector(btnDone_Click:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:_btnDone];

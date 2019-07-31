@@ -519,7 +519,7 @@ double const ScalePhotoWidth = 1000;
         camera.allowRecordVideo = self.configuration.allowSelectVideo && self.configuration.allowRecordVideo;
         camera.sessionPreset = self.configuration.sessionPreset;
         camera.videoType = self.configuration.exportVideoType;
-        camera.circleProgressColor = self.configuration.bottomBtnsNormalTitleColor;
+        camera.circleProgressColor = self.configuration.cameraProgressColor;
         camera.maxRecordDuration = self.configuration.maxRecordDuration;
         @zl_weakify(self);
         camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {
@@ -555,7 +555,7 @@ double const ScalePhotoWidth = 1000;
 {
     if (self.arrSelectedModels.count > 0) {
         [self.btnCancel setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), self.arrSelectedModels.count] forState:UIControlStateNormal];
-        [self.btnCancel setTitleColor:self.configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
+        [self.btnCancel setTitleColor:self.configuration.bottomBtnsNormalBgColor forState:UIControlStateNormal];
     } else {
         [self.btnCancel setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
         [self.btnCancel setTitleColor:self.configuration.previewTextColor forState:UIControlStateNormal];

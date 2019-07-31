@@ -176,12 +176,12 @@
 @property (nonatomic, assign) BOOL showSelectBtn;
 
 /**
- 导航条颜色，默认 rgb(19, 153, 231)
+ 导航条颜色，默认 rgb(44, 45, 46)
  */
 @property (nonatomic, strong) UIColor *navBarColor;
 
 /**
- 导航标题颜色，默认 rgb(255, 255, 255)
+ 导航标题颜色，默认 white
  */
 @property (nonatomic, strong) UIColor *navTitleColor;
 
@@ -191,17 +191,27 @@
 @property (nonatomic, strong) UIColor *previewTextColor;
 
 /**
- 底部工具条底色，默认 rgb(255, 255, 255)
+ 底部工具条底色，默认 rgb(44, 45, 46)
  */
 @property (nonatomic, strong) UIColor *bottomViewBgColor;
 
 /**
- 底部工具栏按钮 可交互 状态标题颜色，底部 toolbar 按钮可交互状态title颜色均使用这个，确定按钮 可交互 的背景色为这个，默认rgb(80, 180, 234)
+ 底部工具栏按钮 可交互 状态标题颜色，默认 white
  */
 @property (nonatomic, strong) UIColor *bottomBtnsNormalTitleColor;
 
 /**
- 底部工具栏按钮 不可交互 状态标题颜色，底部 toolbar 按钮不可交互状态颜色均使用这个，确定按钮 不可交互 的背景色为这个，默认rgb(200, 200, 200)
+ 底部工具栏按钮 不可交互 状态标题颜色， rgb(168, 168, 168)
+ */
+@property (nonatomic, strong) UIColor *bottomBtnsDisableTitleColor;
+
+/**
+ 底部工具栏按钮 可交互 状态背景颜色，默认rgb(80, 169, 56)
+ */
+@property (nonatomic, strong) UIColor *bottomBtnsNormalBgColor;
+
+/**
+ 底部工具栏按钮 不可交互 状态背景颜色，默认rgb(39, 80, 32)
  */
 @property (nonatomic, strong) UIColor *bottomBtnsDisableBgColor;
 
@@ -211,7 +221,7 @@
 @property (nonatomic, assign) BOOL showSelectedMask;
 
 /**
- 遮罩层颜色，内部会默认调整颜色的透明度为0.2， 默认 blackColor
+ 遮罩层颜色， 默认 blackColor alpha 0.2
  */
 @property (nonatomic, strong) UIColor *selectedMaskColor;
 
@@ -221,9 +231,14 @@
 @property (nonatomic, assign) BOOL showSelectedIndex;
 
 /**
- 选中图片右上角index background color
+ 选中图片右上角index background color, 默认rgb(80, 169, 56)
  */
 @property (nonatomic, strong) UIColor *indexLabelBgColor;
+
+/**
+ 长按拍照按钮进行录像时的progress color 默认rgb(80, 169, 56)
+ */
+@property (nonatomic, strong) UIColor *cameraProgressColor;
 
 /**
  支持开发者自定义图片，但是所自定义图片资源名称必须与被替换的bundle中的图片名称一致
