@@ -2,6 +2,16 @@
 
 -----
 
+## [3.0.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.6) (2019-07-31)
+
+#### Add
+* 添加选中图片显示index功能;
+* 新增(及修改)部分颜色api，方便修改框架内部颜色;
+*  修改框架默认风格为微信的风格; 
+* 压缩图片资源;
+
+---
+
 ## [3.0.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.5) (2019-06-27)
 
 #### Add
