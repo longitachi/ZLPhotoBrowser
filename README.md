@@ -22,7 +22,7 @@
 * [效果图](#效果图)
 
 ### <a id="功能介绍"></a>功能介绍
-- [x] 支持横竖屏 (已适配iPhone X)
+- [x] 支持横竖屏
 - [x] 预览快速选择、可设置预览最大数 (支持拖拽选择)
 - [x] 直接进入相册选择 （支持滑动多选）
 - [x] 编辑图片 (可自定义裁剪比例)
@@ -35,6 +35,7 @@
 - [x] 多语言国际化 (中文简/繁、英文、日文，可设置跟随系统和自行切换，可自定义多语言提示)
 - [x] 相册内拍照按钮实时显示镜头捕捉画面
 - [x] 已选择图片遮罩层标记
+- [x] 已选择图片index
 - [x] 预览已选择照片
 - [x] 预览网络及本地 图片/视频 (图片支持长按保存至相册)
 - [x] 相册内图片自定义圆角弧度
@@ -240,10 +241,6 @@ Privacy - Microphone Usage Description
 - 编辑图片预览图
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/edit.gif)
-
-- 滤镜
-
-![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/filter.png)
 
 - 自定义相机效果图及介绍
 
