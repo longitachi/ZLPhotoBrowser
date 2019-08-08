@@ -2,7 +2,7 @@
 
 -----
 
-## [3.0.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.6) (2019-07-31)
+## [3.0.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.6) (2019-07-31)
 
 #### Add
 * 添加选中图片显示index功能;
