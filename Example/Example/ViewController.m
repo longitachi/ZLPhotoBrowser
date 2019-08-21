@@ -10,7 +10,7 @@
 #import "ImageCell.h"
 #import "YYFPSLabel.h"
 #import <Photos/Photos.h>
-#import "ZLPhotoBrowser.h"
+#import <ZLPhotoBrowser/ZLPhotoBrowser.h>
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
