@@ -386,8 +386,12 @@
         [_session stopRunning];
     }
     
-    [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if ([[AVAudioSession sharedInstance] secondaryAudioShouldBeSilencedHint]) {
+        [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    } else {
+        // no op
+    }
 //    NSLog(@"---- %s", __FUNCTION__);
 }
 
