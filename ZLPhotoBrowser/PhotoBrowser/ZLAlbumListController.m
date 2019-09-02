@@ -142,9 +142,11 @@
 {
     [super viewWillAppear:animated];
     
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    
+    @zl_weakify(self);
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
-        @zl_weakify(self);
         [ZLPhotoManager getPhotoAblumList:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage complete:^(NSArray<ZLAlbumListModel *> *albums) {
             @zl_strongify(self);
             self.arrayDataSources = [NSMutableArray arrayWithArray:albums];

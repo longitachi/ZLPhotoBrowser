@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)saveVideoToAblum:(NSURL *)url completion:(void (^ _Nullable)(BOOL suc, PHAsset *asset))completion;
 
 /**
- * @brief 在全部照片中获取指定个数、排序方式的部分照片，在跳往预览大图界面时候video和gif均为no，不受参数影响
+ * @brief 在全部照片中获取指定个数、排序方式的部分照片
  */
 + (NSArray<ZLPhotoModel *> *)getAllAssetInPhotoAlbumWithAscending:(BOOL)ascending limitCount:(NSInteger)limit allowSelectVideo:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage allowSelectGif:(BOOL)allowSelectGif allowSelectLivePhoto:(BOOL)allowSelectLivePhoto;
 

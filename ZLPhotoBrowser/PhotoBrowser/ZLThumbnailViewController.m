@@ -771,12 +771,19 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     NSArray<NSIndexPath *> *visibleIndexPaths = self.collectionView.indexPathsForVisibleItems;
     [visibleIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (obj.row >= self.arrDataSources.count) {
-            // 拍照按钮 return
+        UICollectionViewCell *c = [self.collectionView cellForItemAtIndexPath:obj];
+        if ([c isKindOfClass:ZLTakePhotoCell.class]) {
+            // 拍照cell return
             return;
         }
-        ZLCollectionCell *cell = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:obj];
-        ZLPhotoModel *m = self.arrDataSources[obj.row];
+        ZLCollectionCell *cell = (ZLCollectionCell *)c;
+        
+        NSInteger row = obj.row;
+        if (self.allowTakePhoto && !nav.configuration.sortAscending) {
+            row = obj.row - 1;
+        }
+        
+        ZLPhotoModel *m = self.arrDataSources[row];
         __block BOOL shouldShow = NO;
         __block NSInteger index = 0;
         [nav.arrSelectedModels enumerateObjectsUsingBlock:^(ZLPhotoModel * _Nonnull obj1, NSUInteger idx1, BOOL * _Nonnull stop) {

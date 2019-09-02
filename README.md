@@ -10,8 +10,7 @@
 ----------------------------------------
 
 ### 运行Demo
-下载完Demo请执行`carthage update --platform iOS`
-如果Demo报 `Duplicate interface definition for class''`  请到`Build Phases -> Headers`中，把`Public`中的头文件拖到`Protect`中即可
+下载完Demo请执行`carthage update --platform iOS` （运行时候请选择 `Example` target）
 
 ### 框架整体介绍
 * [功能介绍](#功能介绍)
