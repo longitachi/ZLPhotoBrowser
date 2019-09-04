@@ -1,6 +1,17 @@
 # Update Log
 
 -----
+## [3.0.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.7) (2019-09-04)
+
+#### Add
+* 网络视频播放添加进度条;
+* SDWebImage依赖升级5.1.0以上版本;
+
+#### Fix
+* 选中图片index角标bug.[#405](https://github.com/longitachi/ZLPhotoBrowser/issues/405)
+
+---
+
 
 ## [3.0.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.6) (2019-07-31)
 

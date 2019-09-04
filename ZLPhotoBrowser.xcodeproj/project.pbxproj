@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E49D0738231CCB4D007440D8 /* ZLVideoPlayerControl.h in Headers */ = {isa = PBXBuildFile; fileRef = E49D0736231CCB4D007440D8 /* ZLVideoPlayerControl.h */; };
+		E49D0739231CCB4D007440D8 /* ZLVideoPlayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E49D0737231CCB4D007440D8 /* ZLVideoPlayerControl.m */; };
 		FD4190EE222D1F6100FF46A9 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */; };
 		FD4190F0222D1F8300FF46A9 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190EF222D1F8300FF46A9 /* Photos.framework */; };
 		FD4190F2222D1F8A00FF46A9 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190F1222D1F8A00FF46A9 /* PhotosUI.framework */; };
@@ -78,6 +80,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E49D0736231CCB4D007440D8 /* ZLVideoPlayerControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLVideoPlayerControl.h; sourceTree = "<group>"; };
+		E49D0737231CCB4D007440D8 /* ZLVideoPlayerControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLVideoPlayerControl.m; sourceTree = "<group>"; };
 		FD419037222D1EEA00FF46A9 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZLPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD41903A222D1EEA00FF46A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
@@ -228,6 +232,8 @@
 				FD6446C4225AEF42003724CF /* ZLAlbumListController.m */,
 				FD6446E4225AEF42003724CF /* ZLBigImageCell.h */,
 				FD6446C1225AEF42003724CF /* ZLBigImageCell.m */,
+				E49D0736231CCB4D007440D8 /* ZLVideoPlayerControl.h */,
+				E49D0737231CCB4D007440D8 /* ZLVideoPlayerControl.m */,
 				FD6446CF225AEF42003724CF /* ZLCollectionCell.h */,
 				FD6446F0225AEF42003724CF /* ZLCollectionCell.m */,
 				FD6446BF225AEF42003724CF /* ZLCustomCamera.h */,
@@ -334,6 +340,7 @@
 				FD64470F225AEF43003724CF /* ZLClipItem.h in Headers */,
 				FD64474F225AEF43003724CF /* ZLPhotoBrowserCell.h in Headers */,
 				FD644706225AEF43003724CF /* ZLInteractiveTrasition.h in Headers */,
+				E49D0738231CCB4D007440D8 /* ZLVideoPlayerControl.h in Headers */,
 				FD644736225AEF43003724CF /* ZLInteractiveAnimateProtocol.h in Headers */,
 				FD644732225AEF43003724CF /* ZLAlbumListController.h in Headers */,
 				FD644731225AEF43003724CF /* ZLPullDownInteractiveTransition.h in Headers */,
@@ -436,6 +443,7 @@
 				FD644729225AEF43003724CF /* ZLProgressHUD.m in Sources */,
 				FD64472D225AEF43003724CF /* ZLBrushBoardImageView.m in Sources */,
 				FD64474E225AEF43003724CF /* UIButton+EnlargeTouchArea.m in Sources */,
+				E49D0739231CCB4D007440D8 /* ZLVideoPlayerControl.m in Sources */,
 				FD64473C225AEF43003724CF /* ZLPlayer.m in Sources */,
 				FD64475C225AEF43003724CF /* ZLPhotoModel.m in Sources */,
 				FD644742225AEF43003724CF /* ToastUtils.m in Sources */,
