@@ -395,6 +395,7 @@
 {
     self = [super init];
     if (self) {
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
         self.allowTakePhoto = YES;
         self.allowRecordVideo = YES;
         self.maxRecordDuration = 15;
@@ -924,10 +925,10 @@
 
 - (void)captureOutput:(AVCaptureFileOutput *)output didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray<AVCaptureConnection *> *)connections error:(NSError *)error
 {
-    if (CMTimeGetSeconds(output.recordedDuration) < 1) {
+    if (CMTimeGetSeconds(output.recordedDuration) < 0.3) {
         if (self.allowTakePhoto) {
-            //视频长度小于1s 允许拍照则拍照，不允许拍照，则保存小于1s的视频
-            ZLLoggerDebug(@"视频长度小于1s，按拍照处理");
+            //视频长度小于0.3s 允许拍照则拍照，不允许拍照，则保存小于0.3s的视频
+            ZLLoggerDebug(@"视频长度小于0.3s，按拍照处理");
             [self onTakePicture];
             return;
         }

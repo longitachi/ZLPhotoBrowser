@@ -149,7 +149,7 @@
     //    actionSheet.configuration.sessionPreset = ZLCaptureSessionPreset1920x1080;
     //    actionSheet.configuration.exportVideoType = ZLExportVideoTypeMp4;
     //    actionSheet.configuration.allowRecordVideo = NO;
-    //    actionSheet.configuration.maxVideoDuration = 5;
+    //    actionSheet.configuration.maxRecordDuration = 5;
 #pragma mark - required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;
