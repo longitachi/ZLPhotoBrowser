@@ -32,7 +32,7 @@
 		E4A1F2A0231FC49200315E4E /* SDWebImageMapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4A1F29F231FC49200315E4E /* SDWebImageMapKit.framework */; };
 		E4A1F2A1231FC49200315E4E /* SDWebImageMapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4A1F29F231FC49200315E4E /* SDWebImageMapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4C09432233CACEF0000858B /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C09431233CACEF0000858B /* ImageCell.swift */; };
-		E4C09433233CAD8D0000858B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4126B2722FC07EA00D3E9DF /* Assets.xcassets */; };
+		E4C09435233CB74E0000858B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4C09434233CB74D0000858B /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +112,7 @@
 		E4A1F29F231FC49200315E4E /* SDWebImageMapKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SDWebImageMapKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4A1F2A2231FC52E00315E4E /* SwiftExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		E4C09431233CACEF0000858B /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		E4C09434233CB74D0000858B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +198,7 @@
 				E4C09431233CACEF0000858B /* ImageCell.swift */,
 				E4A1F28C231FC46B00315E4E /* Main.storyboard */,
 				E4A1F291231FC46D00315E4E /* LaunchScreen.storyboard */,
+				E4C09434233CB74D0000858B /* Assets.xcassets */,
 				E4A1F294231FC46D00315E4E /* Info.plist */,
 				E4A1F2A2231FC52E00315E4E /* SwiftExample-Bridging-Header.h */,
 			);
@@ -322,7 +324,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4A1F293231FC46D00315E4E /* LaunchScreen.storyboard in Resources */,
-				E4C09433233CAD8D0000858B /* Assets.xcassets in Resources */,
+				E4C09435233CB74E0000858B /* Assets.xcassets in Resources */,
 				E4A1F28E231FC46B00315E4E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

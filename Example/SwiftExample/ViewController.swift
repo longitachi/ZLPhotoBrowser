@@ -350,6 +350,4 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate {
         self.getPas().previewSelectedPhotos(self.lastSelectImages, assets: self.lastSelectAssets, index: indexPath.row, isOriginal: self.isOriginal)
     }
     
-    
-    
 }

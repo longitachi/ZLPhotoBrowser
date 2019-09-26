@@ -26,7 +26,7 @@ class ImageCell: UICollectionViewCell {
         self.playImageView.contentMode = .scaleAspectFill
         self.playImageView.clipsToBounds = true
         self.playImageView.image = UIImage(named: "playVideo")
-        self.contentView.addSubview(self.imageView)
+        self.contentView.addSubview(self.playImageView)
     }
     
     required init?(coder: NSCoder) {

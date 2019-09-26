@@ -1,6 +1,14 @@
 # Update Log
 
 -----
+## [3.1.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.0) (2019-09-026)
+
+#### Add
+* 初步适配iOS13;
+* 修改拍摄视频时1s以下不给保存的时间点为0.3s，即自定义相机拍摄视频时0.3s以下按拍照处理;
+
+---
+
 ## [3.0.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.7) (2019-09-04)
 
 #### Add
