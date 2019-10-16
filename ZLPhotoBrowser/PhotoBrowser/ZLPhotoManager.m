@@ -375,7 +375,7 @@ static BOOL _sortAscending;
 
 + (NSString *)getDuration:(PHAsset *)asset
 {
-    if (asset.mediaType != PHAssetMediaTypeVideo) return nil;
+    if (asset.mediaType != PHAssetMediaTypeVideo) return @"";
     
     NSInteger duration = (NSInteger)round(asset.duration);
     
@@ -737,24 +737,34 @@ static BOOL _sortAscending;
 
 + (void)requestAssetFileUrl:(PHAsset *)asset complete:(void (^)(NSString *))complete
 {
-    ZLAssetMediaType type = [self transformAssetType:asset];
-    if (type == ZLAssetMediaTypeVideo) {
-        [self requestVideoForAsset:asset completion:^(AVPlayerItem *item, NSDictionary *info) {
-            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
-            NSArray *arr = [info[@"PHImageFileSandboxExtensionTokenKey"] componentsSeparatedByString:@";"];
-            if (complete) {
-                complete(arr.lastObject);
-            }
-        }];
-    } else {
-        [self requestOriginalImageDataForAsset:asset progressHandler:nil completion:^(NSData *data, NSDictionary *info) {
-            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
-            if (complete) {
-                NSURL *url = info[@"PHImageFileURLKey"];
-                complete(url.absoluteString);
-            }
-        }];
-    }
+    // https://github.com/longitachi/ZLPhotoBrowser/issues/417
+    [asset requestContentEditingInputWithOptions:nil completionHandler:^(PHContentEditingInput * _Nullable contentEditingInput, NSDictionary * _Nonnull info) {
+        NSString *path = contentEditingInput.fullSizeImageURL.absoluteString;
+        if (!path) {
+            path = [NSString stringWithFormat:@"file:///var/mobile/Media/%@/%@", [asset valueForKey:@"_directory"], [asset valueForKey:@"_filename"]];
+        }
+        complete(path);
+    }];
+    
+    // iOS13后，下面方法获取路径失败
+//    ZLAssetMediaType type = [self transformAssetType:asset];
+//    if (type == ZLAssetMediaTypeVideo) {
+//        [self requestVideoForAsset:asset completion:^(AVPlayerItem *item, NSDictionary *info) {
+//            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+//            NSArray *arr = [info[@"PHImageFileSandboxExtensionTokenKey"] componentsSeparatedByString:@";"];
+//            if (complete) {
+//                complete(arr.lastObject);
+//            }
+//        }];
+//    } else {
+//        [self requestOriginalImageDataForAsset:asset progressHandler:nil completion:^(NSData *data, NSDictionary *info) {
+//            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+//            if (complete) {
+//                NSURL *url = info[@"PHImageFileURLKey"];
+//                complete(url.absoluteString);
+//            }
+//        }];
+//    }
 }
 
 #pragma mark - 编辑、导出视频相关

@@ -121,6 +121,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * @brief 判断图片是否存储在本地/或者已经从iCloud上下载到本地
+ *
+ * @warning 方法暂未实现，直接返回的YES
  */
 + (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset;
 
@@ -157,7 +159,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  导出编辑的片段视频并保存到相册
  
- @param range 需要到处的视频间隔
+ @param range 需要导出的视频间隔
  */
 + (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^ _Nullable)(BOOL isSuc, PHAsset *asset))complete;
 

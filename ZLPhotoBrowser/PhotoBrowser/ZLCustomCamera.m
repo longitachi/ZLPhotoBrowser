@@ -528,7 +528,7 @@
     
     self.toolView.frame = CGRectMake(0, kViewHeight-150-ZL_SafeAreaBottom(), kViewWidth, 100);
     self.previewLayer.frame = self.view.layer.bounds;
-    self.toggleCameraBtn.frame = CGRectMake(kViewWidth-50, 20, 30, 30);
+    self.toggleCameraBtn.frame = CGRectMake(kViewWidth-50, UIApplication.sharedApplication.statusBarFrame.size.height, 30, 30);
 }
 
 - (void)setupUI
