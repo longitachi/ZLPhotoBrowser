@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  获取原图data，转换gif图
  */
-+ (void)requestOriginalImageDataForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^ _Nullable)(NSData *, NSDictionary *))completion;
++ (PHImageRequestID)requestOriginalImageDataForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^ _Nullable)(NSData *, NSDictionary *))completion;
 
 /**
  * @brief 获取原图

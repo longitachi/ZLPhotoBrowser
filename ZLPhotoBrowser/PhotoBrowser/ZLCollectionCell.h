@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class ZLPhotoModel;
+@class ZLPhotoModel, ZLProgressView;
 
 @interface ZLCollectionCell : UICollectionViewCell
 
@@ -30,6 +30,8 @@
 @property (nonatomic, assign) BOOL showMask;
 @property (nonatomic, assign) BOOL showIndexLabel;
 @property (nonatomic, assign) NSInteger index;
+
+@property (nonatomic, strong) ZLProgressView *progressView;
 
 @property (nonatomic, copy) void (^selectedBlock)(BOOL);
 

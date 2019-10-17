@@ -12,11 +12,13 @@
 #import "ZLDefine.h"
 #import "ToastUtils.h"
 #import "UIButton+EnlargeTouchArea.h"
+#import "ZLProgressView.h"
 
 @interface ZLCollectionCell ()
 
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, assign) PHImageRequestID imageRequestID;
+@property (nonatomic, assign) PHImageRequestID bigImageRequestID;
 
 @end
 
@@ -81,6 +83,10 @@
     self.timeLabel.font = [UIFont systemFontOfSize:13];
     self.timeLabel.textColor = [UIColor whiteColor];
     [self.videoBottomView addSubview:self.timeLabel];
+    
+    self.progressView = [[ZLProgressView alloc] init];
+    self.progressView.hidden = YES;
+    [self.contentView addSubview:self.progressView];
 }
 
 - (void)layoutSubviews
@@ -97,6 +103,9 @@
     self.liveImageView.frame = CGRectMake(5, -1, 15, 15);
     self.timeLabel.frame = CGRectMake(30, 1, GetViewWidth(self)-35, 12);
     [self.contentView sendSubviewToBack:self.imageView];
+    
+    CGFloat progressOriginXY = (GetViewWidth(self) - 20) / 2;
+    self.progressView.frame = CGRectMake(progressOriginXY, progressOriginXY, 20, 20);
 }
 
 - (void)setModel:(ZLPhotoModel *)model
@@ -136,6 +145,12 @@
     self.btnSelect.enabled = self.showSelectBtn;
     self.btnSelect.selected = model.isSelected;
     
+    if (model.isSelected) {
+        [self requestBigImage];
+    } else {
+        [self cancelRequestBigImage];
+    }
+    
     if (self.showSelectBtn) {
         //扩大点击区域
         [_btnSelect setEnlargeEdgeWithTop:0 right:0 bottom:20 left:20];
@@ -146,8 +161,8 @@
     size.height = GetViewHeight(self) * 1.7;
     
     @zl_weakify(self);
-    if (model.asset && self.imageRequestID >= PHInvalidImageRequestID) {
-        [[PHCachingImageManager defaultManager] cancelImageRequest:self.imageRequestID];
+    if (model.asset && self.imageRequestID > PHInvalidImageRequestID) {
+        [[PHImageManager defaultManager] cancelImageRequest:self.imageRequestID];
     }
     self.identifier = model.asset.localIdentifier;
     self.imageView.image = nil;
@@ -183,6 +198,49 @@
     if (self.selectedBlock) {
         self.selectedBlock(self.btnSelect.selected);
     }
+    
+    if (self.btnSelect.isSelected) {
+        [self requestBigImage];
+    } else {
+        self.progressView.hidden = YES;
+        [self cancelRequestBigImage];
+    }
+}
+
+- (void)requestBigImage
+{
+    [self cancelRequestBigImage];
+    
+    @zl_weakify(self);
+    self.bigImageRequestID = [ZLPhotoManager requestOriginalImageDataForAsset:self.model.asset progressHandler:^(double progress, NSError * _Nonnull error, BOOL * _Nonnull stop, NSDictionary * _Nonnull info) {
+        @zl_strongify(self);
+        if (self.model.isSelected) {
+            self.progressView.hidden = NO;
+            self.progressView.progress = MAX(0.1, progress);
+            self.imageView.alpha = 0.5;
+            if (progress >= 1) {
+                [self resetProgressViewStatus];
+            }
+        } else {
+            [self cancelRequestBigImage];
+        }
+    } completion:^(NSData * _Nonnull data, NSDictionary * _Nonnull dic) {
+        [self resetProgressViewStatus];
+    }];
+}
+
+- (void)cancelRequestBigImage
+{
+    if (self.bigImageRequestID > PHInvalidImageRequestID) {
+        [[PHImageManager defaultManager] cancelImageRequest:self.bigImageRequestID];
+    }
+    [self resetProgressViewStatus];
+}
+
+- (void)resetProgressViewStatus
+{
+    self.progressView.hidden = YES;
+    self.imageView.alpha = 1;
 }
 
 @end

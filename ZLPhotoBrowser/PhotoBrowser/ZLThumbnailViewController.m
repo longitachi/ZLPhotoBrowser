@@ -484,10 +484,10 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     self.btnOriginalPhoto.selected = !self.btnOriginalPhoto.selected;
     nav.isSelectOriginalPhoto = self.btnOriginalPhoto.selected;
+    self.labPhotosBytes.hidden = !nav.isSelectOriginalPhoto;
+    self.labPhotosBytes.text = nil;
     if (nav.isSelectOriginalPhoto) {
         [self getOriginalImageBytes];
-    } else {
-        self.labPhotosBytes.text = nil;
     }
 }
 

@@ -456,14 +456,12 @@
     
     [ZLPhotoManager requestOriginalImageDataForAsset:asset progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         @zl_strongify(self);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.indicator.progress = progress;
-            if (progress >= 1) {
-                self.indicator.hidden = YES;
-            } else {
-                self.indicator.hidden = NO;
-            }
-        });
+        self.indicator.progress = progress;
+        if (progress >= 1) {
+            self.indicator.hidden = YES;
+        } else {
+            self.indicator.hidden = NO;
+        }
     } completion:^(NSData *data, NSDictionary *info) {
         @zl_strongify(self);
         if (![[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
@@ -483,14 +481,12 @@
     @zl_weakify(self);
     self.imageRequestID = [ZLPhotoManager requestImageForAsset:asset size:[self requestImageSize:asset] progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         @zl_strongify(self);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.indicator.progress = progress;
-            if (progress >= 1) {
-                self.indicator.hidden = YES;
-            } else {
-                self.indicator.hidden = NO;
-            }
-        });
+        self.indicator.progress = progress;
+        if (progress >= 1) {
+            self.indicator.hidden = YES;
+        } else {
+            self.indicator.hidden = NO;
+        }
     } completion:^(UIImage *image, NSDictionary *info) {
         @zl_strongify(self);
         self.imageView.image = image;
@@ -740,14 +736,12 @@
     @zl_weakify(self);
     self.imageRequestID = [ZLPhotoManager requestImageForAsset:asset size:[self requestImageSize:asset] progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         @zl_strongify(self);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.indicator.progress = progress;
-            if (progress >= 1) {
-                self.indicator.hidden = YES;
-            } else {
-                self.indicator.hidden = NO;
-            }
-        });
+        self.indicator.progress = progress;
+        if (progress >= 1) {
+            self.indicator.hidden = YES;
+        } else {
+            self.indicator.hidden = NO;
+        }
     } completion:^(UIImage *image, NSDictionary *info) {
         @zl_strongify(self);
         self.imageView.image = image;
@@ -893,14 +887,12 @@
     @zl_weakify(self);
     [ZLPhotoManager requestVideoForAsset:asset progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         @zl_strongify(self);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.indicator.progress = progress;
-            if (progress >= 1) {
-                self.indicator.hidden = YES;
-            } else {
-                self.indicator.hidden = NO;
-            }
-        });
+        self.indicator.progress = progress;
+        if (progress >= 1) {
+            self.indicator.hidden = YES;
+        } else {
+            self.indicator.hidden = NO;
+        }
     } completion:^(AVPlayerItem *item, NSDictionary *info) {
         dispatch_async(dispatch_get_main_queue(), ^{
             @zl_strongify(self);
