@@ -80,6 +80,10 @@ class ViewController: UIViewController {
         self.collectionView.register(ImageCell.self, forCellWithReuseIdentifier: cellReuseIdentifier)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     func getPas() -> ZLPhotoActionSheet {
         let ac = ZLPhotoActionSheet()
         

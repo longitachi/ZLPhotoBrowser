@@ -41,8 +41,9 @@
     [self.navigationBar setBackgroundImage:[self imageWithColor:configuration.navBarColor] forBarMetrics:UIBarMetricsDefault];
     [self.navigationBar setTintColor:configuration.navTitleColor];
     [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName: configuration.navTitleColor}];
-    [self.navigationBar setBackIndicatorImage:GetImageWithName(@"zl_navBack")];
-    [self.navigationBar setBackIndicatorTransitionMaskImage:GetImageWithName(@"zl_navBack")];
+//    UIImage *image = [GetImageWithName(@"zl_navBack") imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+//    [self.navigationBar setBackIndicatorImage:image];
+//    [self.navigationBar setBackIndicatorTransitionMaskImage:image];
 }
 
 - (UIImage *)imageWithColor:(UIColor *)color

@@ -154,8 +154,10 @@ static BOOL _sortAscending;
 
 + (void)getCameraRollAlbumList:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage complete:(void (^)(ZLAlbumListModel *))complete
 {
+    ZLAlbumListModel *album = [self getCameraRollAlbumList:allowSelectVideo allowSelectImage:allowSelectImage];
+    album.models = [self getPhotoInResult:album.result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage allowSelectGif:YES allowSelectLivePhoto:YES];
     if (complete) {
-        complete([self getCameraRollAlbumList:allowSelectVideo allowSelectImage:allowSelectImage]);
+        complete(album);
     }
 }
 
@@ -316,8 +318,6 @@ static BOOL _sortAscending;
     } else {
         model.headImageAsset = result.firstObject;
     }
-    //为了获取所有asset gif设置为yes
-    model.models = [ZLPhotoManager getPhotoInResult:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage allowSelectGif:allowSelectImage allowSelectLivePhoto:allowSelectImage];
     
     return model;
 }
