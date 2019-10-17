@@ -822,6 +822,7 @@
         _takedImageView.contentMode = UIViewContentModeScaleAspectFit;
         [self.view insertSubview:_takedImageView belowSubview:self.toolView];
     }
+    
     __weak typeof(self) weakSelf = self;
     [self.imageOutPut captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
         if (imageDataSampleBuffer == NULL) {
@@ -852,7 +853,6 @@
 - (void)onFinishRecord
 {
     [self.movieFileOutPut stopRecording];
-    [self.session stopRunning];
     [self setVideoZoomFactor:1];
 }
 
@@ -933,7 +933,7 @@
             return;
         }
     }
-    
+    [self.session stopRunning];
     self.videoUrl = outputFileURL;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self playVideo];
