@@ -11,7 +11,7 @@
 #import "ZLPhotoManager.h"
 #import "ZLDefine.h"
 #import "ToastUtils.h"
-#import "UIButton+EnlargeTouchArea.h"
+#import "ZLEnlargeButton.h"
 
 @interface ZLCollectionCell ()
 
@@ -52,7 +52,7 @@
     self.videoBottomView.frame = CGRectMake(0, GetViewHeight(self)-15, GetViewWidth(self), 15);
     [self.contentView addSubview:_videoBottomView];
     
-    self.btnSelect = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnSelect = [ZLEnlargeButton buttonWithType:UIButtonTypeCustom];
     self.btnSelect.frame = CGRectMake(GetViewWidth(self.contentView)-26, 5, 23, 23);
     [self.btnSelect setBackgroundImage:GetImageWithName(@"zl_btn_unselected") forState:UIControlStateNormal];
     [self.btnSelect setBackgroundImage:GetImageWithName(@"zl_btn_selected") forState:UIControlStateSelected];
@@ -138,7 +138,7 @@
     
     if (self.showSelectBtn) {
         //扩大点击区域
-        [_btnSelect setEnlargeEdgeWithTop:0 right:0 bottom:20 left:20];
+        [_btnSelect setEnlargeClickInset:UIEdgeInsetsMake(0, 20, 20, 0)];
     }
     
     CGSize size;

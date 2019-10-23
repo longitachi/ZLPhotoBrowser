@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		224E7545236039B100758BB0 /* ZLEnlargeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 224E7544236039B100758BB0 /* ZLEnlargeButton.m */; };
 		FD418FB9222D1D9B00FF46A9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD418FB8222D1D9B00FF46A9 /* AppDelegate.m */; };
 		FD418FBC222D1D9B00FF46A9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD418FBB222D1D9B00FF46A9 /* ViewController.m */; };
 		FD418FBF222D1D9B00FF46A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD418FBD222D1D9B00FF46A9 /* Main.storyboard */; };
@@ -46,7 +47,6 @@
 		FD644714225AEF43003724CF /* ZLPhotoBrowserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446CC225AEF42003724CF /* ZLPhotoBrowserCell.m */; };
 		FD644715225AEF43003724CF /* ZLForceTouchPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446CD225AEF42003724CF /* ZLForceTouchPreviewController.m */; };
 		FD644716225AEF43003724CF /* ZLForceTouchPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446CD225AEF42003724CF /* ZLForceTouchPreviewController.m */; };
-		FD644717225AEF43003724CF /* UIButton+EnlargeTouchArea.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446CE225AEF42003724CF /* UIButton+EnlargeTouchArea.h */; };
 		FD644718225AEF43003724CF /* ZLCollectionCell.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446CF225AEF42003724CF /* ZLCollectionCell.h */; };
 		FD644719225AEF43003724CF /* ZLNoAuthorityViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D0225AEF42003724CF /* ZLNoAuthorityViewController.h */; };
 		FD64471A225AEF43003724CF /* ZLPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446D1225AEF42003724CF /* ZLPhotoManager.m */; };
@@ -100,8 +100,6 @@
 		FD64474A225AEF43003724CF /* ZLNoAuthorityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F1225AEF42003724CF /* ZLNoAuthorityViewController.m */; };
 		FD64474B225AEF43003724CF /* ZLNoAuthorityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F1225AEF42003724CF /* ZLNoAuthorityViewController.m */; };
 		FD64474C225AEF43003724CF /* ZLForceTouchPreviewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446F3225AEF42003724CF /* ZLForceTouchPreviewController.h */; };
-		FD64474D225AEF43003724CF /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F4225AEF42003724CF /* UIButton+EnlargeTouchArea.m */; };
-		FD64474E225AEF43003724CF /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F4225AEF42003724CF /* UIButton+EnlargeTouchArea.m */; };
 		FD64474F225AEF43003724CF /* ZLPhotoBrowserCell.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446F6225AEF42003724CF /* ZLPhotoBrowserCell.h */; };
 		FD644750225AEF43003724CF /* ZLPullDownInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F7225AEF42003724CF /* ZLPullDownInteractiveTransition.m */; };
 		FD644751225AEF43003724CF /* ZLPullDownInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F7225AEF42003724CF /* ZLPullDownInteractiveTransition.m */; };
@@ -149,6 +147,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		224E7543236039B100758BB0 /* ZLEnlargeButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLEnlargeButton.h; sourceTree = "<group>"; };
+		224E7544236039B100758BB0 /* ZLEnlargeButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLEnlargeButton.m; sourceTree = "<group>"; };
 		FD418FB4222D1D9B00FF46A9 /* ZLPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZLPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD418FB7222D1D9B00FF46A9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FD418FB8222D1D9B00FF46A9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -186,7 +186,6 @@
 		FD6446CB225AEF42003724CF /* ZLDrawItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLDrawItem.h; sourceTree = "<group>"; };
 		FD6446CC225AEF42003724CF /* ZLPhotoBrowserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoBrowserCell.m; sourceTree = "<group>"; };
 		FD6446CD225AEF42003724CF /* ZLForceTouchPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLForceTouchPreviewController.m; sourceTree = "<group>"; };
-		FD6446CE225AEF42003724CF /* UIButton+EnlargeTouchArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+EnlargeTouchArea.h"; sourceTree = "<group>"; };
 		FD6446CF225AEF42003724CF /* ZLCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLCollectionCell.h; sourceTree = "<group>"; };
 		FD6446D0225AEF42003724CF /* ZLNoAuthorityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLNoAuthorityViewController.h; sourceTree = "<group>"; };
 		FD6446D1225AEF42003724CF /* ZLPhotoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoManager.m; sourceTree = "<group>"; };
@@ -222,7 +221,6 @@
 		FD6446F0225AEF42003724CF /* ZLCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLCollectionCell.m; sourceTree = "<group>"; };
 		FD6446F1225AEF42003724CF /* ZLNoAuthorityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLNoAuthorityViewController.m; sourceTree = "<group>"; };
 		FD6446F3225AEF42003724CF /* ZLForceTouchPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLForceTouchPreviewController.h; sourceTree = "<group>"; };
-		FD6446F4225AEF42003724CF /* UIButton+EnlargeTouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EnlargeTouchArea.m"; sourceTree = "<group>"; };
 		FD6446F6225AEF42003724CF /* ZLPhotoBrowserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLPhotoBrowserCell.h; sourceTree = "<group>"; };
 		FD6446F7225AEF42003724CF /* ZLPullDownInteractiveTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPullDownInteractiveTransition.m; sourceTree = "<group>"; };
 		FD6446F8225AEF42003724CF /* ZLShowBigImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImgViewController.m; sourceTree = "<group>"; };
@@ -334,8 +332,6 @@
 				FD6446F5225AEF42003724CF /* resource */,
 				FD6446C7225AEF42003724CF /* ToastUtils.h */,
 				FD6446EB225AEF42003724CF /* ToastUtils.m */,
-				FD6446CE225AEF42003724CF /* UIButton+EnlargeTouchArea.h */,
-				FD6446F4225AEF42003724CF /* UIButton+EnlargeTouchArea.m */,
 				FD6446C9225AEF42003724CF /* UIImage+ZLPhotoBrowser.h */,
 				FD6446EA225AEF42003724CF /* UIImage+ZLPhotoBrowser.m */,
 				FD6446E2225AEF42003724CF /* ZLAlbumListController.h */,
@@ -377,6 +373,8 @@
 				FD6446F8225AEF42003724CF /* ZLShowBigImgViewController.m */,
 				FD6446DA225AEF42003724CF /* ZLThumbnailViewController.h */,
 				FD6446FB225AEF42003724CF /* ZLThumbnailViewController.m */,
+				224E7543236039B100758BB0 /* ZLEnlargeButton.h */,
+				224E7544236039B100758BB0 /* ZLEnlargeButton.m */,
 			);
 			path = PhotoBrowser;
 			sourceTree = "<group>";
@@ -444,7 +442,6 @@
 				FD644735225AEF43003724CF /* ZLBigImageCell.h in Headers */,
 				FD644712225AEF43003724CF /* ZLDrawItem.h in Headers */,
 				FD64472E225AEF43003724CF /* ZLShowBigImgViewController.h in Headers */,
-				FD644717225AEF43003724CF /* UIButton+EnlargeTouchArea.h in Headers */,
 				FD64470F225AEF43003724CF /* ZLClipItem.h in Headers */,
 				FD64474F225AEF43003724CF /* ZLPhotoBrowserCell.h in Headers */,
 				FD644706225AEF43003724CF /* ZLInteractiveTrasition.h in Headers */,
@@ -595,9 +592,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD418FBC222D1D9B00FF46A9 /* ViewController.m in Sources */,
-				FD64474D225AEF43003724CF /* UIButton+EnlargeTouchArea.m in Sources */,
 				FD644737225AEF43003724CF /* ZLCustomCamera.m in Sources */,
 				FD644739225AEF43003724CF /* ZLDrawItem.m in Sources */,
+				224E7545236039B100758BB0 /* ZLEnlargeButton.m in Sources */,
 				FD644709225AEF43003724CF /* ZLAlbumListController.m in Sources */,
 				FD644744225AEF43003724CF /* ZLEditViewController.m in Sources */,
 				FD64472C225AEF43003724CF /* ZLBrushBoardImageView.m in Sources */,
@@ -651,7 +648,6 @@
 				FD64470A225AEF43003724CF /* ZLAlbumListController.m in Sources */,
 				FD644729225AEF43003724CF /* ZLProgressHUD.m in Sources */,
 				FD64472D225AEF43003724CF /* ZLBrushBoardImageView.m in Sources */,
-				FD64474E225AEF43003724CF /* UIButton+EnlargeTouchArea.m in Sources */,
 				FD64473C225AEF43003724CF /* ZLPlayer.m in Sources */,
 				FD64475C225AEF43003724CF /* ZLPhotoModel.m in Sources */,
 				FD644742225AEF43003724CF /* ToastUtils.m in Sources */,

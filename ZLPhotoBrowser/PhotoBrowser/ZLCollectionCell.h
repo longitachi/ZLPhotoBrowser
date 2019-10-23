@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class ZLPhotoModel;
+@class ZLEnlargeButton;
 
 @interface ZLCollectionCell : UICollectionViewCell
 
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) UIButton *btnSelect;
+@property (nonatomic, strong) ZLEnlargeButton *btnSelect;
 @property (nonatomic, strong) UIImageView *videoBottomView;
 @property (nonatomic, strong) UIImageView *videoImageView;
 @property (nonatomic, strong) UIImageView *liveImageView;
