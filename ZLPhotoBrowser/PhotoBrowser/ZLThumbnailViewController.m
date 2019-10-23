@@ -73,6 +73,8 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 - (NSMutableArray<ZLPhotoModel *> *)arrDataSources
 {
     if (!_arrDataSources) {
+        _arrDataSources = [NSMutableArray array];
+        
         ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
         [hud show];
         
@@ -83,16 +85,16 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
             @zl_weakify(self);
             __weak typeof(nav) weakNav = nav;
-            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [ZLPhotoManager getCameraRollAlbumList:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage complete:^(ZLAlbumListModel *album) {
-                    @zl_strongify(self);
-                    __strong typeof(weakNav) strongNav  = weakNav;
-                    
-                    self.albumListModel = album;
-                    [ZLPhotoManager markSelectModelInArr:self.albumListModel.models selArr:strongNav.arrSelectedModels];
-                    self.arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        @zl_strongify(self);
+                        __strong typeof(weakNav) strongNav  = weakNav;
+                        
+                        self.albumListModel = album;
+                        [ZLPhotoManager markSelectModelInArr:self.albumListModel.models selArr:strongNav.arrSelectedModels];
+                        [self.arrDataSources addObjectsFromArray:self.albumListModel.models];
+                        
                         [hud hide];
                         if (configuration.allowTakePhotoInLibrary && (configuration.allowSelectImage || configuration.allowRecordVideo)) {
                             self.allowTakePhoto = YES;
@@ -107,9 +109,22 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
             if (configuration.allowTakePhotoInLibrary && (configuration.allowSelectImage || configuration.allowRecordVideo) && self.albumListModel.isCameraRoll) {
                 self.allowTakePhoto = YES;
             }
-            [ZLPhotoManager markSelectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
-            _arrDataSources = [NSMutableArray arrayWithArray:self.albumListModel.models];
-            [hud hide];
+            ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                self.albumListModel.models = [ZLPhotoManager getPhotoInResult:self.albumListModel.result allowSelectVideo:configuration.allowSelectVideo allowSelectImage:configuration.allowSelectImage allowSelectGif:configuration.allowSelectGif allowSelectLivePhoto:configuration.allowSelectLivePhoto];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [ZLPhotoManager markSelectModelInArr:self.albumListModel.models selArr:nav.arrSelectedModels];
+                    [self.arrDataSources addObjectsFromArray:self.albumListModel.models];
+                    
+                    [hud hide];
+                    if (configuration.allowTakePhotoInLibrary && (configuration.allowSelectImage || configuration.allowRecordVideo)) {
+                        self.allowTakePhoto = YES;
+                    }
+                    [self.collectionView reloadData];
+                    [self scrollToBottom];
+                });
+            });
         }
     }
     return _arrDataSources;
@@ -167,6 +182,7 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     [super viewDidAppear:animated];
     _isLayoutOK = YES;
     _isPreviewPush = NO;
+    
 }
 
 - (void)viewDidLayoutSubviews
@@ -401,8 +417,11 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     ZLPhotoConfiguration *configuration = nav.configuration;
-    nav.viewControllers.firstObject.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:GetLocalLanguageTextValue(ZLPhotoBrowserBackText) style:UIBarButtonItemStylePlain target:nil action:nil];
     
+//    nav.viewControllers.firstObject.navigationItem.backBarButtonItem.title = GetLocalLanguageTextValue(ZLPhotoBrowserBackText);
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:GetImageWithName(@"zl_navBack") style:UIBarButtonItemStylePlain target:self action:@selector(navBackAction)];
+    self.navigationItem.leftBarButtonItem = backItem;
+
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat width = GetMatchValue(GetLocalLanguageTextValue(ZLPhotoBrowserCancelText), 16, YES, 44);
     btn.frame = CGRectMake(0, 0, width, 44);
@@ -414,6 +433,12 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
 }
 
 #pragma mark - UIButton Action
+
+- (void)navBackAction
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)btnEdit_Click:(id)sender {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     ZLPhotoModel *m = nav.arrSelectedModels.firstObject;
@@ -459,10 +484,10 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     self.btnOriginalPhoto.selected = !self.btnOriginalPhoto.selected;
     nav.isSelectOriginalPhoto = self.btnOriginalPhoto.selected;
+    self.labPhotosBytes.hidden = !nav.isSelectOriginalPhoto;
+    self.labPhotosBytes.text = nil;
     if (nav.isSelectOriginalPhoto) {
         [self getOriginalImageBytes];
-    } else {
-        self.labPhotosBytes.text = nil;
     }
 }
 
@@ -771,12 +796,19 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     NSArray<NSIndexPath *> *visibleIndexPaths = self.collectionView.indexPathsForVisibleItems;
     [visibleIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (obj.row >= self.arrDataSources.count) {
-            // 拍照按钮 return
+        UICollectionViewCell *c = [self.collectionView cellForItemAtIndexPath:obj];
+        if ([c isKindOfClass:ZLTakePhotoCell.class]) {
+            // 拍照cell return
             return;
         }
-        ZLCollectionCell *cell = (ZLCollectionCell *)[self.collectionView cellForItemAtIndexPath:obj];
-        ZLPhotoModel *m = self.arrDataSources[obj.row];
+        ZLCollectionCell *cell = (ZLCollectionCell *)c;
+        
+        NSInteger row = obj.row;
+        if (self.allowTakePhoto && !nav.configuration.sortAscending) {
+            row = obj.row - 1;
+        }
+        
+        ZLPhotoModel *m = self.arrDataSources[row];
         __block BOOL shouldShow = NO;
         __block NSInteger index = 0;
         [nav.arrSelectedModels enumerateObjectsUsingBlock:^(ZLPhotoModel * _Nonnull obj1, NSUInteger idx1, BOOL * _Nonnull stop) {

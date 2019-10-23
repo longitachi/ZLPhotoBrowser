@@ -154,8 +154,10 @@ static BOOL _sortAscending;
 
 + (void)getCameraRollAlbumList:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage complete:(void (^)(ZLAlbumListModel *))complete
 {
+    ZLAlbumListModel *album = [self getCameraRollAlbumList:allowSelectVideo allowSelectImage:allowSelectImage];
+    album.models = [self getPhotoInResult:album.result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage allowSelectGif:YES allowSelectLivePhoto:YES];
     if (complete) {
-        complete([self getCameraRollAlbumList:allowSelectVideo allowSelectImage:allowSelectImage]);
+        complete(album);
     }
 }
 
@@ -316,8 +318,6 @@ static BOOL _sortAscending;
     } else {
         model.headImageAsset = result.firstObject;
     }
-    //为了获取所有asset gif设置为yes
-    model.models = [ZLPhotoManager getPhotoInResult:result allowSelectVideo:allowSelectVideo allowSelectImage:allowSelectImage allowSelectGif:allowSelectImage allowSelectLivePhoto:allowSelectImage];
     
     return model;
 }
@@ -375,7 +375,7 @@ static BOOL _sortAscending;
 
 + (NSString *)getDuration:(PHAsset *)asset
 {
-    if (asset.mediaType != PHAssetMediaTypeVideo) return nil;
+    if (asset.mediaType != PHAssetMediaTypeVideo) return @"";
     
     NSInteger duration = (NSInteger)round(asset.duration);
     
@@ -393,18 +393,26 @@ static BOOL _sortAscending;
     }
 }
 
-+ (void)requestOriginalImageDataForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double, NSError *, BOOL *, NSDictionary *))progressHandler completion:(void (^)(NSData *, NSDictionary *))completion
++ (PHImageRequestID)requestOriginalImageDataForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double, NSError *, BOOL *, NSDictionary *))progressHandler completion:(void (^)(NSData *, NSDictionary *))completion
 {
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc]init];
     option.networkAccessAllowed = YES;
     option.resizeMode = PHImageRequestOptionsResizeModeFast;
-    option.progressHandler = progressHandler;
-    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+    option.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (progressHandler) {
+                progressHandler(progress, error, stop, info);
+            }
+        });
+    };
+    
+    PHImageRequestID requstID = [[PHImageManager defaultManager] requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
         BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey]);
         if (downloadFinined && imageData) {
             if (completion) completion(imageData, info);
         }
     }];
+    return requstID;
 }
 
 + (void)requestSelectedImageForAsset:(ZLPhotoModel *)model isOriginal:(BOOL)isOriginal allowSelectGif:(BOOL)allowSelectGif completion:(void (^)(UIImage *, NSDictionary *))completion
@@ -565,7 +573,13 @@ static BOOL _sortAscending;
     //    option.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;//控制照片质量
     option.networkAccessAllowed = YES;
     
-    option.progressHandler = progressHandler;
+    option.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (progressHandler) {
+                progressHandler(progress, error, stop, info);
+            }
+        });
+    };
     
     /*
      info字典提供请求状态信息:
@@ -618,9 +632,17 @@ static BOOL _sortAscending;
     __block NSInteger count = photos.count;
     
     __weak typeof(self) weakSelf = self;
+    
+    if (completion) completion(@"0B");
     for (int i = 0; i < photos.count; i++) {
         ZLPhotoModel *model = photos[i];
-        [[PHCachingImageManager defaultManager] requestImageDataForAsset:model.asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        options.resizeMode = PHImageRequestOptionsResizeModeFast;
+        options.networkAccessAllowed = YES;
+        if (model.type == ZLAssetMediaTypeGif) {
+            options.version = PHImageRequestOptionsVersionOriginal;
+        }
+        [[PHCachingImageManager defaultManager] requestImageDataForAsset:model.asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
             dataLength += imageData.length;
             count--;
@@ -737,24 +759,34 @@ static BOOL _sortAscending;
 
 + (void)requestAssetFileUrl:(PHAsset *)asset complete:(void (^)(NSString *))complete
 {
-    ZLAssetMediaType type = [self transformAssetType:asset];
-    if (type == ZLAssetMediaTypeVideo) {
-        [self requestVideoForAsset:asset completion:^(AVPlayerItem *item, NSDictionary *info) {
-            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
-            NSArray *arr = [info[@"PHImageFileSandboxExtensionTokenKey"] componentsSeparatedByString:@";"];
-            if (complete) {
-                complete(arr.lastObject);
-            }
-        }];
-    } else {
-        [self requestOriginalImageDataForAsset:asset progressHandler:nil completion:^(NSData *data, NSDictionary *info) {
-            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
-            if (complete) {
-                NSURL *url = info[@"PHImageFileURLKey"];
-                complete(url.absoluteString);
-            }
-        }];
-    }
+    // https://github.com/longitachi/ZLPhotoBrowser/issues/417
+    [asset requestContentEditingInputWithOptions:nil completionHandler:^(PHContentEditingInput * _Nullable contentEditingInput, NSDictionary * _Nonnull info) {
+        NSString *path = contentEditingInput.fullSizeImageURL.absoluteString;
+        if (!path) {
+            path = [NSString stringWithFormat:@"file:///var/mobile/Media/%@/%@", [asset valueForKey:@"_directory"], [asset valueForKey:@"_filename"]];
+        }
+        complete(path);
+    }];
+    
+    // iOS13后，下面方法获取路径失败
+//    ZLAssetMediaType type = [self transformAssetType:asset];
+//    if (type == ZLAssetMediaTypeVideo) {
+//        [self requestVideoForAsset:asset completion:^(AVPlayerItem *item, NSDictionary *info) {
+//            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+//            NSArray *arr = [info[@"PHImageFileSandboxExtensionTokenKey"] componentsSeparatedByString:@";"];
+//            if (complete) {
+//                complete(arr.lastObject);
+//            }
+//        }];
+//    } else {
+//        [self requestOriginalImageDataForAsset:asset progressHandler:nil completion:^(NSData *data, NSDictionary *info) {
+//            if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) return;
+//            if (complete) {
+//                NSURL *url = info[@"PHImageFileURLKey"];
+//                complete(url.absoluteString);
+//            }
+//        }];
+//    }
 }
 
 #pragma mark - 编辑、导出视频相关

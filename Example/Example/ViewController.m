@@ -10,7 +10,7 @@
 #import "ImageCell.h"
 #import "YYFPSLabel.h"
 #import <Photos/Photos.h>
-#import "ZLPhotoBrowser.h"
+#import <ZLPhotoBrowser/ZLPhotoBrowser.h>
 
 ///////////////////////////////////////////////////
 // git 地址： https://github.com/longitachi/ZLPhotoBrowser
@@ -149,7 +149,7 @@
     //    actionSheet.configuration.sessionPreset = ZLCaptureSessionPreset1920x1080;
     //    actionSheet.configuration.exportVideoType = ZLExportVideoTypeMp4;
     //    actionSheet.configuration.allowRecordVideo = NO;
-    //    actionSheet.configuration.maxVideoDuration = 5;
+    //    actionSheet.configuration.maxRecordDuration = 5;
 #pragma mark - required
     //如果调用的方法没有传sender，则该属性必须提前赋值
     actionSheet.sender = self;
@@ -301,11 +301,12 @@
 
 - (IBAction)btnPreviewNetImageClick:(id)sender
 {
-    NSArray *arrNetImages = @[GetDictForPreviewPhoto([NSURL URLWithString:@"http://i4.chuimg.com/956b3172a2e111e9b17402420a00105a_720w_1280h.mp4"], ZLPreviewPhotoTypeURLVideo),
+    NSArray *arrNetImages = @[GetDictForPreviewPhoto([NSURL URLWithString:@"http://i4.chuimg.com/e71fbe7ecebb11e9b33002420a001066_720w_1280h.mp4"], ZLPreviewPhotoTypeURLVideo),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842025734.jpg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842034354.jpg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514184259027&di=a2e54cf2d5affe17acdaf1fbf19ff0af&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201212%2F25%2F20121225173302_wTjN8.jpeg"], ZLPreviewPhotoTypeURLImage),
-                              GetDictForPreviewPhoto([NSURL URLWithString:@"https://pickcdn.mydesy.com/wp-content/uploads/2016/12/rgb-schemes2.gif"], ZLPreviewPhotoTypeURLImage)];
+                              GetDictForPreviewPhoto([NSURL URLWithString:@"http://i4.chuimg.com/956b3172a2e111e9b17402420a00105a_720w_1280h.mp4"], ZLPreviewPhotoTypeURLVideo),
+                              GetDictForPreviewPhoto([NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1566386966005&di=adba0acdc81f732d75a1cc5a47f36c46&imgtype=0&src=http%3A%2F%2Fmsp.baidu.com%2Fv1%2Fmediaspot%2F968f19dc612b9e6d2f84a5149cd38b17.gif"], ZLPreviewPhotoTypeURLImage)];
     [[self getPas] previewPhotos:arrNetImages index:0 hideToolBar:NO complete:^(NSArray * _Nonnull photos) {
         NSLog(@"%@", photos);
     }];

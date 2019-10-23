@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)saveVideoToAblum:(NSURL *)url completion:(void (^ _Nullable)(BOOL suc, PHAsset *asset))completion;
 
 /**
- * @brief 在全部照片中获取指定个数、排序方式的部分照片，在跳往预览大图界面时候video和gif均为no，不受参数影响
+ * @brief 在全部照片中获取指定个数、排序方式的部分照片
  */
 + (NSArray<ZLPhotoModel *> *)getAllAssetInPhotoAlbumWithAscending:(BOOL)ascending limitCount:(NSInteger)limit allowSelectVideo:(BOOL)allowSelectVideo allowSelectImage:(BOOL)allowSelectImage allowSelectGif:(BOOL)allowSelectGif allowSelectLivePhoto:(BOOL)allowSelectLivePhoto;
 
@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  获取原图data，转换gif图
  */
-+ (void)requestOriginalImageDataForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^ _Nullable)(NSData *, NSDictionary *))completion;
++ (PHImageRequestID)requestOriginalImageDataForAsset:(PHAsset *)asset progressHandler:(void (^ _Nullable)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^ _Nullable)(NSData *, NSDictionary *))completion;
 
 /**
  * @brief 获取原图
@@ -121,6 +121,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * @brief 判断图片是否存储在本地/或者已经从iCloud上下载到本地
+ *
+ * @warning 方法暂未实现，直接返回的YES
  */
 + (BOOL)judgeAssetisInLocalAblum:(PHAsset *)asset;
 
@@ -157,7 +159,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  导出编辑的片段视频并保存到相册
  
- @param range 需要到处的视频间隔
+ @param range 需要导出的视频间隔
  */
 + (void)exportEditVideoForAsset:(AVAsset *)asset range:(CMTimeRange)range type:(ZLExportVideoType)type complete:(void (^ _Nullable)(BOOL isSuc, PHAsset *asset))complete;
 

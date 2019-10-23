@@ -1,9 +1,9 @@
 //
 //  AppDelegate.m
-//  ZLPhotoBrowser
+//  Example
 //
-//  Created by long on 2019/3/4.
-//  Copyright © 2019年 long. All rights reserved.
+//  Created by long on 2019/8/8.
+//  Copyright © 2019 long. All rights reserved.
 //
 
 #import "AppDelegate.h"
@@ -16,11 +16,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    
     return YES;
 }
 

@@ -1,6 +1,37 @@
 # Update Log
 
 -----
+## [3.1.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.1) (2019-10-17)
+
+#### Add
+* 优化进入相册速度及从相册列表进入选择界面流程;
+* 选择相片时候添加progress;
+
+#### Fix
+* 解决原图显示0B的bug.[#349](https://github.com/longitachi/ZLPhotoBrowser/issues/349)
+* 解决视频录制小于0.3s，按照拍照返回没有图片数据的bug.[#386](https://github.com/longitachi/ZLPhotoBrowser/issues/386)
+
+---
+
+## [3.1.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.0) (2019-09-26)
+
+#### Add
+* 初步适配iOS13;
+* 修改拍摄视频时1s以下不给保存的时间点为0.3s，即自定义相机拍摄视频时0.3s以下按拍照处理;
+
+---
+
+## [3.0.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.7) (2019-09-04)
+
+#### Add
+* 网络视频播放添加进度条;
+* SDWebImage依赖升级5.1.0以上版本;
+
+#### Fix
+* 选中图片index角标bug.[#405](https://github.com/longitachi/ZLPhotoBrowser/issues/405)
+
+---
+
 
 ## [3.0.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.0.6) (2019-07-31)
 

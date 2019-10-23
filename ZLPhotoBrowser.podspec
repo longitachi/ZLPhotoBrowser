@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'ZLPhotoBrowser'
-  s.version      = '3.0.6'
+  s.version      = '3.1.1'
   s.summary      = 'A simple way to multiselect photos from ablum, force touch to preview photo, support portrait and landscape, edit photo, multiple languages(Chinese,English,Japanese)'
   s.homepage     = 'https://github.com/longitachi/ZLPhotoBrowser'
   s.license      = 'MIT'
@@ -15,5 +15,5 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.frameworks   = 'UIKit','Photos','PhotosUI'
 
-  s.dependency 'SDWebImage', '~> 5.0.2'
+  s.dependency 'SDWebImage', '~> 5.1.0'
 end

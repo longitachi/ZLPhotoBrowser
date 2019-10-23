@@ -395,6 +395,7 @@
 {
     self = [super init];
     if (self) {
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
         self.allowTakePhoto = YES;
         self.allowRecordVideo = YES;
         self.maxRecordDuration = 15;
@@ -527,7 +528,7 @@
     
     self.toolView.frame = CGRectMake(0, kViewHeight-150-ZL_SafeAreaBottom(), kViewWidth, 100);
     self.previewLayer.frame = self.view.layer.bounds;
-    self.toggleCameraBtn.frame = CGRectMake(kViewWidth-50, 20, 30, 30);
+    self.toggleCameraBtn.frame = CGRectMake(kViewWidth-50, UIApplication.sharedApplication.statusBarFrame.size.height, 30, 30);
 }
 
 - (void)setupUI
@@ -821,6 +822,7 @@
         _takedImageView.contentMode = UIViewContentModeScaleAspectFit;
         [self.view insertSubview:_takedImageView belowSubview:self.toolView];
     }
+    
     __weak typeof(self) weakSelf = self;
     [self.imageOutPut captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
         if (imageDataSampleBuffer == NULL) {
@@ -851,7 +853,6 @@
 - (void)onFinishRecord
 {
     [self.movieFileOutPut stopRecording];
-    [self.session stopRunning];
     [self setVideoZoomFactor:1];
 }
 
@@ -924,15 +925,15 @@
 
 - (void)captureOutput:(AVCaptureFileOutput *)output didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray<AVCaptureConnection *> *)connections error:(NSError *)error
 {
-    if (CMTimeGetSeconds(output.recordedDuration) < 1) {
+    if (CMTimeGetSeconds(output.recordedDuration) < 0.3) {
         if (self.allowTakePhoto) {
-            //视频长度小于1s 允许拍照则拍照，不允许拍照，则保存小于1s的视频
-            ZLLoggerDebug(@"视频长度小于1s，按拍照处理");
+            //视频长度小于0.3s 允许拍照则拍照，不允许拍照，则保存小于0.3s的视频
+            ZLLoggerDebug(@"视频长度小于0.3s，按拍照处理");
             [self onTakePicture];
             return;
         }
     }
-    
+    [self.session stopRunning];
     self.videoUrl = outputFileURL;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self playVideo];
