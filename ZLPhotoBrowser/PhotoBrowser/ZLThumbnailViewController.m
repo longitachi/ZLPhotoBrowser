@@ -22,6 +22,7 @@
 #import "ZLCustomCamera.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "ZLInteractiveAnimateProtocol.h"
+#import "ZLEnlargeButton.h"
 
 typedef NS_ENUM(NSUInteger, SlideSelectType) {
     SlideSelectTypeNone,
