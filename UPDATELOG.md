@@ -1,6 +1,13 @@
 # Update Log
 
 -----
+## [3.1.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.2) (2019-10-24)
+
+#### Add
+* SDWebImage 不在指定依赖版本号;
+
+---
+
 ## [3.1.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.1) (2019-10-17)
 
 #### Add

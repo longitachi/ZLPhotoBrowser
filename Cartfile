@@ -1,3 +1,2 @@
-github "rs/SDWebImage" ~> 5.1.0
-
+github "SDWebImage/SDWebImage"
 

@@ -10,7 +10,7 @@
 ----------------------------------------
 
 ### 运行Demo
-下载完Demo请执行`carthage update --platform iOS` （运行时候请选择 `Example` target）
+下载完Demo请执行`carthage update --platform iOS` （运行时候请选择 `Example` target）`SDWebImage.framework` 和 `SDWebImageMapKit.framework` 路径如果报错的话，关掉项目，重新打开即可
 
 ### 框架整体介绍
 * [功能介绍](#功能介绍)
@@ -51,6 +51,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 3.1.2: SDWebImage 不在指定依赖版本号;
 ● 3.1.1: 优化进入相册速度及从相册列表进入选择界面流程; 选择相片时候添加progress; 解决原图大小显示错误的bug; 已知bug fixed;
 ● 3.1.0: 初步适配iOS13，解决present不是fullScreen的bug; 添加 Swift Example Target;
 ● 3.0.7: 网络视频播放添加进度条; SDWebImage依赖升级5.1.0以上版本; 已知bug修复;
@@ -66,7 +67,6 @@
 ● 2.7.4: 横滑大图界面添加下拉返回; 不允许录制视频时候不请求麦克风权限;
 ● 2.7.1: 支持自定义导航返回按钮图片;
 ● 2.7.0: 图片资源加上前缀，解决9.0无法选择图片问题; 
-● 2.6.9: 重构编辑图片功能，添加滤镜;
 ```
 
 ### 框架支持

@@ -431,9 +431,11 @@
         }
     }];
     
-    //暂停其他音乐，
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    if (self.allowRecordVideo) {
+        //暂停其他音乐
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
