@@ -18,6 +18,7 @@
 #import "ZLEditVideoController.h"
 #import "ZLCustomCamera.h"
 #import "ZLDefine.h"
+#import "ZLEnlargeButton.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
 #define kBaseViewHeight (self.configuration.maxPreviewCount ? 300 : 142)
