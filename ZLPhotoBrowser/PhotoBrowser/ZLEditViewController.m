@@ -14,6 +14,7 @@
 #import "ZLProgressHUD.h"
 #import "ZLAlbumListController.h"
 #import "ZLImageEditTool.h"
+#import <Photos/Photos.h>
 
 //!!!!: edit vc
 @interface ZLEditViewController ()
@@ -113,6 +114,9 @@
         if (!vc) {
             [self dismissViewControllerAnimated:YES completion:nil];
         }
+        if (self.cancelEditBlock) {
+            self.cancelEditBlock();
+        }
     };
     _editTool.doneEditBlock = ^(UIImage *image) {
         @zl_strongify(self);
@@ -130,13 +134,18 @@
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
     
     if (nav.configuration.saveNewImageAfterEdit) {
+        @zl_weakify(self);
         __weak typeof(nav) weakNav = nav;
         [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
             [hud hide];
             if (suc) {
+                @zl_strongify(self);
                 __strong typeof(weakNav) strongNav = weakNav;
                 if (strongNav.callSelectClipImageBlock) {
                     strongNav.callSelectClipImageBlock(image, asset);
+                }
+                if (self.editResultBlock) {
+                    self.editResultBlock(image, asset);
                 }
             } else {
                 ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
@@ -147,6 +156,9 @@
         if (image) {
             if (nav.callSelectClipImageBlock) {
                 nav.callSelectClipImageBlock(image, self.model.asset);
+            }
+            if (self.editResultBlock) {
+                self.editResultBlock(image, self.model.asset);
             }
         } else {
             ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));

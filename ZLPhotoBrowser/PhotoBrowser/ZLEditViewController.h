@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class ZLPhotoModel;
+@class ZLPhotoModel, PHAsset;
 
 @interface ZLEditViewController : UIViewController
 
 @property (nonatomic, strong) UIImage *oriImage;
 @property (nonatomic, strong) ZLPhotoModel *model;
+
+@property (nonatomic, copy) void (^editResultBlock)(UIImage *, PHAsset *);
+@property (nonatomic, copy) void (^cancelEditBlock)(void);
 
 @end

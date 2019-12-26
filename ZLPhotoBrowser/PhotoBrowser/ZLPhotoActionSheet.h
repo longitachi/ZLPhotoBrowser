@@ -102,6 +102,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)previewPhotos:(NSArray<NSDictionary *> *)photos index:(NSInteger)index hideToolBar:(BOOL)hideToolBar complete:(void (^)(NSArray *photos))complete;
 
+
+- (void)editImageWithAsset:(PHAsset *)asset success:(void (^)(UIImage *result, PHAsset *asset))success cancel:(void (^)(void))cancel;
+
 NS_ASSUME_NONNULL_END
 
 @end
