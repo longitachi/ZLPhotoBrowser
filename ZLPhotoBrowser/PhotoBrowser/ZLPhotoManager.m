@@ -38,19 +38,14 @@ static BOOL _sortAscending;
             PHAssetChangeRequest *newAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
             placeholderAsset = newAssetRequest.placeholderForCreatedAsset;
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
-            if (!success) {
-                if (completion) completion(NO, nil);
-                return;
-            }
-            PHAsset *asset = [self getAssetFromlocalIdentifier:placeholderAsset.localIdentifier];
-            PHAssetCollection *desCollection = [self getDestinationCollection];
-            if (!desCollection) completion(NO, nil);
-            
-            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                [[PHAssetCollectionChangeRequest changeRequestForAssetCollection:desCollection] addAssets:@[asset]];
-            } completionHandler:^(BOOL success, NSError * _Nullable error) {
-                if (completion) completion(success, asset);
-            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (success) {
+                    PHAsset *asset = [self getAssetFromlocalIdentifier:placeholderAsset.localIdentifier];
+                    if (completion) completion(YES, asset);
+                } else {
+                    if (completion) completion(NO, nil);
+                }
+            });
         }];
     }
 }
@@ -68,19 +63,14 @@ static BOOL _sortAscending;
             PHAssetChangeRequest *newAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
             placeholderAsset = newAssetRequest.placeholderForCreatedAsset;
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
-            if (!success) {
-                if (completion) completion(NO, nil);
-                return;
-            }
-            PHAsset *asset = [self getAssetFromlocalIdentifier:placeholderAsset.localIdentifier];
-            PHAssetCollection *desCollection = [self getDestinationCollection];
-            if (!desCollection) completion(NO, nil);
-            
-            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                [[PHAssetCollectionChangeRequest changeRequestForAssetCollection:desCollection] addAssets:@[asset]];
-            } completionHandler:^(BOOL success, NSError * _Nullable error) {
-                if (completion) completion(success, asset);
-            }];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (success) {
+                    PHAsset *asset = [self getAssetFromlocalIdentifier:placeholderAsset.localIdentifier];
+                    if (completion) completion(YES, asset);
+                } else {
+                    if (completion) completion(NO, nil);
+                }
+            });
         }];
     }
 }
@@ -95,29 +85,6 @@ static BOOL _sortAscending;
         return result[0];
     }
     return nil;
-}
-
-//获取自定义相册
-+ (PHAssetCollection *)getDestinationCollection
-{
-    //找是否已经创建自定义相册
-    PHFetchResult<PHAssetCollection *> *collectionResult = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-    for (PHAssetCollection *collection in collectionResult) {
-        if ([collection.localizedTitle isEqualToString:kAPPName]) {
-            return collection;
-        }
-    }
-    //新建自定义相册
-    __block NSString *collectionId = nil;
-    NSError *error = nil;
-    [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
-        collectionId = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:kAPPName].placeholderForCreatedAssetCollection.localIdentifier;
-    } error:&error];
-    if (error) {
-        ZLLoggerDebug(@"创建相册：%@失败", kAPPName);
-        return nil;
-    }
-    return [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[collectionId] options:nil].lastObject;
 }
 
 #pragma mark - 在全部照片中获取指定个数、排序方式的部分照片
@@ -671,7 +638,10 @@ static BOOL _sortAscending;
 {
     NSMutableArray *selIdentifiers = [NSMutableArray array];
     for (ZLPhotoModel *m in selArr) {
-        [selIdentifiers addObject:m.asset.localIdentifier];
+        NSString *ident = m.asset.localIdentifier;
+        if (ident.length > 0) {
+            [selIdentifiers addObject:ident];
+        }
     }
     for (ZLPhotoModel *m in dataArr) {
         if ([selIdentifiers containsObject:m.asset.localIdentifier]) {

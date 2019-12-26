@@ -132,17 +132,15 @@
     if (nav.configuration.saveNewImageAfterEdit) {
         __weak typeof(nav) weakNav = nav;
         [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [hud hide];
-                if (suc) {
-                    __strong typeof(weakNav) strongNav = weakNav;
-                    if (strongNav.callSelectClipImageBlock) {
-                        strongNav.callSelectClipImageBlock(image, asset);
-                    }
-                } else {
-                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
+            [hud hide];
+            if (suc) {
+                __strong typeof(weakNav) strongNav = weakNav;
+                if (strongNav.callSelectClipImageBlock) {
+                    strongNav.callSelectClipImageBlock(image, asset);
                 }
-            });
+            } else {
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
+            }
         }];
     } else {
         [hud hide];

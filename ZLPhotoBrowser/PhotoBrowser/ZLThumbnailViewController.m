@@ -986,29 +986,25 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     if (image) {
         [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
             @zl_strongify(self);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (suc) {
-                    ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
-                    [self handleDataArray:model];
-                } else {
-                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
-                }
-                [hud hide];
-            });
+            if (suc) {
+                ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeImage duration:nil];
+                [self handleDataArray:model];
+            } else {
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveImageErrorText));
+            }
+            [hud hide];
         }];
     } else if (videoUrl) {
         [ZLPhotoManager saveVideoToAblum:videoUrl completion:^(BOOL suc, PHAsset *asset) {
             @zl_strongify(self);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (suc) {
-                    ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
-                    model.duration = [ZLPhotoManager getDuration:asset];
-                    [self handleDataArray:model];
-                } else {
-                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
-                }
-                [hud hide];
-            });
+            if (suc) {
+                ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
+                model.duration = [ZLPhotoManager getDuration:asset];
+                [self handleDataArray:model];
+            } else {
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
+            }
+            [hud hide];
         }];
     }
 }

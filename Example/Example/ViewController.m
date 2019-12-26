@@ -241,39 +241,35 @@
     if (image) {
         [ZLPhotoManager saveImageToAblum:image completion:^(BOOL suc, PHAsset *asset) {
             @zl_strongify(self);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (suc) {
-                    self.arrDataSources = @[image];
-                    self.lastSelectPhotos = @[image].mutableCopy;
-                    self.lastSelectAssets = @[asset].mutableCopy;
-                    [self.collectionView reloadData];
-                } else {
-                    ZLLoggerDebug(@"图片保存失败");
-                }
-                [hud hide];
-            });
+            if (suc) {
+                self.arrDataSources = @[image];
+                self.lastSelectPhotos = @[image].mutableCopy;
+                self.lastSelectAssets = @[asset].mutableCopy;
+                [self.collectionView reloadData];
+            } else {
+                ZLLoggerDebug(@"图片保存失败");
+            }
+            [hud hide];
         }];
     } else if (videoUrl) {
         [ZLPhotoManager saveVideoToAblum:videoUrl completion:^(BOOL suc, PHAsset *asset) {
             @zl_strongify(self);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (suc) {
-                    [ZLPhotoManager requestImageForAsset:asset size:CGSizeMake(300, 300) progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
-                        @zl_strongify(self);
-                        if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
-                            return;
-                        }
-                        self.arrDataSources = @[image];
-                        self.lastSelectPhotos = @[image].mutableCopy;
-                        self.lastSelectAssets = @[asset].mutableCopy;
-                        [self.collectionView reloadData];
-                        [hud hide];
-                    }];
-                } else {
-                    ZLLoggerDebug(@"视频保存失败");
+            if (suc) {
+                [ZLPhotoManager requestImageForAsset:asset size:CGSizeMake(300, 300) progressHandler:nil completion:^(UIImage *image, NSDictionary *info) {
+                    @zl_strongify(self);
+                    if ([[info objectForKey:PHImageResultIsDegradedKey] boolValue]) {
+                        return;
+                    }
+                    self.arrDataSources = @[image];
+                    self.lastSelectPhotos = @[image].mutableCopy;
+                    self.lastSelectAssets = @[asset].mutableCopy;
+                    [self.collectionView reloadData];
                     [hud hide];
-                }
-            });
+                }];
+            } else {
+                ZLLoggerDebug(@"视频保存失败");
+                [hud hide];
+            }
         }];
     }
 }
