@@ -702,7 +702,7 @@
     }
     //曝光模式
     if ([captureDevice isExposureModeSupported:exposureMode]) {
-        [captureDevice setExposureMode:AVCaptureExposureModeAutoExpose];
+        [captureDevice setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
     }
     //曝光点
     if ([captureDevice isExposurePointOfInterestSupported]) {
