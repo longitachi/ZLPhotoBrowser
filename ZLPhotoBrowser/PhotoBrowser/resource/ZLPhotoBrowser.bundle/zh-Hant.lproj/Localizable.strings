@@ -43,6 +43,7 @@
 "ZLPhotoBrowserSaveVideoFailed" = "視頻保存失敗";
 "ZLPhotoBrowserRequestTimeout" = "請求超時";
 
+"ZLPhotoBrowserCustomCameraTips" = "輕觸拍照，按住攝像";
 
 "ZLPhotoBrowserCameraRoll" = "所有照片";
 "ZLPhotoBrowserPanoramas" = "全景照片";

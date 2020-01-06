@@ -43,6 +43,7 @@
 "ZLPhotoBrowserSaveVideoFailed" = "ビデオの保存に失敗しました";
 "ZLPhotoBrowserRequestTimeout" = "要求タイムアウト";
 
+"ZLPhotoBrowserCustomCameraTips" = "タップして撮影、長押しで記録";
 
 "ZLPhotoBrowserCameraRoll" = "カメラロール";
 "ZLPhotoBrowserPanoramas" = "パノラマ";

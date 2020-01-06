@@ -68,6 +68,8 @@
 @property (nonatomic, strong) UIColor *circleProgressColor;
 @property (nonatomic, assign) NSInteger maxRecordDuration;
 
+
+@property (nonatomic, strong) UILabel *tipLabel;
 @property (nonatomic, strong) UIButton *dismissBtn;
 @property (nonatomic, strong) UIButton *cancelBtn;
 @property (nonatomic, strong) UIButton *doneBtn;
@@ -77,9 +79,16 @@
 
 @property (nonatomic, assign) CGFloat duration;
 
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 @implementation CameraToolView
+
+- (void)dealloc
+{
+    [self cleanTimer];
+}
 
 - (CAShapeLayer *)animateLayer
 {
@@ -105,6 +114,13 @@
     return self;
 }
 
+- (void)didMoveToSuperview
+{
+    [super didMoveToSuperview];
+    
+    [self setTipLabelAlpha:1 animate:YES];
+}
+
 - (void)setDelegate:(id<CameraToolViewDelegate>)delegate
 {
     _delegate = delegate;
@@ -122,6 +138,8 @@
     if (_layoutOK) return;
     
     _layoutOK = YES;
+    self.tipLabel.frame = CGRectMake(0, -30, GetViewWidth(self), 20);
+    
     CGFloat height = GetViewHeight(self);
     self.bottomView.frame = CGRectMake(0, 0, height*kBottomViewScale, height*kBottomViewScale);
     self.bottomView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
@@ -162,6 +180,16 @@
 
 - (void)setupUI
 {
+    self.clipsToBounds = NO;
+    
+    self.tipLabel = [[UILabel alloc] init];
+    self.tipLabel.font = [UIFont systemFontOfSize:14];
+    self.tipLabel.text = GetLocalLanguageTextValue(@"ZLPhotoBrowserCustomCameraTips");
+    self.tipLabel.textColor = [UIColor whiteColor];
+    self.tipLabel.textAlignment = NSTextAlignmentCenter;
+    self.tipLabel.alpha = 0;
+    [self addSubview:self.tipLabel];
+    
     self.bottomView = [[UIView alloc] init];
     self.bottomView.layer.masksToBounds = YES;
     self.bottomView.backgroundColor = [kRGB(244, 244, 244) colorWithAlphaComponent:.9];
@@ -197,9 +225,49 @@
     [self addSubview:self.doneBtn];
 }
 
+- (void)setTipLabelAlpha:(CGFloat)alpha animate:(BOOL)animate
+{
+    if (!self.allowTakePhoto || !self.allowRecordVideo) {
+        return;
+    }
+    [self.tipLabel.layer removeAllAnimations];
+    if (animate) {
+        [UIView animateWithDuration:0.25 animations:^{
+            self.tipLabel.alpha = alpha;
+        }];
+    } else {
+        self.tipLabel.alpha = alpha;
+    }
+    
+    if (alpha == 1) {
+        [self startTimer];
+    }
+}
+
+- (void)hideTipLabel
+{
+    [self cleanTimer];
+    [self setTipLabelAlpha:0 animate:YES];
+}
+
+- (void)startTimer
+{
+    [self cleanTimer];
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(hideTipLabel) userInfo:nil repeats:NO];
+}
+
+- (void)cleanTimer
+{
+    [self.timer invalidate];
+    self.timer = nil;
+}
+
 #pragma mark - GestureRecognizer
+
 - (void)tapAction:(UITapGestureRecognizer *)tap
 {
+    [self setTipLabelAlpha:0 animate:NO];
     [self stopAnimate];
     if (_delegateFlag.takePic) [self.delegate performSelector:@selector(onTakePicture)];
 }
@@ -210,6 +278,7 @@
         case UIGestureRecognizerStateBegan:
         {
             //此处不启动动画，由vc界面开始录制之后启动
+            [self setTipLabelAlpha:0 animate:NO];
             _stopRecord = NO;
             if (_delegateFlag.startRecord) [self.delegate performSelector:@selector(onStartRecord)];
         }
@@ -238,6 +307,7 @@
 }
 
 #pragma mark - 动画
+
 - (void)startAnimate
 {
     self.dismissBtn.hidden = YES;
@@ -317,6 +387,7 @@
 }
 
 #pragma mark - btn actions
+
 - (void)dismissVC
 {
     if (_delegateFlag.dismiss) [self.delegate performSelector:@selector(onDismiss)];
@@ -324,6 +395,7 @@
 
 - (void)retake
 {
+    [self setTipLabelAlpha:1 animate:YES];
     [self resetUI];
     if (_delegateFlag.retake) [self.delegate performSelector:@selector(onRetake)];
 }
@@ -889,6 +961,9 @@
 //dismiss
 - (void)onDismiss
 {
+    if ([self.session isRunning]) {
+        [self.session stopRunning];
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         [self dismissViewControllerAnimated:YES completion:nil];
     });

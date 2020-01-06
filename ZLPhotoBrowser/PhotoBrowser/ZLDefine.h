@@ -45,6 +45,8 @@
 #define ZLPhotoBrowserSaveVideoFailed @"ZLPhotoBrowserSaveVideoFailed"
 #define ZLPhotoBrowserRequestTimeout @"ZLPhotoBrowserRequestTimeout"
 
+#define ZLPhotoBrowserCustomCameraTips @"ZLPhotoBrowserCustomCameraTips"
+
 #define ZLPhotoBrowserCameraRoll @"ZLPhotoBrowserCameraRoll"
 #define ZLPhotoBrowserPanoramas @"ZLPhotoBrowserPanoramas"
 #define ZLPhotoBrowserVideos @"ZLPhotoBrowserVideos"

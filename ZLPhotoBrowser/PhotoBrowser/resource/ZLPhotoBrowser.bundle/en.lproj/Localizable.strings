@@ -43,6 +43,7 @@
 "ZLPhotoBrowserSaveVideoFailed" = "Failed to save the video";
 "ZLPhotoBrowserRequestTimeout" = "Request timed out";
 
+"ZLPhotoBrowserCustomCameraTips" = "Tap to take photo and hold to record video";
 
 "ZLPhotoBrowserCameraRoll" = "Camera Roll";
 "ZLPhotoBrowserPanoramas" = "Panoramas";
