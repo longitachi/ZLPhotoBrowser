@@ -1,6 +1,16 @@
 # Update Log
 
 -----
+
+## [3.1.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.3) (2020-01-13)
+
+#### Add
+* 修改曝光模式;
+* 拍照界面显示 "轻触拍照，按住摄像" 提示;
+* 增加直接调用编辑图片api;
+
+---
+
 ## [3.1.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.2) (2019-10-24)
 
 #### Add

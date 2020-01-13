@@ -51,6 +51,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 3.1.3: 修改曝光模式; 拍照界面显示 "轻触拍照，按住摄像" 提示; 增加直接调用编辑图片api; 已知bug fixed; 
 ● 3.1.2: SDWebImage 不在指定依赖版本号;
 ● 3.1.1: 优化进入相册速度及从相册列表进入选择界面流程; 选择相片时候添加progress; 解决原图大小显示错误的bug; 已知bug fixed;
 ● 3.1.0: 初步适配iOS13，解决present不是fullScreen的bug; 添加 Swift Example Target;
@@ -66,7 +67,6 @@
 ● 2.7.5: 编辑图片支持自定义工具类型; bug fixed;
 ● 2.7.4: 横滑大图界面添加下拉返回; 不允许录制视频时候不请求麦克风权限;
 ● 2.7.1: 支持自定义导航返回按钮图片;
-● 2.7.0: 图片资源加上前缀，解决9.0无法选择图片问题; 
 ```
 
 ### 框架支持
