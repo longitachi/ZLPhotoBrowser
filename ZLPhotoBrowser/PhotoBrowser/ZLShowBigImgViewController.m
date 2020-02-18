@@ -332,7 +332,7 @@
     _btnDone.titleLabel.font = [UIFont systemFontOfSize:15];
     _btnDone.layer.masksToBounds = YES;
     _btnDone.layer.cornerRadius = 3.0f;
-    [_btnDone setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_btnDone setTitleColor:configuration.bottomBtnsNormalTitleColor forState:UIControlStateNormal];
     [_btnDone setBackgroundColor:configuration.bottomBtnsNormalBgColor];
     _btnDone.frame = CGRectMake(kViewWidth - 82, 7, 70, 30);
     [_btnDone addTarget:self action:@selector(btnDone_Click:) forControlEvents:UIControlEventTouchUpInside];
