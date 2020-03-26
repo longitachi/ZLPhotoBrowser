@@ -29,6 +29,7 @@
 #define ZLPhotoBrowserNoCameraAuthorityText @"ZLPhotoBrowserNoCameraAuthorityText"
 #define ZLPhotoBrowserNoAblumAuthorityText @"ZLPhotoBrowserNoAblumAuthorityText"
 #define ZLPhotoBrowserNoMicrophoneAuthorityText @"ZLPhotoBrowserNoMicrophoneAuthorityText"
+#define ZLPhotoBrowserCameraUnavailableText @"ZLPhotoBrowserCameraUnavailableText"
 #define ZLPhotoBrowseriCloudPhotoText @"ZLPhotoBrowseriCloudPhotoText"
 #define ZLPhotoBrowserGifPreviewText @"ZLPhotoBrowserGifPreviewText"
 #define ZLPhotoBrowserVideoPreviewText @"ZLPhotoBrowserVideoPreviewText"

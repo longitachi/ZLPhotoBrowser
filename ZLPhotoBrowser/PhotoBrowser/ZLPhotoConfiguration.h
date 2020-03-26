@@ -115,7 +115,7 @@
 @property (nonatomic, assign) BOOL allowSelectOriginal;
 
 /**
- 编辑视频时最大裁剪时间，单位：秒，默认10s 且最低10s
+ 编辑视频时最大裁剪时间，单位：秒，默认10s 且最小5s
  
  @discussion 当该参数为10s时，所选视频时长必须大于等于10s才允许进行编辑
  */

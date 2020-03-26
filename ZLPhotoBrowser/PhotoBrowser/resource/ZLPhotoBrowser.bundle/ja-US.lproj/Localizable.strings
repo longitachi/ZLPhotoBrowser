@@ -35,6 +35,7 @@
 "ZLPhotoBrowserNoCameraAuthorityText" = "「設定」->「プライパシー」->「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
 "ZLPhotoBrowserNoAblumAuthorityText" = "%@があなたのアルバムにアクセスするには「設定」->「プライバシー」->「写真」";
 "ZLPhotoBrowserNoMicrophoneAuthorityText" = "「設定」->「プライパシー」->「マイク」から、%@があなたのデバイスのマイクにアクセスする許可をしてください";
+"ZLPhotoBrowserCameraUnavailableText" = "カメラは利用できません";
 
 "ZLPhotoBrowseriCloudPhotoText" = "写真のライブラリをダウンロードした後の再試行";
 "ZLPhotoBrowseriCloudVideoText" = "iCloudから同期できません";

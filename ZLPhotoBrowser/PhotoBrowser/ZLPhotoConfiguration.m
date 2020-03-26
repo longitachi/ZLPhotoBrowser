@@ -125,7 +125,7 @@
 
 - (void)setMaxEditVideoTime:(NSInteger)maxEditVideoTime
 {
-    _maxEditVideoTime = MAX(maxEditVideoTime, 10);
+    _maxEditVideoTime = MAX(maxEditVideoTime, 5);
 }
 
 - (void)setCustomImageNames:(NSArray<NSString *> *)customImageNames

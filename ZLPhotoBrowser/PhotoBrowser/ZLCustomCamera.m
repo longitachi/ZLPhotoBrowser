@@ -11,6 +11,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import "ZLPlayer.h"
 #import "ZLPhotoManager.h"
+#import "UIImage+ZLPhotoBrowser.h"
 
 
 #define kTopViewScale .5
@@ -416,6 +417,7 @@
     //拖拽手势开始的录制
     BOOL _dragStart;
     BOOL _layoutOK;
+    BOOL _cameraUnavailable;
 }
 
 @property (nonatomic, strong) CameraToolView *toolView;
@@ -482,6 +484,13 @@
     [super viewDidLoad];
     
     [self setupUI];
+    
+    // 摄像头不可用状态
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        _cameraUnavailable = YES;
+        return;
+    }
+    
     [self setupCamera];
     [self observeDeviceMotion];
     
@@ -513,12 +522,21 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
     [UIApplication sharedApplication].statusBarHidden = YES;
-    [self.session startRunning];
-    [self setFocusCursorWithPoint:self.view.center];
-    if (!self.allowTakePhoto && !self.allowRecordVideo) {
-        ShowAlert(@"allowTakePhoto与allowRecordVideo不能同时为NO", self);
+    
+    if (_cameraUnavailable) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:GetLocalLanguageTextValue(@"ZLPhotoBrowserCameraUnavailableText") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:GetLocalLanguageTextValue(@"ZLPhotoBrowserDoneText") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:action];
+        [self showDetailViewController:alert sender:nil];
+    } else {
+        [self.session startRunning];
+        [self setFocusCursorWithPoint:self.view.center];
+        if (!self.allowTakePhoto && !self.allowRecordVideo) {
+            ShowAlert(@"allowTakePhoto与allowRecordVideo不能同时为NO", self);
+        }
     }
 }
 
@@ -527,8 +545,10 @@
     [super viewWillDisappear:animated];
     
     [UIApplication sharedApplication].statusBarHidden = NO;
-    [self.motionManager stopDeviceMotionUpdates];
-    self.motionManager = nil;
+    if (self.motionManager) {
+        [self.motionManager stopDeviceMotionUpdates];
+        self.motionManager = nil;
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -904,7 +924,7 @@
         }
         NSData * imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
         UIImage * image = [UIImage imageWithData:imageData];
-        weakSelf.takedImage = image;
+        weakSelf.takedImage = image.fixOrientation;
         weakSelf.takedImageView.hidden = NO;
         weakSelf.takedImageView.image = image;
         [weakSelf.session stopRunning];

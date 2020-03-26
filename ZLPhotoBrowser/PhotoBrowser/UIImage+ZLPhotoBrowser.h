@@ -12,4 +12,6 @@
 
 - (UIImage*)rotate:(UIImageOrientation)orient;
 
+- (UIImage *)fixOrientation;
+
 @end
