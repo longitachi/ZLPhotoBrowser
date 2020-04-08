@@ -2,6 +2,20 @@
 
 -----
 
+## [3.1.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.4) (2020-04-08)
+
+#### Add
+* 添加自定义相机分辨率(320*240, 960*540);
+* 编辑视频最小允许编辑5s;
+* 添加相机是否可用检测;
+
+
+#### Fix
+* 修正拍照后图片方向. [#472](https://github.com/longitachi/ZLPhotoBrowser/issues/472);
+* 修正部分多语言错误的问题. [#469](https://github.com/longitachi/ZLPhotoBrowser/issues/469);
+
+---
+
 ## [3.1.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.3) (2020-01-13)
 
 #### Add

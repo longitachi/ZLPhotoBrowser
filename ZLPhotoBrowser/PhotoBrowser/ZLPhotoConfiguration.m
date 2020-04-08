@@ -116,7 +116,7 @@
 
 - (void)setAllowSelectLivePhoto:(BOOL)allowSelectLivePhoto
 {
-    if (@available(iOS 9.0, *)) {
+    if (@available(iOS 9.1, *)) {
         _allowSelectLivePhoto = allowSelectLivePhoto;
     } else {
         _allowSelectLivePhoto = NO;
