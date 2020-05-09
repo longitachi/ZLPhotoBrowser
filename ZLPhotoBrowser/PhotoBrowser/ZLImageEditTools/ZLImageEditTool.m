@@ -169,7 +169,7 @@
     // 暂时只留下裁剪功能
     if (_layoutCount == 1 && _selectToolType != ZLImageEditTypeClip) {
         [self clipBtn_click];
-        self.clipBtn.userInteractionEnabled = NO;
+//        self.clipBtn.userInteractionEnabled = NO;
     }
 }
 
@@ -517,8 +517,11 @@
     [self setNeedsLayout];
     
     if (_selectToolType == 0) {
+        _drawMenu.hidden = YES;
         _clipMenu.hidden = YES;
         _rotateRatioBtn.superview.hidden = YES;
+        self.imageView.drawEnable = NO;
+        self.revokeBtn.hidden = YES;
         [self switchBtnStatus:nil];
         [self switchCircleAndGridLayerShowStatus:NO];
         return;
@@ -528,6 +531,7 @@
         _clipMenu.hidden = YES;
         _rotateRatioBtn.superview.hidden = YES;
         self.imageView.drawEnable = YES;
+        self.revokeBtn.hidden = NO;
         [self switchCircleAndGridLayerShowStatus:NO];
         [self switchBtnStatus:self.drawBtn];
     } else if (_selectToolType & ZLImageEditTypeClip) {
@@ -535,6 +539,7 @@
         _clipMenu.hidden = NO;
         _rotateRatioBtn.superview.hidden = NO;
         self.imageView.drawEnable = NO;
+        self.revokeBtn.hidden = YES;
         [self switchCircleAndGridLayerShowStatus:YES];
         [self switchBtnStatus:self.clipBtn];
     }
