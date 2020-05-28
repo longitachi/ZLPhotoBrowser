@@ -11,7 +11,7 @@
 #import "ZLPhotoManager.h"
 #import "ZLDefine.h"
 #import "ToastUtils.h"
-#import "UIButton+EnlargeTouchArea.h"
+#import "UIControl+EnlargeTouchArea.h"
 #import "ZLProgressView.h"
 
 @interface ZLCollectionCell ()
@@ -153,7 +153,7 @@
     
     if (self.showSelectBtn) {
         //扩大点击区域
-        [_btnSelect setEnlargeEdgeWithTop:0 right:0 bottom:20 left:20];
+        [_btnSelect zl_enlargeValidTouchAreaWithInsets:UIEdgeInsetsMake(0, 20, 20, 0)];
     }
     
     CGSize size;

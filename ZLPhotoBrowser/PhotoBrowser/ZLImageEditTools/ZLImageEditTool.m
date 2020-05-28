@@ -10,7 +10,7 @@
 #import "ZLPhotoConfiguration.h"
 #import "ZLClipItem.h"
 #import "UIImage+ZLPhotoBrowser.h"
-#import "UIButton+EnlargeTouchArea.h"
+#import "UIControl+EnlargeTouchArea.h"
 #import "ZLBrushBoardImageView.h"
 #import "ZLDrawItem.h"
 
@@ -233,7 +233,7 @@
     [self.cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.cancelBtn setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserCancelText) forState:UIControlStateNormal];
     [self.cancelBtn addTarget:self action:@selector(cancelBtn_click) forControlEvents:UIControlEventTouchUpInside];
-    [self.cancelBtn setEnlargeEdgeWithTop:0 right:10 bottom:10 left:0];
+    [self.cancelBtn zl_enlargeValidTouchAreaWithInsets:UIEdgeInsetsMake(0, 0, 10, 10)];
     [self addSubview:self.cancelBtn];
     
     self.doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -244,7 +244,7 @@
     self.doneBtn.layer.masksToBounds = YES;
     self.doneBtn.layer.cornerRadius = 3.0f;
     [self.doneBtn addTarget:self action:@selector(btnDone_click) forControlEvents:UIControlEventTouchUpInside];
-    [self.doneBtn setEnlargeEdgeWithTop:0 right:0 bottom:10 left:10];
+    [self.doneBtn zl_enlargeValidTouchAreaWithInsets:UIEdgeInsetsMake(0, 10, 10, 0)];
     [self addSubview:_doneBtn];
     
     //imageView

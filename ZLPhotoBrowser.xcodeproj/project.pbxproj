@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E49D0738231CCB4D007440D8 /* ZLVideoPlayerControl.h in Headers */ = {isa = PBXBuildFile; fileRef = E49D0736231CCB4D007440D8 /* ZLVideoPlayerControl.h */; };
 		E49D0739231CCB4D007440D8 /* ZLVideoPlayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = E49D0737231CCB4D007440D8 /* ZLVideoPlayerControl.m */; };
+		E4B4491724655FEE006918B1 /* UIControl+EnlargeTouchArea.h in Headers */ = {isa = PBXBuildFile; fileRef = E4B4491524655FEE006918B1 /* UIControl+EnlargeTouchArea.h */; };
+		E4B4491824655FEE006918B1 /* UIControl+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = E4B4491624655FEE006918B1 /* UIControl+EnlargeTouchArea.m */; };
 		FD4190EE222D1F6100FF46A9 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */; };
 		FD4190F0222D1F8300FF46A9 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190EF222D1F8300FF46A9 /* Photos.framework */; };
 		FD4190F2222D1F8A00FF46A9 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD4190F1222D1F8A00FF46A9 /* PhotosUI.framework */; };
@@ -28,7 +30,6 @@
 		FD644712225AEF43003724CF /* ZLDrawItem.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446CB225AEF42003724CF /* ZLDrawItem.h */; };
 		FD644714225AEF43003724CF /* ZLPhotoBrowserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446CC225AEF42003724CF /* ZLPhotoBrowserCell.m */; };
 		FD644716225AEF43003724CF /* ZLForceTouchPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446CD225AEF42003724CF /* ZLForceTouchPreviewController.m */; };
-		FD644717225AEF43003724CF /* UIButton+EnlargeTouchArea.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446CE225AEF42003724CF /* UIButton+EnlargeTouchArea.h */; };
 		FD644718225AEF43003724CF /* ZLCollectionCell.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446CF225AEF42003724CF /* ZLCollectionCell.h */; };
 		FD644719225AEF43003724CF /* ZLNoAuthorityViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D0225AEF42003724CF /* ZLNoAuthorityViewController.h */; };
 		FD64471B225AEF43003724CF /* ZLPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446D1225AEF42003724CF /* ZLPhotoManager.m */; };
@@ -64,7 +65,6 @@
 		FD644749225AEF43003724CF /* ZLCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F0225AEF42003724CF /* ZLCollectionCell.m */; };
 		FD64474B225AEF43003724CF /* ZLNoAuthorityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F1225AEF42003724CF /* ZLNoAuthorityViewController.m */; };
 		FD64474C225AEF43003724CF /* ZLForceTouchPreviewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446F3225AEF42003724CF /* ZLForceTouchPreviewController.h */; };
-		FD64474E225AEF43003724CF /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F4225AEF42003724CF /* UIButton+EnlargeTouchArea.m */; };
 		FD64474F225AEF43003724CF /* ZLPhotoBrowserCell.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446F6225AEF42003724CF /* ZLPhotoBrowserCell.h */; };
 		FD644751225AEF43003724CF /* ZLPullDownInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F7225AEF42003724CF /* ZLPullDownInteractiveTransition.m */; };
 		FD644753225AEF43003724CF /* ZLShowBigImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446F8225AEF42003724CF /* ZLShowBigImgViewController.m */; };
@@ -82,6 +82,8 @@
 /* Begin PBXFileReference section */
 		E49D0736231CCB4D007440D8 /* ZLVideoPlayerControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZLVideoPlayerControl.h; sourceTree = "<group>"; };
 		E49D0737231CCB4D007440D8 /* ZLVideoPlayerControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZLVideoPlayerControl.m; sourceTree = "<group>"; };
+		E4B4491524655FEE006918B1 /* UIControl+EnlargeTouchArea.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIControl+EnlargeTouchArea.h"; sourceTree = "<group>"; };
+		E4B4491624655FEE006918B1 /* UIControl+EnlargeTouchArea.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIControl+EnlargeTouchArea.m"; sourceTree = "<group>"; };
 		FD419037222D1EEA00FF46A9 /* ZLPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZLPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD41903A222D1EEA00FF46A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD4190E9222D1F5900FF46A9 /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDWebImage.framework; path = Carthage/Build/iOS/SDWebImage.framework; sourceTree = "<group>"; };
@@ -103,7 +105,6 @@
 		FD6446CB225AEF42003724CF /* ZLDrawItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLDrawItem.h; sourceTree = "<group>"; };
 		FD6446CC225AEF42003724CF /* ZLPhotoBrowserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoBrowserCell.m; sourceTree = "<group>"; };
 		FD6446CD225AEF42003724CF /* ZLForceTouchPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLForceTouchPreviewController.m; sourceTree = "<group>"; };
-		FD6446CE225AEF42003724CF /* UIButton+EnlargeTouchArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+EnlargeTouchArea.h"; sourceTree = "<group>"; };
 		FD6446CF225AEF42003724CF /* ZLCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLCollectionCell.h; sourceTree = "<group>"; };
 		FD6446D0225AEF42003724CF /* ZLNoAuthorityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLNoAuthorityViewController.h; sourceTree = "<group>"; };
 		FD6446D1225AEF42003724CF /* ZLPhotoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPhotoManager.m; sourceTree = "<group>"; };
@@ -139,7 +140,6 @@
 		FD6446F0225AEF42003724CF /* ZLCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLCollectionCell.m; sourceTree = "<group>"; };
 		FD6446F1225AEF42003724CF /* ZLNoAuthorityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLNoAuthorityViewController.m; sourceTree = "<group>"; };
 		FD6446F3225AEF42003724CF /* ZLForceTouchPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLForceTouchPreviewController.h; sourceTree = "<group>"; };
-		FD6446F4225AEF42003724CF /* UIButton+EnlargeTouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EnlargeTouchArea.m"; sourceTree = "<group>"; };
 		FD6446F6225AEF42003724CF /* ZLPhotoBrowserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZLPhotoBrowserCell.h; sourceTree = "<group>"; };
 		FD6446F7225AEF42003724CF /* ZLPullDownInteractiveTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLPullDownInteractiveTransition.m; sourceTree = "<group>"; };
 		FD6446F8225AEF42003724CF /* ZLShowBigImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZLShowBigImgViewController.m; sourceTree = "<group>"; };
@@ -224,8 +224,8 @@
 				FD6446F5225AEF42003724CF /* resource */,
 				FD6446C7225AEF42003724CF /* ToastUtils.h */,
 				FD6446EB225AEF42003724CF /* ToastUtils.m */,
-				FD6446CE225AEF42003724CF /* UIButton+EnlargeTouchArea.h */,
-				FD6446F4225AEF42003724CF /* UIButton+EnlargeTouchArea.m */,
+				E4B4491524655FEE006918B1 /* UIControl+EnlargeTouchArea.h */,
+				E4B4491624655FEE006918B1 /* UIControl+EnlargeTouchArea.m */,
 				FD6446C9225AEF42003724CF /* UIImage+ZLPhotoBrowser.h */,
 				FD6446EA225AEF42003724CF /* UIImage+ZLPhotoBrowser.m */,
 				FD6446E2225AEF42003724CF /* ZLAlbumListController.h */,
@@ -336,7 +336,6 @@
 				FD644735225AEF43003724CF /* ZLBigImageCell.h in Headers */,
 				FD644712225AEF43003724CF /* ZLDrawItem.h in Headers */,
 				FD64472E225AEF43003724CF /* ZLShowBigImgViewController.h in Headers */,
-				FD644717225AEF43003724CF /* UIButton+EnlargeTouchArea.h in Headers */,
 				FD64470F225AEF43003724CF /* ZLClipItem.h in Headers */,
 				FD64474F225AEF43003724CF /* ZLPhotoBrowserCell.h in Headers */,
 				FD644706225AEF43003724CF /* ZLInteractiveTrasition.h in Headers */,
@@ -349,6 +348,7 @@
 				FD644711225AEF43003724CF /* ZLPlayer.h in Headers */,
 				FD644726225AEF43003724CF /* ZLThumbnailViewController.h in Headers */,
 				FD64470B225AEF43003724CF /* ZLEditViewController.h in Headers */,
+				E4B4491724655FEE006918B1 /* UIControl+EnlargeTouchArea.h in Headers */,
 				FD64475D225AEF43003724CF /* ZLProgressView.h in Headers */,
 				FD644710225AEF43003724CF /* UIImage+ZLPhotoBrowser.h in Headers */,
 				FD644746225AEF43003724CF /* ZLAnimateTransition.h in Headers */,
@@ -442,7 +442,6 @@
 				FD64470A225AEF43003724CF /* ZLAlbumListController.m in Sources */,
 				FD644729225AEF43003724CF /* ZLProgressHUD.m in Sources */,
 				FD64472D225AEF43003724CF /* ZLBrushBoardImageView.m in Sources */,
-				FD64474E225AEF43003724CF /* UIButton+EnlargeTouchArea.m in Sources */,
 				E49D0739231CCB4D007440D8 /* ZLVideoPlayerControl.m in Sources */,
 				FD64473C225AEF43003724CF /* ZLPlayer.m in Sources */,
 				FD64475C225AEF43003724CF /* ZLPhotoModel.m in Sources */,
@@ -452,6 +451,7 @@
 				FD644749225AEF43003724CF /* ZLCollectionCell.m in Sources */,
 				FD644730225AEF43003724CF /* NSBundle+ZLPhotoBrowser.m in Sources */,
 				FD644757225AEF43003724CF /* ZLThumbnailViewController.m in Sources */,
+				E4B4491824655FEE006918B1 /* UIControl+EnlargeTouchArea.m in Sources */,
 				FD644753225AEF43003724CF /* ZLShowBigImgViewController.m in Sources */,
 				FD644740225AEF43003724CF /* UIImage+ZLPhotoBrowser.m in Sources */,
 				FD644761225AEF43003724CF /* ZLPhotoConfiguration.m in Sources */,
