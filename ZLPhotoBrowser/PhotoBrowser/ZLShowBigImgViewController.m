@@ -340,7 +340,7 @@
     
     [self.view addSubview:_bottomView];
     
-    if (self.arrSelPhotos.count && !_arrSelAssets.count) {
+    if (self.isPreView) {
         //预览本地/网络 图片/视频时，隐藏原图按钮
         [_btnOriginalPhoto removeFromSuperview];
     }

@@ -928,6 +928,7 @@ double const ScalePhotoWidth = 1000;
 - (ZLImageNavigationController *)getImageNavWithRootVC:(UIViewController *)rootVC
 {
     ZLImageNavigationController *nav = [[ZLImageNavigationController alloc] initWithRootViewController:rootVC];
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
     @zl_weakify(self);
     __weak typeof(ZLImageNavigationController *) weakNav = nav;
     [nav setCallSelectImageBlock:^{
@@ -1004,6 +1005,7 @@ double const ScalePhotoWidth = 1000;
     svc.arrSelPhotos = [NSMutableArray arrayWithArray:photos];
     svc.models = models;
     svc.isPush = NO;
+    svc.isPreView = YES;
     
     self.preview = NO;
     [self.sender.view addSubview:self];
