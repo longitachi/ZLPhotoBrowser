@@ -223,14 +223,25 @@
 - (IBAction)showCamera:(id)sender
 {
     ZLCustomCamera *camera = [[ZLCustomCamera alloc] init];
-    
+
     @zl_weakify(self);
     camera.doneBlock = ^(UIImage *image, NSURL *videoUrl) {
         @zl_strongify(self);
         [self saveImage:image videoUrl:videoUrl];
     };
-    
+
     [self showDetailViewController:camera sender:nil];
+}
+
+- (IBAction)eidtVideo:(id)sender
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"testVideo" ofType:@"mp4"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    ZLEditVideoController *vc = [[ZLEditVideoController alloc] initWithFileUrl:url maxEditTime:10 exportVideoType:ZLExportVideoTypeMp4 completion:^(BOOL isSuc, PHAsset *asset) {
+        ZLLoggerDebug(@"---- 编辑视频 %d %@", isSuc, asset);
+    }];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self showDetailViewController:vc sender:nil];
 }
 
 - (void)saveImage:(UIImage *)image videoUrl:(NSURL *)videoUrl
@@ -297,8 +308,7 @@
 
 - (IBAction)btnPreviewNetImageClick:(id)sender
 {
-    NSArray *arrNetImages = @[GetDictForPreviewPhoto([NSURL URLWithString:@"http://i4.chuimg.com/e71fbe7ecebb11e9b33002420a001066_720w_1280h.mp4"], ZLPreviewPhotoTypeURLVideo),
-                              GetDictForPreviewPhoto([NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842025734.jpg"], ZLPreviewPhotoTypeURLImage),
+    NSArray *arrNetImages = @[GetDictForPreviewPhoto([NSURL URLWithString:@"http://aliuwmp3.changba.com/userdata/video/45F6BD5E445E4C029C33DC5901307461.mp4"], ZLPreviewPhotoTypeURLVideo),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://pic.962.net/up/2013-11/20131111660842034354.jpg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1514184259027&di=a2e54cf2d5affe17acdaf1fbf19ff0af&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201212%2F25%2F20121225173302_wTjN8.jpeg"], ZLPreviewPhotoTypeURLImage),
                               GetDictForPreviewPhoto([NSURL URLWithString:@"http://i4.chuimg.com/956b3172a2e111e9b17402420a00105a_720w_1280h.mp4"], ZLPreviewPhotoTypeURLVideo),

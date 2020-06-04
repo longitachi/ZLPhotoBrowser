@@ -24,6 +24,7 @@
 #import "ZLProgressHUD.h"
 #import "NSBundle+ZLPhotoBrowser.h"
 #import "ZLPhotoModel.h"
+#import "ZLEditVideoController.h"
 
 
 

@@ -239,9 +239,26 @@
 @property (nonatomic, strong) ZLEditFrameView *editView;
 @property (nonatomic, strong) AVAssetImageGenerator *generator;
 
+@property (nonatomic, assign) BOOL onlyEdit;
+@property (nonatomic, assign) NSInteger maxEditTime;
+@property (nonatomic, assign) ZLExportVideoType exportVideoType;
+@property (nonatomic, copy) void (^completion)(BOOL, PHAsset *);
+
 @end
 
 @implementation ZLEditVideoController
+
+- (instancetype)initWithFileUrl:(NSURL *)url maxEditTime:(NSInteger)maxEditTime exportVideoType:(ZLExportVideoType)type completion:(void (^)(BOOL, PHAsset *))completion
+{
+    if (self = [super initWithNibName:nil bundle:nil]) {
+        self.onlyEdit = YES;
+        _avAsset = [AVAsset assetWithURL:url];
+        self.maxEditTime = maxEditTime;
+        self.exportVideoType = type;
+        self.completion = completion;
+    }
+    return self;
+}
 
 - (void)dealloc
 {
@@ -267,7 +284,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupUI];
-    [self analysisAssetImages];
     
     _queue = [[NSOperationQueue alloc] init];
     _queue.maxConcurrentOperationCount = 3;
@@ -290,7 +306,14 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [UIApplication sharedApplication].statusBarHidden = NO;
     self.navigationController.navigationBar.hidden = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self analysisAssetImages];
 }
 
 - (void)viewDidLayoutSubviews
@@ -378,7 +401,7 @@
 
 - (void)creatBottomView
 {
-    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration] ?: ZLPhotoConfiguration.defaultPhotoConfiguration;
     //下方视图
     _bottomView = [[UIView alloc] init];
     _bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7];
@@ -405,54 +428,74 @@
 #pragma mark - 解析视频每一帧图片
 - (void)analysisAssetImages
 {
-    float duration = roundf(self.model.asset.duration);
-    
-    ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
-    _interval = configuration.maxEditVideoTime/10.0;
-    
-    _measureCount = (NSInteger)(duration / _interval);
-    
-    @zl_weakify(self);
-    [ZLPhotoManager requestVideoForAsset:self.model.asset completion:^(AVPlayerItem *item, NSDictionary *info) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    float duration = 0;
+    if (self.onlyEdit) {
+        duration = _avAsset.duration.value / _avAsset.duration.timescale;
+        _interval = MIN(duration, self.maxEditTime) / 10.0;
+        
+        _measureCount = (NSInteger)(duration / _interval);
+        
+        AVPlayerItem *item = [AVPlayerItem playerItemWithAsset:_avAsset];
+        AVPlayer *player = [AVPlayer playerWithPlayerItem:item];
+        self.playerLayer.player = player;
+        [self startTimer];
+        [self.collectionView reloadData];
+    } else {
+        duration = roundf(self.model.asset.duration);
+        ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
+        _interval = configuration.maxEditVideoTime/10.0;
+        
+        _measureCount = (NSInteger)(duration / _interval);
+        
+        @zl_weakify(self);
+        [ZLPhotoManager requestVideoForAsset:self.model.asset completion:^(AVPlayerItem *item, NSDictionary *info) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                @zl_strongify(self);
+                if (!item) return;
+                AVPlayer *player = [AVPlayer playerWithPlayerItem:item];
+                self.playerLayer.player = player;
+                [self startTimer];
+            });
+        }];
+        
+        PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
+        options.version = PHVideoRequestOptionsVersionOriginal;
+        options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+        options.networkAccessAllowed = YES;
+        [[PHImageManager defaultManager] requestAVAssetForVideo:self.model.asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
             @zl_strongify(self);
-            if (!item) return;
-            AVPlayer *player = [AVPlayer playerWithPlayerItem:item];
-            self.playerLayer.player = player;
-            [self startTimer];
-        });
-    }];
-    
-    PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
-    options.version = PHVideoRequestOptionsVersionOriginal;
-    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
-    options.networkAccessAllowed = YES;
-    [[PHImageManager defaultManager] requestAVAssetForVideo:self.model.asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-        @zl_strongify(self);
-        self->_avAsset = asset;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collectionView reloadData];
-        });
-    }];
+            self->_avAsset = asset;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
+        }];
+    }
 }
 
 #pragma mark - action
-- (void)cancelBtn_click
+- (void)dismiss
 {
-    [self stopTimer];
-    
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    ZLPhotoConfiguration *configuration = nav.configuration;
-    
-    if (configuration.editAfterSelectThumbnailImage &&
-        configuration.maxSelectCount == 1) {
-        [nav.arrSelectedModels removeAllObjects];
-    }
-    
     UIViewController *vc = [self.navigationController popViewControllerAnimated:NO];
     if (!vc) {
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+- (void)cancelBtn_click
+{
+    [self stopTimer];
+    
+    if (!self.onlyEdit) {
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        ZLPhotoConfiguration *configuration = nav.configuration;
+        
+        if (configuration.editAfterSelectThumbnailImage &&
+            configuration.maxSelectCount == 1) {
+            [nav.arrSelectedModels removeAllObjects];
+        }
+    }
+    
+    [self dismiss];
 }
 
 - (void)btnDone_click
@@ -462,26 +505,44 @@
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     [hud show];
     
-    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
-    
-    @zl_weakify(self);
-    __weak typeof(nav) weakNav = nav;
-    [ZLPhotoManager exportEditVideoForAsset:_avAsset range:[self getTimeRange] type:nav.configuration.exportVideoType complete:^(BOOL isSuc, PHAsset *asset) {
-        [hud hide];
-        if (isSuc) {
-            __strong typeof(weakNav) strongNav = weakNav;
-            ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
-            [strongNav.arrSelectedModels removeAllObjects];
-            [strongNav.arrSelectedModels addObject:model];
-            if (strongNav.callSelectImageBlock) {
-                strongNav.callSelectImageBlock();
+    if (!self.onlyEdit) {
+        ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+        
+        @zl_weakify(self);
+        __weak typeof(nav) weakNav = nav;
+        [ZLPhotoManager exportEditVideoForAsset:_avAsset range:[self getTimeRange] type:nav.configuration.exportVideoType complete:^(BOOL isSuc, PHAsset *asset) {
+            [hud hide];
+            if (isSuc) {
+                __strong typeof(weakNav) strongNav = weakNav;
+                ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:ZLAssetMediaTypeVideo duration:nil];
+                [strongNav.arrSelectedModels removeAllObjects];
+                [strongNav.arrSelectedModels addObject:model];
+                if (strongNav.callSelectImageBlock) {
+                    strongNav.callSelectImageBlock();
+                }
+            } else {
+                @zl_strongify(self);
+                [self startTimer];
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
             }
-        } else {
+        }];
+    } else {
+        @zl_weakify(self);
+        [ZLPhotoManager exportEditVideoForAsset:_avAsset range:[self getTimeRange] type:self.exportVideoType complete:^(BOOL isSuc, PHAsset *asset) {
             @zl_strongify(self);
-            [self startTimer];
-            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
-        }
-    }];
+            [hud hide];
+            if (isSuc) {
+                if (self.completion) {
+                    self.completion(isSuc, asset);
+                }
+                [self dismiss];
+            } else {
+                @zl_strongify(self);
+                [self startTimer];
+                ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserSaveVideoFailed));
+            }
+        }];
+    }
 }
 
 #pragma mark - timer
