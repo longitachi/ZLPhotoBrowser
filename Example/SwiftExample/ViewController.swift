@@ -211,6 +211,18 @@ class ViewController: UIViewController {
         self.showDetailViewController(camera, sender: nil)
     }
     
+    @IBAction func editVideo(_ sender: Any) {
+        guard let path = Bundle.main.path(forResource: "testVideo", ofType: "mp4") else {
+            return
+        }
+        let url = URL(fileURLWithPath: path)
+        let vc = ZLEditVideoController(fileUrl: url, maxEditTime: 10, exportVideoType: .mp4) { (isSuc, asset) in
+            debugPrint("编辑视频 \(isSuc), \(String(describing: asset))")
+        }
+        vc.modalPresentationStyle = .fullScreen
+        self.showDetailViewController(vc, sender: nil)
+    }
+    
     func show(preview: Bool) {
         let ac = self.getPas()
         

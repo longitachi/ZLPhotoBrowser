@@ -37,7 +37,7 @@
 		FD64471F225AEF43003724CF /* ZLPhotoActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = FD6446D3225AEF42003724CF /* ZLPhotoActionSheet.xib */; };
 		FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D4225AEF42003724CF /* ZLPhotoConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD644721225AEF43003724CF /* ZLDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D5225AEF42003724CF /* ZLDefine.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FD644722225AEF43003724CF /* ZLEditVideoController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D7225AEF42003724CF /* ZLEditVideoController.h */; };
+		FD644722225AEF43003724CF /* ZLEditVideoController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D7225AEF42003724CF /* ZLEditVideoController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD644723225AEF43003724CF /* ZLPhotoModel.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446D8225AEF42003724CF /* ZLPhotoModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD644725225AEF43003724CF /* ZLProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6446D9225AEF42003724CF /* ZLProgressView.m */; };
 		FD644726225AEF43003724CF /* ZLThumbnailViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = FD6446DA225AEF42003724CF /* ZLThumbnailViewController.h */; };
@@ -329,6 +329,7 @@
 				FD644703225AEF43003724CF /* ZLPhotoBrowser.h in Headers */,
 				FD644721225AEF43003724CF /* ZLDefine.h in Headers */,
 				FD644720225AEF43003724CF /* ZLPhotoConfiguration.h in Headers */,
+				FD644722225AEF43003724CF /* ZLEditVideoController.h in Headers */,
 				FD64474C225AEF43003724CF /* ZLForceTouchPreviewController.h in Headers */,
 				FD64470E225AEF43003724CF /* ToastUtils.h in Headers */,
 				FD644755225AEF43003724CF /* ZLBrushBoardImageView.h in Headers */,
@@ -343,7 +344,6 @@
 				FD644736225AEF43003724CF /* ZLInteractiveAnimateProtocol.h in Headers */,
 				FD644732225AEF43003724CF /* ZLAlbumListController.h in Headers */,
 				FD644731225AEF43003724CF /* ZLPullDownInteractiveTransition.h in Headers */,
-				FD644722225AEF43003724CF /* ZLEditVideoController.h in Headers */,
 				FD644719225AEF43003724CF /* ZLNoAuthorityViewController.h in Headers */,
 				FD644711225AEF43003724CF /* ZLPlayer.h in Headers */,
 				FD644726225AEF43003724CF /* ZLThumbnailViewController.h in Headers */,
