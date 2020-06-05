@@ -51,6 +51,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 3.2.0: 添加图片视频选择互斥功能（即只能选择1个视频或最多几张图片）; 添加选择量达到最大值时其他cell显示遮罩功能; 删除`allowMixSelect`,`maxVideoSelectCountInMix`,`minVideoSelectCountInMix`参数;
 ● 3.1.4: 添加自定义相机分辨率(320*240, 960*540); 修正拍照后图片方向; 编辑视频最小允许编辑5s; 添加相机是否可用检测; 修正部分多语言错误的问题; 
 ● 3.1.3: 修改曝光模式; 拍照界面显示 "轻触拍照，按住摄像" 提示; 增加直接调用编辑图片api; 已知bug fixed; 
 ● 3.1.2: SDWebImage 不在指定依赖版本号;
@@ -66,7 +67,6 @@
 ● 2.7.8: 添加iCloud图片加载进度条，支持iCloud视频播放;
 ● 2.7.6: 预览大图界面支持precent情况下的下拉返回;
 ● 2.7.5: 编辑图片支持自定义工具类型; bug fixed;
-● 2.7.4: 横滑大图界面添加下拉返回; 不允许录制视频时候不请求麦克风权限;
 ```
 
 ### 框架支持

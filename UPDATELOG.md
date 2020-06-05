@@ -2,6 +2,15 @@
 
 -----
 
+## [3.2.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.2.0) (2020-06-05)
+
+#### Add
+* 添加图片视频选择互斥功能（即只能选择1个视频或最多几张图片）;
+* 添加选择量达到最大值时其他cell显示遮罩功能;
+* 删除`allowMixSelect`,`maxVideoSelectCountInMix`,`minVideoSelectCountInMix`参数;
+
+---
+
 ## [3.1.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.1.4) (2020-04-08)
 
 #### Add
