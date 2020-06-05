@@ -26,10 +26,10 @@
 @property (nonatomic, assign) BOOL showSelectBtn;
 @property (nonatomic, assign) CGFloat cornerRadio;
 @property (nonatomic, strong) ZLPhotoModel *model;
-@property (nonatomic, strong) UIColor *maskColor;
-@property (nonatomic, assign) BOOL showMask;
 @property (nonatomic, assign) BOOL showIndexLabel;
 @property (nonatomic, assign) NSInteger index;
+
+@property (nonatomic, assign) NSInteger enableSelect;
 
 @property (nonatomic, strong) ZLProgressView *progressView;
 

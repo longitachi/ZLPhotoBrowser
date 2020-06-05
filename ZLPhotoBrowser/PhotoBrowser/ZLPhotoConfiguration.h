@@ -36,14 +36,15 @@
 @property (nonatomic, assign) NSInteger maxSelectCount;
 
 /**
- 混合选择时 视频最大数量，默认等同最大选择数 9
+ 混合选择时，照片和视频是否只能选择一种，默认NO
+ e.g. 希望选择视频（最多1个）后不能选择其他图片，或者选择图片（最多9张）后不能选择视频
+ 设置如下参数即可
+ allowSelectImage = YES
+ allowSelectVideo = YES
+ maxSelectCount = 9
+ mutuallyExclusiveSelectInMix = YES
  */
-@property (nonatomic, assign) NSInteger maxVideoSelectCountInMix;
-
-/**
- 混合选择时 视频最小数量，默认为0
- */
-@property (nonatomic, assign) NSInteger minVideoSelectCountInMix;
+@property (nonatomic, assign) BOOL mutuallyExclusiveSelectInMix;
 
 /**
  预览图最大显示数 默认20张，该值为0时将不显示上方预览图，仅显示 '拍照、相册、取消' 按钮
@@ -54,11 +55,6 @@
  cell的圆角弧度 默认为0
  */
 @property (nonatomic, assign) CGFloat cellCornerRadio;
-
-/**
- 是否允许混合选择，即可以同时选择image(image/gif/livephoto)、video类型， 默认YES
- */
-@property (nonatomic, assign) BOOL allowMixSelect;
 
 /**
  是否允许选择照片 默认YES
@@ -224,6 +220,16 @@
  遮罩层颜色， 默认 blackColor alpha 0.2
  */
 @property (nonatomic, strong) UIColor *selectedMaskColor;
+
+/**
+ 是否在不能选择的cell上方覆盖一层遮罩层，默认YES
+ */
+@property (nonatomic, assign) BOOL showInvalidMask;
+
+/**
+ 不能选择的cell上方遮罩层颜色 默认 whiteColor alpha .5
+ */
+@property (nonatomic, strong) UIColor *invalidMaskColor;
 
 /**
  是否显示选中图片的index 默认YES

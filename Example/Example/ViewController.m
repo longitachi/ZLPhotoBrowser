@@ -99,7 +99,7 @@
     actionSheet.configuration.allowEditImage = self.allowEditSwitch.isOn;
     actionSheet.configuration.allowEditVideo = self.allowEditVideoSwitch.isOn;
     actionSheet.configuration.allowSlideSelect = self.allowSlideSelectSwitch.isOn;
-    actionSheet.configuration.allowMixSelect = self.mixSelectSwitch.isOn;
+    actionSheet.configuration.mutuallyExclusiveSelectInMix = !self.mixSelectSwitch.isOn;
     actionSheet.configuration.allowDragSelect = self.allowDragSelectSwitch.isOn;
     //设置相册内部显示拍照按钮
     actionSheet.configuration.allowTakePhotoInLibrary = self.takePhotoInLibrarySwitch.isOn;
@@ -109,8 +109,6 @@
     actionSheet.configuration.maxPreviewCount = self.previewTextField.text.integerValue;
     //设置照片最大选择数
     actionSheet.configuration.maxSelectCount = self.maxSelCountTextField.text.integerValue;
-    actionSheet.configuration.maxVideoSelectCountInMix = 3;
-    actionSheet.configuration.minVideoSelectCountInMix = 1;
     //设置允许选择的视频最大时长
     actionSheet.configuration.maxVideoDuration = self.maxVideoDurationTextField.text.integerValue;
     //设置照片cell弧度

@@ -101,6 +101,10 @@ double const ScalePhotoWidth = 1000;
     _arrSelectedAssets = arrSelectedAssets;
     [self.arrSelectedModels removeAllObjects];
     for (PHAsset *asset in arrSelectedAssets) {
+        // 互斥选择时候如果传入上次选择的视频，不做记录
+        if (self.configuration.mutuallyExclusiveSelectInMix && asset.mediaType == PHAssetMediaTypeVideo) {
+            continue;
+        }
         ZLPhotoModel *model = [ZLPhotoModel modelWithAsset:asset type:[ZLPhotoManager transformAssetType:asset] duration:nil];
         model.selected = YES;
         [self.arrSelectedModels addObject:model];
@@ -598,10 +602,6 @@ double const ScalePhotoWidth = 1000;
 #pragma mark - 请求所选择图片、回调
 - (void)requestSelPhotos:(UIViewController *)vc data:(NSArray<ZLPhotoModel *> *)data hideAfterCallBack:(BOOL)hide
 {
-    if (![self checkSelectVideoCount]) {
-        return;
-    }
-    
     ZLProgressHUD *hud = [[ZLProgressHUD alloc] init];
     
     __block BOOL isTimeOut = NO;
@@ -687,36 +687,6 @@ double const ScalePhotoWidth = 1000;
     }
 }
 
-- (BOOL)checkSelectVideoCount
-{
-    if (!self.configuration.allowMixSelect) {
-        return YES;
-    }
-    
-    __block NSInteger videoCount = 0;
-    
-    [self.arrSelectedModels enumerateObjectsUsingBlock:^(ZLPhotoModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (obj.type == ZLAssetMediaTypeVideo) {
-            videoCount++;
-        }
-    }];
-    
-    NSInteger min = self.configuration.minVideoSelectCountInMix;
-    NSInteger max = self.configuration.maxVideoSelectCountInMix;
-    
-    if (videoCount < min) {
-        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMinVideoSelectCountInMix), min);
-        return NO;
-    }
-    
-    if (videoCount > max) {
-        ShowToastLong(GetLocalLanguageTextValue(ZLPhotoBrowserMaxVideoSelectCountInMix), max);
-        return NO;
-    }
-    
-    return YES;
-}
-
 #pragma mark - UICollectionDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -751,10 +721,8 @@ double const ScalePhotoWidth = 1000;
                 return;
             }
             if (self.arrSelectedModels.count > 0) {
-                ZLPhotoModel *sm = self.arrSelectedModels.firstObject;
-                if (!self.configuration.allowMixSelect &&
-                    ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
-                    ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
+                if (self.configuration.mutuallyExclusiveSelectInMix &&
+                    model.type == ZLAssetMediaTypeVideo) {
                     return;
                 }
             }
@@ -785,18 +753,18 @@ double const ScalePhotoWidth = 1000;
             [self refreshCellIndex];
         }
         
-        if (self.configuration.showSelectedMask) {
-            strongCell.maskView.hidden = !model.isSelected;
-        }
+        [self refreshCellMaskView];
         [self changeCancelBtnTitle];
     };
     
     cell.allSelectGif = self.configuration.allowSelectGif;
     cell.allSelectLivePhoto = self.configuration.allowSelectLivePhoto;
-    cell.showSelectBtn = self.configuration.showSelectBtn;
+    if (self.configuration.mutuallyExclusiveSelectInMix && self.configuration.maxSelectCount > 1) {
+        cell.showSelectBtn = model.type < ZLAssetMediaTypeVideo;
+    } else {
+        cell.showSelectBtn = self.configuration.showSelectBtn;
+    }
     cell.cornerRadio = self.configuration.cellCornerRadio;
-    cell.showMask = self.configuration.showSelectedMask;
-    cell.maskColor = self.configuration.selectedMaskColor;
     cell.indexLabel.backgroundColor = self.configuration.indexLabelBgColor;
     cell.showIndexLabel = NO;
         if (self.configuration.showSelectedIndex) {
@@ -807,6 +775,9 @@ double const ScalePhotoWidth = 1000;
                 }
             }];
         }
+    
+    [self setCellMaskView:cell isSelected:model.isSelected model:model];
+    
     cell.model = model;
     
     return cell;
@@ -850,6 +821,54 @@ double const ScalePhotoWidth = 1000;
     }];
 }
 
+- (void)refreshCellMaskView
+{
+    if (!self.configuration.showSelectedMask && !self.configuration.showInvalidMask) {
+        return;
+    }
+    
+    NSArray<NSIndexPath *> *visibleIndexPaths = self.collectionView.indexPathsForVisibleItems;
+    [visibleIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        UICollectionViewCell *c = [self.collectionView cellForItemAtIndexPath:obj];
+        if ([c isKindOfClass:ZLTakePhotoCell.class]) {
+            // 拍照cell return
+            return;
+        }
+        ZLCollectionCell *cell = (ZLCollectionCell *)c;
+        ZLPhotoModel *m = self.arrDataSources[obj.row];
+        __block BOOL isSel = NO;
+        [self.arrSelectedModels enumerateObjectsUsingBlock:^(ZLPhotoModel * _Nonnull obj1, NSUInteger idx1, BOOL * _Nonnull stop) {
+            if ([obj1.asset.localIdentifier isEqualToString:m.asset.localIdentifier]) {
+                isSel = YES;
+                *stop = YES;
+            }
+        }];
+        [self setCellMaskView:cell isSelected:isSel model:m];
+    }];
+}
+
+- (void)setCellMaskView:(ZLCollectionCell *)cell isSelected:(BOOL)isSelected model:(ZLPhotoModel *)model {
+    cell.maskView.hidden = YES;
+    cell.enableSelect = YES;
+    if (isSelected) {
+        cell.maskView.backgroundColor = self.configuration.selectedMaskColor;
+        cell.maskView.hidden = !self.configuration.showSelectedMask;
+    } else {
+        NSInteger selCount = self.arrSelectedModels.count;
+        if (selCount < self.configuration.maxSelectCount && selCount > 0) {
+            if (self.configuration.mutuallyExclusiveSelectInMix) {
+                cell.maskView.backgroundColor = self.configuration.invalidMaskColor;
+                    cell.maskView.hidden = model.type != ZLAssetMediaTypeVideo;
+                    cell.enableSelect = model.type != ZLAssetMediaTypeVideo;
+            }
+        } else if (selCount >= self.configuration.maxSelectCount) {
+            cell.maskView.backgroundColor = self.configuration.invalidMaskColor;
+            cell.maskView.hidden = NO;
+            cell.enableSelect = NO;
+        }
+    }
+}
+
 #pragma mark - UICollectionViewDelegate
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -859,23 +878,16 @@ double const ScalePhotoWidth = 1000;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZLCollectionCell *cell = (ZLCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    if (!cell.enableSelect) {
+        return;
+    }
+    
     ZLPhotoModel *model = self.arrDataSources[indexPath.row];
     
     if ([self shouldDirectEdit:model]) return;
     
-    if (self.arrSelectedModels.count > 0) {
-        ZLPhotoModel *sm = self.arrSelectedModels.firstObject;
-        if (!self.configuration.allowMixSelect &&
-            ((model.type < ZLAssetMediaTypeVideo && sm.type == ZLAssetMediaTypeVideo) || (model.type == ZLAssetMediaTypeVideo && sm.type < ZLAssetMediaTypeVideo))) {
-            ShowToastLong(@"%@", GetLocalLanguageTextValue(ZLPhotoBrowserCannotSelectVideo));
-            return;
-        }
-    }
-    
-    BOOL allowSelImage = !(model.type==ZLAssetMediaTypeVideo)?YES:self.configuration.allowMixSelect;
-    BOOL allowSelVideo = model.type==ZLAssetMediaTypeVideo?YES:self.configuration.allowMixSelect;
-    
-    NSArray *arr = [ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:self.configuration.sortAscending limitCount:NSIntegerMax allowSelectVideo:allowSelVideo allowSelectImage:allowSelImage allowSelectGif:self.configuration.allowSelectGif allowSelectLivePhoto:self.configuration.allowSelectLivePhoto];
+    NSArray *arr = [ZLPhotoManager getAllAssetInPhotoAlbumWithAscending:self.configuration.sortAscending limitCount:NSIntegerMax allowSelectVideo:YES allowSelectImage:YES allowSelectGif:self.configuration.allowSelectGif allowSelectLivePhoto:self.configuration.allowSelectLivePhoto];
     
     NSMutableArray *selIdentifiers = [NSMutableArray array];
     for (ZLPhotoModel *m in self.arrSelectedModels) {

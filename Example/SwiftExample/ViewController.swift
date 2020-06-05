@@ -99,7 +99,7 @@ class ViewController: UIViewController {
         ac.configuration.allowEditImage = self.editImageSwitch.isOn
         ac.configuration.allowEditVideo = self.editVideoSwitch.isOn
         ac.configuration.allowSlideSelect = self.slideSelectSwitch.isOn
-        ac.configuration.allowMixSelect = self.mixSelectSwitch.isOn
+        ac.configuration.mutuallyExclusiveSelectInMix = !self.mixSelectSwitch.isOn
         ac.configuration.allowDragSelect = self.dragSelectSwitch.isOn
         // 设置相册内部显示拍照按钮
         ac.configuration.allowTakePhotoInLibrary = self.takePhotoInLibratySwitch.isOn
@@ -108,9 +108,7 @@ class ViewController: UIViewController {
         // 最大预览数
         ac.configuration.maxPreviewCount = Int(self.previewTextField.text ?? "20") ?? 20
         //最大选择数
-        ac.configuration.maxSelectCount = Int(self.previewTextField.text ?? "9") ?? 9
-        ac.configuration.maxVideoSelectCountInMix = 3
-        ac.configuration.minVideoSelectCountInMix = 1
+        ac.configuration.maxSelectCount = Int(self.maxSelCountTextField.text ?? "9") ?? 9
         // 允许选择视频的最大时长
         ac.configuration.maxVideoDuration = Int(self.maxVideoDurationTextField.text ?? "120") ?? 120
         // cell 弧度
@@ -147,7 +145,7 @@ class ViewController: UIViewController {
         // MARK: required
         let count = Int(self.maxSelCountTextField.text ?? "9") ?? 9
         if self.rememberLastSelSwitch.isOn && count > 1 {
-            ac.arrSelectedAssets = self.lastSelectAssets as? NSMutableArray
+            ac.arrSelectedAssets = NSMutableArray(array: self.lastSelectAssets)
         } else {
             ac.arrSelectedAssets = nil
         }

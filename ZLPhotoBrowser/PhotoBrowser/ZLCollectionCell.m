@@ -95,9 +95,8 @@
     self.imageView.frame = self.bounds;
     self.btnSelect.frame = CGRectMake(GetViewWidth(self.contentView)-26, 5, 23, 23);
     self.indexLabel.frame = self.btnSelect.frame;
-    if (self.showMask) {
-        self.maskView.frame = self.bounds;
-    }
+    self.maskView.frame = self.bounds;
+    
     self.videoBottomView.frame = CGRectMake(0, GetViewHeight(self)-15, GetViewWidth(self), 15);
     self.videoImageView.frame = CGRectMake(5, 1, 16, 12);
     self.liveImageView.frame = CGRectMake(5, -1, 15, 15);
@@ -134,11 +133,6 @@
         self.timeLabel.text = @"Live";
     } else {
         self.videoBottomView.hidden = YES;
-    }
-    
-    if (self.showMask) {
-        self.maskView.backgroundColor = self.maskColor;
-        self.maskView.hidden = !model.isSelected;
     }
     
     self.btnSelect.hidden = !self.showSelectBtn;

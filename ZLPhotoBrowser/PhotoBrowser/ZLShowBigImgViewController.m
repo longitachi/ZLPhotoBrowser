@@ -86,6 +86,7 @@
     [self initBottomView];
     [self resetDontBtnState];
     [self resetEditBtnState];
+    [self resetNavBtnState];
     [self resetOriginalBtnState];
     
     if (!self.isPush) {
@@ -457,6 +458,10 @@
     ZLPhotoConfiguration *configuration = nav.configuration;
     
     ZLPhotoModel *model = self.models[_currentPage-1];
+    if (configuration.mutuallyExclusiveSelectInMix && configuration.maxSelectCount > 1 && model.type == ZLAssetMediaTypeVideo) {
+        return;
+    }
+    
     if (!btn.selected) {
         //选中
         [btn.layer addAnimation:GetBtnStatusChangedAnimation() forKey:nil];
@@ -605,10 +610,30 @@
 }
 
 #pragma mark - 更新按钮、导航条等显示状态
+
+- (void)resetNavBtnState
+{
+    ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = nav.configuration;
+    if (configuration.mutuallyExclusiveSelectInMix && configuration.maxSelectCount > 1) {
+        ZLPhotoModel *model = self.models[_currentPage-1];
+        _navRightBtn.hidden = model.type == ZLAssetMediaTypeVideo;
+    } else {
+        _navRightBtn.hidden = !configuration.showSelectBtn;
+    }
+}
+
 - (void)resetDontBtnState
 {
     ZLImageNavigationController *nav = (ZLImageNavigationController *)self.navigationController;
+    ZLPhotoConfiguration *configuration = nav.configuration;
+    
+    _btnDone.hidden = NO;
     if (nav.arrSelectedModels.count > 0) {
+        if (configuration.mutuallyExclusiveSelectInMix && configuration.maxSelectCount > 1) {
+            ZLPhotoModel *model = self.models[_currentPage-1];
+            _btnDone.hidden = model.type == ZLAssetMediaTypeVideo;
+        }
         [_btnDone setTitle:[NSString stringWithFormat:@"%@(%ld)", GetLocalLanguageTextValue(ZLPhotoBrowserDoneText), nav.arrSelectedModels.count] forState:UIControlStateNormal];
     } else {
         [_btnDone setTitle:GetLocalLanguageTextValue(ZLPhotoBrowserDoneText) forState:UIControlStateNormal];
@@ -786,6 +811,8 @@
         [self resetIndexLabelState:NO];
         [self resetOriginalBtnState];
         [self resetEditBtnState];
+        [self resetNavBtnState];
+        [self resetDontBtnState];
     }
 }
 

@@ -493,6 +493,9 @@
             configuration.maxSelectCount == 1) {
             [nav.arrSelectedModels removeAllObjects];
         }
+        if (configuration.mutuallyExclusiveSelectInMix) {
+            [nav.arrSelectedModels removeAllObjects];
+        }
     }
     
     [self dismiss];
