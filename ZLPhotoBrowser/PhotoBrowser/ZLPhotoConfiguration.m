@@ -82,7 +82,7 @@
 
 - (BOOL)showSelectBtn
 {
-    return _maxSelectCount > 1 ? YES : _showSelectBtn;
+    return _maxSelectCount >= 1 ? YES : _showSelectBtn;
 }
 
 - (void)setAllowSelectLivePhoto:(BOOL)allowSelectLivePhoto
