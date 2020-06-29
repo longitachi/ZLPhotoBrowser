@@ -196,7 +196,10 @@ typedef NS_ENUM(NSUInteger, SlideSelectType) {
     
     BOOL showBottomView = YES;
     ZLPhotoConfiguration *configuration = [(ZLImageNavigationController *)self.navigationController configuration];
-    if (configuration.editAfterSelectThumbnailImage && configuration.maxSelectCount == 1 && (configuration.allowEditImage || configuration.allowEditVideo)) {
+    
+    BOOL condition1 = configuration.editAfterSelectThumbnailImage && configuration.maxSelectCount == 1 && (configuration.allowEditImage || configuration.allowEditVideo);
+    BOOL condition2 = configuration.maxSelectCount == 1 && configuration.showSelectBtn == NO;
+    if (condition1 || condition2) {
         //点击后直接编辑则不需要下方工具条
         showBottomView = NO;
         inset.bottom = 0;
