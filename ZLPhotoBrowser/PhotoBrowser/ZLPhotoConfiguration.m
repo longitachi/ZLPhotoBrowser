@@ -84,7 +84,7 @@
 {
     return _maxSelectCount >= 1 ? YES : _showSelectBtn;
 }
-
+。。。
 - (void)setAllowSelectLivePhoto:(BOOL)allowSelectLivePhoto
 {
     if (@available(iOS 9.1, *)) {
