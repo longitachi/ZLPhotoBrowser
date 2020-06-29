@@ -105,6 +105,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)editImageWithAsset:(PHAsset *)asset success:(void (^)(UIImage *result, PHAsset *asset))success cancel:(void (^)(void))cancel;
 
+- (IBAction)btnCamera_Click:(id)sender;
+- (IBAction)btnPhotoLibrary_Click:(id)sender;
+- (void)somethingInit;
 NS_ASSUME_NONNULL_END
 
 @end

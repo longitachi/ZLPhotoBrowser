@@ -1130,5 +1130,80 @@ double const ScalePhotoWidth = 1000;
     
     return CGSizeMake(self.collectionView.frame.size.height*scale, self.collectionView.frame.size.height);
 }
+#pragma mark - 自定义补充方法
+- (void)somethingInit{
+    if (![ZLPhotoManager havePhotoLibraryAuthority]) {
+        //注册实施监听相册变化
+        [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+    }
+    
+    NSAssert(self.sender != nil, @"sender 对象不能为空");
+    
+    self.animate = YES;
+    self.preview = YES;
+    self.previousStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
+    self.previousStatusBarIsHidden = [UIApplication sharedApplication].isStatusBarHidden;
+    
+    [ZLPhotoManager setSortAscending:self.configuration.sortAscending];
+    
+    if (!self.configuration.maxPreviewCount) {
+        self.verColHeight.constant = .0;
+    } else if (self.configuration.allowDragSelect) {
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panAction:)];
+        [self.baseView addGestureRecognizer:pan];
+    }
+    
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusRestricted ||
+        status == PHAuthorizationStatusDenied) {
+        [self showNoAuthorityVC];
+        return;
+    } else if (status == PHAuthorizationStatusNotDetermined) {
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            
+        }];
+        
+        [self.sender.view addSubview:self];
+    }
+    
+    if (status == PHAuthorizationStatusAuthorized) {
+       [self loadPhotoFromAlbum];
+               [self show1];
+    }
+}
+- (void)show1
+{
+    self.frame = self.sender.view.bounds;
+    [self.collectionView setContentOffset:CGPointZero];
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    if (!self.superview) {
+        [self.sender.view addSubview:self];
+        self.hidden = YES;
+    }
 
+    if (self.sender.tabBarController.tabBar && self.sender.tabBarController.tabBar.hidden == NO) {
+        self.senderTabBarIsShow = YES;
+        self.sender.tabBarController.tabBar.hidden = YES;
+    }
+
+//    UIEdgeInsets inset = UIEdgeInsetsZero;
+//    if (@available(iOS 11, *)) {
+//        double flag = .0;
+//        if (self.senderTabBarIsShow) {
+//            flag = 49;
+//        }
+//        inset = self.sender.view.safeAreaInsets;
+//        inset.bottom -= flag;
+//        [self.verBottomSpace setConstant:inset.bottom];
+//    }
+//    if (self.animate) {
+//        __block CGRect frame = self.baseView.frame;
+//        frame.origin.y = kViewHeight;
+////        self.baseView.frame = frame;
+//        [UIView animateWithDuration:0.2 animations:^{
+////            frame.origin.y -= kBaseViewHeight;
+////            self.baseView.frame = frame;
+//        } completion:nil];
+//    }
+}
 @end
