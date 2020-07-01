@@ -1168,7 +1168,6 @@ double const ScalePhotoWidth = 1000;
     
     if (status == PHAuthorizationStatusAuthorized) {
        [self loadPhotoFromAlbum];
-               [self show1];
     }
 }
 - (void)show1
