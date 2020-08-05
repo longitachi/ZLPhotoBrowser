@@ -68,18 +68,14 @@
 {
     [super viewWillDisappear:animated];
     [UIApplication sharedApplication].statusBarStyle = self.previousStatusBarStyle;
-    //    [self setNeedsStatusBarAppearanceUpdate];
+//    [self setNeedsStatusBarAppearanceUpdate];
 }
 
-//BOOL dismiss = NO;
-//- (UIStatusBarStyle)previousStatusBarStyle
-//{
-//    if (!dismiss) {
-//        return UIStatusBarStyleLightContent;
-//    } else {
-//        return self.previousStatusBarStyle;
-//    }
-//}
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return self.configuration.statusBarStyle;
+}
+
 
 @end
 

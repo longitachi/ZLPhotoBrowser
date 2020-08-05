@@ -66,6 +66,8 @@
     self.indexLabel.layer.masksToBounds = YES;
     self.indexLabel.textColor = [UIColor whiteColor];
     self.indexLabel.font = [UIFont systemFontOfSize:14];
+    self.indexLabel.adjustsFontSizeToFitWidth = YES;
+    self.indexLabel.minimumScaleFactor = 0.5;
     self.indexLabel.textAlignment = NSTextAlignmentCenter;
     self.indexLabel.hidden = YES;
     [self.contentView addSubview:self.indexLabel];

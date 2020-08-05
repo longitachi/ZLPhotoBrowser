@@ -595,6 +595,11 @@ static BOOL _sortAscending;
 
 + (void)getPhotosBytesWithArray:(NSArray<ZLPhotoModel *> *)photos completion:(void (^)(NSString *photosBytes))completion
 {
+    /**
+     PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:self.phasset] firstObject];
+
+     long long size = [[resourcevalueForKey:@"fileSize"] longLongValue];
+     */
     __block NSInteger dataLength = 0;
     __block NSInteger count = photos.count;
     
