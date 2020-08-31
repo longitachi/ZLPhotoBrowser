@@ -2,6 +2,15 @@
 
 -----
 
+## [4.0.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.0) (2020-08-31)
+
+#### Add
+* 升级为纯`Swift`编写框架，支持最低版本由 `iOS8` 升级到了 `iOS10`;
+* 添加并增强了一些实用功能（例如图片编辑、预览界面下方小视图显示及拖拽排序等等）;
+* 删除一些功能（对SDWebImage的依赖，网络图片及视频的预览，force touch 等等）;
+
+---
+
 ## [3.2.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/3.2.0) (2020-06-05)
 
 #### Add

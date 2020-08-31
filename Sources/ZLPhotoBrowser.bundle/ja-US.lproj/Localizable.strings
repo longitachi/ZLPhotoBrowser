@@ -1,0 +1,59 @@
+"ZLPhotoBrowserCameraText" = "カメラ";
+"ZLPhotoBrowserCameraRecordText" = "撮影";
+"ZLPhotoBrowserAblumText" = "アルバム";
+"ZLPhotoBrowserCancelText" = "取り消し";
+
+"ZLPhotoBrowserOriginalText" = "原図";
+"ZLPhotoBrowserDoneText" = "確定";
+"ZLPhotoBrowserOKText" = "確定";
+"ZLPhotoBrowserEditFinishText" = "完了";
+
+"ZLPhotoBrowserBackText" = "戻る";
+
+"ZLPhotoBrowserEditText" = "編集";
+"ZLPhotoBrowserSaveText" = "保存";
+"ZLPhotoBrowserRevertText" = "元に戻す";
+
+"ZLPhotoBrowserPhotoText" = "写真";
+"ZLPhotoBrowserPreviewText" = "プレビュー";
+
+"ZLPhotoBrowserNoPhotoText" = "写真でない";
+"ZLPhotoBrowserNotAllowMixSelect" = "ビデオを選択できません";
+
+"ZLPhotoBrowserLoadingText" = "ロード中，お待ち下さい";
+"ZLPhotoBrowserHandleText" = "後ほど...";
+
+"ZLPhotoBrowserSaveImageErrorText" = "画像の保存に失敗しました";
+"ZLPhotoBrowserExceededMaxSelectCountText" = "最大選択数: %ld";
+"ZLPhotoBrowserLongerThanMaxVideoDurationText" = "%ldsより長い動画は選択できません";
+"ZLPhotoBrowserShorterThanMinVideoDurationText" = "％ldsより短い動画は選択できません";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "動画の最大選択数: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "動画の最小選択数: %ld";
+
+"ZLPhotoBrowserNoCameraAuthorityText" = "「設定」->「プライパシー」->「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
+"ZLPhotoBrowserNoAblumAuthorityText" = "%@があなたのアルバムにアクセスするには「設定」->「プライバシー」->「写真」";
+"ZLPhotoBrowserNoMicrophoneAuthorityText" = "「設定」->「プライパシー」->「マイク」から、%@があなたのデバイスのマイクにアクセスする許可をしてください";
+"ZLPhotoBrowserCameraUnavailableText" = "カメラは利用できません";
+
+"ZLPhotoBrowseriCloudPhotoLoadFailedText" = "写真のライブラリをダウンロードした後の再試行";
+"ZLPhotoBrowseriCloudVideoLoadFailedText" = "iCloudから同期できません";
+
+"ZLPhotoBrowserLoadImageFailed" = "ロード失敗";
+"ZLPhotoBrowserSaveVideoFailed" = "ビデオの保存に失敗しました";
+"ZLPhotoBrowserRequestTimeout" = "要求タイムアウト";
+
+"ZLPhotoBrowserCustomCameraTips" = "タップして撮影、長押しで記録";
+
+"ZLPhotoBrowserCameraRoll" = "カメラロール";
+"ZLPhotoBrowserPanoramas" = "パノラマ";
+"ZLPhotoBrowserVideos" = "ビデオ";
+"ZLPhotoBrowserFavorites" = "お気に入り";
+"ZLPhotoBrowserTimelapses" = "タイムラプス";
+"ZLPhotoBrowserRecentlyAdded" = "最後に追加した項目";
+"ZLPhotoBrowserBursts" = "バースト";
+"ZLPhotoBrowserSlomoVideos" = "スローモーション";
+"ZLPhotoBrowserSelfPortraits" = "セルフイー";
+"ZLPhotoBrowserScreenshots" = "スクリーンショット";
+"ZLPhotoBrowserDepthEffect" = "ポートレート";
+"ZLPhotoBrowserLivePhotos" = "Live Photos";
+"ZLPhotoBrowserAnimated" = "アニメーション";

@@ -7,7 +7,4 @@
    <FileRef
       location = "group:ZLPhotoBrowser.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:Carthage/Checkouts/SDWebImage/SDWebImage.xcodeproj">
-   </FileRef>
 </Workspace>
