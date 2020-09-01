@@ -29,7 +29,6 @@
 		E4C911C524E284B30061DA40 /* ZLPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = E4C911C324E284B30061DA40 /* ZLPhotoBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4C911D224E2884E0061DA40 /* ZLPhotoPreviewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C911D124E2884E0061DA40 /* ZLPhotoPreviewSheet.swift */; platformFilter = ios; };
 		E4C911D424E288780061DA40 /* ZLPhotoConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C911D324E288780061DA40 /* ZLPhotoConfiguration.swift */; platformFilter = ios; };
-		E4C911D624E294290061DA40 /* ZLEditDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C911D524E294290061DA40 /* ZLEditDefine.swift */; platformFilter = ios; };
 		E4C911D824E298B80061DA40 /* ZLGeneralDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C911D724E298B80061DA40 /* ZLGeneralDefine.swift */; platformFilter = ios; };
 		E4C911DA24E2A4910061DA40 /* ZLCustomCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C911D924E2A4910061DA40 /* ZLCustomCamera.swift */; platformFilter = ios; };
 		E4C911DC24E2A69B0061DA40 /* ZLPhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C911DB24E2A69B0061DA40 /* ZLPhotoModel.swift */; platformFilter = ios; };
@@ -66,7 +65,6 @@
 		E4C911C424E284B30061DA40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4C911D124E2884E0061DA40 /* ZLPhotoPreviewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoPreviewSheet.swift; sourceTree = "<group>"; };
 		E4C911D324E288780061DA40 /* ZLPhotoConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoConfiguration.swift; sourceTree = "<group>"; };
-		E4C911D524E294290061DA40 /* ZLEditDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditDefine.swift; sourceTree = "<group>"; };
 		E4C911D724E298B80061DA40 /* ZLGeneralDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLGeneralDefine.swift; sourceTree = "<group>"; };
 		E4C911D924E2A4910061DA40 /* ZLCustomCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLCustomCamera.swift; sourceTree = "<group>"; };
 		E4C911DB24E2A69B0061DA40 /* ZLPhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoModel.swift; sourceTree = "<group>"; };
@@ -184,7 +182,6 @@
 		E4C911CF24E287700061DA40 /* Edit */ = {
 			isa = PBXGroup;
 			children = (
-				E4C911D524E294290061DA40 /* ZLEditDefine.swift */,
 				E417AC0124F63E7E00EDDCD2 /* ZLEditImageViewController.swift */,
 				E46EA7D724F79F1C00033853 /* ZLClipImageViewController.swift */,
 				E466804624FB76C50011E332 /* ZLEditVideoViewController.swift */,
@@ -272,7 +269,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C911D624E294290061DA40 /* ZLEditDefine.swift in Sources */,
 				E4C911D224E2884E0061DA40 /* ZLPhotoPreviewSheet.swift in Sources */,
 				E46EA7D824F79F1C00033853 /* ZLClipImageViewController.swift in Sources */,
 				E4C911E024E2ACE20061DA40 /* ZLPhotoManager.swift in Sources */,
