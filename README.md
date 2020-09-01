@@ -7,6 +7,8 @@
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
 <a href="http://www.jianshu.com/u/a02909a8a93b"><img src="https://img.shields.io/badge/JianShu-@longitachi-red.svg?style=flat"></a>
 
+![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_small.png)
+
 ----------------------------------------
 
 ## 重要说明
@@ -20,7 +22,7 @@
 ### 框架整体介绍
 * [功能介绍](#功能介绍)
 * [更新日志](#更新日志)
-* [使用方法(支持cocoapods/carthage安装)](#使用方法)
+* [安装方法(支持cocoapods/carthage安装)](#安装方法)
 * [效果图](#效果图)
 
 ### <a id="功能介绍"></a>功能介绍
@@ -32,11 +34,25 @@
 - [x] 多语言国际化 (中文简/繁、英文、日文，可设置跟随系统和自行切换，可自定义多语言提示)
 - [x] 已选择图片index
 - [x] 自定义相机 (仿微信)
-> 更多功能请查看 `ZLPhotoConfiguration` 中你那个参数定义
+> 更多功能请查看 `ZLPhotoConfiguration` 中的参数定义
 
 ### Feature
 
 > 如果您在使用中有好的需求及建议，或者遇到什么bug，欢迎随时issue，我会及时的回复
+ 
+ ### 使用示例
+ ```
+ let ac = ZLPhotoPreviewSheet()
+ ac.selectImageBlock = { (images, assets, isOriginal) in
+     // 选择照片回调
+ }
+ // 快速选择方法
+ ac.showPreview(animate: true, sender: self)
+ 
+ // 进入相册选择方法
+ ac.showPhotoLibrary(sender: self)
+ ```
+ 
  
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
@@ -47,10 +63,12 @@
 ```
 
 ### 框架支持
-最低支持：iOS 10.0 
+* iOS 10.0
+* Swift 5.x
+* Xcode 11.x
 
 
-### <a id="使用方法"></a>使用方法
+### <a id="安装方法"></a>使用方法
 
 第一步：
 * Manually 
@@ -62,7 +80,7 @@
   > 如找不到最新版本，可首先执行`pod repo update`
   
 * Carthage
-  * 1.在Cartfile 中添加 `github "longitachi/ZLPhotoBrowser"`
+* 1.在Cartfile 中添加 `github "longitachi/ZLPhotoBrowser" ~> 4.0.0`
   * 2.执行 `carthage update ZLPhotoBrowser --platform iOS`
   
 
