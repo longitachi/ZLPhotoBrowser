@@ -1,5 +1,3 @@
-![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/ZLPhotoBrowser.png)
-
 [![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)&nbsp;
 [![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
@@ -7,7 +5,9 @@
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
 <a href="http://www.jianshu.com/u/a02909a8a93b"><img src="https://img.shields.io/badge/JianShu-@longitachi-red.svg?style=flat"></a>
 
-![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_small.png)
+![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/ZLPhotoBrowser.png)
+
+![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview.png)
 
 ----------------------------------------
 

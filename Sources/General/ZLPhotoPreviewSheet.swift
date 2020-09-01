@@ -418,7 +418,8 @@ public class ZLPhotoPreviewSheet: UIView {
     @objc func panSelectAction(_ pan: UIPanGestureRecognizer) {
         let point = pan.location(in: self.collectionView)
         if pan.state == .began {
-            guard self.collectionView.frame.contains(point) else {
+            let cp = self.baseView.convert(point, from: self.collectionView)
+            guard self.collectionView.frame.contains(cp) else {
                 self.panBeginPoint = .zero
                 return
             }
