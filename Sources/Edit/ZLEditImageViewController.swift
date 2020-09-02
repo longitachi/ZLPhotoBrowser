@@ -93,7 +93,7 @@ public class ZLEditImageViewController: UIViewController {
         debugPrint("ZLEditImageViewController deinit")
     }
     
-    public init(image: UIImage, tools: EditImageTool = ZLPhotoConfiguration.default().editImageTools) {
+    public init(image: UIImage, tools: ZLEditImageViewController.EditImageTool = ZLPhotoConfiguration.default().editImageTools) {
         self.originalImage = image
         self.editImage = image
         self.tools = tools

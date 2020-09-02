@@ -587,7 +587,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var columnCount: CGFloat = deviceIsiPad() ? 6 : 4
+        let defaultCount = CGFloat(ZLPhotoConfiguration.default().columnCount)
+        var columnCount: CGFloat = deviceIsiPad() ? (defaultCount+2) : defaultCount
         if UIApplication.shared.statusBarOrientation.isLandscape {
             columnCount += 2
         }

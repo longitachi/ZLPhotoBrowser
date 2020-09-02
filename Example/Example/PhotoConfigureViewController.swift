@@ -26,6 +26,10 @@ class PhotoConfigureViewController: UIViewController {
     
     var languageSegment: UISegmentedControl!
     
+    var columnCountLabel: UILabel!
+    
+    var columnStepper: UIStepper!
+    
     var sortAscendingSegment: UISegmentedControl!
     
     var allowSelectImageSwitch: UISwitch!
@@ -243,11 +247,39 @@ class PhotoConfigureViewController: UIViewController {
             make.right.equalTo(containerView).offset(-20)
         }
         
+        // 每列个数
+        let columnCountTitleLabel = createLabel("每行显示照片个数")
+        containerView.addSubview(columnCountTitleLabel)
+        columnCountTitleLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(self.languageSegment.snp.bottom).offset(velSpacing)
+            make.left.equalTo(previewCountLabel.snp.left)
+        }
+        
+        self.columnCountLabel = createLabel(String(config.columnCount))
+        containerView.addSubview(self.columnCountLabel)
+        self.columnCountLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(columnCountTitleLabel.snp.right).offset(10)
+            make.centerY.equalTo(columnCountTitleLabel.snp.centerY)
+        }
+        
+        self.columnStepper = UIStepper()
+        self.columnStepper.minimumValue = 2
+        self.columnStepper.maximumValue = 6
+        self.columnStepper.stepValue = 1
+        self.columnStepper.value = Double(config.columnCount)
+        self.columnStepper.addTarget(self, action: #selector(columnStepperValueChanged), for: .valueChanged)
+        containerView.addSubview(self.columnStepper)
+        self.columnStepper.snp.makeConstraints { (make) in
+            make.centerY.equalTo(columnCountTitleLabel.snp.centerY)
+            make.left.equalTo(columnCountLabel.snp.right).offset(horSpacing)
+            make.size.equalTo(CGSize(width: 100, height: 30))
+        }
+        
         // 排序方式
         let sortLabel = createLabel("排序方式")
         containerView.addSubview(sortLabel)
         sortLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(languageSegment.snp.bottom).offset(velSpacing)
+            make.top.equalTo(columnCountTitleLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -574,6 +606,11 @@ class PhotoConfigureViewController: UIViewController {
     
     @objc func languageSegmentChanged() {
         config.languageType = ZLLanguageType(rawValue: languageSegment.selectedSegmentIndex)!
+    }
+    
+    @objc func columnStepperValueChanged() {
+        columnCountLabel.text = String(Int(columnStepper.value))
+        config.columnCount = Int(columnStepper.value)
     }
     
     @objc func sortAscendingChanged() {

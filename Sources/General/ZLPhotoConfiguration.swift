@@ -95,6 +95,21 @@ public class ZLPhotoConfiguration: NSObject {
     /// 是否允许选择原图
     @objc public var allowSelectOriginal = true
     
+    private var pri_columnCount: Int = 4
+    
+    /// iPhone竖屏时 一行显示几张图片，最小2列，最大6列，默认4列
+    /// iPhone横屏时 列数为 columnCount+2
+    /// iPad竖屏时 列数为 columnCount+2
+    /// iPad横屏时 列数为 columnCount+4
+    @objc public var columnCount: Int {
+        set {
+            pri_columnCount = min(6, max(newValue, 2))
+        }
+        get {
+            return pri_columnCount
+        }
+    }
+    
     private var pri_maxEditVideoTime: Second = 10
     
     /// 编辑视频时最大裁剪时间，单位：秒，默认10s 且最小5s
