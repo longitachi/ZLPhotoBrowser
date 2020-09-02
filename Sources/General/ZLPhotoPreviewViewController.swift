@@ -337,7 +337,7 @@ class ZLPhotoPreviewViewController: UIViewController {
             if config.allowEditImage && (currentModel.type == .image || (currentModel.type == .gif && !config.allowSelectGif) || (currentModel.type == .livePhoto && !config.allowSelectLivePhoto)) {
                 hideEditBtn = false
             }
-            if config.allowEditVideo && currentModel.type == .video && (selCount == 0 || (selCount == 1 && nav.arrSelectedModels.first == currentModel)) && currentModel.second >= config.maxEditVideoTime {
+            if config.allowEditVideo && currentModel.type == .video && (selCount == 0 || (selCount == 1 && nav.arrSelectedModels.first == currentModel)) {
                 hideEditBtn = false
             }
         }
@@ -524,11 +524,11 @@ class ZLPhotoPreviewViewController: UIViewController {
         let vc = ZLEditVideoViewController(asset: asset)
         vc.modalPresentationStyle = .fullScreen
         
-        vc.editFinishBlock = { (asset) in
+        vc.editFinishBlock = { [weak nav] (asset) in
             let m = ZLPhotoModel(asset: asset)
-            nav.arrSelectedModels.removeAll()
-            nav.arrSelectedModels.append(m)
-            nav.selectImageBlock?()
+            nav?.arrSelectedModels.removeAll()
+            nav?.arrSelectedModels.append(m)
+            nav?.selectImageBlock?()
         }
         
         self.present(vc, animated: false, completion: nil)

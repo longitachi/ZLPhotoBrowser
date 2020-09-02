@@ -83,8 +83,10 @@ class ZLFetchImageOperation: Operation {
                     self?.fetchFinish()
                 }
             } else {
-                self.completion(ei, nil)
-                self.fetchFinish()
+                DispatchQueue.main.async {
+                    self.completion(ei, nil)
+                    self.fetchFinish()
+                }
             }
             return
         }

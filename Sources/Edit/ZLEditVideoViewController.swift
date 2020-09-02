@@ -59,7 +59,10 @@ public class ZLEditVideoViewController: UIViewController {
     
     var measureCount = 0
     
-    let interval: TimeInterval = TimeInterval(ZLPhotoConfiguration.default().maxEditVideoTime) / 10
+    lazy var interval: TimeInterval = {
+        let assetDuration = round(self.asset.duration)
+        return min(assetDuration, TimeInterval(ZLPhotoConfiguration.default().maxEditVideoTime)) / 10
+    }()
     
     var requestFrameImageQueue: OperationQueue!
     
@@ -68,6 +71,8 @@ public class ZLEditVideoViewController: UIViewController {
     var videoRequestID = PHInvalidImageRequestID
     
     var frameImageCache: [Int: UIImage] = [:]
+    
+    var requestFailedFrameImageIndex: [Int] = []
     
     var shouldLayout = true
     
@@ -195,7 +200,7 @@ public class ZLEditVideoViewController: UIViewController {
         self.view.addSubview(self.frameImageBorderView)
         
         self.indicator = UIView()
-        self.indicator.backgroundColor = .white
+        self.indicator.backgroundColor = UIColor.white.withAlphaComponent(0.7)
         self.view.addSubview(self.indicator)
         
         self.leftSideView = UIImageView(image: getImage("zl_ic_left"))
@@ -204,7 +209,7 @@ public class ZLEditVideoViewController: UIViewController {
         
         self.leftSidePan = UIPanGestureRecognizer(target: self, action: #selector(leftSidePanAction(_:)))
         self.leftSidePan.delegate = self
-        self.leftSideView.addGestureRecognizer(self.leftSidePan)
+        self.view.addGestureRecognizer(self.leftSidePan)
         
         self.rightSideView = UIImageView(image: getImage("zl_ic_right"))
         self.rightSideView.isUserInteractionEnabled = true
@@ -212,8 +217,10 @@ public class ZLEditVideoViewController: UIViewController {
         
         self.rightSidePan = UIPanGestureRecognizer(target: self, action: #selector(rightSidePanAction(_:)))
         self.rightSidePan.delegate = self
-        self.rightSideView.addGestureRecognizer(self.rightSidePan)
+        self.view.addGestureRecognizer(self.rightSidePan)
         
+        self.collectionView.panGestureRecognizer.require(toFail: self.leftSidePan)
+        self.collectionView.panGestureRecognizer.require(toFail: self.rightSidePan)
         self.rightSidePan.require(toFail: self.leftSidePan)
         
         self.cancelBtn = UIButton(type: .custom)
@@ -240,6 +247,7 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
+        self.cleanTimer()
         guard let avAsset = self.avAsset else {
             return
         }
@@ -283,7 +291,7 @@ public class ZLEditVideoViewController: UIViewController {
             self.cleanTimer()
         } else if pan.state == .changed {
             let minX = self.frameImageBorderView.frame.minX
-            let maxX = self.rightSideView.frame.minX
+            let maxX = self.rightSideView.frame.minX - self.leftSideView.frame.width
             
             var frame = self.leftSideView.frame
             frame.origin.x = min(maxX, max(minX, point.x))
@@ -363,13 +371,16 @@ public class ZLEditVideoViewController: UIViewController {
         }
         
         for i in 0..<self.measureCount {
-            let i = Int32(TimeInterval(i) * self.interval)
-            let time = CMTimeMake(value: Int64((i * avAsset.duration.timescale)), timescale: avAsset.duration.timescale)
+            let mes = TimeInterval(i) * self.interval
+            let time = CMTimeMakeWithSeconds(Float64(mes), preferredTimescale: avAsset.duration.timescale)
             
             let operation = ZLEditVideoFetchFrameImageOperation(generator: g, time: time) { [weak self] (image, time) in
                 self?.frameImageCache[Int(i)] = image
                 let cell = self?.collectionView.cellForItem(at: IndexPath(row: Int(i), section: 0)) as? ZLEditVideoFrameImageCell
                 cell?.imageView.image = image
+                if image == nil {
+                    self?.requestFailedFrameImageIndex.append(i)
+                }
             }
             self.requestFrameImageQueue.addOperation(operation)
         }
@@ -448,12 +459,12 @@ extension ZLEditVideoViewController: UIGestureRecognizerDelegate {
         if gestureRecognizer == self.leftSidePan {
             let point = gestureRecognizer.location(in: self.view)
             let frame = self.leftSideView.frame
-            let outerFrame = frame.insetBy(dx: -20, dy: -20)
+            let outerFrame = frame.inset(by: UIEdgeInsets(top: -20, left: -40, bottom: -20, right: -20))
             return outerFrame.contains(point)
         } else if gestureRecognizer == self.rightSidePan {
             let point = gestureRecognizer.location(in: self.view)
             let frame = self.rightSideView.frame
-            let outerFrame = frame.insetBy(dx: -20, dy: -20)
+            let outerFrame = frame.inset(by: UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -40))
             return outerFrame.contains(point)
         }
         return true
@@ -497,6 +508,26 @@ extension ZLEditVideoViewController: UICollectionViewDataSource, UICollectionVie
         }
         
         return cell
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let avAsset = self.avAsset, let g = self.generator else {
+            return
+        }
+        if self.requestFailedFrameImageIndex.contains(indexPath.row) {
+            let mes = TimeInterval(indexPath.row) * self.interval
+            let time = CMTimeMakeWithSeconds(Float64(mes), preferredTimescale: avAsset.duration.timescale)
+            
+            let operation = ZLEditVideoFetchFrameImageOperation(generator: g, time: time) { [weak self] (image, time) in
+                self?.frameImageCache[indexPath.row] = image
+                let cell = self?.collectionView.cellForItem(at: IndexPath(row: indexPath.row, section: 0)) as? ZLEditVideoFrameImageCell
+                cell?.imageView.image = image
+                if image != nil {
+                    self?.requestFailedFrameImageIndex.removeAll { $0 == indexPath.row }
+                }
+            }
+            self.requestFrameImageQueue.addOperation(operation)
+        }
     }
     
 }

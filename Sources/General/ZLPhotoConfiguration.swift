@@ -110,18 +110,8 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    private var pri_maxEditVideoTime: Second = 10
-    
-    /// 编辑视频时最大裁剪时间，单位：秒，默认10s 且最小5s
-    /// - discussion: 当该参数为10s时，所选视频时长必须大于等于10s才允许进行编辑
-    @objc public var maxEditVideoTime: Second {
-        set {
-            pri_maxEditVideoTime = max(5, newValue)
-        }
-        get {
-            return pri_maxEditVideoTime
-        }
-    }
+    /// 编辑视频时最大裁剪时间，单位：秒，默认10s
+    @objc public var maxEditVideoTime: Second = 10
     
     /// 允许选择视频的最大时长
     @objc public var maxSelectVideoDuration: Second = 120

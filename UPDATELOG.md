@@ -2,6 +2,19 @@
 
 -----
 
+## [4.0.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.0) (2020-09-02)
+
+#### Add
+* 优化视频编辑功能;
+* 增加自定义列数功能;
+
+#### Fix
+* 修复单选情况下点击直接进入编辑界面未跳转的bug;
+* 修复拖拽选择的bug;
+* 修复视频播放完成后未恢复原状的bug;
+
+---
+
 ## [4.0.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.0) (2020-08-31)
 
 #### Add

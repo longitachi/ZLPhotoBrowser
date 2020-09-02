@@ -571,6 +571,64 @@ public class ZLPhotoPreviewSheet: UIView {
         self.sender?.showDetailViewController(nav, sender: nil)
     }
     
+    func showEditImageVC(model: ZLPhotoModel) {
+        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        hud.show()
+        
+        let asset = model.asset
+        let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * 2
+        let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
+        hud.show()
+        ZLPhotoManager.fetchImage(for: asset, size: size) { [weak self] (image, isDegraded) in
+            if !isDegraded {
+                if let image = image {
+                    let vc = ZLEditImageViewController(image: image)
+                    vc.editFinishBlock = { [weak self] (image) in
+                        model.isSelected = true
+                        model.editImage = image
+                        self?.arrSelectedModels.append(model)
+                        self?.requestSelectPhoto()
+                    }
+                    vc.modalPresentationStyle = .fullScreen
+                    self?.sender?.showDetailViewController(vc, sender: nil)
+                } else {
+                    showAlertView(localLanguageTextValue(.imageLoadFailed), self?.sender)
+                }
+                hud.hide()
+            }
+        }
+    }
+    
+    func showEditVideoVC(model: ZLPhotoModel) {
+        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        
+        var requestAvAssetID: PHImageRequestID?
+        
+        hud.show(timeout: 15)
+        hud.timeoutBlock = {
+            if let _ = requestAvAssetID {
+                PHImageManager.default().cancelImageRequest(requestAvAssetID!)
+            }
+        }
+        // 提前fetch一下 avasset
+        requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] (asset, _) in
+            hud.hide()
+            if asset == nil {
+                showAlertView(localLanguageTextValue(.timeout), self?.sender)
+            } else {
+                let vc = ZLEditVideoViewController(asset: model.asset)
+                vc.editFinishBlock = { [weak self] (asset) in
+                    let m = ZLPhotoModel(asset: asset)
+                    m.isSelected = true
+                    self?.arrSelectedModels.append(m)
+                    self?.requestSelectPhoto()
+                }
+                vc.modalPresentationStyle = .fullScreen
+                self?.sender?.showDetailViewController(vc, sender: nil)
+            }
+        }
+    }
+    
     func getImageNav(rootViewController: UIViewController) -> ZLImageNavController {
         let nav = ZLImageNavController(rootViewController: rootViewController)
         nav.modalPresentationStyle = .fullScreen
@@ -776,20 +834,15 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         let canEditVideo = ZLPhotoConfiguration.default().editAfterSelectThumbnailImage &&
             ZLPhotoConfiguration.default().allowEditVideo &&
             model.type == .video &&
-            ZLPhotoConfiguration.default().maxSelectCount == 1 &&
-            model.second >= ZLPhotoConfiguration.default().maxEditVideoTime &&
-            model.second <= ZLPhotoConfiguration.default().maxSelectVideoDuration &&
-            model.second >= ZLPhotoConfiguration.default().minSelectVideoDuration
+            ZLPhotoConfiguration.default().maxSelectCount == 1
         
         //当前未选择图片 或已经选择了一张并且点击的是已选择的图片
         let flag = self.arrSelectedModels.isEmpty || (self.arrSelectedModels.count == 1 && self.arrSelectedModels.first?.ident == model.ident)
         
         if canEditImage, flag {
-            // TODO: 跳转编辑图片界面
-            debugPrint("跳转编辑图片界面")
+            self.showEditImageVC(model: model)
         } else if canEditVideo, flag {
-            // TODO: 跳转编辑视频界面
-            debugPrint("跳转编辑视频界面")
+            self.showEditVideoVC(model: model)
         }
         
         return ZLPhotoConfiguration.default().editAfterSelectThumbnailImage && ZLPhotoConfiguration.default().maxSelectCount == 1 && (ZLPhotoConfiguration.default().allowEditImage || ZLPhotoConfiguration.default().allowEditVideo)

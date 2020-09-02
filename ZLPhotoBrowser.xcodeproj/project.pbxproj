@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E40ECF4824FFB8BB00A4D923 /* ZLPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40ECF4724FFB8BB00A4D923 /* ZLPhotoBrowser.swift */; };
 		E417AC0224F63E7E00EDDCD2 /* ZLEditImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E417AC0124F63E7E00EDDCD2 /* ZLEditImageViewController.swift */; };
 		E43EFA0C24F13747007067EC /* UIImage+ZLPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43EFA0B24F13747007067EC /* UIImage+ZLPhotoBrowser.swift */; };
 		E462465A24EB9ABF00EF6C57 /* ZLFetchImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462465924EB9ABF00EF6C57 /* ZLFetchImageOperation.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E40ECF4724FFB8BB00A4D923 /* ZLPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoBrowser.swift; sourceTree = "<group>"; };
 		E417AC0124F63E7E00EDDCD2 /* ZLEditImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditImageViewController.swift; sourceTree = "<group>"; };
 		E43EFA0524EFBE6C007067EC /* Kingfisher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Kingfisher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E43EFA0B24F13747007067EC /* UIImage+ZLPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+ZLPhotoBrowser.swift"; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				E462465924EB9ABF00EF6C57 /* ZLFetchImageOperation.swift */,
 				E492ABEC24E5454E005E1BD5 /* ZLProgressView.swift */,
 				E4CF57EB24EA63BA00BEBFC6 /* ZLProgressHUD.swift */,
+				E40ECF4724FFB8BB00A4D923 /* ZLPhotoBrowser.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				E4C911DA24E2A4910061DA40 /* ZLCustomCamera.swift in Sources */,
 				E462466024EBEEF800EF6C57 /* ZLAlbumListController.swift in Sources */,
 				E4C911D824E298B80061DA40 /* ZLGeneralDefine.swift in Sources */,
+				E40ECF4824FFB8BB00A4D923 /* ZLPhotoBrowser.swift in Sources */,
 				E462466C24ED163A00EF6C57 /* ZLCameraCell.swift in Sources */,
 				E462467224EE814500EF6C57 /* ZLPhotoPreviewViewController.swift in Sources */,
 				E462465E24EBE45000EF6C57 /* ZLImageNavController.swift in Sources */,

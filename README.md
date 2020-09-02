@@ -5,9 +5,7 @@
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
 <a href="http://www.jianshu.com/u/a02909a8a93b"><img src="https://img.shields.io/badge/JianShu-@longitachi-red.svg?style=flat"></a>
 
-![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/ZLPhotoBrowser.png)
-
-![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview.png)
+![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
 ----------------------------------------
 
@@ -57,6 +55,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.0.1: 优化视频编辑功能; 增加自定义列数功能; 修复一些bug;
 ● 4.0.0: 框架升级为纯`Swift`编写，最低支持右`iOS8`升级到`iOS10`;
 ● 3.2.0: 添加图片视频选择互斥功能（即只能选择1个视频或最多几张图片）; 添加选择量达到最大值时其他cell显示遮罩功能; 删除`allowMixSelect`,`maxVideoSelectCountInMix`,`minVideoSelectCountInMix`参数;
 ...

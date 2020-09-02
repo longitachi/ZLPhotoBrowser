@@ -103,6 +103,8 @@ class ViewController: UIViewController {
     }
     
     @objc func previewSelectPhoto() {
+        ZLPhotoConfiguration.default().editAfterSelectThumbnailImage = true
+        ZLPhotoConfiguration.default().maxSelectCount = 1
         let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
         ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
             self?.selectedImages = images
@@ -115,6 +117,8 @@ class ViewController: UIViewController {
     }
     
     @objc func librarySelectPhoto() {
+        ZLPhotoConfiguration.default().editAfterSelectThumbnailImage = true
+        ZLPhotoConfiguration.default().maxSelectCount = 1
         let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
         ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
             self?.selectedImages = images
