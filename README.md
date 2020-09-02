@@ -20,7 +20,7 @@
 ### 框架整体介绍
 * [功能介绍](#功能介绍)
 * [更新日志](#更新日志)
-* [安装方法(支持cocoapods/carthage安装)](#安装方法)
+* [安装方法(支持Cocoapods/Carthage/SPM安装)](#安装方法)
 * [效果图](#效果图)
 
 ### <a id="功能介绍"></a>功能介绍
@@ -79,8 +79,13 @@
   > 如找不到最新版本，可首先执行`pod repo update`
   
 * Carthage
-* 1.在Cartfile 中添加 `github "longitachi/ZLPhotoBrowser" ~> 4.0.0`
+  * 1.在Cartfile 中添加 `github "longitachi/ZLPhotoBrowser" ~> 4.0.0`
   * 2.执行 `carthage update ZLPhotoBrowser --platform iOS`
+  
+* Swift Package Manager
+  * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
+  * 2. 输入对应版本号（SPM 最低版本为 `5.0.1`）
+  * 3. 等Xcode下载完成后确定即可
   
 
 第二步：
