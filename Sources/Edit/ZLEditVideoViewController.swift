@@ -67,14 +67,14 @@ public class ZLEditVideoViewController: UIViewController {
     
     var videoRequestID = PHInvalidImageRequestID
     
-    var frameImageCache: [IndexPath: UIImage] = [:]
+    var frameImageCache: [Int: UIImage] = [:]
     
     var shouldLayout = true
     
     lazy var generator: AVAssetImageGenerator? = {
         if let avAsset = self.avAsset {
             let g = AVAssetImageGenerator(asset: avAsset)
-            g.maximumSize = CGSize(width: ZLEditVideoViewController.frameImageSize.width * 2, height: ZLEditVideoViewController.frameImageSize.height * 2)
+            g.maximumSize = CGSize(width: ZLEditVideoViewController.frameImageSize.width * 3, height: ZLEditVideoViewController.frameImageSize.height * 3)
             g.appliesPreferredTrackTransform = true
             g.requestedTimeToleranceBefore = .zero
             g.requestedTimeToleranceAfter = .zero
@@ -97,6 +97,7 @@ public class ZLEditVideoViewController: UIViewController {
     deinit {
         debugPrint("ZLEditVideoViewController deinit")
         self.cleanTimer()
+        self.requestFrameImageQueue.cancelAllOperations()
         if self.avAssetRequestID > PHInvalidImageRequestID {
             PHImageManager.default().cancelImageRequest(self.avAssetRequestID)
         }
@@ -120,7 +121,10 @@ public class ZLEditVideoViewController: UIViewController {
         self.setupUI()
         
         self.requestFrameImageQueue = OperationQueue()
-        self.requestFrameImageQueue.maxConcurrentOperationCount = 5
+        self.requestFrameImageQueue.maxConcurrentOperationCount = 10
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -315,6 +319,15 @@ public class ZLEditVideoViewController: UIViewController {
         }
     }
     
+    @objc func appWillResignActive() {
+        self.cleanTimer()
+        self.indicator.layer.removeAllAnimations()
+    }
+    
+    @objc func appDidBecomeActive() {
+        self.startTimer()
+    }
+    
     func analysisAssetImages() {
         let duration = round(self.asset.duration)
         self.measureCount = Int(duration / self.interval)
@@ -337,9 +350,28 @@ public class ZLEditVideoViewController: UIViewController {
             if let avAsset = avAsset {
                 self?.avAsset = avAsset
                 self?.collectionView.reloadData()
+                self?.requestVideoMeasureFrameImage()
             } else {
                 self?.showFetchFailedAlert()
             }
+        }
+    }
+    
+    func requestVideoMeasureFrameImage() {
+        guard let avAsset = self.avAsset, let g = self.generator else {
+            return
+        }
+        
+        for i in 0..<self.measureCount {
+            let i = Int32(TimeInterval(i) * self.interval)
+            let time = CMTimeMake(value: Int64((i * avAsset.duration.timescale)), timescale: avAsset.duration.timescale)
+            
+            let operation = ZLEditVideoFetchFrameImageOperation(generator: g, time: time) { [weak self] (image, time) in
+                self?.frameImageCache[Int(i)] = image
+                let cell = self?.collectionView.cellForItem(at: IndexPath(row: Int(i), section: 0)) as? ZLEditVideoFrameImageCell
+                cell?.imageView.image = image
+            }
+            self.requestFrameImageQueue.addOperation(operation)
         }
     }
     
@@ -460,35 +492,11 @@ extension ZLEditVideoViewController: UICollectionViewDataSource, UICollectionVie
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLEditVideoFrameImageCell.zl_identifier(), for: indexPath) as! ZLEditVideoFrameImageCell
         
-        cell.imageView.image = self.frameImageCache[indexPath]
+        if let image = self.frameImageCache[indexPath.row] {
+            cell.imageView.image = image
+        }
         
         return cell
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let avAsset = self.avAsset, let g = self.generator else {
-            return
-        }
-        guard self.frameImageCache[indexPath] == nil else {
-            return
-        }
-        let cell = cell as! ZLEditVideoFrameImageCell
-        cell.operation?.cancel()
-        
-        let i = Int32(TimeInterval(indexPath.row) * self.interval)
-        let time = CMTimeMake(value: Int64((i * avAsset.duration.timescale)), timescale: avAsset.duration.timescale)
-        let operation = ZLEditVideoFetchFrameImageOperation(generator: g, time: time) { [weak self, weak cell] (image) in
-            self?.frameImageCache[indexPath] = image
-            cell?.imageView.image = image
-            cell?.operation = nil
-        }
-        self.requestFrameImageQueue.addOperation(operation)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let cell = cell as! ZLEditVideoFrameImageCell
-        cell.operation?.cancel()
-        cell.operation = nil
     }
     
 }
@@ -531,20 +539,7 @@ class ZLEditVideoFrameImageBorderView: UIView {
 }
 
 
-private var operationKey = "edgeKey"
 class ZLEditVideoFrameImageCell: UICollectionViewCell {
-    
-    var operation: Operation? {
-        get {
-            if let temp = objc_getAssociatedObject(self, &operationKey) as? Operation  {
-                return temp
-            }
-            return nil
-        }
-        set {
-            objc_setAssociatedObject(self, &operationKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
     
     var imageView: UIImageView!
     
@@ -575,7 +570,7 @@ class ZLEditVideoFetchFrameImageOperation: Operation {
     
     let time: CMTime
     
-    let completion: ( (UIImage?) -> Void )
+    let completion: ( (UIImage?, CMTime) -> Void )
     
     var pri_isExecuting = false {
         willSet {
@@ -603,7 +598,20 @@ class ZLEditVideoFetchFrameImageOperation: Operation {
         return self.pri_isFinished
     }
     
-    init(generator: AVAssetImageGenerator, time: CMTime, completion: @escaping ( (UIImage?) -> Void )) {
+    var pri_isCancelled = false {
+        willSet {
+            self.willChangeValue(forKey: "isCancelled")
+        }
+        didSet {
+            self.didChangeValue(forKey: "isCancelled")
+        }
+    }
+
+    override var isCancelled: Bool {
+        return self.pri_isCancelled
+    }
+    
+    init(generator: AVAssetImageGenerator, time: CMTime, completion: @escaping ( (UIImage?, CMTime) -> Void )) {
         self.generator = generator
         self.time = time
         self.completion = completion
@@ -611,20 +619,21 @@ class ZLEditVideoFetchFrameImageOperation: Operation {
     }
     
     override func start() {
-        
+        if self.isCancelled {
+            self.fetchFinish()
+            return
+        }
         self.pri_isExecuting = true
-        do {
-            let cgImage = try self.generator.copyCGImage(at: self.time, actualTime: nil)
-            let image = UIImage(cgImage: cgImage)
-            DispatchQueue.main.async {
-                self.completion(image)
+        self.generator.generateCGImagesAsynchronously(forTimes: [NSValue(time: self.time)]) { (_, cgImage, _, result, error) in
+            if result == .succeeded, let cg = cgImage {
+                let image = UIImage(cgImage: cg)
+                DispatchQueue.main.async {
+                    self.completion(image, self.time)
+                }
+                self.fetchFinish()
+            } else {
+                self.fetchFinish()
             }
-            self.fetchFinish()
-        } catch {
-            DispatchQueue.main.async {
-                self.completion(nil)
-            }
-            self.fetchFinish()
         }
     }
     
@@ -634,7 +643,8 @@ class ZLEditVideoFetchFrameImageOperation: Operation {
     }
     
     override func cancel() {
-        self.fetchFinish()
+        super.cancel()
+        self.pri_isCancelled = true
     }
     
 }

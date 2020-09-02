@@ -447,6 +447,10 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     func addNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        
+        if ZLPhotoConfiguration.default().allowRecordVideo {
+            NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        }
     }
     
     func showAlertAndDismissAfterDoneAction(message: String) {
@@ -498,6 +502,15 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         if self.session.isRunning {
             self.dismiss(animated: true, completion: nil)
         }
+        if self.videoUrl != nil, let player = self.recordVideoPlayerLayer?.player {
+            player.pause()
+        }
+    }
+    
+    @objc func appDidBecomeActive() {
+        if self.videoUrl != nil, let player = self.recordVideoPlayerLayer?.player {
+            player.play()
+        }
     }
     
     @objc func dismissBtnClick() {
@@ -513,6 +526,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             self.recordVideoPlayerLayer?.player?.pause()
             self.recordVideoPlayerLayer?.player = nil
             self.recordVideoPlayerLayer?.isHidden = true
+            self.videoUrl = nil
             try? FileManager.default.removeItem(at: url)
         }
     }

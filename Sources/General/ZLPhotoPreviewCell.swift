@@ -339,7 +339,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         self.playBtn.addTarget(self, action: #selector(playBtnClick), for: .touchUpInside)
         self.contentView.addSubview(self.playBtn)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(pauseAndCallSingleTap), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
     }
     
     func configureCell() {
@@ -416,22 +416,33 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     @objc func pauseAndCallSingleTap() {
-        if self.isPlaying {
-            self.player?.pause()
-            self.playBtn.setImage(getImage("zl_playVideo"), for: .normal)
-            self.singleTapBlock?()
+        self.pausePlayer(seekToZero: true)
+    }
+    
+    @objc func appWillResignActive() {
+        if self.player != nil, self.player?.rate != 0 {
+            self.pausePlayer(seekToZero: false)
         }
     }
     
     override func previewVCScroll() {
         if self.player != nil, self.player?.rate != 0 {
-            self.pauseAndCallSingleTap()
+            self.pausePlayer(seekToZero: false)
         }
     }
     
     override func resetSubViewStatusWhenCellEndDisplay() {
         self.imageView.isHidden = false
         self.player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+    }
+    
+    func pausePlayer(seekToZero: Bool) {
+        self.player?.pause()
+        if seekToZero {
+            self.player?.seek(to: .zero)
+        }
+        self.playBtn.setImage(getImage("zl_playVideo"), for: .normal)
+        self.singleTapBlock?()
     }
     
 }
