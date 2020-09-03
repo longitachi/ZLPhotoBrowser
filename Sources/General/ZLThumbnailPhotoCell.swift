@@ -199,7 +199,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.btnSelect.isSelected = self.model.isSelected
         self.btnSelect.zl_enlargeValidTouchArea(insets: UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 0))
         
-        self.indexLabel.backgroundColor = ZLPhotoConfiguration.default().indexLabelBgColor
+        self.indexLabel.backgroundColor = .indexLabelBgColor
         
         if self.model.isSelected {
             self.fetchBigImage()

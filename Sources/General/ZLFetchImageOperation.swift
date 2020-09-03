@@ -63,6 +63,19 @@ class ZLFetchImageOperation: Operation {
         return self.pri_isFinished
     }
     
+    var pri_isCancelled = false {
+        willSet {
+            self.willChangeValue(forKey: "isCancelled")
+        }
+        didSet {
+            self.didChangeValue(forKey: "isCancelled")
+        }
+    }
+
+    override var isCancelled: Bool {
+        return self.pri_isCancelled
+    }
+    
     init(model: ZLPhotoModel, isOriginal: Bool, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, PHAsset?) -> Void )) {
         self.model = model
         self.isOriginal = isOriginal
@@ -72,6 +85,10 @@ class ZLFetchImageOperation: Operation {
     }
     
     override func start() {
+        if self.isCancelled {
+            self.fetchFinish()
+            return
+        }
         debugPrint("---- start fetch")
         self.pri_isExecuting = true
         
@@ -133,6 +150,11 @@ class ZLFetchImageOperation: Operation {
     func fetchFinish() {
         self.pri_isExecuting = false
         self.pri_isFinished = true
+    }
+    
+    override func cancel() {
+        super.cancel()
+        self.pri_isCancelled = true
     }
     
 }

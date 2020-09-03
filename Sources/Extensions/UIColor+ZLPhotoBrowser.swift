@@ -113,4 +113,24 @@ extension UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.cameraRecodeProgressColor
     }
     
+    /// 遮罩层颜色
+    class var selectedMaskColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.selectedMaskColor
+    }
+    
+    /// 不能选择的cell上方遮罩层颜色
+    class var invalidMaskColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.invalidMaskColor
+    }
+    
+    /// 选中图片右上角index background color
+    class var indexLabelBgColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.indexLabelBgColor
+    }
+    
+    /// 拍照cell 背景颜色
+    class var cameraCellBgColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.cameraCellBgColor
+    }
+    
 }

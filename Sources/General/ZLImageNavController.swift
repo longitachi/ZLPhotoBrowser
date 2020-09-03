@@ -54,6 +54,7 @@ class ZLImageNavController: UINavigationController {
         self.navigationBar.barStyle = .black
         self.navigationBar.isTranslucent = true
         self.modalPresentationStyle = .fullScreen
+        self.isNavigationBarHidden = true
         
         let colorDeploy = ZLPhotoConfiguration.default().themeColorDeploy
         self.navigationBar.setBackgroundImage(self.image(color: colorDeploy.navBarColor), for: .default)

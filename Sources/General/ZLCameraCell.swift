@@ -70,7 +70,7 @@ class ZLCameraCell: UICollectionViewCell {
         self.imageView.contentMode = .scaleAspectFit
         self.imageView.clipsToBounds = true
         self.contentView.addSubview(self.imageView)
-        self.backgroundColor = UIColor(white: 0.8, alpha: 1)
+        self.backgroundColor = .cameraCellBgColor
     }
     
     func startCapture() {

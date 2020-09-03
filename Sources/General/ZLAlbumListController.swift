@@ -27,8 +27,16 @@
 import UIKit
 import Photos
 
-class ZLAlbumListController: UITableViewController {
+class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    var navView: UIView!
+    
+    var albumTitleLabel: UILabel!
+    
+    var cancelBtn: UIButton!
+    
+    var tableView: UITableView!
+    
     var arrDataSource: [ZLAlbumListModel] = []
     
     var shouldReloadAlbumList = true
@@ -64,29 +72,61 @@ class ZLAlbumListController: UITableViewController {
         }
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        var insets = UIEdgeInsets.zero
+        if #available(iOS 11.0, *) {
+            insets = self.view.safeAreaInsets
+        }
+        let navH = insets.top + 44
+        self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: navH)
+        
+        let albumTitleW = localLanguageTextValue(.photo).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width
+        self.albumTitleLabel.frame = CGRect(x: (self.view.frame.width-albumTitleW)/2, y: insets.top, width: albumTitleW, height: 44)
+        let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width + 40
+        self.cancelBtn.frame = CGRect(x: self.view.frame.width-insets.right-cancelBtnW, y: insets.top, width: cancelBtnW, height: 44)
+        
+        self.tableView.frame = CGRect(x: insets.left, y: 0, width: self.view.frame.width - insets.left - insets.right, height: self.view.frame.height)
+        self.tableView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
+    }
+    
     func setupUI() {
-        self.edgesForExtendedLayout = .top
-        self.title = localLanguageTextValue(.photo)
+        self.view.backgroundColor = .albumListBgColor
+        
+        self.tableView = UITableView(frame: .zero, style: .plain)
         self.tableView.backgroundColor = .albumListBgColor
         self.tableView.tableFooterView = UIView()
         self.tableView.rowHeight = 65
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
         self.tableView.separatorColor = .separatorColor
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.view.addSubview(self.tableView)
+        
         ZLAlbumListCell.zl_register(self.tableView)
         
         if #available(iOS 11.0, *) {
             self.tableView.contentInsetAdjustmentBehavior = .always
         }
         
-        let cancelBtn = UIButton(type: .custom)
-        let title = localLanguageTextValue(.previewCancel)
-        let size = title.boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44))
-        cancelBtn.frame = CGRect(x: 0, y: 0, width: size.width, height: 44)
-        cancelBtn.titleLabel?.font = getFont(16)
-        cancelBtn.setTitle(title, for: .normal)
-        cancelBtn.setTitleColor(.navTitleColor, for: .normal)
-        cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cancelBtn)
+        self.navView = UIView()
+        self.navView.backgroundColor = .navBarColor
+        self.view.addSubview(self.navView)
+        
+        self.albumTitleLabel = UILabel()
+        self.albumTitleLabel.textColor = .navTitleColor
+        self.albumTitleLabel.font = ZLLayout.navTitleFont
+        self.albumTitleLabel.text = localLanguageTextValue(.photo)
+        self.albumTitleLabel.textAlignment = .center
+        self.navView.addSubview(self.albumTitleLabel)
+        
+        self.cancelBtn = UIButton(type: .custom)
+        self.cancelBtn.titleLabel?.font = ZLLayout.navTitleFont
+        self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
+        self.cancelBtn.setTitleColor(.navTitleColor, for: .normal)
+        self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
+        self.navView.addSubview(self.cancelBtn)
     }
     
     @objc func cancelBtnClick() {
@@ -94,19 +134,12 @@ class ZLAlbumListController: UITableViewController {
         nav?.cancelBlock?()
         nav?.dismiss(animated: true, completion: nil)
     }
-    
-    // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.arrDataSource.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ZLAlbumListCell.zl_identifier(), for: indexPath) as! ZLAlbumListCell
         
         cell.model = self.arrDataSource[indexPath.row]
@@ -114,7 +147,7 @@ class ZLAlbumListController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let vc = ZLThumbnailViewController(albumList: self.arrDataSource[indexPath.row])

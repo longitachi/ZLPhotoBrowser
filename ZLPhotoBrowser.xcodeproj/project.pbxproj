@@ -38,6 +38,8 @@
 		E4CF57EC24EA63BA00BEBFC6 /* ZLProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CF57EB24EA63BA00BEBFC6 /* ZLProgressHUD.swift */; };
 		E4CF57EE24EA73EF00BEBFC6 /* UIControl+ZLPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CF57ED24EA73EF00BEBFC6 /* UIControl+ZLPhotoBrowser.swift */; };
 		E4CF57F024EA923C00BEBFC6 /* ZLLanguageDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CF57EF24EA923C00BEBFC6 /* ZLLanguageDefine.swift */; };
+		E4D046F02500A341000BAEC2 /* ZLPreviewImagePopAnimatedTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D046EF2500A341000BAEC2 /* ZLPreviewImagePopAnimatedTransition.swift */; };
+		E4D046F22500A361000BAEC2 /* ZLPreviewImagePopInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D046F12500A361000BAEC2 /* ZLPreviewImagePopInteractiveTransition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +77,8 @@
 		E4CF57EB24EA63BA00BEBFC6 /* ZLProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLProgressHUD.swift; sourceTree = "<group>"; };
 		E4CF57ED24EA73EF00BEBFC6 /* UIControl+ZLPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+ZLPhotoBrowser.swift"; sourceTree = "<group>"; };
 		E4CF57EF24EA923C00BEBFC6 /* ZLLanguageDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLLanguageDefine.swift; sourceTree = "<group>"; };
+		E4D046EF2500A341000BAEC2 /* ZLPreviewImagePopAnimatedTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPreviewImagePopAnimatedTransition.swift; sourceTree = "<group>"; };
+		E4D046F12500A361000BAEC2 /* ZLPreviewImagePopInteractiveTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPreviewImagePopInteractiveTransition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +135,8 @@
 		E4C911CB24E286530061DA40 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				E4D046EF2500A341000BAEC2 /* ZLPreviewImagePopAnimatedTransition.swift */,
+				E4D046F12500A361000BAEC2 /* ZLPreviewImagePopInteractiveTransition.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -281,6 +287,7 @@
 				E4CF57EC24EA63BA00BEBFC6 /* ZLProgressHUD.swift in Sources */,
 				E4C911DC24E2A69B0061DA40 /* ZLPhotoModel.swift in Sources */,
 				E417AC0224F63E7E00EDDCD2 /* ZLEditImageViewController.swift in Sources */,
+				E4D046F22500A361000BAEC2 /* ZLPreviewImagePopInteractiveTransition.swift in Sources */,
 				E462466224EBF06F00EF6C57 /* String+ZLPhotoBrowser.swift in Sources */,
 				E462466424EBF36F00EF6C57 /* UIColor+ZLPhotoBrowser.swift in Sources */,
 				E462467624EF6A7D00EF6C57 /* ZLPhotoPreviewCell.swift in Sources */,
@@ -288,6 +295,7 @@
 				E492ABEB24E53575005E1BD5 /* Cell+ZLPhotoBrowser.swift in Sources */,
 				E4CF57EE24EA73EF00BEBFC6 /* UIControl+ZLPhotoBrowser.swift in Sources */,
 				E49BD1FB24E3D515005D7DFB /* Bundle+ZLPhotoBrowser.swift in Sources */,
+				E4D046F02500A341000BAEC2 /* ZLPreviewImagePopAnimatedTransition.swift in Sources */,
 				E462465A24EB9ABF00EF6C57 /* ZLFetchImageOperation.swift in Sources */,
 				E4C911DE24E2AA950061DA40 /* ZLAlbumListModel.swift in Sources */,
 				E49BD1F724E3CD9E005D7DFB /* ZLThumbnailPhotoCell.swift in Sources */,

@@ -28,6 +28,24 @@ import UIKit
 
 let ZLMaxImageWidth: CGFloat = 600
 
+struct ZLLayout {
+    
+    static let navTitleFont = getFont(17)
+    
+    static let bottomToolViewH: CGFloat = 55
+    
+    static let bottomToolBtnH: CGFloat = 34
+    
+    static let bottomToolTitleFont = getFont(17)
+    
+    static let bottomToolBtnCornerRadius: CGFloat = 5
+    
+    static let thumbCollectionViewItemSpacing: CGFloat = 2
+    
+    static let thumbCollectionViewLineSpacing: CGFloat = 2
+    
+}
+
 func zlRGB(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) -> UIColor {
     return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1)
 }

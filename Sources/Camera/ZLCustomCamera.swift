@@ -216,11 +216,11 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.retakeBtn.frame = CGRect(x: 30, y: insets.top+10, width: 28, height: 28)
         self.toggleCameraBtn.frame = CGRect(x: self.view.bounds.width-30-28, y: insets.top+10, width: 28, height: 28)
         
-        let editBtnW = localLanguageTextValue(.edit).boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width
-        self.editBtn.frame = CGRect(x: 20, y: self.view.bounds.height - insets.bottom - ZLThumbnailViewController.Layout.bottomToolBtnH - 40, width: editBtnW, height: ZLThumbnailViewController.Layout.bottomToolBtnH)
+        let editBtnW = localLanguageTextValue(.edit).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width
+        self.editBtn.frame = CGRect(x: 20, y: self.view.bounds.height - insets.bottom - ZLLayout.bottomToolBtnH - 40, width: editBtnW, height: ZLLayout.bottomToolBtnH)
         
-        let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width + 20
-        self.doneBtn.frame = CGRect(x: self.view.bounds.width - doneBtnW - 20, y: self.view.bounds.height - insets.bottom - ZLThumbnailViewController.Layout.bottomToolBtnH - 40, width: doneBtnW, height: ZLThumbnailViewController.Layout.bottomToolBtnH)
+        let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width + 20
+        self.doneBtn.frame = CGRect(x: self.view.bounds.width - doneBtnW - 20, y: self.view.bounds.height - insets.bottom - ZLLayout.bottomToolBtnH - 40, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
     func setupUI() {
@@ -307,7 +307,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.view.addSubview(self.toggleCameraBtn)
         
         self.editBtn = UIButton(type: .custom)
-        self.editBtn.titleLabel?.font = ZLThumbnailViewController.Layout.bottomToolTitleFont
+        self.editBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.editBtn.setTitle(localLanguageTextValue(.edit), for: .normal)
         self.editBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
         self.editBtn.addTarget(self, action: #selector(editBtnClick), for: .touchUpInside)
@@ -319,14 +319,14 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.view.addSubview(self.editBtn)
         
         self.doneBtn = UIButton(type: .custom)
-        self.doneBtn.titleLabel?.font = ZLThumbnailViewController.Layout.bottomToolTitleFont
+        self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
         self.doneBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
         self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         self.doneBtn.isHidden = true
         self.doneBtn.layer.masksToBounds = true
-        self.doneBtn.layer.cornerRadius = 5
+        self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         self.view.addSubview(self.doneBtn)
         
         let focusCursorTap = UITapGestureRecognizer(target: self, action: #selector(adjustFocusPoint))

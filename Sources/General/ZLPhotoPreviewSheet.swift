@@ -549,7 +549,7 @@ public class ZLPhotoPreviewSheet: UIView {
     func showThumbnailViewController() {
         ZLPhotoManager.getCameraRollAlbum(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (cameraRoll) in
             guard let `self` = self else { return }
-            let albumListVC = ZLAlbumListController(style: .plain)
+            let albumListVC = ZLAlbumListController()
             let nav = self.getImageNav(rootViewController: albumListVC)
             let tvc = ZLThumbnailViewController(albumList: cameraRoll)
             nav.pushViewController(tvc, animated: true)
@@ -914,18 +914,18 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         cell.enableSelect = true
         
         if isSelected {
-            cell.coverView.backgroundColor = ZLPhotoConfiguration.default().selectedMaskColor
+            cell.coverView.backgroundColor = .selectedMaskColor
             cell.coverView.isHidden = !ZLPhotoConfiguration.default().showSelectedMask
         } else {
             let selCount = self.arrSelectedModels.count
             if selCount < ZLPhotoConfiguration.default().maxSelectCount, selCount > 0 {
                 if !ZLPhotoConfiguration.default().allowMixSelect {
-                    cell.coverView.backgroundColor = ZLPhotoConfiguration.default().invalidMaskColor
+                    cell.coverView.backgroundColor = .invalidMaskColor
                     cell.coverView.isHidden = (!ZLPhotoConfiguration.default().showInvalidMask || model.type != .video)
                     cell.enableSelect = model.type != .video
                 }
             } else if selCount >= ZLPhotoConfiguration.default().maxSelectCount {
-                cell.coverView.backgroundColor = ZLPhotoConfiguration.default().invalidMaskColor
+                cell.coverView.backgroundColor = .invalidMaskColor
                 cell.coverView.isHidden = ZLPhotoConfiguration.default().showInvalidMask
                 cell.enableSelect = false
             }

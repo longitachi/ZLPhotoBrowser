@@ -32,6 +32,10 @@ class ZLPreviewBaseCell: UICollectionViewCell {
     
     var singleTapBlock: ( () -> Void )?
     
+    var currentImage: UIImage? {
+        return nil
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -50,11 +54,80 @@ class ZLPreviewBaseCell: UICollectionViewCell {
         
     }
     
+    func resizeImageView(imageView: UIImageView, asset: PHAsset) {
+        let size = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+        var frame: CGRect = .zero
+        
+        let viewW = self.bounds.width
+        let viewH = self.bounds.height
+        
+        var width = min(viewW, size.width)
+        
+        if UIApplication.shared.statusBarOrientation.isLandscape {
+            let height = min(self.bounds.height, size.height)
+            frame.size.height = height
+            
+            let imageWHRatio = size.width / size.height
+            let viewWHRatio = viewW / viewH
+            
+            if imageWHRatio > viewWHRatio {
+                frame.size.width = floor(height * imageWHRatio)
+                if frame.size.width > viewW {
+                    frame.size.width = viewW
+                    frame.size.height = viewW / imageWHRatio
+                }
+            } else {
+                width = floor(height * imageWHRatio)
+                if width < 1 || width.isNaN {
+                    width = viewW
+                }
+                frame.size.width = width
+            }
+        } else {
+            frame.size.width = width
+            
+            let imageHWRatio = size.height / size.width
+            let viewHWRatio = viewH / viewW
+            
+            if imageHWRatio > viewHWRatio {
+                frame.size.height = floor(width * imageHWRatio)
+            } else {
+                var height = floor(width * imageHWRatio)
+                if height < 1 || height.isNaN {
+                    height = viewH
+                }
+                frame.size.height = height
+            }
+        }
+        
+        imageView.frame = frame
+        
+        if UIApplication.shared.statusBarOrientation.isLandscape {
+            if frame.height < viewH {
+                imageView.center = CGPoint(x: viewW / 2, y: viewH / 2)
+            } else {
+                imageView.frame = CGRect(origin: CGPoint(x: (viewW-frame.width)/2, y: 0), size: frame.size)
+            }
+        } else {
+            if frame.width < viewW || frame.height < viewH {
+                imageView.center = CGPoint(x: viewW / 2, y: viewH / 2)
+            }
+        }
+    }
+    
+    func animateImageFrame(convertTo view: UIView) -> CGRect {
+        return .zero
+    }
+    
 }
 
 
 // MARK: static image preview cell
 class ZLPhotoPreviewCell: ZLPreviewBaseCell {
+    
+    override var currentImage: UIImage? {
+        return self.preview.image
+    }
     
     var preview: ZLPreviewView!
     
@@ -94,11 +167,19 @@ class ZLPhotoPreviewCell: ZLPreviewBaseCell {
         self.preview.scrollView.zoomScale = 1
     }
     
+    override func animateImageFrame(convertTo view: UIView) -> CGRect {
+        return self.convert(self.preview.containerView.frame, to: view)
+    }
+    
 }
 
 
 // MARK: gif preview cell
 class ZLGifPreviewCell: ZLPreviewBaseCell {
+    
+    override var currentImage: UIImage? {
+        return self.preview.image
+    }
     
     var preview: ZLPreviewView!
     
@@ -142,6 +223,10 @@ class ZLGifPreviewCell: ZLPreviewBaseCell {
         self.preview.resumeGif()
     }
     
+    func pauseGif() {
+        self.preview.pauseGif()
+    }
+    
     /// gif图加载会导致主线程卡顿一下，所以放在willdisplay时候加载
     func loadGifWhenCellDisplaying() {
         self.preview.loadGifData()
@@ -151,11 +236,19 @@ class ZLGifPreviewCell: ZLPreviewBaseCell {
         self.preview.scrollView.zoomScale = 1
     }
     
+    override func animateImageFrame(convertTo view: UIView) -> CGRect {
+        return self.convert(self.preview.containerView.frame, to: view)
+    }
+    
 }
 
 
 // MARK: live photo preview cell
 class ZLLivePhotoPewviewCell: ZLPreviewBaseCell {
+    
+    override var currentImage: UIImage? {
+        return self.imageView.image
+    }
     
     var livePhotoView: PHLivePhotoView!
     
@@ -191,7 +284,7 @@ class ZLLivePhotoPewviewCell: ZLPreviewBaseCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         self.livePhotoView.frame = self.bounds
-        self.imageView.frame = self.bounds
+        self.resizeImageView(imageView: self.imageView, asset: self.model.asset)
     }
     
     private func setupUI() {
@@ -223,6 +316,7 @@ class ZLLivePhotoPewviewCell: ZLPreviewBaseCell {
         let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * scale
         let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
         
+        self.resizeImageView(imageView: self.imageView, asset: self.model.asset)
         self.imageRequestID = ZLPhotoManager.fetchImage(for: asset, size: size, completion: { [weak self] (image, isDegread) in
             self?.imageView.image = image
         })
@@ -252,11 +346,19 @@ class ZLLivePhotoPewviewCell: ZLPreviewBaseCell {
         self.livePhotoView.startPlayback(with: .full)
     }
     
+    override func animateImageFrame(convertTo view: UIView) -> CGRect {
+        return self.convert(self.imageView.frame, to: view)
+    }
+    
 }
 
 
 // MARK: video preview cell
 class ZLVideoPreviewCell: ZLPreviewBaseCell {
+    
+    override var currentImage: UIImage? {
+        return self.imageView.image
+    }
     
     var player: AVPlayer?
     
@@ -307,7 +409,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         self.playerLayer?.frame = self.bounds
-        self.imageView.frame = self.bounds
+        self.resizeImageView(imageView: self.imageView, asset: self.model.asset)
         let insets = deviceSafeAreaInsets()
         self.playBtn.frame = CGRect(x: 0, y: insets.top, width: self.bounds.width, height: self.bounds.height - insets.top - insets.bottom)
         self.syncErrorLabel.frame = CGRect(x: 10, y: insets.top + 60, width: self.bounds.width - 20, height: 35)
@@ -363,6 +465,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * scale
         let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
         
+        self.resizeImageView(imageView: self.imageView, asset: self.model.asset)
         self.imageRequestID = ZLPhotoManager.fetchImage(for: asset, size: size, completion: { (image, isDegraded) in
             self.imageView.image = image
         })
@@ -396,7 +499,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         self.playerLayer = AVPlayerLayer(player: self.player)
         self.playerLayer?.frame = self.bounds
         self.layer.insertSublayer(self.playerLayer!, at: 0)
-        NotificationCenter.default.addObserver(self, selector: #selector(pauseAndCallSingleTap), name: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
     }
     
     @objc func playBtnClick() {
@@ -411,11 +514,11 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
             self.playBtn.setImage(nil, for: .normal)
             self.singleTapBlock?()
         } else {
-            self.pauseAndCallSingleTap()
+            self.pausePlayer(seekToZero: false)
         }
     }
     
-    @objc func pauseAndCallSingleTap() {
+    @objc func playFinish() {
         self.pausePlayer(seekToZero: true)
     }
     
@@ -445,6 +548,10 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         self.singleTapBlock?()
     }
     
+    override func animateImageFrame(convertTo view: UIView) -> CGRect {
+        return self.convert(self.imageView.frame, to: view)
+    }
+    
 }
 
 
@@ -457,6 +564,8 @@ class ZLPreviewView: UIView {
     var containerView: UIView!
     
     var imageView: UIImageView!
+    
+    var image: UIImage?
     
     var progressView: ZLProgressView!
     
@@ -574,6 +683,7 @@ class ZLPreviewView: UIView {
     func loadPhoto() {
         if let editImage = self.model.editImage {
             self.imageView.image = editImage
+            self.image = editImage
             self.resetSubViewSize()
         } else {
             self.imageRequestID = ZLPhotoManager.fetchImage(for: self.model.asset, size: self.requestPhotoSize(gif: false), progress: { [weak self] (progress, _, _, _) in
@@ -588,6 +698,7 @@ class ZLPreviewView: UIView {
                     return
                 }
                 self?.imageView.image = image
+                self?.image = image
                 self?.resetSubViewSize()
                 if !isDegraded {
                     self?.progressView.isHidden = true
@@ -605,6 +716,7 @@ class ZLPreviewView: UIView {
                 return
             }
             self?.imageView.image = image
+            self?.image = image
             self?.resetSubViewSize()
         })
     }

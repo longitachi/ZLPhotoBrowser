@@ -150,16 +150,16 @@ public class ZLEditVideoViewController: UIViewController {
             insets = self.view.safeAreaInsets
         }
         
-        let btnH = ZLThumbnailViewController.Layout.bottomToolBtnH
+        let btnH = ZLLayout.bottomToolBtnH
         let bottomBtnAndColSpacing: CGFloat = 20
         let playerLayerY = insets.top + 20
         let diffBottom = btnH + ZLEditVideoViewController.frameImageSize.height + bottomBtnAndColSpacing + insets.bottom + 30
         
         self.playerLayer.frame = CGRect(x: 15, y: insets.top + 20, width: self.view.bounds.width - 30, height: self.view.bounds.height - playerLayerY - diffBottom)
         
-        let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width
+        let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width
         self.cancelBtn.frame = CGRect(x: 20, y: self.view.bounds.height - insets.bottom - btnH, width: cancelBtnW, height: btnH)
-        let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width + 20
+        let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width + 20
         self.doneBtn.frame = CGRect(x: self.view.bounds.width-doneBtnW-20, y: self.view.bounds.height - insets.bottom - btnH, width: doneBtnW, height: btnH)
         
         self.collectionView.frame = CGRect(x: 0, y: self.doneBtn.frame.minY - bottomBtnAndColSpacing - ZLEditVideoViewController.frameImageSize.height, width: self.view.bounds.width, height: ZLEditVideoViewController.frameImageSize.height)
@@ -226,18 +226,18 @@ public class ZLEditVideoViewController: UIViewController {
         self.cancelBtn = UIButton(type: .custom)
         self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
         self.cancelBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
-        self.cancelBtn.titleLabel?.font = ZLThumbnailViewController.Layout.bottomToolTitleFont
+        self.cancelBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         self.view.addSubview(self.cancelBtn)
         
         self.doneBtn = UIButton(type: .custom)
         self.doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
         self.doneBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
-        self.doneBtn.titleLabel?.font = ZLThumbnailViewController.Layout.bottomToolTitleFont
+        self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         self.doneBtn.layer.masksToBounds = true
-        self.doneBtn.layer.cornerRadius = 5
+        self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         self.view.addSubview(self.doneBtn)
     }
     

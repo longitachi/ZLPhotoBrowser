@@ -39,25 +39,19 @@ extension ZLThumbnailViewController {
         
     }
     
-    struct Layout {
-        
-        static let bottomToolViewH: CGFloat = 55
-        
-        static let bottomToolBtnH: CGFloat = 34
-        
-        static let bottomToolTitleFont = getFont(17)
-        
-        static let collectionViewItemSpacing: CGFloat = 2
-        
-        static let collectionViewLineSpacing: CGFloat = 2
-        
-    }
-    
 }
 
 class ZLThumbnailViewController: UIViewController {
 
     let albumList: ZLAlbumListModel
+    
+    var navView: UIView!
+    
+    var backBtn: UIButton!
+    
+    var albumTitleLabel: UILabel!
+    
+    var cancelBtn: UIButton!
     
     var collectionView: UICollectionView!
     
@@ -145,7 +139,6 @@ class ZLThumbnailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = false
         self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
         self.resetBottomToolBtnStatus()
     }
@@ -163,6 +156,15 @@ class ZLThumbnailViewController: UIViewController {
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
         }
+        let navH = insets.top + 44
+        self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: navH)
+        
+        self.backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
+        let albumTitleW = self.albumList.title.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width
+        self.albumTitleLabel.frame = CGRect(x: (self.view.frame.width-albumTitleW)/2, y: insets.top, width: albumTitleW, height: 44)
+        let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width + 40
+        self.cancelBtn.frame = CGRect(x: self.view.frame.width-insets.right-cancelBtnW, y: insets.top, width: cancelBtnW, height: 44)
+        
         var showBottomView = true
         
         let config = ZLPhotoConfiguration.default()
@@ -174,15 +176,15 @@ class ZLThumbnailViewController: UIViewController {
             showBottomView = false
             insets.bottom = 0
         }
-        let bottomViewH = showBottomView ? ZLThumbnailViewController.Layout.bottomToolViewH : 0
+        let bottomViewH = showBottomView ? ZLLayout.bottomToolViewH : 0
         
         let totalWidth = self.view.frame.width - insets.left - insets.right
         self.collectionView.frame = CGRect(x: insets.left, y: 0, width: totalWidth, height: self.view.frame.height)
-        self.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomViewH, right: 0)
+        self.collectionView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: bottomViewH, right: 0)
         
         guard showBottomView else { return }
         
-        let btnH = ZLThumbnailViewController.Layout.bottomToolBtnH
+        let btnH = ZLLayout.bottomToolBtnH
         
         self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height-insets.bottom-bottomViewH, width: self.view.bounds.width, height: bottomViewH+insets.bottom)
         self.bottomBlurView?.frame = self.bottomView.bounds
@@ -190,11 +192,11 @@ class ZLThumbnailViewController: UIViewController {
         let btnY: CGFloat = 7
         
         let previewTitle = localLanguageTextValue(.preview)
-        let previewBtnW = previewTitle.boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
+        let previewBtnW = previewTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
         self.previewBtn.frame = CGRect(x: 15, y: btnY, width: previewBtnW, height: btnH)
         
         let originalTitle = localLanguageTextValue(.originalPhoto)
-        let w = originalTitle.boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
+        let w = originalTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
         self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-w)/2-5, y: btnY, width: w, height: btnH)
         
         self.refreshDoneBtnFrame()
@@ -215,18 +217,29 @@ class ZLThumbnailViewController: UIViewController {
         self.view.backgroundColor = .thumbnailBgColor
         self.title = self.albumList.title
         
-        let backItem = UIBarButtonItem(image: getImage("zl_navBack"), style: .plain, target: self, action: #selector(navBackAction))
-        self.navigationItem.leftBarButtonItem = backItem
+        self.navView = UIView()
+        self.navView.backgroundColor = .navBarColor
+        self.view.addSubview(self.navView)
         
-        let cancelBtn = UIButton(type: .custom)
-        let title = localLanguageTextValue(.previewCancel)
-        let size = title.boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44))
-        cancelBtn.frame = CGRect(x: 0, y: 0, width: size.width, height: 44)
-        cancelBtn.titleLabel?.font = getFont(16)
-        cancelBtn.setTitle(title, for: .normal)
-        cancelBtn.setTitleColor(.navTitleColor, for: .normal)
-        cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cancelBtn)
+        self.backBtn = UIButton(type: .custom)
+        self.backBtn.setImage(getImage("zl_navBack"), for: .normal)
+        self.backBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        self.backBtn.addTarget(self, action: #selector(navBackAction), for: .touchUpInside)
+        self.navView.addSubview(self.backBtn)
+        
+        self.albumTitleLabel = UILabel()
+        self.albumTitleLabel.textColor = .navTitleColor
+        self.albumTitleLabel.font = ZLLayout.navTitleFont
+        self.albumTitleLabel.text = self.albumList.title
+        self.albumTitleLabel.textAlignment = .center
+        self.navView.addSubview(self.albumTitleLabel)
+        
+        self.cancelBtn = UIButton(type: .custom)
+        self.cancelBtn.titleLabel?.font = ZLLayout.navTitleFont
+        self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
+        self.cancelBtn.setTitleColor(.navTitleColor, for: .normal)
+        self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
+        self.navView.addSubview(self.cancelBtn)
         
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 3, left: 0, bottom: 3, right: 0)
@@ -255,7 +268,7 @@ class ZLThumbnailViewController: UIViewController {
         
         func createBtn(_ title: String, _ action: Selector) -> UIButton {
             let btn = UIButton(type: .custom)
-            btn.titleLabel?.font = ZLThumbnailViewController.Layout.bottomToolTitleFont
+            btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
             btn.setTitle(title, for: .normal)
             btn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
             btn.setTitleColor(.bottomToolViewBtnDisableTitleColor, for: .disabled)
@@ -275,8 +288,10 @@ class ZLThumbnailViewController: UIViewController {
         
         self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick))
         self.doneBtn.layer.masksToBounds = true
-        self.doneBtn.layer.cornerRadius = 5
+        self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         self.bottomView.addSubview(self.doneBtn)
+        
+        self.view.bringSubviewToFront(self.navView)
     }
     
     func loadPhotos() {
@@ -470,8 +485,8 @@ class ZLThumbnailViewController: UIViewController {
         if selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
         }
-        let doneBtnW = doneTitle.boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
-        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: 7, width: doneBtnW, height: ZLThumbnailViewController.Layout.bottomToolBtnH)
+        let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
+        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: 7, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
     func scrollToBottom() {
@@ -640,11 +655,11 @@ class ZLThumbnailViewController: UIViewController {
 extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return ZLThumbnailViewController.Layout.collectionViewItemSpacing
+        return ZLLayout.thumbCollectionViewItemSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return ZLThumbnailViewController.Layout.collectionViewLineSpacing
+        return ZLLayout.thumbCollectionViewLineSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -653,7 +668,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         if UIApplication.shared.statusBarOrientation.isLandscape {
             columnCount += 2
         }
-        let totalW = collectionView.bounds.width - (columnCount - 1) * ZLThumbnailViewController.Layout.collectionViewItemSpacing
+        let totalW = collectionView.bounds.width - (columnCount - 1) * ZLLayout.thumbCollectionViewItemSpacing
         let singleW = totalW / columnCount
         return CGSize(width: singleW, height: singleW)
     }
@@ -866,18 +881,18 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         let arrSel = (self.navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
         
         if isSelected {
-            cell.coverView.backgroundColor = ZLPhotoConfiguration.default().selectedMaskColor
+            cell.coverView.backgroundColor = .selectedMaskColor
             cell.coverView.isHidden = !ZLPhotoConfiguration.default().showSelectedMask
         } else {
             let selCount = arrSel.count
             if selCount < ZLPhotoConfiguration.default().maxSelectCount, selCount > 0 {
                 if !ZLPhotoConfiguration.default().allowMixSelect {
-                    cell.coverView.backgroundColor = ZLPhotoConfiguration.default().invalidMaskColor
+                    cell.coverView.backgroundColor = .invalidMaskColor
                     cell.coverView.isHidden = (!ZLPhotoConfiguration.default().showInvalidMask || model.type != .video)
                     cell.enableSelect = model.type != .video
                 }
             } else if selCount >= ZLPhotoConfiguration.default().maxSelectCount {
-                cell.coverView.backgroundColor = ZLPhotoConfiguration.default().invalidMaskColor
+                cell.coverView.backgroundColor = .invalidMaskColor
                 cell.coverView.isHidden = ZLPhotoConfiguration.default().showInvalidMask
                 cell.enableSelect = false
             }

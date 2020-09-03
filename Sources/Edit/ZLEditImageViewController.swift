@@ -157,8 +157,8 @@ public class ZLEditImageViewController: UIViewController {
             toolBtnX += toolBtnSize.width + toolBtnSpacing
         }
         
-        let doneBtnH = ZLThumbnailViewController.Layout.bottomToolBtnH
-        let doneBtnW = localLanguageTextValue(.editFinish).boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
+        let doneBtnH = ZLLayout.bottomToolBtnH
+        let doneBtnW = localLanguageTextValue(.editFinish).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
         // y 多减的 8 是为了和工具条居中 (50 - doneBtnH) / 2 = 8
         self.doneBtn.frame = CGRect(x: self.view.frame.width-15-doneBtnW, y: toolBtnY, width: doneBtnW, height: doneBtnH)
     }
@@ -241,12 +241,12 @@ public class ZLEditImageViewController: UIViewController {
         self.bottomShadowView.addSubview(self.clipBtn)
         
         self.doneBtn = UIButton(type: .custom)
-        self.doneBtn.titleLabel?.font = ZLThumbnailViewController.Layout.bottomToolTitleFont
+        self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         self.doneBtn.setTitle(localLanguageTextValue(.editFinish), for: .normal)
         self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         self.doneBtn.layer.masksToBounds = true
-        self.doneBtn.layer.cornerRadius = 5
+        self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         self.bottomShadowView.addSubview(self.doneBtn)
         
         let layout = UICollectionViewFlowLayout()

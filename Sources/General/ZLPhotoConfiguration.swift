@@ -145,23 +145,11 @@ public class ZLPhotoConfiguration: NSObject {
     /// 是否在已选择的图片上方覆盖一层已选中遮罩层
     @objc public var showSelectedMask = true
     
-    /// 遮罩层颜色
-    @objc public var selectedMaskColor = UIColor.black.withAlphaComponent(0.2)
-    
     /// 是否在不能选择的cell上方覆盖一层遮罩层
     @objc public var showInvalidMask = true
     
-    /// 不能选择的cell上方遮罩层颜色
-    @objc public var invalidMaskColor = UIColor.white.withAlphaComponent(0.5)
-    
     /// 是否显示选中图片的index
     @objc public var showSelectedIndex = true
-    
-    /// 选中图片右上角index background color
-    @objc public var indexLabelBgColor = zlRGB(80, 169, 56)
-    
-    /// 长按拍照按钮进行录像时的progress color
-    @objc public var cameraProgressColor = zlRGB(80, 169, 56)
     
     /// 是否在预览界面下方显示已选择的照片
     @objc public var showSelectedPhotoPreview = true
@@ -259,7 +247,7 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     }
     
     /// 导航条颜色
-    @objc public var navBarColor = zlRGB(44, 45, 46)
+    @objc public var navBarColor = zlRGB(44, 45, 46).withAlphaComponent(0.9)
     
     /// 导航标题颜色
     @objc public var navTitleColor = UIColor.white
@@ -308,6 +296,18 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     
     /// 自定义相机录制视频时，进度条颜色
     @objc public var cameraRecodeProgressColor = zlRGB(80, 169, 56)
+    
+    /// 遮罩层颜色
+    @objc public var selectedMaskColor = UIColor.black.withAlphaComponent(0.2)
+    
+    /// 不能选择的cell上方遮罩层颜色
+    @objc public var invalidMaskColor = UIColor.white.withAlphaComponent(0.5)
+    
+    /// 选中图片右上角index background color
+    @objc public var indexLabelBgColor = zlRGB(80, 169, 56)
+    
+    /// 拍照cell 背景颜色
+    @objc public var cameraCellBgColor = UIColor(white: 0.3, alpha: 1)
     
 }
 

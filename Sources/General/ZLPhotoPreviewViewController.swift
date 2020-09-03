@@ -71,9 +71,7 @@ class ZLPhotoPreviewViewController: UIViewController {
     
     var hideNavView = false
     
-    var shouldStartDismiss = false
-    
-    var panCount = 0
+    var popInteractiveTransition: ZLPreviewImagePopInteractiveTransition?
     
     /// 界面进入方式
     var isPush = true
@@ -103,21 +101,18 @@ class ZLPhotoPreviewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.setupUI()
         
+        self.addPopInteractiveTransition()
         self.resetSubViewStatus(animateIndexLabel: false)
         
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationChanged(_:)), name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = true
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.navigationController?.delegate = self
         
         guard self.isFirstAppear else { return }
         self.isFirstAppear = false
@@ -168,7 +163,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
         }
-        var bottomViewH = ZLThumbnailViewController.Layout.bottomToolViewH
+        var bottomViewH = ZLLayout.bottomToolViewH
         var showSelPhotoPreview = false
         if ZLPhotoConfiguration.default().showSelectedPhotoPreview {
             let nav = self.navigationController as! ZLImageNavController
@@ -178,7 +173,7 @@ class ZLPhotoPreviewViewController: UIViewController {
                 self.selPhotoPreview.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: ZLPhotoPreviewViewController.selPhotoPreviewH)
             }
         }
-        let btnH = ZLThumbnailViewController.Layout.bottomToolBtnH
+        let btnH = ZLLayout.bottomToolBtnH
         
         self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height-insets.bottom-bottomViewH, width: self.view.frame.width, height: bottomViewH+insets.bottom)
         self.bottomBlurView?.frame = self.bottomView.bounds
@@ -186,11 +181,11 @@ class ZLPhotoPreviewViewController: UIViewController {
         let btnY: CGFloat = showSelPhotoPreview ? ZLPhotoPreviewViewController.selPhotoPreviewH + 7 : 7
         
         let editTitle = localLanguageTextValue(.edit)
-        let editBtnW = editTitle.boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
+        let editBtnW = editTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
         self.editBtn.frame = CGRect(x: 15, y: btnY, width: editBtnW, height: btnH)
         
         let originalTitle = localLanguageTextValue(.originalPhoto)
-        let w = originalTitle.boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
+        let w = originalTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
         self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-w)/2-5, y: btnY, width: w, height: btnH)
         
         let selCount = (self.navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
@@ -198,8 +193,8 @@ class ZLPhotoPreviewViewController: UIViewController {
         if selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
         }
-        let doneBtnW = doneTitle.boundingRect(font: ZLThumbnailViewController.Layout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
-        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLThumbnailViewController.Layout.bottomToolBtnH)
+        let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
+        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
     func setupUI() {
@@ -209,7 +204,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         let config = ZLPhotoConfiguration.default()
         // nav view
         self.navView = UIView()
-        self.navView.backgroundColor = UIColor.navBarColor.withAlphaComponent(0.9)
+        self.navView.backgroundColor = .navBarColor
         self.view.addSubview(self.navView)
         
         self.backBtn = UIButton(type: .custom)
@@ -226,7 +221,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.navView.addSubview(self.selectBtn)
         
         self.indexLabel = UILabel()
-        self.indexLabel.backgroundColor = config.indexLabelBgColor
+        self.indexLabel.backgroundColor = .indexLabelBgColor
         self.indexLabel.font = getFont(14)
         self.indexLabel.textColor = .white
         self.indexLabel.textAlignment = .center
@@ -276,7 +271,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         
         func createBtn(_ title: String, _ action: Selector) -> UIButton {
             let btn = UIButton(type: .custom)
-            btn.titleLabel?.font = ZLThumbnailViewController.Layout.bottomToolTitleFont
+            btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
             btn.setTitle(title, for: .normal)
             btn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
             btn.setTitleColor(.bottomToolViewBtnDisableTitleColor, for: .disabled)
@@ -298,10 +293,60 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick))
         self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         self.doneBtn.layer.masksToBounds = true
-        self.doneBtn.layer.cornerRadius = 5
+        self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         self.bottomView.addSubview(self.doneBtn)
         
         self.view.bringSubviewToFront(self.navView)
+    }
+    
+    func addPopInteractiveTransition() {
+        guard (self.navigationController?.viewControllers.count ?? 0 ) > 1 else {
+            // 仅有当前vc一个时候，说明不是从相册进入，不添加交互动画
+            return
+        }
+        self.popInteractiveTransition = ZLPreviewImagePopInteractiveTransition(viewController: self)
+        self.popInteractiveTransition?.shouldStartTransition = { [weak self] (point) -> Bool in
+            guard let `self` = self else { return false }
+            if !self.hideNavView && (self.navView.frame.contains(point) || self.bottomView.frame.contains(point)) {
+                return false
+            }
+            return true
+        }
+        self.popInteractiveTransition?.startTransition = { [weak self] in
+            guard let `self` = self else { return }
+            
+            self.navView.alpha = 0
+            self.bottomView.alpha = 0
+            
+            guard let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) else {
+                return
+            }
+            if cell is ZLVideoPreviewCell {
+                (cell as! ZLVideoPreviewCell).player?.pause()
+            } else if cell is ZLLivePhotoPewviewCell {
+                (cell as! ZLLivePhotoPewviewCell).livePhotoView.stopPlayback()
+            } else if cell is ZLGifPreviewCell {
+                (cell as! ZLGifPreviewCell).pauseGif()
+            }
+        }
+        self.popInteractiveTransition?.cancelTransition = { [weak self] in
+            guard let `self` = self else { return }
+            
+            self.hideNavView = false
+            self.navView.isHidden = false
+            self.bottomView.isHidden = false
+            UIView.animate(withDuration: 0.5) {
+                self.navView.alpha = 1
+                self.bottomView.alpha = 1
+            }
+            
+            guard let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) else {
+                return
+            }
+            if cell is ZLGifPreviewCell {
+                (cell as! ZLGifPreviewCell).resumeGif()
+            }
+        }
     }
     
     func resetSubViewStatus(animateIndexLabel: Bool) {
@@ -532,6 +577,22 @@ class ZLPhotoPreviewViewController: UIViewController {
         }
         
         self.present(vc, animated: false, completion: nil)
+    }
+    
+}
+
+
+extension ZLPhotoPreviewViewController: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if operation == .push {
+            return nil
+        }
+        return self.popInteractiveTransition?.interactive == true ? ZLPreviewImagePopAnimatedTransition() : nil
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return self.popInteractiveTransition?.interactive == true ? self.popInteractiveTransition : nil
     }
     
 }
