@@ -12,7 +12,7 @@
 ## 重要说明
 * 框架自 `4.0.0` 版本起，升级为纯`Swift`编写框架，支持最低版本由 `iOS8` 升级到了 `iOS10`
 * 添加并增强了一些实用功能（例如图片编辑、预览界面下方小视图显示及拖拽排序等等）
-* 删除一些功能（对SDWebImage的依赖，网络图片及视频的预览，force touch 等等）
+* 删除一些功能（网络图片及视频的预览，force touch 等等）
 具体使用请下载demo查看
 
 如需使用之前的`oc`版本（`oc`版本不再维护），请点[这里](https://github.com/longitachi/ZLPhotoBrowser-objc)
@@ -85,7 +85,7 @@
   
 * Swift Package Manager
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
-  * 2. 输入对应版本号（SPM 最低版本为 `5.0.1`）
+  * 2. 输入对应版本号（SPM 最低版本为 `4.0.1`）
   * 3. 等Xcode下载完成后确定即可
   
 
