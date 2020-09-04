@@ -168,7 +168,8 @@ class ZLPhotoPreviewCell: ZLPreviewBaseCell {
     }
     
     override func animateImageFrame(convertTo view: UIView) -> CGRect {
-        return self.convert(self.preview.containerView.frame, to: view)
+        let r1 = self.preview.scrollView.convert(self.preview.containerView.frame, to: self)
+        return self.convert(r1, to: view)
     }
     
 }
@@ -237,7 +238,8 @@ class ZLGifPreviewCell: ZLPreviewBaseCell {
     }
     
     override func animateImageFrame(convertTo view: UIView) -> CGRect {
-        return self.convert(self.preview.containerView.frame, to: view)
+        let r1 = self.preview.scrollView.convert(self.preview.containerView.frame, to: self)
+        return self.convert(r1, to: view)
     }
     
 }

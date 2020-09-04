@@ -157,14 +157,14 @@ class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             
         }
         
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25, animations: {
             if let to = toFrame {
                 self.imageView?.frame = to
             } else {
                 self.imageView?.alpha = 0
             }
             self.shadowView?.alpha = 0
-        } completion: { (_) in
+        }) { (_) in
             self.imageView?.removeFromSuperview()
             self.shadowView?.removeFromSuperview()
             self.imageView = nil
@@ -179,10 +179,10 @@ class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             return
         }
         
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25, animations: {
             self.imageView?.frame = self.imageViewOriginalFrame
             self.shadowView?.alpha = 1
-        } completion: { (_) in
+        }) { (_) in
             self.imageView?.removeFromSuperview()
             self.shadowView?.removeFromSuperview()
             self.cancelTransition?()
