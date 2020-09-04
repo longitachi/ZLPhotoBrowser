@@ -120,7 +120,7 @@ public class ZLPhotoConfiguration: NSObject {
     @objc public var minSelectVideoDuration: Second = 0
     
     /// 编辑图片工具，默认 涂鸦及裁剪（因swift OptionSet 不支持 @objc 标识，所以该属性oc不可用）
-    public var editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip]
+    public var editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .mosaic]
     
     /// 编辑图片涂鸦颜色
     @objc public var editImageDrawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]

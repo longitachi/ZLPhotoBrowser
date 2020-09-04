@@ -27,6 +27,7 @@
 import UIKit
 
 /// https://github.com/kiritmodi2702/GIF-Swift
+// MARK: data 转 gif image
 extension UIImage {
     
     class func zl_animateGifImage(data: Data) -> UIImage? {
@@ -175,7 +176,7 @@ extension UIImage {
 }
 
 
-/// 修复转向
+// MARK: 修复转向
 extension UIImage {
     
     func fixOrientation() -> UIImage {
@@ -236,7 +237,7 @@ extension UIImage {
 }
 
 
-/// 旋转方向
+// MARK: 旋转方向
 extension UIImage {
   
     func rotate(orientation: UIImage.Orientation) -> UIImage {
@@ -332,6 +333,32 @@ extension UIImage {
         r.size.width = rect.height
         r.size.height = rect.width
         return r
+    }
+    
+}
+
+
+// MARK: 加马赛克
+extension UIImage {
+    
+    func mosaicImage() -> UIImage? {
+        guard let currCgImage = self.cgImage else {
+            return nil
+        }
+        
+        let currCiImage = CIImage(cgImage: currCgImage)
+        let filter = CIFilter(name: "CIPixellate")
+        filter?.setValue(currCiImage, forKey: kCIInputImageKey)
+        filter?.setValue(30, forKey: kCIInputScaleKey)
+        guard let outputImage = filter?.outputImage else { return nil }
+        
+        let context = CIContext()
+        
+        if let cgImg = context.createCGImage(outputImage, from: CGRect(origin: .zero, size: self.size)) {
+            return UIImage(cgImage: cgImg)
+        } else {
+            return nil
+        }
     }
     
 }
