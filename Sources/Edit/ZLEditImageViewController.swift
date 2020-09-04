@@ -345,7 +345,6 @@ public class ZLEditImageViewController: UIViewController {
             animateImageView.frame = from
             self.view.insertSubview(animateImageView, aboveSubview: self.scrollView)
             let to = self.view.convert(self.containerView.frame, from: self.scrollView)
-            self.scrollView.alpha = 0
             UIView.animate(withDuration: 0.3, animations: {
                 animateImageView.frame = to
             }) { (_) in
@@ -377,10 +376,14 @@ public class ZLEditImageViewController: UIViewController {
             self?.resetContainerViewFrame()
             if let _ = image {
                 animateWhenClipSuc(frame, image!)
+            } else {
+                self?.scrollView.alpha = 1
             }
         }
         
-        self.present(vc, animated: false, completion: nil)
+        self.present(vc, animated: false) {
+            self.scrollView.alpha = 0
+        }
     }
     
     @objc func mosaicBtnClick() {

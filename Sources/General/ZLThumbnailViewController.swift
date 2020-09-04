@@ -284,6 +284,7 @@ class ZLThumbnailViewController: UIViewController {
         self.originalBtn.setImage(getImage("zl_btn_original_selected"), for: .selected)
         self.originalBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         self.originalBtn.isHidden = !(ZLPhotoConfiguration.default().allowSelectOriginal && ZLPhotoConfiguration.default().allowSelectImage)
+        self.originalBtn.isSelected = (self.navigationController as! ZLImageNavController).isSelectedOriginal
         self.bottomView.addSubview(self.originalBtn)
         
         self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick))
