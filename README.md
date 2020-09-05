@@ -19,35 +19,114 @@
 
 ### 框架整体介绍
 * [功能介绍](#功能介绍)
+* [使用示例](#使用示例)
 * [更新日志](#更新日志)
 * [安装方法(支持Cocoapods/Carthage/SPM安装)](#安装方法)
 * [效果图](#效果图)
 
 ### <a id="功能介绍"></a>功能介绍
+你想要的应有尽有，预留给开发者自定义框架参数多达50个（没有的话欢迎提 issue ，功能建议好的话会采纳并着手开发）
 - [x] 支持横竖屏
-- [x] 预览快速选择、可设置预览最大数 (支持拖拽选择)
-- [x] 直接进入相册选择 （支持滑动多选）
-- [x] 编辑图片（涂鸦/裁剪/马赛克）、视频（裁剪）
-- [x] 选择照片、Video、GIF、LivePhoto
-- [x] 多语言国际化 (中文简/繁、英文、日文，可设置跟随系统和自行切换，可自定义多语言提示)
-- [x] 已选择图片index
-- [x] 自定义相机 (仿微信)
-- [x] 自定义主题颜色（传入 dynamic color 即可支持 light/dark mode）
+- [x] 预览快速选择（支持拖拽选择，效果参照QQ）
+- [x] 相册内部选择（支持滑动选择）
+- [x] 图片/Gif/LivePhoto/Video 混合选择
+- [x] 自定义最大预览数/选择数/视频最大最小可选时长，控制可否选择原图
+- [x] 自定义每行显示列数
+- [x] 图片编辑（涂鸦/裁剪/马赛克）（图片编辑可编辑多张；涂鸦颜色可自定义，裁剪工具也可根据需要自行选择）
+- [x] 视频编辑（自定义最大裁剪时长）（效果参照微信视频编辑）
+- [x] 自定义相机（效果参照微信拍照，点击拍照、长按拍摄；上滑调整焦距；可设置最大录制时间及视频分辨率；可设置闪光灯模式及视频导出格式；可根据自己需要控制是否使用自定义相机）
+- [x] 多语言国际化支持（中文简/繁，英文，日文，开发者可选根据系统或自己指定，多语言文案可自定义）
+- [x] 已选择照片index
+- [x] 已选/不可选 状态下mask阴影遮罩
+- [x] 大图界面下方显示已选择照片，可拖拽排序（可根据自己需要控制是否显示）
+- [x] 大图界面下拉返回
+- [x] 相机内部拍照cell实时显示相机俘获画面
+- [x] 可自定义框架字体
+- [x] 框架各个部位颜色均可自定义（传入dynamic color即可支持 light/dark mode）
+- [x] 框架内图片资源可自定义
 > 更多功能请查看 `ZLPhotoConfiguration` 中的参数定义
 
 > 如果你在使用中有好的需求及建议，或者遇到什么bug，欢迎随时issue，我会及时的回复
  
- ### 使用示例
+ ### 框架支持
+ * iOS 10.0
+ * Swift 5.x
+ * Xcode 11.x
+ 
+ ### <a id="使用示例"></a>使用示例
+ - 快速选择
  ```
  let ac = ZLPhotoPreviewSheet()
- ac.selectImageBlock = { (images, assets, isOriginal) in
-     // 选择照片回调
+ ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
+     // your code
  }
- // 快速选择方法
  ac.showPreview(animate: true, sender: self)
+ ```
  
- // 进入相册选择方法
+ - 直接进入相册选择
+ ```
+ let ac = ZLPhotoPreviewSheet()
+ ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
+     // your code
+ }
  ac.showPhotoLibrary(sender: self)
+ ```
+ 
+ - 调用自定义相机
+ ```
+ let camera = ZLCustomCamera()
+ camera.takeDoneBlock = { [weak self] (image, videoUrl) in
+     // your code
+ }
+ self.showDetailViewController(camera, sender: nil)
+ ```
+ 
+ - 调用编辑图片
+ ```
+ let editVC = ZLEditImageViewController(image: image, tools: [.draw, .clip, .mosaic])
+ editVC.editFinishBlock = { [weak self] (image) in
+     // your code
+ }
+ self.showDetailViewController(editVC, sender: nil)
+ ```
+ 
+ - 自定义图片资源
+ ```
+ // 与图片名字保持一致即可
+ ZLPhotoConfiguration.default().customImageNames = ["zl_btn_selected"]
+ ```
+ 
+ - 自定义文案
+ ```
+ // 因需要兼容oc调用，swift的struct不支持添加@objc，所以暂时只能使用这种方式
+ ZLPhotoConfiguration.default().customLanguageKeyValue = [ZLLocalLanguageKey.previewCamera.rawValue: "相机"]
+ ```
+ 
+ - 支持light/dark mode颜色定义示例
+ ```
+ if #available(iOS 13, *) {
+     ZLPhotoConfiguration.default().themeColorDeploy.thumbnailBgColor = UIColor.init(dynamicProvider: { (trait) -> UIColor in
+         if trait.userInterfaceStyle == .dark {
+             return .black
+         } else {
+             return .white
+         }
+     })
+ }
+ ```
+ 
+ - 需要注意的地方，你需要在你app的 `Info.plist` 中添加如下键值对
+ ```
+ //如果不添加该键值对，则不支持多语言，相册名称默认为英文
+ Localized resources can be mixed YES
+ //或者右键plist文件Open As->Source Code 添加
+ CFBundleAllowMixedLocalizations
+ //相册使用权限描述
+ Privacy - Photo Library Usage Description
+ //相机使用权限描述
+ Privacy - Camera Usage Description
+ //麦克风使用权限描述
+ Privacy - Microphone Usage Description
  ```
  
  
@@ -59,12 +138,6 @@
 ● 3.2.0: 添加图片视频选择互斥功能（即只能选择1个视频或最多几张图片）; 添加选择量达到最大值时其他cell显示遮罩功能; 删除`allowMixSelect`,`maxVideoSelectCountInMix`,`minVideoSelectCountInMix`参数;
 ...
 ```
-
-### 框架支持
-* iOS 10.0
-* Swift 5.x
-* Xcode 11.x
-
 
 ### <a id="安装方法"></a>使用方法
 
@@ -85,24 +158,6 @@
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
   * 2. 输入对应版本号（SPM 最低版本为 `4.0.1`）
   * 3. 等Xcode下载完成后确定即可
-  
-
-第二步：
-- 在项目plist配置文件中添加如下键值对
-```objc
-//如果不添加该键值对，则不支持多语言，相册名称默认为英文
-Localized resources can be mixed YES
-//或者右键plist文件Open As->Source Code 添加
-<key>CFBundleAllowMixedLocalizations</key>
-<true/>
-
-//相册使用权限描述
-Privacy - Photo Library Usage Description
-//相机使用权限描述
-Privacy - Camera Usage Description
-//麦克风使用权限描述
-Privacy - Microphone Usage Description
-```
 
 ### <a id="效果图"></a> 效果图
 - 选择

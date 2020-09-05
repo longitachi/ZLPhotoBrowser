@@ -36,7 +36,7 @@ import Foundation
 
 public struct ZLLocalLanguageKey {
     
-    let rawValue: String
+    public let rawValue: String
     
     public init(rawValue: String) {
         self.rawValue = rawValue

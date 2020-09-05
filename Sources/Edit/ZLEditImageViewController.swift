@@ -111,7 +111,7 @@ public class ZLEditImageViewController: UIViewController {
     public init(image: UIImage, tools: ZLEditImageViewController.EditImageTool = ZLPhotoConfiguration.default().editImageTools) {
         self.originalImage = image
         self.editImage = image
-        self.tools = tools
+        self.tools = tools.rawValue == 0 ? [.draw, .clip, .mosaic] : tools
         if ZLPhotoConfiguration.default().editImageDrawColors.isEmpty {
             self.drawColors = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
         } else {

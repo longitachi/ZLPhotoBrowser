@@ -44,9 +44,21 @@ class PhotoConfigureViewController: UIViewController {
     
     var allowMixSelectSwitch: UISwitch!
     
+    var editImageLabel: UILabel!
+    
     var allowEditImageSwitch: UISwitch!
     
+    var editImageToolView: UIView!
+    
+    var editImageDrawToolSwitch: UISwitch!
+    
+    var editImageClipToolSwitch: UISwitch!
+    
+    var editImageMosaicToolSwitch: UISwitch!
+    
     var saveEditImageSwitch: UISwitch!
+    
+    var editVideoLabel: UILabel!
     
     var allowEditVideoSwitch: UISwitch!
     
@@ -395,7 +407,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 编辑图片开关
-        let editImageLabel = createLabel("允许编辑图片")
+        editImageLabel = createLabel("允许编辑图片")
         containerView.addSubview(editImageLabel)
         editImageLabel.snp.makeConstraints { (make) in
             make.top.equalTo(mixSelectLabel.snp.bottom).offset(velSpacing)
@@ -411,11 +423,79 @@ class PhotoConfigureViewController: UIViewController {
             make.centerY.equalTo(editImageLabel)
         }
         
+        // 编辑视频工具
+        self.editImageToolView = UIView()
+        self.editImageToolView.alpha = config.allowEditImage ? 1 : 0
+        containerView.addSubview(self.editImageToolView)
+        self.editImageToolView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.allowEditImageSwitch.snp.bottom)
+            make.left.equalTo(previewCountLabel.snp.left)
+            make.right.equalTo(containerView)
+        }
+        
+        // 涂鸦
+        let drawToolLabel = createLabel("涂鸦")
+        self.editImageToolView.addSubview(drawToolLabel)
+        drawToolLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(self.editImageToolView).offset(velSpacing)
+            make.left.equalTo(self.editImageToolView)
+        }
+        
+        self.editImageDrawToolSwitch = UISwitch()
+        self.editImageDrawToolSwitch.isOn = config.editImageTools.contains(.draw)
+        self.editImageDrawToolSwitch.addTarget(self, action: #selector(drawToolChanged), for: .valueChanged)
+        self.editImageToolView.addSubview(self.editImageDrawToolSwitch)
+        self.editImageDrawToolSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(drawToolLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(drawToolLabel)
+        }
+        
+        // 裁剪
+        let clipToolLabel = createLabel("裁剪")
+        self.editImageToolView.addSubview(clipToolLabel)
+        clipToolLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(drawToolLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(self.editImageToolView)
+        }
+        
+        self.editImageClipToolSwitch = UISwitch()
+        self.editImageClipToolSwitch.isOn = config.editImageTools.contains(.clip)
+        self.editImageClipToolSwitch.addTarget(self, action: #selector(clipToolChanged), for: .valueChanged)
+        self.editImageToolView.addSubview(self.editImageClipToolSwitch)
+        self.editImageClipToolSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(clipToolLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(clipToolLabel)
+        }
+        
+        // 裁剪
+        let mosaicToolLabel = createLabel("马赛克")
+        self.editImageToolView.addSubview(mosaicToolLabel)
+        mosaicToolLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(clipToolLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(self.editImageToolView)
+        }
+        
+        self.editImageMosaicToolSwitch = UISwitch()
+        self.editImageMosaicToolSwitch.isOn = config.editImageTools.contains(.mosaic)
+        self.editImageMosaicToolSwitch.addTarget(self, action: #selector(mosaicToolChanged), for: .valueChanged)
+        self.editImageToolView.addSubview(self.editImageMosaicToolSwitch)
+        self.editImageMosaicToolSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(mosaicToolLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(mosaicToolLabel)
+            make.bottom.equalTo(self.editImageToolView)
+        }
+        
+        
         // 编辑视频开关
-        let editVideoLabel = createLabel("允许编辑视频")
+        editVideoLabel = createLabel("允许编辑视频")
+        editVideoLabel.tag = 1000
         containerView.addSubview(editVideoLabel)
         editVideoLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(editImageLabel.snp.bottom).offset(velSpacing)
+            if config.allowEditImage {
+                make.top.equalTo(editImageLabel.snp.bottom).offset(150)
+            } else {
+                make.top.equalTo(editImageLabel.snp.bottom).offset(velSpacing)
+            }
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -661,6 +741,30 @@ class PhotoConfigureViewController: UIViewController {
     
     @objc func allowEditImageChanged() {
         config.allowEditImage = allowEditImageSwitch.isOn
+        
+        UIView.animate(withDuration: 0.25) {
+            self.editImageToolView.alpha = self.config.allowEditImage ? 1 : 0
+            self.editVideoLabel.snp.updateConstraints({ (make) in
+                if self.config.allowEditImage {
+                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(150)
+                } else {
+                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(20)
+                }
+            })
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func drawToolChanged() {
+        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.draw.rawValue)
+    }
+    
+    @objc func clipToolChanged() {
+        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.clip.rawValue)
+    }
+    
+    @objc func mosaicToolChanged() {
+        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.mosaic.rawValue)
     }
     
     @objc func saveEditImageChanged() {

@@ -56,7 +56,7 @@ class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             }
             let result = self.panResult(pan)
             self.imageView?.frame = result.frame
-            self.shadowView?.alpha = result.scale
+            self.shadowView?.alpha = pow(result.scale, 2)
             
             self.update(result.scale)
         } else if pan.state == .cancelled || pan.state == .ended {

@@ -772,7 +772,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             self.dismissBtn.isHidden = true
             self.toggleCameraBtn.isHidden = true
             self.retakeBtn.isHidden = false
-            self.editBtn.isHidden = self.takedImage == nil
+            if ZLPhotoConfiguration.default().allowEditImage {
+                self.editBtn.isHidden = self.takedImage == nil
+            }
             self.doneBtn.isHidden = false
         }
     }
