@@ -104,7 +104,7 @@
  
  - 支持light/dark mode颜色定义示例
  ```
- if #available(iOS 13, *) {
+ if #available(iOS 13.0, *) {
      ZLPhotoConfiguration.default().themeColorDeploy.thumbnailBgColor = UIColor.init(dynamicProvider: { (trait) -> UIColor in
          if trait.userInterfaceStyle == .dark {
              return .black
@@ -121,6 +121,7 @@
  Localized resources can be mixed YES
  //或者右键plist文件Open As->Source Code 添加
  CFBundleAllowMixedLocalizations
+ 
  //相册使用权限描述
  Privacy - Photo Library Usage Description
  //相机使用权限描述
@@ -141,7 +142,6 @@
 
 ### <a id="安装方法"></a>使用方法
 
-第一步：
 * Manually 
   * 1.直接把`Sources`文件夹拖入到您的工程中
   

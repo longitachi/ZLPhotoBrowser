@@ -36,6 +36,10 @@ public class ZLPhotoConfiguration: NSObject {
         return ZLPhotoConfiguration.single
     }
     
+    /// 框架内部选择样式
+    @objc public var style: ZLPhotoBrowserStyle = .embedAlbumList
+    
+    /// 状态栏样式
     @objc public var statusBarStyle: UIStatusBarStyle = .lightContent
     
     /// 是否升序排列，预览界面不受该参数影响
@@ -223,6 +227,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// hud style
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .lightBlur
     
+    /// 导航条模糊样式
+    @objc public var navViewBlurEffect: UIBlurEffect? = UIBlurEffect(style: .dark)
+    
     /// 下方工具条模糊样式
     @objc public var bottomToolViewBlurEffect: UIBlurEffect? = UIBlurEffect(style: .dark)
     
@@ -239,6 +246,19 @@ public class ZLPhotoConfiguration: NSObject {
 }
 
 
+
+@objc public enum ZLPhotoBrowserStyle: Int {
+    
+    /// 相册列表嵌入在小图界面导航上，点击下拉显示
+    case embedAlbumList
+    
+    /// 相册列表和小图界面之间显示关系为push
+    case externalAlbumList
+    
+}
+
+
+
 /// 框架内主题颜色配置
 public class ZLPhotoThemeColorDeploy: NSObject {
     
@@ -247,10 +267,13 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     }
     
     /// 导航条颜色
-    @objc public var navBarColor = zlRGB(44, 45, 46).withAlphaComponent(0.9)
+    @objc public var navBarColor = zlRGB(35, 35, 35).withAlphaComponent(0.3)
     
     /// 导航标题颜色
     @objc public var navTitleColor = UIColor.white
+    
+    /// 框架样式为 embedAlbumList 时，title view 背景色
+    @objc public var navEmbedTitleViewBgColor = zlRGB(65, 65, 65)
     
     /// 预览选择模式下 上方透明背景色
     @objc public var previewBgColor = UIColor.black.withAlphaComponent(0.1)
@@ -265,16 +288,16 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     @objc public var previewBtnHighlightTitleColor = zlRGB(80, 169, 56)
     
     /// 相册列表界面背景色
-    @objc public var albumListBgColor = UIColor.white
+    @objc public var albumListBgColor = zlRGB(45, 45, 45)
     
     /// 相册列表界面 相册title颜色
-    @objc public var albumListTitleColor = UIColor.black
+    @objc public var albumListTitleColor = UIColor.white
     
     /// 相册列表界面 数量label颜色
     @objc public var albumListCountColor = zlRGB(180, 180, 180)
     
     /// 分割线颜色
-    @objc public var separatorColor = zlRGB(200, 200, 200)
+    @objc public var separatorColor = zlRGB(60, 60, 60)
     
     /// 小图界面背景色
     @objc public var thumbnailBgColor = zlRGB(50, 50, 50)

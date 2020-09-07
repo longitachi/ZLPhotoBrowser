@@ -31,6 +31,8 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
 
     var navView: UIView!
     
+    var navBlurView: UIVisualEffectView?
+    
     var albumTitleLabel: UILabel!
     
     var cancelBtn: UIButton!
@@ -81,6 +83,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         }
         let navH = insets.top + 44
         self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: navH)
+        self.navBlurView?.frame = self.navView.bounds
         
         let albumTitleW = localLanguageTextValue(.photo).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width
         self.albumTitleLabel.frame = CGRect(x: (self.view.frame.width-albumTitleW)/2, y: insets.top, width: albumTitleW, height: 44)
@@ -114,6 +117,11 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         self.navView.backgroundColor = .navBarColor
         self.view.addSubview(self.navView)
         
+        if let effect = ZLPhotoConfiguration.default().navViewBlurEffect {
+            self.navBlurView = UIVisualEffectView(effect: effect)
+            self.navView.addSubview(self.navBlurView!)
+        }
+        
         self.albumTitleLabel = UILabel()
         self.albumTitleLabel.textColor = .navTitleColor
         self.albumTitleLabel.font = ZLLayout.navTitleFont
@@ -142,14 +150,12 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ZLAlbumListCell.zl_identifier(), for: indexPath) as! ZLAlbumListCell
         
-        cell.model = self.arrDataSource[indexPath.row]
+        cell.configureCell(model: self.arrDataSource[indexPath.row], style: .externalAlbumList)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
         let vc = ZLThumbnailViewController(albumList: self.arrDataSource[indexPath.row])
         self.show(vc, sender: nil)
     }

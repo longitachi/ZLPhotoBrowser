@@ -34,13 +34,11 @@ class ZLAlbumListCell: UITableViewCell {
     
     var countLabel: UILabel!
     
+    var selectBtn: UIButton!
+    
     var imageIdentifier: String?
     
-    var model: ZLAlbumListModel! {
-        didSet {
-            self.configureCell()
-        }
-    }
+    var model: ZLAlbumListModel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -60,17 +58,18 @@ class ZLAlbumListCell: UITableViewCell {
         super.layoutSubviews()
         self.coverImageView.frame = CGRect(x: 12, y: 2, width: self.bounds.height-4, height: self.bounds.height-4)
         if let m = self.model {
-            let size = m.title.boundingRect(font: getFont(17), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30))
-            self.titleLabel.frame = CGRect(x: self.coverImageView.frame.maxX + 10, y: (self.bounds.height - 30)/2, width: size.width, height: 30)
+            let titleW = min(self.bounds.width / 3 * 2, m.title.boundingRect(font: getFont(17), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width)
+            self.titleLabel.frame = CGRect(x: self.coverImageView.frame.maxX + 10, y: (self.bounds.height - 30)/2, width: titleW, height: 30)
             
             let countSize = ("(" + String(self.model.count) + ")").boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30))
             self.countLabel.frame = CGRect(x: self.titleLabel.frame.maxX + 10, y: (self.bounds.height - 30)/2, width: countSize.width, height: 30)
         }
+        self.selectBtn.frame = CGRect(x: self.bounds.width - 25 - 30, y: (self.bounds.height - 25) / 2, width: 25, height: 25)
     }
     
     func setupUI() {
-        self.accessoryType = .disclosureIndicator
         self.backgroundColor = .albumListBgColor
+        self.selectionStyle = .none
         
         self.coverImageView = UIImageView()
         self.coverImageView.contentMode = .scaleAspectFill
@@ -91,12 +90,28 @@ class ZLAlbumListCell: UITableViewCell {
         self.countLabel.font = getFont(16)
         self.countLabel.textColor = .albumListCountColor
         self.contentView.addSubview(self.countLabel)
+        
+        self.selectBtn = UIButton(type: .custom)
+        self.selectBtn.isUserInteractionEnabled = false
+        self.selectBtn.isHidden = true
+        self.selectBtn.setImage(getImage("zl_albumSelect"), for: .selected)
+        self.contentView.addSubview(self.selectBtn)
     }
     
-    func configureCell() {
+    func configureCell(model: ZLAlbumListModel, style: ZLPhotoBrowserStyle) {
+        self.model = model
+        
         self.titleLabel.text = self.model.title
         self.countLabel.text = "(" + String(self.model.count) + ")"
-            
+        
+        if style == .embedAlbumList {
+            self.accessoryType = .none
+            self.selectBtn.isHidden = false
+        } else {
+            self.accessoryType = .disclosureIndicator
+            self.selectBtn.isHidden = true
+        }
+        
         self.imageIdentifier = self.model.headImageAsset?.localIdentifier
         if let asset = self.model.headImageAsset {
             let w = self.bounds.height * 2.5

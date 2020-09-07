@@ -38,6 +38,11 @@ extension UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.navTitleColor
     }
     
+    /// 框架样式为 embedAlbumList 时，title view 背景色
+    class var navEmbedTitleViewBgColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.navEmbedTitleViewBgColor
+    }
+    
     /// 预览选择模式下 上方透明背景色
     class var previewBgColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.previewBgColor

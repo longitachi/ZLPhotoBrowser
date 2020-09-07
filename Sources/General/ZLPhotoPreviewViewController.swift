@@ -47,6 +47,8 @@ class ZLPhotoPreviewViewController: UIViewController {
     
     var navView: UIView!
     
+    var navBlurView: UIVisualEffectView?
+    
     var backBtn: UIButton!
     
     var selectBtn: UIButton!
@@ -133,6 +135,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         
         let navH = insets.top + 44
         self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: navH)
+        self.navBlurView?.frame = self.navView.bounds
         
         self.backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
         self.selectBtn.frame = CGRect(x: self.view.frame.width - 40 - insets.right, y: insets.top + (44 - 25) / 2, width: 25, height: 25)
@@ -206,6 +209,11 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.navView = UIView()
         self.navView.backgroundColor = .navBarColor
         self.view.addSubview(self.navView)
+        
+        if let effect = ZLPhotoConfiguration.default().navViewBlurEffect {
+            self.navBlurView = UIVisualEffectView(effect: effect)
+            self.navView.addSubview(self.navBlurView!)
+        }
         
         self.backBtn = UIButton(type: .custom)
         self.backBtn.setImage(getImage("zl_navBack"), for: .normal)
