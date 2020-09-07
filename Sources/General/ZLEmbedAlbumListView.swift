@@ -87,10 +87,10 @@ class ZLEmbedAlbumListView: UIView {
         var toFrame = self.tableView.frame
         toFrame.origin.y = -toFrame.height
         
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: 0.25, animations: {
             self.alpha = 0
             self.tableView.frame = toFrame
-        } completion: { (_) in
+        }) { (_) in
             self.isHidden = true
             self.alpha = 1
         }

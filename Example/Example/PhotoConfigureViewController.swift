@@ -24,6 +24,8 @@ class PhotoConfigureViewController: UIViewController {
     
     var cellRadiusTextField: UITextField!
     
+    var styleSegment: UISegmentedControl!
+    
     var languageSegment: UISegmentedControl!
     
     var columnCountLabel: UILabel!
@@ -241,11 +243,28 @@ class PhotoConfigureViewController: UIViewController {
             make.size.equalTo(fieldSize)
         }
         
+        // 相册样式
+        let styleLabel = createLabel("相册样式")
+        containerView.addSubview(styleLabel)
+        styleLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(cellRadiusLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(previewCountLabel.snp.left)
+        }
+        
+        self.styleSegment = UISegmentedControl(items: ["样式一(仿微信)", "样式二(传统)"])
+        self.styleSegment.selectedSegmentIndex = config.style.rawValue
+        self.styleSegment.addTarget(self, action: #selector(styleSegmentChanged), for: .valueChanged)
+        containerView.addSubview(self.styleSegment)
+        self.styleSegment.snp.makeConstraints { (make) in
+            make.left.equalTo(styleLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(styleLabel)
+        }
+        
         // 框架语言
         let languageLabel = createLabel("框架语言")
         containerView.addSubview(languageLabel)
         languageLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(cellRadiusLabel.snp.bottom).offset(velSpacing)
+            make.top.equalTo(styleLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -682,6 +701,10 @@ class PhotoConfigureViewController: UIViewController {
     
     @objc func dismissBtnClick() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func styleSegmentChanged() {
+        config.style = styleSegment.selectedSegmentIndex == 0 ? .embedAlbumList : .externalAlbumList
     }
     
     @objc func languageSegmentChanged() {
