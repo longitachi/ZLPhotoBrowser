@@ -111,9 +111,13 @@ class ZLClipImageViewController: UIViewController {
     
     var resetTimer: Timer?
     
-    var clipDoneBlock: ( (UIImage, CGRect) -> Void )?
+    var dismissAnimateFromRect: CGRect = .zero
     
-    var cancelClipBlock: ( (UIImage?, CGRect) -> Void )?
+    var dismissAnimateImage: UIImage? = nil
+    
+    var clipDoneBlock: ( (UIImage) -> Void )?
+    
+    var cancelClipBlock: ( (Bool) -> Void )?
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -169,6 +173,7 @@ class ZLClipImageViewController: UIViewController {
             }
         }
         self.viewDidAppearCount += 1
+        self.transitioningDelegate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -356,11 +361,11 @@ class ZLClipImageViewController: UIViewController {
     }
     
     @objc func cancelBtnClick() {
-        let image = self.angle == 0 ? self.originalImage : nil
-        let frame = self.view.convert(self.containerView.frame, from: self.scrollView)
-        self.dismiss(animated: false) {
-            self.cancelClipBlock?(image, frame)
-        }
+        self.dismissAnimateFromRect = self.view.convert(self.containerView.frame, from: self.scrollView)
+        self.dismissAnimateImage = self.editImage
+        let animate = self.angle == 0
+        self.cancelClipBlock?(animate)
+        self.dismiss(animated: animate, completion: nil)
     }
     
     @objc func revertBtnClick() {
@@ -374,9 +379,10 @@ class ZLClipImageViewController: UIViewController {
     
     @objc func doneBtnClick() {
         let image = self.clipImage()
-        self.dismiss(animated: false) {
-            self.clipDoneBlock?(image, self.clipBoxFrame)
-        }
+        self.dismissAnimateFromRect = self.clipBoxFrame
+        self.dismissAnimateImage = image
+        self.clipDoneBlock?(image)
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func rotateBtnClick() {
@@ -705,6 +711,14 @@ extension ZLClipImageViewController: UIScrollViewDelegate {
     
 }
 
+
+extension ZLClipImageViewController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return ZLClipImageDismissAnimatedTransition()
+    }
+    
+}
 
 
 class ZLClipShadowView: UIView {

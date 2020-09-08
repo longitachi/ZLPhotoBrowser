@@ -30,6 +30,9 @@ public class ZLEditImageViewController: UIViewController {
 
     var originalImage: UIImage
     
+    // 第一次进入界面时，布局后frame，裁剪dimiss动画使用
+    var originalFrame: CGRect = .zero
+    
     let tools: EditImageTool
     
     var editImage: UIImage
@@ -197,6 +200,8 @@ public class ZLEditImageViewController: UIViewController {
         self.mosaicImageLayer?.frame = self.imageView.bounds
         self.mosaicImageLayerMaskLayer?.frame = self.imageView.bounds
         self.drawingImageView.frame = self.containerView.bounds
+        
+        self.originalFrame = self.view.convert(self.containerView.frame, from: self.scrollView)
     }
     
     func setupUI() {
@@ -338,27 +343,12 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc func clipBtnClick() {
-        func animateWhenClipSuc(_ from: CGRect, _ image: UIImage) {
-            let animateImageView = UIImageView(image: image)
-            animateImageView.contentMode = .scaleAspectFit
-            animateImageView.clipsToBounds = true
-            animateImageView.frame = from
-            self.view.insertSubview(animateImageView, aboveSubview: self.scrollView)
-            let to = self.view.convert(self.containerView.frame, from: self.scrollView)
-            UIView.animate(withDuration: 0.3, animations: {
-                animateImageView.frame = to
-            }) { (_) in
-                self.scrollView.alpha = 1
-                animateImageView.removeFromSuperview()
-            }
-        }
-        
         let vc = ZLClipImageViewController(image: self.buildImage())
         let rect = self.view.convert(self.containerView.frame, from: self.scrollView)
         vc.animateOriginFrame = rect
         vc.modalPresentationStyle = .fullScreen
         
-        vc.clipDoneBlock = { [weak self] (image, frame) in
+        vc.clipDoneBlock = { [weak self] (image) in
             self?.drawPaths.removeAll()
             self?.mosaicPaths.removeAll()
             self?.revokeBtn.isEnabled = false
@@ -369,14 +359,11 @@ public class ZLEditImageViewController: UIViewController {
             self?.mosaicImageLayer?.contents = self?.mosaicImage?.cgImage
             self?.drawingImageView.image = nil
             self?.resetContainerViewFrame()
-            animateWhenClipSuc(frame, image)
         }
         
-        vc.cancelClipBlock = { [weak self] (image, frame) in
+        vc.cancelClipBlock = { [weak self] (animate) in
             self?.resetContainerViewFrame()
-            if let _ = image {
-                animateWhenClipSuc(frame, image!)
-            } else {
+            if !animate {
                 self?.scrollView.alpha = 1
             }
         }
