@@ -40,6 +40,8 @@ class ZLAlbumListCell: UITableViewCell {
     
     var model: ZLAlbumListModel!
     
+    var style: ZLPhotoBrowserStyle = .embedAlbumList
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -56,7 +58,15 @@ class ZLAlbumListCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.coverImageView.frame = CGRect(x: 12, y: 2, width: self.bounds.height-4, height: self.bounds.height-4)
+        
+        let imageViewX: CGFloat
+        if self.style == .embedAlbumList {
+            imageViewX = 0
+        } else {
+            imageViewX = 12
+        }
+        
+        self.coverImageView.frame = CGRect(x: imageViewX, y: 2, width: self.bounds.height-4, height: self.bounds.height-4)
         if let m = self.model {
             let titleW = min(self.bounds.width / 3 * 2, m.title.boundingRect(font: getFont(17), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width)
             self.titleLabel.frame = CGRect(x: self.coverImageView.frame.maxX + 10, y: (self.bounds.height - 30)/2, width: titleW, height: 30)
@@ -100,6 +110,7 @@ class ZLAlbumListCell: UITableViewCell {
     
     func configureCell(model: ZLAlbumListModel, style: ZLPhotoBrowserStyle) {
         self.model = model
+        self.style = style
         
         self.titleLabel.text = self.model.title
         self.countLabel.text = "(" + String(self.model.count) + ")"

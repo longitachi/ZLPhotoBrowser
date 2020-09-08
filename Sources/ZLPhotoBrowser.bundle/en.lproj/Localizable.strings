@@ -43,7 +43,7 @@
 "timeout" = "Request timed out";
 
 "customCameraTips" = "Tap to take photo and hold to record video";
-"minRecordTimeTips" = "Record for at least %lds";
+"minRecordTimeTips" = "Record at least %lds";
 
 "cameraRoll" = "Camera Roll";
 "panoramas" = "Panoramas";

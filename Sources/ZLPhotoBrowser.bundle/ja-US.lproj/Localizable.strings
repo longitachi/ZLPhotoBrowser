@@ -43,7 +43,7 @@
 "timeout" = "要求タイムアウト";
 
 "customCameraTips" = "タップして撮影、長押しで記録";
-"minRecordTimeTips" = "少なくとも%ld秒の記録";
+"minRecordTimeTips" = "%lds以上記録する";
 
 "cameraRoll" = "カメラロール";
 "panoramas" = "パノラマ";
