@@ -1,59 +1,60 @@
-"ZLPhotoBrowserCameraText" = "Camera";
-"ZLPhotoBrowserCameraRecordText" = "Record";
-"ZLPhotoBrowserAblumText" = "Album";
-"ZLPhotoBrowserCancelText" = "Cancel";
+"previewCamera" = "Camera";
+"previewCameraRecord" = "Record";
+"previewAlbum" = "Album";
+"previewCancel" = "Cancel";
 
-"ZLPhotoBrowserOriginalText" = "Full Image";
-"ZLPhotoBrowserDoneText" = "Done";
-"ZLPhotoBrowserOKText" = "OK";
-"ZLPhotoBrowserEditFinishText" = "Done";
+"originalPhoto" = "Full Image";
+"done" = "Done";
+"ok" = "OK";
+"editFinish" = "Done";
 
-"ZLPhotoBrowserBackText" = "Back";
+"back" = "Back";
 
-"ZLPhotoBrowserEditText" = "Edit";
-"ZLPhotoBrowserSaveText" = "Save";
-"ZLPhotoBrowserRevertText" = "Undo";
+"edit" = "Edit";
+"save" = "Save";
+"revert" = "Undo";
 
-"ZLPhotoBrowserPhotoText" = "Photos";
-"ZLPhotoBrowserPreviewText" = "Preview";
+"photo" = "Photos";
+"preview" = "Preview";
 
-"ZLPhotoBrowserNoPhotoText" = "No Photo";
-"ZLPhotoBrowserNotAllowMixSelect" = "Unable to select video";
+"noPhotoTips" = "No Photo";
+"notAllowMixSelect" = "Unable to select video";
 
-"ZLPhotoBrowserLoadingText" = "loading，waiting please";
-"ZLPhotoBrowserHandleText" = "waiting...";
+"loading" = "loading，waiting please";
+"hudLoading" = "waiting...";
 
-"ZLPhotoBrowserSaveImageErrorText" = "Failed to save the image";
-"ZLPhotoBrowserExceededMaxSelectCountText" = "Max select count: %ld";
-"ZLPhotoBrowserLongerThanMaxVideoDurationText" = "Unable to select video with a duration longer than %lds";
-"ZLPhotoBrowserShorterThanMinVideoDurationText" = "Unable to select video with a duration shorter than %lds";
+"saveImageError" = "Failed to save the image";
+"exceededMaxSelectCount" = "Max select count: %ld";
+"longerThanMaxVideoDuration" = "Unable to select video with a duration longer than %lds";
+"shorterThanMaxVideoDuration" = "Unable to select video with a duration shorter than %lds";
 "ZLPhotoBrowserMaxVideoSelectCountInMix" = "Video max select count: %ld";
 "ZLPhotoBrowserMinVideoSelectCountInMix" = "Video min select count: %ld";
 
-"ZLPhotoBrowserNoCameraAuthorityText" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
-"ZLPhotoBrowserNoAblumAuthorityText" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";
-"ZLPhotoBrowserNoMicrophoneAuthorityText" = "Please allow %@ to access your device's microphone in \"Settings\"->\"Privacy\"->\"Microphone\"";
-"ZLPhotoBrowserCameraUnavailableText" = "Camera is unavailable";
+"noCameraAuthority" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
+"noPhotoLibratyAuthority" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";
+"noMicrophoneAuthority" = "Please allow %@ to access your device's microphone in \"Settings\"->\"Privacy\"->\"Microphone\"";
+"cameraUnavailable" = "Camera is unavailable";
 
-"ZLPhotoBrowseriCloudPhotoLoadFailedText" = "Retry after download in photo ablum";
-"ZLPhotoBrowseriCloudVideoLoadFailedText" = "Unable to sync from iCloud";
+"iCloudPhotoLoadFaild" = "Retry after download in photo ablum";
+"iCloudVideoLoadFaild" = "Unable to sync from iCloud";
 
-"ZLPhotoBrowserLoadImageFailed" = "loading failed";
-"ZLPhotoBrowserSaveVideoFailed" = "Failed to save the video";
-"ZLPhotoBrowserRequestTimeout" = "Request timed out";
+"imageLoadFailed" = "loading failed";
+"saveVideoError" = "Failed to save the video";
+"timeout" = "Request timed out";
 
-"ZLPhotoBrowserCustomCameraTips" = "Tap to take photo and hold to record video";
+"customCameraTips" = "Tap to take photo and hold to record video";
+"minRecordTimeTips" = "Record for at least %lds";
 
-"ZLPhotoBrowserCameraRoll" = "Camera Roll";
-"ZLPhotoBrowserPanoramas" = "Panoramas";
-"ZLPhotoBrowserVideos" = "Videos";
-"ZLPhotoBrowserFavorites" = "Favorites";
-"ZLPhotoBrowserTimelapses" = "Time-Lapse";
-"ZLPhotoBrowserRecentlyAdded" = "Recently Added";
-"ZLPhotoBrowserBursts" = "Bursts";
-"ZLPhotoBrowserSlomoVideos" = "Slo-mo";
-"ZLPhotoBrowserSelfPortraits" = "Selfies";
-"ZLPhotoBrowserScreenshots" = "Screenshots";
-"ZLPhotoBrowserDepthEffect" = "Depth Effect";
-"ZLPhotoBrowserLivePhotos" = "Live Photo";
-"ZLPhotoBrowserAnimated" = "Animated";
+"cameraRoll" = "Camera Roll";
+"panoramas" = "Panoramas";
+"videos" = "Videos";
+"favorites" = "Favorites";
+"timelapses" = "Time-Lapse";
+"recentlyAdded" = "Recently Added";
+"bursts" = "Bursts";
+"slomoVideos" = "Slo-mo";
+"selfPortraits" = "Selfies";
+"screenshots" = "Screenshots";
+"depthEffect" = "Depth Effect";
+"livePhotos" = "Live Photo";
+"animated" = "Animated";

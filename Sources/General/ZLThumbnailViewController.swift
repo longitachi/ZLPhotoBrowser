@@ -936,7 +936,7 @@ extension ZLThumbnailViewController: UIImagePickerControllerDelegate, UINavigati
 // MARK: embed album list nav view
 class ZLEmbedAlbumListNavView: UIView {
     
-    static let titleViewH: CGFloat = 30
+    static let titleViewH: CGFloat = 32
     
     static let arrowH: CGFloat = 20
     

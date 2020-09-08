@@ -187,8 +187,8 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// 支持开发者自定义多语言提示（提供给oc使用）
     /// - example: 开发者需要替换
-    /// key: "ZLPhotoBrowserLoadingText"，value:"正在处理..." 的多语言
-    /// 则需要传入的字典为 ["ZLPhotoBrowserLoadingText": "需要替换的文字"]
+    /// key: "loading"，value:"正在处理..." 的多语言
+    /// 则需要传入的字典为 ["loading": "需要替换的文字"]
     /// 而其他多语言则用框架中的
     /// - warning: 更改时请注意多语言中包含的占位符，如%ld、%@
     @objc public var customLanguageKeyValue_objc: [String: String] = [:] {
@@ -219,8 +219,18 @@ public class ZLPhotoConfiguration: NSObject {
     /// 是否允许录制视频
     @objc public var allowRecordVideo = true
     
-    private var pri_maxRecordDuration: Second = 10
+    private var pri_minRecordDuration: Second = 0
+    /// 最小录制时长，默认 0s
+    @objc public var minRecordDuration: Second {
+        set {
+            pri_minRecordDuration = max(0, newValue)
+        }
+        get {
+            return pri_minRecordDuration
+        }
+    }
     
+    private var pri_maxRecordDuration: Second = 10
     /// 最大录制时长，默认 10s，最小为 1s
     @objc public var maxRecordDuration: Second {
         set {
@@ -282,26 +292,26 @@ public class ZLPhotoThemeColorDeploy: NSObject {
         return ZLPhotoThemeColorDeploy()
     }
     
+    /// 预览快速选择模式下 上方透明背景色
+    @objc public var previewBgColor = UIColor.black.withAlphaComponent(0.1)
+    
+    /// 预览快速选择模式下 拍照/相册/取消 的背景颜色
+    @objc public var previewBtnBgColor = UIColor.white
+    
+    /// 预览快速选择模式下 拍照/相册/取消 的字体颜色
+    @objc public var previewBtnTitleColor = UIColor.black
+    
+    /// 预览快速选择模式下 选择照片大于0时，取消按钮title颜色
+    @objc public var previewBtnHighlightTitleColor = zlRGB(80, 169, 56)
+    
     /// 导航条颜色
-    @objc public var navBarColor = zlRGB(35, 35, 35).withAlphaComponent(0.3)
+    @objc public var navBarColor = zlRGB(100, 100, 100).withAlphaComponent(0.7)
     
     /// 导航标题颜色
     @objc public var navTitleColor = UIColor.white
     
     /// 框架样式为 embedAlbumList 时，title view 背景色
-    @objc public var navEmbedTitleViewBgColor = zlRGB(65, 65, 65)
-    
-    /// 预览选择模式下 上方透明背景色
-    @objc public var previewBgColor = UIColor.black.withAlphaComponent(0.1)
-    
-    /// 预览选择模式下 拍照/相册/取消 的背景颜色
-    @objc public var previewBtnBgColor = UIColor.white
-    
-    /// 预览选择模式下 拍照/相册/取消 的字体颜色
-    @objc public var previewBtnTitleColor = UIColor.black
-    
-    /// 预览选择模式下 选择照片大于0时，取消按钮title颜色
-    @objc public var previewBtnHighlightTitleColor = zlRGB(80, 169, 56)
+    @objc public var navEmbedTitleViewBgColor = zlRGB(70, 70, 70)
     
     /// 相册列表界面背景色
     @objc public var albumListBgColor = zlRGB(45, 45, 45)
@@ -319,7 +329,7 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     @objc public var thumbnailBgColor = zlRGB(50, 50, 50)
     
     /// 底部工具条底色
-    @objc public var bottomToolViewBgColor = zlRGB(35, 35, 35).withAlphaComponent(0.1)
+    @objc public var bottomToolViewBgColor = zlRGB(35, 35, 35).withAlphaComponent(0.3)
     
     /// 底部工具栏按钮 可交互 状态标题颜色
     @objc public var bottomToolViewBtnNormalTitleColor = UIColor.white

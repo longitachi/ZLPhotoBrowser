@@ -64,7 +64,7 @@ class ZLAlbumListCell: UITableViewCell {
             let countSize = ("(" + String(self.model.count) + ")").boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30))
             self.countLabel.frame = CGRect(x: self.titleLabel.frame.maxX + 10, y: (self.bounds.height - 30)/2, width: countSize.width, height: 30)
         }
-        self.selectBtn.frame = CGRect(x: self.bounds.width - 25 - 30, y: (self.bounds.height - 25) / 2, width: 25, height: 25)
+        self.selectBtn.frame = CGRect(x: self.bounds.width - 20 - 20, y: (self.bounds.height - 20) / 2, width: 20, height: 20)
     }
     
     func setupUI() {

@@ -549,10 +549,15 @@ public class ZLPhotoPreviewSheet: UIView {
     func showThumbnailViewController() {
         ZLPhotoManager.getCameraRollAlbum(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (cameraRoll) in
             guard let `self` = self else { return }
-            let albumListVC = ZLAlbumListController()
-            let nav = self.getImageNav(rootViewController: albumListVC)
-            let tvc = ZLThumbnailViewController(albumList: cameraRoll)
-            nav.pushViewController(tvc, animated: true)
+            let nav: ZLImageNavController
+            if ZLPhotoConfiguration.default().style == .embedAlbumList {
+                let tvc = ZLThumbnailViewController(albumList: cameraRoll)
+                nav = self.getImageNav(rootViewController: tvc)
+            } else {
+                nav = self.getImageNav(rootViewController: ZLAlbumListController())
+                let tvc = ZLThumbnailViewController(albumList: cameraRoll)
+                nav.pushViewController(tvc, animated: true)
+            }
             self.sender?.showDetailViewController(nav, sender: nil)
         }
     }

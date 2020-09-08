@@ -42,97 +42,99 @@ public struct ZLLocalLanguageKey: Hashable {
         self.rawValue = rawValue
     }
     
-    public static let previewCamera = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserCameraText")
+    public static let previewCamera = ZLLocalLanguageKey(rawValue: "previewCamera")
     
-    public static let previewCameraRecord = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserCameraRecordText")
+    public static let previewCameraRecord = ZLLocalLanguageKey(rawValue: "previewCameraRecord")
     
-    public static let previewAlbum = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserAblumText")
+    public static let previewAlbum = ZLLocalLanguageKey(rawValue: "previewAlbum")
     
-    public static let previewCancel = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserCancelText")
+    public static let previewCancel = ZLLocalLanguageKey(rawValue: "previewCancel")
     
-    public static let noPhotoTips = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserNoPhotoText")
+    public static let noPhotoTips = ZLLocalLanguageKey(rawValue: "noPhotoTips")
     
-    public static let loading = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserLoadingText")
+    public static let loading = ZLLocalLanguageKey(rawValue: "loading")
     
-    public static let hudLoading = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserHandleText")
+    public static let hudLoading = ZLLocalLanguageKey(rawValue: "hudLoading")
     
-    public static let done = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserDoneText")
+    public static let done = ZLLocalLanguageKey(rawValue: "done")
     
-    public static let ok = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserOKText")
+    public static let ok = ZLLocalLanguageKey(rawValue: "ok")
     
-    public static let timeout = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserRequestTimeout")
+    public static let timeout = ZLLocalLanguageKey(rawValue: "timeout")
     
-    public static let maxSelectCount = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserExceededMaxSelectCountText")
+    public static let maxSelectCount = ZLLocalLanguageKey(rawValue: "exceededMaxSelectCount")
     
-    public static let noPhotoLibratyAuthority = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserNoAblumAuthorityText")
+    public static let noPhotoLibratyAuthority = ZLLocalLanguageKey(rawValue: "noPhotoLibratyAuthority")
     
-    public static let noCameraAuthority = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserNoCameraAuthorityText")
+    public static let noCameraAuthority = ZLLocalLanguageKey(rawValue: "noCameraAuthority")
     
-    public static let noMicrophoneAuthority = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserNoMicrophoneAuthorityText")
+    public static let noMicrophoneAuthority = ZLLocalLanguageKey(rawValue: "noMicrophoneAuthority")
     
-    public static let cameraUnavailable = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserCameraUnavailableText")
+    public static let cameraUnavailable = ZLLocalLanguageKey(rawValue: "cameraUnavailable")
     
-    public static let photo = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserPhotoText")
+    public static let photo = ZLLocalLanguageKey(rawValue: "photo")
     
-    public static let originalPhoto = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserOriginalText")
+    public static let originalPhoto = ZLLocalLanguageKey(rawValue: "originalPhoto")
     
-    public static let back = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserBackText")
+    public static let back = ZLLocalLanguageKey(rawValue: "back")
     
-    public static let edit = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserEditText")
+    public static let edit = ZLLocalLanguageKey(rawValue: "edit")
     
-    public static let editFinish = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserEditFinishText")
+    public static let editFinish = ZLLocalLanguageKey(rawValue: "editFinish")
     
-    public static let save = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserSaveText")
+    public static let save = ZLLocalLanguageKey(rawValue: "save")
     
-    public static let revert = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserRevertText")
+    public static let revert = ZLLocalLanguageKey(rawValue: "revert")
     
-    public static let preview = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserPreviewText")
+    public static let preview = ZLLocalLanguageKey(rawValue: "preview")
     
-    public static let notAllowMixSelect = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserNotAllowMixSelect")
+    public static let notAllowMixSelect = ZLLocalLanguageKey(rawValue: "notAllowMixSelect")
     
-    public static let saveImageError = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserSaveImageErrorText")
+    public static let saveImageError = ZLLocalLanguageKey(rawValue: "saveImageError")
     
-    public static let saveVideoError = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserSaveVideoFailed")
+    public static let saveVideoError = ZLLocalLanguageKey(rawValue: "saveVideoError")
     
-    public static let exceededMaxSelectCount = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserExceededMaxSelectCountText")
+    public static let exceededMaxSelectCount = ZLLocalLanguageKey(rawValue: "exceededMaxSelectCount")
     
-    public static let longerThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserLongerThanMaxVideoDurationText")
+    public static let longerThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "longerThanMaxVideoDuration")
     
-    public static let shorterThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserShorterThanMinVideoDurationText")
+    public static let shorterThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "shorterThanMaxVideoDuration")
     
-    public static let iCloudPhotoLoadFaild = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowseriCloudPhotoLoadFailedText")
+    public static let iCloudPhotoLoadFaild = ZLLocalLanguageKey(rawValue: "iCloudPhotoLoadFaild")
     
-    public static let iCloudVideoLoadFaild = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowseriCloudVideoLoadFailedText")
+    public static let iCloudVideoLoadFaild = ZLLocalLanguageKey(rawValue: "iCloudVideoLoadFaild")
     
-    public static let imageLoadFailed = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserLoadImageFailed")
+    public static let imageLoadFailed = ZLLocalLanguageKey(rawValue: "imageLoadFailed")
     
-    public static let customCameraTips = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserCustomCameraTips")
+    public static let customCameraTips = ZLLocalLanguageKey(rawValue: "customCameraTips")
     
-    public static let cameraRoll = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserCameraRoll")
+    public static let minRecordTimeTips = ZLLocalLanguageKey(rawValue: "minRecordTimeTips")
     
-    public static let panoramas = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserPanoramas")
+    public static let cameraRoll = ZLLocalLanguageKey(rawValue: "cameraRoll")
     
-    public static let videos = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserVideos")
+    public static let panoramas = ZLLocalLanguageKey(rawValue: "panoramas")
     
-    public static let favorites = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserFavorites")
+    public static let videos = ZLLocalLanguageKey(rawValue: "videos")
     
-    public static let timelapses = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserTimelapses")
+    public static let favorites = ZLLocalLanguageKey(rawValue: "favorites")
     
-    public static let recentlyAdded = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserRecentlyAdded")
+    public static let timelapses = ZLLocalLanguageKey(rawValue: "timelapses")
     
-    public static let bursts = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserBursts")
+    public static let recentlyAdded = ZLLocalLanguageKey(rawValue: "recentlyAdded")
     
-    public static let slomoVideos = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserSlomoVideos")
+    public static let bursts = ZLLocalLanguageKey(rawValue: "bursts")
     
-    public static let selfPortraits = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserSelfPortraits")
+    public static let slomoVideos = ZLLocalLanguageKey(rawValue: "slomoVideos")
     
-    public static let screenshots = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserScreenshots")
+    public static let selfPortraits = ZLLocalLanguageKey(rawValue: "selfPortraits")
     
-    public static let depthEffect = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserDepthEffect")
+    public static let screenshots = ZLLocalLanguageKey(rawValue: "screenshots")
     
-    public static let livePhotos = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserLivePhotos")
+    public static let depthEffect = ZLLocalLanguageKey(rawValue: "depthEffect")
     
-    public static let animated = ZLLocalLanguageKey(rawValue: "ZLPhotoBrowserAnimated")
+    public static let livePhotos = ZLLocalLanguageKey(rawValue: "livePhotos")
+    
+    public static let animated = ZLLocalLanguageKey(rawValue: "animated")
     
 }
 

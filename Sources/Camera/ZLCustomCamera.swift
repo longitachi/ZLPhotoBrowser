@@ -280,15 +280,17 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.animateLayer.fillColor = UIColor.clear.cgColor
         self.animateLayer.lineWidth = 8
         
+        var takePictureTap: UITapGestureRecognizer?
         if ZLPhotoConfiguration.default().allowSelectImage {
-            let takePictureTap = UITapGestureRecognizer(target: self, action: #selector(takePicture))
-            self.largeCircleView.addGestureRecognizer(takePictureTap)
+            takePictureTap = UITapGestureRecognizer(target: self, action: #selector(takePicture))
+            self.largeCircleView.addGestureRecognizer(takePictureTap!)
         }
         if ZLPhotoConfiguration.default().allowRecordVideo {
             let recordLongPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
             recordLongPress.minimumPressDuration = 0.3
             recordLongPress.delegate = self
             self.largeCircleView.addGestureRecognizer(recordLongPress)
+            takePictureTap?.require(toFail: recordLongPress)
         }
         
         self.retakeBtn = UIButton(type: .custom)
@@ -723,9 +725,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             return
         }
         self.movieFileOutput.stopRecording()
-        self.session.stopRunning()
         self.stopRecordAnimation()
-        self.resetSubViewStatus()
     }
     
     func startRecordAnimation() {
@@ -828,10 +828,19 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
             //视频长度小于0.3s 允许拍照则拍照，不允许拍照，则保存小于0.3s的视频
             if ZLPhotoConfiguration.default().allowSelectImage {
                 self.takePicture()
+                try? FileManager.default.removeItem(at: outputFileURL)
                 return
             }
         }
+        if output.recordedDuration.seconds < Double(ZLPhotoConfiguration.default().minRecordDuration) {
+            showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), ZLPhotoConfiguration.default().minRecordDuration), self)
+            self.resetSubViewStatus()
+            try? FileManager.default.removeItem(at: outputFileURL)
+            return
+        }
         
+        self.session.stopRunning()
+        self.resetSubViewStatus()
         self.videoUrl = outputFileURL
         self.playRecordVideo(fileUrl: outputFileURL)
     }

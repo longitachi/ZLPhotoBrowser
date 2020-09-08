@@ -1,59 +1,60 @@
-"ZLPhotoBrowserCameraText" = "拍照";
-"ZLPhotoBrowserCameraRecordText" = "拍攝";
-"ZLPhotoBrowserAblumText" = "相冊";
-"ZLPhotoBrowserCancelText" = "取消";
+"previewCamera" = "拍照";
+"previewCameraRecord" = "拍攝";
+"previewAlbum" = "相冊";
+"previewCancel" = "取消";
 
-"ZLPhotoBrowserOriginalText" = "原圖";
-"ZLPhotoBrowserDoneText" = "確定";
-"ZLPhotoBrowserOKText" = "確定";
-"ZLPhotoBrowserEditFinishText" = "完成";
+"originalPhoto" = "原圖";
+"done" = "確定";
+"ok" = "確定";
+"editFinish" = "完成";
 
-"ZLPhotoBrowserBackText" = "返回";
+"back" = "返回";
 
-"ZLPhotoBrowserEditText" = "編輯";
-"ZLPhotoBrowserSaveText" = "保存";
-"ZLPhotoBrowserRevertText" = "還原";
+"edit" = "編輯";
+"save" = "保存";
+"revert" = "還原";
 
-"ZLPhotoBrowserPhotoText" = "照片";
-"ZLPhotoBrowserPreviewText" = "預覽";
+"photo" = "照片";
+"preview" = "預覽";
 
-"ZLPhotoBrowserNoPhotoText" = "無照片";
-"ZLPhotoBrowserNotAllowMixSelect" = "不能同時選擇照片和視頻";
+"noPhotoTips" = "無照片";
+"notAllowMixSelect" = "不能同時選擇照片和視頻";
 
-"ZLPhotoBrowserLoadingText" = "加載中，請稍後";
-"ZLPhotoBrowserHandleText" = "正在處理...";
+"loading" = "加載中，請稍後";
+"hudLoading" = "正在處理...";
 
-"ZLPhotoBrowserSaveImageErrorText" = "圖片保存失敗";
-"ZLPhotoBrowserExceededMaxSelectCountText" = "最多只能選擇%ld張圖片";
-"ZLPhotoBrowserLongerThanMaxVideoDurationText" = "不能選擇超過%ld秒的視頻";
-"ZLPhotoBrowserShorterThanMinVideoDurationText" = "不能選擇低於%ld秒的視頻";
+"saveImageError" = "圖片保存失敗";
+"exceededMaxSelectCount" = "最多只能選擇%ld張圖片";
+"longerThanMaxVideoDuration" = "不能選擇超過%ld秒的視頻";
+"shorterThanMaxVideoDuration" = "不能選擇低於%ld秒的視頻";
 "ZLPhotoBrowserMaxVideoSelectCountInMix" = "最多只能選擇%ld個視頻";
 "ZLPhotoBrowserMinVideoSelectCountInMix" = "最少選擇%ld個視頻";
 
-"ZLPhotoBrowserNoCameraAuthorityText" = "請在iPhone的\"設置-隱私-相機\"選項中，允許%@訪問你的相機";
-"ZLPhotoBrowserNoAblumAuthorityText" = "請在iPhone的\"設置-隱私-相冊\"選項中，允許%@訪問你的照片";
-"ZLPhotoBrowserNoMicrophoneAuthorityText" = "請在iPhone的\"設置-隱私-麥克風\"選項中，允許%@訪問你的麥克風";
-"ZLPhotoBrowserCameraUnavailableText" = "相機不可用";
+"noCameraAuthority" = "請在iPhone的\"設置-隱私-相機\"選項中，允許%@訪問你的相機";
+"noPhotoLibratyAuthority" = "請在iPhone的\"設置-隱私-相冊\"選項中，允許%@訪問你的照片";
+"noMicrophoneAuthority" = "請在iPhone的\"設置-隱私-麥克風\"選項中，允許%@訪問你的麥克風";
+"cameraUnavailable" = "相機不可用";
 
-"ZLPhotoBrowseriCloudPhotoLoadFailedText" = "請在系統相冊中下載到本地后重新嘗試";
-"ZLPhotoBrowseriCloudVideoLoadFailedText" = "iCloud無法同步";
+"iCloudPhotoLoadFaild" = "請在系統相冊中下載到本地后重新嘗試";
+"iCloudVideoLoadFaild" = "iCloud無法同步";
 
-"ZLPhotoBrowserLoadImageFailed" = "圖片加載失敗";
-"ZLPhotoBrowserSaveVideoFailed" = "視頻保存失敗";
-"ZLPhotoBrowserRequestTimeout" = "請求超時";
+"imageLoadFailed" = "圖片加載失敗";
+"saveVideoError" = "視頻保存失敗";
+"timeout" = "請求超時";
 
-"ZLPhotoBrowserCustomCameraTips" = "輕觸拍照，按住攝像";
+"customCameraTips" = "輕觸拍照，按住攝像";
+"minRecordTimeTips" = "至少錄制%ld秒";
 
-"ZLPhotoBrowserCameraRoll" = "所有照片";
-"ZLPhotoBrowserPanoramas" = "全景照片";
-"ZLPhotoBrowserVideos" = "視頻";
-"ZLPhotoBrowserFavorites" = "個人收藏";
-"ZLPhotoBrowserTimelapses" = "延時攝影";
-"ZLPhotoBrowserRecentlyAdded" = "最近添加";
-"ZLPhotoBrowserBursts" = "連拍快照";
-"ZLPhotoBrowserSlomoVideos" = "慢動作";
-"ZLPhotoBrowserSelfPortraits" = "自拍";
-"ZLPhotoBrowserScreenshots" = "屏幕快照";
-"ZLPhotoBrowserDepthEffect" = "人像";
-"ZLPhotoBrowserLivePhotos" = "Live Photo";
-"ZLPhotoBrowserAnimated" = "動圖";
+"cameraRoll" = "所有照片";
+"panoramas" = "全景照片";
+"videos" = "視頻";
+"favorites" = "個人收藏";
+"timelapses" = "延時攝影";
+"recentlyAdded" = "最近添加";
+"bursts" = "連拍快照";
+"slomoVideos" = "慢動作";
+"selfPortraits" = "自拍";
+"screenshots" = "屏幕快照";
+"depthEffect" = "人像";
+"livePhotos" = "Live Photo";
+"animated" = "動圖";
