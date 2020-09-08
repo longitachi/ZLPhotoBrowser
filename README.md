@@ -137,9 +137,9 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.0.2: 新增框架样式设置(新增一种仿微信的样式); 编辑图片添加马赛克功能; 添加下拉返回动画; 自定义相机支持最短录制时间设置; 优化gif照片的回调;
 ● 4.0.1: 优化视频编辑功能; 增加自定义列数功能; 修复一些bug;
 ● 4.0.0: 框架升级为纯`Swift`编写，最低支持右`iOS8`升级到`iOS10`;
-● 3.2.0: 添加图片视频选择互斥功能（即只能选择1个视频或最多几张图片）; 添加选择量达到最大值时其他cell显示遮罩功能; 删除`allowMixSelect`,`maxVideoSelectCountInMix`,`minVideoSelectCountInMix`参数;
 ...
 ```
 

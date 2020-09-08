@@ -2,7 +2,18 @@
 
 -----
 
-## [4.0.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.0) (2020-09-02)
+## [4.0.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.2) (2020-09-08)
+
+#### Add
+* 新增框架样式设置(新增一种仿微信的样式);
+* 编辑图片添加马赛克功能;
+* 添加下拉返回动画;
+* 自定义相机支持最短录制时间设置;
+* 优化gif照片的回调，选中的gif照片将直接转换成动图回调出去;
+
+---
+
+## [4.0.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.1) (2020-09-02)
 
 #### Add
 * 优化视频编辑功能;
