@@ -34,7 +34,7 @@ import Foundation
     case japanese
 }
 
-public struct ZLLocalLanguageKey {
+public struct ZLLocalLanguageKey: Hashable {
     
     public let rawValue: String
     
@@ -137,7 +137,7 @@ public struct ZLLocalLanguageKey {
 }
 
 func localLanguageTextValue(_ key: ZLLocalLanguageKey) -> String {
-    if let value = ZLCustomLanguageDeploy.deploy[key.rawValue] {
+    if let value = ZLCustomLanguageDeploy.deploy[key] {
         return value
     }
     return Bundle.zlLocalizedString(key.rawValue)

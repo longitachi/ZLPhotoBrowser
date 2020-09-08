@@ -185,13 +185,29 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// 支持开发者自定义多语言提示，但是所自定义多语言的key必须与原key一致
+    /// 支持开发者自定义多语言提示（提供给oc使用）
     /// - example: 开发者需要替换
     /// key: "ZLPhotoBrowserLoadingText"，value:"正在处理..." 的多语言
     /// 则需要传入的字典为 ["ZLPhotoBrowserLoadingText": "需要替换的文字"]
     /// 而其他多语言则用框架中的
     /// - warning: 更改时请注意多语言中包含的占位符，如%ld、%@
-    @objc public var customLanguageKeyValue: [String: String] = [:] {
+    @objc public var customLanguageKeyValue_objc: [String: String] = [:] {
+        didSet {
+            var swiftParams: [ZLLocalLanguageKey: String] = [:]
+            customLanguageKeyValue_objc.forEach { (key, value) in
+                swiftParams[ZLLocalLanguageKey(rawValue: key)] = value
+            }
+            self.customLanguageKeyValue = swiftParams
+        }
+    }
+    
+    /// 支持开发者自定义多语言提示（仅提供给swift使用）
+    /// - example: 开发者需要替换
+    /// key: .loading，value:"正在处理..." 的多语言
+    /// 则需要传入的字典为 [.loading: "需要替换的文字"]
+    /// 而其他多语言则用框架中的
+    /// - warning: 更改时请注意多语言中包含的占位符，如%ld、%@
+    public var customLanguageKeyValue: [ZLLocalLanguageKey: String] = [:] {
         didSet {
             ZLCustomLanguageDeploy.deploy = self.customLanguageKeyValue
         }
@@ -348,7 +364,7 @@ struct ZLCustomLanguageDeploy {
     
     static var language: ZLLanguageType = .system
     
-    static var deploy: [String: String] = [:]
+    static var deploy: [ZLLocalLanguageKey: String] = [:]
     
 }
 

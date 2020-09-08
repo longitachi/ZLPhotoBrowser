@@ -98,8 +98,11 @@
  
  - 自定义文案
  ```
- // 因需要兼容oc调用，swift的struct不支持添加@objc，所以暂时只能使用这种方式
- ZLPhotoConfiguration.default().customLanguageKeyValue = [ZLLocalLanguageKey.previewCamera.rawValue: "相机"]
+ // swift
+ ZLPhotoConfiguration.default().customLanguageKeyValue = [.previewCamera: "拍照"]
+ 
+ // oc
+ ZLPhotoConfiguration.default().customLanguageKeyValue_objc = ["ZLPhotoBrowserCameraText": "拍照"]
  ```
  
  - 支持light/dark mode颜色定义示例
