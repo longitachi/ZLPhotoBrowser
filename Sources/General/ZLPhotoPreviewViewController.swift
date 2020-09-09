@@ -85,6 +85,10 @@ class ZLPhotoPreviewViewController: UIViewController {
         return false
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return ZLPhotoConfiguration.default().statusBarStyle
+    }
+    
     deinit {
         zl_debugPrint("ZLPhotoPreviewViewController deinit")
     }

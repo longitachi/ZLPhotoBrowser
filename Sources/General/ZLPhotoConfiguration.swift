@@ -305,13 +305,13 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     @objc public var previewBtnHighlightTitleColor = zlRGB(80, 169, 56)
     
     /// 导航条颜色
-    @objc public var navBarColor = zlRGB(100, 100, 100).withAlphaComponent(0.7)
+    @objc public var navBarColor = zlRGB(170, 170, 170).withAlphaComponent(0.7)
     
     /// 导航标题颜色
     @objc public var navTitleColor = UIColor.white
     
     /// 框架样式为 embedAlbumList 时，title view 背景色
-    @objc public var navEmbedTitleViewBgColor = zlRGB(70, 70, 70)
+    @objc public var navEmbedTitleViewBgColor = zlRGB(80, 80, 80)
     
     /// 相册列表界面背景色
     @objc public var albumListBgColor = zlRGB(45, 45, 45)

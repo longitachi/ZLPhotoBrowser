@@ -43,6 +43,10 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
     
     var shouldReloadAlbumList = true
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return ZLPhotoConfiguration.default().statusBarStyle
+    }
+    
     deinit {
         zl_debugPrint("ZLAlbumListController deinit")
     }

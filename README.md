@@ -15,8 +15,7 @@
 * 删除一些功能（网络图片及视频的预览，force touch 等等）
 具体使用请下载demo查看
 
-> `Swift`版本支持混编app调用
-如需使用之前的`oc`版本（`oc`版本不再维护），请点[这里](https://github.com/longitachi/ZLPhotoBrowser-objc)
+> `Swift` 版本兼容 `oc` app调用；  如需使用之前的`oc`版本（`oc`版本不再维护），请点[这里](https://github.com/longitachi/ZLPhotoBrowser-objc)
 
 ### 框架整体介绍
 * [功能介绍](#功能介绍)

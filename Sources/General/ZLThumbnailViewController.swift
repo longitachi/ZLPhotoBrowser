@@ -110,6 +110,10 @@ class ZLThumbnailViewController: UIViewController {
         return false
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return ZLPhotoConfiguration.default().statusBarStyle
+    }
+    
     deinit {
         zl_debugPrint("ZLThumbnailViewController deinit")
     }
