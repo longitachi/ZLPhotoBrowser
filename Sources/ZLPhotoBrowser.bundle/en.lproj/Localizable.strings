@@ -43,9 +43,11 @@
 "timeout" = "Request timed out";
 
 "customCameraTips" = "Tap to take photo and hold to record video";
+"customCameraTakePhotoTips" = "Tap to take photo";
+"customCameraRecordVideoTips" = "hold to record video";
 "minRecordTimeTips" = "Record at least %lds";
 
-"cameraRoll" = "Camera Roll";
+"cameraRoll" = "Recents";
 "panoramas" = "Panoramas";
 "videos" = "Videos";
 "favorites" = "Favorites";
@@ -55,6 +57,9 @@
 "slomoVideos" = "Slo-mo";
 "selfPortraits" = "Selfies";
 "screenshots" = "Screenshots";
-"depthEffect" = "Depth Effect";
+"depthEffect" = "Portrait";
 "livePhotos" = "Live Photo";
 "animated" = "Animated";
+"myPhotoStream" = "My Photo Stream";
+
+"noTitleAlbumListPlaceholder" = "All Photos";

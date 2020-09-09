@@ -165,7 +165,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         super.viewDidAppear(animated)
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable))
-        } else if !ZLPhotoConfiguration.default().allowSelectImage, !ZLPhotoConfiguration.default().allowRecordVideo {
+        } else if !ZLPhotoConfiguration.default().allowTakePhoto, !ZLPhotoConfiguration.default().allowRecordVideo {
             #if DEBUG
             fatalError("参数配置错误")
             #else
@@ -244,7 +244,14 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.tipsLabel.textColor = .white
         self.tipsLabel.textAlignment = .center
         self.tipsLabel.alpha = 0
-        self.tipsLabel.text = localLanguageTextValue(.customCameraTips)
+        if ZLPhotoConfiguration.default().allowTakePhoto, ZLPhotoConfiguration.default().allowRecordVideo {
+            self.tipsLabel.text = localLanguageTextValue(.customCameraTips)
+        } else if ZLPhotoConfiguration.default().allowTakePhoto {
+            self.tipsLabel.text = localLanguageTextValue(.customCameraTakePhotoTips)
+        } else if ZLPhotoConfiguration.default().allowRecordVideo {
+            self.tipsLabel.text = localLanguageTextValue(.customCameraRecordVideoTips)
+        }
+        
         self.view.addSubview(self.tipsLabel)
         
         self.bottomView = UIView()
@@ -281,7 +288,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.animateLayer.lineWidth = 8
         
         var takePictureTap: UITapGestureRecognizer?
-        if ZLPhotoConfiguration.default().allowSelectImage {
+        if ZLPhotoConfiguration.default().allowTakePhoto {
             takePictureTap = UITapGestureRecognizer(target: self, action: #selector(takePicture))
             self.largeCircleView.addGestureRecognizer(takePictureTap!)
         }
@@ -823,7 +830,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
         if output.recordedDuration.seconds < 0.3 {
             //视频长度小于0.3s 允许拍照则拍照，不允许拍照，则保存小于0.3s的视频
-            if ZLPhotoConfiguration.default().allowSelectImage {
+            if ZLPhotoConfiguration.default().allowTakePhoto {
                 self.takePicture()
                 try? FileManager.default.removeItem(at: outputFileURL)
                 return

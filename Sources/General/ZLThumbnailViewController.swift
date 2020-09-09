@@ -66,7 +66,7 @@ class ZLThumbnailViewController: UIViewController {
     var arrDataSources: [ZLPhotoModel] = []
     
     var showCameraCell: Bool {
-        if ZLPhotoConfiguration.default().allowTakePhotoInLibrary && (ZLPhotoConfiguration.default().allowSelectImage || ZLPhotoConfiguration.default().allowRecordVideo) && self.albumList.isCameraRoll {
+        if ZLPhotoConfiguration.default().allowTakePhotoInLibrary && self.albumList.isCameraRoll {
             return true
         }
         return false
@@ -541,7 +541,7 @@ class ZLThumbnailViewController: UIViewController {
                 picker.sourceType = .camera
                 picker.cameraFlashMode = config.cameraFlashMode.imagePickerFlashMode
                 var mediaTypes = [String]()
-                if config.allowSelectImage {
+                if config.allowTakePhoto {
                     mediaTypes.append("public.image")
                 }
                 if config.allowRecordVideo {

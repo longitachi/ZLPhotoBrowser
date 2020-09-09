@@ -195,7 +195,7 @@ public class ZLPhotoPreviewSheet: UIView {
         }
         
         let cameraTitle: String
-        if !ZLPhotoConfiguration.default().allowSelectImage, ZLPhotoConfiguration.default().allowRecordVideo {
+        if !ZLPhotoConfiguration.default().allowTakePhoto, ZLPhotoConfiguration.default().allowRecordVideo {
             cameraTitle = localLanguageTextValue(.previewCameraRecord)
         } else {
             cameraTitle = localLanguageTextValue(.previewCamera)
@@ -224,7 +224,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     func canShowCameraBtn() -> Bool {
-        if !ZLPhotoConfiguration.default().allowSelectImage, !ZLPhotoConfiguration.default().allowRecordVideo {
+        if !ZLPhotoConfiguration.default().allowTakePhoto, !ZLPhotoConfiguration.default().allowRecordVideo {
             return false
         }
         return true
@@ -386,7 +386,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 picker.sourceType = .camera
                 picker.cameraFlashMode = config.cameraFlashMode.imagePickerFlashMode
                 var mediaTypes = [String]()
-                if config.allowSelectImage {
+                if config.allowTakePhoto {
                     mediaTypes.append("public.image")
                 }
                 if config.allowRecordVideo {
@@ -730,27 +730,8 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         cell.selectedBlock = { [weak self, weak cell] (isSelected) in
             guard let `self` = self else { return }
             if !isSelected {
-                if self.arrSelectedModels.count > ZLPhotoConfiguration.default().maxSelectCount {
-                    let message = String(format: localLanguageTextValue(.maxSelectCount), ZLPhotoConfiguration.default().maxSelectCount)
-                    showAlertView(message, self.sender)
+                guard canAddModel(model, currentSelectCount: self.arrSelectedModels.count, sender: self.sender) else {
                     return
-                }
-                if self.arrSelectedModels.count > 0 {
-                    if !ZLPhotoConfiguration.default().allowMixSelect, model.type == .video {
-                        return
-                    }
-                }
-                if model.type == .video {
-                    if model.second > ZLPhotoConfiguration.default().maxSelectVideoDuration {
-                        let message = String(format: localLanguageTextValue(.longerThanMaxVideoDuration), ZLPhotoConfiguration.default().maxSelectVideoDuration)
-                        showAlertView(message, self.sender)
-                        return
-                    }
-                    if model.second < ZLPhotoConfiguration.default().minSelectVideoDuration {
-                        let message = String(format: localLanguageTextValue(.shorterThanMaxVideoDuration), ZLPhotoConfiguration.default().minSelectVideoDuration)
-                        showAlertView(message, self.sender)
-                        return
-                    }
                 }
                 if !self.shouldDirectEdit(model) {
                     model.isSelected = true

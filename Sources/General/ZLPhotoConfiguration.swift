@@ -80,8 +80,17 @@ public class ZLPhotoConfiguration: NSObject {
     /// 是否允许选择livePhoto，只是控制是否选择，并不控制是否显示，如果为NO，则不显示livePhoto标识
     @objc public var allowSelectLivePhoto = false
     
+    private var pri_allowTakePhotoInLibrary = true
     /// 是否允许相册内部拍照
-    @objc public var allowTakePhotoInLibrary = true
+    /// - warning: 如果allowTakePhoto和allowRecordVideo均为false，则不会显示
+    @objc public var allowTakePhotoInLibrary: Bool {
+        set {
+            pri_allowTakePhotoInLibrary = newValue
+        }
+        get {
+            return pri_allowTakePhotoInLibrary && (allowTakePhoto || allowRecordVideo)
+        }
+    }
     
     /// 是否允许编辑图片，图片可允许编辑多张
     @objc public var allowEditImage = true
@@ -216,8 +225,27 @@ public class ZLPhotoConfiguration: NSObject {
     /// 使用自定义相机相机
     @objc public var useCustomCamera = true
     
-    /// 是否允许录制视频
-    @objc public var allowRecordVideo = true
+    private var pri_allowTakePhoto = true
+    /// 是否允许拍照 (需要allowSelectImage为true)
+    @objc public var allowTakePhoto: Bool {
+        set {
+            pri_allowTakePhoto = newValue
+        }
+        get {
+            return pri_allowTakePhoto && allowSelectImage
+        }
+    }
+    
+    private var pri_allowRecordVideo = true
+    /// 是否允许录制视频 (需要allowSelectVideo为true)
+    @objc public var allowRecordVideo: Bool {
+        set {
+            pri_allowRecordVideo = newValue
+        }
+        get {
+            return pri_allowRecordVideo && allowSelectVideo
+        }
+    }
     
     private var pri_minRecordDuration: Second = 0
     /// 最小录制时长，默认 0s

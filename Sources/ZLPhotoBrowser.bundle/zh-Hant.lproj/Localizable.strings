@@ -43,9 +43,11 @@
 "timeout" = "請求超時";
 
 "customCameraTips" = "輕觸拍照，按住攝像";
+"customCameraTakePhotoTips" = "輕觸拍照";
+"customCameraRecordVideoTips" = "按住攝像";
 "minRecordTimeTips" = "至少錄制%ld秒";
 
-"cameraRoll" = "所有照片";
+"cameraRoll" = "最近項目";
 "panoramas" = "全景照片";
 "videos" = "視頻";
 "favorites" = "個人收藏";
@@ -58,3 +60,6 @@
 "depthEffect" = "人像";
 "livePhotos" = "Live Photo";
 "animated" = "動圖";
+"myPhotoStream" = "我的照片流";
+
+"noTitleAlbumListPlaceholder" = "所有照片";

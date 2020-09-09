@@ -188,7 +188,18 @@ public class ZLPhotoManager: NSObject {
     private class func getCollectionTitle(_ collection: PHAssetCollection) -> String {
         if collection.assetCollectionType == .album {
             // 用户创建的相册
-            return collection.localizedTitle ?? ""
+            var title: String? = nil
+            if ZLCustomLanguageDeploy.language == .system {
+                title = collection.localizedTitle
+            } else {
+                switch collection.assetCollectionSubtype {
+                case .albumMyPhotoStream:
+                    title = localLanguageTextValue(.myPhotoStream)
+                default:
+                    title = collection.localizedTitle
+                }
+            }
+            return title ?? localLanguageTextValue(.noTitleAlbumListPlaceholder)
         }
         
         var title: String? = nil
@@ -221,18 +232,17 @@ public class ZLPhotoManager: NSObject {
             case .smartAlbumLivePhotos:
                 title = localLanguageTextValue(.livePhotos)
             default:
-                break
+                title = collection.localizedTitle
             }
             
             if #available(iOS 11.0, *) {
-                // PHAssetCollectionSubtypeSmartAlbumAnimated 为动图，但是貌似苹果返回的结果有bug，动图的subtype值为 215，即PHAssetCollectionSubtypeSmartAlbumLongExposures
-                if collection.assetCollectionSubtype == PHAssetCollectionSubtype.smartAlbumLongExposures {
+                if collection.assetCollectionSubtype == PHAssetCollectionSubtype.smartAlbumAnimated {
                     title = localLanguageTextValue(.animated)
                 }
             }
         }
         
-        return title ?? (collection.localizedTitle ?? "")
+        return title ?? localLanguageTextValue(.noTitleAlbumListPlaceholder)
     }
     
     @discardableResult

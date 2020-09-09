@@ -158,7 +158,7 @@
   * 1.在Cartfile 中添加 `github "longitachi/ZLPhotoBrowser" ~> 4.0.0`
   * 2.执行 `carthage update ZLPhotoBrowser --platform iOS`
   
-* Swift Package Manager
+* Swift Package Manager (该方式集成暂时有问题，图片及多语言资源无法读取，请暂时先用其他方式)
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
   * 2. 输入对应版本号（SPM 最低版本为 `4.0.1`）
   * 3. 等Xcode下载完成后确定即可

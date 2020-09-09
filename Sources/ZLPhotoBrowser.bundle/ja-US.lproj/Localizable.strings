@@ -1,9 +1,9 @@
 "previewCamera" = "カメラ";
 "previewCameraRecord" = "撮影";
 "previewAlbum" = "アルバム";
-"previewCancel" = "取り消し";
+"previewCancel" = "キャンセル";
 
-"originalPhoto" = "原図";
+"originalPhoto" = "完全な画像";
 "done" = "確定";
 "ok" = "確定";
 "editFinish" = "完了";
@@ -43,9 +43,11 @@
 "timeout" = "要求タイムアウト";
 
 "customCameraTips" = "タップして撮影、長押しで記録";
+"customCameraTakePhotoTips" = "タップして撮影";
+"customCameraRecordVideoTips" = "長押しで記録";
 "minRecordTimeTips" = "%lds以上記録する";
 
-"cameraRoll" = "カメラロール";
+"cameraRoll" = "最近の項目";
 "panoramas" = "パノラマ";
 "videos" = "ビデオ";
 "favorites" = "お気に入り";
@@ -58,3 +60,6 @@
 "depthEffect" = "ポートレート";
 "livePhotos" = "Live Photos";
 "animated" = "アニメーション";
+"myPhotoStream" = "マイフォトストリーム";
+
+"noTitleAlbumListPlaceholder" = "画像すべて";

@@ -148,7 +148,7 @@ func showAlertView(_ message: String, _ sender: UIViewController?) {
 func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
     if currentSelectCount >= ZLPhotoConfiguration.default().maxSelectCount {
         if showAlert {
-            let message = String(format: localLanguageTextValue(.maxSelectCount), ZLPhotoConfiguration.default().maxSelectCount)
+            let message = String(format: localLanguageTextValue(.exceededMaxSelectCount), ZLPhotoConfiguration.default().maxSelectCount)
             showAlertView(message, sender)
         }
         return false
