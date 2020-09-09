@@ -70,7 +70,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     var bigImageReqeustID: PHImageRequestID = PHInvalidImageRequestID
     
     deinit {
-        debugPrint("ZLThumbnailPhotoCell deinit")
+        zl_debugPrint("ZLThumbnailPhotoCell deinit")
     }
     
     override init(frame: CGRect) {

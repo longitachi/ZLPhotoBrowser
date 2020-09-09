@@ -110,7 +110,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     deinit {
-        debugPrint("ZLCustomCamera deinit")
+        zl_debugPrint("ZLCustomCamera deinit")
         self.cleanTimer()
         if self.session.isRunning {
             self.session.stopRunning()
@@ -562,7 +562,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
                 self.session.commitConfiguration()
             }
         } catch {
-            debugPrint("切换摄像头失败 \(error.localizedDescription)")
+            zl_debugPrint("切换摄像头失败 \(error.localizedDescription)")
         }
     }
     
@@ -605,7 +605,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         if longGes.state == .began {
             self.startRecord()
         } else if longGes.state == .cancelled || longGes.state == .ended {
-            debugPrint("---- long press end")
             self.finishRecord()
         }
     }
@@ -657,7 +656,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             zoomFactor = max(1, min(zoomFactor, maxZoomFactor))
             self.setVideoZoomFactor(zoomFactor)
         } else if pan.state == .cancelled || pan.state == .ended {
-            debugPrint("---- pan end")
             guard self.dragStart else {
                 return
             }
@@ -675,7 +673,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             device.videoZoomFactor = zoomFactor
             device.unlockForConfiguration()
         } catch {
-            debugPrint("调整焦距失败 \(error.localizedDescription)")
+            zl_debugPrint("调整焦距失败 \(error.localizedDescription)")
         }
     }
     
@@ -703,7 +701,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             
             device.unlockForConfiguration()
         } catch {
-            debugPrint("相机聚焦设置失败 \(error.localizedDescription)")
+            zl_debugPrint("相机聚焦设置失败 \(error.localizedDescription)")
         }
     }
     
@@ -755,7 +753,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     func resetSubViewStatus() {
-        debugPrint("---- isrunning \(self.session.isRunning)")
         if self.session.isRunning {
             self.showTipsLabel(animate: true)
             self.bottomView.isHidden = false
@@ -799,7 +796,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         if photoSampleBuffer == nil || error != nil {
-            debugPrint("拍照失败 \(error?.localizedDescription ?? "")")
+            zl_debugPrint("拍照失败 \(error?.localizedDescription ?? "")")
             return
         }
         
@@ -810,7 +807,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
             self.takedImageView.isHidden = false
             self.resetSubViewStatus()
         } else {
-            debugPrint("拍照失败，data为空")
+            zl_debugPrint("拍照失败，data为空")
         }
     }
     

@@ -86,7 +86,7 @@ class ZLPhotoPreviewViewController: UIViewController {
     }
     
     deinit {
-        debugPrint("ZLPhotoPreviewViewController deinit")
+        zl_debugPrint("ZLPhotoPreviewViewController deinit")
     }
     
     init(photos: [ZLPhotoModel], index: Int, showBottomViewAndSelectBtn: Bool = true) {
@@ -110,6 +110,11 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.resetSubViewStatus(animateIndexLabel: false)
         
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationChanged(_:)), name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {

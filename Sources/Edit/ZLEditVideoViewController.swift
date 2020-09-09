@@ -100,7 +100,7 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     deinit {
-        debugPrint("ZLEditVideoViewController deinit")
+        zl_debugPrint("ZLEditVideoViewController deinit")
         self.cleanTimer()
         self.requestFrameImageQueue.cancelAllOperations()
         if self.avAssetRequestID > PHInvalidImageRequestID {
@@ -144,7 +144,7 @@ public class ZLEditVideoViewController: UIViewController {
         }
         self.shouldLayout = false
         
-        debugPrint("edit video layout subviews")
+        zl_debugPrint("edit video layout subviews")
         var insets = UIEdgeInsets.zero
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets

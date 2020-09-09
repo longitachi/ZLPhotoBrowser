@@ -108,7 +108,7 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     deinit {
-        debugPrint("ZLEditImageViewController deinit")
+        zl_debugPrint("ZLEditImageViewController deinit")
     }
     
     public init(image: UIImage, tools: ZLEditImageViewController.EditImageTool = ZLPhotoConfiguration.default().editImageTools) {
@@ -143,7 +143,7 @@ public class ZLEditImageViewController: UIViewController {
             return
         }
         self.shouldLayout = false
-        debugPrint("edit image layout subviews")
+        zl_debugPrint("edit image layout subviews")
         var insets = UIEdgeInsets.zero
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets

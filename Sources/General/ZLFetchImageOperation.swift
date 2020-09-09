@@ -89,7 +89,7 @@ class ZLFetchImageOperation: Operation {
             self.fetchFinish()
             return
         }
-        debugPrint("---- start fetch")
+        zl_debugPrint("---- start fetch")
         self.pri_isExecuting = true
         
         // 存在编辑的图片

@@ -38,7 +38,7 @@ class ZLImageNavController: UINavigationController {
     var cancelBlock: ( () -> Void )?
     
     deinit {
-        debugPrint("ZLImageNavController deinit")
+        zl_debugPrint("ZLImageNavController deinit")
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

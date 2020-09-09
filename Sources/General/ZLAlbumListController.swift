@@ -44,7 +44,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
     var shouldReloadAlbumList = true
     
     deinit {
-        debugPrint("ZLAlbumListController deinit")
+        zl_debugPrint("ZLAlbumListController deinit")
     }
     
     override func viewDidLoad() {
@@ -56,6 +56,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
         
         guard self.shouldReloadAlbumList else {
             return

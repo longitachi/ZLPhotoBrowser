@@ -138,7 +138,7 @@ class ZLPhotoPreviewCell: ZLPreviewBaseCell {
     }
     
     deinit {
-        debugPrint("ZLPhotoPreviewCell deinit")
+        zl_debugPrint("ZLPhotoPreviewCell deinit")
     }
     
     override init(frame: CGRect) {
@@ -191,7 +191,7 @@ class ZLGifPreviewCell: ZLPreviewBaseCell {
     }
     
     deinit {
-        debugPrint("ZLGifPreviewCell deinit")
+        zl_debugPrint("ZLGifPreviewCell deinit")
     }
     
     override init(frame: CGRect) {
@@ -271,7 +271,7 @@ class ZLLivePhotoPewviewCell: ZLPreviewBaseCell {
     }
     
     deinit {
-        debugPrint("ZLLivePhotoPewviewCell deinit")
+        zl_debugPrint("ZLLivePhotoPewviewCell deinit")
     }
     
     override init(frame: CGRect) {
@@ -396,7 +396,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     deinit {
-        debugPrint("ZLVideoPreviewCell deinit")
+        zl_debugPrint("ZLVideoPreviewCell deinit")
     }
     
     override init(frame: CGRect) {

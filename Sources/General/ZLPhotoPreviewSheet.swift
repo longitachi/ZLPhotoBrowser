@@ -89,7 +89,7 @@ public class ZLPhotoPreviewSheet: UIView {
     @objc public var cancelBlock: ( () -> Void )?
     
     deinit {
-        debugPrint("ZLPhotoPreviewSheet deinit")
+        zl_debugPrint("ZLPhotoPreviewSheet deinit")
     }
     
     @objc public init(selectedAssets: [PHAsset] = []) {
@@ -521,11 +521,11 @@ public class ZLPhotoPreviewSheet: UIView {
                 if let image = image {
                     images[i] = image
                     assets[i] = asset ?? m.asset
-                    debugPrint("---- suc request \(i)")
+                    zl_debugPrint("---- suc request \(i)")
                 } else {
                     errorAssets[i] = m.asset
                     errorIndexs[i] = i
-                    debugPrint("---- failed request \(i)")
+                    zl_debugPrint("---- failed request \(i)")
                 }
                 
                 guard sucCount >= totalCount else { return }

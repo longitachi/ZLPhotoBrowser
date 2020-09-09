@@ -365,7 +365,7 @@ public class ZLPhotoManager: NSObject {
         exportSession.exportAsynchronously(completionHandler: {
             let suc = exportSession.status == .completed
             if exportSession.status == .failed {
-                debugPrint("导出视频失败 \(exportSession.error?.localizedDescription ?? "")")
+                zl_debugPrint("导出视频失败 \(exportSession.error?.localizedDescription ?? "")")
             }
             DispatchQueue.main.async {
                 completion(suc ? outputUrl : nil, exportSession.error)

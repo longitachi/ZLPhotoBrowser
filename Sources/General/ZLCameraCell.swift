@@ -42,7 +42,7 @@ class ZLCameraCell: UICollectionViewCell {
     deinit {
         self.session?.stopRunning()
         self.session = nil
-        debugPrint("ZLCameraCell deinit")
+        zl_debugPrint("ZLCameraCell deinit")
     }
     
     override init(frame: CGRect) {

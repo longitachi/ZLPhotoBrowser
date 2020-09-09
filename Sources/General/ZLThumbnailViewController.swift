@@ -111,7 +111,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     deinit {
-        debugPrint("ZLThumbnailViewController deinit")
+        zl_debugPrint("ZLThumbnailViewController deinit")
     }
     
     init(albumList: ZLAlbumListModel) {
@@ -140,6 +140,7 @@ class ZLThumbnailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
         self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
         self.resetBottomToolBtnStatus()
     }
