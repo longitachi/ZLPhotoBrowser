@@ -144,7 +144,7 @@ class ZLClipImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.setupUI()
     }
     

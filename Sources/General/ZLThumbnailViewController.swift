@@ -66,7 +66,7 @@ class ZLThumbnailViewController: UIViewController {
     var arrDataSources: [ZLPhotoModel] = []
     
     var showCameraCell: Bool {
-        if ZLPhotoConfiguration.default().allowTakePhotoInLibrary && (ZLPhotoConfiguration.default().allowSelectImage || ZLPhotoConfiguration.default().allowRecordVideo) {
+        if ZLPhotoConfiguration.default().allowTakePhotoInLibrary && (ZLPhotoConfiguration.default().allowSelectImage || ZLPhotoConfiguration.default().allowRecordVideo) && self.albumList.isCameraRoll {
             return true
         }
         return false
@@ -102,6 +102,9 @@ class ZLThumbnailViewController: UIViewController {
     
     /// 预览所选择图片，手势返回时候不调用scrollToIndex
     var isPreviewPush = false
+    
+    /// 拍照后置为true，需要刷新相册列表
+    var hasTakeANewAsset = false
     
     override var prefersStatusBarHidden: Bool {
         return false
@@ -271,7 +274,8 @@ class ZLThumbnailViewController: UIViewController {
             
             self.embedNavView?.selectAlbumBlock = { [weak self] in
                 if self?.embedAlbumListView?.isHidden == true {
-                    self?.embedAlbumListView?.show()
+                    self?.embedAlbumListView?.show(reloadAlbumList: self?.hasTakeANewAsset ?? false)
+                    self?.hasTakeANewAsset = false
                 } else {
                     self?.embedAlbumListView?.hide()
                 }
@@ -575,6 +579,10 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     func handleDataArray(newModel: ZLPhotoModel) {
+        self.hasTakeANewAsset = true
+        self.albumList.count += 1
+        self.albumList.headImageAsset = newModel.asset
+        
         let nav = self.navigationController as? ZLImageNavController
         let config = ZLPhotoConfiguration.default()
         var insertIndex = 0

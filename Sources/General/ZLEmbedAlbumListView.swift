@@ -102,7 +102,12 @@ class ZLEmbedAlbumListView: UIView {
         }
     }
     
-    func show() {
+    /// 这里不采用监听相册发生变化的方式，是因为每次变化，系统都会回调多次，造成重复获取相册列表
+    func show(reloadAlbumList: Bool) {
+        if reloadAlbumList {
+            self.loadAlbumList()
+        }
+        
         let toFrame: CGRect
         
         if UIApplication.shared.statusBarOrientation.isPortrait {

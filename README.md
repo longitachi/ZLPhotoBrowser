@@ -15,6 +15,7 @@
 * 删除一些功能（网络图片及视频的预览，force touch 等等）
 具体使用请下载demo查看
 
+> `Swift`版本支持混编app调用
 如需使用之前的`oc`版本（`oc`版本不再维护），请点[这里](https://github.com/longitachi/ZLPhotoBrowser-objc)
 
 ### 框架整体介绍
@@ -27,6 +28,7 @@
 ### <a id="功能介绍"></a>功能介绍
 你想要的应有尽有，预留给开发者自定义框架参数多达50个（没有的话欢迎提 issue ，功能建议好的话会采纳并着手开发）
 - [x] 支持横竖屏
+- [x] 自选框架样式
 - [x] 预览快速选择（支持拖拽选择，效果参照QQ）
 - [x] 相册内部选择（支持滑动选择）
 - [x] 图片/Gif/LivePhoto/Video 混合选择
@@ -34,7 +36,7 @@
 - [x] 自定义每行显示列数
 - [x] 图片编辑（涂鸦/裁剪/马赛克）（图片编辑可编辑多张；涂鸦颜色可自定义，裁剪工具也可根据需要自行选择）
 - [x] 视频编辑（自定义最大裁剪时长）（效果参照微信视频编辑）
-- [x] 自定义相机（效果参照微信拍照，点击拍照、长按拍摄；上滑调整焦距；可设置最大录制时间及视频分辨率；可设置闪光灯模式及视频导出格式；可根据自己需要控制是否使用自定义相机）
+- [x] 自定义相机（效果参照微信拍照，点击拍照、长按拍摄；上滑调整焦距；可设置最大/最小录制时间及视频分辨率；可设置闪光灯模式及视频导出格式；可根据自己需要控制是否使用自定义相机）
 - [x] 多语言国际化支持（中文简/繁，英文，日文，开发者可选根据系统或自己指定，多语言文案可自定义）
 - [x] 已选择照片index
 - [x] 已选/不可选 状态下mask阴影遮罩
@@ -102,7 +104,7 @@
  ZLPhotoConfiguration.default().customLanguageKeyValue = [.previewCamera: "拍照"]
  
  // oc
- ZLPhotoConfiguration.default().customLanguageKeyValue_objc = ["ZLPhotoBrowserCameraText": "拍照"]
+ ZLPhotoConfiguration.default().customLanguageKeyValue_objc = ["previewCamera": "拍照"]
  ```
  
  - 支持light/dark mode颜色定义示例

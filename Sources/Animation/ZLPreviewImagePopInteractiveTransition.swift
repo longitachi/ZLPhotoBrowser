@@ -165,15 +165,31 @@ class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         guard let fromVC = context.viewController(forKey: .from) as? ZLPhotoPreviewViewController, let toVC = context.viewController(forKey: .to) as? ZLThumbnailViewController else {
             return
         }
-        var toIndex = fromVC.currentIndex
+        
+        let fromVCModel = fromVC.arrDataSources[fromVC.currentIndex]
+        let toVCVisiableIndexPaths = toVC.collectionView.indexPathsForVisibleItems
+        
+        var diff = 0
         if toVC.showCameraCell, !ZLPhotoConfiguration.default().sortAscending {
-            toIndex += 1
+            diff = -1
         }
+        var toIndex: Int? = nil
+        for indexPath in toVCVisiableIndexPaths {
+            let idx = indexPath.row + diff
+            if idx >= toVC.arrDataSources.count || idx < 0 {
+                continue
+            }
+            let m = toVC.arrDataSources[idx]
+            if m == fromVCModel {
+                toIndex = indexPath.row
+                break
+            }
+        }
+        
         var toFrame: CGRect? = nil
         
-        if let toCell = toVC.collectionView.cellForItem(at: IndexPath(row: toIndex, section: 0)) {
+        if let toIdx = toIndex, let toCell = toVC.collectionView.cellForItem(at: IndexPath(row: toIdx, section: 0)) {
             toFrame = toVC.collectionView.convert(toCell.frame, to: context.containerView)
-            
         }
         
         UIView.animate(withDuration: 0.25, animations: {

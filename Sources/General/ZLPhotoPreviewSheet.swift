@@ -300,9 +300,9 @@ public class ZLPhotoPreviewSheet: UIView {
         self.arrDataSources.removeAll()
         
         let config = ZLPhotoConfiguration.default()
-        ZLPhotoManager.getCameraRollAlbum(ascending: false, allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { [weak self] (cameraRoll) in
+        ZLPhotoManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { [weak self] (cameraRoll) in
             guard let `self` = self else { return }
-            var totalPhotos = ZLPhotoManager.fetchPhoto(in: cameraRoll.result, allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo, limitCount: config.maxPreviewCount)
+            var totalPhotos = ZLPhotoManager.fetchPhoto(in: cameraRoll.result, ascending: false, allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo, limitCount: config.maxPreviewCount)
             markSelected(source: &totalPhotos, selected: &self.arrSelectedModels)
             self.arrDataSources.append(contentsOf: totalPhotos)
             self.collectionView.reloadData()
@@ -547,7 +547,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     func showThumbnailViewController() {
-        ZLPhotoManager.getCameraRollAlbum(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (cameraRoll) in
+        ZLPhotoManager.getCameraRollAlbum(allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (cameraRoll) in
             guard let `self` = self else { return }
             let nav: ZLImageNavController
             if ZLPhotoConfiguration.default().style == .embedAlbumList {
@@ -810,12 +810,12 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         let hud = ZLProgressHUD(style: config.hudStyle)
         hud.show()
         
-        ZLPhotoManager.getCameraRollAlbum(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (cameraRoll) in
+        ZLPhotoManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { [weak self] (cameraRoll) in
             guard let `self` = self else {
                 hud.hide()
                 return
             }
-            var totalPhotos = ZLPhotoManager.fetchPhoto(in: cameraRoll.result, allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo)
+            var totalPhotos = ZLPhotoManager.fetchPhoto(in: cameraRoll.result, ascending: config.sortAscending, allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo)
             markSelected(source: &totalPhotos, selected: &self.arrSelectedModels)
             let defaultIndex = config.sortAscending ? totalPhotos.count - 1 : 0
             var index: Int?

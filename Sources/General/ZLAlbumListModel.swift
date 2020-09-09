@@ -47,20 +47,17 @@ class ZLAlbumListModel: NSObject {
     // 暂未用到
     var selectedCount: Int = 0
     
-    init(title: String, result: PHFetchResult<PHAsset>, isCameraRoll: Bool, ascending: Bool) {
+    init(title: String, result: PHFetchResult<PHAsset>, isCameraRoll: Bool) {
         self.title = title
         self.count = result.count
         self.result = result
         self.isCameraRoll = isCameraRoll
-        if ascending {
-            self.headImageAsset = result.lastObject
-        } else {
-            self.headImageAsset = result.firstObject
-        }
+        
+        self.headImageAsset = result.lastObject
     }
     
     func refetchPhotos() {
-        let models = ZLPhotoManager.fetchPhoto(in: self.result, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo:  ZLPhotoConfiguration.default().allowSelectVideo)
+        let models = ZLPhotoManager.fetchPhoto(in: self.result, ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo:  ZLPhotoConfiguration.default().allowSelectVideo)
         self.models.removeAll()
         self.models.append(contentsOf: models)
     }

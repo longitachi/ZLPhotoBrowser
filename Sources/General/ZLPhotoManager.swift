@@ -90,24 +90,13 @@ public class ZLPhotoManager: NSObject {
         return nil
     }
     
-    
-    
-    /// 在全部照片中获取指定个数、排序方式的部分照片
-    class func getAssetsInPhotoAlbum(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, limitCount: Int = .max) -> [ZLPhotoModel] {
-        let option = PHFetchOptions()
-        if !ascending {
-            option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: ascending)]
-        }
-        let result = PHAsset.fetchAssets(with: option)
-        return self.fetchPhoto(in: result, allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, limitCount: limitCount)
-    }
-    
     /// 从相册中获取照片
-    class func fetchPhoto(in result: PHFetchResult<PHAsset>, allowSelectImage: Bool, allowSelectVideo: Bool, limitCount: Int = .max) -> [ZLPhotoModel] {
+    class func fetchPhoto(in result: PHFetchResult<PHAsset>, ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, limitCount: Int = .max) -> [ZLPhotoModel] {
         var models: [ZLPhotoModel] = []
-        
+        let option: NSEnumerationOptions = ascending ? .init(rawValue: 0) : .reverse
         var count = 1
-        result.enumerateObjects { (asset, index, stop) in
+        
+        result.enumerateObjects(options: option) { (asset, index, stop) in
             let m = ZLPhotoModel(asset: asset)
             
             if m.type == .image, !allowSelectImage {
@@ -136,9 +125,7 @@ public class ZLPhotoManager: NSObject {
         if !allowSelectVideo {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
         }
-        if !ascending {
-            option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: ascending)]
-        }
+        
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil) as! PHFetchResult<PHCollection>
         let streamAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil) as! PHFetchResult<PHCollection>
         let userAlbums = PHCollectionList.fetchTopLevelUserCollections(with: nil)
@@ -164,10 +151,10 @@ public class ZLPhotoManager: NSObject {
                 
                 if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                     // 所有照片
-                    let m = ZLAlbumListModel(title: title, result: result, isCameraRoll: true, ascending: ascending)
+                    let m = ZLAlbumListModel(title: title, result: result, isCameraRoll: true)
                     albumList.insert(m, at: 0)
                 } else {
-                    let m = ZLAlbumListModel(title: title, result: result, isCameraRoll: false, ascending: ascending)
+                    let m = ZLAlbumListModel(title: title, result: result, isCameraRoll: false)
                     albumList.append(m)
                 }
             }
@@ -177,7 +164,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// 获取相机胶卷album
-    class func getCameraRollAlbum(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping ( (ZLAlbumListModel) -> Void )) {
+    class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping ( (ZLAlbumListModel) -> Void )) {
         let option = PHFetchOptions()
         if !allowSelectImage {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
@@ -185,14 +172,12 @@ public class ZLPhotoManager: NSObject {
         if !allowSelectVideo {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
         }
-        if !ascending {
-            option.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: ascending)]
-        }
+        
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
         smartAlbums.enumerateObjects { (collection, _, stop) in
             if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                 let result = PHAsset.fetchAssets(in: collection, options: option)
-                let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, isCameraRoll: true, ascending: ascending)
+                let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, isCameraRoll: true)
                 completion(albumModel)
                 stop.pointee = true
             }
