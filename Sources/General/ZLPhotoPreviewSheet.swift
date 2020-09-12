@@ -588,10 +588,11 @@ public class ZLPhotoPreviewSheet: UIView {
         ZLPhotoManager.fetchImage(for: asset, size: size) { [weak self] (image, isDegraded) in
             if !isDegraded {
                 if let image = image {
-                    let vc = ZLEditImageViewController(image: image)
-                    vc.editFinishBlock = { [weak self] (image) in
+                    let vc = ZLEditImageViewController(image: image, editModel: model.editImageModel)
+                    vc.editFinishBlock = { [weak self] (image, editImageModel) in
                         model.isSelected = true
                         model.editImage = image
+                        model.editImageModel = editImageModel
                         self?.arrSelectedModels.append(model)
                         self?.requestSelectPhoto()
                     }

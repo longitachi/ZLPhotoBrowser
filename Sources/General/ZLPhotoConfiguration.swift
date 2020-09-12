@@ -56,12 +56,14 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     /// 混合选择时，照片和视频是否可以同时选择，默认true
-    /// e.g. 希望选择视频（最多1个）后不能选择其他图片，或者选择图片（最多9张）后不能选择视频
+    /// - 希望选择视频（最多1个）后不能选择其他图片，或者选择图片（最多9张）后不能选择视频
     /// 设置如下参数即可
+    /// ```
     /// allowSelectImage = true
     /// allowSelectVideo = true
     /// maxSelectCount = 9
     /// allowMixSelect = false
+    /// ```
     @objc public var allowMixSelect = true
     
     /// 预览图最大显示数，该值为0时将不显示上方预览图，仅显示 '拍照、相册、取消' 按钮
@@ -70,8 +72,10 @@ public class ZLPhotoConfiguration: NSObject {
     /// cell的圆角弧度
     @objc public var cellCornerRadio: CGFloat = 0
     
+    /// 是否允许选择图片
     @objc public var allowSelectImage = true
     
+    /// 是否允许选择视频
     @objc public var allowSelectVideo = true
     
     /// 是否允许选择Gif，只是控制是否选择，并不控制是否显示，如果为NO，则不显示gif标识
@@ -333,7 +337,7 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     @objc public var previewBtnHighlightTitleColor = zlRGB(80, 169, 56)
     
     /// 导航条颜色
-    @objc public var navBarColor = zlRGB(170, 170, 170).withAlphaComponent(0.7)
+    @objc public var navBarColor = zlRGB(160, 160, 160).withAlphaComponent(0.65)
     
     /// 导航标题颜色
     @objc public var navTitleColor = UIColor.white

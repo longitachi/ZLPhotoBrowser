@@ -244,11 +244,9 @@ extension UIImage {
         guard let imagRef = self.cgImage else {
             return self
         }
-        var bnds = CGRect.zero
-        bnds.size.width = CGFloat(imagRef.width)
-        bnds.size.height = CGFloat(imagRef.height)
+        let rect = CGRect(origin: .zero, size: CGSize(width: CGFloat(imagRef.width), height: CGFloat(imagRef.height)))
         
-        let rect = bnds
+        var bnds = rect
         
         var transform = CGAffineTransform.identity
         
@@ -257,10 +255,10 @@ extension UIImage {
             return self
         case .upMirrored:
             transform = transform.translatedBy(x: rect.width, y: 0)
-            transform.scaledBy(x: -1, y: 1)
+            transform = transform.scaledBy(x: -1, y: 1)
         case .down:
             transform = transform.translatedBy(x: rect.width, y: rect.height)
-            transform.rotated(by: .pi)
+            transform = transform.rotated(by: .pi)
         case .downMirrored:
             transform = transform.translatedBy(x: 0, y: rect.height)
             transform = transform.scaledBy(x: 1, y: -1)
@@ -271,45 +269,20 @@ extension UIImage {
         case .leftMirrored:
             bnds = swapRectWidthAndHeight(bnds)
             transform = transform.translatedBy(x: rect.height, y: rect.width)
-            transform.scaledBy(x: -1, y: 1)
-            transform.rotated(by: CGFloat.pi * 3 / 2)
+            transform = transform.scaledBy(x: -1, y: 1)
+            transform = transform.rotated(by: CGFloat.pi * 3 / 2)
         case .right:
             bnds = swapRectWidthAndHeight(bnds)
             transform = transform.translatedBy(x: rect.height, y: 0)
-            transform.rotated(by: CGFloat.pi / 2)
+            transform = transform.rotated(by: CGFloat.pi / 2)
         case .rightMirrored:
             bnds = swapRectWidthAndHeight(bnds)
             transform = transform.scaledBy(x: -1, y: 1)
             transform = transform.rotated(by: CGFloat.pi / 2)
         @unknown default:
-            break
+            return self
         }
         
-        /**
-         UIGraphicsBeginImageContext(bnds.size);
-         ctxt = UIGraphicsGetCurrentContext();
-         
-         switch(orient) {
-             case UIImageOrientationLeft:
-             case UIImageOrientationLeftMirrored:
-             case UIImageOrientationRight:
-             case UIImageOrientationRightMirrored:
-                 CGContextScaleCTM(ctxt, -1.0, 1.0);
-                 CGContextTranslateCTM(ctxt, -rect.size.height, 0.0);
-                 break;
-                 
-             default:
-                 CGContextScaleCTM(ctxt, 1.0, -1.0);
-                 CGContextTranslateCTM(ctxt, 0.0, -rect.size.height);
-                 break;
-         }
-         
-         CGContextConcatCTM(ctxt, tran);
-         CGContextDrawImage(UIGraphicsGetCurrentContext(), rect, imag);
-         
-         copy = UIGraphicsGetImageFromCurrentImageContext();
-         UIGraphicsEndImageContext();
-         */
         UIGraphicsBeginImageContext(bnds.size)
         let context = UIGraphicsGetCurrentContext()
         switch orientation {
@@ -335,6 +308,31 @@ extension UIImage {
         return r
     }
     
+    func rotate(degress: CGFloat) -> UIImage {
+        let rotatedViewBox = UIView(frame: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        let t = CGAffineTransform(rotationAngle: degress)
+        rotatedViewBox.transform = t
+        let rotatedSize = rotatedViewBox.frame.size
+
+        UIGraphicsBeginImageContext(rotatedSize)
+        let bitmap = UIGraphicsGetCurrentContext()
+
+        bitmap?.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
+
+        bitmap?.rotate(by: degress)
+
+        bitmap?.scaleBy(x: 1.0, y: -1.0)
+        guard let cgImg = self.cgImage else {
+            return self
+        }
+        bitmap?.draw(cgImg, in: CGRect(x: -self.size.width/2, y: -self.size.height/2, width: self.size.width, height: self.size.height))
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage ?? self
+    }
+    
 }
 
 
@@ -349,7 +347,7 @@ extension UIImage {
         let currCiImage = CIImage(cgImage: currCgImage)
         let filter = CIFilter(name: "CIPixellate")
         filter?.setValue(currCiImage, forKey: kCIInputImageKey)
-        filter?.setValue(30, forKey: kCIInputScaleKey)
+        filter?.setValue(20, forKey: kCIInputScaleKey)
         guard let outputImage = filter?.outputImage else { return nil }
         
         let context = CIContext()

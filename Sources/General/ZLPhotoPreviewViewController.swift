@@ -464,22 +464,18 @@ class ZLPhotoPreviewViewController: UIViewController {
         let hud = ZLProgressHUD(style: config.hudStyle)
         
         if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
-            if let ei = model.editImage {
-                self.showEditImageVC(image: ei)
-            } else {
-                let asset = model.asset
-                let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * 2
-                let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
-                hud.show()
-                ZLPhotoManager.fetchImage(for: asset, size: size) { [weak self] (image, isDegraded) in
-                    if !isDegraded {
-                        if let image = image {
-                            self?.showEditImageVC(image: image)
-                        } else {
-                            showAlertView(localLanguageTextValue(.imageLoadFailed), self)
-                        }
-                        hud.hide()
+            let asset = model.asset
+            let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * 2
+            let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
+            hud.show()
+            ZLPhotoManager.fetchImage(for: asset, size: size) { [weak self] (image, isDegraded) in
+                if !isDegraded {
+                    if let image = image {
+                        self?.showEditImageVC(image: image)
+                    } else {
+                        showAlertView(localLanguageTextValue(.imageLoadFailed), self)
                     }
+                    hud.hide()
                 }
             }
         } else if model.type == .video || config.allowEditVideo {
@@ -561,13 +557,14 @@ class ZLPhotoPreviewViewController: UIViewController {
     }
     
     func showEditImageVC(image: UIImage) {
-        let nav = self.navigationController as! ZLImageNavController
-        let vc = ZLEditImageViewController(image: image)
-        vc.modalPresentationStyle = .fullScreen
         let model = self.arrDataSources[self.currentIndex]
-        vc.editFinishBlock = { [weak self, weak nav] (ei) in
+        let nav = self.navigationController as! ZLImageNavController
+        let vc = ZLEditImageViewController(image: image, editModel: model.editImageModel)
+        vc.modalPresentationStyle = .fullScreen
+        vc.editFinishBlock = { [weak self, weak nav] (ei, editImageModel) in
             guard let `self` = self else { return }
             model.editImage = ei
+            model.editImageModel = editImageModel
             if nav?.arrSelectedModels.contains(where: { $0 == model }) == false {
                 model.isSelected = true
                 nav?.arrSelectedModels.append(model)

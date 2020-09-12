@@ -44,7 +44,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
     }
     
-    public var takeDoneBlock: ( (UIImage?, URL?) -> Void )?
+    @objc public var takeDoneBlock: ( (UIImage?, URL?) -> Void )?
     
     var tipsLabel: UILabel!
     
@@ -579,11 +579,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         let vc = ZLEditImageViewController(image: image)
         vc.modalPresentationStyle = .fullScreen
-        vc.editFinishBlock = { [weak self] (ei) in
-            guard let `self` = self else { return }
-            self.dismiss(animated: true) {
-                self.takeDoneBlock?(ei, nil)
-            }
+        vc.editFinishBlock = { [weak self] (ei, _) in
+            self?.takedImage = ei
+            self?.takedImageView.image = ei
         }
         self.present(vc, animated: false, completion: nil)
     }

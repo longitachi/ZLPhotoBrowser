@@ -61,6 +61,9 @@ class ZLPhotoModel: NSObject {
         return Int(round(asset.duration))
     }
     
+    // 保存上次编辑图片的一些内容，下次编辑时候可继续上次的编辑
+    var editImageModel: ZLEditImageModel?
+    
     init(asset: PHAsset) {
         self.ident = asset.localIdentifier
         self.asset = asset

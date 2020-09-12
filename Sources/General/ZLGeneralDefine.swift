@@ -72,11 +72,13 @@ func markSelected(source: inout [ZLPhotoModel], selected: inout [ZLPhotoModel]) 
     
     var selIds: [String: Bool] = [:]
     var selEditImage: [String: UIImage] = [:]
+    var selEditModel: [String: ZLEditImageModel] = [:]
     var selIdAndIndex: [String: Int] = [:]
     
     for (index, m) in selected.enumerated() {
         selIds[m.ident] = true
         selEditImage[m.ident] = m.editImage
+        selEditModel[m.ident] = m.editImageModel
         selIdAndIndex[m.ident] = index
     }
     
@@ -84,6 +86,7 @@ func markSelected(source: inout [ZLPhotoModel], selected: inout [ZLPhotoModel]) 
         if selIds[m.ident] == true {
             m.isSelected = true
             m.editImage = selEditImage[m.ident]
+            m.editImageModel = selEditModel[m.ident]
             selected[selIdAndIndex[m.ident]!] = m
         } else {
             m.isSelected = false

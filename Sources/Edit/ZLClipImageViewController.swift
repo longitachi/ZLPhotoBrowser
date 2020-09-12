@@ -47,14 +47,23 @@ class ZLClipImageViewController: UIViewController {
 
     static let bottomToolViewH: CGFloat = 100
     
-    /// 用作进入裁剪界面首次动画
-    var animateOriginFrame: CGRect = .zero
+    /// 用作进入裁剪界面首次动画frame
+    var presentAnimateFrame: CGRect?
+    
+    /// 用作进入裁剪界面首次动画和取消裁剪时动画的image
+    var presentAnimateImage: UIImage?
+    
+    /// 取消裁剪时动画frame
+    var cancelClipAnimateFrame: CGRect = .zero
     
     var viewDidAppearCount = 0
     
     let originalImage: UIImage
     
     var editImage: UIImage
+    
+    /// 初次进入界面时候，裁剪范围
+    var editRect: CGRect
     
     var scrollView: UIScrollView!
     
@@ -94,7 +103,7 @@ class ZLClipImageViewController: UIViewController {
     
     var isRotating = false
     
-    var angle = 0
+    var angle: CGFloat = 0
     
     var maxClipFrame: CGRect = {
         var insets = deviceSafeAreaInsets()
@@ -115,9 +124,10 @@ class ZLClipImageViewController: UIViewController {
     
     var dismissAnimateImage: UIImage? = nil
     
-    var clipDoneBlock: ( (UIImage) -> Void )?
+    /// 传回旋转角度，图片编辑区域的rect
+    var clipDoneBlock: ( (CGFloat, CGRect) -> Void )?
     
-    var cancelClipBlock: ( (Bool) -> Void )?
+    var cancelClipBlock: ( () -> Void )?
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -132,9 +142,10 @@ class ZLClipImageViewController: UIViewController {
         self.cleanTimer()
     }
     
-    init(image: UIImage) {
+    init(image: UIImage, editRect: CGRect) {
         self.originalImage = image
         self.editImage = image
+        self.editRect = editRect
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -151,25 +162,24 @@ class ZLClipImageViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if self.viewDidAppearCount == 0 {
-            let animateImageView = UIImageView(image: self.originalImage)
+        if self.viewDidAppearCount == 0, let frame = self.presentAnimateFrame, let image = self.presentAnimateImage {
+            let animateImageView = UIImageView(image: image)
             animateImageView.contentMode = .scaleAspectFit
-            animateImageView.frame = self.animateOriginFrame
+            animateImageView.frame = frame
             self.view.addSubview(animateImageView)
             
-            self.scrollView.alpha = 0
-            self.overlayView.alpha = 0
-            self.bottomToolView.alpha = 0
-            self.rotateBtn.alpha = 0
-            let toRect = self.view.convert(self.containerView.frame, from: self.scrollView)
+            self.cancelClipAnimateFrame = self.clipBoxFrame
             UIView.animate(withDuration: 0.25, animations: {
-                animateImageView.frame = toRect
+                animateImageView.frame = self.clipBoxFrame
                 self.bottomToolView.alpha = 1
                 self.rotateBtn.alpha = 1
             }) { (_) in
-                animateImageView.removeFromSuperview()
-                self.scrollView.alpha = 1
-                self.overlayView.alpha = 1
+                UIView.animate(withDuration: 0.1) {
+                    self.scrollView.alpha = 1
+                    self.overlayView.alpha = 1
+                } completion: { (_) in
+                    animateImageView.removeFromSuperview()
+                }
             }
         }
         self.viewDidAppearCount += 1
@@ -284,30 +294,44 @@ class ZLClipImageViewController: UIViewController {
         self.gridPanGes.delegate = self
         self.view.addGestureRecognizer(self.gridPanGes)
         self.scrollView.panGestureRecognizer.require(toFail: self.gridPanGes)
+        
+        self.scrollView.alpha = 0
+        self.overlayView.alpha = 0
+        self.bottomToolView.alpha = 0
+        self.rotateBtn.alpha = 0
     }
     
     func layoutInitialImage() {
-        let imageSize = self.editImage.size
-        self.scrollView.contentSize = imageSize
+        let editSize = self.editRect.size//self.editImage.size
+        self.scrollView.contentSize = editSize
         let maxClipRect = self.maxClipFrame
         
         self.containerView.frame = CGRect(origin: .zero, size: self.editImage.size)
         self.imageView.frame = self.containerView.bounds
         
-        let scale = min(maxClipRect.width/imageSize.width, maxClipRect.height/imageSize.height)
-        
-        let scaledSize = CGSize(width: floor(imageSize.width * scale), height: floor(imageSize.height * scale))
-        self.scrollView.minimumZoomScale = scale
-        self.scrollView.maximumZoomScale = 10
+        // editRect比例，计算editRect所占frame
+        let editScale = min(maxClipRect.width/editSize.width, maxClipRect.height/editSize.height)
+        let scaledSize = CGSize(width: floor(editSize.width * editScale), height: floor(editSize.height * editScale))
         
         var frame = CGRect.zero
         frame.size = scaledSize
         frame.origin.x = maxClipRect.minX + floor((maxClipRect.width-frame.width) / 2)
         frame.origin.y = maxClipRect.minY + floor((maxClipRect.height-frame.height) / 2)
+        
+        // 按照edit image进行计算最小缩放比例
+        let originalScale = min(maxClipRect.width/self.editImage.size.width, maxClipRect.height/self.editImage.size.height)
+        // 将 edit rect 相对 originalScale 进行缩放，缩放到图片未放大时候的clip rect
+        let scaleEditSize = CGSize(width: self.editRect.width * originalScale, height: self.editRect.height * originalScale)
+        // 计算缩放后的clip rect相对maxClipRect的比例
+        let clipRectZoomScale = min(maxClipRect.width/scaleEditSize.width, maxClipRect.height/scaleEditSize.height)
+        
+        self.scrollView.minimumZoomScale = originalScale
+        self.scrollView.maximumZoomScale = 10
+        // 设置当前zoom scale
+        self.scrollView.zoomScale = (clipRectZoomScale * originalScale)
+        self.scrollView.contentSize = CGSize(width: scaledSize.width * clipRectZoomScale, height: scaledSize.height * clipRectZoomScale)
+        
         self.changeClipBoxFrame(newFrame: frame)
-
-        self.scrollView.zoomScale = self.scrollView.minimumZoomScale
-        self.scrollView.contentSize = scaledSize
         
         if (frame.size.width < scaledSize.width - CGFloat.ulpOfOne) || (frame.size.height < scaledSize.height - CGFloat.ulpOfOne) {
             var offset = CGPoint.zero
@@ -315,6 +339,11 @@ class ZLClipImageViewController: UIViewController {
             offset.y = -floor((self.scrollView.frame.height - scaledSize.height) / 2)
             self.scrollView.contentOffset = offset
         }
+        
+        // edit rect 相对 image size 的 偏移量
+        let diffX = self.editRect.origin.x / self.editImage.size.width * self.scrollView.contentSize.width
+        let diffY = self.editRect.origin.y / self.editImage.size.height * self.scrollView.contentSize.height
+        self.scrollView.contentOffset = CGPoint(x: -self.scrollView.contentInset.left+diffX, y: -self.scrollView.contentInset.top+diffY)
     }
     
     func changeClipBoxFrame(newFrame: CGRect) {
@@ -361,15 +390,15 @@ class ZLClipImageViewController: UIViewController {
     }
     
     @objc func cancelBtnClick() {
-        self.dismissAnimateFromRect = self.view.convert(self.containerView.frame, from: self.scrollView)
-        self.dismissAnimateImage = self.editImage
-        let animate = self.angle == 0
-        self.cancelClipBlock?(animate)
-        self.dismiss(animated: animate, completion: nil)
+        self.dismissAnimateFromRect = self.cancelClipAnimateFrame
+        self.dismissAnimateImage = self.presentAnimateImage
+        self.cancelClipBlock?()
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func revertBtnClick() {
         self.editImage = self.originalImage
+        self.editRect = CGRect(origin: .zero, size: self.originalImage.size)
         self.scrollView.minimumZoomScale = 1
         self.scrollView.maximumZoomScale = 1
         self.scrollView.zoomScale = 1
@@ -380,8 +409,8 @@ class ZLClipImageViewController: UIViewController {
     @objc func doneBtnClick() {
         let image = self.clipImage()
         self.dismissAnimateFromRect = self.clipBoxFrame
-        self.dismissAnimateImage = image
-        self.clipDoneBlock?(image)
+        self.dismissAnimateImage = image.clipImage
+        self.clipDoneBlock?(self.angle, image.editRect)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -408,6 +437,8 @@ class ZLClipImageViewController: UIViewController {
         self.scrollView.maximumZoomScale = 1
         self.scrollView.zoomScale = 1
         self.imageView.image = self.editImage
+        // 旋转后重置edit rect
+        self.editRect = CGRect(origin: .zero, size: self.editImage.size)
         self.layoutInitialImage()
         
         let toFrame = self.view.convert(self.containerView.frame, from: self.scrollView)
@@ -631,7 +662,7 @@ class ZLClipImageViewController: UIViewController {
         }
     }
     
-    func clipImage() -> UIImage {
+    func clipImage() -> (clipImage: UIImage, editRect: CGRect) {
         let imageSize = self.editImage.size
         let contentSize = self.scrollView.contentSize
         let offset = self.scrollView.contentOffset
@@ -656,10 +687,10 @@ class ZLClipImageViewController: UIViewController {
         let temp = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         guard let cgi = temp?.cgImage else {
-            return self.editImage
+            return (self.editImage, CGRect(origin: .zero, size: self.editImage.size))
         }
         let newImage = UIImage(cgImage: cgi, scale: self.editImage.scale, orientation: .up)
-        return newImage
+        return (newImage, frame)
     }
     
 }
