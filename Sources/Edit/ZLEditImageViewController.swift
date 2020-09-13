@@ -252,6 +252,14 @@ public class ZLEditImageViewController: UIViewController {
         self.mosaicImageLayerMaskLayer?.frame = self.imageView.bounds
         self.drawingImageView.frame = self.imageView.frame
         
+        // 针对于长图的优化
+        if self.editRect.height / self.editRect.width > self.view.frame.height / self.view.frame.width {
+            let widthScale = self.view.frame.width / w
+            self.scrollView.maximumZoomScale = widthScale
+            self.scrollView.zoomScale = widthScale
+            self.scrollView.contentOffset = .zero
+        }
+        
         self.originalFrame = self.view.convert(self.containerView.frame, from: self.scrollView)
     }
     
@@ -375,6 +383,10 @@ public class ZLEditImageViewController: UIViewController {
             self.mosaicImageLayer?.mask = self.mosaicImageLayerMaskLayer
         }
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
+        tap.delegate = self
+        self.view.addGestureRecognizer(tap)
+        
         let pan = UIPanGestureRecognizer(target: self, action: #selector(drawAction(_:)))
         pan.maximumNumberOfTouches = 1
         pan.delegate = self
@@ -434,6 +446,8 @@ public class ZLEditImageViewController: UIViewController {
         
         self.present(vc, animated: false) {
             self.scrollView.alpha = 0
+            self.topShadowView.alpha = 0
+            self.bottomShadowView.alpha = 0
         }
     }
     
@@ -467,6 +481,14 @@ public class ZLEditImageViewController: UIViewController {
             self.mosaicPaths.removeLast()
             self.revokeBtn.isEnabled = self.mosaicPaths.count > 0
             self.generateNewMosaicImage()
+        }
+    }
+    
+    @objc func tapAction(_ tap: UITapGestureRecognizer) {
+        if self.bottomShadowView.alpha == 1 {
+            self.setToolView(show: false)
+        } else {
+            self.setToolView(show: true)
         }
     }
     
@@ -521,6 +543,8 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func setToolView(show: Bool) {
+        self.topShadowView.layer.removeAllAnimations()
+        self.bottomShadowView.layer.removeAllAnimations()
         if show {
             UIView.animate(withDuration: 0.25) {
                 self.topShadowView.alpha = 1
@@ -643,6 +667,14 @@ public class ZLEditImageViewController: UIViewController {
         let newImage = UIImage(cgImage: cgi, scale: image.scale, orientation: .up)
         return newImage
     }
+    
+    func finishClipDismissAnimate() {
+        self.scrollView.alpha = 1
+        UIView.animate(withDuration: 0.1) {
+            self.topShadowView.alpha = 1
+            self.bottomShadowView.alpha = 1
+        }
+    }
 
 }
 
@@ -650,7 +682,18 @@ public class ZLEditImageViewController: UIViewController {
 extension ZLEditImageViewController: UIGestureRecognizerDelegate {
     
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return (self.drawBtn.isSelected || self.mosaicBtn.isSelected) && !self.isScrolling
+        if gestureRecognizer is UITapGestureRecognizer {
+            if self.bottomShadowView.alpha == 1 {
+                let p = gestureRecognizer.location(in: self.view)
+                return !self.bottomShadowView.frame.contains(p)
+            } else {
+                return true
+            }
+        } else if gestureRecognizer is UIPanGestureRecognizer {
+            return (self.drawBtn.isSelected || self.mosaicBtn.isSelected) && !self.isScrolling
+        }
+        
+        return true
     }
     
 }

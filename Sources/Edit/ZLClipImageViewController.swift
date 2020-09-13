@@ -164,7 +164,7 @@ class ZLClipImageViewController: UIViewController {
         
         if self.viewDidAppearCount == 0, let frame = self.presentAnimateFrame, let image = self.presentAnimateImage {
             let animateImageView = UIImageView(image: image)
-            animateImageView.contentMode = .scaleAspectFit
+            animateImageView.contentMode = .scaleAspectFill
             animateImageView.frame = frame
             self.view.addSubview(animateImageView)
             
@@ -302,7 +302,7 @@ class ZLClipImageViewController: UIViewController {
     }
     
     func layoutInitialImage() {
-        let editSize = self.editRect.size//self.editImage.size
+        let editSize = self.editRect.size
         self.scrollView.contentSize = editSize
         let maxClipRect = self.maxClipFrame
         

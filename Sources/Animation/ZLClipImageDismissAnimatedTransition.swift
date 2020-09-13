@@ -50,7 +50,7 @@ class ZLClipImageDismissAnimatedTransition: NSObject, UIViewControllerAnimatedTr
         UIView.animate(withDuration: 0.3, animations: {
             imageView.frame = toVC.originalFrame
         }) { (_) in
-            toVC.scrollView.alpha = 1
+            toVC.finishClipDismissAnimate()
             imageView.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
