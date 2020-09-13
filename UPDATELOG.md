@@ -2,7 +2,7 @@
 
 -----
 
-## [4.0.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.2) (2020-09-13)
+## [4.0.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.2) (2020-09-13)
 
 #### Add
 * 优化图片编辑体验，记录之前编辑状态;
