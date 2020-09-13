@@ -2,6 +2,22 @@
 
 -----
 
+## [4.0.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.2) (2020-09-13)
+
+#### Add
+* 优化图片编辑体验，记录之前编辑状态;
+* 添加是否允许拍照参数；[#512](https://github.com/longitachi/ZLPhotoBrowser/issues/512)
+
+#### Fix
+* 优化降序照片获取方式; [#145](https://github.com/longitachi/ZLPhotoBrowser/issues/145)
+* 处理`FDFullscreenPopGesture`引起的导航显示异常; [#510](https://github.com/longitachi/ZLPhotoBrowser/issues/510)
+* oc无法使用自定义相机回调; [#513](https://github.com/longitachi/ZLPhotoBrowser/issues/513)
+* 解决embedAlbumList样式下拍照后未更新相册的bug;
+* 修复状态栏样式参数无效的bug;
+* 修复不可选cell遮罩不显示的bug;
+
+---
+
 ## [4.0.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.2) (2020-09-08)
 
 #### Add
