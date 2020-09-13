@@ -142,10 +142,19 @@ class ZLClipImageViewController: UIViewController {
         self.cleanTimer()
     }
     
-    init(image: UIImage, editRect: CGRect) {
+    init(image: UIImage, editRect: CGRect, angle: CGFloat = 0) {
         self.originalImage = image
-        self.editImage = image
         self.editRect = editRect
+        self.angle = angle
+        if angle == -90 {
+            self.editImage = image.rotate(orientation: .left)
+        } else if self.angle == -180 {
+            self.editImage = image.rotate(orientation: .down)
+        } else if self.angle == -270 {
+            self.editImage = image.rotate(orientation: .right)
+        } else {
+            self.editImage = image
+        }
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -232,7 +241,7 @@ class ZLClipImageViewController: UIViewController {
         self.containerView = UIView()
         self.scrollView.addSubview(self.containerView)
         
-        self.imageView = UIImageView(image: self.originalImage)
+        self.imageView = UIImageView(image: self.editImage)
         self.imageView.contentMode = .scaleAspectFit
         self.imageView.clipsToBounds = true
         self.containerView.addSubview(self.imageView)
@@ -397,6 +406,7 @@ class ZLClipImageViewController: UIViewController {
     }
     
     @objc func revertBtnClick() {
+        self.angle = 0
         self.editImage = self.originalImage
         self.editRect = CGRect(origin: .zero, size: self.originalImage.size)
         self.scrollView.minimumZoomScale = 1

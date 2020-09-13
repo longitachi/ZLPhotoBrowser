@@ -421,7 +421,7 @@ public class ZLEditImageViewController: UIViewController {
     
     @objc func clipBtnClick() {
         let currentEditImage = self.buildImage()
-        let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.editRect)
+        let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.editRect, angle: self.angle)
         let rect = self.scrollView.convert(self.containerView.frame, to: self.view)
         vc.presentAnimateFrame = rect
         vc.presentAnimateImage = self.clipImage(currentEditImage)
@@ -429,11 +429,8 @@ public class ZLEditImageViewController: UIViewController {
         
         vc.clipDoneBlock = { [weak self] (angle, editFrame) in
             guard let `self` = self else { return }
-            if angle != 0 {
-                self.angle += angle
-                if self.angle <= -360 {
-                    self.angle += 360
-                }
+            if self.angle != angle {
+                self.angle = angle
                 self.rotationImageView()
             }
             self.editRect = editFrame
@@ -640,32 +637,31 @@ public class ZLEditImageViewController: UIViewController {
         guard let cgi = temp?.cgImage else {
             return self.editImage
         }
-        var image = UIImage(cgImage: cgi, scale: self.editImage.scale, orientation: .up)
-        
-        if self.angle == -90 {
-            image = image.rotate(orientation: .left)
-        } else if self.angle == -180 {
-            image = image.rotate(orientation: .down)
-        } else if self.angle == -270 {
-            image = image.rotate(orientation: .right)
-        }
-        return image
+        return UIImage(cgImage: cgi, scale: self.editImage.scale, orientation: .up)
     }
     
     func clipImage(_ image: UIImage) -> UIImage? {
-        guard self.editRect.size != image.size else {
-            return image
+        var newImage = image
+        if self.angle == -90 {
+            newImage = image.rotate(orientation: .left)
+        } else if self.angle == -180 {
+            newImage = image.rotate(orientation: .down)
+        } else if self.angle == -270 {
+            newImage = image.rotate(orientation: .right)
+        }
+        guard self.editRect.size != newImage.size else {
+            return newImage
         }
         let origin = CGPoint(x: -self.editRect.minX, y: -self.editRect.minY)
-        UIGraphicsBeginImageContextWithOptions(self.editRect.size, false, image.scale)
-        image.draw(at: origin)
+        UIGraphicsBeginImageContextWithOptions(self.editRect.size, false, newImage.scale)
+        newImage.draw(at: origin)
         let temp = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         guard let cgi = temp?.cgImage else {
             return temp
         }
-        let newImage = UIImage(cgImage: cgi, scale: image.scale, orientation: .up)
-        return newImage
+        let clipImage = UIImage(cgImage: cgi, scale: newImage.scale, orientation: .up)
+        return clipImage
     }
     
     func finishClipDismissAnimate() {
