@@ -174,10 +174,10 @@ class ZLClipImageViewController: UIViewController {
                 self.bottomToolView.alpha = 1
                 self.rotateBtn.alpha = 1
             }) { (_) in
-                UIView.animate(withDuration: 0.1) {
+                UIView.animate(withDuration: 0.1, animations: {
                     self.scrollView.alpha = 1
                     self.overlayView.alpha = 1
-                } completion: { (_) in
+                }) { (_) in
                     animateImageView.removeFromSuperview()
                 }
             }
