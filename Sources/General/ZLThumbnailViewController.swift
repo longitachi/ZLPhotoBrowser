@@ -925,7 +925,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 }
             } else if selCount >= ZLPhotoConfiguration.default().maxSelectCount {
                 cell.coverView.backgroundColor = .invalidMaskColor
-                cell.coverView.isHidden = ZLPhotoConfiguration.default().showInvalidMask
+                cell.coverView.isHidden = !ZLPhotoConfiguration.default().showInvalidMask
                 cell.enableSelect = false
             }
         }

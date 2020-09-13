@@ -785,6 +785,9 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
         super.layoutSubviews()
         self.bottomBlurView?.frame = self.bounds
         self.collectionView.frame = CGRect(x: 0, y: 10, width: self.bounds.width, height: 80)
+        if let index = self.arrSelectedModels.firstIndex(where: { $0 == self.currentShowModel }) {
+            self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: true)
+        }
     }
     
     func currentShowModelChanged(model: ZLPhotoModel) {
