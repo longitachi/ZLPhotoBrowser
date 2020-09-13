@@ -432,18 +432,20 @@ class ZLClipImageViewController: UIViewController {
         animateImageView.frame = originFrame
         self.view.addSubview(animateImageView)
         
+        // 将edit rect转换为相对edit image的rect
+        let rect = convertClipRectToEditImageRect()
+        // 旋转图片
         self.editImage = self.editImage.rotate(orientation: .left)
+        // 将rect进行旋转，转换到相对于旋转后的edit image的rect
+        self.editRect = CGRect(x: rect.minY, y: self.editImage.size.height-rect.minX-rect.width, width: rect.height, height: rect.width)
         self.scrollView.minimumZoomScale = 1
         self.scrollView.maximumZoomScale = 1
         self.scrollView.zoomScale = 1
         self.imageView.image = self.editImage
-        // 旋转后重置edit rect
-        self.editRect = CGRect(origin: .zero, size: self.editImage.size)
         self.layoutInitialImage()
         
         let toFrame = self.view.convert(self.containerView.frame, from: self.scrollView)
         let transform = CGAffineTransform(rotationAngle: -CGFloat.pi/2)
-        
         self.overlayView.alpha = 0
         self.containerView.alpha = 0
         UIView.animate(withDuration: 0.3, animations: {
@@ -663,6 +665,21 @@ class ZLClipImageViewController: UIViewController {
     }
     
     func clipImage() -> (clipImage: UIImage, editRect: CGRect) {
+        let frame = self.convertClipRectToEditImageRect()
+        
+        let origin = CGPoint(x: -frame.minX, y: -frame.minY)
+        UIGraphicsBeginImageContextWithOptions(frame.size, false, self.editImage.scale)
+        self.editImage.draw(at: origin)
+        let temp = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        guard let cgi = temp?.cgImage else {
+            return (self.editImage, CGRect(origin: .zero, size: self.editImage.size))
+        }
+        let newImage = UIImage(cgImage: cgi, scale: self.editImage.scale, orientation: .up)
+        return (newImage, frame)
+    }
+    
+    func convertClipRectToEditImageRect() -> CGRect {
         let imageSize = self.editImage.size
         let contentSize = self.scrollView.contentSize
         let offset = self.scrollView.contentOffset
@@ -681,16 +698,7 @@ class ZLClipImageViewController: UIViewController {
         frame.size.height = ceil(self.clipBoxFrame.height * (imageSize.height / contentSize.height))
         frame.size.height = min(imageSize.height, frame.height)
         
-        let origin = CGPoint(x: -frame.minX, y: -frame.minY)
-        UIGraphicsBeginImageContextWithOptions(frame.size, false, self.editImage.scale)
-        self.editImage.draw(at: origin)
-        let temp = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        guard let cgi = temp?.cgImage else {
-            return (self.editImage, CGRect(origin: .zero, size: self.editImage.size))
-        }
-        let newImage = UIImage(cgImage: cgi, scale: self.editImage.scale, orientation: .up)
-        return (newImage, frame)
+        return frame
     }
     
 }
