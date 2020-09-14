@@ -34,7 +34,7 @@
 - [x] 自定义最大预览数/选择数/视频最大最小可选时长，控制可否选择原图
 - [x] 自定义每行显示列数
 - [x] 图片编辑（涂鸦/裁剪/马赛克）（图片编辑可编辑多张；涂鸦颜色可自定义，裁剪工具也可根据需要自行选择）
-- [x] 视频编辑（自定义最大裁剪时长）（效果参照微信视频编辑）
+- [x] 视频编辑（自定义最大裁剪时长）（效果参照微信视频编辑；支持编辑本地视频）
 - [x] 自定义相机（效果参照微信拍照，点击拍照、长按拍摄；上滑调整焦距；可设置最大/最小录制时间及视频分辨率；可设置闪光灯模式及视频导出格式；可根据自己需要控制是否使用自定义相机）
 - [x] 多语言国际化支持（中文简/繁，英文，日文，开发者可选根据系统或自己指定，多语言文案可自定义）
 - [x] 已选择照片index
@@ -88,6 +88,20 @@
  editVC.editFinishBlock = { [weak self] (image) in
      // your code
  }
+ editVC.modalPresentationStyle = .fullScreen
+ self.showDetailViewController(editVC, sender: nil)
+ ```
+ 
+ - 调用编辑视频
+ ```
+ // 编辑本地视频
+ let fileUrl = URL(fileURLWithPath: "filePath")
+ let avAsset = AVAsset(url: fileUrl)
+ let editVC = ZLEditVideoViewController(avAsset: avAsset, animateDismiss: true)
+ editVC.editFinishBlock = { (url) in
+     // your code
+ }
+ editVC.modalPresentationStyle = .fullScreen
  self.showDetailViewController(editVC, sender: nil)
  ```
  

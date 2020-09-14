@@ -487,12 +487,12 @@ class ZLPhotoPreviewViewController: UIViewController {
                 }
             }
             // 提前fetch一下 avasset
-            requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] (asset, _) in
+            requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] (avAsset, _) in
                 hud.hide()
-                if asset == nil {
-                    showAlertView(localLanguageTextValue(.timeout), self)
+                if let _ = avAsset {
+                    self?.showEditVideoVC(avAsset: avAsset!)
                 } else {
-                    self?.showEditVideoVC(asset: model.asset)
+                    showAlertView(localLanguageTextValue(.timeout), self)
                 }
             }
         }
@@ -579,16 +579,22 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.present(vc, animated: false, completion: nil)
     }
     
-    func showEditVideoVC(asset: PHAsset) {
+    func showEditVideoVC(avAsset: AVAsset) {
         let nav = self.navigationController as! ZLImageNavController
-        let vc = ZLEditVideoViewController(asset: asset)
+        let vc = ZLEditVideoViewController(avAsset: avAsset)
         vc.modalPresentationStyle = .fullScreen
         
-        vc.editFinishBlock = { [weak nav] (asset) in
-            let m = ZLPhotoModel(asset: asset)
-            nav?.arrSelectedModels.removeAll()
-            nav?.arrSelectedModels.append(m)
-            nav?.selectImageBlock?()
+        vc.editFinishBlock = { [weak nav] (url) in
+            ZLPhotoManager.saveVideoToAblum(url: url) { [weak self, weak nav] (suc, asset) in
+                if suc, asset != nil {
+                    let m = ZLPhotoModel(asset: asset!)
+                    nav?.arrSelectedModels.removeAll()
+                    nav?.arrSelectedModels.append(m)
+                    nav?.selectImageBlock?()
+                } else {
+                    showAlertView(localLanguageTextValue(.saveVideoError), self)
+                }
+            }
         }
         
         self.present(vc, animated: false, completion: nil)

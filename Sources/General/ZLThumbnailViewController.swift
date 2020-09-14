@@ -662,21 +662,32 @@ class ZLThumbnailViewController: UIViewController {
                 PHImageManager.default().cancelImageRequest(requestAvAssetID!)
             }
         }
-        // 提前fetch一下 avasset
-        requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self, weak nav] (asset, _) in
-            hud.hide()
-            if asset == nil {
-                showAlertView(localLanguageTextValue(.timeout), self)
-            } else {
-                let vc = ZLEditVideoViewController(asset: model.asset)
-                vc.editFinishBlock = { [weak nav] (asset) in
-                    let m = ZLPhotoModel(asset: asset)
-                    m.isSelected = true
-                    nav?.arrSelectedModels.append(m)
-                    nav?.selectImageBlock?()
+        
+        func inner_showEditVideoVC(_ avAsset: AVAsset) {
+            let vc = ZLEditVideoViewController(avAsset: avAsset)
+            vc.editFinishBlock = { [weak self] (url) in
+                ZLPhotoManager.saveVideoToAblum(url: url) { [weak self, weak nav] (suc, asset) in
+                    if suc, asset != nil {
+                        let m = ZLPhotoModel(asset: asset!)
+                        m.isSelected = true
+                        nav?.arrSelectedModels.append(m)
+                        nav?.selectImageBlock?()
+                    } else {
+                        showAlertView(localLanguageTextValue(.saveVideoError), self)
+                    }
                 }
-                vc.modalPresentationStyle = .fullScreen
-                self?.showDetailViewController(vc, sender: nil)
+            }
+            vc.modalPresentationStyle = .fullScreen
+            self.showDetailViewController(vc, sender: nil)
+        }
+        
+        // 提前fetch一下 avasset
+        requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] (avAsset, _) in
+            hud.hide()
+            if let _ = avAsset {
+                inner_showEditVideoVC(avAsset!)
+            } else {
+                showAlertView(localLanguageTextValue(.timeout), self)
             }
         }
     }

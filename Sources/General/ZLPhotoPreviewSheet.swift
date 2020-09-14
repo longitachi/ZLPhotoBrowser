@@ -617,21 +617,32 @@ public class ZLPhotoPreviewSheet: UIView {
                 PHImageManager.default().cancelImageRequest(requestAvAssetID!)
             }
         }
-        // 提前fetch一下 avasset
-        requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] (asset, _) in
-            hud.hide()
-            if asset == nil {
-                showAlertView(localLanguageTextValue(.timeout), self?.sender)
-            } else {
-                let vc = ZLEditVideoViewController(asset: model.asset)
-                vc.editFinishBlock = { [weak self] (asset) in
-                    let m = ZLPhotoModel(asset: asset)
-                    m.isSelected = true
-                    self?.arrSelectedModels.append(m)
-                    self?.requestSelectPhoto()
+        
+        func inner_showEditVideoVC(_ avAsset: AVAsset) {
+            let vc = ZLEditVideoViewController(avAsset: avAsset)
+            vc.editFinishBlock = { [weak self] (url) in
+                ZLPhotoManager.saveVideoToAblum(url: url) { [weak self] (suc, asset) in
+                    if suc, asset != nil {
+                        let m = ZLPhotoModel(asset: asset!)
+                        m.isSelected = true
+                        self?.arrSelectedModels.append(m)
+                        self?.requestSelectPhoto()
+                    } else {
+                        showAlertView(localLanguageTextValue(.saveVideoError), self?.sender)
+                    }
                 }
-                vc.modalPresentationStyle = .fullScreen
-                self?.sender?.showDetailViewController(vc, sender: nil)
+            }
+            vc.modalPresentationStyle = .fullScreen
+            self.sender?.showDetailViewController(vc, sender: nil)
+        }
+        
+        // 提前fetch一下 avasset
+        requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] (avAsset, _) in
+            hud.hide()
+            if let _ = avAsset {
+                inner_showEditVideoVC(avAsset!)
+            } else {
+                showAlertView(localLanguageTextValue(.timeout), self?.sender)
             }
         }
     }
