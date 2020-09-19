@@ -121,6 +121,11 @@ public class ZLPhotoPreviewSheet: UIView {
             m.isSelected = true
             self.arrSelectedModels.append(m)
         }
+        
+        // 状态为limit时候注册相册变化通知，由于photoLibraryDidChange方法会在每次相册变化时候回调多次，导致界面多次刷新，所以其他情况不监听相册变化
+        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
+            PHPhotoLibrary.shared().register(self)
+        }
     }
     
     public required init?(coder: NSCoder) {
@@ -951,6 +956,18 @@ extension ZLPhotoPreviewSheet: UIImagePickerControllerDelegate, UINavigationCont
             let image = info[.originalImage] as? UIImage
             let url = info[.mediaURL] as? URL
             self.save(image: image, videoUrl: url)
+        }
+    }
+    
+}
+
+
+extension ZLPhotoPreviewSheet: PHPhotoLibraryChangeObserver {
+    
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+        DispatchQueue.main.async {
+            self.loadPhotos()
         }
     }
     

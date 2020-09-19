@@ -140,6 +140,11 @@ class ZLThumbnailViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationChanged(_:)), name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
         
         self.loadPhotos()
+        
+        // 状态为limit时候注册相册变化通知，由于photoLibraryDidChange方法会在每次相册变化时候回调多次，导致界面多次刷新，所以其他情况不监听相册变化
+        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
+            PHPhotoLibrary.shared().register(self)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -162,6 +167,7 @@ class ZLThumbnailViewController: UIViewController {
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
         }
+        
         let navViewFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: insets.top + 44)
         self.externalNavView?.frame = navViewFrame
         self.embedNavView?.frame = navViewFrame
@@ -184,6 +190,7 @@ class ZLThumbnailViewController: UIViewController {
         let totalWidth = self.view.frame.width - insets.left - insets.right
         self.collectionView.frame = CGRect(x: insets.left, y: 0, width: totalWidth, height: self.view.frame.height)
         self.collectionView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: bottomViewH, right: 0)
+        self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: insets.top, left: 0, bottom: bottomViewH, right: 0)
         
         guard showBottomView else { return }
         
@@ -952,6 +959,21 @@ extension ZLThumbnailViewController: UIImagePickerControllerDelegate, UINavigati
             let image = info[.originalImage] as? UIImage
             let url = info[.mediaURL] as? URL
             self.save(image: image, videoUrl: url)
+        }
+    }
+    
+}
+
+
+extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
+    
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+        DispatchQueue.main.async {
+            // 变化后再次显示相册列表需要刷新
+            self.hasTakeANewAsset = true
+            self.albumList.refreshResult()
+            self.loadPhotos()
         }
     }
     

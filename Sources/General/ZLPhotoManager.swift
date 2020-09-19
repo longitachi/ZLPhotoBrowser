@@ -151,10 +151,10 @@ public class ZLPhotoManager: NSObject {
                 
                 if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                     // 所有照片
-                    let m = ZLAlbumListModel(title: title, result: result, isCameraRoll: true)
+                    let m = ZLAlbumListModel(title: title, result: result, collection: collection, option: option, isCameraRoll: true)
                     albumList.insert(m, at: 0)
                 } else {
-                    let m = ZLAlbumListModel(title: title, result: result, isCameraRoll: false)
+                    let m = ZLAlbumListModel(title: title, result: result, collection: collection, option: option, isCameraRoll: false)
                     albumList.append(m)
                 }
             }
@@ -177,7 +177,7 @@ public class ZLPhotoManager: NSObject {
         smartAlbums.enumerateObjects { (collection, _, stop) in
             if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                 let result = PHAsset.fetchAssets(in: collection, options: option)
-                let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, isCameraRoll: true)
+                let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
                 completion(albumModel)
                 stop.pointee = true
             }

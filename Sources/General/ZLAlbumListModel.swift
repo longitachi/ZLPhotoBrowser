@@ -33,7 +33,11 @@ class ZLAlbumListModel: NSObject {
     
     var count: Int
     
-    let result: PHFetchResult<PHAsset>
+    var result: PHFetchResult<PHAsset>
+    
+    let collection: PHAssetCollection
+    
+    let option: PHFetchOptions
     
     let isCameraRoll: Bool
     
@@ -47,10 +51,12 @@ class ZLAlbumListModel: NSObject {
     // 暂未用到
     var selectedCount: Int = 0
     
-    init(title: String, result: PHFetchResult<PHAsset>, isCameraRoll: Bool) {
+    init(title: String, result: PHFetchResult<PHAsset>, collection: PHAssetCollection, option: PHFetchOptions, isCameraRoll: Bool) {
         self.title = title
         self.count = result.count
         self.result = result
+        self.collection = collection
+        self.option = option
         self.isCameraRoll = isCameraRoll
         
         self.headImageAsset = result.lastObject
@@ -60,6 +66,12 @@ class ZLAlbumListModel: NSObject {
         let models = ZLPhotoManager.fetchPhoto(in: self.result, ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo:  ZLPhotoConfiguration.default().allowSelectVideo)
         self.models.removeAll()
         self.models.append(contentsOf: models)
+    }
+    
+    func refreshResult() {
+        self.result = PHAsset.fetchAssets(in: self.collection, options: self.option)
+        self.count = self.result.count
+        self.models.removeAll()
     }
     
 }

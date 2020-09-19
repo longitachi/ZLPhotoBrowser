@@ -117,7 +117,7 @@
  ZLPhotoConfiguration.default().customLanguageKeyValue = [.previewCamera: "拍照"]
  
  // oc
- ZLPhotoConfiguration.default().customLanguageKeyValue_objc = ["previewCamera": "拍照"]
+ [ZLPhotoConfiguration default].customLanguageKeyValue_objc = @["previewCamera": "拍照"]
  ```
  
  - 支持light/dark mode颜色定义示例

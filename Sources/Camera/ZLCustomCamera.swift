@@ -199,7 +199,8 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
         }
-        self.previewLayer?.frame = CGRect(x: 0, y: 20, width: self.view.bounds.width, height: self.view.bounds.height)
+        let previewLayerY: CGFloat = insets.top > 0 ? 20 : 0
+        self.previewLayer?.frame = CGRect(x: 0, y: previewLayerY, width: self.view.bounds.width, height: self.view.bounds.height)
         self.recordVideoPlayerLayer?.frame = self.view.bounds
         self.takedImageView.frame = self.view.bounds
         
