@@ -61,6 +61,23 @@ class ZLPhotoModel: NSObject {
         return Int(round(asset.duration))
     }
     
+    var whRatio: CGFloat {
+        return CGFloat(self.asset.pixelWidth) / CGFloat(self.asset.pixelHeight)
+    }
+    
+    var previewSize: CGSize {
+        let scale: CGFloat = 2 //UIScreen.main.scale
+        if self.whRatio > 1 {
+            let h = min(UIScreen.main.bounds.height, ZLMaxImageWidth) * scale
+            let w = h * self.whRatio
+            return CGSize(width: w, height: h)
+        } else {
+            let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * scale
+            let h = w / self.whRatio
+            return CGSize(width: w, height: h)
+        }
+    }
+    
     // 保存上次编辑图片的一些内容，下次编辑时候可继续上次的编辑
     var editImageModel: ZLEditImageModel?
     

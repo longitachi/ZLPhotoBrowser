@@ -174,6 +174,7 @@ class ZLClipImageViewController: UIViewController {
         if self.viewDidAppearCount == 0, let frame = self.presentAnimateFrame, let image = self.presentAnimateImage {
             let animateImageView = UIImageView(image: image)
             animateImageView.contentMode = .scaleAspectFill
+            animateImageView.clipsToBounds = true
             animateImageView.frame = frame
             self.view.addSubview(animateImageView)
             

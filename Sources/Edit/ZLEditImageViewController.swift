@@ -253,14 +253,17 @@ public class ZLEditImageViewController: UIViewController {
         self.drawingImageView.frame = self.imageView.frame
         
         // 针对于长图的优化
-        if self.editRect.height / self.editRect.width > self.view.frame.height / self.view.frame.width {
+        if (self.editRect.height / self.editRect.width) > (self.view.frame.height / self.view.frame.width * 1.1) {
             let widthScale = self.view.frame.width / w
             self.scrollView.maximumZoomScale = widthScale
             self.scrollView.zoomScale = widthScale
             self.scrollView.contentOffset = .zero
+        } else if self.editRect.width / self.editRect.height > 1 {
+            self.scrollView.maximumZoomScale = max(3, self.view.frame.height / h)
         }
         
         self.originalFrame = self.view.convert(self.containerView.frame, from: self.scrollView)
+        self.isScrolling = false
     }
     
     func setupUI() {
@@ -494,12 +497,23 @@ public class ZLEditImageViewController: UIViewController {
             let point = pan.location(in: self.drawingImageView)
             if pan.state == .began {
                 self.setToolView(show: false)
-                let diff = (self.scrollView.zoomScale - 1)
                 
                 let originalRatio = min(self.scrollView.frame.width / self.originalImage.size.width, self.scrollView.frame.height / self.originalImage.size.height)
                 let ratio = min(self.scrollView.frame.width / self.editRect.width, self.scrollView.frame.height / self.editRect.height)
+                let scale = ratio / originalRatio
+                // 缩放到最初的size
+                var size = self.drawingImageView.frame.size
+                size.width /= scale
+                size.height /= scale
+                if self.angle == -90 || self.angle == -270 {
+                    swap(&size.width, &size.height)
+                }
+                var toImageScale = ZLMaxImageWidth / size.width
+                if self.editImage.size.width / self.editImage.size.height > 1 {
+                    toImageScale = ZLMaxImageWidth / size.height
+                }
                 
-                let path = ZLDrawPath(pathColor: self.currentDrawColor, pathWidth: self.drawLineWidth - diff, ratio: ratio / originalRatio, startPoint: point)
+                let path = ZLDrawPath(pathColor: self.currentDrawColor, pathWidth: self.drawLineWidth / self.scrollView.zoomScale, ratio: ratio / originalRatio / toImageScale, startPoint: point)
                 self.drawPaths.append(path)
             } else if pan.state == .changed {
                 let path = self.drawPaths.last
@@ -513,8 +527,6 @@ public class ZLEditImageViewController: UIViewController {
             let point = pan.location(in: self.imageView)
             if pan.state == .began {
                 self.setToolView(show: false)
-                let step = 10 / (self.scrollView.maximumZoomScale - self.scrollView.minimumZoomScale)
-                let diff = (self.scrollView.zoomScale - 1) * step
                 
                 var actualSize = self.editRect.size
                 if self.angle == -90 || self.angle == -270 {
@@ -522,9 +534,10 @@ public class ZLEditImageViewController: UIViewController {
                 }
                 let ratio = min(self.scrollView.frame.width / self.editRect.width, self.scrollView.frame.height / self.editRect.height)
                 
-                let path = ZLMosaicPath(pathWidth: self.mosaicLineWidth-diff, ratio: ratio, startPoint: point)
+                let pathW = self.mosaicLineWidth / self.scrollView.zoomScale
+                let path = ZLMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
                 
-                self.mosaicImageLayerMaskLayer?.lineWidth = self.mosaicLineWidth - diff
+                self.mosaicImageLayerMaskLayer?.lineWidth = pathW
                 self.mosaicImageLayerMaskLayer?.path = path.path.cgPath
                 self.mosaicPaths.append(path)
             } else if pan.state == .changed {
@@ -563,10 +576,15 @@ public class ZLEditImageViewController: UIViewController {
         var size = self.drawingImageView.frame.size
         size.width /= scale
         size.height /= scale
-        
         if self.angle == -90 || self.angle == -270 {
             swap(&size.width, &size.height)
         }
+        var toImageScale = ZLMaxImageWidth / size.width
+        if self.editImage.size.width / self.editImage.size.height > 1 {
+            toImageScale = ZLMaxImageWidth / size.height
+        }
+        size.width *= toImageScale
+        size.height *= toImageScale
         
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         let context = UIGraphicsGetCurrentContext()
@@ -619,7 +637,6 @@ public class ZLEditImageViewController: UIViewController {
         
         self.editImage = image
         self.imageView.image = self.editImage
-        
         
         self.mosaicImageLayerMaskLayer?.path = nil
     }

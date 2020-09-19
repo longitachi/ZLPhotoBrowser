@@ -63,6 +63,7 @@ class ZLPreviewBaseCell: UICollectionViewCell {
         
         var width = min(viewW, size.width)
         
+        // video和livephoto没必要处理长图和宽图
         if UIApplication.shared.statusBarOrientation.isLandscape {
             let height = min(self.bounds.height, size.height)
             frame.size.height = height
@@ -313,13 +314,13 @@ class ZLLivePhotoPewviewCell: ZLPreviewBaseCell {
         self.onFetchingLivePhoto = false
         self.imageView.isHidden = false
         
-        let asset = self.model.asset
-        let scale: CGFloat = 0.5
-        let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * scale
-        let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
+        // livephoto 加载个较小的预览图即可
+        var size = self.model.previewSize
+        size.width /= 4
+        size.height /= 4
         
         self.resizeImageView(imageView: self.imageView, asset: self.model.asset)
-        self.imageRequestID = ZLPhotoManager.fetchImage(for: asset, size: size, completion: { [weak self] (image, isDegread) in
+        self.imageRequestID = ZLPhotoManager.fetchImage(for: self.model.asset, size: size, completion: { [weak self] (image, isDegread) in
             self?.imageView.image = image
         })
     }
@@ -462,13 +463,13 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
             PHImageManager.default().cancelImageRequest(self.videoRequestID)
         }
         
-        let asset = self.model.asset
-        let scale: CGFloat = 1
-        let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * scale
-        let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
+        // 视频预览图尺寸
+        var size = self.model.previewSize
+        size.width /= 2
+        size.height /= 2
         
         self.resizeImageView(imageView: self.imageView, asset: self.model.asset)
-        self.imageRequestID = ZLPhotoManager.fetchImage(for: asset, size: size, completion: { (image, isDegraded) in
+        self.imageRequestID = ZLPhotoManager.fetchImage(for: self.model.asset, size: size, completion: { (image, isDegraded) in
             self.imageView.image = image
         })
         
@@ -561,6 +562,8 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
 
 class ZLPreviewView: UIView {
     
+    static let defaultMaxZoomScale: CGFloat = 3
+    
     var scrollView: UIScrollView!
     
     var containerView: UIView!
@@ -611,7 +614,7 @@ class ZLPreviewView: UIView {
     
     func setupUI() {
         self.scrollView = UIScrollView()
-        self.scrollView.maximumZoomScale = 3
+        self.scrollView.maximumZoomScale = ZLPreviewView.defaultMaxZoomScale
         self.scrollView.minimumZoomScale = 1
         self.scrollView.isMultipleTouchEnabled = true
         self.scrollView.delegate = self
@@ -624,7 +627,7 @@ class ZLPreviewView: UIView {
         self.scrollView.addSubview(self.containerView)
         
         self.imageView = UIImageView()
-        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.contentMode = .scaleAspectFill
         self.imageView.clipsToBounds = true
         self.containerView.addSubview(self.imageView)
         
@@ -646,7 +649,7 @@ class ZLPreviewView: UIView {
     }
     
     @objc func doubleTapAction(_ tap: UITapGestureRecognizer) {
-        let scale: CGFloat = self.scrollView.zoomScale != 3 ? 3 : 1
+        let scale: CGFloat = self.scrollView.zoomScale != self.scrollView.maximumZoomScale ? self.scrollView.maximumZoomScale : 1
         let tapPoint = tap.location(in: self)
         var rect = CGRect.zero
         rect.size.width = self.scrollView.frame.width / scale
@@ -675,11 +678,13 @@ class ZLPreviewView: UIView {
     }
     
     func requestPhotoSize(gif: Bool) -> CGSize {
-        let asset = self.model.asset
         // gif 情况下优先加载一个小的缩略图
-        let scale: CGFloat = gif ? 1 : 2
-        let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * scale
-        return CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
+        var size = self.model.previewSize
+        if gif {
+            size.width /= 2
+            size.height /= 2
+        }
+        return size
     }
     
     func loadPhoto() {
@@ -766,10 +771,10 @@ class ZLPreviewView: UIView {
         let viewW = self.bounds.width
         let viewH = self.bounds.height
         
-        var width = min(viewW, size.width)
+        var width = viewW
         
         if UIApplication.shared.statusBarOrientation.isLandscape {
-            let height = min(self.bounds.height, size.height)
+            let height = viewH
             frame.size.height = height
             
             let imageWHRatio = size.width / size.height
@@ -778,6 +783,7 @@ class ZLPreviewView: UIView {
             if imageWHRatio > viewWHRatio {
                 frame.size.width = floor(height * imageWHRatio)
                 if frame.size.width > viewW {
+                    // 宽图
                     frame.size.width = viewW
                     frame.size.height = viewW / imageWHRatio
                 }
@@ -795,14 +801,23 @@ class ZLPreviewView: UIView {
             let viewHWRatio = viewH / viewW
             
             if imageHWRatio > viewHWRatio {
-                frame.size.height = floor(width * imageHWRatio)
+                // 长图
+                frame.size.width = min(size.width, viewW)
+                frame.size.height = floor(frame.size.width * imageHWRatio)
             } else {
-                var height = floor(width * imageHWRatio)
+                var height = floor(frame.size.width * imageHWRatio)
                 if height < 1 || height.isNaN {
                     height = viewH
                 }
                 frame.size.height = height
             }
+        }
+        
+        // 优化 scroll view zoom scale
+        if frame.width < frame.height {
+            self.scrollView.maximumZoomScale = max(ZLPreviewView.defaultMaxZoomScale, viewW / frame.width)
+        } else {
+            self.scrollView.maximumZoomScale = max(ZLPreviewView.defaultMaxZoomScale, viewH / frame.height)
         }
         
         self.containerView.frame = frame

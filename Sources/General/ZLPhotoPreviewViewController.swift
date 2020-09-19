@@ -464,11 +464,8 @@ class ZLPhotoPreviewViewController: UIViewController {
         let hud = ZLProgressHUD(style: config.hudStyle)
         
         if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
-            let asset = model.asset
-            let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * 2
-            let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
             hud.show()
-            ZLPhotoManager.fetchImage(for: asset, size: size) { [weak self] (image, isDegraded) in
+            ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] (image, isDegraded) in
                 if !isDegraded {
                     if let image = image {
                         self?.showEditImageVC(image: image)
@@ -513,9 +510,8 @@ class ZLPhotoPreviewViewController: UIViewController {
         
         if nav.arrSelectedModels.isEmpty, canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
             nav.arrSelectedModels.append(currentModel)
+            nav.selectImageBlock?()
         }
-        
-        nav.selectImageBlock?()
     }
     
     @objc func deviceOrientationChanged(_ notify: Notification) {

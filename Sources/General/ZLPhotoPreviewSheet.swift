@@ -586,11 +586,7 @@ public class ZLPhotoPreviewSheet: UIView {
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         hud.show()
         
-        let asset = model.asset
-        let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * 2
-        let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
-        hud.show()
-        ZLPhotoManager.fetchImage(for: asset, size: size) { [weak self] (image, isDegraded) in
+        ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] (image, isDegraded) in
             if !isDegraded {
                 if let image = image {
                     let vc = ZLEditImageViewController(image: image, editModel: model.editImageModel)
