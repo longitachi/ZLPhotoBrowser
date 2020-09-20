@@ -24,6 +24,8 @@
 * [安装方法(支持Cocoapods/Carthage/SPM安装)](#安装方法)
 * [效果图](#效果图)
 
+详细使用方法请查看[Wiki](https://github.com/longitachi/ZLPhotoBrowser/wiki)
+
 ### <a id="功能介绍"></a>功能介绍
 你想要的应有尽有，预留给开发者自定义框架参数多达50个（没有的话欢迎提 issue ，功能建议好的话会采纳并着手开发）
 - [x] 支持横竖屏
@@ -117,7 +119,7 @@
  ZLPhotoConfiguration.default().customLanguageKeyValue = [.previewCamera: "拍照"]
  
  // oc
- [ZLPhotoConfiguration default].customLanguageKeyValue_objc = @["previewCamera": "拍照"]
+ [ZLPhotoConfiguration default].customLanguageKeyValue_objc = @[@"previewCamera": @"拍照"];
  ```
  
  - 支持light/dark mode颜色定义示例
@@ -162,7 +164,7 @@
 ### <a id="安装方法"></a>使用方法
 
 * Manually 
-  * 1.直接把`Sources`文件夹拖入到您的工程中
+  * 1.直接把`Sources`文件夹拖入到你的工程中
   
 * Cocoapods
   * 1.在Podfile 中添加 `pod 'ZLPhotoBrowser'`

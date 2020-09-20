@@ -527,7 +527,7 @@ class ZLClipImageViewController: UIViewController {
             return .left
         }
         
-        let rightRect = CGRect(origin: CGPoint(x: frame.width-cornerSize.width, y: frame.minY), size: CGSize(width: cornerSize.width, height: frame.height))
+        let rightRect = CGRect(origin: CGPoint(x: frame.maxX-cornerSize.width, y: frame.minY), size: CGSize(width: cornerSize.width, height: frame.height))
         if rightRect.contains(point) {
             return .right
         }
