@@ -271,9 +271,9 @@ public class ZLEditVideoViewController: UIViewController {
             if let er = error {
                 showAlertView(er.localizedDescription, self)
             } else if url != nil {
-                self?.dismiss(animated: self?.animateDismiss ?? false, completion: {
+                self?.dismiss(animated: self?.animateDismiss ?? false) {
                     self?.editFinishBlock?(url!)
-                })
+                }
             }
         }
     }

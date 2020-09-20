@@ -2,7 +2,20 @@
 
 -----
 
-## [4.0.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.2) (2020-09-13)
+
+## [4.0.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.5) (2020-09-20)
+
+#### Add
+* 适配iOS14 limited权限; [#517](https://github.com/longitachi/ZLPhotoBrowser/issues/517)
+* 优化图片预览显示; 
+* 优化大长/宽图编辑; 
+
+#### Fix
+* 修复hud异常显示的问题; [#518](https://github.com/longitachi/ZLPhotoBrowser/issues/518)
+
+---
+
+## [4.0.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.4) (2020-09-13)
 
 #### Add
 * 优化图片编辑体验，记录之前编辑状态;

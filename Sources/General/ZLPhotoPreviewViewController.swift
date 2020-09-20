@@ -510,6 +510,9 @@ class ZLPhotoPreviewViewController: UIViewController {
         
         if nav.arrSelectedModels.isEmpty, canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
             nav.arrSelectedModels.append(currentModel)
+        }
+        
+        if !nav.arrSelectedModels.isEmpty {
             nav.selectImageBlock?()
         }
     }
@@ -580,7 +583,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         let vc = ZLEditVideoViewController(avAsset: avAsset)
         vc.modalPresentationStyle = .fullScreen
         
-        vc.editFinishBlock = { [weak nav] (url) in
+        vc.editFinishBlock = { [weak self, weak nav] (url) in
             ZLPhotoManager.saveVideoToAblum(url: url) { [weak self, weak nav] (suc, asset) in
                 if suc, asset != nil {
                     let m = ZLPhotoModel(asset: asset!)

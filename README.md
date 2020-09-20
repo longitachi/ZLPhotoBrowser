@@ -75,66 +75,6 @@
  ac.showPhotoLibrary(sender: self)
  ```
  
- - 调用自定义相机
- ```
- let camera = ZLCustomCamera()
- camera.takeDoneBlock = { [weak self] (image, videoUrl) in
-     // your code
- }
- self.showDetailViewController(camera, sender: nil)
- ```
- 
- - 调用编辑图片
- ```
- let editVC = ZLEditImageViewController(image: image, tools: [.draw, .clip, .mosaic])
- editVC.editFinishBlock = { [weak self] (image) in
-     // your code
- }
- editVC.modalPresentationStyle = .fullScreen
- self.showDetailViewController(editVC, sender: nil)
- ```
- 
- - 调用编辑视频
- ```
- // 编辑本地视频
- let fileUrl = URL(fileURLWithPath: "filePath")
- let avAsset = AVAsset(url: fileUrl)
- let editVC = ZLEditVideoViewController(avAsset: avAsset, animateDismiss: true)
- editVC.editFinishBlock = { (url) in
-     // your code
- }
- editVC.modalPresentationStyle = .fullScreen
- self.showDetailViewController(editVC, sender: nil)
- ```
- 
- - 自定义图片资源
- ```
- // 与图片名字保持一致即可
- ZLPhotoConfiguration.default().customImageNames = ["zl_btn_selected"]
- ```
- 
- - 自定义文案
- ```
- // swift
- ZLPhotoConfiguration.default().customLanguageKeyValue = [.previewCamera: "拍照"]
- 
- // oc
- [ZLPhotoConfiguration default].customLanguageKeyValue_objc = @[@"previewCamera": @"拍照"];
- ```
- 
- - 支持light/dark mode颜色定义示例
- ```
- if #available(iOS 13.0, *) {
-     ZLPhotoConfiguration.default().themeColorDeploy.thumbnailBgColor = UIColor.init(dynamicProvider: { (trait) -> UIColor in
-         if trait.userInterfaceStyle == .dark {
-             return .black
-         } else {
-             return .white
-         }
-     })
- }
- ```
- 
  - 需要注意的地方，你需要在你app的 `Info.plist` 中添加如下键值对
  ```
  //如果不添加该键值对，则不支持多语言，相册名称默认为英文
@@ -154,6 +94,7 @@
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.0.5: 适配iOS14 limited权限; 优化图片预览显示; 优化大长/宽图编辑; 
 ● 4.0.4: 优化图片编辑体验，记录之前编辑状态; 添加是否允许拍照参数; 优化降序照片获取顺序; fix #510, fix #513; 修复其他已知bug;
 ● 4.0.2: 新增框架样式设置(新增一种仿微信的样式); 编辑图片添加马赛克功能; 添加下拉返回动画; 自定义相机支持最短录制时间设置; 优化gif照片的回调;
 ● 4.0.1: 优化视频编辑功能; 增加自定义列数功能; 修复一些bug;
@@ -177,7 +118,7 @@
   
 * Swift Package Manager (该方式集成暂时有问题，图片及多语言资源无法读取，请暂时先用其他方式)
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
-  * 2. 输入对应版本号（SPM 最低版本为 `4.0.1`）
+  * 2. 输入对应版本号（SPM 最低版本为 `4.0.5`）
   * 3. 等Xcode下载完成后确定即可
 
 ### <a id="效果图"></a> 效果图

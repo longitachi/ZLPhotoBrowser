@@ -406,7 +406,7 @@ class ZLThumbnailViewController: UIViewController {
                 self.panSelectType = m.isSelected ? .cancel : .select
                 self.beginSlideIndexPath = indexPath
                 
-                if !m.isSelected, canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
+                if !m.isSelected, nav.arrSelectedModels.count < config.maxSelectCount, canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
                     if self.shouldDirectEdit(m) {
                         self.panSelectType = .none
                         return
