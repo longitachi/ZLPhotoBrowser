@@ -811,7 +811,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         guard let cell = c as? ZLThumbnailPhotoCell else {
             return
         }
-        if !cell.enableSelect {
+        if !cell.enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
             return
         }
         let config = ZLPhotoConfiguration.default()

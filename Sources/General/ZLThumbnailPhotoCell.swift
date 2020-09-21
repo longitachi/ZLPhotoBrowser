@@ -144,7 +144,9 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     }
     
     @objc func btnSelectClick() {
-        guard self.enableSelect else { return }
+        if !self.enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
+            return
+        }
         
         if !self.btnSelect.isSelected {
             self.btnSelect.layer.add(getSpringAnimation(), forKey: nil)

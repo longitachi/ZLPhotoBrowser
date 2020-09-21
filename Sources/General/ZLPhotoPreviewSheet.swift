@@ -121,11 +121,6 @@ public class ZLPhotoPreviewSheet: UIView {
             m.isSelected = true
             self.arrSelectedModels.append(m)
         }
-        
-        // 状态为limit时候注册相册变化通知，由于photoLibraryDidChange方法会在每次相册变化时候回调多次，导致界面多次刷新，所以其他情况不监听相册变化
-        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
-            PHPhotoLibrary.shared().register(self)
-        }
     }
     
     public required init?(coder: NSCoder) {
@@ -299,6 +294,11 @@ public class ZLPhotoPreviewSheet: UIView {
                 self.photoLibraryBtnClick()
             }
         }
+        
+        // 状态为limit时候注册相册变化通知，由于photoLibraryDidChange方法会在每次相册变化时候回调多次，导致界面多次刷新，所以其他情况不监听相册变化
+        if #available(iOS 14.0, *), preview, PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
+            PHPhotoLibrary.shared().register(self)
+        }
     }
     
     func loadPhotos() {
@@ -407,6 +407,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     @objc func photoLibraryBtnClick() {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
         self.animate = false
         self.showThumbnailViewController()
     }
