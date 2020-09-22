@@ -112,6 +112,12 @@ public class ZLPhotoConfiguration: NSObject {
     /// 是否允许选择原图
     @objc public var allowSelectOriginal = true
     
+    /// 是否允许预览已选择的照片 (小图界面预览按钮)
+    @objc public var allowPreviewSelectedPhotos = true
+    
+    /// 是否允许进入预览大图界面 (即点击小图后是否允许进入大图界面)
+    @objc public var allowPreviewPhotos = true
+    
     private var pri_columnCount: Int = 4
     
     /// iPhone竖屏时 一行显示几张图片，最小2列，最大6列，默认4列
@@ -161,6 +167,9 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// 是否在已选择的图片上方覆盖一层已选中遮罩层
     @objc public var showSelectedMask = true
+    
+    /// 是否在已选择的图片cell上显示边框
+    @objc public var showSelectedBorder = false
     
     /// 是否在不能选择的cell上方覆盖一层遮罩层
     @objc public var showInvalidMask = true
@@ -378,8 +387,11 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     /// 自定义相机录制视频时，进度条颜色
     @objc public var cameraRecodeProgressColor = zlRGB(80, 169, 56)
     
-    /// 遮罩层颜色
+    /// 已选cell遮罩层颜色
     @objc public var selectedMaskColor = UIColor.black.withAlphaComponent(0.2)
+    
+    /// 已选cell border颜色
+    @objc public var selectedBorderColor = zlRGB(80, 169, 56)
     
     /// 不能选择的cell上方遮罩层颜色
     @objc public var invalidMaskColor = UIColor.white.withAlphaComponent(0.5)

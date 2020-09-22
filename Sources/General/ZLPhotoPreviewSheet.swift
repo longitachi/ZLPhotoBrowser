@@ -793,7 +793,13 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         guard let cell = collectionView.cellForItem(at: indexPath) as? ZLThumbnailPhotoCell else {
             return
         }
-        if !cell.enableSelect {
+        
+        if !ZLPhotoConfiguration.default().allowPreviewPhotos {
+            cell.btnSelectClick()
+            return
+        }
+        
+        if !cell.enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
             return
         }
         let model = self.arrDataSources[indexPath.row]
@@ -917,6 +923,9 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         if isSelected {
             cell.coverView.backgroundColor = .selectedMaskColor
             cell.coverView.isHidden = !ZLPhotoConfiguration.default().showSelectedMask
+            if ZLPhotoConfiguration.default().showSelectedBorder {
+                cell.layer.borderWidth = 4
+            }
         } else {
             let selCount = self.arrSelectedModels.count
             if selCount < ZLPhotoConfiguration.default().maxSelectCount, selCount > 0 {
@@ -927,8 +936,11 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 }
             } else if selCount >= ZLPhotoConfiguration.default().maxSelectCount {
                 cell.coverView.backgroundColor = .invalidMaskColor
-                cell.coverView.isHidden = ZLPhotoConfiguration.default().showInvalidMask
+                cell.coverView.isHidden = !ZLPhotoConfiguration.default().showInvalidMask
                 cell.enableSelect = false
+            }
+            if ZLPhotoConfiguration.default().showSelectedBorder {
+                cell.layer.borderWidth = 0
             }
         }
     }

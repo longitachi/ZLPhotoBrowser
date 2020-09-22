@@ -262,6 +262,7 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         self.previewBtn = createBtn(localLanguageTextValue(.preview), #selector(previewBtnClick))
+        self.previewBtn.isHidden = !ZLPhotoConfiguration.default().allowPreviewSelectedPhotos
         self.bottomView.addSubview(self.previewBtn)
         
         self.originalBtn = createBtn(localLanguageTextValue(.originalPhoto), #selector(originalPhotoClick))
@@ -811,6 +812,12 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         guard let cell = c as? ZLThumbnailPhotoCell else {
             return
         }
+        
+        if !ZLPhotoConfiguration.default().allowPreviewPhotos {
+            cell.btnSelectClick()
+            return
+        }
+        
         if !cell.enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
             return
         }
@@ -933,6 +940,9 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         if isSelected {
             cell.coverView.backgroundColor = .selectedMaskColor
             cell.coverView.isHidden = !ZLPhotoConfiguration.default().showSelectedMask
+            if ZLPhotoConfiguration.default().showSelectedBorder {
+                cell.layer.borderWidth = 4
+            }
         } else {
             let selCount = arrSel.count
             if selCount < ZLPhotoConfiguration.default().maxSelectCount, selCount > 0 {
@@ -945,6 +955,9 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 cell.coverView.backgroundColor = .invalidMaskColor
                 cell.coverView.isHidden = !ZLPhotoConfiguration.default().showInvalidMask
                 cell.enableSelect = false
+            }
+            if ZLPhotoConfiguration.default().showSelectedBorder {
+                cell.layer.borderWidth = 0
             }
         }
     }

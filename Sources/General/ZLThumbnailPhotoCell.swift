@@ -97,6 +97,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.btnSelect.setBackgroundImage(getImage("zl_btn_unselected"), for: .normal)
         self.btnSelect.setBackgroundImage(getImage("zl_btn_selected"), for: .selected)
         self.btnSelect.addTarget(self, action: #selector(btnSelectClick), for: .touchUpInside)
+        self.btnSelect.zl_enlargeValidTouchArea(insets: UIEdgeInsets(top: 5, left: 20, bottom: 20, right: 5))
         self.contentView.addSubview(self.btnSelect)
         
         self.indexLabel = UILabel()
@@ -127,12 +128,16 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.progressView = ZLProgressView()
         self.progressView.isHidden = true
         self.contentView.addSubview(self.progressView)
+        
+        if ZLPhotoConfiguration.default().showSelectedBorder {
+            self.layer.borderColor = UIColor.selectedBorderColor.cgColor
+        }
     }
     
     override func layoutSubviews() {
         self.imageView.frame = self.bounds
         self.coverView.frame = self.bounds
-        self.btnSelect.frame = CGRect(x: self.bounds.width - 26, y: 5, width: 23, height: 23)
+        self.btnSelect.frame = CGRect(x: self.bounds.width - 30, y: 8, width: 23, height: 23)
         self.indexLabel.frame = self.btnSelect.frame
         self.bottomShadowView.frame = CGRect(x: 0, y: self.bounds.height - 25, width: self.bounds.width, height: 25)
         self.videoTag.frame = CGRect(x: 5, y: 1, width: 20, height: 15)
@@ -201,7 +206,6 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.btnSelect.isHidden = !showSelBtn
         self.btnSelect.isUserInteractionEnabled = showSelBtn
         self.btnSelect.isSelected = self.model.isSelected
-        self.btnSelect.zl_enlargeValidTouchArea(insets: UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 0))
         
         self.indexLabel.backgroundColor = .indexLabelBgColor
         
