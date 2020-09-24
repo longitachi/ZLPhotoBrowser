@@ -46,6 +46,8 @@ class PhotoConfigureViewController: UIViewController {
     
     var allowMixSelectSwitch: UISwitch!
     
+    var allowPreviewPhotosSwitch: UISwitch!
+    
     var editImageLabel: UILabel!
     
     var allowEditImageSwitch: UISwitch!
@@ -75,6 +77,8 @@ class PhotoConfigureViewController: UIViewController {
     var showSelectIndexSwitch: UISwitch!
     
     var showSelectMaskSwitch: UISwitch!
+    
+    var showSelectBorderSwitch: UISwitch!
     
     var showInvalidSelectMaskSwitch: UISwitch!
     
@@ -425,11 +429,28 @@ class PhotoConfigureViewController: UIViewController {
             make.centerY.equalTo(mixSelectLabel)
         }
         
+        // 预览大图开关
+        let previewPhotosLabel = createLabel("允许进入大图界面")
+        containerView.addSubview(previewPhotosLabel)
+        previewPhotosLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(mixSelectLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(previewCountLabel.snp.left)
+        }
+        
+        self.allowPreviewPhotosSwitch = UISwitch()
+        self.allowPreviewPhotosSwitch.isOn = config.allowPreviewPhotos
+        self.allowPreviewPhotosSwitch.addTarget(self, action: #selector(allowPreviewPhotoChanged), for: .valueChanged)
+        containerView.addSubview(self.allowPreviewPhotosSwitch)
+        self.allowPreviewPhotosSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(previewPhotosLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(previewPhotosLabel)
+        }
+        
         // 编辑图片开关
         editImageLabel = createLabel("允许编辑图片")
         containerView.addSubview(editImageLabel)
         editImageLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(mixSelectLabel.snp.bottom).offset(velSpacing)
+            make.top.equalTo(previewPhotosLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -646,11 +667,28 @@ class PhotoConfigureViewController: UIViewController {
             make.centerY.equalTo(showSelectMaskLabel)
         }
         
+        // 显示已选选择照片边框
+        let showSelectBorderLabel = createLabel("显示已选择照片边框")
+        containerView.addSubview(showSelectBorderLabel)
+        showSelectBorderLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(showSelectMaskLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(previewCountLabel.snp.left)
+        }
+        
+        self.showSelectBorderSwitch = UISwitch()
+        self.showSelectBorderSwitch.isOn = config.showSelectedBorder
+        self.showSelectBorderSwitch.addTarget(self, action: #selector(showSelectBorderChanged), for: .valueChanged)
+        containerView.addSubview(self.showSelectBorderSwitch)
+        self.showSelectBorderSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(showSelectBorderLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(showSelectBorderLabel)
+        }
+        
         // 显示不可选状态照片遮罩
         let showInvalidMaskLabel = createLabel("显示不可选状态照片遮罩")
         containerView.addSubview(showInvalidMaskLabel)
         showInvalidMaskLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(showSelectMaskLabel.snp.bottom).offset(velSpacing)
+            make.top.equalTo(showSelectBorderLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -762,6 +800,10 @@ class PhotoConfigureViewController: UIViewController {
         config.allowMixSelect = allowMixSelectSwitch.isOn
     }
     
+    @objc func allowPreviewPhotoChanged() {
+        config.allowPreviewPhotos = allowPreviewPhotosSwitch.isOn
+    }
+    
     @objc func allowEditImageChanged() {
         config.allowEditImage = allowEditImageSwitch.isOn
         
@@ -821,6 +863,10 @@ class PhotoConfigureViewController: UIViewController {
     
     @objc func showSelectMaskChanged() {
         config.showSelectedMask = showSelectMaskSwitch.isOn
+    }
+    
+    @objc func showSelectBorderChanged() {
+        config.showSelectedBorder = showSelectBorderSwitch.isOn
     }
     
     @objc func showInvalidSelectMaskChanged() {

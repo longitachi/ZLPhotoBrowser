@@ -253,6 +253,7 @@ public class ZLPhotoPreviewSheet: UIView {
         self.sender?.view.addSubview(self)
         
         let vc = ZLPhotoPreviewViewController(photos: models, index: index)
+        vc.isPreviewSelectedPhotos = true
         let nav = self.getImageNav(rootViewController: vc)
         vc.backBlock = { [weak self] in
             self?.hide()
@@ -491,6 +492,13 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     func requestSelectPhoto(viewController: UIViewController? = nil) {
+        guard !self.arrSelectedModels.isEmpty else {
+            self.selectImageBlock?([], [], self.isSelectOriginal)
+            self.hide()
+            viewController?.dismiss(animated: true, completion: nil)
+            return
+        }
+        
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         
         var timeout = false
