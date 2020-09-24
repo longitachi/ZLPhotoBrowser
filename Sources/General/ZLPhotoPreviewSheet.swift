@@ -253,7 +253,7 @@ public class ZLPhotoPreviewSheet: UIView {
         self.sender?.view.addSubview(self)
         
         let vc = ZLPhotoPreviewViewController(photos: models, index: index)
-        vc.isPreviewSelectedPhotos = true
+        vc.autoSelectCurrentIfNotSelectAnyone = false
         let nav = self.getImageNav(rootViewController: vc)
         vc.backBlock = { [weak self] in
             self?.hide()

@@ -266,7 +266,7 @@ public class ZLEditVideoViewController: UIViewController {
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         hud.show()
         
-        ZLPhotoManager.exportEditVideo(for: avAsset, range: self.getTimeRange()) { [weak self] (url, error) in
+        ZLVideoManager.exportEditVideo(for: avAsset, range: self.getTimeRange()) { [weak self] (url, error) in
             hud.hide()
             if let er = error {
                 showAlertView(er.localizedDescription, self)

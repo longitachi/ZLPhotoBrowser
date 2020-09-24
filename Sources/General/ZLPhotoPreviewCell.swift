@@ -856,7 +856,7 @@ class ZLPreviewView: UIView {
         self.imageView.layer.timeOffset = 0
         self.imageView.layer.beginTime = 0
         let timeSincePause = self.imageView.layer.convertTime(CACurrentMediaTime(), from: nil) - pauseTime
-        layer.beginTime = timeSincePause
+        self.imageView.layer.beginTime = timeSincePause
     }
     
     func pauseGif() {

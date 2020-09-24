@@ -75,8 +75,8 @@ class ZLPhotoPreviewViewController: UIViewController {
     
     var popInteractiveTransition: ZLPreviewImagePopInteractiveTransition?
     
-    /// 是否是预览已确定选择的照片
-    var isPreviewSelectedPhotos = false
+    /// 是否在点击确定时候，当未选择任何照片时候，自动选择当前index的照片
+    var autoSelectCurrentIfNotSelectAnyone = true
     
     /// 界面消失时，通知上个界面刷新（针对预览视图）
     var backBlock: ( () -> Void )?
@@ -508,10 +508,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         let nav = self.navigationController as! ZLImageNavController
         let currentModel = self.arrDataSources[self.currentIndex]
         
-        if self.isPreviewSelectedPhotos {
-            // 预览已确定选择的照片，允许点击确定时不选择照片
-            nav.selectImageBlock?()
-        } else {
+        if self.autoSelectCurrentIfNotSelectAnyone {
             if nav.arrSelectedModels.isEmpty, canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
                 nav.arrSelectedModels.append(currentModel)
             }
@@ -519,6 +516,8 @@ class ZLPhotoPreviewViewController: UIViewController {
             if !nav.arrSelectedModels.isEmpty {
                 nav.selectImageBlock?()
             }
+        } else {
+            nav.selectImageBlock?()
         }
     }
     

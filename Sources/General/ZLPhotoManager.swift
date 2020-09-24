@@ -345,11 +345,6 @@ public class ZLPhotoManager: NSObject {
         return false
     }
     
-    class func getVideoExportFilePath() -> String {
-        let format = ZLPhotoConfiguration.default().videoExportType.format
-        return NSTemporaryDirectory().appendingFormat("/%@.%@", UUID().uuidString, format)
-    }
-    
     @objc public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping ( (AVAsset?, [AnyHashable: Any]?) -> Void )) -> PHImageRequestID {
         let options = PHVideoRequestOptions()
         options.version = .original
@@ -360,27 +355,6 @@ public class ZLPhotoManager: NSObject {
                 completion(avAsset, info)
             }
         }
-    }
-    
-    @objc public class func exportEditVideo(for asset: AVAsset, range: CMTimeRange, completion: @escaping ( (URL?, Error?) -> Void )) {
-        let outputUrl = URL(fileURLWithPath: self.getVideoExportFilePath())
-        guard let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetPassthrough) else {
-            completion(nil, NSError(domain: "", code: -1000, userInfo: [NSLocalizedDescriptionKey: "export video failed"]))
-            return
-        }
-        exportSession.outputURL = outputUrl
-        exportSession.outputFileType = ZLPhotoConfiguration.default().videoExportType.avFileType
-        exportSession.timeRange = range
-        
-        exportSession.exportAsynchronously(completionHandler: {
-            let suc = exportSession.status == .completed
-            if exportSession.status == .failed {
-                zl_debugPrint("导出视频失败 \(exportSession.error?.localizedDescription ?? "")")
-            }
-            DispatchQueue.main.async {
-                completion(suc ? outputUrl : nil, exportSession.error)
-            }
-        })
     }
     
 }
