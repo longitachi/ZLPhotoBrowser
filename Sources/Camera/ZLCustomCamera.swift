@@ -856,6 +856,15 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
         if self.restartRecordAfterSwitchCamera {
             self.restartRecordAfterSwitchCamera = false
+            // 稍微加一个延时，否则切换摄像头后拍摄时间会略小于设置的最大值
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                let pauseTime = self.animateLayer.timeOffset
+                self.animateLayer.speed = 1
+                self.animateLayer.timeOffset = 0
+                self.animateLayer.beginTime = 0
+                let timeSincePause = self.animateLayer.convertTime(CACurrentMediaTime(), from: nil) - pauseTime
+                self.animateLayer.beginTime = timeSincePause
+            }
         } else {
             self.startRecordAnimation()
         }
@@ -863,12 +872,6 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
     
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
         if self.restartRecordAfterSwitchCamera {
-            let pauseTime = self.animateLayer.timeOffset
-            self.animateLayer.speed = 1
-            self.animateLayer.timeOffset = 0
-            self.animateLayer.beginTime = 0
-            let timeSincePause = self.animateLayer.convertTime(CACurrentMediaTime(), from: nil) - pauseTime
-            self.animateLayer.beginTime = timeSincePause
             self.recordUrls.append(outputFileURL)
             self.startRecord()
             return

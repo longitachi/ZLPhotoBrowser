@@ -27,7 +27,7 @@
 import UIKit
 import AVFoundation
 
-class ZLVideoManager: NSObject {
+public class ZLVideoManager: NSObject {
     
     class func getVideoExportFilePath() -> String {
         let format = ZLPhotoConfiguration.default().videoExportType.format
@@ -55,6 +55,7 @@ class ZLVideoManager: NSObject {
         })
     }
     
+    /// 没有针对不同分辨率视频做处理，仅用于处理相机拍照的视频
     @objc public class func mergeVideos(fileUrls: [URL], completion: @escaping ( (URL?, Error?) -> Void )) {
         let mixComposition = AVMutableComposition()
         

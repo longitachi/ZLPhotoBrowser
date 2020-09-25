@@ -396,7 +396,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.refreshBottomViewFrame()
         
         var hideEditBtn = true
-        if selCount < config.maxSelectCount {
+        if selCount < config.maxSelectCount || nav.arrSelectedModels.contains(where: { $0 == currentModel }) {
             if config.allowEditImage && (currentModel.type == .image || (currentModel.type == .gif && !config.allowSelectGif) || (currentModel.type == .livePhoto && !config.allowSelectLivePhoto)) {
                 hideEditBtn = false
             }
