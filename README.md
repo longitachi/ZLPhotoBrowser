@@ -24,7 +24,7 @@
 * [安装方法(支持Cocoapods/Carthage/SPM安装)](#安装方法)
 * [效果图](#效果图)
 
-详细使用方法请查看[Wiki](https://github.com/longitachi/ZLPhotoBrowser/wiki)
+`Swift`及`OC`详细使用方法请查看[Wiki](https://github.com/longitachi/ZLPhotoBrowser/wiki)
 
 ### <a id="功能介绍"></a>功能介绍
 你想要的应有尽有，预留给开发者自定义框架参数多达50个（没有的话欢迎提 issue ，功能建议好的话会采纳并着手开发）
@@ -59,20 +59,20 @@
  ### <a id="使用示例"></a>使用示例
  - 快速选择
  ```
- let ac = ZLPhotoPreviewSheet()
- ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
+ let ps = ZLPhotoPreviewSheet()
+ ps.selectImageBlock = { [weak self] (images, assets, isOriginal) in
      // your code
  }
- ac.showPreview(animate: true, sender: self)
+ ps.showPreview(animate: true, sender: self)
  ```
  
  - 直接进入相册选择
  ```
- let ac = ZLPhotoPreviewSheet()
- ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
+ let ps = ZLPhotoPreviewSheet()
+ ps.selectImageBlock = { [weak self] (images, assets, isOriginal) in
      // your code
  }
- ac.showPhotoLibrary(sender: self)
+ ps.showPhotoLibrary(sender: self)
  ```
  
  - 需要注意的地方，你需要在你app的 `Info.plist` 中添加如下键值对
