@@ -1,7 +1,7 @@
 # Update Log
 
 -----
-## [4.0.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.6) (2020-09-28)
+## [4.0.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.7) (2020-09-28)
 
 #### Add
 * 支持设置图片裁剪比例; [#524](https://github.com/longitachi/ZLPhotoBrowser/pull/524)

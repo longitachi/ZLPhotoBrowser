@@ -36,9 +36,9 @@ public class ZLEditImageModel: NSObject {
     
     public let angle: CGFloat
     
-    public let selectRatio: ZLImageClipRatio
+    public let selectRatio: ZLImageClipRatio?
     
-    init(drawPaths: [ZLDrawPath], mosaicPaths: [ZLMosaicPath], editRect: CGRect?, angle: CGFloat, selectRatio: ZLImageClipRatio) {
+    init(drawPaths: [ZLDrawPath], mosaicPaths: [ZLMosaicPath], editRect: CGRect?, angle: CGFloat, selectRatio: ZLImageClipRatio?) {
         self.drawPaths = drawPaths
         self.mosaicPaths = mosaicPaths
         self.editRect = editRect
@@ -57,23 +57,11 @@ public class ZLEditImageViewController: UIViewController {
     var originalFrame: CGRect = .zero
     
     // 图片可编辑rect
-    var store_editRect: CGRect? = nil
-    var editRect: CGRect {
-        set {
-            store_editRect = newValue
-        }
-        get {
-            if store_editRect == nil {
-                return CGRect(origin: .zero, size: self.editImage.size)
-            } else {
-                return store_editRect!
-            }
-        }
-    }
+    var editRect: CGRect
     
     let tools: ZLEditImageViewController.EditImageTool
     
-    var selectRatio: ZLImageClipRatio
+    var selectRatio: ZLImageClipRatio?
     
     var editImage: UIImage
     
@@ -161,7 +149,7 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc convenience init(image: UIImage) {
-        self.init(image: image)
+        self.init(image: image, editModel: nil)
     }
     
     @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
@@ -171,14 +159,14 @@ public class ZLEditImageViewController: UIViewController {
         self.mosaicPaths = editModel?.mosaicPaths ?? []
         self.angle = editModel?.angle ?? 0
         self.tools = ZLPhotoConfiguration.default().editImageTools.rawValue == 0 ? [.draw, .clip, .mosaic] :  ZLPhotoConfiguration.default().editImageTools
-        self.selectRatio = editModel?.selectRatio ?? ZLPhotoConfiguration.default().editImageClipRatios.first!
+        self.selectRatio = editModel?.selectRatio
+        self.editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
         if ZLPhotoConfiguration.default().editImageDrawColors.isEmpty {
             self.drawColors = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
         } else {
             self.drawColors = ZLPhotoConfiguration.default().editImageDrawColors
         }
         super.init(nibName: nil, bundle: nil)
-        self.editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
         
         if !self.drawColors.contains(self.currentDrawColor) {
             self.currentDrawColor = self.drawColors.first!
@@ -443,7 +431,7 @@ public class ZLEditImageViewController: UIViewController {
     @objc func clipBtnClick() {
         let currentEditImage = self.buildImage()
         // 这里要传store_editRect，因为第一次进入编辑界面时候需要编辑界面根据这个判断是不是第一次进入
-        let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.store_editRect, angle: self.angle, selectRatio: self.selectRatio)
+        let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio)
         let rect = self.scrollView.convert(self.containerView.frame, to: self.view)
         vc.presentAnimateFrame = rect
         vc.presentAnimateImage = self.clipImage(currentEditImage)

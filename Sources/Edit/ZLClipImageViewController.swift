@@ -152,9 +152,8 @@ class ZLClipImageViewController: UIViewController {
         self.cleanTimer()
     }
     
-    init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0, selectRatio: ZLImageClipRatio) {
+    init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0, selectRatio: ZLImageClipRatio?) {
         self.originalImage = image
-        self.selectedRatio = selectRatio
         self.clipRatios = ZLPhotoConfiguration.default().editImageClipRatios
         self.editRect = editRect ?? .zero
         self.angle = angle
@@ -167,9 +166,15 @@ class ZLClipImageViewController: UIViewController {
         } else {
             self.editImage = image
         }
+        var firstEnter = false
+        if let sr = selectRatio {
+            self.selectedRatio = sr
+        } else {
+            firstEnter = true
+            self.selectedRatio = ZLPhotoConfiguration.default().editImageClipRatios.first!
+        }
         super.init(nibName: nil, bundle: nil)
-        // edit rect为nil时，代表第一次进入裁剪界面
-        if editRect == nil {
+        if firstEnter {
             self.calculateClipRect()
         }
     }
@@ -490,7 +495,7 @@ class ZLClipImageViewController: UIViewController {
     @objc func revertBtnClick() {
         self.angle = 0
         self.editImage = self.originalImage
-        self.editRect = CGRect(origin: .zero, size: self.originalImage.size)
+        self.calculateClipRect()
         self.imageView.image = self.editImage
         self.layoutInitialImage()
         
