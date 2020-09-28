@@ -36,11 +36,14 @@ public class ZLEditImageModel: NSObject {
     
     public let angle: CGFloat
     
-    init(drawPaths: [ZLDrawPath], mosaicPaths: [ZLMosaicPath], editRect: CGRect?, angle: CGFloat) {
+    public let selectRatio: ZLImageClipRatio
+    
+    init(drawPaths: [ZLDrawPath], mosaicPaths: [ZLMosaicPath], editRect: CGRect?, angle: CGFloat, selectRatio: ZLImageClipRatio) {
         self.drawPaths = drawPaths
         self.mosaicPaths = mosaicPaths
         self.editRect = editRect
         self.angle = angle
+        self.selectRatio = selectRatio
         super.init()
     }
     
@@ -54,9 +57,25 @@ public class ZLEditImageViewController: UIViewController {
     var originalFrame: CGRect = .zero
     
     // 图片可编辑rect
-    var editRect: CGRect
+    var store_editRect: CGRect? = nil
+    var editRect: CGRect {
+        set {
+            store_editRect = newValue
+        }
+        get {
+            if store_editRect == nil {
+                return CGRect(origin: .zero, size: self.editImage.size)
+            } else {
+                return store_editRect!
+            }
+        }
+    }
     
-    let tools: EditImageTool
+    let tools: ZLEditImageViewController.EditImageTool
+    
+    let clipRatios: [ZLImageClipRatio]
+    
+    var selectRatio: ZLImageClipRatio
     
     var editImage: UIImage
     
@@ -147,20 +166,22 @@ public class ZLEditImageViewController: UIViewController {
         self.init(image: image, tools: [.draw, .clip, .mosaic])
     }
     
-    public init(image: UIImage, editModel: ZLEditImageModel? = nil, tools: ZLEditImageViewController.EditImageTool = ZLPhotoConfiguration.default().editImageTools) {
+    public init(image: UIImage, editModel: ZLEditImageModel? = nil, tools: ZLEditImageViewController.EditImageTool = ZLPhotoConfiguration.default().editImageTools, clipRatios: [ZLImageClipRatio] = ZLPhotoConfiguration.default().editImageClipRatios) {
         self.originalImage = image
         self.editImage = image
         self.drawPaths = editModel?.drawPaths ?? []
         self.mosaicPaths = editModel?.mosaicPaths ?? []
-        self.editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
         self.angle = editModel?.angle ?? 0
         self.tools = tools.rawValue == 0 ? [.draw, .clip, .mosaic] : tools
+        self.clipRatios = clipRatios.isEmpty ? [.custom] : clipRatios
+        self.selectRatio = editModel?.selectRatio ?? clipRatios.first!
         if ZLPhotoConfiguration.default().editImageDrawColors.isEmpty {
             self.drawColors = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
         } else {
             self.drawColors = ZLPhotoConfiguration.default().editImageDrawColors
         }
         super.init(nibName: nil, bundle: nil)
+        self.editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
         
         if !self.drawColors.contains(self.currentDrawColor) {
             self.currentDrawColor = self.drawColors.first!
@@ -424,19 +445,21 @@ public class ZLEditImageViewController: UIViewController {
     
     @objc func clipBtnClick() {
         let currentEditImage = self.buildImage()
-        let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.editRect, angle: self.angle)
+        // 这里要传store_editRect，因为第一次进入编辑界面时候需要编辑界面根据这个判断是不是第一次进入
+        let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.store_editRect, angle: self.angle, selectRatio: self.selectRatio, clipRatios: self.clipRatios)
         let rect = self.scrollView.convert(self.containerView.frame, to: self.view)
         vc.presentAnimateFrame = rect
         vc.presentAnimateImage = self.clipImage(currentEditImage)
         vc.modalPresentationStyle = .fullScreen
         
-        vc.clipDoneBlock = { [weak self] (angle, editFrame) in
+        vc.clipDoneBlock = { [weak self] (angle, editFrame, selectRatio) in
             guard let `self` = self else { return }
             if self.angle != angle {
                 self.angle = angle
                 self.rotationImageView()
             }
             self.editRect = editFrame
+            self.selectRatio = selectRatio
             self.resetContainerViewFrame()
         }
         
@@ -462,7 +485,7 @@ public class ZLEditImageViewController: UIViewController {
     @objc func doneBtnClick() {
         var image = self.buildImage()
         image = self.clipImage(image) ?? image
-        self.editFinishBlock?(image, ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle))
+        self.editFinishBlock?(image, ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio))
         self.dismiss(animated: false, completion: nil)
     }
     
@@ -777,7 +800,6 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
 }
 
 
-
 extension ZLEditImageViewController {
     
     public struct EditImageTool: OptionSet {
@@ -795,6 +817,41 @@ extension ZLEditImageViewController {
         public static let mosaic = EditImageTool(rawValue: 1 << 2)
         
     }
+    
+}
+
+
+public class ZLImageClipRatio: NSObject {
+    
+    let title: String
+    
+    let whRatio: CGFloat
+    
+    @objc public init(title: String, whRatio: CGFloat) {
+        self.title = title
+        self.whRatio = whRatio
+    }
+    
+}
+
+func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
+    return lhs.whRatio == rhs.whRatio
+}
+
+
+extension ZLImageClipRatio {
+    
+    @objc public static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
+    
+    @objc public static let wh1x1 = ZLImageClipRatio(title: "1 : 1", whRatio: 1)
+    
+    @objc public static let wh1x2 = ZLImageClipRatio(title: "1 : 2", whRatio: 1.0 / 2.0)
+    
+    @objc public static let wh3x4 = ZLImageClipRatio(title: "3 : 4", whRatio: 3.0/4.0)
+    
+    @objc public static let wh3x2 = ZLImageClipRatio(title: "3 : 2", whRatio: 3.0/2.0)
+    
+    @objc public static let wh16x9 = ZLImageClipRatio(title: "16 : 9", whRatio: 16.0/9.0)
     
 }
 

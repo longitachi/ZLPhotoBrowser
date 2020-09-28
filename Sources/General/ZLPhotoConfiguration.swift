@@ -151,6 +151,21 @@ public class ZLPhotoConfiguration: NSObject {
     /// 编辑图片涂鸦默认颜色
     @objc public var editImageDefaultDrawColor = zlRGB(241, 79, 79)
     
+    private var pri_editImageClipRatios: [ZLImageClipRatio] = [.custom, .wh1x1, .wh1x2, .wh3x4, .wh3x2, .wh16x9]
+    /// 编辑图片裁剪比例
+    @objc public var editImageClipRatios: [ZLImageClipRatio] {
+        set {
+            if newValue.isEmpty {
+                pri_editImageClipRatios = [.custom]
+            } else {
+                pri_editImageClipRatios = newValue
+            }
+        }
+        get {
+            return pri_editImageClipRatios
+        }
+    }
+    
     /// 在小图界面选择 图片/视频 后直接进入编辑界面
     /// - discussion: 编辑图片 仅在allowEditImage为YES 且 maxSelectCount为1 的情况下，置为YES有效，
     /// 编辑视频则在 allowEditVideo为YES 且 maxSelectCount为1情况下，置为YES有效
