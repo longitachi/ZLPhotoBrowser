@@ -845,11 +845,15 @@ extension ZLImageClipRatio {
     
     @objc public static let wh1x1 = ZLImageClipRatio(title: "1 : 1", whRatio: 1)
     
-    @objc public static let wh1x2 = ZLImageClipRatio(title: "1 : 2", whRatio: 1.0 / 2.0)
-    
     @objc public static let wh3x4 = ZLImageClipRatio(title: "3 : 4", whRatio: 3.0/4.0)
     
+    @objc public static let wh4x3 = ZLImageClipRatio(title: "4 : 3", whRatio: 4.0/3.0)
+    
+    @objc public static let wh2x3 = ZLImageClipRatio(title: "2 : 3", whRatio: 2.0/3.0)
+    
     @objc public static let wh3x2 = ZLImageClipRatio(title: "3 : 2", whRatio: 3.0/2.0)
+    
+    @objc public static let wh9x16 = ZLImageClipRatio(title: "9 : 16", whRatio: 9.0/16.0)
     
     @objc public static let wh16x9 = ZLImageClipRatio(title: "16 : 9", whRatio: 16.0/9.0)
     

@@ -151,7 +151,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// 编辑图片涂鸦默认颜色
     @objc public var editImageDefaultDrawColor = zlRGB(241, 79, 79)
     
-    private var pri_editImageClipRatios: [ZLImageClipRatio] = [.custom, .wh1x1, .wh1x2, .wh3x4, .wh3x2, .wh16x9]
+    private var pri_editImageClipRatios: [ZLImageClipRatio] = [.custom]
     /// 编辑图片裁剪比例
     @objc public var editImageClipRatios: [ZLImageClipRatio] {
         set {
