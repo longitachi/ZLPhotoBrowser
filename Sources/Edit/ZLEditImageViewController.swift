@@ -73,8 +73,6 @@ public class ZLEditImageViewController: UIViewController {
     
     let tools: ZLEditImageViewController.EditImageTool
     
-    let clipRatios: [ZLImageClipRatio]
-    
     var selectRatio: ZLImageClipRatio
     
     var editImage: UIImage
@@ -163,18 +161,17 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc convenience init(image: UIImage) {
-        self.init(image: image, tools: [.draw, .clip, .mosaic])
+        self.init(image: image)
     }
     
-    public init(image: UIImage, editModel: ZLEditImageModel? = nil, tools: ZLEditImageViewController.EditImageTool = ZLPhotoConfiguration.default().editImageTools, clipRatios: [ZLImageClipRatio] = ZLPhotoConfiguration.default().editImageClipRatios) {
+    @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
         self.originalImage = image
         self.editImage = image
         self.drawPaths = editModel?.drawPaths ?? []
         self.mosaicPaths = editModel?.mosaicPaths ?? []
         self.angle = editModel?.angle ?? 0
-        self.tools = tools.rawValue == 0 ? [.draw, .clip, .mosaic] : tools
-        self.clipRatios = clipRatios.isEmpty ? [.custom] : clipRatios
-        self.selectRatio = editModel?.selectRatio ?? clipRatios.first!
+        self.tools = ZLPhotoConfiguration.default().editImageTools.rawValue == 0 ? [.draw, .clip, .mosaic] :  ZLPhotoConfiguration.default().editImageTools
+        self.selectRatio = editModel?.selectRatio ?? ZLPhotoConfiguration.default().editImageClipRatios.first!
         if ZLPhotoConfiguration.default().editImageDrawColors.isEmpty {
             self.drawColors = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
         } else {
@@ -446,7 +443,7 @@ public class ZLEditImageViewController: UIViewController {
     @objc func clipBtnClick() {
         let currentEditImage = self.buildImage()
         // 这里要传store_editRect，因为第一次进入编辑界面时候需要编辑界面根据这个判断是不是第一次进入
-        let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.store_editRect, angle: self.angle, selectRatio: self.selectRatio, clipRatios: self.clipRatios)
+        let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.store_editRect, angle: self.angle, selectRatio: self.selectRatio)
         let rect = self.scrollView.convert(self.containerView.frame, to: self.view)
         vc.presentAnimateFrame = rect
         vc.presentAnimateImage = self.clipImage(currentEditImage)

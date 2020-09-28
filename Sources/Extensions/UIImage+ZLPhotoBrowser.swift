@@ -180,9 +180,9 @@ extension UIImage {
 }
 
 
-// MARK: 修复转向
 extension UIImage {
     
+    // 修复转向
     func fixOrientation() -> UIImage {
         if self.imageOrientation == .up {
             return self
@@ -237,13 +237,8 @@ extension UIImage {
         }
         return UIImage(cgImage: newCgimg)
     }
-    
-}
 
-
-// MARK: 旋转方向
-extension UIImage {
-  
+    // 旋转方向
     func rotate(orientation: UIImage.Orientation) -> UIImage {
         guard let imagRef = self.cgImage else {
             return self
@@ -337,12 +332,7 @@ extension UIImage {
         return newImage ?? self
     }
     
-}
-
-
-// MARK: 加马赛克
-extension UIImage {
-    
+    // 加马赛克
     func mosaicImage() -> UIImage? {
         guard let currCgImage = self.cgImage else {
             return nil
@@ -361,6 +351,17 @@ extension UIImage {
         } else {
             return nil
         }
+    }
+    
+    func resize(_ size: CGSize) -> UIImage? {
+        if size.width <= 0 || size.height <= 0 {
+            return nil
+        }
+        UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
+        self.draw(in: CGRect(origin: .zero, size: size))
+        let temp = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return temp
     }
     
 }

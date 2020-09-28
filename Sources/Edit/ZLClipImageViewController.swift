@@ -113,15 +113,7 @@ class ZLClipImageViewController: UIViewController {
     
     var selectedRatio: ZLImageClipRatio
     
-    lazy var thumbnailImage: UIImage = {
-        let w: CGFloat = 50
-        let h: CGFloat = 50 / (self.originalImage.size.width / self.originalImage.size.height)
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: w, height: h), false, 0)
-        self.originalImage.draw(in: CGRect(origin: .zero, size: CGSize(width: w, height: h)))
-        let temp = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return temp ?? self.originalImage
-    }()
+    var thumbnailImage: UIImage?
     
     var maxClipFrame: CGRect = {
         var insets = deviceSafeAreaInsets()
@@ -160,10 +152,10 @@ class ZLClipImageViewController: UIViewController {
         self.cleanTimer()
     }
     
-    init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0, selectRatio: ZLImageClipRatio, clipRatios: [ZLImageClipRatio]) {
+    init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0, selectRatio: ZLImageClipRatio) {
         self.originalImage = image
         self.selectedRatio = selectRatio
-        self.clipRatios = clipRatios
+        self.clipRatios = ZLPhotoConfiguration.default().editImageClipRatios
         self.editRect = editRect ?? .zero
         self.angle = angle
         if angle == -90 {
@@ -190,6 +182,7 @@ class ZLClipImageViewController: UIViewController {
         super.viewDidLoad()
         
         self.setupUI()
+        self.generateThumbnailImage()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -359,6 +352,17 @@ class ZLClipImageViewController: UIViewController {
         self.rotateBtn.alpha = 0
     }
     
+    func generateThumbnailImage() {
+        let size: CGSize
+        let ratio = (self.editImage.size.width / self.editImage.size.height)
+        if ratio >= 1 {
+            size = CGSize(width: 50 * ratio, height: 50)
+        } else {
+            size = CGSize(width: 50, height: 50 / ratio)
+        }
+        self.thumbnailImage = self.editImage.resize(size)
+    }
+    
     func calculateClipRect() {
         if self.selectedRatio.whRatio == 0 {
             self.editRect = CGRect(origin: .zero, size: self.editImage.size)
@@ -489,6 +493,9 @@ class ZLClipImageViewController: UIViewController {
         self.editRect = CGRect(origin: .zero, size: self.originalImage.size)
         self.imageView.image = self.editImage
         self.layoutInitialImage()
+        
+        self.generateThumbnailImage()
+        self.clipRatioColView.reloadData()
     }
     
     @objc func doneBtnClick() {
@@ -550,6 +557,9 @@ class ZLClipImageViewController: UIViewController {
             self.containerView.alpha = 1
             self.isRotating = false
         }
+        
+        self.generateThumbnailImage()
+        self.clipRatioColView.reloadData()
     }
     
     @objc func gridGesPanAction(_ pan: UIPanGestureRecognizer) {
@@ -909,7 +919,7 @@ extension ZLClipImageViewController: UICollectionViewDataSource, UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLImageClipRatioCell.zl_identifier(), for: indexPath) as! ZLImageClipRatioCell
         
         let ratio = self.clipRatios[indexPath.row]
-        cell.configureCell(image: self.thumbnailImage, ratio: ratio)
+        cell.configureCell(image: self.thumbnailImage ?? self.editImage, ratio: ratio)
         
         if ratio == self.selectedRatio {
             cell.backgroundColor = UIColor.white.withAlphaComponent(0.2)

@@ -1,6 +1,21 @@
 # Update Log
 
 -----
+## [4.0.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.6) (2020-09-28)
+
+#### Add
+* 支持设置图片裁剪比例; [#524](https://github.com/longitachi/ZLPhotoBrowser/pull/524)
+* 自定义相机支持录制时切换摄像头; [#521](https://github.com/longitachi/ZLPhotoBrowser/issues/521)
+* 新增已选照片边框功能;
+* 新增是否允许预览大图功能;
+* 新增是否允许预览已选择照片功能;
+* 优化前置摄像头拍照及录像镜像翻转问题;
+
+#### Fix
+* 修改选择数量超过最大值的提示显示条件错误的bug;
+* 修改选择量达到最大值后无法编辑图片的bug;
+
+---
 
 
 ## [4.0.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.5) (2020-09-20)
