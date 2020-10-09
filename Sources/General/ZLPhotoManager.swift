@@ -357,6 +357,17 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
+    /// 获取 asset 本地路径
+    @objc public class func fetchAssetFilePath(asset: PHAsset, completion: @escaping (String?) -> Void ) {
+        asset.requestContentEditingInput(with: nil) { (input, info) in
+            var path = input?.fullSizeImageURL?.absoluteString
+            if path == nil, let dir = asset.value(forKey: "directory") as? String, let name = asset.value(forKey: "filename") as? String {
+                path = String(format: "file:///var/mobile/Media/%@/%@", dir, name)
+            }
+            completion(path)
+        }
+    }
+    
 }
 
 

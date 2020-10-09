@@ -112,7 +112,7 @@ public class ZLPhotoPreviewSheet: UIView {
         self.setupUI()
         
         self.arrSelectedModels.removeAll()
-        selectedAssets.forEach { (asset) in
+        selectedAssets.removeDuplicate().forEach { (asset) in
             if !ZLPhotoConfiguration.default().allowMixSelect, asset.mediaType == .video {
                 return
             }
@@ -240,7 +240,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     /// 传入已选择的assets，并预览
     @objc public func previewAssets(sender: UIViewController, assets: [PHAsset], index: Int, isOriginal: Bool, showBottomViewAndSelectBtn: Bool = true) {
-        let models = assets.map { (asset) -> ZLPhotoModel in
+        let models = assets.removeDuplicate().map { (asset) -> ZLPhotoModel in
             let m = ZLPhotoModel(asset: asset)
             m.isSelected = true
             return m

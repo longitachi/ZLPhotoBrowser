@@ -148,10 +148,6 @@ public class ZLEditImageViewController: UIViewController {
         zl_debugPrint("ZLEditImageViewController deinit")
     }
     
-    @objc convenience init(image: UIImage) {
-        self.init(image: image, editModel: nil)
-    }
-    
     @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
         self.originalImage = image
         self.editImage = image
@@ -818,6 +814,7 @@ public class ZLImageClipRatio: NSObject {
     }
     
 }
+
 
 func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
     return lhs.whRatio == rhs.whRatio
