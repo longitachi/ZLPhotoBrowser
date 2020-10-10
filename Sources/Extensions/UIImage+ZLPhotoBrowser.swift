@@ -364,4 +364,25 @@ extension UIImage {
         return temp
     }
     
+    func toCIImage() -> CIImage? {
+        var ci = self.ciImage
+        if ci == nil, let cg = self.cgImage {
+            ci = CIImage(cgImage: cg)
+        }
+        return ci
+    }
+    
+}
+
+
+extension CIImage {
+    
+    func toUIImage() -> UIImage? {
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(self, from: self.extent) else {
+            return nil
+        }
+        return UIImage(cgImage: cgImage)
+    }
+    
 }

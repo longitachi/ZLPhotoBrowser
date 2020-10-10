@@ -248,11 +248,7 @@ class ZLClipImageViewController: UIViewController {
         self.clipRatioColView.frame = CGRect(x: ratioColViewX, y: ratioColViewY, width: self.view.bounds.width - ratioColViewX, height: 70)
         
         if self.clipRatios.count > 1, let index = self.clipRatios.firstIndex(where: { $0 == self.selectedRatio}) {
-            self.clipRatioColView.performBatchUpdates {
-                self.clipRatioColView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
-            } completion: { (_) in
-                
-            }
+            self.clipRatioColView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
         }
     }
     
@@ -360,10 +356,11 @@ class ZLClipImageViewController: UIViewController {
     func generateThumbnailImage() {
         let size: CGSize
         let ratio = (self.editImage.size.width / self.editImage.size.height)
+        let fixLength: CGFloat = 100
         if ratio >= 1 {
-            size = CGSize(width: 50 * ratio, height: 50)
+            size = CGSize(width: fixLength * ratio, height: fixLength)
         } else {
-            size = CGSize(width: 50, height: 50 / ratio)
+            size = CGSize(width: fixLength, height: fixLength / ratio)
         }
         self.thumbnailImage = self.editImage.resize(size)
     }
@@ -927,9 +924,9 @@ extension ZLClipImageViewController: UICollectionViewDataSource, UICollectionVie
         cell.configureCell(image: self.thumbnailImage ?? self.editImage, ratio: ratio)
         
         if ratio == self.selectedRatio {
-            cell.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+            cell.titleLabel.textColor = .white
         } else {
-            cell.backgroundColor = .clear
+            cell.titleLabel.textColor = zlRGB(160, 160, 160)
         }
         
         return cell
@@ -1054,6 +1051,9 @@ class ZLImageClipRatioCell: UICollectionViewCell {
         self.titleLabel.font = getFont(12)
         self.titleLabel.textColor = .white
         self.titleLabel.textAlignment = .center
+        self.titleLabel.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
+        self.titleLabel.layer.shadowOffset = .zero
+        self.titleLabel.layer.shadowOpacity = 1
         self.contentView.addSubview(self.titleLabel)
     }
     
