@@ -60,6 +60,8 @@ class PhotoConfigureViewController: UIViewController {
     
     var editImageMosaicToolSwitch: UISwitch!
     
+    var editImageFilterToolSwitch: UISwitch!
+    
     var saveEditImageSwitch: UISwitch!
     
     var editVideoLabel: UILabel!
@@ -522,9 +524,25 @@ class PhotoConfigureViewController: UIViewController {
         self.editImageMosaicToolSwitch.snp.makeConstraints { (make) in
             make.left.equalTo(mosaicToolLabel.snp.right).offset(horSpacing)
             make.centerY.equalTo(mosaicToolLabel)
-            make.bottom.equalTo(self.editImageToolView)
         }
         
+        // 滤镜
+        let filterToolLabel = createLabel("滤镜")
+        self.editImageToolView.addSubview(filterToolLabel)
+        filterToolLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(mosaicToolLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(self.editImageToolView)
+        }
+        
+        self.editImageFilterToolSwitch = UISwitch()
+        self.editImageFilterToolSwitch.isOn = config.editImageTools.contains(.filter)
+        self.editImageFilterToolSwitch.addTarget(self, action: #selector(filterToolChanged), for: .valueChanged)
+        self.editImageToolView.addSubview(self.editImageFilterToolSwitch)
+        self.editImageFilterToolSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(filterToolLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(filterToolLabel)
+            make.bottom.equalTo(self.editImageToolView)
+        }
         
         // 编辑视频开关
         editVideoLabel = createLabel("允许编辑视频")
@@ -532,7 +550,7 @@ class PhotoConfigureViewController: UIViewController {
         containerView.addSubview(editVideoLabel)
         editVideoLabel.snp.makeConstraints { (make) in
             if config.allowEditImage {
-                make.top.equalTo(editImageLabel.snp.bottom).offset(150)
+                make.top.equalTo(editImageLabel.snp.bottom).offset(180)
             } else {
                 make.top.equalTo(editImageLabel.snp.bottom).offset(velSpacing)
             }
@@ -811,7 +829,7 @@ class PhotoConfigureViewController: UIViewController {
             self.editImageToolView.alpha = self.config.allowEditImage ? 1 : 0
             self.editVideoLabel.snp.updateConstraints({ (make) in
                 if self.config.allowEditImage {
-                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(150)
+                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(180)
                 } else {
                     make.top.equalTo(self.editImageLabel.snp.bottom).offset(20)
                 }
@@ -830,6 +848,10 @@ class PhotoConfigureViewController: UIViewController {
     
     @objc func mosaicToolChanged() {
         config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.mosaic.rawValue)
+    }
+    
+    @objc func filterToolChanged() {
+        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.filter.rawValue)
     }
     
     @objc func saveEditImageChanged() {

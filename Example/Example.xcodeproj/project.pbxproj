@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E462467024EE6F9A00EF6C57 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462466F24EE6F9A00EF6C57 /* ImageCell.swift */; };
+		E480050825316920008A2B67 /* ZLCustomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E480050725316920008A2B67 /* ZLCustomFilter.swift */; };
 		E4A4109724F39DF700EEC20B /* PhotoConfigureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A4109624F39DF700EEC20B /* PhotoConfigureViewController.swift */; };
 		E4A410C024F39F0000EEC20B /* ConstraintMultiplierTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A4109924F39F0000EEC20B /* ConstraintMultiplierTarget.swift */; };
 		E4A410C124F39F0000EEC20B /* LayoutConstraintItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A4109A24F39F0000EEC20B /* LayoutConstraintItem.swift */; };
@@ -72,6 +73,7 @@
 /* Begin PBXFileReference section */
 		E462466F24EE6F9A00EF6C57 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		E463C1512509FA9500FE1401 /* Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		E480050725316920008A2B67 /* ZLCustomFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLCustomFilter.swift; sourceTree = "<group>"; };
 		E4A4109624F39DF700EEC20B /* PhotoConfigureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoConfigureViewController.swift; sourceTree = "<group>"; };
 		E4A4109924F39F0000EEC20B /* ConstraintMultiplierTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintMultiplierTarget.swift; sourceTree = "<group>"; };
 		E4A4109A24F39F0000EEC20B /* LayoutConstraintItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutConstraintItem.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				E4A4109824F39F0000EEC20B /* SnapKit */,
 				E4C911A224E283D80061DA40 /* AppDelegate.swift */,
 				E4C911A624E283D80061DA40 /* ViewController.swift */,
+				E480050725316920008A2B67 /* ZLCustomFilter.swift */,
 				E4A4109624F39DF700EEC20B /* PhotoConfigureViewController.swift */,
 				E462466F24EE6F9A00EF6C57 /* ImageCell.swift */,
 				E4C911A824E283D80061DA40 /* Main.storyboard */,
@@ -292,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E480050825316920008A2B67 /* ZLCustomFilter.swift in Sources */,
 				E4A410CE24F39F0000EEC20B /* ConstraintMakerRelatable+Extensions.swift in Sources */,
 				E4A410E524F39F0000EEC20B /* ConstraintMakerRelatable.swift in Sources */,
 				E4A410D124F39F0000EEC20B /* ConstraintView.swift in Sources */,

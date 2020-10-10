@@ -142,11 +142,23 @@ public class ZLPhotoConfiguration: NSObject {
     /// 允许选择视频的最小时长
     @objc public var minSelectVideoDuration: Second = 0
     
-    /// 编辑图片工具，默认 涂鸦及裁剪（因swift OptionSet 不支持 @objc 标识，所以该属性oc不可用）
-    public var editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .mosaic]
+    /// 编辑图片工具（因swift OptionSet 不支持 @objc 标识，所以该属性oc不可用）
+    public var editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .mosaic, .filter]
     
     /// 编辑图片涂鸦颜色
-    @objc public var editImageDrawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+    private var pri_editImageDrawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+    @objc public var editImageDrawColors: [UIColor] {
+        set {
+            pri_editImageDrawColors = newValue
+        }
+        get {
+            if pri_editImageDrawColors.isEmpty {
+                return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+            } else {
+                return pri_editImageDrawColors
+            }
+        }
+    }
     
     /// 编辑图片涂鸦默认颜色
     @objc public var editImageDefaultDrawColor = zlRGB(241, 79, 79)
@@ -163,6 +175,21 @@ public class ZLPhotoConfiguration: NSObject {
         }
         get {
             return pri_editImageClipRatios
+        }
+    }
+    
+    /// 滤镜
+    private var pri_filters: [ZLFilter] = ZLFilter.all
+    @objc public var filters: [ZLFilter] {
+        set {
+            pri_filters = newValue
+        }
+        get {
+            if pri_filters.isEmpty {
+                return ZLFilter.all
+            } else {
+                return pri_filters
+            }
         }
     }
     
