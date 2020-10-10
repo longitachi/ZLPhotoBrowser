@@ -121,9 +121,11 @@ public class ZLPhotoConfiguration: NSObject {
     private var pri_columnCount: Int = 4
     
     /// iPhone竖屏时 一行显示几张图片，最小2列，最大6列，默认4列
+    /// ```
     /// iPhone横屏时 列数为 columnCount+2
     /// iPad竖屏时 列数为 columnCount+2
     /// iPad横屏时 列数为 columnCount+4
+    /// ```
     @objc public var columnCount: Int {
         set {
             pri_columnCount = min(6, max(newValue, 2))
@@ -145,8 +147,8 @@ public class ZLPhotoConfiguration: NSObject {
     /// 编辑图片工具（因swift OptionSet 不支持 @objc 标识，所以该属性oc不可用）
     public var editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .mosaic, .filter]
     
-    /// 编辑图片涂鸦颜色
     private var pri_editImageDrawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+    /// 编辑图片涂鸦颜色
     @objc public var editImageDrawColors: [UIColor] {
         set {
             pri_editImageDrawColors = newValue
@@ -178,8 +180,8 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// 滤镜
     private var pri_filters: [ZLFilter] = ZLFilter.all
+    /// 滤镜
     @objc public var filters: [ZLFilter] {
         set {
             pri_filters = newValue
@@ -251,8 +253,8 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// 支持开发者自定义多语言提示（提供给oc使用）
     /// - example: 开发者需要替换
-    /// key: "loading"，value:"正在处理..." 的多语言
-    /// 则需要传入的字典为 ["loading": "需要替换的文字"]
+    /// key: @"loading", value: @"正在处理..." 的多语言
+    /// 则需要传入的字典为 @[@"loading": @"需要替换的文字"]
     /// 而其他多语言则用框架中的
     /// - warning: 更改时请注意多语言中包含的占位符，如%ld、%@
     @objc public var customLanguageKeyValue_objc: [String: String] = [:] {
@@ -267,7 +269,7 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// 支持开发者自定义多语言提示（仅提供给swift使用）
     /// - example: 开发者需要替换
-    /// key: .loading，value:"正在处理..." 的多语言
+    /// key: .loading, value: "正在处理..." 的多语言
     /// 则需要传入的字典为 [.loading: "需要替换的文字"]
     /// 而其他多语言则用框架中的
     /// - warning: 更改时请注意多语言中包含的占位符，如%ld、%@
@@ -355,7 +357,6 @@ public class ZLPhotoConfiguration: NSObject {
 }
 
 
-
 @objc public enum ZLPhotoBrowserStyle: Int {
     
     /// 相册列表嵌入在小图界面导航上，点击下拉显示
@@ -365,7 +366,6 @@ public class ZLPhotoConfiguration: NSObject {
     case externalAlbumList
     
 }
-
 
 
 /// 框架内主题颜色配置
