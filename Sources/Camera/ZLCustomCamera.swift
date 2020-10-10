@@ -368,6 +368,12 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     func observerDeviceMotion() {
+        if !Thread.isMainThread {
+            DispatchQueue.main.async {
+                self.observerDeviceMotion()
+            }
+            return
+        }
         self.motionManager = CMMotionManager()
         self.motionManager?.deviceMotionUpdateInterval = 0.5
         
