@@ -26,11 +26,13 @@
 
 import Foundation
 
+private class BundleFinder {}
+
 extension Bundle {
     
     private static var bundle: Bundle? = nil
     
-    static var zlPhotoBrowserBundle: Bundle? = {
+    static var normal_module: Bundle? = {
         let bundleName = "ZLPhotoBrowser"
 
         let candidates = [
@@ -53,6 +55,34 @@ extension Bundle {
         
         return nil
     }()
+    
+    static var spm_module: Bundle? = {
+        let bundleName = "ZLPhotoBrowser_ZLPhotoBrowser"
+
+        let candidates = [
+            // Bundle should be present here when the package is linked into an App.
+            Bundle.main.resourceURL,
+
+            // Bundle should be present here when the package is linked into a framework.
+            Bundle(for: BundleFinder.self).resourceURL,
+
+            // For command-line tools.
+            Bundle.main.bundleURL,
+        ]
+
+        for candidate in candidates {
+            let bundlePath = candidate?.appendingPathComponent(bundleName + ".bundle")
+            if let bundle = bundlePath.flatMap(Bundle.init(url:)) {
+                return bundle
+            }
+        }
+        
+        return nil
+    }()
+    
+    static var zlPhotoBrowserBundle: Bundle? {
+        return normal_module ?? spm_module
+    }
     
     class func resetLanguage() {
         self.bundle = nil

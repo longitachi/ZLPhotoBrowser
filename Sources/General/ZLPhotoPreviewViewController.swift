@@ -65,7 +65,7 @@ class ZLPhotoPreviewViewController: UIViewController {
     
     var doneBtn: UIButton!
     
-    var selPhotoPreview: ZLPhotoPreviewSelectedView!
+    var selPhotoPreview: ZLPhotoPreviewSelectedView?
     
     var isFirstLayout = true
     
@@ -182,7 +182,7 @@ class ZLPhotoPreviewViewController: UIViewController {
             if !nav.arrSelectedModels.isEmpty {
                 showSelPhotoPreview = true
                 bottomViewH += ZLPhotoPreviewViewController.selPhotoPreviewH
-                self.selPhotoPreview.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: ZLPhotoPreviewViewController.selPhotoPreviewH)
+                self.selPhotoPreview?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: ZLPhotoPreviewViewController.selPhotoPreviewH)
             }
         }
         let btnH = ZLLayout.bottomToolBtnH
@@ -277,13 +277,13 @@ class ZLPhotoPreviewViewController: UIViewController {
         if config.showSelectedPhotoPreview {
             let nav = self.navigationController as! ZLImageNavController
             self.selPhotoPreview = ZLPhotoPreviewSelectedView(selModels: nav.arrSelectedModels, currentShowModel: self.arrDataSources[self.currentIndex])
-            self.selPhotoPreview.selectBlock = { [weak self] (model) in
+            self.selPhotoPreview?.selectBlock = { [weak self] (model) in
                 self?.scrollToSelPreviewCell(model)
             }
-            self.selPhotoPreview.endSortBlock = { [weak self] (models) in
+            self.selPhotoPreview?.endSortBlock = { [weak self] (models) in
                 self?.refreshCurrentCellIndex(models)
             }
-            self.bottomView.addSubview(self.selPhotoPreview)
+            self.bottomView.addSubview(self.selPhotoPreview!)
         }
         
         func createBtn(_ title: String, _ action: Selector) -> UIButton {
@@ -392,7 +392,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         }
         self.doneBtn.setTitle(doneTitle, for: .normal)
         
-        self.selPhotoPreview.isHidden = selCount == 0
+        self.selPhotoPreview?.isHidden = selCount == 0
         self.refreshBottomViewFrame()
         
         var hideEditBtn = true
@@ -445,7 +445,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         if currentModel.isSelected {
             currentModel.isSelected = false
             nav.arrSelectedModels.removeAll { $0 == currentModel }
-            self.selPhotoPreview.removeSelModel(model: currentModel)
+            self.selPhotoPreview?.removeSelModel(model: currentModel)
         } else {
             self.selectBtn.layer.add(getSpringAnimation(), forKey: nil)
             if !canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
@@ -453,7 +453,7 @@ class ZLPhotoPreviewViewController: UIViewController {
             }
             currentModel.isSelected = true
             nav.arrSelectedModels.append(currentModel)
-            self.selPhotoPreview.addSelModel(model: currentModel)
+            self.selPhotoPreview?.addSelModel(model: currentModel)
         }
         self.resetSubViewStatus(animateIndexLabel: true)
     }
@@ -572,9 +572,9 @@ class ZLPhotoPreviewViewController: UIViewController {
                 model.isSelected = true
                 nav?.arrSelectedModels.append(model)
                 self.resetSubViewStatus(animateIndexLabel: false)
-                self.selPhotoPreview.addSelModel(model: model)
+                self.selPhotoPreview?.addSelModel(model: model)
             } else {
-                self.selPhotoPreview.refreshCell(for: model)
+                self.selPhotoPreview?.refreshCell(for: model)
             }
             self.collectionView.reloadItems(at: [IndexPath(row: self.currentIndex, section: 0)])
         }
@@ -638,7 +638,7 @@ extension ZLPhotoPreviewViewController {
         }
         self.currentIndex = page
         self.resetSubViewStatus(animateIndexLabel: false)
-        self.selPhotoPreview.currentShowModelChanged(model: self.arrDataSources[self.currentIndex])
+        self.selPhotoPreview?.currentShowModelChanged(model: self.arrDataSources[self.currentIndex])
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

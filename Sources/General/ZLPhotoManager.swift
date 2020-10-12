@@ -330,8 +330,11 @@ public class ZLPhotoManager: NSObject {
             }
         }
         return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { (item, info) in
-            let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-            completion(item, info, isDegraded)
+            // iOS11 系统这个回调没有在主线程
+            DispatchQueue.main.async {
+                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
+                completion(item, info, isDegraded)
+            }
         }
     }
     
