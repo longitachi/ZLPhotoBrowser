@@ -475,7 +475,9 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         
         self.videoRequestID = ZLPhotoManager.fetchVideo(for: self.model.asset, progress: { [weak self] (progress, _, _, _) in
             self?.progressView.progress = progress
+            zl_debugPrint("video progress \(progress)")
             if progress >= 1 {
+                zl_debugPrint("video load finished")
                 self?.progressView.isHidden = true
             } else {
                 self?.progressView.isHidden = false

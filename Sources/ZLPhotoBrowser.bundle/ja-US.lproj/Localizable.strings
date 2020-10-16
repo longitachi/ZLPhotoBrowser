@@ -63,3 +63,4 @@
 "myPhotoStream" = "マイフォトストリーム";
 
 "noTitleAlbumListPlaceholder" = "画像すべて";
+"unableToAccessAllPhotos" = "すべての写真にアクセスできません。設定に移動してください";

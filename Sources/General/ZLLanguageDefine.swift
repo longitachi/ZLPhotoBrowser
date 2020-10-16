@@ -192,6 +192,9 @@ public struct ZLLocalLanguageKey: Hashable {
     /// 所有照片
     public static let noTitleAlbumListPlaceholder = ZLLocalLanguageKey(rawValue: "noTitleAlbumListPlaceholder")
     
+    /// 无法访问所有照片，前往设置
+    public static let unableToAccessAllPhotos = ZLLocalLanguageKey(rawValue: "unableToAccessAllPhotos")
+    
 }
 
 func localLanguageTextValue(_ key: ZLLocalLanguageKey) -> String {

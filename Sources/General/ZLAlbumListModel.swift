@@ -31,7 +31,9 @@ class ZLAlbumListModel: NSObject {
 
     let title: String
     
-    var count: Int
+    var count: Int {
+        return result.count
+    }
     
     var result: PHFetchResult<PHAsset>
     
@@ -41,7 +43,9 @@ class ZLAlbumListModel: NSObject {
     
     let isCameraRoll: Bool
     
-    var headImageAsset: PHAsset?
+    var headImageAsset: PHAsset? {
+        return result.lastObject
+    }
     
     var models: [ZLPhotoModel] = []
     
@@ -53,13 +57,10 @@ class ZLAlbumListModel: NSObject {
     
     init(title: String, result: PHFetchResult<PHAsset>, collection: PHAssetCollection, option: PHFetchOptions, isCameraRoll: Bool) {
         self.title = title
-        self.count = result.count
         self.result = result
         self.collection = collection
         self.option = option
         self.isCameraRoll = isCameraRoll
-        
-        self.headImageAsset = result.lastObject
     }
     
     func refetchPhotos() {
@@ -70,8 +71,6 @@ class ZLAlbumListModel: NSObject {
     
     func refreshResult() {
         self.result = PHAsset.fetchAssets(in: self.collection, options: self.option)
-        self.count = self.result.count
-        self.models.removeAll()
     }
     
 }

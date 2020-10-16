@@ -28,6 +28,8 @@ import UIKit
 
 class ZLEmbedAlbumListView: UIView {
 
+    static let rowH: CGFloat = 60
+    
     var selectedAlbum: ZLAlbumListModel
     
     var tableBgView: UIView!
@@ -66,12 +68,7 @@ class ZLEmbedAlbumListView: UIView {
             return
         }
         
-        let bgFrame: CGRect
-        if currOri.isPortrait {
-            bgFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height*0.7)
-        } else {
-            bgFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height*0.8)
-        }
+        let bgFrame = self.calculateBgViewBounds()
         
         let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.frame.width, height: bgFrame.height), byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 8, height: 8))
         self.tableBgView.layer.mask = nil
@@ -94,7 +91,7 @@ class ZLEmbedAlbumListView: UIView {
         self.tableView = UITableView(frame: .zero, style: .plain)
         self.tableView.backgroundColor = .albumListBgColor
         self.tableView.tableFooterView = UIView()
-        self.tableView.rowHeight = 60
+        self.tableView.rowHeight = ZLEmbedAlbumListView.rowH
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
         self.tableView.separatorColor = .separatorColor
         self.tableView.delegate = self
@@ -121,19 +118,26 @@ class ZLEmbedAlbumListView: UIView {
         }
     }
     
+    func calculateBgViewBounds() -> CGRect {
+        let contentH = CGFloat(self.arrDataSource.count) * ZLEmbedAlbumListView.rowH
+        
+        let maxH: CGFloat
+        if UIApplication.shared.statusBarOrientation.isPortrait {
+            maxH = min(self.frame.height * 0.7, contentH)
+        } else {
+            maxH = min(self.frame.height * 0.8, contentH)
+        }
+        
+        return CGRect(x: 0, y: 0, width: self.frame.width, height: maxH)
+    }
+    
     /// 这里不采用监听相册发生变化的方式，是因为每次变化，系统都会回调多次，造成重复获取相册列表
     func show(reloadAlbumList: Bool) {
         if reloadAlbumList {
             self.loadAlbumList()
         }
         
-        let toFrame: CGRect
-        
-        if UIApplication.shared.statusBarOrientation.isPortrait {
-            toFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height*0.7)
-        } else {
-            toFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height*0.8)
-        }
+        let toFrame = self.calculateBgViewBounds()
         
         self.isHidden = false
         self.alpha = 0

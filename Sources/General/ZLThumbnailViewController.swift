@@ -241,6 +241,7 @@ class ZLThumbnailViewController: UIViewController {
         
         ZLCameraCell.zl_register(self.collectionView)
         ZLThumbnailPhotoCell.zl_register(self.collectionView)
+        self.collectionView.register(ZLThumbnailColViewFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(ZLThumbnailColViewFooter.classForCoder()))
         
         self.bottomView = UIView()
         self.bottomView.backgroundColor = .bottomToolViewBgColor
@@ -529,7 +530,7 @@ class ZLThumbnailViewController: UIViewController {
             return
         }
         let index = self.showCameraCell ? self.arrDataSources.count : self.arrDataSources.count - 1
-        self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .bottom, animated: false)
+        self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredVertically, animated: false)
     }
     
     func showCamera() {
@@ -593,8 +594,7 @@ class ZLThumbnailViewController: UIViewController {
     
     func handleDataArray(newModel: ZLPhotoModel) {
         self.hasTakeANewAsset = true
-        self.albumList.count += 1
-        self.albumList.headImageAsset = newModel.asset
+        self.albumList.refreshResult()
         
         let nav = self.navigationController as? ZLImageNavController
         let config = ZLPhotoConfiguration.default()
@@ -722,6 +722,27 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         let totalW = collectionView.bounds.width - (columnCount - 1) * ZLLayout.thumbCollectionViewItemSpacing
         let singleW = totalW / columnCount
         return CGSize(width: singleW, height: singleW)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited, ZLPhotoConfiguration.default().allowSelectMorePhotoWhenAuthIsLismited {
+            return CGSize(width: collectionView.bounds.width, height: 50)
+        } else {
+            return .zero
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(ZLThumbnailColViewFooter.classForCoder()), for: indexPath) as! ZLThumbnailColViewFooter
+        
+        if #available(iOS 14, *) {
+            view.selectMoreBlock = { [weak self] in
+                guard let `self` = self else { return }
+                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+            }
+        }
+        
+        return view
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -981,12 +1002,36 @@ extension ZLThumbnailViewController: UIImagePickerControllerDelegate, UINavigati
 extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        PHPhotoLibrary.shared().unregisterChangeObserver(self)
-        DispatchQueue.main.async {
+        guard let changes = changeInstance.changeDetails(for: self.albumList.result)
+            else { return }
+        DispatchQueue.main.sync {
             // 变化后再次显示相册列表需要刷新
             self.hasTakeANewAsset = true
-            self.albumList.refreshResult()
-            self.loadPhotos()
+            self.albumList.result = changes.fetchResultAfterChanges
+            let nav = (self.navigationController as! ZLImageNavController)
+            if changes.hasIncrementalChanges {
+                for sm in nav.arrSelectedModels {
+                    let isDelete = changeInstance.changeDetails(for: sm.asset)?.objectWasDeleted ?? false
+                    if isDelete {
+                        nav.arrSelectedModels.removeAll { $0 == sm }
+                    }
+                }
+                if (!changes.removedObjects.isEmpty || !changes.insertedObjects.isEmpty) {
+                    self.albumList.models.removeAll()
+                }
+                
+                self.loadPhotos()
+            } else {
+                for sm in nav.arrSelectedModels {
+                    let isDelete = changeInstance.changeDetails(for: sm.asset)?.objectWasDeleted ?? false
+                    if isDelete {
+                        nav.arrSelectedModels.removeAll { $0 == sm }
+                    }
+                }
+                self.albumList.models.removeAll()
+                self.loadPhotos()
+            }
+            self.resetBottomToolBtnStatus()
         }
     }
     
@@ -1161,7 +1206,7 @@ class ZLExternalAlbumListNavView: UIView {
         self.navBlurView?.frame = self.bounds
         
         self.backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
-        let albumTitleW = self.title.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width
+        let albumTitleW = min(self.bounds.width / 2, self.title.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width)
         self.albumTitleLabel.frame = CGRect(x: (self.frame.width-albumTitleW)/2, y: insets.top, width: albumTitleW, height: 44)
         let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width + 40
         self.cancelBtn.frame = CGRect(x: self.frame.width-insets.right-cancelBtnW, y: insets.top, width: cancelBtnW, height: 44)
@@ -1202,6 +1247,39 @@ class ZLExternalAlbumListNavView: UIView {
     
     @objc func cancelBtnClick() {
         self.cancelBlock?()
+    }
+    
+}
+
+
+class ZLThumbnailColViewFooter: UICollectionReusableView {
+    
+    var selectPhotoLabel: UILabel!
+    
+    var selectMoreBlock: ( () -> Void )?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.selectPhotoLabel = UILabel(frame: CGRect(x: 20, y: 0, width: self.bounds.width - 40, height: self.bounds.height))
+        self.selectPhotoLabel.font = getFont(14)
+        self.selectPhotoLabel.numberOfLines = 2
+        self.selectPhotoLabel.textAlignment = .center
+        self.selectPhotoLabel.textColor = .selectMorePhotoWhenAuthIsLismitedTitleColor
+        self.selectPhotoLabel.text = localLanguageTextValue(.unableToAccessAllPhotos)
+        self.addSubview(self.selectPhotoLabel)
+        
+        let control = UIControl(frame: self.bounds)
+        control.addTarget(self, action: #selector(selectMorePhoto), for: .touchUpInside)
+        self.addSubview(control)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func selectMorePhoto() {
+        self.selectMoreBlock?()
     }
     
 }

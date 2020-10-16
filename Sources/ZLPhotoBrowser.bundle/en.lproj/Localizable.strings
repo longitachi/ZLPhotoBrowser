@@ -63,3 +63,4 @@
 "myPhotoStream" = "My Photo Stream";
 
 "noTitleAlbumListPlaceholder" = "All Photos";
+"unableToAccessAllPhotos" = "Unable to access all photos, go to settings";

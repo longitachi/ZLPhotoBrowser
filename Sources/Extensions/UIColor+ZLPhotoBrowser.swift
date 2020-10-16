@@ -113,6 +113,11 @@ extension UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnDisableBgColor
     }
     
+    /// iOS14 limited 权限时候，小图界面下方显示 选择更多图片 标题颜色
+    class var selectMorePhotoWhenAuthIsLismitedTitleColor: UIColor {
+        return ZLPhotoConfiguration.default().themeColorDeploy.selectMorePhotoWhenAuthIsLismitedTitleColor
+    }
+    
     /// 自定义相机录制视频时，进度条颜色
     class var cameraRecodeProgressColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.cameraRecodeProgressColor

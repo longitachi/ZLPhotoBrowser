@@ -112,11 +112,14 @@ public class ZLPhotoConfiguration: NSObject {
     /// 是否允许选择原图
     @objc public var allowSelectOriginal = true
     
-    /// 是否允许预览已选择的照片 (小图界面预览按钮)
+    /// 是否允许预览已选择的照片 (即是否显示小图界面左下角预览按钮)
     @objc public var allowPreviewSelectedPhotos = true
     
     /// 是否允许进入预览大图界面 (即点击小图后是否允许进入大图界面)
     @objc public var allowPreviewPhotos = true
+    
+    /// iOS14 limited 权限时候，是否在小图界面下方显示 选择更多图片 功能
+    @objc public var allowSelectMorePhotoWhenAuthIsLismited = true
     
     private var pri_columnCount: Int = 4
     
@@ -425,6 +428,9 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     
     /// 底部工具栏按钮 不可交互 状态背景颜色
     @objc public var bottomToolViewBtnDisableBgColor = zlRGB(50, 50, 50)
+    
+    /// iOS14 limited 权限时候，小图界面下方显示 选择更多图片 标题颜色
+    @objc public var selectMorePhotoWhenAuthIsLismitedTitleColor = UIColor.white
     
     /// 自定义相机录制视频时，进度条颜色
     @objc public var cameraRecodeProgressColor = zlRGB(80, 169, 56)

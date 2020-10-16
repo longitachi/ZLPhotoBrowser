@@ -63,3 +63,4 @@
 "myPhotoStream" = "我的照片流";
 
 "noTitleAlbumListPlaceholder" = "所有照片";
+"unableToAccessAllPhotos" = "無法訪問所有照片，前往設置";
