@@ -9,11 +9,17 @@
 - [ ] 我想提出一个建议或bug，而不是问一个问题
 
 #### 关于 Issue
-1. 请附上当前所使用的cocoapods版本
+1. 请附上以下信息
    cocoapods版本: 
+   设备:
+   系统版本:
+   Xcode版本:
+
 2. 所遇到的问题（如有可能，请尽量详细描述，建议附上截图）
-   crash截图:
-3. `ZLPhotoConfiguration`配置代码
+   问题截图:
+
+3. `ZLPhotoConfiguration` 配置代码
+
    ```
    paste your code
    ```

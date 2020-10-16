@@ -25,6 +25,7 @@
 //  THE SOFTWARE.
 
 import UIKit
+import Photos
 
 public typealias Second = Int
 
@@ -356,6 +357,13 @@ public class ZLPhotoConfiguration: NSObject {
             ZLCustomFontDeploy.fontName = self.themeFontName
         }
     }
+    
+    /// 选择图片之前会调用该block，开发者可首先判断asset是否允许被选择
+    /// 仅控制是否允许被选择，不会影响框架内选择逻辑
+    /// 如果允许被选择，但如果不满足其他可选条件(例如视频时长不满足最大最小可选
+    /// 时长; 选择量已达最大值等)的话，不会添加到已选择数组中
+    /// - Tips: 如果不允许选择的话，开发者可自行 toast 提示用户相关信息
+    @objc public var canSelectAsset: ( (PHAsset) -> Bool )?
     
 }
 
