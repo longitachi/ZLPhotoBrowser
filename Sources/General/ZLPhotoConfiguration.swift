@@ -200,8 +200,8 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     /// 在小图界面选择 图片/视频 后直接进入编辑界面
-    /// - discussion: 编辑图片 仅在allowEditImage为YES 且 maxSelectCount为1 的情况下，置为YES有效，
-    /// 编辑视频则在 allowEditVideo为YES 且 maxSelectCount为1情况下，置为YES有效
+    /// - discussion: 编辑图片 仅在allowEditImage为true 且 maxSelectCount为1 的情况下，置为true有效，
+    /// 编辑视频则在 allowEditVideo为true 且 maxSelectCount为1情况下，置为true有效
     @objc public var editAfterSelectThumbnailImage = false
     
     /// 编辑图片后是否保存编辑后的图片至相册
@@ -238,7 +238,7 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// 回调时候是否允许框架解析图片，默认YES
+    /// 回调时候是否允许框架解析图片，默认true
     /// discussion 如果选择了大量图片，框架一下解析大量图片会耗费一些内存，
     /// 开发者此时可置为NO，拿到assets数组后使用 ZLPhotoManager 中提供的 "anialysisAssets:original:completion:" 方法进行逐个解析，
     /// 以达到缓解内存瞬间暴涨的效果，该值为NO时，回调的图片数组为nil
