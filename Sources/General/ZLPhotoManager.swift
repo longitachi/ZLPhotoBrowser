@@ -29,7 +29,7 @@ import Photos
 
 public class ZLPhotoManager: NSObject {
 
-    /// 保存图片到相册
+    /// save image to album
     @objc public class func saveImageToAlbum(image: UIImage, completion: ( (Bool, PHAsset?) -> Void )? ) {
         let status = PHPhotoLibrary.authorizationStatus()
         
@@ -54,7 +54,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// 保存视频到相册
+    /// save video to album
     @objc public class func saveVideoToAblum(url: URL, completion: ( (Bool, PHAsset?) -> Void )? ) {
         let status = PHPhotoLibrary.authorizationStatus()
         
@@ -90,7 +90,7 @@ public class ZLPhotoManager: NSObject {
         return nil
     }
     
-    /// 从相册中获取照片
+    /// fetch photos from result
     class func fetchPhoto(in result: PHFetchResult<PHAsset>, ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, limitCount: Int = .max) -> [ZLPhotoModel] {
         var models: [ZLPhotoModel] = []
         let option: NSEnumerationOptions = ascending ? .init(rawValue: 0) : .reverse
@@ -116,7 +116,7 @@ public class ZLPhotoManager: NSObject {
         return models
     }
     
-    /// 获取相册列表
+    /// fetch all album list
     class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, completion: ( ([ZLAlbumListModel]) -> Void )) {
         let option = PHFetchOptions()
         if !allowSelectImage {
@@ -163,7 +163,7 @@ public class ZLPhotoManager: NSObject {
         completion(albumList)
     }
     
-    /// 获取相机胶卷album
+    /// fetch camera roll album
     class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping ( (ZLAlbumListModel) -> Void )) {
         let option = PHFetchOptions()
         if !allowSelectImage {
@@ -184,7 +184,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// 转换相册title
+    /// conversion collection title
     private class func getCollectionTitle(_ collection: PHAssetCollection) -> String {
         if collection.assetCollectionType == .album {
             // 用户创建的相册
@@ -255,7 +255,7 @@ public class ZLPhotoManager: NSObject {
         return self.fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
     }
     
-    /// 获取asset data
+    /// fetch asset data
     @discardableResult
     class func fetchOriginalImageData(for asset: PHAsset, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (Data, [AnyHashable: Any]?, Bool) -> Void)) -> PHImageRequestID {
         let option = PHImageRequestOptions()
@@ -280,7 +280,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// 获取asset对应图片
+    /// fetch image for asset
     private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         /**
@@ -360,7 +360,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// 获取 asset 本地路径
+    /// fetch asset local file path
     @objc public class func fetchAssetFilePath(asset: PHAsset, completion: @escaping (String?) -> Void ) {
         asset.requestContentEditingInput(with: nil) { (input, info) in
             var path = input?.fullSizeImageURL?.absoluteString
@@ -374,7 +374,7 @@ public class ZLPhotoManager: NSObject {
 }
 
 
-/// 权限相关
+/// authority related
 extension ZLPhotoManager {
     
     public class func havePhotoLibratyAuthority() -> Bool {

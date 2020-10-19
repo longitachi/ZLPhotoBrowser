@@ -263,7 +263,7 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         self.previewBtn = createBtn(localLanguageTextValue(.preview), #selector(previewBtnClick))
-        self.previewBtn.isHidden = !ZLPhotoConfiguration.default().allowPreviewSelectedPhotos
+        self.previewBtn.isHidden = !ZLPhotoConfiguration.default().showPreviewButtonInAlbum
         self.bottomView.addSubview(self.previewBtn)
         
         self.originalBtn = createBtn(localLanguageTextValue(.originalPhoto), #selector(originalPhotoClick))

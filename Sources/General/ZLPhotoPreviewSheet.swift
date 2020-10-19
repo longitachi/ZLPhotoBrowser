@@ -79,19 +79,27 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private var fetchImageQueue: OperationQueue = OperationQueue()
     
-    /// 解析成功的照片回调  参数为: 1.解析好的图片 2.对应asset 3.是否原图
+    /// Success call back
+    /// block params
+    ///  - params1: images for asset.
+    ///  - params2: selected assets
+    ///  - params3: is full image
     @objc public var selectImageBlock: ( ([UIImage], [PHAsset], Bool) -> Void )?
     
-    /// 解析失败的照片回调  参数: 1.失败的asset 2.对应的下标
+    /// Callback for photos that failed to parse
+    /// block params
+    ///  - params1: failed assets.
+    ///  - params2: index for asset
     @objc public var selectImageRequestErrorBlock: ( ([PHAsset], [Int]) -> Void )?
     
-    /// 取消选择回调
     @objc public var cancelBlock: ( () -> Void )?
     
     deinit {
         zl_debugPrint("ZLPhotoPreviewSheet deinit")
     }
     
+    
+    /// - Parameter selectedAssets: preselected assets
     @objc public init(selectedAssets: [PHAsset] = []) {
         super.init(frame: .zero)
         

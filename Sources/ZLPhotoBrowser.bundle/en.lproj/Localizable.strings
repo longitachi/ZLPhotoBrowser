@@ -20,7 +20,7 @@
 "noPhotoTips" = "No Photo";
 "notAllowMixSelect" = "Unable to select video";
 
-"loading" = "loading，waiting please";
+"loading" = "loading, waiting please";
 "hudLoading" = "waiting...";
 
 "saveImageError" = "Failed to save the image";
