@@ -416,7 +416,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         let insets = deviceSafeAreaInsets()
         self.playBtn.frame = CGRect(x: 0, y: insets.top, width: self.bounds.width, height: self.bounds.height - insets.top - insets.bottom)
         self.syncErrorLabel.frame = CGRect(x: 10, y: insets.top + 60, width: self.bounds.width - 20, height: 35)
-        self.progressView.frame = CGRect(x: self.bounds.width / 2 - 20, y: self.bounds.height / 2 - 20, width: 40, height: 40)
+        self.progressView.frame = CGRect(x: self.bounds.width / 2 - 30, y: self.bounds.height / 2 - 30, width: 60, height: 60)
     }
     
     private func setupUI() {
@@ -451,7 +451,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         self.imageView.image = nil
         self.imageView.isHidden = false
         self.syncErrorLabel.isHidden = true
-        self.playBtn.isUserInteractionEnabled = false
+        self.playBtn.isEnabled = false
         self.player = nil
         self.playerLayer?.removeFromSuperlayer()
         self.playerLayer = nil
@@ -498,7 +498,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     
     func configurePlayerLayer(_ item: AVPlayerItem) {
         self.playBtn.setImage(getImage("zl_playVideo"), for: .normal)
-        self.playBtn.isUserInteractionEnabled = true
+        self.playBtn.isEnabled = true
         
         self.player = AVPlayer(playerItem: item)
         self.playerLayer = AVPlayerLayer(player: self.player)

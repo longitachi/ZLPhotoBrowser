@@ -275,6 +275,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.languageButton = UIButton(type: .custom)
+        self.languageButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         self.languageButton.setTitle(config.languageType.toString(), for: .normal)
         self.languageButton.addTarget(self, action: #selector(languageButtonClick), for: .touchUpInside)
         self.languageButton.setTitleColor(.white, for: .normal)
