@@ -32,6 +32,13 @@ import Foundation
     case chineseTraditional
     case english
     case japanese
+    case french
+    case german
+    case russian
+    case vietnamese
+    case korean
+    case malay
+    case italian
 }
 
 public struct ZLLocalLanguageKey: Hashable {
@@ -72,7 +79,7 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Request timed out (请求超时)
     public static let timeout = ZLLocalLanguageKey(rawValue: "timeout")
     
-    /// Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"
+    /// Allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"
     /// (请在iPhone的\"设置-隐私-照片\"选项中，允许%@访问你的照片)
     public static let noPhotoLibratyAuthority = ZLLocalLanguageKey(rawValue: "noPhotoLibratyAuthority")
     
@@ -102,9 +109,6 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Done (完成)
     public static let editFinish = ZLLocalLanguageKey(rawValue: "editFinish")
     
-    /// Save (保存)
-    public static let save = ZLLocalLanguageKey(rawValue: "save")
-    
     /// Undo (还原)
     public static let revert = ZLLocalLanguageKey(rawValue: "revert")
     
@@ -130,10 +134,6 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Unable to select video with a duration shorter than %lds
     /// (不能选择低于%ld秒的视频)
     public static let shorterThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "shorterThanMaxVideoDuration")
-    
-    /// Retry after download in photo ablum
-    /// (请在系统相册中下载到本地后重新尝试)
-    public static let iCloudPhotoLoadFaild = ZLLocalLanguageKey(rawValue: "iCloudPhotoLoadFaild")
     
     /// Unable to sync from iCloud (iCloud无法同步)
     public static let iCloudVideoLoadFaild = ZLLocalLanguageKey(rawValue: "iCloudVideoLoadFaild")

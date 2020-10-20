@@ -1,0 +1,64 @@
+"previewCamera" = "카메라";
+"previewCameraRecord" = "기록";
+"previewAlbum" = "이미지";
+"previewCancel" = "취소";
+
+"originalPhoto" = "전체 이미지";
+"done" = "끝난";
+"ok" = "확인";
+"editFinish" = "완료";
+
+"back" = "뒤";
+
+"edit" = "편집";
+"revert" = "실행 취소";
+
+"photo" = "사진";
+"preview" = "미리 보기";
+
+"noPhotoTips" = "사진 없음";
+"notAllowMixSelect" = "비디오를 선택할 수 없습니다";
+
+"loading" = "로딩 중, 기다려주세요";
+"hudLoading" = "기다리는...";
+
+"exceededMaxSelectCount" = "최대 선택 수: %ld";
+"longerThanMaxVideoDuration" = "길이가 %ld 초 보다 긴 동영상을 선택할 수 없습니다";
+"shorterThanMaxVideoDuration" = "기간이 %ld 초 보다 짧은 비디오를 선택할 수 없습니다";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "동영상 최대 선택 수: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "동영상 최소 선택 횟수: %ld";
+
+"noCameraAuthority" = "%@ 에서 장치의 카메라에 액세스하도록 허용하십시오 에서 \"설정\"-> \"개인 정보\"-> \"카메라\"";
+"noPhotoLibratyAuthority" = "%@ 이 \"설정\"-> \"개인 정보\"-> \"사진\"에서 앨범에 액세스하도록 허용하세요";
+"noMicrophoneAuthority" = "%@ 에서 장치의 마이크로폰 액세스하도록 허용하십시오 에서 \"설정\"-> \"개인 정보\"-> \"마이크\"";
+"cameraUnavailable" = "카메라를 사용할 수 없습니다";
+
+"iCloudVideoLoadFaild" = "iCloud에서 동기화 할 수 없습니다";
+"imageLoadFailed" = "로드 실패";
+
+"saveImageError" = "이미지를 저장하지 못했습니다";
+"saveVideoError" = "비디오를 저장하지 못했습니다";
+"timeout" = "요청 시간이 초과되었습니다";
+
+"customCameraTips" = "눌러서 촬영 및 길게 눌러서 기록";
+"customCameraTakePhotoTips" = "눌러서 촬영";
+"customCameraRecordVideoTips" = "길게 눌러서 기록";
+"minRecordTimeTips" = "%ld 초 이상 녹화";
+
+"cameraRoll" = "최근 항목";
+"panoramas" = "파노라마";
+"videos" = "비디오";
+"favorites" = "즐겨 찾기";
+"timelapses" = "타임랩스";
+"recentlyAdded" = "최근에 추가";
+"bursts" = "고속 연사 촬영";
+"slomoVideos" = "슬로 모션";
+"selfPortraits" = "셀카";
+"screenshots" = "스크린샷";
+"depthEffect" = "인물 사진";
+"livePhotos" = "Live Photos";
+"animated" = "움직이는 항목";
+"myPhotoStream" = "나의 사진 스트림";
+
+"noTitleAlbumListPlaceholder" = "모든 사진";
+"unableToAccessAllPhotos" = "모든 사진에 액세스 할 수 없습니다. 설정으로 이동하세요";

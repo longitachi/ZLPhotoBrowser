@@ -15,7 +15,8 @@
 * [Features](#Features)
 * [Requirements](#Requirements)
 * [Usage](#Usage)
-* [Update Log](#updateLog)
+* [Update Log](#UpdateLog)
+* [Languages](#Languages)
 * [Installation(support Cocoapods/Carthage/SPM)](#Installation)
 * [Demo Effect](#DemoEffect)
 
@@ -23,25 +24,25 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 
 
 ### <a id="Features"></a>Features
-- [x] iOS14 support
-- [x] Portrait and landscape support
-- [x] Two framework style
-- [x] Preview selection (support drag and drop)
-- [x] Library selection (support sliding selection)
-- [x] Image/Gif/LivePhoto/Video Support
-- [x] Customize the maximum number of previews/the number of choices/the maximum and minimum optional duration of the video
-- [x] Customize the number of columns displayed in each row
-- [x] Image editor (draw/crop/mosaic/filter) (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want)
-- [x] Video editor
-- [x] Custom camera
-- [x] Multi-language
-- [x] Selected index
-- [x] Selected/unselectable state shadow mask
-- [x] The selected photos are displayed at the bottom of the big picture interface, which can be dragged and sorted
-- [x] The camera's internal photo cell can displays the captured images of the camera
-- [x] Customize font
-- [x] The color of each part of the framework can be customized (provide dynamic color can support light/dark mode)
-- [x] Customize images
+- [x] iOS14 support.
+- [x] Portrait and landscape support.
+- [x] Two framework style.
+- [x] Preview selection (support drag and drop).
+- [x] Library selection (support sliding selection).
+- [x] Image/Gif/LivePhoto/Video Support.
+- [x] Customize the maximum number of previews or selection, the maximum and minimum optional duration of the video.
+- [x] Customize the number of columns displayed in each row.
+- [x] Image editor (draw/crop/mosaic/filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
+- [x] Video editor.
+- [x] Custom camera.
+- [x] Multi-language.
+- [x] Selected index.
+- [x] Selected/unselectable state shadow mask.
+- [x] The selected photos are displayed at the bottom of the big picture interface, which can be dragged and sorted.
+- [x] The camera's internal photo cell can displays the captured images of the camera.
+- [x] Customize font.
+- [x] The color of each part of the framework can be customized (provide dynamic color can support light/dark mode).
+- [x] Customize images.
 
 > If you have good needs and suggestions in use, or encounter any bugs, please feel free to issue and I will reply in time
  
@@ -83,7 +84,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
  ```
  
  
-### <a id="updateLog"></a>Update Log
+### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
 ● 4.0.8: Add filter to image editor;
@@ -91,6 +92,9 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 ● 4.0.5: Support iOS14 limited authority; Optimize picture preview display;
 ...
 ```
+
+### <a id="Languages"></a>Languages
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLPhotoBrowser in your project:

@@ -1,14 +1,14 @@
 //
-//  PhotoConfigureViewController.swift
+//  PhotoConfigureCNViewController.swift
 //  Example
 //
-//  Created by long on 2020/8/24.
+//  Created by long on 2020/10/20.
 //
 
 import UIKit
 import ZLPhotoBrowser
 
-class PhotoConfigureViewController: UIViewController {
+class PhotoConfigureCNViewController: UIViewController {
 
     let config = ZLPhotoConfiguration.default()
     
@@ -135,7 +135,7 @@ class PhotoConfigureViewController: UIViewController {
         let horSpacing: CGFloat = 20
         let fieldSize = CGSize(width: 100, height: 30)
         
-        let tipsLabel = createLabel("For more parameter settings, view in ZLPhotoConfiguration")
+        let tipsLabel = createLabel("更多参数设置，请前往ZLPhotoConfiguration查看")
         tipsLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         tipsLabel.numberOfLines = 2
         tipsLabel.lineBreakMode = .byWordWrapping
@@ -146,7 +146,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         let dismissBtn = UIButton(type: .custom)
-        dismissBtn.setTitle("Done", for: .normal)
+        dismissBtn.setTitle("完成", for: .normal)
         dismissBtn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
         dismissBtn.layer.cornerRadius = 5
         dismissBtn.layer.masksToBounds = true
@@ -163,7 +163,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 预览张数
-        let previewCountLabel = createLabel("Max count for preview")
+        let previewCountLabel = createLabel("最大预览张数")
         containerView.addSubview(previewCountLabel)
         if #available(iOS 13.0, *) {
             previewCountLabel.snp.makeConstraints { (make) in
@@ -186,7 +186,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 最大选择张数
-        let maxSelectCountLabel = createLabel("Max count for selection")
+        let maxSelectCountLabel = createLabel("最大选择张数")
         containerView.addSubview(maxSelectCountLabel)
         maxSelectCountLabel.snp.makeConstraints { (make) in
             make.top.equalTo(previewCountLabel.snp.bottom).offset(velSpacing)
@@ -202,7 +202,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 视频最小选择时长
-        let minVideoDurationLabel = createLabel("Min duration for video selection")
+        let minVideoDurationLabel = createLabel("视频选择最小时长")
         containerView.addSubview(minVideoDurationLabel)
         minVideoDurationLabel.snp.makeConstraints { (make) in
             make.top.equalTo(maxSelectCountLabel.snp.bottom).offset(velSpacing)
@@ -218,7 +218,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 视频最大选择时长
-        let maxVideoDurationLabel = createLabel("Max duration for video selection")
+        let maxVideoDurationLabel = createLabel("视频选择最大时长")
         containerView.addSubview(maxVideoDurationLabel)
         maxVideoDurationLabel.snp.makeConstraints { (make) in
             make.top.equalTo(minVideoDurationLabel.snp.bottom).offset(velSpacing)
@@ -234,7 +234,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // cell圆角
-        let cellRadiusLabel = createLabel("Cell corner radius")
+        let cellRadiusLabel = createLabel("cell圆角")
         containerView.addSubview(cellRadiusLabel)
         cellRadiusLabel.snp.makeConstraints { (make) in
             make.top.equalTo(maxVideoDurationLabel.snp.bottom).offset(velSpacing)
@@ -250,14 +250,14 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 相册样式
-        let styleLabel = createLabel("Framework style")
+        let styleLabel = createLabel("相册样式")
         containerView.addSubview(styleLabel)
         styleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(cellRadiusLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
-        self.styleSegment = UISegmentedControl(items: ["First (like wechat)", "Second"])
+        self.styleSegment = UISegmentedControl(items: ["样式一(仿微信)", "样式二(传统)"])
         self.styleSegment.selectedSegmentIndex = config.style.rawValue
         self.styleSegment.addTarget(self, action: #selector(styleSegmentChanged), for: .valueChanged)
         containerView.addSubview(self.styleSegment)
@@ -267,7 +267,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 框架语言
-        let languageLabel = createLabel("Language")
+        let languageLabel = createLabel("框架语言")
         containerView.addSubview(languageLabel)
         languageLabel.snp.makeConstraints { (make) in
             make.top.equalTo(styleLabel.snp.bottom).offset(velSpacing)
@@ -288,7 +288,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 每列个数
-        let columnCountTitleLabel = createLabel("Column count for each row:")
+        let columnCountTitleLabel = createLabel("每行显示照片个数")
         containerView.addSubview(columnCountTitleLabel)
         columnCountTitleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(languageLabel.snp.bottom).offset(velSpacing)
@@ -316,14 +316,14 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 排序方式
-        let sortLabel = createLabel("Sort by")
+        let sortLabel = createLabel("排序方式")
         containerView.addSubview(sortLabel)
         sortLabel.snp.makeConstraints { (make) in
             make.top.equalTo(columnCountTitleLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
-        self.sortAscendingSegment = UISegmentedControl(items: ["Ascending", "Descending"])
+        self.sortAscendingSegment = UISegmentedControl(items: ["升序", "降序"])
         self.sortAscendingSegment.selectedSegmentIndex = config.sortAscending ? 0 : 1
         self.sortAscendingSegment.addTarget(self, action: #selector(sortAscendingChanged), for: .valueChanged)
         containerView.addSubview(self.sortAscendingSegment)
@@ -333,7 +333,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 选择图片开关
-        let selImageLabel = createLabel("Select image")
+        let selImageLabel = createLabel("允许选择图片")
         containerView.addSubview(selImageLabel)
         selImageLabel.snp.makeConstraints { (make) in
             make.top.equalTo(sortLabel.snp.bottom).offset(velSpacing)
@@ -350,7 +350,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 选择gif开关
-        let selGifLabel = createLabel("Select Gif")
+        let selGifLabel = createLabel("允许选择Gif")
         containerView.addSubview(selGifLabel)
         selGifLabel.snp.makeConstraints { (make) in
             make.top.equalTo(selImageLabel.snp.bottom).offset(velSpacing)
@@ -367,7 +367,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 选择livePhoto开关
-        let selLivePhotoLabel = createLabel("Select LivePhoto")
+        let selLivePhotoLabel = createLabel("允许选择LivePhoto")
         containerView.addSubview(selLivePhotoLabel)
         selLivePhotoLabel.snp.makeConstraints { (make) in
             make.top.equalTo(selGifLabel.snp.bottom).offset(velSpacing)
@@ -384,7 +384,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 选择livePhoto开关
-        let selOriginalLabel = createLabel("Select full image")
+        let selOriginalLabel = createLabel("允许选择原图")
         containerView.addSubview(selOriginalLabel)
         selOriginalLabel.snp.makeConstraints { (make) in
             make.top.equalTo(selLivePhotoLabel.snp.bottom).offset(velSpacing)
@@ -401,7 +401,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 选择视频开关
-        let selVideoLabel = createLabel("Select video")
+        let selVideoLabel = createLabel("允许选择视频")
         containerView.addSubview(selVideoLabel)
         selVideoLabel.snp.makeConstraints { (make) in
             make.top.equalTo(selOriginalLabel.snp.bottom).offset(velSpacing)
@@ -418,7 +418,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 混合选择开关
-        let mixSelectLabel = createLabel("Select image and video together")
+        let mixSelectLabel = createLabel("允许图片视频一起选择")
         containerView.addSubview(mixSelectLabel)
         mixSelectLabel.snp.makeConstraints { (make) in
             make.top.equalTo(selVideoLabel.snp.bottom).offset(velSpacing)
@@ -435,7 +435,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 预览大图开关
-        let previewPhotosLabel = createLabel("Preview big image")
+        let previewPhotosLabel = createLabel("允许进入大图界面")
         containerView.addSubview(previewPhotosLabel)
         previewPhotosLabel.snp.makeConstraints { (make) in
             make.top.equalTo(mixSelectLabel.snp.bottom).offset(velSpacing)
@@ -452,7 +452,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 编辑图片开关
-        editImageLabel = createLabel("Edit image")
+        editImageLabel = createLabel("允许编辑图片")
         containerView.addSubview(editImageLabel)
         editImageLabel.snp.makeConstraints { (make) in
             make.top.equalTo(previewPhotosLabel.snp.bottom).offset(velSpacing)
@@ -479,7 +479,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 涂鸦
-        let drawToolLabel = createLabel("Draw")
+        let drawToolLabel = createLabel("涂鸦")
         self.editImageToolView.addSubview(drawToolLabel)
         drawToolLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.editImageToolView).offset(velSpacing)
@@ -496,7 +496,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 裁剪
-        let clipToolLabel = createLabel("Crop")
+        let clipToolLabel = createLabel("裁剪")
         self.editImageToolView.addSubview(clipToolLabel)
         clipToolLabel.snp.makeConstraints { (make) in
             make.top.equalTo(drawToolLabel.snp.bottom).offset(velSpacing)
@@ -513,7 +513,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 裁剪
-        let mosaicToolLabel = createLabel("Mosaic")
+        let mosaicToolLabel = createLabel("马赛克")
         self.editImageToolView.addSubview(mosaicToolLabel)
         mosaicToolLabel.snp.makeConstraints { (make) in
             make.top.equalTo(clipToolLabel.snp.bottom).offset(velSpacing)
@@ -530,7 +530,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 滤镜
-        let filterToolLabel = createLabel("Filter")
+        let filterToolLabel = createLabel("滤镜")
         self.editImageToolView.addSubview(filterToolLabel)
         filterToolLabel.snp.makeConstraints { (make) in
             make.top.equalTo(mosaicToolLabel.snp.bottom).offset(velSpacing)
@@ -548,7 +548,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 编辑视频开关
-        editVideoLabel = createLabel("Edit video")
+        editVideoLabel = createLabel("允许编辑视频")
         editVideoLabel.tag = 1000
         containerView.addSubview(editVideoLabel)
         editVideoLabel.snp.makeConstraints { (make) in
@@ -570,7 +570,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 保存编辑图片开关
-        let saveEditImageLabel = createLabel("Save edited image")
+        let saveEditImageLabel = createLabel("保存编辑的图片")
         containerView.addSubview(saveEditImageLabel)
         saveEditImageLabel.snp.makeConstraints { (make) in
             make.top.equalTo(editVideoLabel.snp.bottom).offset(velSpacing)
@@ -587,7 +587,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 拖拽选择开关
-        let dragSelectLabel = createLabel("Drag to select")
+        let dragSelectLabel = createLabel("允许拖拽选择")
         containerView.addSubview(dragSelectLabel)
         dragSelectLabel.snp.makeConstraints { (make) in
             make.top.equalTo(saveEditImageLabel.snp.bottom).offset(velSpacing)
@@ -604,7 +604,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 滑动拖拽开关
-        let slideSelectLabel = createLabel("Slide to select")
+        let slideSelectLabel = createLabel("允许滑动选择")
         containerView.addSubview(slideSelectLabel)
         slideSelectLabel.snp.makeConstraints { (make) in
             make.top.equalTo(dragSelectLabel.snp.bottom).offset(velSpacing)
@@ -620,8 +620,8 @@ class PhotoConfigureViewController: UIViewController {
             make.centerY.equalTo(slideSelectLabel)
         }
         
-        // 相册内部拍照
-        let takePhotoLabel = createLabel("Show camera cell in thumbnail")
+        // 相册内部拍照开关
+        let takePhotoLabel = createLabel("允许相册内部拍照")
         containerView.addSubview(takePhotoLabel)
         takePhotoLabel.snp.makeConstraints { (make) in
             make.top.equalTo(slideSelectLabel.snp.bottom).offset(velSpacing)
@@ -638,7 +638,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 相册内部拍照cell显示实时画面
-        let showCaptureLabel = createLabel("Show captured images in camera cell")
+        let showCaptureLabel = createLabel("拍照cell显示相机俘获画面")
         containerView.addSubview(showCaptureLabel)
         showCaptureLabel.snp.makeConstraints { (make) in
             make.top.equalTo(takePhotoLabel.snp.bottom).offset(velSpacing)
@@ -655,7 +655,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 显示已选选择照片index
-        let showSelectIndexLabel = createLabel("Selected index")
+        let showSelectIndexLabel = createLabel("显示已选择照片index")
         containerView.addSubview(showSelectIndexLabel)
         showSelectIndexLabel.snp.makeConstraints { (make) in
             make.top.equalTo(showCaptureLabel.snp.bottom).offset(velSpacing)
@@ -672,7 +672,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 显示已选选择照片遮罩
-        let showSelectMaskLabel = createLabel("Mask for selected cell")
+        let showSelectMaskLabel = createLabel("显示已选择照片遮罩")
         containerView.addSubview(showSelectMaskLabel)
         showSelectMaskLabel.snp.makeConstraints { (make) in
             make.top.equalTo(showSelectIndexLabel.snp.bottom).offset(velSpacing)
@@ -689,7 +689,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 显示已选选择照片边框
-        let showSelectBorderLabel = createLabel("Border for selected cell")
+        let showSelectBorderLabel = createLabel("显示已选择照片边框")
         containerView.addSubview(showSelectBorderLabel)
         showSelectBorderLabel.snp.makeConstraints { (make) in
             make.top.equalTo(showSelectMaskLabel.snp.bottom).offset(velSpacing)
@@ -706,7 +706,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 显示不可选状态照片遮罩
-        let showInvalidMaskLabel = createLabel("Mask for unavailable cell")
+        let showInvalidMaskLabel = createLabel("显示不可选状态照片遮罩")
         containerView.addSubview(showInvalidMaskLabel)
         showInvalidMaskLabel.snp.makeConstraints { (make) in
             make.top.equalTo(showSelectBorderLabel.snp.bottom).offset(velSpacing)
@@ -723,7 +723,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 使用自定义相机
-        let useCustomCameraLabel = createLabel("Use custom camera")
+        let useCustomCameraLabel = createLabel("使用自定义相机")
         containerView.addSubview(useCustomCameraLabel)
         useCustomCameraLabel.snp.makeConstraints { (make) in
             make.top.equalTo(showInvalidMaskLabel.snp.bottom).offset(velSpacing)
@@ -740,14 +740,14 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 闪光灯模式
-        let cameraFlashLabel = createLabel("Flash mode")
+        let cameraFlashLabel = createLabel("闪光灯模式")
         containerView.addSubview(cameraFlashLabel)
         cameraFlashLabel.snp.makeConstraints { (make) in
             make.top.equalTo(useCustomCameraLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
-        self.cameraFlashSegment = UISegmentedControl(items: ["Auto", "On", "Off"])
+        self.cameraFlashSegment = UISegmentedControl(items: ["自动", "打开", "关闭"])
         cameraFlashSegment.selectedSegmentIndex = config.cameraFlashMode.rawValue
         self.cameraFlashSegment.addTarget(self, action: #selector(cameraFlashSegmentChanged), for: .valueChanged)
         containerView.addSubview(self.cameraFlashSegment)
@@ -919,7 +919,7 @@ class PhotoConfigureViewController: UIViewController {
 }
 
 
-extension PhotoConfigureViewController: UITextFieldDelegate {
+extension PhotoConfigureCNViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

@@ -9,9 +9,7 @@
 "editFinish" = "完成";
 
 "back" = "返回";
-
 "edit" = "編輯";
-"save" = "保存";
 "revert" = "還原";
 
 "photo" = "照片";
@@ -23,7 +21,6 @@
 "loading" = "加載中，請稍後";
 "hudLoading" = "正在處理...";
 
-"saveImageError" = "圖片保存失敗";
 "exceededMaxSelectCount" = "最多只能選擇%ld張圖片";
 "longerThanMaxVideoDuration" = "不能選擇超過%ld秒的視頻";
 "shorterThanMaxVideoDuration" = "不能選擇低於%ld秒的視頻";
@@ -35,10 +32,10 @@
 "noMicrophoneAuthority" = "請在iPhone的\"設置-隱私-麥克風\"選項中，允許%@訪問你的麥克風";
 "cameraUnavailable" = "相機不可用";
 
-"iCloudPhotoLoadFaild" = "請在系統相冊中下載到本地后重新嘗試";
 "iCloudVideoLoadFaild" = "iCloud無法同步";
-
 "imageLoadFailed" = "圖片加載失敗";
+
+"saveImageError" = "圖片保存失敗";
 "saveVideoError" = "視頻保存失敗";
 "timeout" = "請求超時";
 
@@ -58,7 +55,7 @@
 "selfPortraits" = "自拍";
 "screenshots" = "屏幕快照";
 "depthEffect" = "人像";
-"livePhotos" = "Live Photo";
+"livePhotos" = "Live Photos";
 "animated" = "動圖";
 "myPhotoStream" = "我的照片流";
 

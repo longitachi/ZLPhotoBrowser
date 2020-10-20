@@ -639,7 +639,7 @@ public class ZLPhotoPreviewSheet: UIView {
         func inner_showEditVideoVC(_ avAsset: AVAsset) {
             let vc = ZLEditVideoViewController(avAsset: avAsset)
             vc.editFinishBlock = { [weak self] (url) in
-                ZLPhotoManager.saveVideoToAblum(url: url) { [weak self] (suc, asset) in
+                ZLPhotoManager.saveVideoToAlbum(url: url) { [weak self] (suc, asset) in
                     if suc, asset != nil {
                         let m = ZLPhotoModel(asset: asset!)
                         m.isSelected = true
@@ -701,7 +701,7 @@ public class ZLPhotoPreviewSheet: UIView {
             }
         } else if let videoUrl = videoUrl {
             hud.show()
-            ZLPhotoManager.saveVideoToAblum(url: videoUrl) { [weak self] (suc, asset) in
+            ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] (suc, asset) in
                 if suc, let at = asset {
                     let model = ZLPhotoModel(asset: at)
                     self?.handleDataArray(newModel: model)

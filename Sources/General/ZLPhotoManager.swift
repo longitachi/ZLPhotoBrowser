@@ -55,7 +55,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// save video to album
-    @objc public class func saveVideoToAblum(url: URL, completion: ( (Bool, PHAsset?) -> Void )? ) {
+    @objc public class func saveVideoToAlbum(url: URL, completion: ( (Bool, PHAsset?) -> Void )? ) {
         let status = PHPhotoLibrary.authorizationStatus()
         
         if status == .denied || status == .restricted {

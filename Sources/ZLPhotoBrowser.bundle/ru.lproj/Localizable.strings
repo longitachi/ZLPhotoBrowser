@@ -1,0 +1,64 @@
+"previewCamera" = "Камера";
+"previewCameraRecord" = "изображения";
+"previewAlbum" = "Альбом";
+"previewCancel" = "Отмена";
+
+"originalPhoto" = "Полное изображение";
+"done" = "Готово";
+"ok" = "в порядке";
+"editFinish" = "Готово";
+
+"back" = "Назад";
+
+"edit" = "Pед";
+"revert" = "Отменить";
+
+"photo" = "Фото";
+"preview" = "Просмотр";
+
+"noPhotoTips" = "Нет фотографии";
+"notAllowMixSelect" = "Невозможно выбрать видео";
+
+"loading" = "загрузка, подождите пожалуйста";
+"hudLoading" = "ожидание...";
+
+"exceededMaxSelectCount" = "Максимальное количество выбранных: %ld";
+"longerThanMaxVideoDuration" = "Невозможно выбрать видео длительностью более %ld с";
+"shorterThanMaxVideoDuration" = "Невозможно выбрать видео продолжительностью менее 2 с";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Максимальное количество выбранных видео: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "Количество мин. Выбора видео: %ld";
+
+"noCameraAuthority" = "Разрешите %@ доступ к камере вашего устройства в \"Настройки\" -> \"Конфиденциальность\" -> \"Камера\"";
+"noPhotoLibratyAuthority" = "Разрешите %@ доступ к вашему альбому в \"Настройки\" -> \"Конфиденциальность\" -> \"Фото\"";
+"noMicrophoneAuthority" = "Разрешите %@ доступ к микрофону вашего устройства в \"Настройки\" -> \"Конфиденциальность\" -> \"Микрофон\"";
+"cameraUnavailable" = "Камера недоступна";
+
+"iCloudVideoLoadFaild" = "Невозможно синхронизировать из iCloud";
+"imageLoadFailed" = "загрузка не удалась";
+
+"saveImageError" = "Не удалось сохранить изображение";
+"saveVideoError" = "Не удалось сохранить видео";
+"timeout" = "Истекло время запроса";
+
+"customCameraTips" = "Нажмите для съемки, удерживайте для записи";
+"customCameraTakePhotoTips" = "Нажмите для съeмки";
+"customCameraRecordVideoTips" = "Удерживайте для записи";
+"minRecordTimeTips" = "Запишите не менее 2 с";
+
+"cameraRoll" = "Недавние";
+"panoramas" = "Панорамы";
+"videos" = "Видео";
+"favorites" = "Избранное";
+"timelapses" = "Tаймлапс";
+"recentlyAdded" = "Недавно добавленный";
+"bursts" = "Cepии";
+"slomoVideos" = "Замедленное";
+"selfPortraits" = "Селфи";
+"screenshots" = "Cнимки зкрана";
+"depthEffect" = "Портреты";
+"livePhotos" = "Live Photos";
+"animated" = "Анимированные";
+"myPhotoStream" = "Мой фотопоток";
+
+"noTitleAlbumListPlaceholder" = "Все фотографии";
+"unableToAccessAllPhotos" = "Невозможно получить доступ ко всем фотографиям, перейдите в настройки";

@@ -107,9 +107,7 @@ extension Bundle {
         case .system:
             language = Locale.preferredLanguages.first ?? "en"
             
-            if language.hasPrefix("en") {
-                language = "en"
-            } else if language.hasPrefix("zh") {
+            if language.hasPrefix("zh") {
                 if language.range(of: "Hans") != nil {
                     language = "zh-Hans"
                 } else {
@@ -117,6 +115,22 @@ extension Bundle {
                 }
             } else if language.hasPrefix("ja") {
                 language = "ja-US"
+            } else if language.hasPrefix("fr") {
+                language = "fr"
+            } else if language.hasPrefix("de") {
+                language = "de"
+            } else if language.hasPrefix("ru") {
+                language = "ru"
+            } else if language.hasPrefix("vi") {
+                language = "vi"
+            } else if language.hasPrefix("ko") {
+                language = "ko"
+            } else if language.hasPrefix("ms") {
+                language = "ms"
+            } else if language.hasPrefix("it") {
+                language = "it"
+            } else {
+                language = "en"
             }
         case .chineseSimplified:
             language = "zh-Hans"
@@ -126,6 +140,20 @@ extension Bundle {
             language = "en"
         case .japanese:
             language = "ja-US"
+        case .french:
+            language = "fr"
+        case .german:
+            language = "de"
+        case .russian:
+            language = "ru"
+        case .vietnamese:
+            language = "vi"
+        case .korean:
+            language = "ko"
+        case .malay:
+            language = "ms"
+        case .italian:
+            language = "it"
         }
         
         return language

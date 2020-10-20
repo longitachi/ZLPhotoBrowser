@@ -1,0 +1,64 @@
+"previewCamera" = "Camera";
+"previewCameraRecord" = "Ghi lại";
+"previewAlbum" = "Hình ảnh";
+"previewCancel" = "Huỷ";
+
+"originalPhoto" = "Toàn bộ hình ảnh";
+"done" = "Xong";
+"ok" = "đồng ý";
+"editFinish" = "Xong";
+
+"back" = "Trở lại";
+
+"edit" = "Chỉnh sửa";
+"revert" = "Hoàn tác";
+
+"photo" = "Ảnh";
+"preview" = "Xem trước";
+
+"noPhotoTips" = "Không có ảnh";
+"notAllowMixSelect" = "Không thể chọn video";
+
+"loading" = "đang tải, vui lòng đợi";
+"hudLoading" = "đang chờ đợi...";
+
+"exceededMaxSelectCount" = "Số lượng lựa chọn tối đa: %ld";
+"longerThanMaxVideoDuration" = "Không thể chọn video có thời lượng dài hơn %ld giây";
+"shorterThanMaxVideoDuration" = "Không thể chọn video có thời lượng ngắn hơn %ld giây";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Số lượng lựa chọn tối đa của video: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "Số phút chọn tối thiểu của video: %ld";
+
+"noCameraAuthority" = "Vui lòng cho phép %@ truy cập máy ảnh trên thiết bị của bạn trong \"Cài đặt\" -> \"Quyền riêng tư\" -> \"Máy ảnh\"";
+"noPhotoLibratyAuthority" = "Vui lòng cho phép %@ truy cập anbom của bạn trong \"Cài đặt\" -> \"Bảo mật\" -> \"Ảnh\"";
+"noMicrophoneAuthority" = "Vui lòng cho phép %@ truy cập micrô trên thiết bị của bạn trong \"Cài đặt\" -> \"Quyền riêng tư\" -> \"Micrô\"";
+"cameraUnavailable" = "Máy ảnh không khả dụng";
+
+"iCloudVideoLoadFaild" = "Không thể đồng bộ hóa từ iCloud";
+"imageLoadFailed" = "tải không thành công";
+
+"saveImageError" = "Lưu ảnh không thành công";
+"saveVideoError" = "Lưu video không thành công";
+"timeout" = "Yêu cầu đã hết thời gian chờ";
+
+"customCameraTips" = "Nhấn để chụp và giữ để ghi";
+"customCameraTakePhotoTips" = "Nhấn để chụp";
+"customCameraRecordVideoTips" = "Giữ để quay video";
+"minRecordTimeTips" = "Ghi ít nhất %ld giây";
+
+"cameraRoll" = "Gần đây";
+"panoramas" = "Ảnh toàn cảnh";
+"videos" = "Video";
+"favorites" = "Mục ưa thích";
+"timelapses" = "Ảnh time-lapse";
+"recentlyAdded" = "Đã thêm gần đây";
+"bursts" = "Chụp liên hình";
+"slomoVideos" = "Quay chậm";
+"selfPortraits" = "Ảnh selfie";
+"screenshots" = "Ảnh màn hình";
+"depthEffect" = "Chân dung";
+"livePhotos" = "Live Photos";
+"animated" = "Hình động";
+"myPhotoStream" = "Kho ảnh của tôi";
+
+"noTitleAlbumListPlaceholder" = "Tất cả ảnh";
+"unableToAccessAllPhotos" = "Không thể truy cập tất cả ảnh, hãy chuyển đến cài đặt";

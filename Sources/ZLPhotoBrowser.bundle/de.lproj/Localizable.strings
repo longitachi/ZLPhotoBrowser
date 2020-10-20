@@ -1,0 +1,64 @@
+"previewCamera" = "Kamera";
+"previewCameraRecord" = "Aufzeichnung";
+"previewAlbum" = "Album";
+"previewCancel" = "Stornieren";
+
+"originalPhoto" = "Vollbild";
+"done" = "Erledigt";
+"ok" = "in Ordnung";
+"editFinish" = "Fertig";
+
+"back" = "Zurück";
+
+"edit" = "Bearbeiten";
+"revert" = "Rückgängig";
+
+"photo" = "Fotos";
+"preview" = "Vorschau";
+
+"noPhotoTips" = "Kein Foto";
+"notAllowMixSelect" = "Video kann nicht ausgewählt werden";
+
+"loading" = "Laden, bitte warten";
+"hudLoading" = "warten...";
+
+"exceededMaxSelectCount" = "Maximale Auswahlanzahl: %ld";
+"longerThanMaxVideoDuration" = "Video mit einer Dauer von mehr als %lds kann nicht ausgewählt werden";
+"shorterThanMaxVideoDuration" = "Video mit einer Dauer von weniger als %lds kann nicht ausgewählt werden";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Video max Auswahlanzahl: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "Video min Auswahlanzahl: %ld";
+
+"noCameraAuthority" = "Bitte erlauben Sie %@, auf die Kamera Ihres Geräts unter \"Einstellungen\" -> \"Datenschutz\" -> \"Kamera\" zuzugreifen";
+"noPhotoLibratyAuthority" = "Bitte erlauben Sie %@, auf Ihr Album unter \"Einstellungen\" -> \"Datenschutz\" -> \"Fotos\" zuzugreifen";
+"noMicrophoneAuthority" = "Bitte erlauben Sie %@, unter \"Einstellungen\" -> \"Datenschutz\" -> \"Mikrofon\" auf das Mikrofon Ihres Geräts zuzugreifen.";
+"cameraUnavailable" = "Kamera ist nicht verfügbar";
+
+"iCloudVideoLoadFaild" = "Synchronisierung von iCloud nicht möglich";
+"imageLoadFailed" = "Laden fehlgeschlagen";
+
+"saveImageError" = "Das Bild konnte nicht gespeichert werden";
+"saveVideoError" = "Das Video konnte nicht gespeichert werden";
+"timeout" = "Zeitüberschreitung der Anforderung";
+
+"customCameraTips" = "Tippen, um Fotos aufzunehmen und halten, um ein Video aufzunehmen";
+"customCameraTakePhotoTips" = "Tippen, um ein Foto aufzunehmen";
+"customCameraRecordVideoTips" = "Halten Sie gedrückt, um ein Video aufzunehmen";
+"minRecordTimeTips" = "Nehmen Sie mindestens %lds auf";
+
+"cameraRoll" = "Letzte";
+"panoramas" = "Panoramen";
+"videos" = "Videos";
+"favorites" = "Favoriten";
+"timelapses" = "Zeitraffer";
+"recentlyAdded" = "Kürzlich hinzugefügt";
+"bursts" = "Serien";
+"slomoVideos" = "Slo-Mo";
+"selfPortraits" = "Selfies";
+"screenshots" = "Bildschirmfotos";
+"depthEffect" = "Porträt";
+"livePhotos" = "Live Photos";
+"animated" = "Animiert";
+"myPhotoStream" = "Mein Fotostream";
+
+"noTitleAlbumListPlaceholder" = "Alle Fotos";
+"unableToAccessAllPhotos" = "Sie können nicht auf alle Fotos zugreifen und gehen Sie zu den Einstellungen";

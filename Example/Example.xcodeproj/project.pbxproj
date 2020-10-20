@@ -47,6 +47,8 @@
 		E4A410E324F39F0000EEC20B /* ConstraintDirectionalInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A410BD24F39F0000EEC20B /* ConstraintDirectionalInsets.swift */; };
 		E4A410E424F39F0000EEC20B /* ConstraintLayoutSupportDSL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A410BE24F39F0000EEC20B /* ConstraintLayoutSupportDSL.swift */; };
 		E4A410E524F39F0000EEC20B /* ConstraintMakerRelatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A410BF24F39F0000EEC20B /* ConstraintMakerRelatable.swift */; };
+		E4C69FEC253ED19600AE466C /* LanguagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C69FEB253ED19600AE466C /* LanguagePickerView.swift */; };
+		E4C69FEE253EDA8600AE466C /* PhotoConfigureCNViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C69FED253EDA8600AE466C /* PhotoConfigureCNViewController.swift */; };
 		E4C911A324E283D80061DA40 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C911A224E283D80061DA40 /* AppDelegate.swift */; };
 		E4C911A724E283D80061DA40 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C911A624E283D80061DA40 /* ViewController.swift */; };
 		E4C911AA24E283D80061DA40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4C911A824E283D80061DA40 /* Main.storyboard */; };
@@ -113,6 +115,8 @@
 		E4A410BD24F39F0000EEC20B /* ConstraintDirectionalInsets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintDirectionalInsets.swift; sourceTree = "<group>"; };
 		E4A410BE24F39F0000EEC20B /* ConstraintLayoutSupportDSL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintLayoutSupportDSL.swift; sourceTree = "<group>"; };
 		E4A410BF24F39F0000EEC20B /* ConstraintMakerRelatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintMakerRelatable.swift; sourceTree = "<group>"; };
+		E4C69FEB253ED19600AE466C /* LanguagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagePickerView.swift; sourceTree = "<group>"; };
+		E4C69FED253EDA8600AE466C /* PhotoConfigureCNViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoConfigureCNViewController.swift; sourceTree = "<group>"; };
 		E4C9119F24E283D80061DA40 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C911A224E283D80061DA40 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E4C911A624E283D80061DA40 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 				E4C911A624E283D80061DA40 /* ViewController.swift */,
 				E480050725316920008A2B67 /* ZLCustomFilter.swift */,
 				E4A4109624F39DF700EEC20B /* PhotoConfigureViewController.swift */,
+				E4C69FED253EDA8600AE466C /* PhotoConfigureCNViewController.swift */,
+				E4C69FEB253ED19600AE466C /* LanguagePickerView.swift */,
 				E462466F24EE6F9A00EF6C57 /* ImageCell.swift */,
 				E4C911A824E283D80061DA40 /* Main.storyboard */,
 				E4C911AB24E283DA0061DA40 /* Assets.xcassets */,
@@ -309,10 +315,12 @@
 				E4A410C324F39F0000EEC20B /* ConstraintMakerPriortizable.swift in Sources */,
 				E4A410D724F39F0000EEC20B /* ConstraintMakerEditable.swift in Sources */,
 				E4A4109724F39DF700EEC20B /* PhotoConfigureViewController.swift in Sources */,
+				E4C69FEC253ED19600AE466C /* LanguagePickerView.swift in Sources */,
 				E4C911A724E283D80061DA40 /* ViewController.swift in Sources */,
 				E4A410E324F39F0000EEC20B /* ConstraintDirectionalInsets.swift in Sources */,
 				E4A410C624F39F0000EEC20B /* ConstraintPriorityTarget.swift in Sources */,
 				E4A410D624F39F0000EEC20B /* ConstraintOffsetTarget.swift in Sources */,
+				E4C69FEE253EDA8600AE466C /* PhotoConfigureCNViewController.swift in Sources */,
 				E4A410DA24F39F0000EEC20B /* ConstraintLayoutGuideDSL.swift in Sources */,
 				E4C911A324E283D80061DA40 /* AppDelegate.swift in Sources */,
 				E4A410CA24F39F0000EEC20B /* ConstraintMakerExtendable.swift in Sources */,
@@ -492,7 +500,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -515,7 +523,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = ZL.Example1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

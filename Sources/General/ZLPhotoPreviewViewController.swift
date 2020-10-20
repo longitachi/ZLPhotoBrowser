@@ -588,7 +588,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         vc.modalPresentationStyle = .fullScreen
         
         vc.editFinishBlock = { [weak self, weak nav] (url) in
-            ZLPhotoManager.saveVideoToAblum(url: url) { [weak self, weak nav] (suc, asset) in
+            ZLPhotoManager.saveVideoToAlbum(url: url) { [weak self, weak nav] (suc, asset) in
                 if suc, asset != nil {
                     let m = ZLPhotoModel(asset: asset!)
                     nav?.arrSelectedModels.removeAll()

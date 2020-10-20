@@ -1,0 +1,64 @@
+"previewCamera" = "Fotocamera";
+"previewCameraRecord" = "Disco";
+"previewAlbum" = "Immagini";
+"previewCancel" = "Annulla";
+
+"originalPhoto" = "Immagine completa";
+"done" = "Fine";
+"ok" = "OK";
+"editFinish" = "Fine";
+
+"back" = "Indietro";
+
+"edit" = "Modifica";
+"revert" = "Annulla";
+
+"photo" = "Fotografie";
+"preview" = "Anteprima";
+
+"noPhotoTips" = "Niente foto";
+"notAllowMixSelect" = "Impossibile selezionare il video";
+
+"loading" = "Caricamento, in attesa per favore";
+"hudLoading" = "in attesa...";
+
+"exceededMaxSelectCount" = "Conteggio massimo per la selezione: %ld";
+"longerThanMaxVideoDuration" = "Impossibile selezionare video con una durata superiore a %lds";
+"shorterThanMaxVideoDuration" = "Impossibile selezionare video con una durata inferiore a %lds";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Conteggio massimo per la selezione dei video: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "Conteggio minimo per la selezione del video: %ld";
+
+"noCameraAuthority" = "Consenti a %@ di accedere alla fotocamera del tuo dispositivo in \"Impostazioni\" -> \"Privacy\" -> \"Fotocamera\"";
+"noPhotoLibratyAuthority" = "Consenti a %@ di accedere al tuo album in \"Impostazioni\" -> \"Privacy\" -> \"Foto\"";
+"noMicrophoneAuthority" = "Consenti a %@ di accedere al microfono del tuo dispositivo in \"Impostazioni\" -> \"Privacy\" -> \"Microfono\"";
+"cameraUnavailable" = "La fotocamera non è disponibile";
+
+"iCloudVideoLoadFaild" = "Impossibile sincronizzare da iCloud";
+"imageLoadFailed" = "Caricamento fallito";
+
+"saveImageError" = "Impossibile salvare l'immagine";
+"saveVideoError" = "Impossibile salvare il video";
+"timeout" = "Tempo scaduto per la richiesta";
+
+"customCameraTips" = "Toccare per scattare e tiene premuto per registrare";
+"customCameraTakePhotoTips" = "Tocca per scattare una foto";
+"customCameraRecordVideoTips" = "Tieni premuto per registrare il video";
+"minRecordTimeTips" = "Registra almeno %lds";
+
+"cameraRoll" = "Recenti";
+"panoramas" = "Panoramiche";
+"videos" = "Video";
+"favorites" = "Preferiti";
+"timelapses" = "Time-lapse";
+"recentlyAdded" = "Aggiunto recentemente";
+"bursts" = "Sequenze";
+"slomoVideos" = "Slow motion";
+"selfPortraits" = "Selfie";
+"screenshots" = "Istantanee";
+"depthEffect" = "Ritratti";
+"livePhotos" = "Live Photo";
+"animated" = "Animazioni";
+"myPhotoStream" = "II mio streaming foto";
+
+"noTitleAlbumListPlaceholder" = "Tutte le foto";
+"unableToAccessAllPhotos" = "Impossibile accedere a tutte le foto, vai alle impostazioni";

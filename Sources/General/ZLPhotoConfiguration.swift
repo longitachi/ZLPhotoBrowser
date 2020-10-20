@@ -105,14 +105,14 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow select full image. Default is true.
     @objc public var allowSelectOriginal = true
     
-    /// Allow access to the preview large image interface. (That is, whether to allow access to the large image interface after clicking the thumbnail image)
+    /// Allow access to the preview large image interface (That is, whether to allow access to the large image interface after clicking the thumbnail image).
     @objc public var allowPreviewPhotos = true
     
     /// When iOS14 limited permission, whether to display more pictures.
-    /// (PHPhotoLibrary.shared().presentLimitedLibraryPicker(:) method)
+    /// (PHPhotoLibrary.shared().presentLimitedLibraryPicker(:) method).
     @objc public var allowSelectMorePhotoWhenAuthIsLismited = true
     
-    /// Whether to display the preview button. (i.e. the preview button in the lower left corner of the thumbnail interface)
+    /// Whether to display the preview button (i.e. the preview button in the lower left corner of the thumbnail interface).
     @objc public var showPreviewButtonInAlbum = true
     
     private var pri_columnCount: Int = 4
@@ -243,7 +243,7 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// Developers can customize languages. (This property is only for objc)
+    /// Developers can customize languages (This property is only for objc).
     /// - example: If you needs to replace
     /// key: @"loading", value: @"loading, waiting please" language,
     /// The dictionary that needs to be passed in is @[@"loading": @"text to be replaced"].
@@ -273,7 +273,7 @@ public class ZLPhotoConfiguration: NSObject {
     @objc public var useCustomCamera = true
     
     private var pri_allowTakePhoto = true
-    /// Allow taking photos in the camera. (Need allowSelectImage to be true)
+    /// Allow taking photos in the camera (Need allowSelectImage to be true).
     @objc public var allowTakePhoto: Bool {
         set {
             pri_allowTakePhoto = newValue
@@ -284,7 +284,7 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     private var pri_allowRecordVideo = true
-    /// Allow recording in the camera. (Need allowSelectVideo to be true)
+    /// Allow recording in the camera (Need allowSelectVideo to be true).
     @objc public var allowRecordVideo: Bool {
         set {
             pri_allowRecordVideo = newValue

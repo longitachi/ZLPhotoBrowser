@@ -11,7 +11,6 @@
 "back" = "Back";
 
 "edit" = "Edit";
-"save" = "Save";
 "revert" = "Undo";
 
 "photo" = "Photos";
@@ -23,28 +22,27 @@
 "loading" = "loading, waiting please";
 "hudLoading" = "waiting...";
 
-"saveImageError" = "Failed to save the image";
-"exceededMaxSelectCount" = "Max select count: %ld";
+"exceededMaxSelectCount" = "Max count for selection: %ld";
 "longerThanMaxVideoDuration" = "Unable to select video with a duration longer than %lds";
 "shorterThanMaxVideoDuration" = "Unable to select video with a duration shorter than %lds";
-"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Video max select count: %ld";
-"ZLPhotoBrowserMinVideoSelectCountInMix" = "Video min select count: %ld";
+"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Max count for video selection: %ld";
+"ZLPhotoBrowserMinVideoSelectCountInMix" = "Min count for video selection: %ld";
 
 "noCameraAuthority" = "Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"";
-"noPhotoLibratyAuthority" = "Allow %@ to access your ablum in \"Settings\"->\"Privacy\"->\"Photos\"";
+"noPhotoLibratyAuthority" = "Please allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"";
 "noMicrophoneAuthority" = "Please allow %@ to access your device's microphone in \"Settings\"->\"Privacy\"->\"Microphone\"";
 "cameraUnavailable" = "Camera is unavailable";
 
-"iCloudPhotoLoadFaild" = "Retry after download in photo ablum";
 "iCloudVideoLoadFaild" = "Unable to sync from iCloud";
-
 "imageLoadFailed" = "loading failed";
+
+"saveImageError" = "Failed to save the image";
 "saveVideoError" = "Failed to save the video";
 "timeout" = "Request timed out";
 
 "customCameraTips" = "Tap to take photo and hold to record video";
 "customCameraTakePhotoTips" = "Tap to take photo";
-"customCameraRecordVideoTips" = "hold to record video";
+"customCameraRecordVideoTips" = "Hold to record video";
 "minRecordTimeTips" = "Record at least %lds";
 
 "cameraRoll" = "Recents";
@@ -58,7 +56,7 @@
 "selfPortraits" = "Selfies";
 "screenshots" = "Screenshots";
 "depthEffect" = "Portrait";
-"livePhotos" = "Live Photo";
+"livePhotos" = "Live Photos";
 "animated" = "Animated";
 "myPhotoStream" = "My Photo Stream";
 

@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "主界面"
+        self.title = "Main"
         self.view.backgroundColor = .white
         
         func createBtn(_ title: String, _ action: Selector) -> UIButton {
@@ -38,37 +38,44 @@ class ViewController: UIViewController {
             return btn
         }
         
-        let configBtn = createBtn("相册配置", #selector(configureClick))
+        let configBtn = createBtn("Configuration", #selector(configureClick))
         self.view.addSubview(configBtn)
         configBtn.snp.makeConstraints { (make) in
             make.top.equalTo(self.view.snp.topMargin).offset(20)
             make.left.equalTo(self.view).offset(30)
         }
         
-        let previewSelectBtn = createBtn("快速选择", #selector(previewSelectPhoto))
-        self.view.addSubview(previewSelectBtn)
-        previewSelectBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.snp.topMargin).offset(20)
-            make.left.equalTo(configBtn.snp.right).offset(20)
+        let configBtn_cn = createBtn("相册配置 (中文)", #selector(cn_configureClick))
+        self.view.addSubview(configBtn_cn)
+        configBtn_cn.snp.makeConstraints { (make) in
+            make.top.equalTo(configBtn.snp.top)
+            make.left.equalTo(configBtn.snp.right).offset(30)
         }
         
-        let libratySelectBtn = createBtn("进入相册选择", #selector(librarySelectPhoto))
+        let previewSelectBtn = createBtn("Preview selection", #selector(previewSelectPhoto))
+        self.view.addSubview(previewSelectBtn)
+        previewSelectBtn.snp.makeConstraints { (make) in
+            make.top.equalTo(configBtn.snp.bottom).offset(20)
+            make.left.equalTo(configBtn.snp.left)
+        }
+        
+        let libratySelectBtn = createBtn("Library selection", #selector(librarySelectPhoto))
         self.view.addSubview(libratySelectBtn)
         libratySelectBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.snp.topMargin).offset(20)
+            make.top.equalTo(previewSelectBtn.snp.top)
             make.left.equalTo(previewSelectBtn.snp.right).offset(20)
         }
         
-        let cameraBtn = createBtn("自定义相机", #selector(showCamera))
+        let cameraBtn = createBtn("Custom camera", #selector(showCamera))
         self.view.addSubview(cameraBtn)
         cameraBtn.snp.makeConstraints { (make) in
             make.left.equalTo(configBtn.snp.left)
-            make.top.equalTo(configBtn.snp.bottom).offset(20)
+            make.top.equalTo(previewSelectBtn.snp.bottom).offset(20)
         }
         
         let takeLabel = UILabel()
         takeLabel.font = UIFont.systemFont(ofSize: 14)
-        takeLabel.text = "记录已选择照片："
+        takeLabel.text = "Record selected photos："
         self.view.addSubview(takeLabel)
         takeLabel.snp.makeConstraints { (make) in
             make.left.equalTo(configBtn.snp.left)
@@ -99,6 +106,11 @@ class ViewController: UIViewController {
     
     @objc func configureClick() {
         let vc = PhotoConfigureViewController()
+        self.showDetailViewController(vc, sender: nil)
+    }
+    
+    @objc func cn_configureClick() {
+        let vc = PhotoConfigureCNViewController()
         self.showDetailViewController(vc, sender: nil)
     }
     
@@ -153,7 +165,7 @@ class ViewController: UIViewController {
             }
         } else if let videoUrl = videoUrl {
             hud.show()
-            ZLPhotoManager.saveVideoToAblum(url: videoUrl) { [weak self] (suc, asset) in
+            ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] (suc, asset) in
                 if suc, let at = asset {
                     self?.fetchImage(for: at)
                 } else {

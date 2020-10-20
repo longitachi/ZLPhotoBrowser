@@ -9,9 +9,7 @@
 "editFinish" = "完了";
 
 "back" = "戻る";
-
 "edit" = "編集";
-"save" = "保存";
 "revert" = "元に戻す";
 
 "photo" = "写真";
@@ -23,7 +21,6 @@
 "loading" = "ロード中，お待ち下さい";
 "hudLoading" = "後ほど...";
 
-"saveImageError" = "画像の保存に失敗しました";
 "exceededMaxSelectCount" = "最大選択数: %ld";
 "longerThanMaxVideoDuration" = "%ldsより長い動画は選択できません";
 "shorterThanMaxVideoDuration" = "％ldsより短い動画は選択できません";
@@ -35,10 +32,10 @@
 "noMicrophoneAuthority" = "「設定」->「プライパシー」->「マイク」から、%@があなたのデバイスのマイクにアクセスする許可をしてください";
 "cameraUnavailable" = "カメラは利用できません";
 
-"iCloudPhotoLoadFaild" = "写真のライブラリをダウンロードした後の再試行";
 "iCloudVideoLoadFaild" = "iCloudから同期できません";
-
 "imageLoadFailed" = "ロード失敗";
+
+"saveImageError" = "画像の保存に失敗しました";
 "saveVideoError" = "ビデオの保存に失敗しました";
 "timeout" = "要求タイムアウト";
 
