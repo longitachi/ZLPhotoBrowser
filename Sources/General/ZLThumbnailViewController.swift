@@ -640,16 +640,13 @@ class ZLThumbnailViewController: UIViewController {
         ZLPhotoManager.fetchImage(for: asset, size: size) { [weak self, weak nav] (image, isDegraded) in
             if !isDegraded {
                 if let image = image {
-                    let vc = ZLEditImageViewController(image: image, editModel: model.editImageModel)
-                    vc.editFinishBlock = { [weak nav] (image, editImageModel) in
+                    ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: model.editImageModel) { [weak nav] (ei, editImageModel) in
                         model.isSelected = true
-                        model.editImage = image
+                        model.editImage = ei
                         model.editImageModel = editImageModel
                         nav?.arrSelectedModels.append(model)
                         nav?.selectImageBlock?()
                     }
-                    vc.modalPresentationStyle = .fullScreen
-                    self?.showDetailViewController(vc, sender: nil)
                 } else {
                     showAlertView(localLanguageTextValue(.imageLoadFailed), self)
                 }

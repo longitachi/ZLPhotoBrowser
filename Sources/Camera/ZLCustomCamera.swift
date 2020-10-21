@@ -603,13 +603,10 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         guard let image = self.takedImage else {
             return
         }
-        let vc = ZLEditImageViewController(image: image)
-        vc.modalPresentationStyle = .fullScreen
-        vc.editFinishBlock = { [weak self] (ei, _) in
+        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image) { [weak self] (ei, _) in
             self?.takedImage = ei
             self?.takedImageView.image = ei
         }
-        self.present(vc, animated: false, completion: nil)
     }
     
     @objc func doneBtnClick() {

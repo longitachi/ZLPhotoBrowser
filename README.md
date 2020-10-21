@@ -9,6 +9,8 @@
 
 ----------------------------------------
 
+ZLPhotoBrowser is a lightweight and pure Swift implemented library for select photos from album. Support select multiple photos, video, gif, livePhoto. Support edit image and crop video.
+
 [中文简介](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README_CN.md)
 
 ### Directory
@@ -17,7 +19,7 @@
 * [Usage](#Usage)
 * [Update Log](#UpdateLog)
 * [Languages](#Languages)
-* [Installation(support Cocoapods/Carthage/SPM)](#Installation)
+* [Installation(Support Cocoapods/Carthage/SPM)](#Installation)
 * [Demo Effect](#DemoEffect)
 
 Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/longitachi/ZLPhotoBrowser/wiki) 
@@ -27,12 +29,12 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 - [x] iOS14 support.
 - [x] Portrait and landscape support.
 - [x] Two framework style.
-- [x] Preview selection (support drag and drop).
-- [x] Library selection (support sliding selection).
+- [x] Preview selection (Support drag and drop).
+- [x] Library selection (Support sliding selection).
 - [x] Image/Gif/LivePhoto/Video Support.
 - [x] Customize the maximum number of previews or selection, the maximum and minimum optional duration of the video.
 - [x] Customize the number of columns displayed in each row.
-- [x] Image editor (draw/crop/mosaic/filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
+- [x] Image editor (Draw/Crop/Mosaic/Filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
 - [x] Video editor.
 - [x] Custom camera.
 - [x] Multi-language.
@@ -41,7 +43,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 - [x] The selected photos are displayed at the bottom of the big picture interface, which can be dragged and sorted.
 - [x] The camera's internal photo cell can displays the captured images of the camera.
 - [x] Customize font.
-- [x] The color of each part of the framework can be customized (provide dynamic color can support light/dark mode).
+- [x] The color of each part of the framework can be customized (Provide dynamic color can support light/dark mode).
 - [x] Customize images.
 
 > If you have good needs and suggestions in use, or encounter any bugs, please feel free to issue and I will reply in time

@@ -140,8 +140,20 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow to choose the minimum duration of the video.
     @objc public var minSelectVideoDuration: Second = 0
     
+    private var pri_editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .mosaic, .filter]
     /// Edit image tools. (Because swift OptionSet does not support @objc mark, this attribute oc is not available)
-    public var editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .mosaic, .filter]
+    public var editImageTools: ZLEditImageViewController.EditImageTool {
+        set {
+            pri_editImageTools = newValue
+        }
+        get {
+            if pri_editImageTools.isEmpty {
+                return [.draw, .clip, .mosaic, .filter]
+            } else {
+                return pri_editImageTools
+            }
+        }
+    }
     
     private var pri_editImageDrawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
     /// Draw colors for image editor.
@@ -165,14 +177,14 @@ public class ZLPhotoConfiguration: NSObject {
     /// Edit ratios for image editor.
     @objc public var editImageClipRatios: [ZLImageClipRatio] {
         set {
-            if newValue.isEmpty {
-                pri_editImageClipRatios = [.custom]
-            } else {
-                pri_editImageClipRatios = newValue
-            }
+            pri_editImageClipRatios = newValue
         }
         get {
-            return pri_editImageClipRatios
+            if pri_editImageClipRatios.isEmpty {
+                return [.custom]
+            } else {
+                return pri_editImageClipRatios
+            }
         }
     }
     
@@ -195,6 +207,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.
     /// Editing video is only valid when allowEditVideo is true and maxSelectCount is 1.
     @objc public var editAfterSelectThumbnailImage = false
+    
+    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false
+    @objc public var showClipDirectlyIfOnlyHasClipTool = false
     
     /// Save the edited image to the album after editing.
     @objc public var saveNewImageAfterEdit = true

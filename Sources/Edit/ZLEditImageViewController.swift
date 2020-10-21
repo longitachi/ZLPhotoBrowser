@@ -166,13 +166,32 @@ public class ZLEditImageViewController: UIViewController {
         zl_debugPrint("ZLEditImageViewController deinit")
     }
     
+    @objc public class func showEditImageVC(parentVC: UIViewController?, image: UIImage, editModel: ZLEditImageModel? = nil, completion: ( (UIImage, ZLEditImageModel) -> Void )? ) {
+        if ZLPhotoConfiguration.default().showClipDirectlyIfOnlyHasClipTool, ZLPhotoConfiguration.default().editImageTools.rawValue == ZLEditImageViewController.EditImageTool.clip.rawValue {
+            let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
+            vc.clipDoneBlock = { (angle, editRect, ratio) in
+                let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, selectRatio: ratio, selectFilter: .normal)
+                completion?(image.clipImage(angle, editRect) ?? image, m)
+            }
+            vc.modalPresentationStyle = .fullScreen
+            parentVC?.present(vc, animated: false, completion: nil)
+        } else {
+            let vc = ZLEditImageViewController(image: image, editModel: editModel)
+            vc.editFinishBlock = {  (ei, editImageModel) in
+                completion?(ei, editImageModel)
+            }
+            vc.modalPresentationStyle = .fullScreen
+            parentVC?.present(vc, animated: false, completion: nil)
+        }
+    }
+    
     @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
         self.originalImage = image
         self.editImage = image
         self.drawPaths = editModel?.drawPaths ?? []
         self.mosaicPaths = editModel?.mosaicPaths ?? []
         self.angle = editModel?.angle ?? 0
-        self.tools = ZLPhotoConfiguration.default().editImageTools.rawValue == 0 ? [.draw, .clip, .mosaic] :  ZLPhotoConfiguration.default().editImageTools
+        self.tools = ZLPhotoConfiguration.default().editImageTools
         self.selectRatio = editModel?.selectRatio
         self.editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
         self.drawColors = ZLPhotoConfiguration.default().editImageDrawColors
@@ -520,7 +539,7 @@ public class ZLEditImageViewController: UIViewController {
         let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio)
         let rect = self.scrollView.convert(self.containerView.frame, to: self.view)
         vc.presentAnimateFrame = rect
-        vc.presentAnimateImage = self.clipImage(currentEditImage)
+        vc.presentAnimateImage = currentEditImage.clipImage(self.angle, self.editRect)
         vc.modalPresentationStyle = .fullScreen
         
         vc.clipDoneBlock = { [weak self] (angle, editFrame, selectRatio) in
@@ -566,7 +585,7 @@ public class ZLEditImageViewController: UIViewController {
     
     @objc func doneBtnClick() {
         var image = self.buildImage()
-        image = self.clipImage(image) ?? image
+        image = image.clipImage(self.angle, self.editRect) ?? image
         self.editFinishBlock?(image, ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio, selectFilter: self.currentFilter))
         self.dismiss(animated: false, completion: nil)
     }
@@ -763,30 +782,6 @@ public class ZLEditImageViewController: UIViewController {
             return self.editImage
         }
         return UIImage(cgImage: cgi, scale: self.editImage.scale, orientation: .up)
-    }
-    
-    func clipImage(_ image: UIImage) -> UIImage? {
-        var newImage = image
-        if self.angle == -90 {
-            newImage = image.rotate(orientation: .left)
-        } else if self.angle == -180 {
-            newImage = image.rotate(orientation: .down)
-        } else if self.angle == -270 {
-            newImage = image.rotate(orientation: .right)
-        }
-        guard self.editRect.size != newImage.size else {
-            return newImage
-        }
-        let origin = CGPoint(x: -self.editRect.minX, y: -self.editRect.minY)
-        UIGraphicsBeginImageContextWithOptions(self.editRect.size, false, newImage.scale)
-        newImage.draw(at: origin)
-        let temp = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        guard let cgi = temp?.cgImage else {
-            return temp
-        }
-        let clipImage = UIImage(cgImage: cgi, scale: newImage.scale, orientation: .up)
-        return clipImage
     }
     
     func finishClipDismissAnimate() {

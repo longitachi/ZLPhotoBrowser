@@ -193,7 +193,14 @@ class ZLClipImageViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if self.viewDidAppearCount == 0, let frame = self.presentAnimateFrame, let image = self.presentAnimateImage {
+        self.viewDidAppearCount += 1
+        self.transitioningDelegate = self
+        
+        guard self.viewDidAppearCount == 1 else {
+            return
+        }
+        
+        if let frame = self.presentAnimateFrame, let image = self.presentAnimateImage {
             let animateImageView = UIImageView(image: image)
             animateImageView.contentMode = .scaleAspectFill
             animateImageView.clipsToBounds = true
@@ -213,9 +220,12 @@ class ZLClipImageViewController: UIViewController {
                     animateImageView.removeFromSuperview()
                 }
             }
+        } else {
+            self.bottomToolView.alpha = 1
+            self.rotateBtn.alpha = 1
+            self.scrollView.alpha = 1
+            self.overlayView.alpha = 1
         }
-        self.viewDidAppearCount += 1
-        self.transitioningDelegate = self
     }
     
     override func viewDidLayoutSubviews() {

@@ -562,9 +562,7 @@ class ZLPhotoPreviewViewController: UIViewController {
     func showEditImageVC(image: UIImage) {
         let model = self.arrDataSources[self.currentIndex]
         let nav = self.navigationController as! ZLImageNavController
-        let vc = ZLEditImageViewController(image: image, editModel: model.editImageModel)
-        vc.modalPresentationStyle = .fullScreen
-        vc.editFinishBlock = { [weak self, weak nav] (ei, editImageModel) in
+        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: model.editImageModel) { [weak self, weak nav] (ei, editImageModel) in
             guard let `self` = self else { return }
             model.editImage = ei
             model.editImageModel = editImageModel
@@ -578,8 +576,6 @@ class ZLPhotoPreviewViewController: UIViewController {
             }
             self.collectionView.reloadItems(at: [IndexPath(row: self.currentIndex, section: 0)])
         }
-        
-        self.present(vc, animated: false, completion: nil)
     }
     
     func showEditVideoVC(avAsset: AVAsset) {

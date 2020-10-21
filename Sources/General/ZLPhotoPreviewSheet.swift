@@ -606,16 +606,13 @@ public class ZLPhotoPreviewSheet: UIView {
         ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] (image, isDegraded) in
             if !isDegraded {
                 if let image = image {
-                    let vc = ZLEditImageViewController(image: image, editModel: model.editImageModel)
-                    vc.editFinishBlock = { [weak self] (image, editImageModel) in
+                    ZLEditImageViewController.showEditImageVC(parentVC: self?.sender, image: image, editModel: model.editImageModel) { [weak self] (ei, editImageModel) in
                         model.isSelected = true
-                        model.editImage = image
+                        model.editImage = ei
                         model.editImageModel = editImageModel
                         self?.arrSelectedModels.append(model)
                         self?.requestSelectPhoto()
                     }
-                    vc.modalPresentationStyle = .fullScreen
-                    self?.sender?.showDetailViewController(vc, sender: nil)
                 } else {
                     showAlertView(localLanguageTextValue(.imageLoadFailed), self?.sender)
                 }
