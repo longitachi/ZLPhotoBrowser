@@ -260,7 +260,7 @@ public class ZLPhotoPreviewSheet: UIView {
         self.isHidden = true
         self.sender?.view.addSubview(self)
         
-        let vc = ZLPhotoPreviewViewController(photos: models, index: index)
+        let vc = ZLPhotoPreviewController(photos: models, index: index, showBottomViewAndSelectBtn: showBottomViewAndSelectBtn)
         vc.autoSelectCurrentIfNotSelectAnyone = false
         let nav = self.getImageNav(rootViewController: vc)
         vc.backBlock = { [weak self] in
@@ -585,7 +585,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     func showPreviewController(_ models: [ZLPhotoModel], index: Int) {
-        let vc = ZLPhotoPreviewViewController(photos: models, index: index)
+        let vc = ZLPhotoPreviewController(photos: models, index: index)
         let nav = self.getImageNav(rootViewController: vc)
         vc.backBlock = { [weak self, weak nav] in
             guard let `self` = self else { return }

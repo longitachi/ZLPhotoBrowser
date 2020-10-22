@@ -73,6 +73,13 @@ class ViewController: UIViewController {
             make.top.equalTo(previewSelectBtn.snp.bottom).offset(20)
         }
         
+        let previewLocalAndNetImageBtn = createBtn("Preview local and net image", #selector(previewLocalAndNetImage))
+        self.view.addSubview(previewLocalAndNetImageBtn)
+        previewLocalAndNetImageBtn.snp.makeConstraints { (make) in
+            make.left.equalTo(cameraBtn.snp.right).offset(20)
+            make.centerY.equalTo(cameraBtn)
+        }
+        
         let takeLabel = UILabel()
         takeLabel.font = UIFont.systemFont(ofSize: 14)
         takeLabel.text = "Record selected photos："
@@ -129,7 +136,6 @@ class ViewController: UIViewController {
     
     @objc func librarySelectPhoto() {
 //        ZLPhotoConfiguration.default().editImageClipRatios = [.custom, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)]
-        // 自定义滤镜
 //        ZLPhotoConfiguration.default().filters = [.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)]
         let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
         ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
@@ -139,6 +145,47 @@ class ViewController: UIViewController {
             debugPrint("\(images)   \(assets)   \(isOriginal)")
         }
         ac.showPhotoLibrary(sender: self)
+    }
+    
+    @objc func previewLocalAndNetImage() {
+        var datas: [Any] = []
+        // network image
+        datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/08/31/03/21/girl-5531217_1280.jpg")!)
+        datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/10/19/12/48/leaves-5667719_1280.jpg")!)
+        datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/10/02/21/06/dome-5622133_1280.jpg")!)
+        datas.append(URL(string: "https://cdn.pixabay.com/photo/2019/11/08/11/56/cat-4611189_1280.jpg")!)
+        
+        // network video
+        datas.append(URL(string: "http://aliuwmp3.changba.com/userdata/video/45F6BD5E445E4C029C33DC5901307461.mp4")!)
+        
+        // phasset
+        if self.takeSelectedAssetsSwitch.isOn {
+            datas.append(contentsOf: self.selectedAssets)
+        }
+        
+        // local image
+        datas.append(contentsOf:
+            (1...5).compactMap { UIImage(named: "image" + String($0)) }
+        )
+        
+        let vc = ZLImagePreviewController(datas: datas, index: 0, showSelectBtn: true) { (url) -> ZLURLType in
+            if url.absoluteString.hasSuffix("mp4") {
+                return .video
+            } else {
+                return .image
+            }
+        } urlImageLoader: { (url, imageView, callBack) in
+            imageView.kf.setImage(with: url, completionHandler:  { (_) in
+                callBack()
+            })
+        }
+        
+        vc.doneBlock = { (datas) in
+            debugPrint(datas)
+        }
+        
+        vc.modalPresentationStyle = .fullScreen
+        self.showDetailViewController(vc, sender: nil)
     }
     
     @objc func showCamera() {
@@ -239,7 +286,8 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
             self?.collectionView.reloadData()
             debugPrint("\(images)   \(assets)   \(isOriginal)")
         }
-        ac.previewAssets(sender: self, assets: self.selectedAssets, index: indexPath.row, isOriginal: self.isOriginal)
+        
+        ac.previewAssets(sender: self, assets: self.selectedAssets, index: indexPath.row, isOriginal: self.isOriginal, showBottomViewAndSelectBtn: false)
     }
     
 }

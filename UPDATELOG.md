@@ -4,7 +4,7 @@
 ## [4.0.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.8) (2020-10-10)
 
 ### Add
-* 编辑图片添加滤镜功能;[#530](https://github.com/longitachi/ZLPhotoBrowser/pull/530)
+* Add filter to image editor. [#530](https://github.com/longitachi/ZLPhotoBrowser/pull/530)
 
 ---
 
@@ -12,16 +12,16 @@
 ## [4.0.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.7) (2020-09-28)
 
 ### Add
-* 支持设置图片裁剪比例; [#524](https://github.com/longitachi/ZLPhotoBrowser/pull/524)
-* 自定义相机支持录制时切换摄像头; [#521](https://github.com/longitachi/ZLPhotoBrowser/issues/521)
-* 新增已选照片边框功能;
-* 新增是否允许预览大图功能;
-* 新增是否允许预览已选择照片功能;
-* 优化前置摄像头拍照及录像镜像翻转问题;
+* Image editor support crop ratios. [#524](https://github.com/longitachi/ZLPhotoBrowser/pull/524)
+* Custom camera supports switching camera during recording. [#521](https://github.com/longitachi/ZLPhotoBrowser/issues/521)
+* Can show border color in selected cell.
+* Whether to allow preview of large images.
+* Whether to allow preview of selected photos.
+* Optimize the front camera to take pictures and video mirror flip issues.
 
 ### Fix
-* 修改选择数量超过最大值的提示显示条件错误的bug;
-* 修改选择量达到最大值后无法编辑图片的bug;
+* Some toast‘s show condition was wrong.
+* Cannot edit when the maximum number of choices is reached. 
 
 ---
 
@@ -29,28 +29,27 @@
 ## [4.0.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.5) (2020-09-20)
 
 ### Add
-* 适配iOS14 limited权限; [#517](https://github.com/longitachi/ZLPhotoBrowser/issues/517)
-* 优化图片预览显示; 
-* 优化大长/宽图编辑; 
+* iOS14 limited authority supported. [#517](https://github.com/longitachi/ZLPhotoBrowser/issues/517)
+* Optimize picture preview display.
 
 ### Fix
-* 修复hud异常显示的问题; [#518](https://github.com/longitachi/ZLPhotoBrowser/issues/518)
+* Fix bug of hud. [#518](https://github.com/longitachi/ZLPhotoBrowser/issues/518)
 
 ---
 
 ## [4.0.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.4) (2020-09-13)
 
 ### Add
-* 优化图片编辑体验，记录之前编辑状态;
-* 添加是否允许拍照参数；[#512](https://github.com/longitachi/ZLPhotoBrowser/issues/512)
+* Record the editing status of the image, and can continue the last editing.
+* Add a property to control whether it is allowed to take photos.[#512](https://github.com/longitachi/ZLPhotoBrowser/issues/512)
 
 ### Fix
-* 优化降序照片获取方式; [#145](https://github.com/longitachi/ZLPhotoBrowser/issues/145)
-* 处理`FDFullscreenPopGesture`引起的导航显示异常; [#510](https://github.com/longitachi/ZLPhotoBrowser/issues/510)
-* oc无法使用自定义相机回调; [#513](https://github.com/longitachi/ZLPhotoBrowser/issues/513)
-* 解决embedAlbumList样式下拍照后未更新相册的bug;
-* 修复状态栏样式参数无效的bug;
-* 修复不可选cell遮罩不显示的bug;
+* Optimize the method of fetch photos in descending order. [#145](https://github.com/longitachi/ZLPhotoBrowser/issues/145)
+* Compatible `FDFullscreenPopGesture`. [#510](https://github.com/longitachi/ZLPhotoBrowser/issues/510)
+* Add `@objc` mark to the call back of custom camera. [#513](https://github.com/longitachi/ZLPhotoBrowser/issues/513)
+* Fix in `embedAlbumList` style, albums not reload after take a photo.
+* Fix `statusBarStyle` is invalide.
+* Fix the mask of can't be selected cells not showing.
 
 ---
 

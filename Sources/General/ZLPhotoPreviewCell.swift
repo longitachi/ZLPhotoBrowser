@@ -39,7 +39,7 @@ class ZLPreviewBaseCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(previewVCScroll), name: ZLPhotoPreviewViewController.previewVCScrollNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(previewVCScroll), name: ZLPhotoPreviewController.previewVCScrollNotification, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -121,6 +121,59 @@ class ZLPreviewBaseCell: UICollectionViewCell {
     }
     
 }
+
+
+// MARK: local and net image preview cell
+class ZLLocalImagePreviewCell: ZLPreviewBaseCell {
+    
+    override var currentImage: UIImage? {
+        return self.preview.image
+    }
+    
+    var preview: ZLPreviewView!
+    
+    var image: UIImage? = nil {
+        didSet {
+            self.preview.imageView.image = image
+            self.preview.resetSubViewSize()
+        }
+    }
+    
+    deinit {
+        zl_debugPrint("ZLLocalImagePreviewCell deinit")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.preview.frame = self.bounds
+    }
+    
+    private func setupUI() {
+        self.preview = ZLPreviewView()
+        self.preview.singleTapBlock = { [weak self] in
+            self?.singleTapBlock?()
+        }
+        self.contentView.addSubview(self.preview)
+    }
+    
+    override func resetSubViewStatusWhenCellEndDisplay() {
+        self.preview.scrollView.zoomScale = 1
+    }
+    
+}
+
+
+// MARK: net image preview cell
+class ZLNetImagePreviewCell: ZLLocalImagePreviewCell { }
 
 
 // MARK: static image preview cell
@@ -560,8 +613,117 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
 }
 
 
-// MARK: class ZLPreviewView
+// MARK: net video preview cell
+class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
+    
+    var player: AVPlayer?
+    
+    var playerLayer: AVPlayerLayer?
+    
+    var playBtn: UIButton!
+    
+    var isPlaying: Bool {
+        if self.player != nil, self.player?.rate != 0 {
+            return true
+        }
+        return false
+    }
+    
+    var videoUrl: URL! {
+        didSet {
+            self.configureCell()
+        }
+    }
+    
+    deinit {
+        zl_debugPrint("v deinit")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.playerLayer?.frame = self.bounds
+        let insets = deviceSafeAreaInsets()
+        self.playBtn.frame = CGRect(x: 0, y: insets.top, width: self.bounds.width, height: self.bounds.height - insets.top - insets.bottom)
+    }
+    
+    private func setupUI() {
+        self.playBtn = UIButton(type: .custom)
+        self.playBtn.setImage(getImage("zl_playVideo"), for: .normal)
+        self.playBtn.addTarget(self, action: #selector(playBtnClick), for: .touchUpInside)
+        self.contentView.addSubview(self.playBtn)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+    }
+    
+    func configureCell() {
+        self.player = nil
+        self.playerLayer?.removeFromSuperlayer()
+        self.playerLayer = nil
+        
+        self.player = AVPlayer(playerItem: AVPlayerItem(url: self.videoUrl))
+        self.playerLayer = AVPlayerLayer(player: self.player)
+        self.playerLayer?.frame = self.bounds
+        self.layer.insertSublayer(self.playerLayer!, at: 0)
+        NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
+    }
+    
+    @objc func playBtnClick() {
+        let currentTime = self.player?.currentItem?.currentTime()
+        let duration = self.player?.currentItem?.duration
+        if self.player?.rate == 0 {
+            if currentTime?.value == duration?.value {
+                self.player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+            }
+            self.player?.play()
+            self.playBtn.setImage(nil, for: .normal)
+            self.singleTapBlock?()
+        } else {
+            self.pausePlayer(seekToZero: false)
+        }
+    }
+    
+    @objc func playFinish() {
+        self.pausePlayer(seekToZero: true)
+    }
+    
+    @objc func appWillResignActive() {
+        if self.player != nil, self.player?.rate != 0 {
+            self.pausePlayer(seekToZero: false)
+        }
+    }
+    
+    override func previewVCScroll() {
+        if self.player != nil, self.player?.rate != 0 {
+            self.pausePlayer(seekToZero: false)
+        }
+    }
+    
+    override func resetSubViewStatusWhenCellEndDisplay() {
+        self.player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+    }
+    
+    func pausePlayer(seekToZero: Bool) {
+        self.player?.pause()
+        if seekToZero {
+            self.player?.seek(to: .zero)
+        }
+        self.playBtn.setImage(getImage("zl_playVideo"), for: .normal)
+        self.singleTapBlock?()
+    }
+    
+}
 
+
+// MARK: class ZLPreviewView
 class ZLPreviewView: UIView {
     
     static let defaultMaxZoomScale: CGFloat = 3
@@ -763,11 +925,16 @@ class ZLPreviewView: UIView {
     
     func resetSubViewSize() {
         let size: CGSize
-        if let ei = self.model.editImage {
-            size = ei.size
+        if let _ = self.model {
+            if let ei = self.model.editImage {
+                size = ei.size
+            } else {
+                size = CGSize(width: self.model.asset.pixelWidth, height: self.model.asset.pixelHeight)
+            }
         } else {
-            size = CGSize(width: self.model.asset.pixelWidth, height: self.model.asset.pixelHeight)
+            size = self.imageView.image?.size ?? self.bounds.size
         }
+        
         var frame: CGRect = .zero
         
         let viewW = self.bounds.width

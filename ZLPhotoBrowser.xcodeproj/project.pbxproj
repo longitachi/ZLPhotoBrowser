@@ -21,10 +21,11 @@
 		E462466624ECD93B00EF6C57 /* ZLAlbumListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462466524ECD93B00EF6C57 /* ZLAlbumListCell.swift */; };
 		E462466A24ED06C700EF6C57 /* ZLThumbnailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462466924ED06C700EF6C57 /* ZLThumbnailViewController.swift */; };
 		E462466C24ED163A00EF6C57 /* ZLCameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462466B24ED163A00EF6C57 /* ZLCameraCell.swift */; };
-		E462467224EE814500EF6C57 /* ZLPhotoPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462467124EE814500EF6C57 /* ZLPhotoPreviewViewController.swift */; };
+		E462467224EE814500EF6C57 /* ZLPhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462467124EE814500EF6C57 /* ZLPhotoPreviewController.swift */; };
 		E462467624EF6A7D00EF6C57 /* ZLPhotoPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462467524EF6A7D00EF6C57 /* ZLPhotoPreviewCell.swift */; };
 		E466804724FB76C50011E332 /* ZLEditVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E466804624FB76C50011E332 /* ZLEditVideoViewController.swift */; };
 		E46EA7D824F79F1C00033853 /* ZLClipImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46EA7D724F79F1C00033853 /* ZLClipImageViewController.swift */; };
+		E4765DFB25415F87007B2C0F /* ZLImagePreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4765DFA25415F87007B2C0F /* ZLImagePreviewController.swift */; };
 		E48E52D52507297500619AED /* ZLClipImageDismissAnimatedTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48E52D42507297500619AED /* ZLClipImageDismissAnimatedTransition.swift */; };
 		E492ABEB24E53575005E1BD5 /* Cell+ZLPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E492ABEA24E53575005E1BD5 /* Cell+ZLPhotoBrowser.swift */; };
 		E492ABED24E5454E005E1BD5 /* ZLProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E492ABEC24E5454E005E1BD5 /* ZLProgressView.swift */; };
@@ -63,10 +64,11 @@
 		E462466524ECD93B00EF6C57 /* ZLAlbumListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLAlbumListCell.swift; sourceTree = "<group>"; };
 		E462466924ED06C700EF6C57 /* ZLThumbnailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLThumbnailViewController.swift; sourceTree = "<group>"; };
 		E462466B24ED163A00EF6C57 /* ZLCameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLCameraCell.swift; sourceTree = "<group>"; };
-		E462467124EE814500EF6C57 /* ZLPhotoPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoPreviewViewController.swift; sourceTree = "<group>"; };
+		E462467124EE814500EF6C57 /* ZLPhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoPreviewController.swift; sourceTree = "<group>"; };
 		E462467524EF6A7D00EF6C57 /* ZLPhotoPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoPreviewCell.swift; sourceTree = "<group>"; };
 		E466804624FB76C50011E332 /* ZLEditVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEditVideoViewController.swift; sourceTree = "<group>"; };
 		E46EA7D724F79F1C00033853 /* ZLClipImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLClipImageViewController.swift; sourceTree = "<group>"; };
+		E4765DFA25415F87007B2C0F /* ZLImagePreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLImagePreviewController.swift; sourceTree = "<group>"; };
 		E48E52D42507297500619AED /* ZLClipImageDismissAnimatedTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLClipImageDismissAnimatedTransition.swift; sourceTree = "<group>"; };
 		E492ABEA24E53575005E1BD5 /* Cell+ZLPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell+ZLPhotoBrowser.swift"; sourceTree = "<group>"; };
 		E492ABEC24E5454E005E1BD5 /* ZLProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLProgressView.swift; sourceTree = "<group>"; };
@@ -179,7 +181,8 @@
 				E462465F24EBEEF800EF6C57 /* ZLAlbumListController.swift */,
 				E4A9CE002505DB91003201C1 /* ZLEmbedAlbumListView.swift */,
 				E462466924ED06C700EF6C57 /* ZLThumbnailViewController.swift */,
-				E462467124EE814500EF6C57 /* ZLPhotoPreviewViewController.swift */,
+				E462467124EE814500EF6C57 /* ZLPhotoPreviewController.swift */,
+				E4765DFA25415F87007B2C0F /* ZLImagePreviewController.swift */,
 				E4C911DB24E2A69B0061DA40 /* ZLPhotoModel.swift */,
 				E4C911DD24E2AA950061DA40 /* ZLAlbumListModel.swift */,
 				E49BD1F624E3CD9E005D7DFB /* ZLThumbnailPhotoCell.swift */,
@@ -299,6 +302,7 @@
 				E46EA7D824F79F1C00033853 /* ZLClipImageViewController.swift in Sources */,
 				E4C911E024E2ACE20061DA40 /* ZLPhotoManager.swift in Sources */,
 				E4CF57F024EA923C00BEBFC6 /* ZLLanguageDefine.swift in Sources */,
+				E4765DFB25415F87007B2C0F /* ZLImagePreviewController.swift in Sources */,
 				E466804724FB76C50011E332 /* ZLEditVideoViewController.swift in Sources */,
 				E462466624ECD93B00EF6C57 /* ZLAlbumListCell.swift in Sources */,
 				E4CF57EC24EA63BA00BEBFC6 /* ZLProgressHUD.swift in Sources */,
@@ -326,7 +330,7 @@
 				E45690B52530159800783AE6 /* Array+ZLPhotoBrowser.swift in Sources */,
 				E40ECF4824FFB8BB00A4D923 /* ZLPhotoBrowser.swift in Sources */,
 				E462466C24ED163A00EF6C57 /* ZLCameraCell.swift in Sources */,
-				E462467224EE814500EF6C57 /* ZLPhotoPreviewViewController.swift in Sources */,
+				E462467224EE814500EF6C57 /* ZLPhotoPreviewController.swift in Sources */,
 				E462465E24EBE45000EF6C57 /* ZLImageNavController.swift in Sources */,
 				E43EFA0C24F13747007067EC /* UIImage+ZLPhotoBrowser.swift in Sources */,
 			);

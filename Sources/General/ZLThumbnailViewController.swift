@@ -367,7 +367,7 @@ class ZLThumbnailViewController: UIViewController {
     
     @objc func previewBtnClick() {
         let nav = self.navigationController as! ZLImageNavController
-        let vc = ZLPhotoPreviewViewController(photos: nav.arrSelectedModels, index: 0)
+        let vc = ZLPhotoPreviewController(photos: nav.arrSelectedModels, index: 0)
         self.show(vc, sender: nil)
     }
     
@@ -850,7 +850,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             return
         }
         
-        let vc = ZLPhotoPreviewViewController(photos: self.arrDataSources, index: index)
+        let vc = ZLPhotoPreviewController(photos: self.arrDataSources, index: index)
         self.show(vc, sender: nil)
     }
     

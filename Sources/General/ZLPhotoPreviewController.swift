@@ -1,5 +1,5 @@
 //
-//  ZLPhotoPreviewViewController.swift
+//  ZLPhotoPreviewController.swift
 //  ZLPhotoBrowser
 //
 //  Created by long on 2020/8/20.
@@ -27,7 +27,7 @@
 import UIKit
 import Photos
 
-class ZLPhotoPreviewViewController: UIViewController {
+class ZLPhotoPreviewController: UIViewController {
 
     static let colItemSpacing: CGFloat = 40
     
@@ -90,7 +90,7 @@ class ZLPhotoPreviewViewController: UIViewController {
     }
     
     deinit {
-        zl_debugPrint("ZLPhotoPreviewViewController deinit")
+        zl_debugPrint("ZLPhotoPreviewController deinit")
     }
     
     init(photos: [ZLPhotoModel], index: Int, showBottomViewAndSelectBtn: Bool = true) {
@@ -139,8 +139,8 @@ class ZLPhotoPreviewViewController: UIViewController {
             insets = self.view.safeAreaInsets
         }
         
-        self.collectionView.frame = CGRect(x: -ZLPhotoPreviewViewController.colItemSpacing / 2, y: 0, width: self.view.frame.width + ZLPhotoPreviewViewController.colItemSpacing, height: self.view.frame.height)
-        self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewViewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
+        self.collectionView.frame = CGRect(x: -ZLPhotoPreviewController.colItemSpacing / 2, y: 0, width: self.view.frame.width + ZLPhotoPreviewController.colItemSpacing, height: self.view.frame.height)
+        self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
         
         let navH = insets.top + 44
         self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: navH)
@@ -155,7 +155,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         guard self.isFirstLayout else { return }
         self.isFirstLayout = false
         if self.currentIndex > 0 {
-            self.collectionView.contentOffset = CGPoint(x: (self.view.bounds.width + ZLPhotoPreviewViewController.colItemSpacing) * CGFloat(self.currentIndex), y: 0)
+            self.collectionView.contentOffset = CGPoint(x: (self.view.bounds.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.currentIndex), y: 0)
         }
     }
     
@@ -181,8 +181,8 @@ class ZLPhotoPreviewViewController: UIViewController {
             let nav = self.navigationController as! ZLImageNavController
             if !nav.arrSelectedModels.isEmpty {
                 showSelPhotoPreview = true
-                bottomViewH += ZLPhotoPreviewViewController.selPhotoPreviewH
-                self.selPhotoPreview?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: ZLPhotoPreviewViewController.selPhotoPreviewH)
+                bottomViewH += ZLPhotoPreviewController.selPhotoPreviewH
+                self.selPhotoPreview?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: ZLPhotoPreviewController.selPhotoPreviewH)
             }
         }
         let btnH = ZLLayout.bottomToolBtnH
@@ -190,7 +190,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height-insets.bottom-bottomViewH, width: self.view.frame.width, height: bottomViewH+insets.bottom)
         self.bottomBlurView?.frame = self.bottomView.bounds
         
-        let btnY: CGFloat = showSelPhotoPreview ? ZLPhotoPreviewViewController.selPhotoPreviewH + 7 : 7
+        let btnY: CGFloat = showSelPhotoPreview ? ZLPhotoPreviewController.selPhotoPreviewH + 7 : 7
         
         let editTitle = localLanguageTextValue(.edit)
         let editBtnW = editTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
@@ -206,7 +206,7 @@ class ZLPhotoPreviewViewController: UIViewController {
             doneTitle += "(" + String(selCount) + ")"
         }
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
-        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: btnH)
     }
     
     func setupUI() {
@@ -219,7 +219,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.navView.backgroundColor = .navBarColor
         self.view.addSubview(self.navView)
         
-        if let effect = ZLPhotoConfiguration.default().navViewBlurEffect {
+        if let effect = config.navViewBlurEffect {
             self.navBlurView = UIVisualEffectView(effect: effect)
             self.navView.addSubview(self.navBlurView!)
         }
@@ -269,7 +269,7 @@ class ZLPhotoPreviewViewController: UIViewController {
         self.bottomView.backgroundColor = .bottomToolViewBgColor
         self.view.addSubview(self.bottomView)
         
-        if let effect = ZLPhotoConfiguration.default().bottomToolViewBlurEffect {
+        if let effect = config.bottomToolViewBlurEffect {
             self.bottomBlurView = UIVisualEffectView(effect: effect)
             self.bottomView.addSubview(self.bottomBlurView!)
         }
@@ -602,7 +602,7 @@ class ZLPhotoPreviewViewController: UIViewController {
 }
 
 
-extension ZLPhotoPreviewViewController: UINavigationControllerDelegate {
+extension ZLPhotoPreviewController: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if operation == .push {
@@ -619,15 +619,15 @@ extension ZLPhotoPreviewViewController: UINavigationControllerDelegate {
 
 
 // scroll view delegate
-extension ZLPhotoPreviewViewController {
+extension ZLPhotoPreviewController {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView == self.collectionView else {
             return
         }
-        NotificationCenter.default.post(name: ZLPhotoPreviewViewController.previewVCScrollNotification, object: nil)
+        NotificationCenter.default.post(name: ZLPhotoPreviewController.previewVCScrollNotification, object: nil)
         let offset = scrollView.contentOffset
-        var page = Int(round(offset.x / (self.view.bounds.width + ZLPhotoPreviewViewController.colItemSpacing)))
+        var page = Int(round(offset.x / (self.view.bounds.width + ZLPhotoPreviewController.colItemSpacing)))
         page = max(0, min(page, self.arrDataSources.count-1))
         if page == self.currentIndex {
             return
@@ -650,18 +650,18 @@ extension ZLPhotoPreviewViewController {
 }
 
 
-extension ZLPhotoPreviewViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension ZLPhotoPreviewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return ZLPhotoPreviewViewController.colItemSpacing
+        return ZLPhotoPreviewController.colItemSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return ZLPhotoPreviewViewController.colItemSpacing
+        return ZLPhotoPreviewController.colItemSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: ZLPhotoPreviewViewController.colItemSpacing / 2, bottom: 0, right: ZLPhotoPreviewViewController.colItemSpacing / 2)
+        return UIEdgeInsets(top: 0, left: ZLPhotoPreviewController.colItemSpacing / 2, bottom: 0, right: ZLPhotoPreviewController.colItemSpacing / 2)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

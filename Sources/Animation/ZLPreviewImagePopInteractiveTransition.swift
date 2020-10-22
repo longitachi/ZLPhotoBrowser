@@ -30,7 +30,7 @@ class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransiti
     
     weak var transitionContext: UIViewControllerContextTransitioning?
     
-    weak var viewController: ZLPhotoPreviewViewController?
+    weak var viewController: ZLPhotoPreviewController?
     
     var shadowView: UIView?
     
@@ -50,7 +50,7 @@ class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransiti
     
     var finishTransition: ( () -> Void )?
     
-    init(viewController: ZLPhotoPreviewViewController) {
+    init(viewController: ZLPhotoPreviewController) {
         super.init()
         self.viewController = viewController
         let dismissPan = UIPanGestureRecognizer(target: self, action: #selector(dismissPanAction(_:)))
@@ -134,7 +134,7 @@ class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         guard let context = self.transitionContext else {
             return
         }
-        guard let fromVC = context.viewController(forKey: .from) as? ZLPhotoPreviewViewController, let toVC = context.viewController(forKey: .to) as? ZLThumbnailViewController else {
+        guard let fromVC = context.viewController(forKey: .from) as? ZLPhotoPreviewController, let toVC = context.viewController(forKey: .to) as? ZLThumbnailViewController else {
             return
         }
         let containerView = context.containerView
@@ -162,7 +162,7 @@ class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         guard let context = self.transitionContext else {
             return
         }
-        guard let fromVC = context.viewController(forKey: .from) as? ZLPhotoPreviewViewController, let toVC = context.viewController(forKey: .to) as? ZLThumbnailViewController else {
+        guard let fromVC = context.viewController(forKey: .from) as? ZLPhotoPreviewController, let toVC = context.viewController(forKey: .to) as? ZLThumbnailViewController else {
             return
         }
         
