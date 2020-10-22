@@ -20,7 +20,8 @@ let package = Package(
             path: "Sources",
             resources: [
                 .process("ZLPhotoBrowser.bundle")
-            ]
+            ],
+            exclude: ["Info.plist"]
         )
     ]
 )
