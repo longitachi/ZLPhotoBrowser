@@ -151,12 +151,12 @@ class ViewController: UIViewController {
         var datas: [Any] = []
         // network image
         datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/08/31/03/21/girl-5531217_1280.jpg")!)
-        datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/10/19/12/48/leaves-5667719_1280.jpg")!)
-        datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/10/02/21/06/dome-5622133_1280.jpg")!)
+        datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/10/14/18/35/sign-post-5655110_1280.png")!)
+        datas.append(URL(string: "https://cdn.pixabay.com/photo/2015/10/07/18/56/aircraft-976685_1280.jpg")!)
         datas.append(URL(string: "https://cdn.pixabay.com/photo/2019/11/08/11/56/cat-4611189_1280.jpg")!)
         
         // network video
-        datas.append(URL(string: "http://aliuwmp3.changba.com/userdata/video/45F6BD5E445E4C029C33DC5901307461.mp4")!)
+        datas.append(URL(string: "https://apd-468c0b1097db54303907a7fbce9e4ab4.v.smtcdns.com/mv.music.tc.qq.com/Ad-FUBLBItbB8_aWIDX0n4FQ8dDJdwpeOCheXTVTjm1k/337FE5B81EC760FB40D739858B23136C6A6E09751D8206B9D34E91BF65C27C6E3A02E478788FA393CCA2E875AC7762D6ZZqqmusic_default/1049_M0126200001FKyJe0WpWG31001699887.f9844.mp4?fname=1049_M0126200001FKyJe0WpWG31001699887.f9844.mp4")!)
         
         // phasset
         if self.takeSelectedAssetsSwitch.isOn {
@@ -165,19 +165,24 @@ class ViewController: UIViewController {
         
         // local image
         datas.append(contentsOf:
-            (1...5).compactMap { UIImage(named: "image" + String($0)) }
+            (1...3).compactMap { UIImage(named: "image" + String($0)) }
         )
         
+        ImageCache.default.clearCache()
         let vc = ZLImagePreviewController(datas: datas, index: 0, showSelectBtn: true) { (url) -> ZLURLType in
             if url.absoluteString.hasSuffix("mp4") {
                 return .video
             } else {
                 return .image
             }
-        } urlImageLoader: { (url, imageView, callBack) in
-            imageView.kf.setImage(with: url, completionHandler:  { (_) in
-                callBack()
-            })
+        } urlImageLoader: { (url, imageView, progress, loadFinish) in
+            imageView.kf.setImage(with: url) { (receivedSize, totalSize) in
+                let percentage = (CGFloat(receivedSize) / CGFloat(totalSize))
+                debugPrint("\(percentage)")
+                progress(percentage)
+            } completionHandler: { (_) in
+                loadFinish()
+            }
         }
         
         vc.doneBlock = { (datas) in

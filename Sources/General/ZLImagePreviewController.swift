@@ -44,7 +44,7 @@ public class ZLImagePreviewController: UIViewController {
     
     let urlType: ( (URL) -> ZLURLType )
     
-    let urlImageLoader: ( (URL, UIImageView, @escaping ( () -> Void )) -> Void )
+    let urlImageLoader: ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ), @escaping ( () -> Void )) -> Void )
     
     let showSelectBtn: Bool
     
@@ -90,8 +90,9 @@ public class ZLImagePreviewController: UIViewController {
     ///   - datas: Must be one of PHAsset, UIImage and URL, will filter ohers in init function.
     ///   - index: Index for first display.
     ///   - urlType: Tell me the url is image or video.
-    ///   - urlImageLoader: Call when cell will display, cell will layout after call back when image load finish.
-    @objc public init(datas: [Any], index: Int = 0, showSelectBtn: Bool = true, urlType: @escaping ( (URL) -> ZLURLType ), urlImageLoader: @escaping ( (URL, UIImageView, @escaping ( () -> Void )) -> Void ) ) {
+    ///   - urlImageLoader: Call when cell will display, cell will layout after call back when image load finish. The first block is progress call back, second is load finish call back.
+    ///
+    @objc public init(datas: [Any], index: Int = 0, showSelectBtn: Bool = true, urlType: @escaping ( (URL) -> ZLURLType ), urlImageLoader: @escaping ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ),  @escaping ( () -> Void )) -> Void ) ) {
         let filterDatas = datas.filter { (obj) -> Bool in
             return obj is PHAsset || obj is UIImage || obj is URL
         }
@@ -451,8 +452,14 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLNetImagePreviewCell.zl_identifier(), for: indexPath) as! ZLNetImagePreviewCell
                 cell.image = nil
                 
-                self.urlImageLoader(url, cell.preview.imageView, { [weak cell] in
-                    cell?.preview.resetSubViewSize()
+                self.urlImageLoader(url, cell.preview.imageView, { [weak cell] (progress) in
+                    DispatchQueue.main.async {
+                        cell?.progress = progress
+                    }
+                }, { [weak cell] in
+                    DispatchQueue.main.async {
+                        cell?.preview.resetSubViewSize()
+                    }
                 })
                 
                 baseCell = cell

@@ -173,7 +173,41 @@ class ZLLocalImagePreviewCell: ZLPreviewBaseCell {
 
 
 // MARK: net image preview cell
-class ZLNetImagePreviewCell: ZLLocalImagePreviewCell { }
+class ZLNetImagePreviewCell: ZLLocalImagePreviewCell {
+    
+    var progressView: ZLProgressView!
+    
+    var progress: CGFloat = 0 {
+        didSet {
+            progressView.progress = progress
+            progressView.isHidden = progress >= 1
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.progressView = ZLProgressView()
+        self.progressView.isHidden = true
+        self.contentView.addSubview(self.progressView)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.bringSubviewToFront(self.progressView)
+        self.progressView.frame = CGRect(x: self.bounds.width / 2 - 20, y: self.bounds.height / 2 - 20, width: 40, height: 40)
+    }
+    
+    override func resetSubViewStatusWhenCellEndDisplay() {
+        self.progressView.isHidden = true
+    }
+    
+}
 
 
 // MARK: static image preview cell
