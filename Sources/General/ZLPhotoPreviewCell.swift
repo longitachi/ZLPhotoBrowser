@@ -640,6 +640,11 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         self.singleTapBlock?()
     }
     
+    func pauseWhileTransition() {
+        self.player?.pause()
+        self.playBtn.setImage(getImage("zl_playVideo"), for: .normal)
+    }
+    
     override func animateImageFrame(convertTo view: UIView) -> CGRect {
         return self.convert(self.imageView.frame, to: view)
     }
