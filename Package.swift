@@ -18,6 +18,7 @@ let package = Package(
         .target(
             name: "ZLPhotoBrowser",
             path: "Sources",
+            exclude: ["Info.plist"],
             resources: [
                 .process("ZLPhotoBrowser.bundle")
             ]

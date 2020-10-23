@@ -35,7 +35,7 @@ extension Bundle {
     static var normal_module: Bundle? = {
         let bundleName = "ZLPhotoBrowser"
 
-        let candidates = [
+        var candidates = [
             // Bundle should be present here when the package is linked into an App.
             Bundle.main.resourceURL,
 
@@ -45,6 +45,11 @@ extension Bundle {
             // For command-line tools.
             Bundle.main.bundleURL,
         ]
+        
+        #if SWIFT_PACKAGE
+        // For SWIFT_PACKAGE.
+        candidates.append(Bundle.module.bundleURL)
+        #endif
 
         for candidate in candidates {
             let bundlePath = candidate?.appendingPathComponent(bundleName + ".bundle")
