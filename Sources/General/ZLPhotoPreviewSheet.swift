@@ -79,7 +79,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private var fetchImageQueue: OperationQueue = OperationQueue()
     
-    /// Success call back
+    /// Success callback
     /// block params
     ///  - params1: images for asset.
     ///  - params2: selected assets

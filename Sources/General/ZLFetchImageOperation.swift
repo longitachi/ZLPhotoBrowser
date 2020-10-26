@@ -122,16 +122,14 @@ class ZLFetchImageOperation: Operation {
         if self.isOriginal {
             ZLPhotoManager.fetchOriginalImage(for: self.model.asset, progress: self.progress) { [weak self] (image, isDegraded) in
                 if !isDegraded {
-                    self?.completion(self?.scaleImage(image), nil)
+                    self?.completion(image?.fixOrientation(), nil)
                     self?.fetchFinish()
                 }
             }
         } else {
-            let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * 2
-            let aspectRatio = CGFloat(self.model.asset.pixelHeight) / CGFloat(self.model.asset.pixelWidth)
-            ZLPhotoManager.fetchImage(for: self.model.asset, size: CGSize(width: w, height: w * aspectRatio), progress: self.progress) { [weak self] (image, isDegraded) in
+            ZLPhotoManager.fetchImage(for: self.model.asset, size: self.model.previewSize, progress: self.progress) { [weak self] (image, isDegraded) in
                 if !isDegraded {
-                    self?.completion(self?.scaleImage(image), nil)
+                    self?.completion(self?.scaleImage(image?.fixOrientation()), nil)
                     self?.fetchFinish()
                 }
             }
@@ -150,7 +148,7 @@ class ZLFetchImageOperation: Operation {
         if data.count < Int(0.2 * mUnit) {
             return i
         }
-        let scale: CGFloat = self.isOriginal ? (data.count > Int(mUnit) ? 0.7 : 0.9) : (data.count > Int(mUnit) ? 0.5 : 0.7)
+        let scale: CGFloat = (data.count > Int(mUnit) ? 0.5 : 0.7)
         
         guard let d = i.jpegData(compressionQuality: scale) else {
             return i

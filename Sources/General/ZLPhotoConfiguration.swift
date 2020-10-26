@@ -244,7 +244,7 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// Allow framework fetch photos when call back. Default is true.
+    /// Allow framework fetch photos when callback. Default is true.
     @objc public var shouldAnialysisAsset = true
     
     /// Timeout for image parsing.

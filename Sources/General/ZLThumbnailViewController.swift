@@ -633,11 +633,8 @@ class ZLThumbnailViewController: UIViewController {
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         hud.show()
         
-        let asset = model.asset
-        let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * 2
-        let size = CGSize(width: w, height: w * CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth))
         hud.show()
-        ZLPhotoManager.fetchImage(for: asset, size: size) { [weak self, weak nav] (image, isDegraded) in
+        ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self, weak nav] (image, isDegraded) in
             if !isDegraded {
                 if let image = image {
                     ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: model.editImageModel) { [weak nav] (ei, editImageModel) in

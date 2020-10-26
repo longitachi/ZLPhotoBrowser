@@ -90,7 +90,7 @@ public class ZLImagePreviewController: UIViewController {
     ///   - datas: Must be one of PHAsset, UIImage and URL, will filter ohers in init function.
     ///   - index: Index for first display.
     ///   - urlType: Tell me the url is image or video.
-    ///   - urlImageLoader: Call when cell will display, cell will layout after call back when image load finish. The first block is progress call back, second is load finish call back.
+    ///   - urlImageLoader: Call when cell will display, cell will layout after callback when image load finish. The first block is progress callback, second is load finish callback.
     ///
     @objc public init(datas: [Any], index: Int = 0, showSelectBtn: Bool = true, urlType: @escaping ( (URL) -> ZLURLType ), urlImageLoader: @escaping ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ),  @escaping ( () -> Void )) -> Void ) ) {
         let filterDatas = datas.filter { (obj) -> Bool in

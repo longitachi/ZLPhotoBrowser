@@ -56,6 +56,8 @@ public class ZLEditImageViewController: UIViewController {
 
     static let filterColViewH: CGFloat = 80
     
+    static let maxDrawLineImageWidth: CGFloat = 600
+    
     var originalImage: UIImage
     
     // 第一次进入界面时，布局后frame，裁剪dimiss动画使用
@@ -632,9 +634,10 @@ public class ZLEditImageViewController: UIViewController {
                 if self.angle == -90 || self.angle == -270 {
                     swap(&size.width, &size.height)
                 }
-                var toImageScale = ZLMaxImageWidth / size.width
+                
+                var toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.width
                 if self.editImage.size.width / self.editImage.size.height > 1 {
-                    toImageScale = ZLMaxImageWidth / size.height
+                    toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.height
                 }
                 
                 let path = ZLDrawPath(pathColor: self.currentDrawColor, pathWidth: self.drawLineWidth / self.scrollView.zoomScale, ratio: ratio / originalRatio / toImageScale, startPoint: point)
@@ -703,9 +706,9 @@ public class ZLEditImageViewController: UIViewController {
         if self.angle == -90 || self.angle == -270 {
             swap(&size.width, &size.height)
         }
-        var toImageScale = ZLMaxImageWidth / size.width
+        var toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.width
         if self.editImage.size.width / self.editImage.size.height > 1 {
-            toImageScale = ZLMaxImageWidth / size.height
+            toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.height
         }
         size.width *= toImageScale
         size.height *= toImageScale
