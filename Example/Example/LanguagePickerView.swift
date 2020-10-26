@@ -42,8 +42,8 @@ extension ZLLanguageType {
 }
 
 class LanguagePickerView: UIView {
-
-    var cancelBtn: UIButton!
+    
+    var baseView: UIView!
     
     var doneBtn: UIButton!
     
@@ -58,24 +58,20 @@ class LanguagePickerView: UIView {
     init(selectedLanguage: ZLLanguageType) {
         super.init(frame: .zero)
         
-        self.backgroundColor = .white
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: -5)
-        self.layer.shadowRadius = 10
-        self.layer.shadowOpacity = 0.5
+        self.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         
-        self.cancelBtn = UIButton(type: .custom)
-        self.cancelBtn.backgroundColor = .black
-        self.cancelBtn.setTitleColor(.white, for: .normal)
-        self.cancelBtn.setTitle("Cancel", for: .normal)
-        self.cancelBtn.layer.cornerRadius = 5
-        self.cancelBtn.layer.masksToBounds = true
-        self.cancelBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
-        self.addSubview(self.cancelBtn)
-        self.cancelBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self).offset(20)
-            make.left.equalTo(self).offset(20)
-            make.size.equalTo(CGSize(width: 60, height: 35))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
+        self.addGestureRecognizer(tap)
+        
+        self.baseView = UIView()
+        self.baseView.backgroundColor = .white
+        self.baseView.layer.shadowColor = UIColor.black.cgColor
+        self.baseView.layer.shadowOffset = CGSize(width: 0, height: -3)
+        self.baseView.layer.shadowRadius = 10
+        self.baseView.layer.shadowOpacity = 0.4
+        self.addSubview(self.baseView)
+        self.baseView.snp.makeConstraints { (make) in
+            make.left.bottom.right.equalTo(self)
         }
         
         self.doneBtn = UIButton(type: .custom)
@@ -85,20 +81,20 @@ class LanguagePickerView: UIView {
         self.doneBtn.layer.cornerRadius = 5
         self.doneBtn.layer.masksToBounds = true
         self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
-        self.addSubview(self.doneBtn)
+        self.baseView.addSubview(self.doneBtn)
         self.doneBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self).offset(20)
-            make.right.equalTo(self).offset(-20)
+            make.top.equalTo(self.baseView).offset(10)
+            make.right.equalTo(self.baseView).offset(-20)
             make.size.equalTo(CGSize(width: 50, height: 35))
         }
         
         self.pickerView = UIPickerView()
         self.pickerView.dataSource = self
         self.pickerView.delegate = self
-        self.addSubview(self.pickerView)
+        self.baseView.addSubview(self.pickerView)
         self.pickerView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.cancelBtn.snp.bottom).offset(10)
-            make.left.bottom.right.equalTo(self)
+            make.top.equalTo(self.doneBtn.snp.bottom).offset(10)
+            make.left.bottom.right.equalTo(self.baseView)
             make.height.equalTo(200)
         }
         
@@ -112,13 +108,34 @@ class LanguagePickerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func cancelBtnClick() {
-        self.removeFromSuperview()
+    @objc func tapAction(_ tap: UITapGestureRecognizer) {
+        if self.baseView.frame.contains(tap.location(in: self)) {
+            return
+        }
+        self.hide()
     }
     
     @objc func doneBtnClick() {
         self.selectBlock?(languages[self.selectedIndex])
-        self.removeFromSuperview()
+        self.hide()
+    }
+    
+    func show(in view: UIView) {
+        view.addSubview(self)
+        self.alpha = 0
+        
+        UIView.animate(withDuration: 0.25) {
+            self.alpha = 1
+        }
+    }
+    
+    func hide() {
+        UIView.animate(withDuration: 0.25) {
+            self.alpha = 0
+        } completion: { (_) in
+            self.removeFromSuperview()
+        }
+
     }
 
 }

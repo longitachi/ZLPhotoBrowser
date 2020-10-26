@@ -156,7 +156,8 @@ class ViewController: UIViewController {
         datas.append(URL(string: "https://cdn.pixabay.com/photo/2019/11/08/11/56/cat-4611189_1280.jpg")!)
         
         // network video
-        datas.append(URL(string: "https://apd-468c0b1097db54303907a7fbce9e4ab4.v.smtcdns.com/mv.music.tc.qq.com/Ad-FUBLBItbB8_aWIDX0n4FQ8dDJdwpeOCheXTVTjm1k/337FE5B81EC760FB40D739858B23136C6A6E09751D8206B9D34E91BF65C27C6E3A02E478788FA393CCA2E875AC7762D6ZZqqmusic_default/1049_M0126200001FKyJe0WpWG31001699887.f9844.mp4?fname=1049_M0126200001FKyJe0WpWG31001699887.f9844.mp4")!)
+        let netVideoUrlString = "https://freevod.nf.migu.cn/mORsHmtum1AysKe3Ry%2FUb5rA1WelPRwa%2BS7ylo4qQCjcD5a2YuwiIC7rpFwwdGcgkgMxZVi%2FVZ%2Fnxf6NkQZ75HC0xnJ5rlB8UwiH8cZUuvErkVufDlxxLUBF%2FIgUEwjiq%2F%2FV%2FoxBQBVMUzAZaWTvOE5dxUFh4V3Oa489Ec%2BPw0IhEGuR64SuKk3MOszdFg0Q/600575Y9FGZ040325.mp4?msisdn=2a257d4c-1ee0-4ad8-8081-b1650c26390a&spid=600906&sid=50816168212200&timestamp=20201026155427&encrypt=70fe12c7473e6d68075e9478df40f207&k=dc156224f8d0835e&t=1603706067279&ec=2&flag=+&FN=%E5%B0%86%E6%95%85%E4%BA%8B%E5%86%99%E6%88%90%E6%88%91%E4%BB%AC"
+        datas.append(URL(string: netVideoUrlString)!)
         
         // phasset
         if self.takeSelectedAssetsSwitch.isOn {
@@ -168,9 +169,12 @@ class ViewController: UIViewController {
             (1...3).compactMap { UIImage(named: "image" + String($0)) }
         )
         
-        ImageCache.default.clearCache()
+        let videoSuffixs = ["mp4", "mov", "avi", "rmvb", "rm", "flv", "3gp", "wmv", "vob", "dat", "m4v", "f4v", "mkv"] // and more suffixs
         let vc = ZLImagePreviewController(datas: datas, index: 0, showSelectBtn: true) { (url) -> ZLURLType in
-            if url.absoluteString.hasSuffix("mp4") {
+            if url.absoluteString == netVideoUrlString {
+                return .video
+            }
+            if let sf = url.absoluteString.split(separator: ".").last, videoSuffixs.contains(String(sf)) {
                 return .video
             } else {
                 return .image

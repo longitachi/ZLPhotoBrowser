@@ -775,9 +775,9 @@ class PhotoConfigureViewController: UIViewController {
             self?.config.languageType = language
         }
         
-        self.view.addSubview(languagePicker)
+        languagePicker.show(in: self.view)
         languagePicker.snp.makeConstraints { (make) in
-            make.left.bottom.right.equalTo(self.view)
+            make.edges.equalTo(self.view)
         }
     }
     
