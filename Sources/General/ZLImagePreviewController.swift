@@ -42,9 +42,9 @@ public class ZLImagePreviewController: UIViewController {
     
     var selectStatus: [Bool]
     
-    let urlType: ( (URL) -> ZLURLType )
+    let urlType: ( (URL) -> ZLURLType )?
     
-    let urlImageLoader: ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ), @escaping ( () -> Void )) -> Void )
+    let urlImageLoader: ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ), @escaping ( () -> Void )) -> Void )?
     
     let showSelectBtn: Bool
     
@@ -92,14 +92,14 @@ public class ZLImagePreviewController: UIViewController {
     ///   - urlType: Tell me the url is image or video.
     ///   - urlImageLoader: Call when cell will display, cell will layout after callback when image load finish. The first block is progress callback, second is load finish callback.
     ///
-    @objc public init(datas: [Any], index: Int = 0, showSelectBtn: Bool = true, urlType: @escaping ( (URL) -> ZLURLType ), urlImageLoader: @escaping ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ),  @escaping ( () -> Void )) -> Void ) ) {
+    @objc public init(datas: [Any], index: Int = 0, showSelectBtn: Bool = true, urlType: ( (URL) -> ZLURLType )? = nil, urlImageLoader: ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ),  @escaping ( () -> Void )) -> Void )? = nil) {
         let filterDatas = datas.filter { (obj) -> Bool in
             return obj is PHAsset || obj is UIImage || obj is URL
         }
         self.datas = filterDatas
         self.selectStatus = Array(repeating: true, count: filterDatas.count)
-        self.currentIndex = index
-        self.indexBeforOrientationChanged = index
+        self.currentIndex = index >= filterDatas.count ? 0 : index
+        self.indexBeforOrientationChanged = self.currentIndex
         self.showSelectBtn = showSelectBtn
         self.urlType = urlType
         self.urlImageLoader = urlImageLoader
@@ -447,12 +447,12 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
             
             baseCell = cell
         } else if let url = obj as? URL {
-            let type = self.urlType(url)
+            let type = self.urlType?(url) ?? ZLURLType.image
             if type == .image {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLNetImagePreviewCell.zl_identifier(), for: indexPath) as! ZLNetImagePreviewCell
                 cell.image = nil
                 
-                self.urlImageLoader(url, cell.preview.imageView, { [weak cell] (progress) in
+                self.urlImageLoader?(url, cell.preview.imageView, { [weak cell] (progress) in
                     DispatchQueue.main.async {
                         cell?.progress = progress
                     }

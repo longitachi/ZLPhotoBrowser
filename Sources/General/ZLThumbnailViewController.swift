@@ -659,7 +659,8 @@ class ZLThumbnailViewController: UIViewController {
         var requestAvAssetID: PHImageRequestID?
         
         hud.show(timeout: 15)
-        hud.timeoutBlock = {
+        hud.timeoutBlock = { [weak self] in
+            showAlertView(localLanguageTextValue(.timeout), self)
             if let _ = requestAvAssetID {
                 PHImageManager.default().cancelImageRequest(requestAvAssetID!)
             }

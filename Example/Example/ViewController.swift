@@ -296,7 +296,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
             debugPrint("\(images)   \(assets)   \(isOriginal)")
         }
         
-        ac.previewAssets(sender: self, assets: self.selectedAssets, index: indexPath.row, isOriginal: self.isOriginal, showBottomViewAndSelectBtn: false)
+        ac.previewAssets(sender: self, assets: self.selectedAssets, index: indexPath.row, isOriginal: self.isOriginal, showBottomViewAndSelectBtn: true)
     }
     
 }

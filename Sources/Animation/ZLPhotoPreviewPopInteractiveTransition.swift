@@ -1,5 +1,5 @@
 //
-//  ZLPreviewImagePopInteractiveTransition.swift
+//  ZLPhotoPreviewPopInteractiveTransition.swift
 //  ZLPhotoBrowser
 //
 //  Created by long on 2020/9/3.
@@ -26,7 +26,7 @@
 
 import UIKit
 
-class ZLPreviewImagePopInteractiveTransition: UIPercentDrivenInteractiveTransition {
+class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransition {
     
     weak var transitionContext: UIViewControllerContextTransitioning?
     

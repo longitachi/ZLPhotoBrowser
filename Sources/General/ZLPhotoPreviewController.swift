@@ -73,7 +73,7 @@ class ZLPhotoPreviewController: UIViewController {
     
     var hideNavView = false
     
-    var popInteractiveTransition: ZLPreviewImagePopInteractiveTransition?
+    var popInteractiveTransition: ZLPhotoPreviewPopInteractiveTransition?
     
     /// 是否在点击确定时候，当未选择任何照片时候，自动选择当前index的照片
     var autoSelectCurrentIfNotSelectAnyone = true
@@ -322,7 +322,7 @@ class ZLPhotoPreviewController: UIViewController {
             // 仅有当前vc一个时候，说明不是从相册进入，不添加交互动画
             return
         }
-        self.popInteractiveTransition = ZLPreviewImagePopInteractiveTransition(viewController: self)
+        self.popInteractiveTransition = ZLPhotoPreviewPopInteractiveTransition(viewController: self)
         self.popInteractiveTransition?.shouldStartTransition = { [weak self] (point) -> Bool in
             guard let `self` = self else { return false }
             if !self.hideNavView && (self.navView.frame.contains(point) || self.bottomView.frame.contains(point)) {
@@ -478,7 +478,8 @@ class ZLPhotoPreviewController: UIViewController {
         } else if model.type == .video || config.allowEditVideo {
             var requestAvAssetID: PHImageRequestID?
             hud.show(timeout: 15)
-            hud.timeoutBlock = {
+            hud.timeoutBlock = { [weak self] in
+                showAlertView(localLanguageTextValue(.timeout), self)
                 if let _ = requestAvAssetID {
                     PHImageManager.default().cancelImageRequest(requestAvAssetID!)
                 }
@@ -556,7 +557,7 @@ class ZLPhotoPreviewController: UIViewController {
             }
         }
         self.navView.isHidden = self.hideNavView
-        self.bottomView.isHidden = self.hideNavView
+        self.bottomView.isHidden = self.showBottomViewAndSelectBtn ? self.hideNavView : true
     }
     
     func showEditImageVC(image: UIImage) {
@@ -608,7 +609,7 @@ extension ZLPhotoPreviewController: UINavigationControllerDelegate {
         if operation == .push {
             return nil
         }
-        return self.popInteractiveTransition?.interactive == true ? ZLPreviewImagePopAnimatedTransition() : nil
+        return self.popInteractiveTransition?.interactive == true ? ZLPhotoPreviewAnimatedTransition() : nil
     }
     
     func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {

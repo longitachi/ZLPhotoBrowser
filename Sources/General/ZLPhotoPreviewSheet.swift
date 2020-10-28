@@ -510,10 +510,10 @@ public class ZLPhotoPreviewSheet: UIView {
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         
         var timeout = false
-        hud.timeoutBlock = {
-            showAlertView(localLanguageTextValue(.timeout), self.sender)
-            self.fetchImageQueue.cancelAllOperations()
+        hud.timeoutBlock = { [weak self] in
             timeout = true
+            showAlertView(localLanguageTextValue(.timeout), viewController ?? self?.sender)
+            self?.fetchImageQueue.cancelAllOperations()
         }
         
         hud.show(timeout: ZLPhotoConfiguration.default().timeout)
@@ -627,7 +627,8 @@ public class ZLPhotoPreviewSheet: UIView {
         var requestAvAssetID: PHImageRequestID?
         
         hud.show(timeout: 15)
-        hud.timeoutBlock = {
+        hud.timeoutBlock = { [weak self] in
+            showAlertView(localLanguageTextValue(.timeout), self?.sender)
             if let _ = requestAvAssetID {
                 PHImageManager.default().cancelImageRequest(requestAvAssetID!)
             }

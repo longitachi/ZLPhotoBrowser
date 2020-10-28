@@ -69,13 +69,11 @@ public class ZLPhotoConfiguration: NSObject {
     
     @objc public var allowSelectVideo = true
     
-    /// Allow select Gif, it only controls whether it can be
-    /// selected, and does not control whether it is displayed.
+    /// Allow select Gif, it only controls whether it is displayed in Gif form.
     /// If value is false, the Gif logo is not displayed.
     @objc public var allowSelectGif = true
     
-    /// Allow select LivePhoto, it only controls whether it can be
-    /// selected, and does not control whether it is displayed.
+    /// Allow select LivePhoto, it only controls whether it is displayed in LivePhoto form.
     /// If value is false, the LivePhoto logo is not displayed.
     @objc public var allowSelectLivePhoto = false
     

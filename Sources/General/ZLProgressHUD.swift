@@ -149,6 +149,7 @@ public class ZLProgressHUD: UIView {
     }
     
     @objc func timeout(_ timer: Timer) {
+        self.timeoutBlock?()
         self.hide()
     }
     
