@@ -25,6 +25,7 @@
 //  THE SOFTWARE.
 
 import UIKit
+import Photos
 
 class ZLEmbedAlbumListView: UIView {
 
@@ -105,13 +106,14 @@ class ZLEmbedAlbumListView: UIView {
         self.addGestureRecognizer(tap)
     }
     
-    func loadAlbumList() {
+    func loadAlbumList(completion: ( () -> Void )? = nil) {
         DispatchQueue.global().async {
             ZLPhotoManager.getPhotoAlbumList(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (albumList) in
                 self?.arrDataSource.removeAll()
                 self?.arrDataSource.append(contentsOf: albumList)
                 
                 DispatchQueue.main.async {
+                    completion?()
                     self?.tableView.reloadData()
                 }
             }
@@ -133,30 +135,41 @@ class ZLEmbedAlbumListView: UIView {
     
     /// 这里不采用监听相册发生变化的方式，是因为每次变化，系统都会回调多次，造成重复获取相册列表
     func show(reloadAlbumList: Bool) {
+        func animateShow() {
+            let toFrame = self.calculateBgViewBounds()
+            
+            self.isHidden = false
+            self.alpha = 0
+            var newFrame = toFrame
+            newFrame.origin.y -= newFrame.height
+            
+            if newFrame != self.tableBgView.frame {
+                let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: newFrame.width, height: newFrame.height), byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 8, height: 8))
+                self.tableBgView.layer.mask = nil
+                let maskLayer = CAShapeLayer()
+                maskLayer.path = path.cgPath
+                self.tableBgView.layer.mask = maskLayer
+            }
+            
+            self.tableBgView.frame = newFrame
+            self.tableView.frame = self.tableBgView.bounds
+            UIView.animate(withDuration: 0.25) {
+                self.alpha = 1
+                self.tableBgView.frame = toFrame
+            }
+        }
+        
         if reloadAlbumList {
-            self.loadAlbumList()
-        }
-        
-        let toFrame = self.calculateBgViewBounds()
-        
-        self.isHidden = false
-        self.alpha = 0
-        var newFrame = toFrame
-        newFrame.origin.y -= newFrame.height
-        
-        if newFrame != self.tableBgView.frame {
-            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: newFrame.width, height: newFrame.height), byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 8, height: 8))
-            self.tableBgView.layer.mask = nil
-            let maskLayer = CAShapeLayer()
-            maskLayer.path = path.cgPath
-            self.tableBgView.layer.mask = maskLayer
-        }
-        
-        self.tableBgView.frame = newFrame
-        self.tableView.frame = self.tableBgView.bounds
-        UIView.animate(withDuration: 0.25) {
-            self.alpha = 1
-            self.tableBgView.frame = toFrame
+            if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
+                self.loadAlbumList {
+                    animateShow()
+                }
+            } else {
+                self.loadAlbumList()
+                animateShow()
+            }
+        } else {
+            animateShow()
         }
     }
     

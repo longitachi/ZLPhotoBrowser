@@ -215,7 +215,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// Show the image captured by the camera is displayed on the camera button inside the album.
     @objc public var showCaptureImageOnTakePhotoBtn = false
     
-    /// In the control single-selection mode, whether to display the selection button, the multi-selection mode is not controlled.
+    /// In single selection mode, whether to display the selection button.
     @objc public var showSelectBtnWhenSingleSelect = false
     
     /// Overlay a mask layer on top of the selected photos.
@@ -233,7 +233,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// Display the selected photos at the bottom of the preview large photos interface.
     @objc public var showSelectedPhotoPreview = true
     
-    /// Developers can customize pictures, but the name of the custom picture resource must be consistent with the picture name in the replaced bundle.
+    /// Developers can customize iamges, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
     /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
     /// ["zl_btn_selected", "zl_btn_unselected"].
     @objc public var customImageNames: [String] = [] {

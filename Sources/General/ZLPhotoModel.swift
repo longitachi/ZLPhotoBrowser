@@ -78,7 +78,7 @@ class ZLPhotoModel: NSObject {
         }
     }
     
-    // 保存上次编辑图片的一些内容，下次编辑时候可继续上次的编辑
+    // Content of the last edit.
     var editImageModel: ZLEditImageModel?
     
     init(asset: PHAsset) {

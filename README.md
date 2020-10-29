@@ -89,9 +89,17 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
-● 4.0.8: Add filter to image editor;
-● 4.0.7: Image editor support crop ratios; Custom camera supports switching camera during recording; bug fixed;
-● 4.0.5: Support iOS14 limited authority; Optimize picture preview display;
+● 4.0.9: 
+    Support languages of more countries (French, German, Russian, Vietnamese, Korean, Malay, Italian).
+    Support iOS14 limited authority.
+    Provides the ability to preview PHAsset, local images and videos, network images and videos together.
+    Optimize some UI effects.
+● 4.0.8:
+    Add filter to image editor.
+● 4.0.7: 
+    Image editor support crop ratios. 
+    Custom camera supports switching camera during recording. 
+    bug fixed.
 ...
 ```
 

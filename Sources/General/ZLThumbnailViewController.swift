@@ -141,7 +141,7 @@ class ZLThumbnailViewController: UIViewController {
         
         self.loadPhotos()
         
-        // 状态为limit时候注册相册变化通知，由于photoLibraryDidChange方法会在每次相册变化时候回调多次，导致界面多次刷新，所以其他情况不监听相册变化
+        // Register for the album change notification when the status is limited, because the photoLibraryDidChange method will be repeated multiple times each time the album changes, causing the interface to refresh multiple times. So the album changes are not monitored in other authority.
         if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
             PHPhotoLibrary.shared().register(self)
         }
@@ -609,7 +609,12 @@ class ZLThumbnailViewController: UIViewController {
             self.arrDataSources.insert(newModel, at: 0)
         }
         
-        if canAddModel(newModel, currentSelectCount: nav?.arrSelectedModels.count ?? 0, sender: self, showAlert: false) {
+        var canSelect = true
+        // If mixed selection is not allowed, and the newModel type is video, it will not be selected.
+        if !config.allowMixSelect, newModel.type == .video {
+            canSelect = false
+        }
+        if canSelect, canAddModel(newModel, currentSelectCount: nav?.arrSelectedModels.count ?? 0, sender: self, showAlert: false) {
             if !self.shouldDirectEdit(newModel) {
                 newModel.isSelected = true
                 nav?.arrSelectedModels.append(newModel)

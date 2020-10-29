@@ -37,7 +37,7 @@ public class ZLVideoManager: NSObject {
     @objc public class func exportEditVideo(for asset: AVAsset, range: CMTimeRange, completion: @escaping ( (URL?, Error?) -> Void )) {
         let outputUrl = URL(fileURLWithPath: self.getVideoExportFilePath())
         guard let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetPassthrough) else {
-            completion(nil, NSError(domain: "", code: -1000, userInfo: [NSLocalizedDescriptionKey: "export video failed"]))
+            completion(nil, NSError(domain: "", code: -1000, userInfo: [NSLocalizedDescriptionKey: "video export failed"]))
             return
         }
         exportSession.outputURL = outputUrl
@@ -47,7 +47,7 @@ public class ZLVideoManager: NSObject {
         exportSession.exportAsynchronously(completionHandler: {
             let suc = exportSession.status == .completed
             if exportSession.status == .failed {
-                zl_debugPrint("导出视频失败 \(exportSession.error?.localizedDescription ?? "")")
+                zl_debugPrint("ZLPhotoBrowser: video export failed: \(exportSession.error?.localizedDescription ?? "")")
             }
             DispatchQueue.main.async {
                 completion(suc ? outputUrl : nil, exportSession.error)
@@ -109,7 +109,7 @@ public class ZLVideoManager: NSObject {
             }
             
             guard let exportSession = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPreset1280x720) else {
-                completion(nil, NSError(domain: "", code: -1000, userInfo: [NSLocalizedDescriptionKey: "merge video failed"]))
+                completion(nil, NSError(domain: "", code: -1000, userInfo: [NSLocalizedDescriptionKey: "video merge failed"]))
                 return
             }
             
@@ -121,7 +121,7 @@ public class ZLVideoManager: NSObject {
             exportSession.exportAsynchronously(completionHandler: {
                 let suc = exportSession.status == .completed
                 if exportSession.status == .failed {
-                    zl_debugPrint("合并视频失败 \(exportSession.error?.localizedDescription ?? "")")
+                    zl_debugPrint("ZLPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")")
                 }
                 DispatchQueue.main.async {
                     completion(suc ? outputUrl : nil, exportSession.error)

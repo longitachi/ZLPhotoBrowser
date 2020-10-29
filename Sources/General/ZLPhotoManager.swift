@@ -29,7 +29,7 @@ import Photos
 
 public class ZLPhotoManager: NSObject {
 
-    /// save image to album
+    /// Save image to album.
     @objc public class func saveImageToAlbum(image: UIImage, completion: ( (Bool, PHAsset?) -> Void )? ) {
         let status = PHPhotoLibrary.authorizationStatus()
         
@@ -54,7 +54,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// save video to album
+    /// Save video to album.
     @objc public class func saveVideoToAlbum(url: URL, completion: ( (Bool, PHAsset?) -> Void )? ) {
         let status = PHPhotoLibrary.authorizationStatus()
         
@@ -90,7 +90,7 @@ public class ZLPhotoManager: NSObject {
         return nil
     }
     
-    /// fetch photos from result
+    /// Fetch photos from result.
     class func fetchPhoto(in result: PHFetchResult<PHAsset>, ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, limitCount: Int = .max) -> [ZLPhotoModel] {
         var models: [ZLPhotoModel] = []
         let option: NSEnumerationOptions = ascending ? .init(rawValue: 0) : .reverse
@@ -116,7 +116,7 @@ public class ZLPhotoManager: NSObject {
         return models
     }
     
-    /// fetch all album list
+    /// Fetch all album list.
     class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, completion: ( ([ZLAlbumListModel]) -> Void )) {
         let option = PHFetchOptions()
         if !allowSelectImage {
@@ -150,7 +150,7 @@ public class ZLPhotoManager: NSObject {
                 let title = self.getCollectionTitle(collection)
                 
                 if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
-                    // 所有照片
+                    // Album of all photos.
                     let m = ZLAlbumListModel(title: title, result: result, collection: collection, option: option, isCameraRoll: true)
                     albumList.insert(m, at: 0)
                 } else {
@@ -163,7 +163,7 @@ public class ZLPhotoManager: NSObject {
         completion(albumList)
     }
     
-    /// fetch camera roll album
+    /// Fetch camera roll album.
     class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping ( (ZLAlbumListModel) -> Void )) {
         let option = PHFetchOptions()
         if !allowSelectImage {
@@ -184,10 +184,10 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// conversion collection title
+    /// Conversion collection title.
     private class func getCollectionTitle(_ collection: PHAssetCollection) -> String {
         if collection.assetCollectionType == .album {
-            // 用户创建的相册
+            // Albums created by user.
             var title: String? = nil
             if ZLCustomLanguageDeploy.language == .system {
                 title = collection.localizedTitle
@@ -255,7 +255,7 @@ public class ZLPhotoManager: NSObject {
         return self.fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
     }
     
-    /// fetch asset data
+    /// Fetch asset data.
     @discardableResult
     class func fetchOriginalImageData(for asset: PHAsset, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (Data, [AnyHashable: Any]?, Bool) -> Void)) -> PHImageRequestID {
         let option = PHImageRequestOptions()
@@ -280,14 +280,9 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// fetch image for asset
+    /// Fetch image for asset.
     private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
         let option = PHImageRequestOptions()
-        /**
-         resizeMode：对请求的图像怎样缩放。有三种选择：None，默认加载方式；Fast，尽快地提供接近或稍微大于要求的尺寸；Exact，精准提供要求的尺寸。
-         deliveryMode：图像质量。有三种值：Opportunistic，在速度与质量中均衡；HighQualityFormat，不管花费多长时间，提供高质量图像；FastFormat，以最快速度提供好的质量。
-         这个属性只有在 synchronous 为 true 时有效。
-         */
         option.resizeMode = resizeMode
         option.isNetworkAccessAllowed = true
         option.progressHandler = { (pro, error, stop, info) in
@@ -306,7 +301,6 @@ public class ZLPhotoManager: NSObject {
                 completion(image, isDegraded)
             }
         }
-        
     }
     
     class func fetchLivePhoto(for asset: PHAsset, completion: @escaping ( (PHLivePhoto?, [AnyHashable: Any]?, Bool) -> Void )) -> PHImageRequestID {
@@ -330,7 +324,7 @@ public class ZLPhotoManager: NSObject {
             }
         }
         return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { (item, info) in
-            // iOS11 系统这个回调没有在主线程
+            // iOS11 and earlier, callback is not on the main thread.
             DispatchQueue.main.async {
                 let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
                 completion(item, info, isDegraded)
@@ -360,7 +354,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// fetch asset local file path
+    /// Fetch asset local file path.
     @objc public class func fetchAssetFilePath(asset: PHAsset, completion: @escaping (String?) -> Void ) {
         asset.requestContentEditingInput(with: nil) { (input, info) in
             var path = input?.fullSizeImageURL?.absoluteString
@@ -374,7 +368,7 @@ public class ZLPhotoManager: NSObject {
 }
 
 
-/// authority related
+/// Authority related.
 extension ZLPhotoManager {
     
     public class func havePhotoLibratyAuthority() -> Bool {
