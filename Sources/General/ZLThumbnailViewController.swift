@@ -106,6 +106,22 @@ class ZLThumbnailViewController: UIViewController {
     /// 拍照后置为true，需要刷新相册列表
     var hasTakeANewAsset = false
     
+    
+    @available(iOS 14, *)
+    var showAddPhotoCell: Bool {
+        PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited && ZLPhotoConfiguration.default().showAddPhotoButton
+    }
+    
+    /// 返回照相按钮+添加图片按钮的数量
+    /// the count of addPhotoButton & cameraButton
+    private var offset: Int {
+        if #available(iOS 14, *) {
+            return Int(self.showAddPhotoCell) + Int(self.showCameraCell)
+        } else {
+            return Int(self.showCameraCell)
+        }
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return false
     }
@@ -242,6 +258,7 @@ class ZLThumbnailViewController: UIViewController {
         ZLCameraCell.zl_register(self.collectionView)
         ZLThumbnailPhotoCell.zl_register(self.collectionView)
         self.collectionView.register(ZLThumbnailColViewFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(ZLThumbnailColViewFooter.classForCoder()))
+        ZLAddPhotoCell.zl_register(self.collectionView)
         
         self.bottomView = UIView()
         self.bottomView.backgroundColor = .bottomToolViewBgColor
@@ -363,7 +380,7 @@ class ZLThumbnailViewController: UIViewController {
         }
     }
     
-    /// MARK: btn actions
+    // MARK: btn actions
     
     @objc func previewBtnClick() {
         let nav = self.navigationController as! ZLImageNavController
@@ -396,13 +413,13 @@ class ZLThumbnailViewController: UIViewController {
         let nav = self.navigationController as! ZLImageNavController
         
         let cell = self.collectionView.cellForItem(at: indexPath) as? ZLThumbnailPhotoCell
-        let asc = !self.showCameraCell || config.sortAscending
+        let asc = config.sortAscending
         
         if pan.state == .began {
             self.beginPanSelect = (cell != nil)
             
             if self.beginPanSelect {
-                let index = asc ? indexPath.row : indexPath.row - 1
+                let index = asc ? indexPath.row : indexPath.row - self.offset
                 
                 let m = self.arrDataSources[index]
                 self.panSelectType = m.isSelected ? .cancel : .select
@@ -605,7 +622,7 @@ class ZLThumbnailViewController: UIViewController {
             self.arrDataSources.append(newModel)
         } else {
             // 保存拍照的照片或者视频，说明肯定有camera cell
-            insertIndex = 1
+            insertIndex = self.offset
             self.arrDataSources.insert(newModel, at: 0)
         }
         
@@ -697,7 +714,7 @@ class ZLThumbnailViewController: UIViewController {
     
 }
 
-
+// MARK: CollectionView Delegate & DataSource
 extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -741,13 +758,14 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.showCameraCell ? (self.arrDataSources.count + 1) : self.arrDataSources.count
+        return self.arrDataSources.count + self.offset
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let config = ZLPhotoConfiguration.default()
         if self.showCameraCell && ((config.sortAscending && indexPath.row == self.arrDataSources.count) || (!config.sortAscending && indexPath.row == 0)) {
             // camera cell
+            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLCameraCell.zl_identifier(), for: indexPath) as! ZLCameraCell
             
             if config.showCaptureImageOnTakePhotoBtn {
@@ -757,12 +775,21 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             return cell
         }
         
+        if #available(iOS 14, *) {
+            if ((config.sortAscending && indexPath.row == self.arrDataSources.count - 1 + self.offset) || (!config.sortAscending && indexPath.row == self.offset - 1)) {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLAddPhotoCell.zl_identifier(), for: indexPath) as? ZLAddPhotoCell else {
+                    return UICollectionViewCell()
+                }
+                return cell
+            }
+        }
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLThumbnailPhotoCell.zl_identifier(), for: indexPath) as! ZLThumbnailPhotoCell
         
         let model: ZLPhotoModel
         
-        if self.showCameraCell, !config.sortAscending {
-            model = self.arrDataSources[indexPath.row - 1]
+        if !config.sortAscending {
+            model = self.arrDataSources[indexPath.row - self.offset]
         } else {
             model = self.arrDataSources[indexPath.row]
         }
@@ -812,8 +839,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             return
         }
         var index = indexPath.row
-        if self.showCameraCell, !ZLPhotoConfiguration.default().sortAscending {
-            index -= 1
+        if !ZLPhotoConfiguration.default().sortAscending {
+            index -= self.offset
         }
         let model = self.arrDataSources[index]
         self.setCellMaskView(c, isSelected: model.isSelected, model: model)
@@ -825,6 +852,13 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             self.showCamera()
             return
         }
+        if #available(iOS 14, *) {
+            if c is ZLAddPhotoCell {
+                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+                return
+            }
+        }
+        
         guard let cell = c as? ZLThumbnailPhotoCell else {
             return
         }
@@ -840,8 +874,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         let config = ZLPhotoConfiguration.default()
         
         var index = indexPath.row
-        if self.showCameraCell, !config.sortAscending {
-            index -= 1
+        if !config.sortAscending {
+            index -= self.offset
         }
         let m = self.arrDataSources[index]
         if self.shouldDirectEdit(m) {
@@ -900,8 +934,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 return
             }
             var row = indexPath.row
-            if self.showCameraCell, !ZLPhotoConfiguration.default().sortAscending {
-                row -= 1
+            if !ZLPhotoConfiguration.default().sortAscending {
+                row -= self.offset
             }
             let m = self.arrDataSources[row]
             
@@ -931,8 +965,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 return
             }
             var row = indexPath.row
-            if self.showCameraCell, !ZLPhotoConfiguration.default().sortAscending {
-                row -= 1
+            if !ZLPhotoConfiguration.default().sortAscending {
+                row -= self.offset
             }
             let m = self.arrDataSources[row]
             
