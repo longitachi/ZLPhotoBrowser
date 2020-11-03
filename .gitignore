@@ -73,3 +73,5 @@ Carthage/Build
 Carthage/Checkouts
 
 # End of https://www.gitignore.io/api/cocoapods,objective-c
+Sources/.DS_Store
+.DS_Store
