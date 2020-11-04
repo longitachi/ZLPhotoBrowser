@@ -537,8 +537,8 @@ public class ZLPhotoPreviewSheet: UIView {
                     assets[i] = asset ?? m.asset
                     zl_debugPrint("ZLPhotoBrowser: suc request \(i)")
                 } else {
-                    errorAssets[i] = m.asset
-                    errorIndexs[i] = i
+                    errorAssets.append(m.asset)
+                    errorIndexs.append(i)
                     zl_debugPrint("ZLPhotoBrowser: failed request \(i)")
                 }
                 
