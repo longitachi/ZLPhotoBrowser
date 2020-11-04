@@ -112,7 +112,7 @@ class ZLThumbnailViewController: UIViewController {
         PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited && ZLPhotoConfiguration.default().showAddPhotoButton
     }
     
-    /// 返回照相按钮+添加图片按钮的数量
+    /// 照相按钮+添加图片按钮的数量
     /// the count of addPhotoButton & cameraButton
     private var offset: Int {
         if #available(iOS 14, *) {
@@ -462,7 +462,7 @@ class ZLThumbnailViewController: UIViewController {
                     let p = IndexPath(row: i, section: 0)
                     if !self.arrSlideIndexPaths.contains(p) {
                         self.arrSlideIndexPaths.append(p)
-                        let index = asc ? i : i - 1
+                        let index = asc ? i : i - self.offset
                         let m = self.arrDataSources[index]
                         self.dicOriSelectStatus[p] = m.isSelected
                     }
@@ -471,7 +471,7 @@ class ZLThumbnailViewController: UIViewController {
             }
             
             for path in self.arrSlideIndexPaths {
-                let index = asc ? path.row : path.row - 1
+                let index = asc ? path.row : path.row - self.offset
                 // 是否在最初和现在的间隔区间内
                 let inSection = path.row >= minIndex && path.row <= maxIndex
                 let m = self.arrDataSources[index]
@@ -546,7 +546,7 @@ class ZLThumbnailViewController: UIViewController {
         guard ZLPhotoConfiguration.default().sortAscending, self.arrDataSources.count > 0 else {
             return
         }
-        let index = self.showCameraCell ? self.arrDataSources.count : self.arrDataSources.count - 1
+        let index = self.arrDataSources.count - 1 + self.offset
         self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredVertically, animated: false)
     }
     
