@@ -106,10 +106,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow access to the preview large image interface (That is, whether to allow access to the large image interface after clicking the thumbnail image).
     @objc public var allowPreviewPhotos = true
     
-    /// When iOS14 limited permission, whether to display more pictures.
-    /// (PHPhotoLibrary.shared().presentLimitedLibraryPicker(:) method).
-    @objc public var allowSelectMorePhotoWhenAuthIsLismited = true
-    
     /// Whether to display the preview button (i.e. the preview button in the lower left corner of the thumbnail interface).
     @objc public var showPreviewButtonInAlbum = true
     
@@ -366,6 +362,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// E.g., Sina Weibo's ImagePicker
     @objc public var showAddPhotoButton: Bool = true
     
+    /// iOS14 limited Photo mode, will show collection footer view in ZLThumbnailViewController.
+    /// Will go to system setting if clicked.
+    @objc public var showEnterSettingFooter = true
 }
 
 

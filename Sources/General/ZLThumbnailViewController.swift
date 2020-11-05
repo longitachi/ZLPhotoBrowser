@@ -109,7 +109,7 @@ class ZLThumbnailViewController: UIViewController {
     
     @available(iOS 14, *)
     var showAddPhotoCell: Bool {
-        PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited && ZLPhotoConfiguration.default().showAddPhotoButton
+        PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited && ZLPhotoConfiguration.default().showAddPhotoButton && self.albumList.isCameraRoll
     }
     
     /// 照相按钮+添加图片按钮的数量
@@ -742,7 +742,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited, ZLPhotoConfiguration.default().allowSelectMorePhotoWhenAuthIsLismited {
+        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited, ZLPhotoConfiguration.default().showEnterSettingFooter, self.albumList.isCameraRoll {
             return CGSize(width: collectionView.bounds.width, height: 50)
         } else {
             return .zero
@@ -753,9 +753,13 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(ZLThumbnailColViewFooter.classForCoder()), for: indexPath) as! ZLThumbnailColViewFooter
         
         if #available(iOS 14, *) {
-            view.selectMoreBlock = { [weak self] in
-                guard let `self` = self else { return }
-                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+            view.selectMoreBlock = {
+                guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                    return
+                }
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
             }
         }
         
