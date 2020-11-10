@@ -1,25 +1,17 @@
+### Issue Description
 
-感谢提交问题，提交 issue 前请先通过关键字搜索已经存在或解决了的 issue，避免重复提交相同内容。
+#### Description and Steps
 
-由于框架内参数相对来说比较多，如果想要实现某种操作
-* 请阅读README中相关功能介绍，查看是否有描述；
-* 请翻阅下`ZLPhotoConfiguration`类中所定义的属性，每个属性均有详细的注释；
+Please fill in the detailed description of the issue (full output of any stack trace, compiler error, ...) and the steps to reproduce the issue.
 
-- [ ] 我已经查阅了已有的issue，没有找到相同的
-- [ ] 我想提出一个建议或bug，而不是问一个问题
+#### Info
+   ZLPhotoBrowser version:  e.g. 4.0.9
+   Device:  e.g. iPhone X
+   Device version:  e.g. iOS 14.0
+   Xcode version:  e.g. Xcode 12.0
 
-#### 关于 Issue
-1. 请附上以下信息
-   cocoapods版本: 
-   设备: 
-   系统版本: 
-   Xcode版本: 
-
-2. 所遇到的问题（如有可能，请尽量详细描述，建议附上截图）
-   问题截图: 
-
-3. `ZLPhotoConfiguration` 配置代码
+#### Configuration code of `ZLPhotoConfiguration`
 
    ```
-   paste your code
+   Paste your code here.
    ```
