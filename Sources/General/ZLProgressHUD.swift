@@ -138,6 +138,7 @@ public class ZLProgressHUD: UIView {
         if timeout > 0 {
             self.cleanTimer()
             self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(timeout(_:)), userInfo: nil, repeats: false)
+            RunLoop.current.add(self.timer!, forMode: .default)
         }
     }
     

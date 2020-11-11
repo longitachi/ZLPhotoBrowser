@@ -72,6 +72,9 @@ iOSInjectionProject/
 Carthage/Build
 Carthage/Checkouts
 
+### FLEX
+Example/Example/Classes
+
 # End of https://www.gitignore.io/api/cocoapods,objective-c
 Sources/.DS_Store
 .DS_Store

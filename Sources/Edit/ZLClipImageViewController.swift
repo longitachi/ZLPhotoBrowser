@@ -817,7 +817,6 @@ class ZLClipImageViewController: UIViewController {
         self.resetTimer = nil
     }
     
-    
     func moveClipContentToCenter() {
         let maxClipRect = self.maxClipFrame
         var clipRect = self.clipBoxFrame

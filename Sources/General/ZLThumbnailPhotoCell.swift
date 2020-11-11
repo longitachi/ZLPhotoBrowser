@@ -223,7 +223,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     }
     
     func fetchSmallImage() {
-        let size = CGSize(width: self.bounds.width * 1.5, height: self.bounds.height * 1.5)
+        let size = CGSize(width: self.bounds.width * 1.2, height: self.bounds.height * 1.2)
         
         if self.smallImageRequestID > PHInvalidImageRequestID {
             PHImageManager.default().cancelImageRequest(self.smallImageRequestID)

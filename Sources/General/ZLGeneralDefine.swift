@@ -185,5 +185,5 @@ func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewC
 }
 
 func zl_debugPrint(_ message: Any) {
-//    debugPrint(message)
+    debugPrint(message)
 }

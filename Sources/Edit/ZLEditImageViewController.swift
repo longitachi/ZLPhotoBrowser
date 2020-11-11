@@ -40,13 +40,16 @@ public class ZLEditImageModel: NSObject {
     
     public let selectFilter: ZLFilter?
     
-    init(drawPaths: [ZLDrawPath], mosaicPaths: [ZLMosaicPath], editRect: CGRect?, angle: CGFloat, selectRatio: ZLImageClipRatio?, selectFilter: ZLFilter) {
+    public let textStickers: [(text: String, zoomScale: CGFloat, originAngle: CGFloat, gesScale: CGFloat, gesRotation: CGFloat, gesTranslationPoint: CGPoint, frame: CGRect)]?
+    
+    init(drawPaths: [ZLDrawPath], mosaicPaths: [ZLMosaicPath], editRect: CGRect?, angle: CGFloat, selectRatio: ZLImageClipRatio?, selectFilter: ZLFilter, textStickers: [(text: String, zoomScale: CGFloat, originAngle: CGFloat, gesScale: CGFloat, gesRotation: CGFloat, gesTranslationPoint: CGPoint, frame: CGRect)]?) {
         self.drawPaths = drawPaths
         self.mosaicPaths = mosaicPaths
         self.editRect = editRect
         self.angle = angle
         self.selectRatio = selectRatio
         self.selectFilter = selectFilter
+        self.textStickers = textStickers
         super.init()
     }
     
@@ -78,11 +81,14 @@ public class ZLEditImageViewController: UIViewController {
     
     var containerView: UIView!
     
-    // 显示图片
+    // Show image.
     var imageView: UIImageView!
     
-    // 显示涂鸦
+    // Show draw lines.
     var drawingImageView: UIImageView!
+    
+    // Show text stickers.
+    var textStickersContainer: UIView!
     
     // 处理好的马赛克图片
     var mosaicImage: UIImage?
@@ -115,21 +121,19 @@ public class ZLEditImageViewController: UIViewController {
     
     var revokeBtn: UIButton!
     
-    // 选择涂鸦颜色
     var drawColorCollectionView: UICollectionView!
     
-    // 滤镜
     var filterCollectionView: UICollectionView!
     
     let drawColors: [UIColor]
     
     var currentDrawColor = ZLPhotoConfiguration.default().editImageDefaultDrawColor
     
-    var drawPaths: [ZLDrawPath] = []
+    var drawPaths: [ZLDrawPath]
     
     var drawLineWidth: CGFloat = 5
     
-    var mosaicPaths: [ZLMosaicPath] = []
+    var mosaicPaths: [ZLMosaicPath]
     
     var mosaicLineWidth: CGFloat = 25
     
@@ -141,11 +145,15 @@ public class ZLEditImageViewController: UIViewController {
     
     var currentFilter: ZLFilter
     
+    var textStickers: [ZLTextStickerView] = []
+    
     var isScrolling = false
     
     var shouldLayout = true
     
-    var angle: CGFloat = 0
+    var angle: CGFloat
+    
+    var panGes: UIPanGestureRecognizer!
     
     var imageSize: CGSize {
         if self.angle == -90 || self.angle == -270 {
@@ -172,7 +180,7 @@ public class ZLEditImageViewController: UIViewController {
         if ZLPhotoConfiguration.default().showClipDirectlyIfOnlyHasClipTool, ZLPhotoConfiguration.default().editImageTools.rawValue == ZLEditImageViewController.EditImageTool.clip.rawValue {
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
             vc.clipDoneBlock = { (angle, editRect, ratio) in
-                let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, selectRatio: ratio, selectFilter: .normal)
+                let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, selectRatio: ratio, selectFilter: .normal, textStickers: nil)
                 completion?(image.clipImage(angle, editRect) ?? image, m)
             }
             vc.modalPresentationStyle = .fullScreen
@@ -190,18 +198,30 @@ public class ZLEditImageViewController: UIViewController {
     @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
         self.originalImage = image
         self.editImage = image
-        self.drawPaths = editModel?.drawPaths ?? []
-        self.mosaicPaths = editModel?.mosaicPaths ?? []
-        self.angle = editModel?.angle ?? 0
         self.tools = ZLPhotoConfiguration.default().editImageTools
-        self.selectRatio = editModel?.selectRatio
         self.editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
         self.drawColors = ZLPhotoConfiguration.default().editImageDrawColors
         self.currentFilter = editModel?.selectFilter ?? .normal
+        self.drawPaths = editModel?.drawPaths ?? []
+        self.mosaicPaths = editModel?.mosaicPaths ?? []
+        self.angle = editModel?.angle ?? 0
+        self.selectRatio = editModel?.selectRatio
+        
         super.init(nibName: nil, bundle: nil)
         
         if !self.drawColors.contains(self.currentDrawColor) {
             self.currentDrawColor = self.drawColors.first!
+        }
+        if let ts = editModel?.textStickers {
+            self.textStickers = ts.map { (text, zoomScale, originAngle, gesScale, gesRotation, gesTranslationPoint, frame) -> ZLTextStickerView in
+                let v = ZLTextStickerView(text: text, zoomScale: zoomScale, originAngle: originAngle, textColor: .white, bgColor: .clear)
+                v.originFrame = frame
+                v.frame = frame
+                v.gesScale = gesScale
+                v.gesRotation = gesRotation
+                v.totalTranslationPoint = gesTranslationPoint
+                return v
+            }
         }
     }
     
@@ -330,6 +350,7 @@ public class ZLEditImageViewController: UIViewController {
         self.mosaicImageLayer?.frame = self.imageView.bounds
         self.mosaicImageLayerMaskLayer?.frame = self.imageView.bounds
         self.drawingImageView.frame = self.imageView.frame
+        self.textStickersContainer.frame = self.imageView.frame
         
         // 针对于长图的优化
         if (self.editRect.height / self.editRect.width) > (self.view.frame.height / self.view.frame.width * 1.1) {
@@ -369,6 +390,9 @@ public class ZLEditImageViewController: UIViewController {
         self.drawingImageView.contentMode = .scaleAspectFit
         self.drawingImageView.isUserInteractionEnabled = true
         self.containerView.addSubview(self.drawingImageView)
+        
+        self.textStickersContainer = UIView()
+        self.containerView.addSubview(self.textStickersContainer)
         
         let color1 = UIColor.black.withAlphaComponent(0.35).cgColor
         let color2 = UIColor.black.withAlphaComponent(0).cgColor
@@ -497,28 +521,102 @@ public class ZLEditImageViewController: UIViewController {
             self.mosaicImageLayer?.mask = self.mosaicImageLayerMaskLayer
         }
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
-        tap.delegate = self
-        self.view.addGestureRecognizer(tap)
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
+        tapGes.delegate = self
+        self.view.addGestureRecognizer(tapGes)
         
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(drawAction(_:)))
-        pan.maximumNumberOfTouches = 1
-        pan.delegate = self
-        self.view.addGestureRecognizer(pan)
-        self.scrollView.panGestureRecognizer.require(toFail: pan)
+        self.panGes = UIPanGestureRecognizer(target: self, action: #selector(drawAction(_:)))
+        self.panGes.maximumNumberOfTouches = 1
+        self.panGes.delegate = self
+        self.view.addGestureRecognizer(self.panGes)
+        self.scrollView.panGestureRecognizer.require(toFail: self.panGes)
+        
+        self.textStickers.forEach { (tv) in
+            self.textStickersContainer.addSubview(tv)
+            self.scrollView.pinchGestureRecognizer?.require(toFail: tv.pinchGes)
+            self.scrollView.panGestureRecognizer.require(toFail: tv.panGes)
+            self.panGes.require(toFail: tv.panGes)
+        }
+    }
+    
+    func reCalculateTextStickersFrame(_ oldSize: CGSize, _ oldAngle: CGFloat, _ newAngle: CGFloat) {
+        guard oldAngle != newAngle else {
+            return
+        }
+        let currSize = self.textStickersContainer.frame.size
+        let scale: CGFloat
+        if Int(newAngle - oldAngle) % 180 == 0{
+            scale = currSize.width / oldSize.width
+        } else {
+            scale = currSize.height / oldSize.width
+        }
+        
+        self.textStickersContainer.subviews.forEach { (view) in
+            if let ts = view as? ZLTextStickerView {
+//                var origin = ts.frame.origin
+//                origin.x *= scale
+//                origin.y *= scale
+//                ts.transform = ts.transform.scaledBy(x: scale, y: scale)
+//                let newO = ts.frame.origin
+//                let diffX: CGFloat = (origin.x - newO.x)
+//                let diffY: CGFloat = (origin.y - newO.y)
+//
+//                // 这个移动需要算上scale
+//                ts.transform = ts.transform.translatedBy(x: diffX / min(1, scale), y: diffY / min(1, scale))
+//                // 这个移动不需要算scale，之后在text sticker的updateTransform方法中会计算
+//                ts.originTransform = ts.originTransform.translatedBy(x: diffX , y: diffY )
+//
+//                ts.gesScale *= scale
+                
+                // Revert ges rotation.
+                ts.transform = ts.transform.rotated(by: -ts.gesRotation)
+                
+                var origin = ts.frame.origin
+                origin.x *= scale
+                origin.y *= scale
+                
+                let newSize = CGSize(width: ts.frame.width * scale, height: ts.frame.height * scale)
+                let newOrigin = CGPoint(x: ts.frame.minX + (ts.frame.width - newSize.width)/2, y: ts.frame.minY + (ts.frame.height - newSize.height)/2)
+                let diffX: CGFloat = (origin.x - newOrigin.x)
+                let diffY: CGFloat = (origin.y - newOrigin.y)
+                
+                if ts.originAngle == 90 {
+                    ts.transform = ts.transform.translatedBy(x: diffY * min(scale, 1), y: -diffX * min(scale, 1))
+                    // 这个移动不需要算scale，之后在text sticker的updateTransform方法中会计算
+                    ts.originTransform = ts.originTransform.translatedBy(x: diffY , y: -diffX)
+                } else if ts.originAngle == 180 {
+                    ts.transform = ts.transform.translatedBy(x: -diffX * max(scale, 1), y: -diffY * max(scale, 1))
+                    ts.originTransform = ts.originTransform.translatedBy(x: -diffX , y: -diffY)
+//                    ts.totalTranslationPoint.x -= diffX
+//                    ts.totalTranslationPoint.y -= diffY
+                } else if ts.originAngle == 270 {
+                    ts.transform = ts.transform.translatedBy(x: -diffY * min(scale, 1), y: diffX * min(scale, 1))
+                    ts.originTransform = ts.originTransform.translatedBy(x: -diffY , y: diffX)
+//                    ts.totalTranslationPoint.x -= diffY
+//                    ts.totalTranslationPoint.y += diffX
+                } else {
+                    ts.transform = ts.transform.translatedBy(x: diffX * max(scale, 1), y: diffY * max(scale, 1))
+                    // 这个移动不需要算scale，之后在text sticker的updateTransform方法中会计算
+                    ts.originTransform = ts.originTransform.translatedBy(x: diffX , y: diffY)
+                }
+                ts.totalTranslationPoint.x += diffX
+                ts.totalTranslationPoint.y += diffY
+                
+                ts.transform = ts.transform.scaledBy(x: scale, y: scale)
+                
+                // Add ges rotation.
+                ts.transform = ts.transform.rotated(by: ts.gesRotation)
+                
+                ts.gesScale *= scale
+            }
+        }
     }
     
     func rotationImageView() {
-        var transform = CGAffineTransform.identity
-        if self.angle == -90 {
-            transform = CGAffineTransform(rotationAngle: -CGFloat.pi/2)
-        } else if self.angle == -180 {
-            transform = CGAffineTransform(rotationAngle: -CGFloat.pi)
-        } else if self.angle == -270 {
-            transform = CGAffineTransform(rotationAngle: -CGFloat.pi*3/2)
-        }
+        let transform = CGAffineTransform(rotationAngle: self.angle.toPi)
         self.imageView.transform = transform
         self.drawingImageView.transform = transform
+        self.textStickersContainer.transform = transform
     }
     
     @objc func cancelBtnClick() {
@@ -526,13 +624,84 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc func drawBtnClick() {
-        self.drawBtn.isSelected = !self.drawBtn.isSelected
-        self.drawColorCollectionView.isHidden = !self.drawBtn.isSelected
-        self.revokeBtn.isHidden = !self.drawBtn.isSelected
-        self.revokeBtn.isEnabled = self.drawPaths.count > 0
-        self.mosaicBtn.isSelected = false
-        self.filterBtn.isSelected = false
-        self.filterCollectionView.isHidden = true
+//        UIGraphicsBeginImageContextWithOptions(view.frame.size, false, 0)
+//        self.containerView.layer.render(in: UIGraphicsGetCurrentContext()!)
+//        let img = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+        
+        var scale = self.scrollView.zoomScale
+        
+//        let scale = self.scrollView.zoomScale
+        // Calculate the display rect of container view.
+        let x = max(0, (self.scrollView.contentOffset.x - self.containerView.frame.minX)) / scale
+        let y = max(0, (self.scrollView.contentOffset.y - self.containerView.frame.minY)) / scale
+        let w = min(view.frame.width, self.containerView.frame.width) / scale
+        let h = min(view.frame.height + min(self.scrollView.contentOffset.y, 0), self.containerView.frame.height) / scale
+        // Convert to text stickers container view.
+        
+        var r = self.containerView.convert(CGRect(x: x, y: y, width: w, height: h), to: self.imageView)
+        if Int(self.angle) % 180 == 0{
+            scale = self.originalImage.size.width / self.imageView.frame.width
+        } else {
+            scale = self.originalImage.size.width / self.imageView.frame.height
+        }
+        r.origin.x *= scale
+        r.origin.y *= scale
+        r.size.width *= scale
+        r.size.height *= scale
+        
+        let image = self.buildImage()
+        let clipImage = image.clipImage(self.angle, r) ?? image
+        
+        let vc = ZLInputTextViewController(image: clipImage, text: nil)
+        
+        vc.endInput = { [weak self] (text) in
+            self?.addTextStickersView(text)
+        }
+        
+        vc.modalPresentationStyle = .fullScreen
+        self.showDetailViewController(vc, sender: nil)
+//        self.drawBtn.isSelected = !self.drawBtn.isSelected
+//        self.drawColorCollectionView.isHidden = !self.drawBtn.isSelected
+//        self.revokeBtn.isHidden = !self.drawBtn.isSelected
+//        self.revokeBtn.isEnabled = self.drawPaths.count > 0
+//        self.mosaicBtn.isSelected = false
+//        self.filterBtn.isSelected = false
+//        self.filterCollectionView.isHidden = true
+    }
+    
+    func addTextStickersView(_ text: String) {
+        guard !text.isEmpty else { return }
+        let scale = self.scrollView.zoomScale
+        let size = ZLTextStickerView.calculateSize(text: text, width: view.frame.width)
+        let textSticker = ZLTextStickerView(text: text, zoomScale: 1 / scale, originAngle: -self.angle, textColor: .white, bgColor: .clear)
+        self.textStickersContainer.addSubview(textSticker)
+        
+        // Calculate the display rect of container view.
+        let x = (self.scrollView.contentOffset.x - self.containerView.frame.minX) / scale
+        let y = (self.scrollView.contentOffset.y - self.containerView.frame.minY) / scale
+        let w = view.frame.width / scale
+        let h = view.frame.height / scale
+        // Convert to text stickers container view.
+        let r = self.containerView.convert(CGRect(x: x, y: y, width: w, height: h), to: self.textStickersContainer)
+        textSticker.frame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
+        textSticker.originFrame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
+        
+        textSticker.beginOperation = { [weak self] in
+            self?.setToolView(show: false)
+        }
+        
+        textSticker.endOperation = { [weak self] in
+            self?.setToolView(show: true)
+        }
+        
+        textSticker.editText = { [weak self] (text) in
+            
+        }
+        
+        self.scrollView.pinchGestureRecognizer?.require(toFail: textSticker.pinchGes)
+        self.scrollView.panGestureRecognizer.require(toFail: textSticker.panGes)
+        self.panGes.require(toFail: textSticker.panGes)
     }
     
     @objc func clipBtnClick() {
@@ -546,6 +715,8 @@ public class ZLEditImageViewController: UIViewController {
         
         vc.clipDoneBlock = { [weak self] (angle, editFrame, selectRatio) in
             guard let `self` = self else { return }
+            let oldAngle = self.angle
+            let oldContainerSize = self.textStickersContainer.frame.size
             if self.angle != angle {
                 self.angle = angle
                 self.rotationImageView()
@@ -553,6 +724,7 @@ public class ZLEditImageViewController: UIViewController {
             self.editRect = editFrame
             self.selectRatio = selectRatio
             self.resetContainerViewFrame()
+            self.reCalculateTextStickersFrame(oldContainerSize, oldAngle, angle)
         }
         
         vc.cancelClipBlock = { [weak self] () in
@@ -586,9 +758,16 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
+        let textStickers = self.textStickersContainer.subviews.compactMap { (view) -> (text: String, zoomScale: CGFloat, originAngle: CGFloat, gesScale: CGFloat, gesRotation: CGFloat, gesTranslationPoint: CGPoint, frame: CGRect)? in
+            if let ts = view as? ZLTextStickerView, let text = ts.label.text {
+                return (text, ts.zoomScale, ts.originAngle, ts.gesScale, ts.gesRotation, ts.totalTranslationPoint, ts.originFrame)
+            } else {
+                return nil
+            }
+        }
         var image = self.buildImage()
         image = image.clipImage(self.angle, self.editRect) ?? image
-        self.editFinishBlock?(image, ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio, selectFilter: self.currentFilter))
+        self.editFinishBlock?(image, ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio, selectFilter: self.currentFilter, textStickers: textStickers))
         self.dismiss(animated: false, completion: nil)
     }
     
@@ -778,6 +957,17 @@ public class ZLEditImageViewController: UIViewController {
         self.editImage.draw(at: .zero)
         
         self.drawingImageView.image?.draw(in: CGRect(origin: .zero, size: imageSize))
+        
+        if !self.textStickersContainer.subviews.isEmpty, let context = UIGraphicsGetCurrentContext() {
+            let scale = self.imageSize.width / self.textStickersContainer.frame.width
+            self.textStickersContainer.subviews.forEach { (sv) in
+                (sv as? ZLTextStickerView)?.hideBorder()
+                (sv as? ZLTextStickerView)?.cleanTimer()
+            }
+            context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
+            self.textStickersContainer.layer.render(in: context)
+            context.concatenate(CGAffineTransform(scaleX: 1/scale, y: 1/scale))
+        }
         
         let temp = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
