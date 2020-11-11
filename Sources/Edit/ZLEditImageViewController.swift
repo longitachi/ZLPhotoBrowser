@@ -40,9 +40,9 @@ public class ZLEditImageModel: NSObject {
     
     public let selectFilter: ZLFilter?
     
-    public let textStickers: [(text: String, zoomScale: CGFloat, originAngle: CGFloat, gesScale: CGFloat, gesRotation: CGFloat, gesTranslationPoint: CGPoint, frame: CGRect)]?
+    public let textStickers: [ZLTextStickerState]?
     
-    init(drawPaths: [ZLDrawPath], mosaicPaths: [ZLMosaicPath], editRect: CGRect?, angle: CGFloat, selectRatio: ZLImageClipRatio?, selectFilter: ZLFilter, textStickers: [(text: String, zoomScale: CGFloat, originAngle: CGFloat, gesScale: CGFloat, gesRotation: CGFloat, gesTranslationPoint: CGPoint, frame: CGRect)]?) {
+    init(drawPaths: [ZLDrawPath], mosaicPaths: [ZLMosaicPath], editRect: CGRect?, angle: CGFloat, selectRatio: ZLImageClipRatio?, selectFilter: ZLFilter, textStickers: [ZLTextStickerState]?) {
         self.drawPaths = drawPaths
         self.mosaicPaths = mosaicPaths
         self.editRect = editRect
@@ -213,15 +213,7 @@ public class ZLEditImageViewController: UIViewController {
             self.currentDrawColor = self.drawColors.first!
         }
         if let ts = editModel?.textStickers {
-            self.textStickers = ts.map { (text, zoomScale, originAngle, gesScale, gesRotation, gesTranslationPoint, frame) -> ZLTextStickerView in
-                let v = ZLTextStickerView(text: text, zoomScale: zoomScale, originAngle: originAngle, textColor: .white, bgColor: .clear)
-                v.originFrame = frame
-                v.frame = frame
-                v.gesScale = gesScale
-                v.gesRotation = gesRotation
-                v.totalTranslationPoint = gesTranslationPoint
-                return v
-            }
+            self.textStickers = ts.map { ZLTextStickerView(from: $0) }
         }
     }
     
@@ -533,9 +525,8 @@ public class ZLEditImageViewController: UIViewController {
         
         self.textStickers.forEach { (tv) in
             self.textStickersContainer.addSubview(tv)
-            self.scrollView.pinchGestureRecognizer?.require(toFail: tv.pinchGes)
-            self.scrollView.panGestureRecognizer.require(toFail: tv.panGes)
-            self.panGes.require(toFail: tv.panGes)
+            tv.frame = tv.originFrame
+            self.configTextSticker(tv)
         }
     }
     
@@ -553,23 +544,9 @@ public class ZLEditImageViewController: UIViewController {
         
         self.textStickersContainer.subviews.forEach { (view) in
             if let ts = view as? ZLTextStickerView {
-//                var origin = ts.frame.origin
-//                origin.x *= scale
-//                origin.y *= scale
-//                ts.transform = ts.transform.scaledBy(x: scale, y: scale)
-//                let newO = ts.frame.origin
-//                let diffX: CGFloat = (origin.x - newO.x)
-//                let diffY: CGFloat = (origin.y - newO.y)
-//
-//                // 这个移动需要算上scale
-//                ts.transform = ts.transform.translatedBy(x: diffX / min(1, scale), y: diffY / min(1, scale))
-//                // 这个移动不需要算scale，之后在text sticker的updateTransform方法中会计算
-//                ts.originTransform = ts.originTransform.translatedBy(x: diffX , y: diffY )
-//
-//                ts.gesScale *= scale
-                
                 // Revert ges rotation.
                 ts.transform = ts.transform.rotated(by: -ts.gesRotation)
+//                ts.transform = ts.transform.scaledBy(x: 1/ts.gesScale, y: 1/ts.gesScale)
                 
                 var origin = ts.frame.origin
                 origin.x *= scale
@@ -581,21 +558,41 @@ public class ZLEditImageViewController: UIViewController {
                 let diffY: CGFloat = (origin.y - newOrigin.y)
                 
                 if ts.originAngle == 90 {
-                    ts.transform = ts.transform.translatedBy(x: diffY * min(scale, 1), y: -diffX * min(scale, 1))
+                    var diffScale: CGFloat = 1
+                    if self.editImage.size.width / self.editImage.size.height < 1 {
+                        diffScale = min(scale, 1)
+                    } else {
+                        diffScale = max(scale, 1)
+                    }
+                    ts.transform = ts.transform.translatedBy(x: diffY * diffScale, y: -diffX * diffScale)
                     // 这个移动不需要算scale，之后在text sticker的updateTransform方法中会计算
                     ts.originTransform = ts.originTransform.translatedBy(x: diffY , y: -diffX)
                 } else if ts.originAngle == 180 {
-                    ts.transform = ts.transform.translatedBy(x: -diffX * max(scale, 1), y: -diffY * max(scale, 1))
+                    var diffScale: CGFloat = 1
+                    if self.editImage.size.width / self.editImage.size.height < 1 {
+                        diffScale = max(scale, 1)
+                    } else {
+                        diffScale = min(scale, 1)
+                    }
+                    ts.transform = ts.transform.translatedBy(x: -diffX * diffScale, y: -diffY * diffScale)
                     ts.originTransform = ts.originTransform.translatedBy(x: -diffX , y: -diffY)
-//                    ts.totalTranslationPoint.x -= diffX
-//                    ts.totalTranslationPoint.y -= diffY
                 } else if ts.originAngle == 270 {
-                    ts.transform = ts.transform.translatedBy(x: -diffY * min(scale, 1), y: diffX * min(scale, 1))
+                    var diffScale: CGFloat = 1
+                    if self.editImage.size.width / self.editImage.size.height < 1 {
+                        diffScale = min(scale, 1)
+                    } else {
+                        diffScale = max(scale, 1)
+                    }
+                    ts.transform = ts.transform.translatedBy(x: -diffY * diffScale, y: diffX * diffScale)
                     ts.originTransform = ts.originTransform.translatedBy(x: -diffY , y: diffX)
-//                    ts.totalTranslationPoint.x -= diffY
-//                    ts.totalTranslationPoint.y += diffX
                 } else {
-                    ts.transform = ts.transform.translatedBy(x: diffX * max(scale, 1), y: diffY * max(scale, 1))
+                    var diffScale: CGFloat = 1
+                    if self.editImage.size.width / self.editImage.size.height < 1 {
+                        diffScale = max(scale, 1)
+                    } else {
+                        diffScale = min(scale, 1)
+                    }
+                    ts.transform = ts.transform.translatedBy(x: diffX * diffScale, y: diffY * diffScale)
                     // 这个移动不需要算scale，之后在text sticker的updateTransform方法中会计算
                     ts.originTransform = ts.originTransform.translatedBy(x: diffX , y: diffY)
                 }
@@ -606,6 +603,7 @@ public class ZLEditImageViewController: UIViewController {
                 
                 // Add ges rotation.
                 ts.transform = ts.transform.rotated(by: ts.gesRotation)
+//                ts.transform = ts.transform.scaledBy(x: ts.gesScale, y: ts.gesScale)
                 
                 ts.gesScale *= scale
             }
@@ -674,8 +672,6 @@ public class ZLEditImageViewController: UIViewController {
         guard !text.isEmpty else { return }
         let scale = self.scrollView.zoomScale
         let size = ZLTextStickerView.calculateSize(text: text, width: view.frame.width)
-        let textSticker = ZLTextStickerView(text: text, zoomScale: 1 / scale, originAngle: -self.angle, textColor: .white, bgColor: .clear)
-        self.textStickersContainer.addSubview(textSticker)
         
         // Calculate the display rect of container view.
         let x = (self.scrollView.contentOffset.x - self.containerView.frame.minX) / scale
@@ -684,9 +680,16 @@ public class ZLEditImageViewController: UIViewController {
         let h = view.frame.height / scale
         // Convert to text stickers container view.
         let r = self.containerView.convert(CGRect(x: x, y: y, width: w, height: h), to: self.textStickersContainer)
-        textSticker.frame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
-        textSticker.originFrame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
+        let originFrame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
         
+        let textSticker = ZLTextStickerView(text: text, textColor: .white, bgColor: .black, zoomScale: 1 / scale, originAngle: -self.angle, originFrame: originFrame)
+        self.textStickersContainer.addSubview(textSticker)
+        textSticker.frame = originFrame
+        
+        self.configTextSticker(textSticker)
+    }
+    
+    func configTextSticker(_ textSticker: ZLTextStickerView) {
         textSticker.beginOperation = { [weak self] in
             self?.setToolView(show: false)
         }
@@ -758,9 +761,9 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
-        let textStickers = self.textStickersContainer.subviews.compactMap { (view) -> (text: String, zoomScale: CGFloat, originAngle: CGFloat, gesScale: CGFloat, gesRotation: CGFloat, gesTranslationPoint: CGPoint, frame: CGRect)? in
-            if let ts = view as? ZLTextStickerView, let text = ts.label.text {
-                return (text, ts.zoomScale, ts.originAngle, ts.gesScale, ts.gesRotation, ts.totalTranslationPoint, ts.originFrame)
+        let textStickers = self.textStickersContainer.subviews.compactMap { (view) -> ZLTextStickerState? in
+            if let ts = view as? ZLTextStickerView, let _ = ts.label.text {
+                return ts.state
             } else {
                 return nil
             }

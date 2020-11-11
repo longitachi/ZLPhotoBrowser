@@ -19,17 +19,17 @@ class ZLTextStickerView: UIView {
     
     let originAngle: CGFloat
     
-    var originFrame: CGRect = .zero
+    var originFrame: CGRect
     
     var text: String
     
-    var textColor: UIColor = .white {
+    var textColor: UIColor {
         didSet {
             label.textColor = textColor
         }
     }
     
-    var bgColor: UIColor? {
+    var bgColor: UIColor {
         didSet {
             label.backgroundColor = bgColor
         }
@@ -69,20 +69,39 @@ class ZLTextStickerView: UIView {
     
     var onOperation = false
     
+    // Conver all states to model.
+    var state: ZLTextStickerState {
+        return ZLTextStickerState(text: self.text, textColor: self.textColor, bgColor: self.bgColor, zoomScale: self.zoomScale, originAngle: self.zoomScale, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
+    }
+    
     deinit {
         self.cleanTimer()
     }
     
-    init(text: String, zoomScale: CGFloat, originAngle: CGFloat, textColor: UIColor, bgColor: UIColor?) {
+    convenience init(from state: ZLTextStickerState) {
+        self.init(text: state.text, textColor: state.textColor, bgColor: state.bgColor, zoomScale: state.zoomScale, originAngle: state.originAngle, originFrame: state.originFrame, gesScale: state.gesScale, gesRotation: state.gesRotation, totalTranslationPoint: state.totalTranslationPoint, showBorder: false)
+    }
+    
+    init(text: String, textColor: UIColor, bgColor: UIColor, zoomScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat = 1, gesRotation: CGFloat = 0, totalTranslationPoint: CGPoint = .zero, showBorder: Bool = true) {
         self.zoomScale = zoomScale
-        self.originAngle = originAngle
         self.text = text
+        self.textColor = textColor
+        self.bgColor = bgColor
+        self.originAngle = originAngle
+        self.originFrame = originFrame
         
         super.init(frame: .zero)
         
+        self.gesScale = gesScale
+        self.gesRotation = gesRotation
+        self.totalTranslationPoint = totalTranslationPoint
+        
         self.borderView = UIView()
-        self.borderView.layer.borderWidth = 1 / UIScreen.main.scale / self.zoomScale / self.gesScale
-        self.borderView.layer.borderColor = UIColor.white.cgColor
+        if showBorder {
+            self.borderView.layer.borderWidth = 1 / UIScreen.main.scale / self.zoomScale / self.gesScale
+            self.borderView.layer.borderColor = UIColor.white.cgColor
+            self.startTimer()
+        }
         self.addSubview(self.borderView)
         
         self.label = UILabel()
@@ -147,22 +166,20 @@ class ZLTextStickerView: UIView {
             self.transform = self.transform.rotated(by: self.gesRotation)
         }
         
-        
-        self.startTimer()
         self.firstLayout = false
         self.borderView.frame = self.bounds.insetBy(dx: ZLTextStickerView.edgeInset, dy: ZLTextStickerView.edgeInset)
         self.label.frame = self.borderView.bounds.insetBy(dx: ZLTextStickerView.edgeInset, dy: ZLTextStickerView.edgeInset)
     }
     
     @objc func pinchAction(_ ges: UIPinchGestureRecognizer) {
-//        self.gesScale *= ges.scale
-//        ges.scale = 1
-//        self.updateTransform()
-//        if ges.state == .began {
-//            self.setOperation(true)
-//        } else if (ges.state == .ended || ges.state == .cancelled){
-//            self.setOperation(false)
-//        }
+        self.gesScale *= ges.scale
+        ges.scale = 1
+        self.updateTransform()
+        if ges.state == .began {
+            self.setOperation(true)
+        } else if (ges.state == .ended || ges.state == .cancelled){
+            self.setOperation(false)
+        }
     }
     
     @objc func rotationAction(_ ges: UIRotationGestureRecognizer) {
@@ -190,7 +207,7 @@ class ZLTextStickerView: UIView {
     
     @objc func panAction(_ ges: UIPanGestureRecognizer) {
         let point = ges.translation(in: self.superview)
-        self.gesTranslationPoint = point
+        self.gesTranslationPoint = CGPoint(x: point.x / self.zoomScale, y: point.y / self.zoomScale)
         self.updateTransform()
         
         if ges.state == .began {
@@ -200,13 +217,13 @@ class ZLTextStickerView: UIView {
             self.totalTranslationPoint.y += point.y
             self.setOperation(false)
             if self.originAngle == 90 {
-                self.originTransform = self.originTransform.translatedBy(x: point.y, y: -point.x)
+                self.originTransform = self.originTransform.translatedBy(x: self.gesTranslationPoint.y, y: -self.gesTranslationPoint.x)
             } else if self.originAngle == 180 {
-                self.originTransform = self.originTransform.translatedBy(x: -point.x, y: -point.y)
+                self.originTransform = self.originTransform.translatedBy(x: -self.gesTranslationPoint.x, y: -self.gesTranslationPoint.y)
             } else if self.originAngle == 270 {
-                self.originTransform = self.originTransform.translatedBy(x: -point.y, y: point.x)
+                self.originTransform = self.originTransform.translatedBy(x: -self.gesTranslationPoint.y, y: self.gesTranslationPoint.x)
             } else {
-                self.originTransform = self.originTransform.translatedBy(x: point.x, y: point.y)
+                self.originTransform = self.originTransform.translatedBy(x: self.gesTranslationPoint.x, y: self.gesTranslationPoint.y)
             }
             self.gesTranslationPoint = .zero
         }
@@ -278,6 +295,34 @@ extension ZLTextStickerView: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
+    }
+    
+}
+
+
+public class ZLTextStickerState: NSObject {
+    
+    let text: String
+    let textColor: UIColor
+    let bgColor: UIColor
+    let zoomScale: CGFloat
+    let originAngle: CGFloat
+    let originFrame: CGRect
+    let gesScale: CGFloat
+    let gesRotation: CGFloat
+    let totalTranslationPoint: CGPoint
+    
+    init(text: String, textColor: UIColor, bgColor: UIColor, zoomScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat, gesRotation: CGFloat, totalTranslationPoint: CGPoint) {
+        self.text = text
+        self.textColor = textColor
+        self.bgColor = bgColor
+        self.zoomScale = zoomScale
+        self.originAngle = originAngle
+        self.originFrame = originFrame
+        self.gesScale = gesScale
+        self.gesRotation = gesRotation
+        self.totalTranslationPoint = totalTranslationPoint
+        super.init()
     }
     
 }
