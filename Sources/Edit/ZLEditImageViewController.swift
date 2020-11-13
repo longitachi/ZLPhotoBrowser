@@ -330,7 +330,7 @@ public class ZLEditImageViewController: UIViewController {
         self.imageView.image = self.editImage
         
         let editSize = self.editRect.size
-        let scrollViewSize = self.scrollView.frame
+        let scrollViewSize = self.scrollView.frame.size
         let ratio = min(scrollViewSize.width / editSize.width, scrollViewSize.height / editSize.height)
         let w = ratio * editSize.width * self.scrollView.zoomScale
         let h = ratio * editSize.height * self.scrollView.zoomScale
@@ -531,9 +531,6 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func reCalculateTextStickersFrame(_ oldSize: CGSize, _ oldAngle: CGFloat, _ newAngle: CGFloat) {
-        guard oldAngle != newAngle else {
-            return
-        }
         let currSize = self.textStickersContainer.frame.size
         let scale: CGFloat
         if Int(newAngle - oldAngle) % 180 == 0{
@@ -544,9 +541,12 @@ public class ZLEditImageViewController: UIViewController {
         
         self.textStickersContainer.subviews.forEach { (view) in
             if let ts = view as? ZLTextStickerView {
+                // Revert zoom scale.
+                ts.transform = ts.transform.scaledBy(x: 1/ts.zoomScale, y: 1/ts.zoomScale)
+                // Revert ges scale.
+                ts.transform = ts.transform.scaledBy(x: 1/ts.gesScale, y: 1/ts.gesScale)
                 // Revert ges rotation.
                 ts.transform = ts.transform.rotated(by: -ts.gesRotation)
-//                ts.transform = ts.transform.scaledBy(x: 1/ts.gesScale, y: 1/ts.gesScale)
                 
                 var origin = ts.frame.origin
                 origin.x *= scale
@@ -558,52 +558,29 @@ public class ZLEditImageViewController: UIViewController {
                 let diffY: CGFloat = (origin.y - newOrigin.y)
                 
                 if ts.originAngle == 90 {
-                    var diffScale: CGFloat = 1
-                    if self.editImage.size.width / self.editImage.size.height < 1 {
-                        diffScale = min(scale, 1)
-                    } else {
-                        diffScale = max(scale, 1)
-                    }
-                    ts.transform = ts.transform.translatedBy(x: diffY * diffScale, y: -diffX * diffScale)
-                    // 这个移动不需要算scale，之后在text sticker的updateTransform方法中会计算
-                    ts.originTransform = ts.originTransform.translatedBy(x: diffY , y: -diffX)
+                    ts.transform = ts.transform.translatedBy(x: diffY, y: -diffX)
+                    ts.originTransform = ts.originTransform.translatedBy(x: diffY / ts.zoomScale, y: -diffX / ts.zoomScale)
                 } else if ts.originAngle == 180 {
-                    var diffScale: CGFloat = 1
-                    if self.editImage.size.width / self.editImage.size.height < 1 {
-                        diffScale = max(scale, 1)
-                    } else {
-                        diffScale = min(scale, 1)
-                    }
-                    ts.transform = ts.transform.translatedBy(x: -diffX * diffScale, y: -diffY * diffScale)
-                    ts.originTransform = ts.originTransform.translatedBy(x: -diffX , y: -diffY)
+                    ts.transform = ts.transform.translatedBy(x: -diffX, y: -diffY)
+                    ts.originTransform = ts.originTransform.translatedBy(x: -diffX / ts.zoomScale, y: -diffY / ts.zoomScale)
                 } else if ts.originAngle == 270 {
-                    var diffScale: CGFloat = 1
-                    if self.editImage.size.width / self.editImage.size.height < 1 {
-                        diffScale = min(scale, 1)
-                    } else {
-                        diffScale = max(scale, 1)
-                    }
-                    ts.transform = ts.transform.translatedBy(x: -diffY * diffScale, y: diffX * diffScale)
-                    ts.originTransform = ts.originTransform.translatedBy(x: -diffY , y: diffX)
+                    ts.transform = ts.transform.translatedBy(x: -diffY, y: diffX)
+                    ts.originTransform = ts.originTransform.translatedBy(x: -diffY / ts.zoomScale, y: diffX / ts.zoomScale)
                 } else {
-                    var diffScale: CGFloat = 1
-                    if self.editImage.size.width / self.editImage.size.height < 1 {
-                        diffScale = max(scale, 1)
-                    } else {
-                        diffScale = min(scale, 1)
-                    }
-                    ts.transform = ts.transform.translatedBy(x: diffX * diffScale, y: diffY * diffScale)
-                    // 这个移动不需要算scale，之后在text sticker的updateTransform方法中会计算
-                    ts.originTransform = ts.originTransform.translatedBy(x: diffX , y: diffY)
+                    ts.transform = ts.transform.translatedBy(x: diffX, y: diffY)
+                    ts.originTransform = ts.originTransform.translatedBy(x: diffX / ts.zoomScale, y: diffY / ts.zoomScale)
                 }
                 ts.totalTranslationPoint.x += diffX
                 ts.totalTranslationPoint.y += diffY
                 
                 ts.transform = ts.transform.scaledBy(x: scale, y: scale)
                 
-                // Add ges rotation.
+                // Readd zoom scale.
+                ts.transform = ts.transform.scaledBy(x: ts.zoomScale, y: ts.zoomScale)
+                // Readd ges scale.
+                ts.transform = ts.transform.scaledBy(x: ts.gesScale, y: ts.gesScale)
+                // Readd ges rotation.
                 ts.transform = ts.transform.rotated(by: ts.gesRotation)
-//                ts.transform = ts.transform.scaledBy(x: ts.gesScale, y: ts.gesScale)
                 
                 ts.gesScale *= scale
             }

@@ -13,6 +13,8 @@ class ZLTextStickerView: UIView {
     
     static let fontSize: CGFloat = 30
     
+    static let borderWidth = 1 / UIScreen.main.scale
+    
     var firstLayout = true
     
     let zoomScale: CGFloat
@@ -71,7 +73,7 @@ class ZLTextStickerView: UIView {
     
     // Conver all states to model.
     var state: ZLTextStickerState {
-        return ZLTextStickerState(text: self.text, textColor: self.textColor, bgColor: self.bgColor, zoomScale: self.zoomScale, originAngle: self.zoomScale, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
+        return ZLTextStickerState(text: self.text, textColor: self.textColor, bgColor: self.bgColor, zoomScale: self.zoomScale, originAngle: self.originAngle, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
     }
     
     deinit {
@@ -98,7 +100,7 @@ class ZLTextStickerView: UIView {
         
         self.borderView = UIView()
         if showBorder {
-            self.borderView.layer.borderWidth = 1 / UIScreen.main.scale / self.zoomScale / self.gesScale
+            self.borderView.layer.borderWidth = ZLTextStickerView.borderWidth
             self.borderView.layer.borderColor = UIColor.white.cgColor
             self.startTimer()
         }
@@ -195,7 +197,7 @@ class ZLTextStickerView: UIView {
     
     @objc func tapAction(_ ges: UITapGestureRecognizer) {
         if !self.isSelected {
-            self.borderView.layer.borderWidth = 1 / UIScreen.main.scale / self.zoomScale / self.gesScale
+            self.borderView.layer.borderWidth = ZLTextStickerView.borderWidth
             self.borderView.layer.borderColor = UIColor.white.cgColor
             self.superview?.bringSubviewToFront(self)
             self.startTimer()
@@ -244,7 +246,7 @@ class ZLTextStickerView: UIView {
     }
     
     func updateTransform() {
-        self.borderView.layer.borderWidth = 1 / UIScreen.main.scale / self.zoomScale / self.gesScale
+        self.borderView.layer.borderWidth = ZLTextStickerView.borderWidth
         var transform = self.originTransform
         
         if self.originAngle == 90 {
