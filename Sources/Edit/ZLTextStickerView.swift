@@ -7,6 +7,21 @@
 
 import UIKit
 
+protocol ZLTextStickerViewDelegate: NSObject {
+    
+    // Called when scale or rotate or move.
+    func textStickerBeginOperation(_ textSticker: ZLTextStickerView)
+    
+    // Called during scale or rotate or move.
+    func textStickerOnOperation(_ textSticker: ZLTextStickerView, panGes: UIPanGestureRecognizer)
+    
+    // Called after scale or rotate or move.
+    func textStickerEndOperation(_ textSticker: ZLTextStickerView, panGes: UIPanGestureRecognizer)
+    
+    func textSticker(_ textSticker: ZLTextStickerView, editText text: String)
+    
+}
+
 class ZLTextStickerView: UIView {
 
     static let edgeInset: CGFloat = 20
@@ -15,15 +30,23 @@ class ZLTextStickerView: UIView {
     
     static let borderWidth = 1 / UIScreen.main.scale
     
+    weak var delegate: ZLTextStickerViewDelegate?
+    
     var firstLayout = true
     
-    let zoomScale: CGFloat
+    let originScale: CGFloat
     
     let originAngle: CGFloat
     
     var originFrame: CGRect
     
-    var text: String
+    var originTransform: CGAffineTransform = .identity
+    
+    var text: String {
+        didSet {
+            self.label.text = text
+        }
+    }
     
     var textColor: UIColor {
         didSet {
@@ -47,8 +70,6 @@ class ZLTextStickerView: UIView {
     
     var panGes: UIPanGestureRecognizer!
     
-    var isSelected = false
-    
     var timer: Timer?
     
     var totalTranslationPoint: CGPoint = .zero
@@ -59,21 +80,11 @@ class ZLTextStickerView: UIView {
     
     var gesScale: CGFloat = 1
     
-    var originTransform: CGAffineTransform = .identity
-    
-    var editText: ( (String) -> Void )?
-    
-    // Call when scale or rotate or move.
-    var beginOperation: ( () -> Void )?
-    
-    // Call when end scale or rotate or move.
-    var endOperation: ( () -> Void )?
-    
     var onOperation = false
     
     // Conver all states to model.
     var state: ZLTextStickerState {
-        return ZLTextStickerState(text: self.text, textColor: self.textColor, bgColor: self.bgColor, zoomScale: self.zoomScale, originAngle: self.originAngle, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
+        return ZLTextStickerState(text: self.text, textColor: self.textColor, bgColor: self.bgColor, zoomScale: self.originScale, originAngle: self.originAngle, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
     }
     
     deinit {
@@ -85,7 +96,7 @@ class ZLTextStickerView: UIView {
     }
     
     init(text: String, textColor: UIColor, bgColor: UIColor, zoomScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat = 1, gesRotation: CGFloat = 0, totalTranslationPoint: CGPoint = .zero, showBorder: Bool = true) {
-        self.zoomScale = zoomScale
+        self.originScale = zoomScale
         self.text = text
         self.textColor = textColor
         self.bgColor = bgColor
@@ -129,6 +140,8 @@ class ZLTextStickerView: UIView {
         self.panGes = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
         self.panGes.delegate = self
         self.addGestureRecognizer(self.panGes)
+        
+        self.tapGes.require(toFail: self.panGes)
     }
     
     required init?(coder: NSCoder) {
@@ -157,7 +170,7 @@ class ZLTextStickerView: UIView {
             }
         }
         
-        self.transform = self.transform.scaledBy(x: self.zoomScale, y: self.zoomScale)
+        self.transform = self.transform.scaledBy(x: self.originScale, y: self.originScale)
         
         self.originTransform = self.transform
         
@@ -173,12 +186,24 @@ class ZLTextStickerView: UIView {
         self.label.frame = self.borderView.bounds.insetBy(dx: ZLTextStickerView.edgeInset, dy: ZLTextStickerView.edgeInset)
     }
     
+    @objc func tapAction(_ ges: UITapGestureRecognizer) {
+        if let t = self.timer, t.isValid {
+            self.delegate?.textSticker(self, editText: self.text)
+        } else {
+            self.borderView.layer.borderColor = UIColor.white.cgColor
+            self.superview?.bringSubviewToFront(self)
+            self.startTimer()
+        }
+    }
+    
     @objc func pinchAction(_ ges: UIPinchGestureRecognizer) {
         self.gesScale *= ges.scale
         ges.scale = 1
-        self.updateTransform()
+        
         if ges.state == .began {
             self.setOperation(true)
+        } else if ges.state == .changed {
+            self.updateTransform()
         } else if (ges.state == .ended || ges.state == .cancelled){
             self.setOperation(false)
         }
@@ -187,33 +212,24 @@ class ZLTextStickerView: UIView {
     @objc func rotationAction(_ ges: UIRotationGestureRecognizer) {
         self.gesRotation += ges.rotation
         ges.rotation = 0
-        self.updateTransform()
+        
         if ges.state == .began {
             self.setOperation(true)
+        } else if ges.state == .changed {
+            self.updateTransform()
         } else if (ges.state == .ended || ges.state == .cancelled){
             self.setOperation(false)
         }
     }
     
-    @objc func tapAction(_ ges: UITapGestureRecognizer) {
-        if !self.isSelected {
-            self.borderView.layer.borderWidth = ZLTextStickerView.borderWidth
-            self.borderView.layer.borderColor = UIColor.white.cgColor
-            self.superview?.bringSubviewToFront(self)
-            self.startTimer()
-        } else {
-            self.editText?(self.text)
-        }
-        self.isSelected = !self.isSelected
-    }
-    
     @objc func panAction(_ ges: UIPanGestureRecognizer) {
         let point = ges.translation(in: self.superview)
-        self.gesTranslationPoint = CGPoint(x: point.x / self.zoomScale, y: point.y / self.zoomScale)
-        self.updateTransform()
+        self.gesTranslationPoint = CGPoint(x: point.x / self.originScale, y: point.y / self.originScale)
         
         if ges.state == .began {
             self.setOperation(true)
+        } else if ges.state == .changed {
+            self.updateTransform()
         } else if (ges.state == .ended || ges.state == .cancelled) {
             self.totalTranslationPoint.x += point.x
             self.totalTranslationPoint.y += point.y
@@ -233,15 +249,15 @@ class ZLTextStickerView: UIView {
     
     func setOperation(_ isOn: Bool) {
         if isOn, !self.onOperation {
+            self.onOperation = true
             self.cleanTimer()
             self.borderView.layer.borderColor = UIColor.white.cgColor
             self.superview?.bringSubviewToFront(self)
-            self.onOperation = true
-            self.beginOperation?()
+            self.delegate?.textStickerBeginOperation(self)
         } else if !isOn, self.onOperation {
-            self.startTimer()
             self.onOperation = false
-            self.endOperation?()
+            self.startTimer()
+            self.delegate?.textStickerEndOperation(self, panGes: self.panGes)
         }
     }
     
@@ -263,10 +279,11 @@ class ZLTextStickerView: UIView {
         // Rotate must after scale.
         transform = transform.rotated(by: self.gesRotation)
         self.transform = transform
+        
+        self.delegate?.textStickerOnOperation(self, panGes: self.panGes)
     }
     
     @objc func hideBorder() {
-        self.isSelected = false
         self.borderView.layer.borderColor = UIColor.clear.cgColor
     }
     
@@ -282,6 +299,82 @@ class ZLTextStickerView: UIView {
     func cleanTimer() {
         self.timer?.invalidate()
         self.timer = nil
+    }
+    
+    func addScale(_ scale: CGFloat) {
+        // Revert zoom scale.
+        self.transform = self.transform.scaledBy(x: 1/self.originScale, y: 1/self.originScale)
+        // Revert ges scale.
+        self.transform = self.transform.scaledBy(x: 1/self.gesScale, y: 1/self.gesScale)
+        // Revert ges rotation.
+        self.transform = self.transform.rotated(by: -self.gesRotation)
+        
+        var origin = self.frame.origin
+        origin.x *= scale
+        origin.y *= scale
+        
+        let newSize = CGSize(width: self.frame.width * scale, height: self.frame.height * scale)
+        let newOrigin = CGPoint(x: self.frame.minX + (self.frame.width - newSize.width)/2, y: self.frame.minY + (self.frame.height - newSize.height)/2)
+        let diffX: CGFloat = (origin.x - newOrigin.x)
+        let diffY: CGFloat = (origin.y - newOrigin.y)
+        
+        if self.originAngle == 90 {
+            self.transform = self.transform.translatedBy(x: diffY, y: -diffX)
+            self.originTransform = self.originTransform.translatedBy(x: diffY / self.originScale, y: -diffX / self.originScale)
+        } else if self.originAngle == 180 {
+            self.transform = self.transform.translatedBy(x: -diffX, y: -diffY)
+            self.originTransform = self.originTransform.translatedBy(x: -diffX / self.originScale, y: -diffY / self.originScale)
+        } else if self.originAngle == 270 {
+            self.transform = self.transform.translatedBy(x: -diffY, y: diffX)
+            self.originTransform = self.originTransform.translatedBy(x: -diffY / self.originScale, y: diffX / self.originScale)
+        } else {
+            self.transform = self.transform.translatedBy(x: diffX, y: diffY)
+            self.originTransform = self.originTransform.translatedBy(x: diffX / self.originScale, y: diffY / self.originScale)
+        }
+        self.totalTranslationPoint.x += diffX
+        self.totalTranslationPoint.y += diffY
+        
+        self.transform = self.transform.scaledBy(x: scale, y: scale)
+        
+        // Readd zoom scale.
+        self.transform = self.transform.scaledBy(x: self.originScale, y: self.originScale)
+        // Readd ges scale.
+        self.transform = self.transform.scaledBy(x: self.gesScale, y: self.gesScale)
+        // Readd ges rotation.
+        self.transform = self.transform.rotated(by: self.gesRotation)
+        
+        self.gesScale *= scale
+    }
+    
+    func changeSize(to newSize: CGSize) {
+        // Revert zoom scale.
+        self.transform = self.transform.scaledBy(x: 1/self.originScale, y: 1/self.originScale)
+        // Revert ges scale.
+        self.transform = self.transform.scaledBy(x: 1/self.gesScale, y: 1/self.gesScale)
+        // Revert ges rotation.
+        self.transform = self.transform.rotated(by: -self.gesRotation)
+        
+        let center = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        var frame = self.frame
+        frame.origin.x = center.x - newSize.width / 2
+        frame.origin.y = center.y - newSize.height / 2
+        frame.size = newSize
+        self.frame = frame
+        
+        self.borderView.frame = self.bounds.insetBy(dx: ZLTextStickerView.edgeInset, dy: ZLTextStickerView.edgeInset)
+        self.label.frame = self.borderView.bounds.insetBy(dx: ZLTextStickerView.edgeInset, dy: ZLTextStickerView.edgeInset)
+        
+        // Readd zoom scale.
+        self.transform = self.transform.scaledBy(x: self.originScale, y: self.originScale)
+        // Readd ges scale.
+        self.transform = self.transform.scaledBy(x: self.gesScale, y: self.gesScale)
+        // Readd ges rotation.
+        self.transform = self.transform.rotated(by: self.gesRotation)
+    }
+    
+    func moveToAshbin() {
+        self.cleanTimer()
+        self.removeFromSuperview()
     }
     
     class func calculateSize(text: String, width: CGFloat) -> CGSize {

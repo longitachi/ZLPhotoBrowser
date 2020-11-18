@@ -134,7 +134,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow to choose the minimum duration of the video.
     @objc public var minSelectVideoDuration: Second = 0
     
-    private var pri_editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .mosaic, .filter]
+    private var pri_editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .textSticker, .mosaic, .filter]
     /// Edit image tools. (Because swift OptionSet does not support @objc mark, this attribute oc is not available)
     public var editImageTools: ZLEditImageViewController.EditImageTool {
         set {
@@ -142,7 +142,7 @@ public class ZLPhotoConfiguration: NSObject {
         }
         get {
             if pri_editImageTools.isEmpty {
-                return [.draw, .clip, .mosaic, .filter]
+                return [.draw, .clip, .textSticker, .mosaic, .filter]
             } else {
                 return pri_editImageTools
             }

@@ -42,12 +42,12 @@ class ZLInputTextViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupUI()
+        self.setupUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        textView.becomeFirstResponder()
+        self.textView.becomeFirstResponder()
     }
     
     override func viewDidLayoutSubviews() {
@@ -60,58 +60,49 @@ class ZLInputTextViewController: UIViewController {
         
         let btnY = insets.top + 20
         let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
-        cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLLayout.bottomToolBtnH)
+        self.cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLLayout.bottomToolBtnH)
         
         let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
-        doneBtn.frame = CGRect(x: view.bounds.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        self.doneBtn.frame = CGRect(x: view.bounds.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
         
-        textView.frame = CGRect(x: 20, y: cancelBtn.frame.maxY + 20, width: view.bounds.width - 40, height: 150)
+        self.textView.frame = CGRect(x: 20, y: cancelBtn.frame.maxY + 20, width: view.bounds.width - 40, height: 150)
     }
     
     func setupUI() {
-        view.backgroundColor = .black
+        self.view.backgroundColor = .black
         
-        // blur image
-        let inputImage = image?.toCIImage()
-        let context = CIContext()
-        let filter = CIFilter(name: "CIGaussianBlur")!
-        filter.setValue(inputImage, forKey:kCIInputImageKey)
-        filter.setValue(6, forKey: kCIInputRadiusKey)
-        let outputCIImage = filter.outputImage!
-        let cgImage = context.createCGImage(outputCIImage, from: outputCIImage.extent)
-        
-        let img = UIImage(cgImage: cgImage!)
-        let bgImageView = UIImageView(image: image)
-        bgImageView.frame = view.bounds
+        let bgImageView = UIImageView(image: image?.blurImage(level: 4))
+        bgImageView.frame = self.view.bounds
         bgImageView.contentMode = .scaleAspectFit
-        view.addSubview(bgImageView)
+        self.view.addSubview(bgImageView)
         
-//        let coverView = UIView(frame: bgImageView.bounds)
-//        coverView.backgroundColor = .black
-//        coverView.alpha = 0.6
-//        bgImageView.addSubview(coverView)
+        let coverView = UIView(frame: bgImageView.bounds)
+        coverView.backgroundColor = .black
+        coverView.alpha = 0.4
+        bgImageView.addSubview(coverView)
         
-        cancelBtn = UIButton(type: .custom)
-        cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
-        cancelBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
-        cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
-        view.addSubview(cancelBtn)
+        self.cancelBtn = UIButton(type: .custom)
+        self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
+        self.cancelBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
+        self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
+        view.addSubview(self.cancelBtn)
         
-        doneBtn = UIButton(type: .custom)
-        doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
-        doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
-        doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
-        view.addSubview(doneBtn)
+        self.doneBtn = UIButton(type: .custom)
+        self.doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
+        self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
+        self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
+        view.addSubview(self.doneBtn)
         
-        textView = UITextView(frame: .zero)
-        textView.keyboardAppearance = .dark
-        textView.returnKeyType = .done
-        textView.delegate = self
-        textView.backgroundColor = .clear
-        textView.tintColor = .bottomToolViewBtnNormalBgColor
-        textView.textColor = .white
-        textView.font = UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
-        view.addSubview(textView)
+        self.textView = UITextView(frame: .zero)
+        self.textView.keyboardAppearance = .dark
+        self.textView.returnKeyType = .done
+        self.textView.delegate = self
+        self.textView.backgroundColor = .clear
+        self.textView.tintColor = .bottomToolViewBtnNormalBgColor
+        self.textView.textColor = .white
+        self.textView.text = self.text
+        self.textView.font = UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
+        view.addSubview(self.textView)
     }
     
     @objc func cancelBtnClick() {
@@ -119,7 +110,7 @@ class ZLInputTextViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
-        endInput?(textView.text)
+        self.endInput?(self.textView.text)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -130,7 +121,7 @@ extension ZLInputTextViewController: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
-            doneBtnClick()
+            self.doneBtnClick()
             return false
         }
         return true
