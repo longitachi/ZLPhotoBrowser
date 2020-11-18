@@ -9,7 +9,6 @@
 "editFinish" = "완료";
 
 "back" = "뒤";
-
 "edit" = "편집";
 "revert" = "실행 취소";
 
@@ -62,3 +61,4 @@
 
 "noTitleAlbumListPlaceholder" = "모든 사진";
 "unableToAccessAllPhotos" = "모든 사진에 액세스 할 수 없습니다. 설정으로 이동하세요";
+"textStickerRemoveTips" = "제거하려면 여기로 드래그하세요";

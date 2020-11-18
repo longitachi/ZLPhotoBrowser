@@ -19,7 +19,12 @@ class ZLInputTextViewController: UIViewController {
     
     var textView: UITextView!
     
-    var endInput: ( (String) -> Void )?
+    var collectionView: UICollectionView!
+    
+    var currentTextColor: UIColor
+    
+    /// text, textColor, bgColor
+    var endInput: ( (String, UIColor, UIColor) -> Void )?
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -29,9 +34,18 @@ class ZLInputTextViewController: UIViewController {
         return true
     }
     
-    init(image: UIImage?, text: String?) {
+    init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil) {
         self.image = image
         self.text = text ?? ""
+        if let _ = textColor {
+            self.currentTextColor = textColor!
+        } else {
+            if !ZLPhotoConfiguration.default().textStickerTextColors.contains(ZLPhotoConfiguration.default().textStickerDefaultTextColor) {
+                self.currentTextColor = ZLPhotoConfiguration.default().textStickerTextColors.first!
+            } else {
+                self.currentTextColor = ZLPhotoConfiguration.default().textStickerDefaultTextColor
+            }
+        }
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,6 +57,8 @@ class ZLInputTextViewController: UIViewController {
         super.viewDidLoad()
 
         self.setupUI()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIApplication.keyboardWillShowNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,6 +82,10 @@ class ZLInputTextViewController: UIViewController {
         self.doneBtn.frame = CGRect(x: view.bounds.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
         
         self.textView.frame = CGRect(x: 20, y: cancelBtn.frame.maxY + 20, width: view.bounds.width - 40, height: 150)
+        
+        if let index = ZLPhotoConfiguration.default().textStickerTextColors.firstIndex(where: { $0 == self.currentTextColor}) {
+            self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
+        }
     }
     
     func setupUI() {
@@ -99,10 +119,25 @@ class ZLInputTextViewController: UIViewController {
         self.textView.delegate = self
         self.textView.backgroundColor = .clear
         self.textView.tintColor = .bottomToolViewBtnNormalBgColor
-        self.textView.textColor = .white
+        self.textView.textColor = self.currentTextColor
         self.textView.text = self.text
         self.textView.font = UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
         view.addSubview(self.textView)
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 30, height: 30)
+        layout.minimumLineSpacing = 15
+        layout.minimumInteritemSpacing = 15
+        layout.scrollDirection = .horizontal
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 30, bottom: 10, right: 30)
+        self.collectionView = UICollectionView(frame: CGRect(x: 0, y: self.view.frame.height - 50, width: self.view.frame.width, height: 50), collectionViewLayout: layout)
+        self.collectionView.backgroundColor = .clear
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        self.collectionView.showsHorizontalScrollIndicator = false
+        self.view.addSubview(self.collectionView)
+        
+        ZLDrawColorCell.zl_register(self.collectionView)
     }
     
     @objc func cancelBtnClick() {
@@ -110,9 +145,50 @@ class ZLInputTextViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
-        self.endInput?(self.textView.text)
+        self.endInput?(self.textView.text, self.currentTextColor, .clear)
         self.dismiss(animated: true, completion: nil)
     }
+    
+    @objc func keyboardWillShow(_ notify: Notification) {
+        let rect = notify.userInfo?[UIApplication.keyboardFrameEndUserInfoKey] as? CGRect
+        let keyboardH = rect?.height ?? 366
+        let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+        
+        UIView.animate(withDuration: duration) {
+            self.collectionView.frame = CGRect(x: 0, y: self.view.frame.height - keyboardH - 50, width: self.view.frame.width, height: 50)
+        }
+    }
+    
+}
+
+
+extension ZLInputTextViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return ZLPhotoConfiguration.default().textStickerTextColors.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLDrawColorCell.zl_identifier(), for: indexPath) as! ZLDrawColorCell
+        
+        let c = ZLPhotoConfiguration.default().textStickerTextColors[indexPath.row]
+        cell.color = c
+        if c == self.currentTextColor {
+            cell.bgWhiteView.layer.transform = CATransform3DMakeScale(1.2, 1.2, 1)
+        } else {
+            cell.bgWhiteView.layer.transform = CATransform3DIdentity
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.currentTextColor = ZLPhotoConfiguration.default().textStickerTextColors[indexPath.row]
+        self.textView.textColor = self.currentTextColor
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        collectionView.reloadData()
+    }
+    
     
 }
 

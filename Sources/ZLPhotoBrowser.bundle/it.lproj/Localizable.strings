@@ -9,7 +9,6 @@
 "editFinish" = "Fine";
 
 "back" = "Indietro";
-
 "edit" = "Modifica";
 "revert" = "Annulla";
 
@@ -62,3 +61,4 @@
 
 "noTitleAlbumListPlaceholder" = "Tutte le foto";
 "unableToAccessAllPhotos" = "Impossibile accedere a tutte le foto, vai alle impostazioni";
+"textStickerRemoveTips" = "Trascina qui per rimuovere";

@@ -201,6 +201,9 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Unable to access all photos, go to settings (无法访问所有照片，前往设置)
     public static let unableToAccessAllPhotos = ZLLocalLanguageKey(rawValue: "unableToAccessAllPhotos")
     
+    /// Drag here to remove (拖到此处删除)
+    public static let textStickerRemoveTips = ZLLocalLanguageKey(rawValue: "textStickerRemoveTips")
+    
 }
 
 func localLanguageTextValue(_ key: ZLLocalLanguageKey) -> String {

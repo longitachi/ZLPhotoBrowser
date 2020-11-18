@@ -182,6 +182,24 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
+    private var pri_textStickerTextColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+    /// Draw colors for image editor.
+    @objc public var textStickerTextColors: [UIColor] {
+        set {
+            pri_editImageDrawColors = newValue
+        }
+        get {
+            if pri_editImageDrawColors.isEmpty {
+                return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+            } else {
+                return pri_editImageDrawColors
+            }
+        }
+    }
+    
+    /// The default draw color. If this color not in editImageDrawColors, will pick the first color in editImageDrawColors as the default.
+    @objc public var textStickerDefaultTextColor = zlRGB(241, 79, 79)
+    
     private var pri_filters: [ZLFilter] = ZLFilter.all
     /// Filters for image editor.
     @objc public var filters: [ZLFilter] {

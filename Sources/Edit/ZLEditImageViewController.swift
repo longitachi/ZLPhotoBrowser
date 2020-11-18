@@ -484,14 +484,16 @@ public class ZLEditImageViewController: UIViewController {
         self.view.addSubview(self.ashbinView)
         
         self.ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
-        self.ashbinImgView.frame = CGRect(x: (ashbinSize.width-25)/2, y: 20, width: 25, height: 25)
+        self.ashbinImgView.frame = CGRect(x: (ashbinSize.width-25)/2, y: 15, width: 25, height: 25)
         self.ashbinView.addSubview(self.ashbinImgView)
         
-        let asbinTipLabel = UILabel(frame: CGRect(x: 0, y: ashbinSize.height-25, width: ashbinSize.width, height: 20))
+        let asbinTipLabel = UILabel(frame: CGRect(x: 0, y: ashbinSize.height-34, width: ashbinSize.width, height: 34))
         asbinTipLabel.font = getFont(12)
         asbinTipLabel.textAlignment = .center
         asbinTipLabel.textColor = .white
-        asbinTipLabel.text = "拖动到此处删除"
+        asbinTipLabel.text = localLanguageTextValue(.textStickerRemoveTips)
+        asbinTipLabel.numberOfLines = 2
+        asbinTipLabel.lineBreakMode = .byCharWrapping
         self.ashbinView.addSubview(asbinTipLabel)
         
         if self.tools.contains(.mosaic) {
@@ -596,8 +598,8 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     func textStickerBtnClick() {
-        self.showInputTextVC(nil) { [weak self] (text) in
-            self?.addTextStickersView(text)
+        self.showInputTextVC { [weak self] (text, textColor, bgColor) in
+            self?.addTextStickersView(text, textColor: textColor, bgColor: bgColor)
         }
     }
     
@@ -745,7 +747,7 @@ public class ZLEditImageViewController: UIViewController {
         }
     }
     
-    func showInputTextVC(_ text: String?, completion: @escaping ( (String) -> Void )) {
+    func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil, completion: @escaping ( (String, UIColor, UIColor) -> Void )) {
         // Calculate image displayed frame on the screen.
         var r = self.scrollView.convert(self.view.frame, to: self.containerView)
         r.origin.x += self.scrollView.contentOffset.x / self.scrollView.zoomScale
@@ -756,10 +758,10 @@ public class ZLEditImageViewController: UIViewController {
         r.size.width *= scale
         r.size.height *= scale
         let bgImage = self.buildImage().clipImage(self.angle, self.editRect)?.clipImage(0, r)
-        let vc = ZLInputTextViewController(image: bgImage, text: text)
+        let vc = ZLInputTextViewController(image: bgImage, text: text, textColor: textColor, bgColor: bgColor)
         
-        vc.endInput = { (text) in
-            completion(text)
+        vc.endInput = { (text, textColor, bgColor) in
+            completion(text, textColor, bgColor)
         }
         
         vc.modalPresentationStyle = .fullScreen
@@ -767,7 +769,7 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     /// Text sticker
-    func addTextStickersView(_ text: String) {
+    func addTextStickersView(_ text: String, textColor: UIColor, bgColor: UIColor) {
         guard !text.isEmpty else { return }
         let scale = self.scrollView.zoomScale
         let size = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width)
@@ -781,7 +783,7 @@ public class ZLEditImageViewController: UIViewController {
         let r = self.containerView.convert(CGRect(x: x, y: y, width: w, height: h), to: self.textStickersContainer)
         let originFrame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
         
-        let textSticker = ZLTextStickerView(text: text, textColor: .white, bgColor: .clear, zoomScale: 1 / scale, originAngle: -self.angle, originFrame: originFrame)
+        let textSticker = ZLTextStickerView(text: text, textColor: textColor, bgColor: bgColor, zoomScale: 1 / scale, originAngle: -self.angle, originFrame: originFrame)
         self.textStickersContainer.addSubview(textSticker)
         textSticker.frame = originFrame
         
@@ -896,8 +898,7 @@ public class ZLEditImageViewController: UIViewController {
         if !self.textStickersContainer.subviews.isEmpty, let context = UIGraphicsGetCurrentContext() {
             let scale = self.imageSize.width / self.textStickersContainer.frame.width
             self.textStickersContainer.subviews.forEach { (sv) in
-                (sv as? ZLTextStickerView)?.hideBorder()
-                (sv as? ZLTextStickerView)?.cleanTimer()
+                (sv as? ZLTextStickerView)?.resetState()
             }
             context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
             self.textStickersContainer.layer.render(in: context)
@@ -1064,7 +1065,6 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             default:
                 break
             }
-            collectionView.reloadData()
         } else if collectionView == self.drawColorCollectionView {
             self.currentDrawColor = self.drawColors[indexPath.row]
         } else {
@@ -1113,6 +1113,13 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
         UIView.animate(withDuration: 0.25) {
             self.ashbinView.alpha = 1
         }
+        
+        self.textStickersContainer.subviews.forEach { (view) in
+            if let ts = view as? ZLTextStickerView, ts !== textSticker {
+                ts.resetState()
+                ts.gesIsEnabled = false
+            }
+        }
     }
     
     func textStickerOnOperation(_ textSticker: ZLTextStickerView, panGes: UIPanGestureRecognizer) {
@@ -1135,15 +1142,33 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
         if self.ashbinView.frame.contains(point) {
             textSticker.moveToAshbin()
         }
+        
+        self.textStickersContainer.subviews.forEach { (view) in
+            (view as? ZLTextStickerView)?.gesIsEnabled = true
+        }
+    }
+    
+    func textStickerDidTap(_ textSticker: ZLTextStickerView) {
+        self.textStickersContainer.subviews.forEach { (view) in
+            if let ts = view as? ZLTextStickerView, ts !== textSticker {
+                ts.resetState()
+            }
+        }
     }
     
     func textSticker(_ textSticker: ZLTextStickerView, editText text: String) {
-        self.showInputTextVC(text) { [weak self] (text) in
+        self.showInputTextVC(text, textColor: textSticker.textColor, bgColor: textSticker.bgColor) { [weak self] (text, textColor, bgColor) in
             guard let `self` = self else { return }
             if text.isEmpty {
                 textSticker.moveToAshbin()
             } else {
+                textSticker.startTimer()
+                guard textSticker.text != text else {
+                    return
+                }
                 textSticker.text = text
+                textSticker.textColor = textColor
+                textSticker.bgColor = bgColor
                 let newSize = ZLTextStickerView.calculateSize(text: text, width: self.view.frame.width)
                 textSticker.changeSize(to: newSize)
             }
