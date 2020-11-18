@@ -35,7 +35,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 - [x] Image/Gif/LivePhoto/Video Support.
 - [x] Customize the maximum number of previews or selection, the maximum and minimum optional duration of the video.
 - [x] Customize the number of columns displayed in each row.
-- [x] Image editor (Draw/Crop/Mosaic/Filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
+- [x] Image editor (Draw/Crop/Text sticker/Mosaic/Filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
 - [x] Video editor.
 - [x] Custom camera.
 - [x] Multi-language.
