@@ -8,6 +8,7 @@
 * Support iOS14 limited authority.
 * Provides the ability to preview PHAsset, local images and videos, network images and videos together.
 * Optimize some UI effects.
+* Support show image crop vc directly.
 
 ### Fix
 * Fixed the bug that the selected index is displayed in the video cell after recording the video.[#546](https://github.com/longitachi/ZLPhotoBrowser/issues/546)

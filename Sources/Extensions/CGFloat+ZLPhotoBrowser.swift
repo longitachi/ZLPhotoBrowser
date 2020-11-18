@@ -1,8 +1,8 @@
 //
-//  String+ZLPhotoBrowser.swift
+//  CGFloat+ZLPhotoBrowser.swift
 //  ZLPhotoBrowser
 //
-//  Created by long on 2020/8/18.
+//  Created by long on 2020/11/10.
 //
 //  Copyright (c) 2020 Long Zhang <longitachi@163.com>
 //
@@ -24,22 +24,12 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Foundation
-import UIKit
+import AVKit
 
-extension String {
+extension CGFloat {
     
-    func boundingRect(font: UIFont, limitSize: CGSize) -> CGSize {
-        let style = NSMutableParagraphStyle()
-        style.lineBreakMode = .byCharWrapping
-        
-        let att = [NSAttributedString.Key.font: font, NSAttributedString.Key.paragraphStyle: style]
-        
-        let attContent = NSMutableAttributedString(string: self, attributes: att)
-        
-        let size = attContent.boundingRect(with: limitSize, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).size
-        
-        return CGSize(width: ceil(size.width), height: ceil(size.height))
+    var toPi: CGFloat {
+        return self / 180 * .pi
     }
     
 }

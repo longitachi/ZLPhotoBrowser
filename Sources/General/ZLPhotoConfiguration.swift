@@ -134,7 +134,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow to choose the minimum duration of the video.
     @objc public var minSelectVideoDuration: Second = 0
     
-    private var pri_editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .mosaic, .filter]
+    private var pri_editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .textSticker, .mosaic, .filter]
     /// Edit image tools. (Because swift OptionSet does not support @objc mark, this attribute oc is not available)
     public var editImageTools: ZLEditImageViewController.EditImageTool {
         set {
@@ -142,7 +142,7 @@ public class ZLPhotoConfiguration: NSObject {
         }
         get {
             if pri_editImageTools.isEmpty {
-                return [.draw, .clip, .mosaic, .filter]
+                return [.draw, .clip, .textSticker, .mosaic, .filter]
             } else {
                 return pri_editImageTools
             }
@@ -181,6 +181,24 @@ public class ZLPhotoConfiguration: NSObject {
             }
         }
     }
+    
+    private var pri_textStickerTextColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+    /// Text sticker colors for image editor.
+    @objc public var textStickerTextColors: [UIColor] {
+        set {
+            pri_textStickerTextColors = newValue
+        }
+        get {
+            if pri_textStickerTextColors.isEmpty {
+                return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
+            } else {
+                return pri_textStickerTextColors
+            }
+        }
+    }
+    
+    /// The default text sticker color. If this color not in textStickerTextColors, will pick the first color in textStickerTextColors as the default.
+    @objc public var textStickerDefaultTextColor = zlRGB(241, 79, 79)
     
     private var pri_filters: [ZLFilter] = ZLFilter.all
     /// Filters for image editor.

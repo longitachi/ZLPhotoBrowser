@@ -9,7 +9,6 @@
 "editFinish" = "Готово";
 
 "back" = "Назад";
-
 "edit" = "Pед";
 "revert" = "Отменить";
 
@@ -62,3 +61,4 @@
 
 "noTitleAlbumListPlaceholder" = "Все фотографии";
 "unableToAccessAllPhotos" = "Невозможно получить доступ ко всем фотографиям, перейдите в настройки";
+"textStickerRemoveTips" = "Перетащите сюда, чтобы удалить";

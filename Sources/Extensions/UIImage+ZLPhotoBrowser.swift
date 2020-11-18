@@ -397,6 +397,24 @@ extension UIImage {
         return clipImage
     }
     
+    func blurImage(level: CGFloat) -> UIImage? {
+        guard let ciImage = self.toCIImage() else {
+            return nil
+        }
+        let blurFilter = CIFilter(name: "CIGaussianBlur")
+        blurFilter?.setValue(ciImage, forKey: "inputImage")
+        blurFilter?.setValue(level, forKey: "inputRadius")
+        
+        guard let outputImage = blurFilter?.outputImage else {
+            return nil
+        }
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(outputImage, from: ciImage.extent) else {
+            return nil
+        }
+        return UIImage(cgImage: cgImage)
+    }
+    
 }
 
 

@@ -9,7 +9,6 @@
 "editFinish" = "Xong";
 
 "back" = "Trở lại";
-
 "edit" = "Chỉnh sửa";
 "revert" = "Hoàn tác";
 
@@ -62,3 +61,4 @@
 
 "noTitleAlbumListPlaceholder" = "Tất cả ảnh";
 "unableToAccessAllPhotos" = "Không thể truy cập tất cả ảnh, hãy chuyển đến cài đặt";
+"textStickerRemoveTips" = "Kéo vào đây để xóa";

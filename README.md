@@ -1,5 +1,6 @@
 [![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)&nbsp;
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 [![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
@@ -34,7 +35,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 - [x] Image/Gif/LivePhoto/Video Support.
 - [x] Customize the maximum number of previews or selection, the maximum and minimum optional duration of the video.
 - [x] Customize the number of columns displayed in each row.
-- [x] Image editor (Draw/Crop/Mosaic/Filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
+- [x] Image editor (Draw/Crop/Text sticker/Mosaic/Filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
 - [x] Video editor.
 - [x] Custom camera.
 - [x] Multi-language.
@@ -46,7 +47,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 - [x] The color of each part of the framework can be customized (Provide dynamic color can support light/dark mode).
 - [x] Customize images.
 
-> If you have good needs and suggestions in use, or encounter any bugs, please feel free to issue and I will reply in time
+> If you have good needs and suggestions in use, or encounter any bugs, please create an issue and I will reply in time.
  
 ### <a id="Requirements"></a>Requirements
  * iOS 10.0
@@ -94,6 +95,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
     Support iOS14 limited authority.
     Provides the ability to preview PHAsset, local images and videos, network images and videos together.
     Optimize some UI effects.
+    Support show image crop vc directly.
 ● 4.0.8:
     Add filter to image editor.
 ● 4.0.7: 
@@ -152,7 +154,7 @@ $ carthage update ZLPhotoBrowser
 
 #### Swift Package Manager
 1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.0.8" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.0.9" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### <a id="DemoEffect"></a> Demo Effect

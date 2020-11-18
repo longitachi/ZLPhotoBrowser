@@ -1,5 +1,6 @@
 [![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)&nbsp;
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 [![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
@@ -38,7 +39,7 @@
 - [x] 图片/Gif/LivePhoto/Video 混合选择
 - [x] 自定义最大预览数/选择数/视频最大最小可选时长，控制可否选择原图
 - [x] 自定义每行显示列数
-- [x] 图片编辑（涂鸦/裁剪/马赛克/滤镜）（图片编辑可编辑多张；涂鸦颜色可自定义；裁剪比例可自定义；滤镜效果可自定义；编辑工具可根据需要自行选择）
+- [x] 图片编辑（涂鸦/裁剪/添加文字/马赛克/滤镜）（图片编辑可编辑多张；涂鸦/文字颜色可自定义；裁剪比例可自定义；滤镜效果可自定义；编辑工具可根据需要自行选择）
 - [x] 视频编辑（自定义最大裁剪时长）（效果参照微信视频编辑；支持编辑本地视频）
 - [x] 自定义相机（效果参照微信拍照，点击拍照、长按拍摄；上滑调整焦距；可设置最大/最小录制时间及视频分辨率；可设置闪光灯模式及视频导出格式；可根据自己需要控制是否使用自定义相机）
 - [x] 多语言国际化支持（中文简/繁，英文，日文，开发者可选根据系统或自己指定，多语言文案可自定义）
@@ -96,7 +97,7 @@
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
-● 4.0.9: 支持更多国家的语言; 完善iOS14 limited authority 权限的适配; 提供可以同时预览PHAsset、本地图片/视频及网络图片/视频的功能; 优化部分UI效果;
+● 4.0.9: 支持更多国家的语言; 完善iOS14 limited authority 权限的适配; 提供可以同时预览PHAsset、本地图片/视频及网络图片/视频的功能; 优化部分UI效果; 编辑图片可直接跳转裁剪界面;
 ● 4.0.8: 编辑图片添加滤镜功能;
 ● 4.0.7: 支持设置图片裁剪比例; 自定义相机支持录制时切换摄像头; 新增已选照片边框功能; 新增是否允许预览大图功能；其他细节优化及已知bug修复；
 ● 4.0.5: 适配iOS14 limited权限; 优化图片预览显示; 优化大长/宽图编辑; 
@@ -122,7 +123,7 @@
   
 * Swift Package Manager (该方式集成暂时有问题，图片及多语言资源无法读取，请暂时先用其他方式)
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
-  * 2. 输入对应版本号（SPM 最低版本为 `4.0.5`）
+  * 2. 输入对应版本号（SPM 最低版本为 `4.0.9`）
   * 3. 等Xcode下载完成后确定即可
 
 ### <a id="效果图"></a> 效果图

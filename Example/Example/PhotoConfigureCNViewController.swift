@@ -58,6 +58,8 @@ class PhotoConfigureCNViewController: UIViewController {
     
     var editImageClipToolSwitch: UISwitch!
     
+    var editImageTextStickerToolSwitch: UISwitch!
+    
     var editImageMosaicToolSwitch: UISwitch!
     
     var editImageFilterToolSwitch: UISwitch!
@@ -513,11 +515,28 @@ class PhotoConfigureCNViewController: UIViewController {
             make.centerY.equalTo(clipToolLabel)
         }
         
-        // 裁剪
+        // 文本
+        let textStickerToolLabel = createLabel("文字")
+        self.editImageToolView.addSubview(textStickerToolLabel)
+        textStickerToolLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(clipToolLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(self.editImageToolView)
+        }
+        
+        self.editImageTextStickerToolSwitch = UISwitch()
+        self.editImageTextStickerToolSwitch.isOn = config.editImageTools.contains(.textSticker)
+        self.editImageTextStickerToolSwitch.addTarget(self, action: #selector(textStickerToolChanged), for: .valueChanged)
+        self.editImageToolView.addSubview(self.editImageTextStickerToolSwitch)
+        self.editImageTextStickerToolSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(textStickerToolLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(textStickerToolLabel)
+        }
+        
+        // 马赛克
         let mosaicToolLabel = createLabel("马赛克")
         self.editImageToolView.addSubview(mosaicToolLabel)
         mosaicToolLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(clipToolLabel.snp.bottom).offset(velSpacing)
+            make.top.equalTo(textStickerToolLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(self.editImageToolView)
         }
         
@@ -550,11 +569,10 @@ class PhotoConfigureCNViewController: UIViewController {
         
         // 编辑视频开关
         editVideoLabel = createLabel("允许编辑视频")
-        editVideoLabel.tag = 1000
         containerView.addSubview(editVideoLabel)
         editVideoLabel.snp.makeConstraints { (make) in
             if config.allowEditImage {
-                make.top.equalTo(editImageLabel.snp.bottom).offset(180)
+                make.top.equalTo(editImageLabel.snp.bottom).offset(225)
             } else {
                 make.top.equalTo(editImageLabel.snp.bottom).offset(velSpacing)
             }
@@ -843,7 +861,7 @@ class PhotoConfigureCNViewController: UIViewController {
             self.editImageToolView.alpha = self.config.allowEditImage ? 1 : 0
             self.editVideoLabel.snp.updateConstraints({ (make) in
                 if self.config.allowEditImage {
-                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(180)
+                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(225)
                 } else {
                     make.top.equalTo(self.editImageLabel.snp.bottom).offset(20)
                 }
@@ -858,6 +876,10 @@ class PhotoConfigureCNViewController: UIViewController {
     
     @objc func clipToolChanged() {
         config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.clip.rawValue)
+    }
+    
+    @objc func textStickerToolChanged() {
+        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.textSticker.rawValue)
     }
     
     @objc func mosaicToolChanged() {

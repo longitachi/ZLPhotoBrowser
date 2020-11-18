@@ -9,7 +9,6 @@
 "editFinish" = "Selesai";
 
 "back" = "Belakang";
-
 "edit" = "Edit";
 "revert" = "Buat asal";
 
@@ -62,3 +61,4 @@
 
 "noTitleAlbumListPlaceholder" = "Semua Foto";
 "unableToAccessAllPhotos" = "Tidak dapat mengakses semua foto, pergi ke tetapan";
+"textStickerRemoveTips" = "Seret ke sini untuk mengalih keluar";
