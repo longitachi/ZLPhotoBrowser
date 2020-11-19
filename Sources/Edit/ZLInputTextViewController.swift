@@ -9,6 +9,8 @@ import UIKit
 
 class ZLInputTextViewController: UIViewController {
 
+    static let collectionViewHeight: CGFloat = 50
+    
     let image: UIImage?
     
     var text: String
@@ -130,7 +132,7 @@ class ZLInputTextViewController: UIViewController {
         layout.minimumInteritemSpacing = 15
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 10, left: 30, bottom: 10, right: 30)
-        self.collectionView = UICollectionView(frame: CGRect(x: 0, y: self.view.frame.height - 50, width: self.view.frame.width, height: 50), collectionViewLayout: layout)
+        self.collectionView = UICollectionView(frame: CGRect(x: 0, y: self.view.frame.height - ZLInputTextViewController.collectionViewHeight, width: self.view.frame.width, height: ZLInputTextViewController.collectionViewHeight), collectionViewLayout: layout)
         self.collectionView.backgroundColor = .clear
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -154,8 +156,8 @@ class ZLInputTextViewController: UIViewController {
         let keyboardH = rect?.height ?? 366
         let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
         
-        UIView.animate(withDuration: duration) {
-            self.collectionView.frame = CGRect(x: 0, y: self.view.frame.height - keyboardH - 50, width: self.view.frame.width, height: 50)
+        UIView.animate(withDuration: max(duration, 0.25)) {
+            self.collectionView.frame = CGRect(x: 0, y: self.view.frame.height - keyboardH - ZLInputTextViewController.collectionViewHeight, width: self.view.frame.width, height: ZLInputTextViewController.collectionViewHeight)
         }
     }
     

@@ -378,8 +378,7 @@ class ZLTextStickerView: UIView {
         self.transform = self.transform.scaledBy(x: 1/self.gesScale, y: 1/self.gesScale)
         // Revert ges rotation.
         self.transform = self.transform.rotated(by: -self.gesRotation)
-        // Revert ges translation.
-        self.transform = self.transform.translatedBy(x: -self.totalTranslationPoint.x, y: -self.totalTranslationPoint.y)
+        self.transform = self.transform.rotated(by: -self.originAngle.toPi)
         
         // Recalculate current frame.
         let center = CGPoint(x: self.frame.midX, y: self.frame.midY)
@@ -388,7 +387,13 @@ class ZLTextStickerView: UIView {
         frame.origin.y = center.y - newSize.height / 2
         frame.size = newSize
         self.frame = frame
-        self.originFrame = frame
+        
+        let oc = CGPoint(x: self.originFrame.midX, y: self.originFrame.midY)
+        var of = self.originFrame
+        of.origin.x = oc.x - newSize.width / 2
+        of.origin.y = oc.y - newSize.height / 2
+        of.size = newSize
+        self.originFrame = of
         
         self.borderView.frame = self.bounds.insetBy(dx: ZLTextStickerView.edgeInset, dy: ZLTextStickerView.edgeInset)
         self.label.frame = self.borderView.bounds.insetBy(dx: ZLTextStickerView.edgeInset, dy: ZLTextStickerView.edgeInset)
@@ -399,8 +404,7 @@ class ZLTextStickerView: UIView {
         self.transform = self.transform.scaledBy(x: self.gesScale, y: self.gesScale)
         // Readd ges rotation.
         self.transform = self.transform.rotated(by: self.gesRotation)
-        // Readd ges translation.
-        self.transform = self.transform.translatedBy(x: self.totalTranslationPoint.x, y: self.totalTranslationPoint.y)
+        self.transform = self.transform.rotated(by: self.originAngle.toPi)
     }
     
     class func calculateSize(text: String, width: CGFloat) -> CGSize {

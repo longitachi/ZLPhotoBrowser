@@ -475,12 +475,12 @@ public class ZLEditImageViewController: UIViewController {
         self.revokeBtn.addTarget(self, action: #selector(revokeBtnClick), for: .touchUpInside)
         self.bottomShadowView.addSubview(self.revokeBtn)
         
-        let ashbinSize = CGSize(width: 170, height: 80)
-        self.ashbinView = UIView(frame: CGRect(x: (self.view.frame.width-ashbinSize.width)/2, y: self.view.frame.height-ashbinSize.height-15, width: ashbinSize.width, height: ashbinSize.height))
+        let ashbinSize = CGSize(width: 160, height: 80)
+        self.ashbinView = UIView(frame: CGRect(x: (self.view.frame.width-ashbinSize.width)/2, y: self.view.frame.height-ashbinSize.height-40, width: ashbinSize.width, height: ashbinSize.height))
         self.ashbinView.backgroundColor = ZLEditImageViewController.ashbinNormalBgColor
-        self.ashbinView.layer.cornerRadius = 10
+        self.ashbinView.layer.cornerRadius = 15
         self.ashbinView.layer.masksToBounds = true
-        self.ashbinView.alpha = 0
+        self.ashbinView.isHidden = true
         self.view.addSubview(self.ashbinView)
         
         self.ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
@@ -1109,9 +1109,14 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
     func textStickerBeginOperation(_ textSticker: ZLTextStickerView) {
         self.setToolView(show: false)
         self.ashbinView.layer.removeAllAnimations()
-        self.ashbinView.alpha = 0
+        self.ashbinView.isHidden = false
+        var frame = self.ashbinView.frame
+        let diff = self.view.frame.height - frame.minY
+        frame.origin.y += diff
+        self.ashbinView.frame = frame
+        frame.origin.y -= diff
         UIView.animate(withDuration: 0.25) {
-            self.ashbinView.alpha = 1
+            self.ashbinView.frame = frame
         }
         
         self.textStickersContainer.subviews.forEach { (view) in
@@ -1125,7 +1130,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
     func textStickerOnOperation(_ textSticker: ZLTextStickerView, panGes: UIPanGestureRecognizer) {
         let point = panGes.location(in: self.view)
         if self.ashbinView.frame.contains(point) {
-            self.ashbinView.backgroundColor = zlRGB(241, 79, 79)
+            self.ashbinView.backgroundColor = zlRGB(241, 79, 79).withAlphaComponent(0.98)
             self.ashbinImgView.isHighlighted = true
         } else {
             self.ashbinView.backgroundColor = ZLEditImageViewController.ashbinNormalBgColor
@@ -1136,7 +1141,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
     func textStickerEndOperation(_ textSticker: ZLTextStickerView, panGes: UIPanGestureRecognizer) {
         self.setToolView(show: true)
         self.ashbinView.layer.removeAllAnimations()
-        self.ashbinView.alpha = 0
+        self.ashbinView.isHidden = true
         
         let point = panGes.location(in: self.view)
         if self.ashbinView.frame.contains(point) {
@@ -1163,7 +1168,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
                 textSticker.moveToAshbin()
             } else {
                 textSticker.startTimer()
-                guard textSticker.text != text else {
+                guard textSticker.text != text || textSticker.textColor != textColor || textSticker.bgColor != bgColor else {
                     return
                 }
                 textSticker.text = text
