@@ -871,23 +871,43 @@ class PhotoConfigureViewController: UIViewController {
     }
     
     @objc func drawToolChanged() {
-        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.draw.rawValue)
+        if config.editImageTools.contains(.draw) {
+            config.editImageTools.removeAll { $0 == .draw }
+        } else {
+            config.editImageTools.append(.draw)
+        }
     }
     
     @objc func clipToolChanged() {
-        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.clip.rawValue)
+        if config.editImageTools.contains(.clip) {
+            config.editImageTools.removeAll { $0 == .clip }
+        } else {
+            config.editImageTools.append(.clip)
+        }
     }
     
     @objc func textStickerToolChanged() {
-        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.textSticker.rawValue)
+        if config.editImageTools.contains(.textSticker) {
+            config.editImageTools.removeAll { $0 == .textSticker }
+        } else {
+            config.editImageTools.append(.textSticker)
+        }
     }
     
     @objc func mosaicToolChanged() {
-        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.mosaic.rawValue)
+        if config.editImageTools.contains(.mosaic) {
+            config.editImageTools.removeAll { $0 == .mosaic }
+        } else {
+            config.editImageTools.append(.mosaic)
+        }
     }
     
     @objc func filterToolChanged() {
-        config.editImageTools = ZLEditImageViewController.EditImageTool(rawValue: config.editImageTools.rawValue ^ ZLEditImageViewController.EditImageTool.filter.rawValue)
+        if config.editImageTools.contains(.filter) {
+            config.editImageTools.removeAll { $0 == .filter }
+        } else {
+            config.editImageTools.append(.filter)
+        }
     }
     
     @objc func saveEditImageChanged() {

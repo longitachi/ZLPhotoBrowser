@@ -134,9 +134,10 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow to choose the minimum duration of the video.
     @objc public var minSelectVideoDuration: Second = 0
     
-    private var pri_editImageTools: ZLEditImageViewController.EditImageTool = [.draw, .clip, .textSticker, .mosaic, .filter]
-    /// Edit image tools. (Because swift OptionSet does not support @objc mark, this attribute oc is not available)
-    public var editImageTools: ZLEditImageViewController.EditImageTool {
+    private var pri_editImageTools: [ZLEditImageViewController.EditImageTool] = [.draw, .clip, .textSticker, .mosaic, .filter]
+    /// Edit image tools. (Default sequence is draw, clip, textSticker, mosaic, filtter)
+    /// Because Objective-C Array can't contain Enum styles, so this property is not available in Objective-C.
+    public var editImageTools: [ZLEditImageViewController.EditImageTool] {
         set {
             pri_editImageTools = newValue
         }
@@ -383,6 +384,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// iOS14 limited Photo mode, will show collection footer view in ZLThumbnailViewController.
     /// Will go to system setting if clicked.
     @objc public var showEnterSettingFooter = true
+    
 }
 
 

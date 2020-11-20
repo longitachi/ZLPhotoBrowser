@@ -71,8 +71,6 @@ public class ZLEditImageViewController: UIViewController {
     // 图片可编辑rect
     var editRect: CGRect
     
-    let tools: [ZLEditImageViewController.EditImageTool]
-    
     var selectRatio: ZLImageClipRatio?
     
     var editImage: UIImage
@@ -179,7 +177,8 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc public class func showEditImageVC(parentVC: UIViewController?, image: UIImage, editModel: ZLEditImageModel? = nil, completion: ( (UIImage, ZLEditImageModel) -> Void )? ) {
-        if ZLPhotoConfiguration.default().showClipDirectlyIfOnlyHasClipTool, ZLPhotoConfiguration.default().editImageTools.rawValue == ZLEditImageViewController.EditImageTool.clip.rawValue {
+        let tools = ZLPhotoConfiguration.default().editImageTools
+        if ZLPhotoConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
             vc.clipDoneBlock = { (angle, editRect, ratio) in
                 let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, selectRatio: ratio, selectFilter: .normal, textStickers: nil)
@@ -208,24 +207,6 @@ public class ZLEditImageViewController: UIViewController {
         self.angle = editModel?.angle ?? 0
         self.selectRatio = editModel?.selectRatio
         
-        var tools: [ZLEditImageViewController.EditImageTool] = []
-        if ZLPhotoConfiguration.default().editImageTools.contains(.draw) {
-            tools.append(.draw)
-        }
-        if ZLPhotoConfiguration.default().editImageTools.contains(.clip) {
-            tools.append(.clip)
-        }
-        if ZLPhotoConfiguration.default().editImageTools.contains(.textSticker) {
-            tools.append(.textSticker)
-        }
-        if ZLPhotoConfiguration.default().editImageTools.contains(.mosaic) {
-            tools.append(.mosaic)
-        }
-        if ZLPhotoConfiguration.default().editImageTools.contains(.filter) {
-            tools.append(.filter)
-        }
-        self.tools = tools
-        
         super.init(nibName: nil, bundle: nil)
         
         if !self.drawColors.contains(self.currentDrawColor) {
@@ -246,7 +227,7 @@ public class ZLEditImageViewController: UIViewController {
         self.setupUI()
         
         self.rotationImageView()
-        if self.tools.contains(.filter) {
+        if ZLPhotoConfiguration.default().editImageTools.contains(.filter) {
             self.generateFilterImages()
         }
     }
@@ -496,7 +477,7 @@ public class ZLEditImageViewController: UIViewController {
         asbinTipLabel.lineBreakMode = .byCharWrapping
         self.ashbinView.addSubview(asbinTipLabel)
         
-        if self.tools.contains(.mosaic) {
+        if ZLPhotoConfiguration.default().editImageTools.contains(.mosaic) {
             // 之前选择过滤镜
             if let applier = self.currentFilter.applier {
                 let image = applier(self.originalImage)
@@ -843,7 +824,7 @@ public class ZLEditImageViewController: UIViewController {
     
     func generateNewMosaicImage() {
         UIGraphicsBeginImageContextWithOptions(self.originalImage.size, false, self.originalImage.scale)
-        if self.tools.contains(.filter), let image = self.filterImages[self.currentFilter.name] {
+        if ZLPhotoConfiguration.default().editImageTools.contains(.filter), let image = self.filterImages[self.currentFilter.name] {
             image.draw(at: .zero)
         } else {
             self.originalImage.draw(at: .zero)
@@ -938,7 +919,7 @@ extension ZLEditImageViewController: UIGestureRecognizerDelegate {
             guard let st = self.selectedTool else {
                 return false
             }
-            return (st.contains(.draw) || st.contains(.mosaic)) && !self.isScrolling
+            return (st == .draw || st == .mosaic) && !self.isScrolling
         }
         
         return true
@@ -999,7 +980,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.editToolCollectionView {
-            return self.tools.count
+            return ZLPhotoConfiguration.default().editImageTools.count
         } else if collectionView == self.drawColorCollectionView {
             return self.drawColors.count
         } else {
@@ -1011,7 +992,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
         if collectionView == self.editToolCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLEditToolCell.zl_identifier(), for: indexPath) as! ZLEditToolCell
             
-            let toolType = self.tools[indexPath.row]
+            let toolType = ZLPhotoConfiguration.default().editImageTools[indexPath.row]
             cell.icon.isHighlighted = false
             cell.toolType = toolType
             cell.icon.isHighlighted = toolType == self.selectedTool
@@ -1050,7 +1031,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.editToolCollectionView {
-            let toolType = self.tools[indexPath.row]
+            let toolType = ZLPhotoConfiguration.default().editImageTools[indexPath.row]
             switch toolType {
             case .draw:
                 self.drawBtnClick()
@@ -1076,7 +1057,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
                 self.editImage = image
                 self.filterImages[self.currentFilter.name] = image
             }
-            if self.tools.contains(.mosaic) {
+            if ZLPhotoConfiguration.default().editImageTools.contains(.mosaic) {
                 self.mosaicImage = self.editImage.mosaicImage()
                 
                 self.mosaicImageLayer?.removeFromSuperlayer()
@@ -1185,24 +1166,12 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
 
 extension ZLEditImageViewController {
     
-    public struct EditImageTool: OptionSet {
-        
-        public let rawValue: UInt
-        
-        public init(rawValue: UInt) {
-            self.rawValue = rawValue
-        }
-        
-        public static let draw = EditImageTool(rawValue: 1 << 0)
-        
-        public static let clip = EditImageTool(rawValue: 1 << 1)
-        
-        public static let textSticker = EditImageTool(rawValue: 1 << 2)
-        
-        public static let mosaic = EditImageTool(rawValue: 1 << 3)
-        
-        public static let filter = EditImageTool(rawValue: 1 << 4)
-        
+    @objc public enum EditImageTool: Int {
+        case draw
+        case clip
+        case textSticker
+        case mosaic
+        case filter
     }
     
 }
