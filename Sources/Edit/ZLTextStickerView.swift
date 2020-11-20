@@ -4,28 +4,35 @@
 //
 //  Created by long on 2020/10/30.
 //
+//  Copyright (c) 2020 Long Zhang <495181165@qq.com>
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 
 import UIKit
 
-protocol ZLTextStickerViewDelegate: NSObject {
+protocol ZLTextStickerViewDelegate: ZLStickerViewDelegate {
     
-    // Called when scale or rotate or move.
-    func textStickerBeginOperation(_ textSticker: ZLTextStickerView)
-    
-    // Called during scale or rotate or move.
-    func textStickerOnOperation(_ textSticker: ZLTextStickerView, panGes: UIPanGestureRecognizer)
-    
-    // Called after scale or rotate or move.
-    func textStickerEndOperation(_ textSticker: ZLTextStickerView, panGes: UIPanGestureRecognizer)
-    
-    // Called when tap text sticker.
-    func textStickerDidTap(_ textSticker: ZLTextStickerView)
-    
-    func textSticker(_ textSticker: ZLTextStickerView, editText text: String)
+    func sticker(_ textSticker: ZLTextStickerView, editText text: String)
     
 }
 
-class ZLTextStickerView: UIView {
+class ZLTextStickerView: UIView, ZLStickerViewAdditional {
 
     static let edgeInset: CGFloat = 20
     
@@ -36,6 +43,8 @@ class ZLTextStickerView: UIView {
     weak var delegate: ZLTextStickerViewDelegate?
     
     var firstLayout = true
+    
+    var gesIsEnabled = true
     
     let originScale: CGFloat
     
@@ -86,11 +95,9 @@ class ZLTextStickerView: UIView {
     
     var onOperation = false
     
-    var gesIsEnabled = true
-    
     // Conver all states to model.
     var state: ZLTextStickerState {
-        return ZLTextStickerState(text: self.text, textColor: self.textColor, bgColor: self.bgColor, zoomScale: self.originScale, originAngle: self.originAngle, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
+        return ZLTextStickerState(text: self.text, textColor: self.textColor, bgColor: self.bgColor, originScale: self.originScale, originAngle: self.originAngle, originFrame: self.originFrame, gesScale: self.gesScale, gesRotation: self.gesRotation, totalTranslationPoint: self.totalTranslationPoint)
     }
     
     deinit {
@@ -98,11 +105,11 @@ class ZLTextStickerView: UIView {
     }
     
     convenience init(from state: ZLTextStickerState) {
-        self.init(text: state.text, textColor: state.textColor, bgColor: state.bgColor, zoomScale: state.zoomScale, originAngle: state.originAngle, originFrame: state.originFrame, gesScale: state.gesScale, gesRotation: state.gesRotation, totalTranslationPoint: state.totalTranslationPoint, showBorder: false)
+        self.init(text: state.text, textColor: state.textColor, bgColor: state.bgColor, originScale: state.originScale, originAngle: state.originAngle, originFrame: state.originFrame, gesScale: state.gesScale, gesRotation: state.gesRotation, totalTranslationPoint: state.totalTranslationPoint, showBorder: false)
     }
     
-    init(text: String, textColor: UIColor, bgColor: UIColor, zoomScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat = 1, gesRotation: CGFloat = 0, totalTranslationPoint: CGPoint = .zero, showBorder: Bool = true) {
-        self.originScale = zoomScale
+    init(text: String, textColor: UIColor, bgColor: UIColor, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat = 1, gesRotation: CGFloat = 0, totalTranslationPoint: CGPoint = .zero, showBorder: Bool = true) {
+        self.originScale = originScale
         self.text = text
         self.textColor = textColor
         self.bgColor = bgColor
@@ -132,6 +139,9 @@ class ZLTextStickerView: UIView {
         self.label.lineBreakMode = .byCharWrapping
         self.borderView.addSubview(self.label)
         
+        self.tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
+        self.addGestureRecognizer(self.tapGes)
+        
         self.pinchGes = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
         self.pinchGes.delegate = self
         self.addGestureRecognizer(self.pinchGes)
@@ -139,9 +149,6 @@ class ZLTextStickerView: UIView {
         let rotationGes = UIRotationGestureRecognizer(target: self, action: #selector(rotationAction(_:)))
         rotationGes.delegate = self
         self.addGestureRecognizer(rotationGes)
-        
-        self.tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
-        self.addGestureRecognizer(self.tapGes)
         
         self.panGes = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
         self.panGes.delegate = self
@@ -196,10 +203,10 @@ class ZLTextStickerView: UIView {
         guard self.gesIsEnabled else { return }
         
         if let t = self.timer, t.isValid {
-            self.delegate?.textSticker(self, editText: self.text)
+            self.delegate?.sticker(self, editText: self.text)
         } else {
             self.superview?.bringSubviewToFront(self)
-            self.delegate?.textStickerDidTap(self)
+            self.delegate?.stickerDidTap(self)
             self.startTimer()
         }
     }
@@ -267,11 +274,11 @@ class ZLTextStickerView: UIView {
             self.cleanTimer()
             self.borderView.layer.borderColor = UIColor.white.cgColor
             self.superview?.bringSubviewToFront(self)
-            self.delegate?.textStickerBeginOperation(self)
+            self.delegate?.stickerBeginOperation(self)
         } else if !isOn, self.onOperation {
             self.onOperation = false
             self.startTimer()
-            self.delegate?.textStickerEndOperation(self, panGes: self.panGes)
+            self.delegate?.stickerEndOperation(self, panGes: self.panGes)
         }
     }
     
@@ -293,7 +300,7 @@ class ZLTextStickerView: UIView {
         transform = transform.rotated(by: self.gesRotation)
         self.transform = transform
         
-        self.delegate?.textStickerOnOperation(self, panGes: self.panGes)
+        self.delegate?.stickerOnOperation(self, panGes: self.panGes)
     }
     
     @objc func hideBorder() {
@@ -430,18 +437,18 @@ public class ZLTextStickerState: NSObject {
     let text: String
     let textColor: UIColor
     let bgColor: UIColor
-    let zoomScale: CGFloat
+    let originScale: CGFloat
     let originAngle: CGFloat
     let originFrame: CGRect
     let gesScale: CGFloat
     let gesRotation: CGFloat
     let totalTranslationPoint: CGPoint
     
-    init(text: String, textColor: UIColor, bgColor: UIColor, zoomScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat, gesRotation: CGFloat, totalTranslationPoint: CGPoint) {
+    init(text: String, textColor: UIColor, bgColor: UIColor, originScale: CGFloat, originAngle: CGFloat, originFrame: CGRect, gesScale: CGFloat, gesRotation: CGFloat, totalTranslationPoint: CGPoint) {
         self.text = text
         self.textColor = textColor
         self.bgColor = bgColor
-        self.zoomScale = zoomScale
+        self.originScale = originScale
         self.originAngle = originAngle
         self.originFrame = originFrame
         self.gesScale = gesScale

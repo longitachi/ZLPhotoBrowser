@@ -4,7 +4,7 @@
 //
 //  Created by long on 2020/8/11.
 //
-//  Copyright (c) 2020 Long Zhang <longitachi@163.com>
+//  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -222,6 +222,10 @@ public class ZLPhotoPreviewSheet: UIView {
             let pan = UIPanGestureRecognizer(target: self, action: #selector(panSelectAction(_:)))
             self.baseView.addGestureRecognizer(pan)
         }
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
+        tap.delegate = self
+        self.addGestureRecognizer(tap)
     }
     
     func canShowCameraBtn() -> Bool {
@@ -364,16 +368,9 @@ public class ZLPhotoPreviewSheet: UIView {
         }
     }
     
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.randomElement()
-        guard let location = touch?.location(in: self) else {
-            return
-        }
-        
-        if !self.baseView.frame.contains(location) {
-            self.cancelBlock?()
-            self.hide()
-        }
+    @objc func tapAction(_ tap: UITapGestureRecognizer) {
+        self.cancelBlock?()
+        self.hide()
     }
     
     @objc func cameraBtnClick() {
@@ -727,6 +724,16 @@ public class ZLPhotoPreviewSheet: UIView {
         }
         
         self.changeCancelBtnTitle()
+    }
+    
+}
+
+
+extension ZLPhotoPreviewSheet: UIGestureRecognizerDelegate {
+    
+    public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let location = gestureRecognizer.location(in: self)
+        return !self.baseView.frame.contains(location)
     }
     
 }

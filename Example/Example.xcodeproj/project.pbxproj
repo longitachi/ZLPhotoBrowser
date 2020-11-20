@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E44A20F02567763A00FE6CAE /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */; };
 		E462467024EE6F9A00EF6C57 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462466F24EE6F9A00EF6C57 /* ImageCell.swift */; };
 		E4765F72254189E4007B2C0F /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4765F33254189E4007B2C0F /* Storage.swift */; };
 		E4765F73254189E4007B2C0F /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4765F34254189E4007B2C0F /* ImageCache.swift */; };
@@ -123,6 +124,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStickerContainerView.swift; sourceTree = "<group>"; };
 		E462466F24EE6F9A00EF6C57 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		E463C1512509FA9500FE1401 /* Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		E4765F33254189E4007B2C0F /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
@@ -443,6 +445,7 @@
 				E4A4109624F39DF700EEC20B /* PhotoConfigureViewController.swift */,
 				E4C69FED253EDA8600AE466C /* PhotoConfigureCNViewController.swift */,
 				E4C69FEB253ED19600AE466C /* LanguagePickerView.swift */,
+				E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */,
 				E462466F24EE6F9A00EF6C57 /* ImageCell.swift */,
 				E4C911A824E283D80061DA40 /* Main.storyboard */,
 				E4C911AB24E283DA0061DA40 /* Assets.xcassets */,
@@ -564,6 +567,7 @@
 				E4A410C624F39F0000EEC20B /* ConstraintPriorityTarget.swift in Sources */,
 				E4765F9A254189E4007B2C0F /* Indicator.swift in Sources */,
 				E4A410D624F39F0000EEC20B /* ConstraintOffsetTarget.swift in Sources */,
+				E44A20F02567763A00FE6CAE /* ImageStickerContainerView.swift in Sources */,
 				E4765F73254189E4007B2C0F /* ImageCache.swift in Sources */,
 				E4765F9B254189E4007B2C0F /* AnimatedImageView.swift in Sources */,
 				E4765F99254189E4007B2C0F /* NSTextAttachment+Kingfisher.swift in Sources */,

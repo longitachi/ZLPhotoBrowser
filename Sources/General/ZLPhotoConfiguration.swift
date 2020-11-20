@@ -4,7 +4,7 @@
 //
 //  Created by long on 2020/8/11.
 //
-//  Copyright (c) 2020 Long Zhang <longitachi@163.com>
+//  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -134,16 +134,17 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow to choose the minimum duration of the video.
     @objc public var minSelectVideoDuration: Second = 0
     
-    private var pri_editImageTools: [ZLEditImageViewController.EditImageTool] = [.draw, .clip, .textSticker, .mosaic, .filter]
-    /// Edit image tools. (Default sequence is draw, clip, textSticker, mosaic, filtter)
+    private var pri_editImageTools: [ZLEditImageViewController.EditImageTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
+    /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker, mosaic, filtter)
     /// Because Objective-C Array can't contain Enum styles, so this property is not available in Objective-C.
+    /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
     public var editImageTools: [ZLEditImageViewController.EditImageTool] {
         set {
             pri_editImageTools = newValue
         }
         get {
             if pri_editImageTools.isEmpty {
-                return [.draw, .clip, .textSticker, .mosaic, .filter]
+                return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
             } else {
                 return pri_editImageTools
             }
@@ -215,6 +216,8 @@ public class ZLPhotoConfiguration: NSObject {
             }
         }
     }
+    
+    @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
     
     /// After selecting a image/video in the thumbnail interface, enter the editing interface directly.
     /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.
@@ -503,5 +506,16 @@ struct ZLCustomLanguageDeploy {
 struct ZLCustomImageDeploy {
     
     static var deploy: [String] = []
+    
+}
+
+
+@objc public protocol ZLImageStickerContainerDelegate where Self: UIView {
+    
+    @objc var selectImageBlock: ( (UIImage) -> Void )? { get set }
+    
+    @objc var hideBlock: ( () -> Void )? { get set }
+    
+    @objc func show(in view: UIView)
     
 }
