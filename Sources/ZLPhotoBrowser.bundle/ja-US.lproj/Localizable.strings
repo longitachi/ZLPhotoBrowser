@@ -1,7 +1,7 @@
 "previewCamera" = "カメラ";
 "previewCameraRecord" = "撮影";
 "previewAlbum" = "アルバム";
-"previewCancel" = "キャンセル";
+"cancel" = "キャンセル";
 
 "originalPhoto" = "完全な画像";
 "done" = "確定";
@@ -35,6 +35,7 @@
 "iCloudVideoLoadFaild" = "iCloudから同期できません";
 "imageLoadFailed" = "ロード失敗";
 
+"save" = "セーブ";
 "saveImageError" = "画像の保存に失敗しました";
 "saveVideoError" = "ビデオの保存に失敗しました";
 "timeout" = "要求タイムアウト";

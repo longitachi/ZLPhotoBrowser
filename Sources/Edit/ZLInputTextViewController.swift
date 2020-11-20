@@ -96,7 +96,7 @@ class ZLInputTextViewController: UIViewController {
         }
         
         let btnY = insets.top + 20
-        let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
+        let cancelBtnW = localLanguageTextValue(.cancel).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
         self.cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLLayout.bottomToolBtnH)
         
         let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
@@ -123,7 +123,7 @@ class ZLInputTextViewController: UIViewController {
         bgImageView.addSubview(coverView)
         
         self.cancelBtn = UIButton(type: .custom)
-        self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
+        self.cancelBtn.setTitle(localLanguageTextValue(.cancel), for: .normal)
         self.cancelBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         view.addSubview(self.cancelBtn)

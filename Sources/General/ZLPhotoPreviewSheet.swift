@@ -210,7 +210,7 @@ public class ZLPhotoPreviewSheet: UIView {
         self.photoLibraryBtn.addTarget(self, action: #selector(photoLibraryBtnClick), for: .touchUpInside)
         self.baseView.addSubview(self.photoLibraryBtn)
         
-        self.cancelBtn = createBtn(localLanguageTextValue(.previewCancel))
+        self.cancelBtn = createBtn(localLanguageTextValue(.cancel))
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         self.baseView.addSubview(self.cancelBtn)
         
@@ -968,7 +968,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             self.cancelBtn.setTitle(String(format: "%@(%ld)", localLanguageTextValue(.done), self.arrSelectedModels.count), for: .normal)
             self.cancelBtn.setTitleColor(.previewBtnHighlightTitleColor, for: .normal)
         } else {
-            self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
+            self.cancelBtn.setTitle(localLanguageTextValue(.cancel), for: .normal)
             self.cancelBtn.setTitleColor(.previewBtnTitleColor, for: .normal)
         }
     }

@@ -1,7 +1,7 @@
 "previewCamera" = "Camera";
 "previewCameraRecord" = "Record";
 "previewAlbum" = "Album";
-"previewCancel" = "Cancel";
+"cancel" = "Cancel";
 
 "originalPhoto" = "Full Image";
 "done" = "Done";
@@ -35,6 +35,7 @@
 "iCloudVideoLoadFaild" = "Unable to sync from iCloud";
 "imageLoadFailed" = "loading failed";
 
+"save" = "Save";
 "saveImageError" = "Failed to save the image";
 "saveVideoError" = "Failed to save the video";
 "timeout" = "Request timed out";

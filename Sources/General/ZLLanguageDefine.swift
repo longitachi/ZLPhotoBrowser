@@ -59,7 +59,7 @@ public struct ZLLocalLanguageKey: Hashable {
     public static let previewAlbum = ZLLocalLanguageKey(rawValue: "previewAlbum")
     
     /// Cancel (取消)
-    public static let previewCancel = ZLLocalLanguageKey(rawValue: "previewCancel")
+    public static let cancel = ZLLocalLanguageKey(rawValue: "cancel")
     
     /// No Photo (无照片)
     public static let noPhotoTips = ZLLocalLanguageKey(rawValue: "noPhotoTips")
@@ -117,6 +117,9 @@ public struct ZLLocalLanguageKey: Hashable {
     
     /// Unable to select video (不能同时选择照片和视频)
     public static let notAllowMixSelect = ZLLocalLanguageKey(rawValue: "notAllowMixSelect")
+    
+    /// Save (保存)
+    public static let save = ZLLocalLanguageKey(rawValue: "save")
     
     /// Failed to save the image (图片保存失败)
     public static let saveImageError = ZLLocalLanguageKey(rawValue: "saveImageError")

@@ -481,6 +481,10 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
             self?.tapPreviewCell()
         }
         
+        (baseCell as? ZLLocalImagePreviewCell)?.longPressBlock = { [weak self] in
+            self?.showSaveImageAlert()
+        }
+        
         return baseCell
     }
     
@@ -488,6 +492,31 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
         if let c = cell as? ZLPreviewBaseCell {
             c.resetSubViewStatusWhenCellEndDisplay()
         }
+    }
+    
+    func showSaveImageAlert() {
+        func saveImage() {
+            guard let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) as? ZLLocalImagePreviewCell, let image = cell.currentImage else {
+                return
+            }
+            let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+            hud.show()
+            ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] (suc, _) in
+                hud.hide()
+                if !suc {
+                    showAlertView(localLanguageTextValue(.saveImageError), self)
+                }
+            }
+        }
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let save = UIAlertAction(title: localLanguageTextValue(.save), style: .default) { (_) in
+            saveImage()
+        }
+        let cancel = UIAlertAction(title: localLanguageTextValue(.cancel), style: .cancel, handler: nil)
+        alert.addAction(save)
+        alert.addAction(cancel)
+        self.showDetailViewController(alert, sender: nil)
     }
     
 }

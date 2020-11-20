@@ -1,7 +1,7 @@
 "previewCamera" = "拍照";
 "previewCameraRecord" = "拍摄";
 "previewAlbum" = "相册";
-"previewCancel" = "取消";
+"cancel" = "取消";
 
 "originalPhoto" = "原图";
 "done" = "确定";
@@ -35,6 +35,7 @@
 "iCloudVideoLoadFaild" = "iCloud无法同步";
 "imageLoadFailed" = "图片加载失败";
 
+"save" = "保存";
 "saveImageError" = "图片保存失败";
 "saveVideoError" = "视频保存失败";
 "timeout" = "请求超时";

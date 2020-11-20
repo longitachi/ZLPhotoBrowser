@@ -139,6 +139,8 @@ class ZLLocalImagePreviewCell: ZLPreviewBaseCell {
         }
     }
     
+    var longPressBlock: ( () -> Void )?
+    
     deinit {
         zl_debugPrint("ZLLocalImagePreviewCell deinit")
     }
@@ -163,10 +165,24 @@ class ZLLocalImagePreviewCell: ZLPreviewBaseCell {
             self?.singleTapBlock?()
         }
         self.contentView.addSubview(self.preview)
+        
+        let longGes = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
+        longGes.minimumPressDuration = 0.5
+        self.addGestureRecognizer(longGes)
     }
     
     override func resetSubViewStatusWhenCellEndDisplay() {
         self.preview.scrollView.zoomScale = 1
+    }
+    
+    @objc func longPressAction(_ ges: UILongPressGestureRecognizer) {
+        guard let _ = self.currentImage else {
+            return
+        }
+        
+        if ges.state == .began {
+            self.longPressBlock?()
+        }
     }
     
 }
@@ -773,7 +789,9 @@ class ZLPreviewView: UIView {
     
     var imageView: UIImageView!
     
-    var image: UIImage?
+    var image: UIImage? {
+        self.imageView.image
+    }
     
     var progressView: ZLProgressView!
     
@@ -893,7 +911,6 @@ class ZLPreviewView: UIView {
     func loadPhoto() {
         if let editImage = self.model.editImage {
             self.imageView.image = editImage
-            self.image = editImage
             self.resetSubViewSize()
         } else {
             self.imageRequestID = ZLPhotoManager.fetchImage(for: self.model.asset, size: self.requestPhotoSize(gif: false), progress: { [weak self] (progress, _, _, _) in
@@ -908,7 +925,6 @@ class ZLPreviewView: UIView {
                     return
                 }
                 self?.imageView.image = image
-                self?.image = image
                 self?.resetSubViewSize()
                 if !isDegraded {
                     self?.progressView.isHidden = true
@@ -926,7 +942,6 @@ class ZLPreviewView: UIView {
                 return
             }
             self?.imageView.image = image
-            self?.image = image
             self?.resetSubViewSize()
         })
     }

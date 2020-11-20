@@ -160,7 +160,7 @@ public class ZLEditVideoViewController: UIViewController {
         
         self.playerLayer.frame = CGRect(x: 15, y: insets.top + 20, width: self.view.bounds.width - 30, height: self.view.bounds.height - playerLayerY - diffBottom)
         
-        let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width
+        let cancelBtnW = localLanguageTextValue(.cancel).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width
         self.cancelBtn.frame = CGRect(x: 20, y: self.view.bounds.height - insets.bottom - btnH, width: cancelBtnW, height: btnH)
         let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width + 20
         self.doneBtn.frame = CGRect(x: self.view.bounds.width-doneBtnW-20, y: self.view.bounds.height - insets.bottom - btnH, width: doneBtnW, height: btnH)
@@ -227,7 +227,7 @@ public class ZLEditVideoViewController: UIViewController {
         self.rightSidePan.require(toFail: self.leftSidePan)
         
         self.cancelBtn = UIButton(type: .custom)
-        self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
+        self.cancelBtn.setTitle(localLanguageTextValue(.cancel), for: .normal)
         self.cancelBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
         self.cancelBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)

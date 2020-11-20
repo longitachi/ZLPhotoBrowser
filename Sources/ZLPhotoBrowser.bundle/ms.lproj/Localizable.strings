@@ -1,7 +1,7 @@
 "previewCamera" = "Kamera";
 "previewCameraRecord" = "Rekod";
 "previewAlbum" = "Imej";
-"previewCancel" = "Batal";
+"cancel" = "Batal";
 
 "originalPhoto" = "Imej Penuh";
 "done" = "Selesai";
@@ -35,6 +35,7 @@
 "iCloudVideoLoadFaild" = "Tidak dapat menyegerakkan dari iCloud";
 "imageLoadFailed" = "pemuatan gagal";
 
+"save" = "Berjimat";
 "saveImageError" = "Gagal menyimpan gambar";
 "saveVideoError" = "Gagal menyimpan video";
 "timeout" = "Permintaan tamat";

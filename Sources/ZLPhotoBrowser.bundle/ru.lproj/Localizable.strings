@@ -1,7 +1,7 @@
 "previewCamera" = "Камера";
 "previewCameraRecord" = "изображения";
 "previewAlbum" = "Альбом";
-"previewCancel" = "Отмена";
+"cancel" = "Отмена";
 
 "originalPhoto" = "Полное изображение";
 "done" = "Готово";
@@ -35,6 +35,7 @@
 "iCloudVideoLoadFaild" = "Невозможно синхронизировать из iCloud";
 "imageLoadFailed" = "загрузка не удалась";
 
+"save" = "Сохранить";
 "saveImageError" = "Не удалось сохранить изображение";
 "saveVideoError" = "Не удалось сохранить видео";
 "timeout" = "Истекло время запроса";

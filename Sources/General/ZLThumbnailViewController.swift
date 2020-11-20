@@ -1123,7 +1123,7 @@ class ZLEmbedAlbumListNavView: UIView {
         }
         
         self.refreshTitleViewFrame()
-        let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width
+        let cancelBtnW = localLanguageTextValue(.cancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width
         self.cancelBtn.frame = CGRect(x: insets.left+20, y: insets.top, width: cancelBtnW, height: 44)
     }
     
@@ -1174,7 +1174,7 @@ class ZLEmbedAlbumListNavView: UIView {
         
         self.cancelBtn = UIButton(type: .custom)
         self.cancelBtn.titleLabel?.font = ZLLayout.navTitleFont
-        self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
+        self.cancelBtn.setTitle(localLanguageTextValue(.cancel), for: .normal)
         self.cancelBtn.setTitleColor(.navTitleColor, for: .normal)
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         self.addSubview(self.cancelBtn)
@@ -1246,7 +1246,7 @@ class ZLExternalAlbumListNavView: UIView {
         self.backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
         let albumTitleW = min(self.bounds.width / 2, self.title.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width)
         self.albumTitleLabel.frame = CGRect(x: (self.frame.width-albumTitleW)/2, y: insets.top, width: albumTitleW, height: 44)
-        let cancelBtnW = localLanguageTextValue(.previewCancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width + 40
+        let cancelBtnW = localLanguageTextValue(.cancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width + 40
         self.cancelBtn.frame = CGRect(x: self.frame.width-insets.right-cancelBtnW, y: insets.top, width: cancelBtnW, height: 44)
     }
     
@@ -1273,7 +1273,7 @@ class ZLExternalAlbumListNavView: UIView {
         
         self.cancelBtn = UIButton(type: .custom)
         self.cancelBtn.titleLabel?.font = ZLLayout.navTitleFont
-        self.cancelBtn.setTitle(localLanguageTextValue(.previewCancel), for: .normal)
+        self.cancelBtn.setTitle(localLanguageTextValue(.cancel), for: .normal)
         self.cancelBtn.setTitleColor(.navTitleColor, for: .normal)
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         self.addSubview(self.cancelBtn)

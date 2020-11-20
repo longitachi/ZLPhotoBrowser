@@ -1,7 +1,7 @@
 "previewCamera" = "카메라";
 "previewCameraRecord" = "기록";
 "previewAlbum" = "이미지";
-"previewCancel" = "취소";
+"cancel" = "취소";
 
 "originalPhoto" = "전체 이미지";
 "done" = "끝난";
@@ -35,6 +35,7 @@
 "iCloudVideoLoadFaild" = "iCloud에서 동기화 할 수 없습니다";
 "imageLoadFailed" = "로드 실패";
 
+"save" = "저장";
 "saveImageError" = "이미지를 저장하지 못했습니다";
 "saveVideoError" = "비디오를 저장하지 못했습니다";
 "timeout" = "요청 시간이 초과되었습니다";

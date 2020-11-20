@@ -1,7 +1,7 @@
 "previewCamera" = "Camera";
 "previewCameraRecord" = "Ghi lại";
 "previewAlbum" = "Hình ảnh";
-"previewCancel" = "Huỷ";
+"cancel" = "Huỷ";
 
 "originalPhoto" = "Toàn bộ hình ảnh";
 "done" = "Xong";
@@ -35,6 +35,7 @@
 "iCloudVideoLoadFaild" = "Không thể đồng bộ hóa từ iCloud";
 "imageLoadFailed" = "tải không thành công";
 
+"save" = "Tiết kiệm";
 "saveImageError" = "Lưu ảnh không thành công";
 "saveVideoError" = "Lưu video không thành công";
 "timeout" = "Yêu cầu đã hết thời gian chờ";
