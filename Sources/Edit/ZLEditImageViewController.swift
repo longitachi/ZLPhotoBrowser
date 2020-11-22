@@ -1192,9 +1192,21 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
         if self.ashbinView.frame.contains(point) {
             self.ashbinView.backgroundColor = zlRGB(241, 79, 79).withAlphaComponent(0.98)
             self.ashbinImgView.isHighlighted = true
+            if sticker.alpha == 1 {
+                sticker.layer.removeAllAnimations()
+                UIView.animate(withDuration: 0.25) {
+                    sticker.alpha = 0.5
+                }
+            }
         } else {
             self.ashbinView.backgroundColor = ZLEditImageViewController.ashbinNormalBgColor
             self.ashbinImgView.isHighlighted = false
+            if sticker.alpha != 1 {
+                sticker.layer.removeAllAnimations()
+                UIView.animate(withDuration: 0.25) {
+                    sticker.alpha = 1
+                }
+            }
         }
     }
     
