@@ -365,6 +365,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             
             NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         }
+        
+        let pinchGes = UIPinchGestureRecognizer(target: self, action: #selector(pinchToAdjustCameraFocus(_:)))
+        self.view.addGestureRecognizer(pinchGes)
     }
     
     func observerDeviceMotion() {
@@ -682,8 +685,8 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             guard self.dragStart else {
                 return
             }
-            let maxZoomFactor = self.videoInput?.device.formats.first?.videoMaxZoomFactor ?? 10
-            var zoomFactor = (convertRect.midY - point.y) / convertRect.midY * 10
+            let maxZoomFactor = self.getMaxZoomFactor()
+            var zoomFactor = (convertRect.midY - point.y) / convertRect.midY * maxZoomFactor
             zoomFactor = max(1, min(zoomFactor, maxZoomFactor))
             self.setVideoZoomFactor(zoomFactor)
         } else if pan.state == .cancelled || pan.state == .ended {
@@ -692,6 +695,29 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             }
             self.dragStart = false
             self.finishRecord()
+        }
+    }
+    
+    @objc func pinchToAdjustCameraFocus(_ pinch: UIPinchGestureRecognizer) {
+        guard let device = self.videoInput?.device else {
+            return
+        }
+        
+        var zoomFactor = device.videoZoomFactor * pinch.scale
+        zoomFactor = max(1, min(zoomFactor, self.getMaxZoomFactor()))
+        self.setVideoZoomFactor(zoomFactor)
+        
+        pinch.scale = 1
+    }
+    
+    func getMaxZoomFactor() -> CGFloat {
+        guard let device = self.videoInput?.device else {
+            return 1
+        }
+        if #available(iOS 11.0, *) {
+            return device.maxAvailableVideoZoomFactor
+        } else {
+            return device.activeFormat.videoMaxZoomFactor
         }
     }
     
