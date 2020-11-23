@@ -101,6 +101,7 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
     }
     
     deinit {
+        zl_debugPrint("ZLTextStickerView deinit")
         self.cleanTimer()
     }
     

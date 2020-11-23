@@ -24,6 +24,7 @@ ZLPhotoBrowser is a Wechat-like image picker. Support select normal photos, vide
 
 Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/longitachi/ZLPhotoBrowser/wiki).
 
+If you only want to use the image edit feature, please move to [ZLImageEditor](https://github.com/longitachi/ZLImageEditor).
 
 ### <a id="Features"></a>Features
 - [x] iOS14 support.
@@ -34,7 +35,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 - [x] Image/Gif/LivePhoto/Video Support.
 - [x] Customize the maximum number of previews or selection, the maximum and minimum optional duration of the video.
 - [x] Customize the number of columns displayed in each row.
-- [x] Image editor (Draw/Crop/Text sticker/Mosaic/Filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
+- [x] Image editor (Draw/Crop/Image sticker/Text sticker/Mosaic/Filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
 - [x] Video editor.
 - [x] Custom camera.
 - [x] Multi-language.

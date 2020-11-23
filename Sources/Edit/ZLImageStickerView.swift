@@ -104,6 +104,7 @@ class ZLImageStickerView: UIView, ZLStickerViewAdditional {
     }
     
     deinit {
+        zl_debugPrint("ZLImageStickerView deinit")
         self.cleanTimer()
     }
     

@@ -55,6 +55,10 @@ class ZLInputTextViewController: UIViewController {
         return true
     }
     
+    deinit {
+        zl_debugPrint("ZLInputTextViewController deinit")
+    }
+    
     init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil) {
         self.image = image
         self.text = text ?? ""
