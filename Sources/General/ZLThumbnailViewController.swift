@@ -995,27 +995,39 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         cell.coverView.isHidden = true
         cell.enableSelect = true
         let arrSel = (self.navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
+        let config = ZLPhotoConfiguration.default()
         
         if isSelected {
             cell.coverView.backgroundColor = .selectedMaskColor
-            cell.coverView.isHidden = !ZLPhotoConfiguration.default().showSelectedMask
-            if ZLPhotoConfiguration.default().showSelectedBorder {
+            cell.coverView.isHidden = !config.showSelectedMask
+            if config.showSelectedBorder {
                 cell.layer.borderWidth = 4
             }
         } else {
             let selCount = arrSel.count
-            if selCount < ZLPhotoConfiguration.default().maxSelectCount, selCount > 0 {
-                if !ZLPhotoConfiguration.default().allowMixSelect {
+            if selCount < config.maxSelectCount {
+                if config.allowMixSelect {
+                    let videoCount = arrSel.filter { $0.type == .video }.count
+                    if videoCount >= config.maxVideoSelectCount, model.type == .video {
+                        cell.coverView.backgroundColor = .invalidMaskColor
+                        cell.coverView.isHidden = !config.showInvalidMask
+                        cell.enableSelect = false
+                    } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
+                        cell.coverView.backgroundColor = .invalidMaskColor
+                        cell.coverView.isHidden = !config.showInvalidMask
+                        cell.enableSelect = false
+                    }
+                } else if selCount > 0 {
                     cell.coverView.backgroundColor = .invalidMaskColor
-                    cell.coverView.isHidden = (!ZLPhotoConfiguration.default().showInvalidMask || model.type != .video)
+                    cell.coverView.isHidden = (!config.showInvalidMask || model.type != .video)
                     cell.enableSelect = model.type != .video
                 }
-            } else if selCount >= ZLPhotoConfiguration.default().maxSelectCount {
+            } else if selCount >= config.maxSelectCount {
                 cell.coverView.backgroundColor = .invalidMaskColor
-                cell.coverView.isHidden = !ZLPhotoConfiguration.default().showInvalidMask
+                cell.coverView.isHidden = !config.showInvalidMask
                 cell.enableSelect = false
             }
-            if ZLPhotoConfiguration.default().showSelectedBorder {
+            if config.showSelectedBorder {
                 cell.layer.borderWidth = 0
             }
         }

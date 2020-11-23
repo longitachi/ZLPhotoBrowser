@@ -496,6 +496,20 @@ public class ZLPhotoPreviewSheet: UIView {
             return
         }
         
+        let config = ZLPhotoConfiguration.default()
+        
+        if config.allowMixSelect {
+            let videoCount = self.arrSelectedModels.filter { $0.type == .video }.count
+            
+            if videoCount > config.maxVideoSelectCount {
+                showAlertView(String(format: localLanguageTextValue(.exceededMaxVideoSelectCount), ZLPhotoConfiguration.default().maxVideoSelectCount), viewController)
+                return
+            } else if videoCount < config.minVideoSelectCount {
+                showAlertView(String(format: localLanguageTextValue(.lessThanMinVideoSelectCount), ZLPhotoConfiguration.default().minVideoSelectCount), viewController)
+                return
+            }
+        }
+        
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         
         var timeout = false
@@ -937,27 +951,39 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     func setCellMaskView(_ cell: ZLThumbnailPhotoCell, isSelected: Bool, model: ZLPhotoModel) {
         cell.coverView.isHidden = true
         cell.enableSelect = true
+        let config = ZLPhotoConfiguration.default()
         
         if isSelected {
             cell.coverView.backgroundColor = .selectedMaskColor
-            cell.coverView.isHidden = !ZLPhotoConfiguration.default().showSelectedMask
-            if ZLPhotoConfiguration.default().showSelectedBorder {
+            cell.coverView.isHidden = !config.showSelectedMask
+            if config.showSelectedBorder {
                 cell.layer.borderWidth = 4
             }
         } else {
             let selCount = self.arrSelectedModels.count
-            if selCount < ZLPhotoConfiguration.default().maxSelectCount, selCount > 0 {
-                if !ZLPhotoConfiguration.default().allowMixSelect {
+            if selCount < config.maxSelectCount {
+                if config.allowMixSelect {
+                    let videoCount = self.arrSelectedModels.filter { $0.type == .video }.count
+                    if videoCount >= config.maxVideoSelectCount, model.type == .video {
+                        cell.coverView.backgroundColor = .invalidMaskColor
+                        cell.coverView.isHidden = !config.showInvalidMask
+                        cell.enableSelect = false
+                    } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
+                        cell.coverView.backgroundColor = .invalidMaskColor
+                        cell.coverView.isHidden = !config.showInvalidMask
+                        cell.enableSelect = false
+                    }
+                } else if selCount > 0 {
                     cell.coverView.backgroundColor = .invalidMaskColor
-                    cell.coverView.isHidden = (!ZLPhotoConfiguration.default().showInvalidMask || model.type != .video)
+                    cell.coverView.isHidden = (!config.showInvalidMask || model.type != .video)
                     cell.enableSelect = model.type != .video
                 }
-            } else if selCount >= ZLPhotoConfiguration.default().maxSelectCount {
+            } else if selCount >= config.maxSelectCount {
                 cell.coverView.backgroundColor = .invalidMaskColor
-                cell.coverView.isHidden = !ZLPhotoConfiguration.default().showInvalidMask
+                cell.coverView.isHidden = !config.showInvalidMask
                 cell.enableSelect = false
             }
-            if ZLPhotoConfiguration.default().showSelectedBorder {
+            if config.showSelectedBorder {
                 cell.layer.borderWidth = 0
             }
         }

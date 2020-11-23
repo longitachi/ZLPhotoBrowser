@@ -24,8 +24,8 @@
 "exceededMaxSelectCount" = "最多只能选择%ld张图片";
 "longerThanMaxVideoDuration" = "不能选择超过%ld秒的视频";
 "shorterThanMaxVideoDuration" = "不能选择低于%ld秒的视频";
-"ZLPhotoBrowserMaxVideoSelectCountInMix" = "最多只能选择%ld个视频";
-"ZLPhotoBrowserMinVideoSelectCountInMix" = "最少选择%ld个视频";
+"exceededMaxVideoSelectCount" = "最多只能选择%ld个视频";
+"lessThanMinVideoSelectCount" = "最少选择%ld个视频";
 
 "noCameraAuthority" = "请在iPhone的\"设置-隐私-相机\"选项中，允许%@访问你的相机";
 "noPhotoLibratyAuthority" = "请在iPhone的\"设置-隐私-照片\"选项中，允许%@访问你的照片";

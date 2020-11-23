@@ -130,6 +130,12 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Max select count: %ld (最多只能选择%ld张图片)
     public static let exceededMaxSelectCount = ZLLocalLanguageKey(rawValue: "exceededMaxSelectCount")
     
+    /// Max count for video selection: %ld (最多只能选择%ld个视频)
+    public static let exceededMaxVideoSelectCount = ZLLocalLanguageKey(rawValue: "exceededMaxVideoSelectCount")
+    
+    /// Min count for video selection: %ld (最少选择%ld个视频)
+    public static let lessThanMinVideoSelectCount = ZLLocalLanguageKey(rawValue: "lessThanMinVideoSelectCount")
+    
     /// Unable to select video with a duration longer than %lds
     /// (不能选择超过%ld秒的视频)
     public static let longerThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "longerThanMaxVideoDuration")

@@ -56,6 +56,34 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
+    private var pri_maxVideoSelectCount = 0
+    /// A count for video max selection.
+    /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
+    @objc public var maxVideoSelectCount: Int {
+        set {
+            pri_maxVideoSelectCount = newValue
+        }
+        get {
+            if pri_maxVideoSelectCount <= 0 {
+                return maxSelectCount
+            } else {
+                return max(minVideoSelectCount, min(pri_maxVideoSelectCount, maxSelectCount))
+            }
+        }
+    }
+    
+    private var pri_minVideoSelectCount = 0
+    /// A count for video min selection.
+    /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
+    @objc public var minVideoSelectCount: Int {
+        set {
+            pri_minVideoSelectCount = newValue
+        }
+        get {
+            return min(maxSelectCount, max(pri_minVideoSelectCount, 0))
+        }
+    }
+    
     /// Whether photos and videos can be selected together. Default is true.
     @objc public var allowMixSelect = true
     

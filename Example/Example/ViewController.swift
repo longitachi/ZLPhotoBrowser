@@ -122,7 +122,24 @@ class ViewController: UIViewController {
     }
     
     @objc func previewSelectPhoto() {
-        ZLPhotoConfiguration.default().imageStickerContainerView = ImageStickerContainerView()
+        self.showImagePicker(true)
+    }
+    
+    @objc func librarySelectPhoto() {
+        self.showImagePicker(false)
+    }
+    
+    func showImagePicker(_ preview: Bool) {
+        let config = ZLPhotoConfiguration.default()
+//        config.editImageClipRatios = [.custom, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)]
+//        config.filters = [.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)]
+        
+        config.imageStickerContainerView = ImageStickerContainerView()
+        
+        // You can first determine whether the asset is allowed to be selected.
+        config.canSelectAsset = { (asset) -> Bool in
+            return true
+        }
         
         let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
         ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
@@ -138,34 +155,12 @@ class ViewController: UIViewController {
         ac.selectImageRequestErrorBlock = { (errorAssets, errorIndexs) in
             debugPrint("fetch error assets: \(errorAssets), error indexs: \(errorIndexs)")
         }
-        ac.showPreview(animate: true, sender: self)
-    }
-    
-    @objc func librarySelectPhoto() {
-//        ZLPhotoConfiguration.default().editImageClipRatios = [.custom, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)]
-//        ZLPhotoConfiguration.default().filters = [.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)]
         
-        ZLPhotoConfiguration.default().imageStickerContainerView = ImageStickerContainerView()
-        
-        // You can first determine whether the asset is allowed to be selected.
-        ZLPhotoConfiguration.default().canSelectAsset = { (asset) -> Bool in
-            return true
+        if preview {
+            ac.showPreview(animate: true, sender: self)
+        } else {
+            ac.showPhotoLibrary(sender: self)
         }
-        
-        let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
-        ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
-            self?.selectedImages = images
-            self?.selectedAssets = assets
-            self?.collectionView.reloadData()
-            debugPrint("\(images)   \(assets)   \(isOriginal)")
-        }
-        ac.cancelBlock = {
-            debugPrint("cancel select")
-        }
-        ac.selectImageRequestErrorBlock = { (errorAssets, errorIndexs) in
-            debugPrint("fetch error assets: \(errorAssets), error indexs: \(errorIndexs)")
-        }
-        ac.showPhotoLibrary(sender: self)
     }
     
     @objc func previewLocalAndNetImage() {

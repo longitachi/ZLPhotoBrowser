@@ -24,8 +24,8 @@
 "exceededMaxSelectCount" = "Nombre maximal de sélections: %ld";
 "longerThanMaxVideoDuration" = "Impossible de sélectionner une vidéo d'une durée supérieure à %lds";
 "shorterThanMaxVideoDuration" = "Impossible de sélectionner une vidéo d'une durée inférieure à %lds";
-"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Nombre maximal de sélections vidéo: %ld";
-"ZLPhotoBrowserMinVideoSelectCountInMix" = "Nombre minimal de sélection de vidéo: %ld";
+"exceededMaxVideoSelectCount" = "Nombre maximal de sélections vidéo: %ld";
+"lessThanMinVideoSelectCount" = "Nombre minimal de sélection de vidéo: %ld";
 
 "noCameraAuthority" = "Veuillez autoriser %@ à accéder à la caméra de votre appareil dans \"Paramètres\" -> \"Confidentialité\" -> \"Caméra\"";
 "noPhotoLibratyAuthority" = "Veuillez autoriser %@ à accéder à votre album dans \"Paramètres\" -> \"Confidentialité\" -> \"Photos\"";

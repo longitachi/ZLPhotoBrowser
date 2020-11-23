@@ -24,8 +24,8 @@
 "exceededMaxSelectCount" = "최대 선택 수: %ld";
 "longerThanMaxVideoDuration" = "길이가 %ld 초 보다 긴 동영상을 선택할 수 없습니다";
 "shorterThanMaxVideoDuration" = "기간이 %ld 초 보다 짧은 비디오를 선택할 수 없습니다";
-"ZLPhotoBrowserMaxVideoSelectCountInMix" = "동영상 최대 선택 수: %ld";
-"ZLPhotoBrowserMinVideoSelectCountInMix" = "동영상 최소 선택 횟수: %ld";
+"exceededMaxVideoSelectCount" = "동영상 최대 선택 수: %ld";
+"lessThanMinVideoSelectCount" = "동영상 최소 선택 횟수: %ld";
 
 "noCameraAuthority" = "%@ 에서 장치의 카메라에 액세스하도록 허용하십시오 에서 \"설정\"-> \"개인 정보\"-> \"카메라\"";
 "noPhotoLibratyAuthority" = "%@ 이 \"설정\"-> \"개인 정보\"-> \"사진\"에서 앨범에 액세스하도록 허용하세요";

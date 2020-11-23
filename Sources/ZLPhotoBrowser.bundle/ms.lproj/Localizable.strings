@@ -24,8 +24,8 @@
 "exceededMaxSelectCount" = "Kiraan maksimum untuk pemilihan: %ld";
 "longerThanMaxVideoDuration" = "Tidak dapat memilih video dengan jangka masa lebih lama daripada %lds";
 "shorterThanMaxVideoDuration" = "Tidak dapat memilih video dengan jangka masa lebih pendek daripada %lds";
-"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Jumlah maksimum untuk pemilihan video: %ld";
-"ZLPhotoBrowserMinVideoSelectCountInMix" = "Kiraan minimum untuk pemilihan video: %ld";
+"exceededMaxVideoSelectCount" = "Jumlah maksimum untuk pemilihan video: %ld";
+"lessThanMinVideoSelectCount" = "Kiraan minimum untuk pemilihan video: %ld";
 
 "noCameraAuthority" = "Izinkan %@ mengakses kamera peranti anda di \"Tetapan\" -> \"Privasi\" -> \"Kamera\"";
 "noPhotoLibratyAuthority" = "Izinkan %@ mengakses album anda di \"Tetapan\" -> \"Privasi\" -> \"Foto\"";

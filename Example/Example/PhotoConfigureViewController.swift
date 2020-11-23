@@ -18,6 +18,10 @@ class PhotoConfigureViewController: UIViewController {
     
     var selectCountTextField: UITextField!
     
+    var minVideoSelectCountTextField: UITextField!
+    
+    var maxVideoSelectCountTextField: UITextField!
+    
     var minVideoDurationTextField: UITextField!
     
     var maxVideoDurationTextField: UITextField!
@@ -205,11 +209,43 @@ class PhotoConfigureViewController: UIViewController {
             make.size.equalTo(fieldSize)
         }
         
+        // 视频最小选择个数
+        let minVideoSelectCountLabel = createLabel("Min count for video selection")
+        containerView.addSubview(minVideoSelectCountLabel)
+        minVideoSelectCountLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(maxSelectCountLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(previewCountLabel.snp.left)
+        }
+        
+        self.minVideoSelectCountTextField = createTextField(String(config.minVideoSelectCount), .numberPad)
+        containerView.addSubview(self.minVideoSelectCountTextField)
+        self.minVideoSelectCountTextField.snp.makeConstraints { (make) in
+            make.left.equalTo(minVideoSelectCountLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(minVideoSelectCountLabel)
+            make.size.equalTo(fieldSize)
+        }
+        
+        // 视频最大选择个数
+        let maxVideoSelectCountLabel = createLabel("Max count for video selection")
+        containerView.addSubview(maxVideoSelectCountLabel)
+        maxVideoSelectCountLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(minVideoSelectCountLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(previewCountLabel.snp.left)
+        }
+        
+        self.maxVideoSelectCountTextField = createTextField(String(config.maxVideoSelectCount), .numberPad)
+        containerView.addSubview(self.maxVideoSelectCountTextField)
+        self.maxVideoSelectCountTextField.snp.makeConstraints { (make) in
+            make.left.equalTo(maxVideoSelectCountLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(maxVideoSelectCountLabel)
+            make.size.equalTo(fieldSize)
+        }
+        
         // 视频最小选择时长
         let minVideoDurationLabel = createLabel("Min duration for video selection")
         containerView.addSubview(minVideoDurationLabel)
         minVideoDurationLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(maxSelectCountLabel.snp.bottom).offset(velSpacing)
+            make.top.equalTo(maxVideoSelectCountLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -1001,6 +1037,10 @@ extension PhotoConfigureViewController: UITextFieldDelegate {
             config.maxPreviewCount = Int(textField.text ?? "") ?? 20
         } else if textField == self.selectCountTextField {
             config.maxSelectCount = Int(textField.text ?? "") ?? 9
+        } else if textField == self.minVideoSelectCountTextField {
+            config.minVideoSelectCount = Int(textField.text ?? "") ?? 0
+        } else if textField == self.maxVideoSelectCountTextField {
+            config.maxVideoSelectCount = Int(textField.text ?? "") ?? 0
         } else if textField == self.minVideoDurationTextField {
             config.minSelectVideoDuration = Int(textField.text ?? "") ?? 0
         } else if textField == self.maxVideoDurationTextField {

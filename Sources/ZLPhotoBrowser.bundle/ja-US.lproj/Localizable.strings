@@ -24,8 +24,8 @@
 "exceededMaxSelectCount" = "最大選択数: %ld";
 "longerThanMaxVideoDuration" = "%ldsより長い動画は選択できません";
 "shorterThanMaxVideoDuration" = "％ldsより短い動画は選択できません";
-"ZLPhotoBrowserMaxVideoSelectCountInMix" = "動画の最大選択数: %ld";
-"ZLPhotoBrowserMinVideoSelectCountInMix" = "動画の最小選択数: %ld";
+"exceededMaxVideoSelectCount" = "動画の最大選択数: %ld";
+"lessThanMinVideoSelectCount" = "動画の最小選択数: %ld";
 
 "noCameraAuthority" = "「設定」->「プライパシー」->「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
 "noPhotoLibratyAuthority" = "%@があなたのアルバムにアクセスするには「設定」->「プライバシー」->「写真」";

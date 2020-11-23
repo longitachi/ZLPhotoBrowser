@@ -24,8 +24,8 @@
 "exceededMaxSelectCount" = "Максимальное количество выбранных: %ld";
 "longerThanMaxVideoDuration" = "Невозможно выбрать видео длительностью более %ld с";
 "shorterThanMaxVideoDuration" = "Невозможно выбрать видео продолжительностью менее 2 с";
-"ZLPhotoBrowserMaxVideoSelectCountInMix" = "Максимальное количество выбранных видео: %ld";
-"ZLPhotoBrowserMinVideoSelectCountInMix" = "Количество мин. Выбора видео: %ld";
+"exceededMaxVideoSelectCount" = "Максимальное количество выбранных видео: %ld";
+"lessThanMinVideoSelectCount" = "Количество мин. Выбора видео: %ld";
 
 "noCameraAuthority" = "Разрешите %@ доступ к камере вашего устройства в \"Настройки\" -> \"Конфиденциальность\" -> \"Камера\"";
 "noPhotoLibratyAuthority" = "Разрешите %@ доступ к вашему альбому в \"Настройки\" -> \"Конфиденциальность\" -> \"Фото\"";
