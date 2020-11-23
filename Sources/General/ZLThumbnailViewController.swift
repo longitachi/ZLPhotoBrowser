@@ -222,8 +222,8 @@ class ZLThumbnailViewController: UIViewController {
         self.previewBtn.frame = CGRect(x: 15, y: btnY, width: previewBtnW, height: btnH)
         
         let originalTitle = localLanguageTextValue(.originalPhoto)
-        let w = originalTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
-        self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-w)/2-5, y: btnY, width: w, height: btnH)
+        let originBtnW = originalTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
+        self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-originBtnW)/2-5, y: btnY, width: originBtnW, height: btnH)
         
         self.refreshDoneBtnFrame()
         

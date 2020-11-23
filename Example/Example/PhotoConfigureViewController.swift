@@ -509,7 +509,7 @@ class PhotoConfigureViewController: UIViewController {
             make.centerY.equalTo(editImageLabel)
         }
         
-        // 编辑视频工具
+        // 编辑图片工具
         self.editImageToolView = UIView()
         self.editImageToolView.alpha = config.allowEditImage ? 1 : 0
         containerView.addSubview(self.editImageToolView)

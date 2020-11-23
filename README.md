@@ -9,7 +9,7 @@
 
 ----------------------------------------
 
-ZLPhotoBrowser is a lightweight and pure Swift implemented library for select photos from album. Support select multiple photos, video, gif, livePhoto. Support edit image and crop video.
+ZLPhotoBrowser is a Wechat-like image picker. Support select normal photos, videos, gif and livePhoto. Support edit image and crop video.
 
 [中文简介](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README_CN.md)
 
@@ -55,7 +55,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
  
 ### <a id="Usage"></a>Usage
  - Preview selection
- ```
+ ```swift
  let ps = ZLPhotoPreviewSheet()
  ps.selectImageBlock = { [weak self] (images, assets, isOriginal) in
      // your code
@@ -64,7 +64,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
  ```
  
  - Library selection
- ```
+ ```swift
  let ps = ZLPhotoPreviewSheet()
  ps.selectImageBlock = { [weak self] (images, assets, isOriginal) in
      // your code
@@ -89,6 +89,16 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.0:
+  Add:
+    Image editor add text sticker and image sticker feature.
+    Customizable order of editing image tools.
+    Can set the maximum and minimum number of choices for the video.
+    Pinch to adjust zoom factor of the custom camera.
+    Long press to save the local image and network image.
+    iOS14 limited mode, change the way to select more photos.
+  Fix:
+    Fix the bug that will crash when has request failed images.
 ● 4.0.9: 
     Support languages of more countries (French, German, Russian, Vietnamese, Korean, Malay, Italian).
     Support iOS14 limited authority.
@@ -97,10 +107,6 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
     Support show image crop vc directly.
 ● 4.0.8:
     Add filter to image editor.
-● 4.0.7: 
-    Image editor support crop ratios. 
-    Custom camera supports switching camera during recording. 
-    bug fixed.
 ...
 ```
 

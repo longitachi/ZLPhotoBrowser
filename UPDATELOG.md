@@ -1,6 +1,23 @@
 # Update Log
 
 -----
+
+## [4.1.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.0) (2020-11-21)
+
+### Add
+* Image editor add text sticker and image sticker feature.[#552](https://github.com/longitachi/ZLPhotoBrowser/pull/552)
+* Customizable order of editing image tools.
+* Can set the maximum and minimum number of choices for the video.
+* Pinch to adjust zoom factor of the custom camera.
+* Long press to save the local image and network image.
+* iOS14 limited mode, change the way to select more photos.[#548](https://github.com/longitachi/ZLPhotoBrowser/pull/548)
+
+### Fix
+* Fix the bug that will crash when has request failed images.[#549](https://github.com/longitachi/ZLPhotoBrowser/pull/549)
+
+---
+
+
 ## [4.0.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.9) (2020-10-29)
 
 ### Add
@@ -15,7 +32,7 @@
 
 ---
 
------
+
 ## [4.0.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.0.8) (2020-10-10)
 
 ### Add
