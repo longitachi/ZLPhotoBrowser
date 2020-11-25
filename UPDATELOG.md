@@ -2,6 +2,13 @@
 
 -----
 
+## [4.1.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.1) (2020-11-25)
+
+### Fix
+* Fix a crash when using zoom to preview local images and network images.[#556](https://github.com/longitachi/ZLPhotoBrowser/issues/556)
+
+---
+
 ## [4.1.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.0) (2020-11-21)
 
 ### Add

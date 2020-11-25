@@ -66,6 +66,8 @@ public class ZLEditImageViewController: UIViewController {
     
     static let ashbinNormalBgColor = zlRGB(40, 40, 40).withAlphaComponent(0.8)
     
+    var animate = false
+    
     var originalImage: UIImage
     
     // 第一次进入界面时，布局后frame，裁剪dimiss动画使用
@@ -183,7 +185,7 @@ public class ZLEditImageViewController: UIViewController {
         zl_debugPrint("ZLEditImageViewController deinit")
     }
     
-    @objc public class func showEditImageVC(parentVC: UIViewController?, image: UIImage, editModel: ZLEditImageModel? = nil, completion: ( (UIImage, ZLEditImageModel) -> Void )? ) {
+    @objc public class func showEditImageVC(parentVC: UIViewController?, animate: Bool = false, image: UIImage, editModel: ZLEditImageModel? = nil, completion: ( (UIImage, ZLEditImageModel) -> Void )? ) {
         let tools = ZLPhotoConfiguration.default().editImageTools
         if ZLPhotoConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
@@ -191,15 +193,17 @@ public class ZLEditImageViewController: UIViewController {
                 let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, selectRatio: ratio, selectFilter: .normal, textStickers: nil, imageStickers: nil)
                 completion?(image.clipImage(angle, editRect) ?? image, m)
             }
+            vc.animate = animate
             vc.modalPresentationStyle = .fullScreen
-            parentVC?.present(vc, animated: false, completion: nil)
+            parentVC?.present(vc, animated: animate, completion: nil)
         } else {
             let vc = ZLEditImageViewController(image: image, editModel: editModel)
             vc.editFinishBlock = {  (ei, editImageModel) in
                 completion?(ei, editImageModel)
             }
+            vc.animate = animate
             vc.modalPresentationStyle = .fullScreen
-            parentVC?.present(vc, animated: false, completion: nil)
+            parentVC?.present(vc, animated: animate, completion: nil)
         }
     }
     
@@ -569,7 +573,7 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc func cancelBtnClick() {
-        self.dismiss(animated: false, completion: nil)
+        self.dismiss(animated: self.animate, completion: nil)
     }
     
     func drawBtnClick() {
@@ -671,7 +675,7 @@ public class ZLEditImageViewController: UIViewController {
         var image = self.buildImage()
         image = image.clipImage(self.angle, self.editRect) ?? image
         self.editFinishBlock?(image, ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio, selectFilter: self.currentFilter, textStickers: textStickers, imageStickers: imageStickers))
-        self.dismiss(animated: false, completion: nil)
+        self.dismiss(animated: self.animate, completion: nil)
     }
     
     @objc func revokeBtnClick() {

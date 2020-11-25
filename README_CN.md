@@ -98,6 +98,9 @@
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.1 - 4.1.0 Patch:
+  Fix:
+    修复了预览本地和网络图片时，缩放后滑动会闪退的bug：
 ● 4.1.0:
   新增:
     编辑图片工具新增文本贴纸和图片贴纸;
@@ -113,8 +116,6 @@
     完善iOS14 limited authority 权限的适配; 
     提供可以同时预览PHAsset、本地图片/视频及网络图片/视频的功能; 优化部分UI效果; 
     编辑图片可直接跳转裁剪界面;
-● 4.0.8: 
-    编辑图片添加滤镜功能;
 ...
 ```
 

@@ -49,6 +49,8 @@ class ZLClipImageViewController: UIViewController {
     
     static let clipRatioItemSize: CGSize = CGSize(width: 60, height: 70)
     
+    var animate = true
+    
     /// 用作进入裁剪界面首次动画frame
     var presentAnimateFrame: CGRect?
     
@@ -194,7 +196,9 @@ class ZLClipImageViewController: UIViewController {
         super.viewDidAppear(animated)
         
         self.viewDidAppearCount += 1
-        self.transitioningDelegate = self
+        if self.presentingViewController is ZLEditImageViewController {
+            self.transitioningDelegate = self
+        }
         
         guard self.viewDidAppearCount == 1 else {
             return
@@ -496,7 +500,7 @@ class ZLClipImageViewController: UIViewController {
         self.dismissAnimateFromRect = self.cancelClipAnimateFrame
         self.dismissAnimateImage = self.presentAnimateImage
         self.cancelClipBlock?()
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: self.animate, completion: nil)
     }
     
     @objc func revertBtnClick() {
@@ -515,7 +519,7 @@ class ZLClipImageViewController: UIViewController {
         self.dismissAnimateFromRect = self.clipBoxFrame
         self.dismissAnimateImage = image.clipImage
         self.clipDoneBlock?(self.angle, image.editRect, self.selectedRatio)
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: self.animate, completion: nil)
     }
     
     @objc func rotateBtnClick() {

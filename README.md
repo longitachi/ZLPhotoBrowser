@@ -90,6 +90,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.1 - 4.1.0 Patch:
+  Fix:
+    Fix a crash when using zoom to preview local images and network images.
 ● 4.1.0:
   Add:
     Image editor add text sticker and image sticker feature.
@@ -106,8 +109,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Provides the ability to preview PHAsset, local images and videos, network images and videos together.
     Optimize some UI effects.
     Support show image crop vc directly.
-● 4.0.8:
-    Add filter to image editor.
 ...
 ```
 
