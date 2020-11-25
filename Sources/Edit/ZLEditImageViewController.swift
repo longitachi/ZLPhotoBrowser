@@ -587,7 +587,6 @@ public class ZLEditImageViewController: UIViewController {
     
     func clipBtnClick() {
         let currentEditImage = self.buildImage()
-        // 这里要传store_editRect，因为第一次进入编辑界面时候需要编辑界面根据这个判断是不是第一次进入
         let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio)
         let rect = self.scrollView.convert(self.containerView.frame, to: self.view)
         vc.presentAnimateFrame = rect
@@ -1489,11 +1488,6 @@ public class ZLMosaicPath: NSObject {
     
     var linePoints: [CGPoint] = []
     
-    /// 初始化 mosaic path
-    /// - Parameters:
-    ///   - pathWidth: 线宽
-    ///   - startPoint: path 起始点
-    ///   - actualStartPoint: startPoint 相对于图片的真实起始点
     init(pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.path = UIBezierPath()
         self.path.lineWidth = pathWidth
