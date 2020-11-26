@@ -3,7 +3,7 @@
 [![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 [![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
-![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
+![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
@@ -24,6 +24,7 @@
 * [更新日志](#更新日志)
 * [国际化语言](#国际化语言)
 * [安装方法(支持Cocoapods/Carthage/SPM安装)](#安装方法)
+* [支持](#支持)
 * [效果图](#效果图)
 
 `Swift`及`OC`详细使用方法请查看[Wiki](https://github.com/longitachi/ZLPhotoBrowser/wiki)
@@ -140,6 +141,10 @@
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
   * 2. 输入对应版本号（SPM 最低版本为 `4.0.9`）
   * 3. 等Xcode下载完成后确定即可
+
+### <a id="支持"></a> 支持
+* 给个[**★ Star**](#)
+* 请喝☕️ <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/aliPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wechatPay.png" width = "100" height = "125" />
 
 ### <a id="效果图"></a> 效果图
 - 选择

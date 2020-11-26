@@ -3,7 +3,7 @@
 [![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
 [![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
-![Language](https://img.shields.io/badge/Language-%20Swift%20-blue.svg)
+![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
@@ -20,6 +20,7 @@ ZLPhotoBrowser is a Wechat-like image picker. Support select normal photos, vide
 * [Update Log](#UpdateLog)
 * [Languages](#Languages)
 * [Installation(Support Cocoapods/Carthage/SPM)](#Installation)
+* [Support](#Support)
 * [Demo Effect](#DemoEffect)
 
 Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/longitachi/ZLPhotoBrowser/wiki).
@@ -163,6 +164,10 @@ $ carthage update ZLPhotoBrowser
 1. Select File > Swift Packages > Add Package Dependency. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
 2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.0.9" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
+
+### <a id="Support"></a> Support
+* [**★ Star**](#) this repo
+* Support with <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/aliPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wechatPay.png" width = "100" height = "125" />
 
 ### <a id="DemoEffect"></a> Demo Effect
 - Selection
