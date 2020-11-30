@@ -27,35 +27,35 @@
 import UIKit
 import Photos
 
-class ZLAlbumListModel: NSObject {
+public class ZLAlbumListModel: NSObject {
 
-    let title: String
+    public let title: String
     
-    var count: Int {
+    public var count: Int {
         return result.count
     }
     
-    var result: PHFetchResult<PHAsset>
+    public var result: PHFetchResult<PHAsset>
     
-    let collection: PHAssetCollection
+    public let collection: PHAssetCollection
     
-    let option: PHFetchOptions
+    public let option: PHFetchOptions
     
-    let isCameraRoll: Bool
+    public let isCameraRoll: Bool
     
-    var headImageAsset: PHAsset? {
+    public var headImageAsset: PHAsset? {
         return result.lastObject
     }
     
-    var models: [ZLPhotoModel] = []
+    public var models: [ZLPhotoModel] = []
     
     // 暂未用到
-    var selectedModels: [ZLPhotoModel] = []
+    private var selectedModels: [ZLPhotoModel] = []
     
     // 暂未用到
-    var selectedCount: Int = 0
+    private var selectedCount: Int = 0
     
-    init(title: String, result: PHFetchResult<PHAsset>, collection: PHAssetCollection, option: PHFetchOptions, isCameraRoll: Bool) {
+    public init(title: String, result: PHFetchResult<PHAsset>, collection: PHAssetCollection, option: PHFetchOptions, isCameraRoll: Bool) {
         self.title = title
         self.result = result
         self.collection = collection
@@ -63,7 +63,7 @@ class ZLAlbumListModel: NSObject {
         self.isCameraRoll = isCameraRoll
     }
     
-    func refetchPhotos() {
+    public func refetchPhotos() {
         let models = ZLPhotoManager.fetchPhoto(in: self.result, ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo:  ZLPhotoConfiguration.default().allowSelectVideo)
         self.models.removeAll()
         self.models.append(contentsOf: models)

@@ -164,7 +164,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch camera roll album.
-    class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping ( (ZLAlbumListModel) -> Void )) {
+    public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping ( (ZLAlbumListModel) -> Void )) {
         let option = PHFetchOptions()
         if !allowSelectImage {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
@@ -246,7 +246,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     @discardableResult
-    class func fetchImage(for asset: PHAsset, size: CGSize, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
+    public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
         return self.fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
     }
     

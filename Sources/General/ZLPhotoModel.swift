@@ -29,7 +29,7 @@ import Photos
 
 extension ZLPhotoModel {
     
-    enum MediaType: Int {
+    public enum MediaType: Int {
         case unknown = 0
         case image
         case gif
@@ -40,32 +40,32 @@ extension ZLPhotoModel {
 }
 
 
-class ZLPhotoModel: NSObject {
+public class ZLPhotoModel: NSObject {
 
-    let ident: String
+    public let ident: String
     
-    let asset: PHAsset
+    public let asset: PHAsset
     
-    var type: ZLPhotoModel.MediaType = .unknown
+    public var type: ZLPhotoModel.MediaType = .unknown
     
-    var duration: String = ""
+    public var duration: String = ""
     
-    var isSelected: Bool = false
+    public var isSelected: Bool = false
     
-    var editImage: UIImage?
+    public var editImage: UIImage?
     
-    var second: Second {
+    public var second: Second {
         guard type == .video else {
             return 0
         }
         return Int(round(asset.duration))
     }
     
-    var whRatio: CGFloat {
+    public var whRatio: CGFloat {
         return CGFloat(self.asset.pixelWidth) / CGFloat(self.asset.pixelHeight)
     }
     
-    var previewSize: CGSize {
+    public var previewSize: CGSize {
         let scale: CGFloat = 2 //UIScreen.main.scale
         if self.whRatio > 1 {
             let h = min(UIScreen.main.bounds.height, ZLMaxImageWidth) * scale
@@ -79,9 +79,9 @@ class ZLPhotoModel: NSObject {
     }
     
     // Content of the last edit.
-    var editImageModel: ZLEditImageModel?
+    public var editImageModel: ZLEditImageModel?
     
-    init(asset: PHAsset) {
+    public init(asset: PHAsset) {
         self.ident = asset.localIdentifier
         self.asset = asset
         super.init()
@@ -92,7 +92,7 @@ class ZLPhotoModel: NSObject {
         }
     }
     
-    func transformAssetType(for asset: PHAsset) -> ZLPhotoModel.MediaType {
+    public func transformAssetType(for asset: PHAsset) -> ZLPhotoModel.MediaType {
         switch asset.mediaType {
         case .video:
             return .video
@@ -111,7 +111,7 @@ class ZLPhotoModel: NSObject {
         }
     }
     
-    func transformDuration(for asset: PHAsset) -> String {
+    public func transformDuration(for asset: PHAsset) -> String {
         let dur = Int(round(asset.duration))
         
         switch dur {
@@ -134,6 +134,6 @@ class ZLPhotoModel: NSObject {
 }
 
 
-func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
+public func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
     return lhs.ident == rhs.ident
 }
