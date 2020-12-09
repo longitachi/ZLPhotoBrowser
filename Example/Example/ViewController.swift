@@ -41,7 +41,12 @@ class ViewController: UIViewController {
         let configBtn = createBtn("Configuration", #selector(configureClick))
         self.view.addSubview(configBtn)
         configBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.snp.topMargin).offset(20)
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(self.view.snp.topMargin).offset(20)
+            } else {
+                make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(20)
+            }
+            
             make.left.equalTo(self.view).offset(30)
         }
         

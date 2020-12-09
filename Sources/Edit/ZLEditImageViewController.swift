@@ -268,7 +268,7 @@ public class ZLEditImageViewController: UIViewController {
         }
         self.shouldLayout = false
         zl_debugPrint("edit image layout subviews")
-        var insets = UIEdgeInsets.zero
+        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
         }
