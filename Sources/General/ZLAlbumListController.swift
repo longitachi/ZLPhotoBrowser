@@ -82,12 +82,18 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        let navViewNormalH: CGFloat = 44
+        
         var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        var collectionViewInsetTop: CGFloat = 20
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
+            collectionViewInsetTop = navViewNormalH
+        } else {
+            collectionViewInsetTop += navViewNormalH
         }
-        let navH = insets.top + 44
-        self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: navH)
+        
+        self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: insets.top + navViewNormalH)
         self.navBlurView?.frame = self.navView.bounds
         
         let albumTitleW = localLanguageTextValue(.photo).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width
@@ -96,7 +102,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         self.cancelBtn.frame = CGRect(x: self.view.frame.width-insets.right-cancelBtnW, y: insets.top, width: cancelBtnW, height: 44)
         
         self.tableView.frame = CGRect(x: insets.left, y: 0, width: self.view.frame.width - insets.left - insets.right, height: self.view.frame.height)
-        self.tableView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
+        self.tableView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 0, bottom: 0, right: 0)
         self.tableView.scrollIndicatorInsets = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
     }
     

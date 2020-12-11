@@ -179,12 +179,18 @@ class ZLThumbnailViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        let navViewNormalH: CGFloat = 44
+        
         var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        var collectionViewInsetTop: CGFloat = 20
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
+            collectionViewInsetTop = navViewNormalH
+        } else {
+            collectionViewInsetTop += navViewNormalH
         }
         
-        let navViewFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: insets.top + 44)
+        let navViewFrame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: insets.top + navViewNormalH)
         self.externalNavView?.frame = navViewFrame
         self.embedNavView?.frame = navViewFrame
         
@@ -205,7 +211,7 @@ class ZLThumbnailViewController: UIViewController {
         
         let totalWidth = self.view.frame.width - insets.left - insets.right
         self.collectionView.frame = CGRect(x: insets.left, y: 0, width: totalWidth, height: self.view.frame.height)
-        self.collectionView.contentInset = UIEdgeInsets(top: 44, left: 0, bottom: bottomViewH, right: 0)
+        self.collectionView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 0, bottom: bottomViewH, right: 0)
         self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: insets.top, left: 0, bottom: bottomViewH, right: 0)
         
         guard showBottomView else { return }
