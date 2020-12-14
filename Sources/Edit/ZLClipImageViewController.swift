@@ -117,7 +117,7 @@ class ZLClipImageViewController: UIViewController {
     
     var thumbnailImage: UIImage?
     
-    var maxClipFrame: CGRect = {
+    lazy var maxClipFrame: CGRect = {
         var insets = deviceSafeAreaInsets()
         insets.top +=  20
         var rect = CGRect.zero

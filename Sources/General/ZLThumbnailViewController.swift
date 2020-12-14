@@ -214,6 +214,15 @@ class ZLThumbnailViewController: UIViewController {
         self.collectionView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 0, bottom: bottomViewH, right: 0)
         self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: insets.top, left: 0, bottom: bottomViewH, right: 0)
         
+        if !self.isLayoutOK {
+            self.scrollToBottom()
+        } else if self.isSwitchOrientation {
+            self.isSwitchOrientation = false
+            if let ip = self.firstVisibleIndexPathBeforeRotation {
+                self.collectionView.scrollToItem(at: ip, at: .top, animated: false)
+            }
+        }
+        
         guard showBottomView else { return }
         
         let btnH = ZLLayout.bottomToolBtnH
@@ -232,15 +241,6 @@ class ZLThumbnailViewController: UIViewController {
         self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-originBtnW)/2-5, y: btnY, width: originBtnW, height: btnH)
         
         self.refreshDoneBtnFrame()
-        
-        if !self.isLayoutOK {
-            self.scrollToBottom()
-        } else if self.isSwitchOrientation {
-            self.isSwitchOrientation = false
-            if let ip = self.firstVisibleIndexPathBeforeRotation {
-                self.collectionView.scrollToItem(at: ip, at: .top, animated: false)
-            }
-        }
     }
     
     func setupUI() {
