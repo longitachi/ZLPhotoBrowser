@@ -80,6 +80,10 @@ class PhotoConfigureViewController: UIViewController {
     
     var allowSlideSelectSwitch: UISwitch!
     
+    var autoScrollSwitch: UISwitch!
+    
+    var autoScrollMaxSpeedTextField: UITextField!
+    
     var allowTakePhotoInLibrarySwitch: UISwitch!
     
     var showCaptureInCameraCellSwitch: UISwitch!
@@ -694,11 +698,43 @@ class PhotoConfigureViewController: UIViewController {
             make.centerY.equalTo(slideSelectLabel)
         }
         
+        // 滑动拖拽时自动滚动
+        let autoScrollLabel = createLabel("Auto scroll when slide select")
+        containerView.addSubview(autoScrollLabel)
+        autoScrollLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(slideSelectLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(previewCountLabel.snp.left)
+        }
+        
+        self.autoScrollSwitch = UISwitch()
+        self.autoScrollSwitch.isOn = config.autoScrollWhenSlideSelectIsActive
+        self.autoScrollSwitch.addTarget(self, action: #selector(autoScrollSwitchChanged), for: .valueChanged)
+        containerView.addSubview(self.autoScrollSwitch)
+        self.autoScrollSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(autoScrollLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(autoScrollLabel)
+        }
+        
+        // 滑动拖拽时自动滚动最大速度
+        let autoScrollMaxSpeedLabel = createLabel("Max speed of auto scroll")
+        containerView.addSubview(autoScrollMaxSpeedLabel)
+        autoScrollMaxSpeedLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(autoScrollLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(previewCountLabel.snp.left)
+        }
+        
+        self.autoScrollMaxSpeedTextField = createTextField(String(format: "%.2f", config.autoScrollMaxSpeed), .decimalPad)
+        containerView.addSubview(self.autoScrollMaxSpeedTextField)
+        self.autoScrollMaxSpeedTextField.snp.makeConstraints { (make) in
+            make.left.equalTo(autoScrollMaxSpeedLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(autoScrollMaxSpeedLabel)
+        }
+        
         // 相册内部拍照
         let takePhotoLabel = createLabel("Show camera cell in thumbnail")
         containerView.addSubview(takePhotoLabel)
         takePhotoLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(slideSelectLabel.snp.bottom).offset(velSpacing)
+            make.top.equalTo(autoScrollMaxSpeedLabel.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -989,6 +1025,10 @@ class PhotoConfigureViewController: UIViewController {
         config.allowSlideSelect = allowSlideSelectSwitch.isOn
     }
     
+    @objc func autoScrollSwitchChanged() {
+        config.autoScrollWhenSlideSelectIsActive = autoScrollSwitch.isOn
+    }
+    
     @objc func allowTakePhotoInLibraryChanged() {
         config.allowTakePhotoInLibrary = allowTakePhotoInLibrarySwitch.isOn
     }
@@ -1047,6 +1087,8 @@ extension PhotoConfigureViewController: UITextFieldDelegate {
             config.maxSelectVideoDuration = Int(textField.text ?? "") ?? 120
         } else if textField == self.cellRadiusTextField {
             config.cellCornerRadio = CGFloat(Double(textField.text ?? "") ?? 0)
+        } else if textField == self.autoScrollMaxSpeedTextField {
+            config.autoScrollMaxSpeed = CGFloat(Double(textField.text ?? "") ?? 0)
         }
     }
     

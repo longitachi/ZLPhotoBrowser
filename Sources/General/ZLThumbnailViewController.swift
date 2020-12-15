@@ -106,6 +106,19 @@ class ZLThumbnailViewController: UIViewController {
     /// 拍照后置为true，需要刷新相册列表
     var hasTakeANewAsset = false
     
+    var slideCalculateQueue = DispatchQueue(label: "com.ZLhotoBrowser.slide")
+    
+    var autoScrollTimer: CADisplayLink?
+    
+    var lastPanUpdateTime = CACurrentMediaTime()
+    
+    private enum AutoScrollDirection {
+        case none
+        case top
+        case bottom
+    }
+    
+    private var autoScrollInfo: (direction: AutoScrollDirection, speed: CGFloat) = (.none, 0)
     
     @available(iOS 14, *)
     var showAddPhotoCell: Bool {
@@ -130,6 +143,8 @@ class ZLThumbnailViewController: UIViewController {
         return ZLPhotoConfiguration.default().statusBarStyle
     }
     
+    var panGes: UIPanGestureRecognizer!
+    
     deinit {
         zl_debugPrint("ZLThumbnailViewController deinit")
     }
@@ -149,8 +164,8 @@ class ZLThumbnailViewController: UIViewController {
         self.setupUI()
         
         if ZLPhotoConfiguration.default().allowSlideSelect {
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(slideSelectAction(_:)))
-            self.view.addGestureRecognizer(pan)
+            self.panGes = UIPanGestureRecognizer(target: self, action: #selector(slideSelectAction(_:)))
+            self.view.addGestureRecognizer(self.panGes)
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationChanged(_:)), name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
@@ -445,78 +460,166 @@ class ZLThumbnailViewController: UIViewController {
                 }
                 
                 cell?.btnSelect.isSelected = m.isSelected
-                self.refreshCellIndex()
-                self.refreshCellMaskView()
+                self.refreshCellIndexAndMaskView()
                 self.resetBottomToolBtnStatus()
                 self.lastSlideIndex = indexPath.row
             }
         } else if pan.state == .changed {
+            self.autoScrollWhenSlideSelect(pan)
+            
             if !self.beginPanSelect || indexPath.row == self.lastSlideIndex || self.panSelectType == .none || cell == nil {
                 return
             }
             guard let beginIndexPath = self.beginSlideIndexPath else {
                 return
             }
-            self.lastSlideIndex = indexPath.row
-            let minIndex = min(indexPath.row, beginIndexPath.row)
-            let maxIndex = max(indexPath.row, beginIndexPath.row)
-            let minIsBegin = minIndex == beginIndexPath.row
+            self.lastPanUpdateTime = CACurrentMediaTime()
             
-            var i = beginIndexPath.row
-            while (minIsBegin ? i <= maxIndex : i >= minIndex) {
-                if i != beginIndexPath.row {
-                    let p = IndexPath(row: i, section: 0)
-                    if !self.arrSlideIndexPaths.contains(p) {
-                        self.arrSlideIndexPaths.append(p)
-                        let index = asc ? i : i - self.offset
-                        let m = self.arrDataSources[index]
-                        self.dicOriSelectStatus[p] = m.isSelected
-                    }
-                }
-                i += (minIsBegin ? 1 : -1)
-            }
-            
-            for path in self.arrSlideIndexPaths {
-                let index = asc ? path.row : path.row - self.offset
-                // 是否在最初和现在的间隔区间内
-                let inSection = path.row >= minIndex && path.row <= maxIndex
-                let m = self.arrDataSources[index]
+            let visiblePaths = self.collectionView.indexPathsForVisibleItems
+            self.slideCalculateQueue.async {
+                self.lastSlideIndex = indexPath.row
+                let minIndex = min(indexPath.row, beginIndexPath.row)
+                let maxIndex = max(indexPath.row, beginIndexPath.row)
+                let minIsBegin = minIndex == beginIndexPath.row
                 
-                if self.panSelectType == .select {
-                    if inSection,
-                       !m.isSelected,
-                       canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self, showAlert: false) {
-                        m.isSelected = true
+                var i = beginIndexPath.row
+                while (minIsBegin ? i <= maxIndex : i >= minIndex) {
+                    if i != beginIndexPath.row {
+                        let p = IndexPath(row: i, section: 0)
+                        if !self.arrSlideIndexPaths.contains(p) {
+                            self.arrSlideIndexPaths.append(p)
+                            let index = asc ? i : i - self.offset
+                            let m = self.arrDataSources[index]
+                            self.dicOriSelectStatus[p] = m.isSelected
+                        }
                     }
-                } else if self.panSelectType == .cancel {
-                    if inSection {
-                        m.isSelected = false
-                    }
+                    i += (minIsBegin ? 1 : -1)
                 }
                 
-                if !inSection {
-                    // 未在区间内的model还原为初始选择状态
-                    m.isSelected = self.dicOriSelectStatus[path] ?? false
-                }
-                if !m.isSelected {
-                    nav.arrSelectedModels.removeAll { $0 == m}
-                } else {
-                    if !nav.arrSelectedModels.contains(where: { $0 == m }) {
-                        nav.arrSelectedModels.append(m)
+                var selectedArrHasChange = false
+                
+                for path in self.arrSlideIndexPaths {
+                    if !visiblePaths.contains(path) {
+                        continue
+                    }
+                    let index = asc ? path.row : path.row - self.offset
+                    // 是否在最初和现在的间隔区间内
+                    let inSection = path.row >= minIndex && path.row <= maxIndex
+                    let m = self.arrDataSources[index]
+                    
+                    if self.panSelectType == .select {
+                        if inSection,
+                           !m.isSelected,
+                           canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self, showAlert: false) {
+                            m.isSelected = true
+                        }
+                    } else if self.panSelectType == .cancel {
+                        if inSection {
+                            m.isSelected = false
+                        }
+                    }
+                    
+                    if !inSection {
+                        // 未在区间内的model还原为初始选择状态
+                        m.isSelected = self.dicOriSelectStatus[path] ?? false
+                    }
+                    if !m.isSelected {
+                        if let index = nav.arrSelectedModels.firstIndex(where: { $0 == m }) {
+                            nav.arrSelectedModels.remove(at: index)
+                            selectedArrHasChange = true
+                        }
+                    } else {
+                        if !nav.arrSelectedModels.contains(where: { $0 == m }) {
+                            nav.arrSelectedModels.append(m)
+                            selectedArrHasChange = true
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        let c = self.collectionView.cellForItem(at: path) as? ZLThumbnailPhotoCell
+                        c?.btnSelect.isSelected = m.isSelected
                     }
                 }
                 
-                let c = self.collectionView.cellForItem(at: path) as? ZLThumbnailPhotoCell
-                c?.btnSelect.isSelected = m.isSelected
-                self.refreshCellIndex()
-                self.refreshCellMaskView()
-                self.resetBottomToolBtnStatus()
+                if selectedArrHasChange {
+                    DispatchQueue.main.async {
+                        self.refreshCellIndexAndMaskView()
+                        self.resetBottomToolBtnStatus()
+                    }
+                }
             }
         } else if pan.state == .ended || pan.state == .cancelled {
+            self.cleanTimer()
             self.panSelectType = .none
             self.arrSlideIndexPaths.removeAll()
             self.dicOriSelectStatus.removeAll()
             self.resetBottomToolBtnStatus()
+        }
+    }
+    
+    func autoScrollWhenSlideSelect(_ pan: UIPanGestureRecognizer) {
+        guard ZLPhotoConfiguration.default().autoScrollWhenSlideSelectIsActive else {
+            return
+        }
+        let arrSel = (self.navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
+        guard arrSel.count < ZLPhotoConfiguration.default().maxSelectCount else {
+            // Stop auto scroll when reach the max select count.
+            self.cleanTimer()
+            return
+        }
+        
+        let top = ((self.embedNavView?.frame.height ?? self.externalNavView?.frame.height) ?? 44) + 30
+        let bottom = self.bottomView.frame.minY - 30
+        
+        let point = pan.location(in: self.view)
+        
+        var diff: CGFloat = 0
+        var direction: AutoScrollDirection = .none
+        if point.y < top {
+            diff = top - point.y
+            direction = .top
+        } else if point.y > bottom {
+            diff = point.y - bottom
+            direction = .bottom
+        } else {
+            self.autoScrollInfo = (.none, 0)
+            self.cleanTimer()
+            return
+        }
+        
+        guard diff > 0 else { return }
+        
+        let s = min(diff, 60) / 60 * ZLPhotoConfiguration.default().autoScrollMaxSpeed
+        
+        self.autoScrollInfo = (direction, s)
+        
+        if self.autoScrollTimer == nil {
+            self.cleanTimer()
+            self.autoScrollTimer = CADisplayLink(target: self, selector: #selector(autoScrollAction))
+            self.autoScrollTimer?.add(to: RunLoop.current, forMode: .common)
+        }
+    }
+    
+    func cleanTimer() {
+        self.autoScrollTimer?.remove(from: RunLoop.current, forMode: .common)
+        self.autoScrollTimer?.invalidate()
+        self.autoScrollTimer = nil
+    }
+    
+    @objc func autoScrollAction() {
+        guard self.autoScrollInfo.direction != .none else { return }
+        let duration = CGFloat(self.autoScrollTimer?.duration ?? 1 / 60)
+        if CACurrentMediaTime() - self.lastPanUpdateTime > 0.2 {
+            // Finger may be not moved in slide selection mode
+            self.slideSelectAction(self.panGes)
+        }
+        let distance = self.autoScrollInfo.speed * duration
+        let offset = self.collectionView.contentOffset
+        let inset = self.collectionView.contentInset
+        if self.autoScrollInfo.direction == .top, offset.y + inset.top > distance {
+            self.collectionView.contentOffset = CGPoint(x: 0, y: offset.y - distance)
+        } else if self.autoScrollInfo.direction == .bottom, offset.y + self.collectionView.bounds.height + distance - inset.bottom < self.collectionView.contentSize.height {
+            self.collectionView.contentOffset = CGPoint(x: 0, y: offset.y + distance)
         }
     }
     
@@ -820,15 +923,14 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                     model.isSelected = true
                     nav?.arrSelectedModels.append(model)
                     cell?.btnSelect.isSelected = true
-                    self?.setCellIndex(cell, showIndexLabel: true, index: currentSelectCount+1, animate: true)
+                    self?.refreshCellIndexAndMaskView()
                 }
             } else {
                 cell?.btnSelect.isSelected = false
                 model.isSelected = false
                 nav?.arrSelectedModels.removeAll { $0 == model }
-                self?.refreshCellIndex()
+                self?.refreshCellIndexAndMaskView()
             }
-            self?.refreshCellMaskView()
             self?.resetBottomToolBtnStatus()
         }
         
@@ -937,8 +1039,11 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         }
     }
     
-    func refreshCellIndex() {
-        guard ZLPhotoConfiguration.default().showSelectedIndex else {
+    func refreshCellIndexAndMaskView() {
+        let showIndex = ZLPhotoConfiguration.default().showSelectedIndex
+        let showMask = ZLPhotoConfiguration.default().showSelectedMask || ZLPhotoConfiguration.default().showInvalidMask
+        
+        guard showIndex || showMask else {
             return
         }
         
@@ -957,43 +1062,21 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             let arrSel = (self.navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
             var show = false
             var idx = 0
+            var isSelected = false
             for (index, selM) in arrSel.enumerated() {
                 if m == selM {
                     show = true
                     idx = index + 1
-                    break
-                }
-            }
-            self.setCellIndex(cell, showIndexLabel: show, index: idx, animate: false)
-        }
-    }
-    
-    func refreshCellMaskView() {
-        guard ZLPhotoConfiguration.default().showSelectedMask || ZLPhotoConfiguration.default().showInvalidMask else {
-            return
-        }
-        
-        let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems
-        
-        visibleIndexPaths.forEach { (indexPath) in
-            guard let cell = self.collectionView.cellForItem(at: indexPath) as? ZLThumbnailPhotoCell else {
-                return
-            }
-            var row = indexPath.row
-            if !ZLPhotoConfiguration.default().sortAscending {
-                row -= self.offset
-            }
-            let m = self.arrDataSources[row]
-            
-            let arrSel = (self.navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
-            var isSelected = false
-            for selM in arrSel {
-                if m == selM {
                     isSelected = true
                     break
                 }
             }
-            self.setCellMaskView(cell, isSelected: isSelected, model: m)
+            if showIndex {
+                self.setCellIndex(cell, showIndexLabel: show, index: idx, animate: false)
+            }
+            if showMask {
+                self.setCellMaskView(cell, isSelected: isSelected, model: m)
+            }
         }
     }
     

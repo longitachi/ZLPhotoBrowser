@@ -783,7 +783,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                     model.isSelected = true
                     self.arrSelectedModels.append(model)
                     cell?.btnSelect.isSelected = true
-                    self.setCellIndex(cell, showIndexLabel: true, index: self.arrSelectedModels.count, animate: true)
+                    self.refreshCellIndex()
                 }
             } else {
                 cell?.btnSelect.isSelected = false
@@ -792,7 +792,6 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 self.refreshCellIndex()
             }
             
-            self.refreshCellMaskView()
             self.changeCancelBtnTitle()
         }
         
@@ -899,7 +898,10 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func refreshCellIndex() {
-        guard ZLPhotoConfiguration.default().showSelectedIndex else {
+        let showIndex = ZLPhotoConfiguration.default().showSelectedIndex
+        let showMask = ZLPhotoConfiguration.default().showSelectedMask || ZLPhotoConfiguration.default().showInvalidMask
+        
+        guard showIndex || showMask else {
             return
         }
         
@@ -913,38 +915,21 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             
             var show = false
             var idx = 0
+            var isSelected = false
             for (index, selM) in self.arrSelectedModels.enumerated() {
                 if m == selM {
                     show = true
                     idx = index + 1
-                    break
-                }
-            }
-            self.setCellIndex(cell, showIndexLabel: show, index: idx, animate: false)
-        }
-    }
-    
-    func refreshCellMaskView() {
-        guard ZLPhotoConfiguration.default().showSelectedMask || ZLPhotoConfiguration.default().showInvalidMask else {
-            return
-        }
-        
-        let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems
-        
-        visibleIndexPaths.forEach { (indexPath) in
-            guard let cell = self.collectionView.cellForItem(at: indexPath) as? ZLThumbnailPhotoCell else {
-                return
-            }
-            let m = self.arrDataSources[indexPath.row]
-            
-            var isSelected = false
-            for selM in self.arrSelectedModels {
-                if m == selM {
                     isSelected = true
                     break
                 }
             }
-            self.setCellMaskView(cell, isSelected: isSelected, model: m)
+            if showIndex {
+                self.setCellIndex(cell, showIndexLabel: show, index: idx, animate: false)
+            }
+            if showMask {
+                self.setCellMaskView(cell, isSelected: isSelected, model: m)
+            }
         }
     }
     
