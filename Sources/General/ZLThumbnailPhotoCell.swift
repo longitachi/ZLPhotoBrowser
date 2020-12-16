@@ -39,6 +39,8 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     var livePhotoTag: UIImageView!
     
+    var editImageTag: UIImageView!
+    
     var descLabel: UILabel!
     
     var coverView: UIView!
@@ -119,6 +121,9 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.livePhotoTag = UIImageView(image: getImage("zl_livePhoto"))
         self.bottomShadowView.addSubview(self.livePhotoTag)
         
+        self.editImageTag = UIImageView(image: getImage("zl_editImage_tag"))
+        self.bottomShadowView.addSubview(self.editImageTag)
+        
         self.descLabel = UILabel()
         self.descLabel.font = getFont(13)
         self.descLabel.textAlignment = .right
@@ -142,6 +147,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.bottomShadowView.frame = CGRect(x: 0, y: self.bounds.height - 25, width: self.bounds.width, height: 25)
         self.videoTag.frame = CGRect(x: 5, y: 1, width: 20, height: 15)
         self.livePhotoTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
+        self.editImageTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
         self.descLabel.frame = CGRect(x: 30, y: 1, width: self.bounds.width - 35, height: 17)
         self.progressView.frame = CGRect(x: (self.bounds.width - 20)/2, y: (self.bounds.height - 20)/2, width: 20, height: 20)
         
@@ -177,19 +183,30 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             self.bottomShadowView.isHidden = false
             self.videoTag.isHidden = false
             self.livePhotoTag.isHidden = true
+            self.editImageTag.isHidden = true
             self.descLabel.text = self.model.duration
         } else if self.model.type == .gif {
             self.bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectGif
             self.videoTag.isHidden = true
             self.livePhotoTag.isHidden = true
+            self.editImageTag.isHidden = true
             self.descLabel.text = "GIF"
         } else if self.model.type == .livePhoto {
             self.bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectLivePhoto
             self.videoTag.isHidden = true
             self.livePhotoTag.isHidden = false
+            self.editImageTag.isHidden = true
             self.descLabel.text = "Live"
         } else {
-            self.bottomShadowView.isHidden = true
+            if let _ = self.model.editImage {
+                self.bottomShadowView.isHidden = false
+                self.videoTag.isHidden = true
+                self.livePhotoTag.isHidden = true
+                self.editImageTag.isHidden = false
+                self.descLabel.text = ""
+            } else {
+                self.bottomShadowView.isHidden = true
+            }
         }
         
         let showSelBtn: Bool

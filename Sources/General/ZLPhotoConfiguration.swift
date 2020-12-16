@@ -125,10 +125,10 @@ public class ZLPhotoConfiguration: NSObject {
     /// If true, you can slide select photos in album. Default is true.
     @objc public var allowSlideSelect = true
     
-    /// When slide select is active, will auto scroll to top or bottom when your finger at the top or end.
+    /// When slide select is active, will auto scroll to top or bottom when your finger at the top or bottom.
     @objc public var autoScrollWhenSlideSelectIsActive = true
     
-    /// The max speed of auto scroll.
+    /// The max speed (pt/s) of auto scroll.
     @objc public var autoScrollMaxSpeed: CGFloat = 600
     
     /// If true, you can drag select photo when preview selection style. Default is false.

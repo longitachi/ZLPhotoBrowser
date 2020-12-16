@@ -52,7 +52,19 @@ public class ZLPhotoModel: NSObject {
     
     public var isSelected: Bool = false
     
-    public var editImage: UIImage?
+    private var pri_editImage: UIImage? = nil
+    public var editImage: UIImage? {
+        set {
+            pri_editImage = newValue
+        }
+        get {
+            if let _ = self.editImageModel {
+                return pri_editImage
+            } else {
+                return nil
+            }
+        }
+    }
     
     public var second: Second {
         guard type == .video else {
