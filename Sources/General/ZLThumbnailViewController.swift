@@ -789,7 +789,7 @@ class ZLThumbnailViewController: UIViewController {
         
         var requestAvAssetID: PHImageRequestID?
         
-        hud.show(timeout: 15)
+        hud.show(timeout: 20)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self)
             if let _ = requestAvAssetID {
@@ -1004,15 +1004,21 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func shouldDirectEdit(_ model: ZLPhotoModel) -> Bool {
-        let canEditImage = ZLPhotoConfiguration.default().editAfterSelectThumbnailImage &&
-            ZLPhotoConfiguration.default().allowEditImage &&
-            ZLPhotoConfiguration.default().maxSelectCount == 1 &&
+        let config = ZLPhotoConfiguration.default()
+        
+        let canEditImage = config.editAfterSelectThumbnailImage &&
+            config.allowEditImage &&
+            config.maxSelectCount == 1 &&
             model.type.rawValue < ZLPhotoModel.MediaType.video.rawValue
         
-        let canEditVideo = ZLPhotoConfiguration.default().editAfterSelectThumbnailImage &&
-            ZLPhotoConfiguration.default().allowEditVideo &&
+        let canEditVideo = (config.editAfterSelectThumbnailImage &&
+            config.allowEditVideo &&
             model.type == .video &&
-            ZLPhotoConfiguration.default().maxSelectCount == 1
+            config.maxSelectCount == 1) ||
+            (config.allowEditVideo &&
+            model.type == .video &&
+            !config.allowMixSelect &&
+            config.cropVideoAfterSelectThumbnail)
         
         //当前未选择图片 或已经选择了一张并且点击的是已选择的图片
         let nav = self.navigationController as? ZLImageNavController
@@ -1025,7 +1031,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             self.showEditVideoVC(model: model)
         }
         
-        return ZLPhotoConfiguration.default().editAfterSelectThumbnailImage && ZLPhotoConfiguration.default().maxSelectCount == 1 && (ZLPhotoConfiguration.default().allowEditImage || ZLPhotoConfiguration.default().allowEditVideo)
+        return flag && (canEditImage || canEditVideo)
     }
     
     func setCellIndex(_ cell: ZLThumbnailPhotoCell?, showIndexLabel: Bool, index: Int, animate: Bool) {

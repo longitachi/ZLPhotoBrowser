@@ -85,6 +85,7 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     /// Whether photos and videos can be selected together. Default is true.
+    /// If set to false, only one video can be selected
     @objc public var allowMixSelect = true
     
     /// Preview selection max preview count, if the value is zero, only show `Camera`, `Album`, `Cancel` buttons.
@@ -121,6 +122,21 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// - warning: The video can only be edited when no photos are selected, or only one video is selected, and the selection callback is executed immediately after editing is completed.
     @objc public var allowEditVideo = false
+    
+    /// After selecting a image/video in the thumbnail interface, enter the editing interface directly.
+    /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.
+    /// Editing video is only valid when allowEditVideo is true and maxSelectCount is 1.
+    @objc public var editAfterSelectThumbnailImage = false
+    
+    /// Only valid when allowMixSelect is false and allowEditVideo is true.
+    /// Just like the Wechat-Timeline selection style. If you want to crop the video after select thumbnail under allowMixSelect = true, please use **editAfterSelectThumbnailImage**.
+    @objc public var cropVideoAfterSelectThumbnail = true
+    
+    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false.
+    @objc public var showClipDirectlyIfOnlyHasClipTool = false
+    
+    /// Save the edited image to the album after editing.
+    @objc public var saveNewImageAfterEdit = true
     
     /// If true, you can slide select photos in album. Default is true.
     @objc public var allowSlideSelect = true
@@ -170,7 +186,7 @@ public class ZLPhotoConfiguration: NSObject {
     
     private var pri_editImageTools: [ZLEditImageViewController.EditImageTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
     /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker, mosaic, filtter)
-    /// Because Objective-C Array can't contain Enum styles, so this property is not available in Objective-C.
+    /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
     /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
     public var editImageTools: [ZLEditImageViewController.EditImageTool] {
         set {
@@ -252,17 +268,6 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
-    
-    /// After selecting a image/video in the thumbnail interface, enter the editing interface directly.
-    /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.
-    /// Editing video is only valid when allowEditVideo is true and maxSelectCount is 1.
-    @objc public var editAfterSelectThumbnailImage = false
-    
-    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false
-    @objc public var showClipDirectlyIfOnlyHasClipTool = false
-    
-    /// Save the edited image to the album after editing.
-    @objc public var saveNewImageAfterEdit = true
     
     /// Show the image captured by the camera is displayed on the camera button inside the album.
     @objc public var showCaptureImageOnTakePhotoBtn = false

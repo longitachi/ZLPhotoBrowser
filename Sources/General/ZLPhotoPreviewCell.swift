@@ -61,11 +61,11 @@ class ZLPreviewBaseCell: UICollectionViewCell {
         let viewW = self.bounds.width
         let viewH = self.bounds.height
         
-        var width = min(viewW, size.width)
+        var width = viewW
         
         // video和livephoto没必要处理长图和宽图
         if UIApplication.shared.statusBarOrientation.isLandscape {
-            let height = min(self.bounds.height, size.height)
+            let height = viewH
             frame.size.height = height
             
             let imageWHRatio = size.width / size.height
@@ -525,7 +525,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     private func setupUI() {
         self.imageView = UIImageView()
         self.imageView.clipsToBounds = true
-        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.contentMode = .scaleAspectFill
         self.contentView.addSubview(self.imageView)
         
         let attStr = NSMutableAttributedString()

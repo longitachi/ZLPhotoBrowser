@@ -477,14 +477,14 @@ class ZLPhotoPreviewController: UIViewController {
             }
         } else if model.type == .video || config.allowEditVideo {
             var requestAvAssetID: PHImageRequestID?
-            hud.show(timeout: 15)
+            hud.show(timeout: 20)
             hud.timeoutBlock = { [weak self] in
                 showAlertView(localLanguageTextValue(.timeout), self)
                 if let _ = requestAvAssetID {
                     PHImageManager.default().cancelImageRequest(requestAvAssetID!)
                 }
             }
-            // 提前fetch一下 avasset
+            // fetch avasset
             requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] (avAsset, _) in
                 hud.hide()
                 if let _ = avAsset {

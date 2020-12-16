@@ -323,11 +323,27 @@ public class ZLPhotoManager: NSObject {
                 progress?(CGFloat(pro), error, stop, info)
             }
         }
-        return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { (item, info) in
-            // iOS11 and earlier, callback is not on the main thread.
-            DispatchQueue.main.async {
-                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-                completion(item, info, isDegraded)
+        
+        // https://github.com/longitachi/ZLPhotoBrowser/issues/369#issuecomment-728679135
+        
+        if asset.isInCloud {
+            return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { (session, info) in
+                // iOS11 and earlier, callback is not on the main thread.
+                DispatchQueue.main.async {
+                    let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
+                    if let avAsset = session?.asset {
+                        let item = AVPlayerItem(asset: avAsset)
+                        completion(item, info, isDegraded)
+                    }
+                }
+            })
+        } else {
+            return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { (item, info) in
+                // iOS11 and earlier, callback is not on the main thread.
+                DispatchQueue.main.async {
+                    let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
+                    completion(item, info, isDegraded)
+                }
             }
         }
     }
@@ -347,9 +363,21 @@ public class ZLPhotoManager: NSObject {
         options.version = .original
         options.deliveryMode = .automatic
         options.isNetworkAccessAllowed =  true
-        return PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { (avAsset, _, info) in
-            DispatchQueue.main.async {
-                completion(avAsset, info)
+        
+        if asset.isInCloud {
+            return PHImageManager.default().requestExportSession(forVideo: asset, options: options, exportPreset: AVAssetExportPresetHighestQuality) { (session, info) in
+                // iOS11 and earlier, callback is not on the main thread.
+                DispatchQueue.main.async {
+                    if let avAsset = session?.asset {
+                        completion(avAsset, info)
+                    }
+                }
+            }
+        } else {
+            return PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { (avAsset, _, info) in
+                DispatchQueue.main.async {
+                    completion(avAsset, info)
+                }
             }
         }
     }

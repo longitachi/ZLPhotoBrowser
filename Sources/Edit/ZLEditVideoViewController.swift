@@ -332,12 +332,16 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     func analysisAssetImages() {
+        let duration = round(self.avAsset.duration.seconds)
+        guard duration > 0 else {
+            self.showFetchFailedAlert()
+            return
+        }
         let item = AVPlayerItem(asset: self.avAsset)
         let player = AVPlayer(playerItem: item)
         self.playerLayer.player = player
         self.startTimer()
         
-        let duration = round(self.avAsset.duration.seconds)
         self.measureCount = Int(duration / self.interval)
         self.collectionView.reloadData()
         self.requestVideoMeasureFrameImage()
@@ -415,7 +419,7 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     func showFetchFailedAlert() {
-        let alert = UIAlertController(title: nil, message: localLanguageTextValue(.timeout), preferredStyle: .alert)
+        let alert = UIAlertController(title: nil, message: localLanguageTextValue(.iCloudVideoLoadFaild), preferredStyle: .alert)
         let action = UIAlertAction(title: localLanguageTextValue(.ok), style: .default) { (_) in
             self.dismiss(animated: false, completion: nil)
         }

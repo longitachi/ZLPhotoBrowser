@@ -1,8 +1,8 @@
 //
-//  Int+ZLPhotoBrowser.swift
+//  PHAsset+ZLPhotoBrowser.swift
 //  ZLPhotoBrowser
 //
-//  Created by ruby109 on 2020/11/3.
+//  Created by long on 2020/12/16.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -25,11 +25,15 @@
 //  THE SOFTWARE.
 
 import Foundation
+import Photos
 
-extension Int {
+extension PHAsset {
     
-    init(_ bool:Bool) {
-        self = bool ? 1 : 0
+    var isInCloud: Bool {
+        guard let resource = PHAssetResource.assetResources(for: self).first else {
+            return false
+        }
+        return !(resource.value(forKey: "locallyAvailable") as? Bool ?? true)
     }
     
 }
