@@ -487,8 +487,8 @@ class ZLPhotoPreviewController: UIViewController {
             // fetch avasset
             requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] (avAsset, _) in
                 hud.hide()
-                if let _ = avAsset {
-                    self?.showEditVideoVC(avAsset: avAsset!)
+                if let av = avAsset {
+                    self?.showEditVideoVC(model: model, avAsset: av)
                 } else {
                     showAlertView(localLanguageTextValue(.timeout), self)
                 }
@@ -579,21 +579,27 @@ class ZLPhotoPreviewController: UIViewController {
         }
     }
     
-    func showEditVideoVC(avAsset: AVAsset) {
+    func showEditVideoVC(model: ZLPhotoModel, avAsset: AVAsset) {
         let nav = self.navigationController as! ZLImageNavController
         let vc = ZLEditVideoViewController(avAsset: avAsset)
         vc.modalPresentationStyle = .fullScreen
         
         vc.editFinishBlock = { [weak self, weak nav] (url) in
-            ZLPhotoManager.saveVideoToAlbum(url: url) { [weak self, weak nav] (suc, asset) in
-                if suc, asset != nil {
-                    let m = ZLPhotoModel(asset: asset!)
-                    nav?.arrSelectedModels.removeAll()
-                    nav?.arrSelectedModels.append(m)
-                    nav?.selectImageBlock?()
-                } else {
-                    showAlertView(localLanguageTextValue(.saveVideoError), self)
+            if let u = url {
+                ZLPhotoManager.saveVideoToAlbum(url: u) { [weak self, weak nav] (suc, asset) in
+                    if suc, asset != nil {
+                        let m = ZLPhotoModel(asset: asset!)
+                        nav?.arrSelectedModels.removeAll()
+                        nav?.arrSelectedModels.append(m)
+                        nav?.selectImageBlock?()
+                    } else {
+                        showAlertView(localLanguageTextValue(.saveVideoError), self)
+                    }
                 }
+            } else {
+                nav?.arrSelectedModels.removeAll()
+                nav?.arrSelectedModels.append(model)
+                nav?.selectImageBlock?()
             }
         }
         

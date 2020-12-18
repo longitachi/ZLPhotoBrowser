@@ -640,15 +640,22 @@ public class ZLPhotoPreviewSheet: UIView {
         func inner_showEditVideoVC(_ avAsset: AVAsset) {
             let vc = ZLEditVideoViewController(avAsset: avAsset)
             vc.editFinishBlock = { [weak self] (url) in
-                ZLPhotoManager.saveVideoToAlbum(url: url) { [weak self] (suc, asset) in
-                    if suc, asset != nil {
-                        let m = ZLPhotoModel(asset: asset!)
-                        m.isSelected = true
-                        self?.arrSelectedModels.append(m)
-                        self?.requestSelectPhoto()
-                    } else {
-                        showAlertView(localLanguageTextValue(.saveVideoError), self?.sender)
+                if let u = url {
+                    ZLPhotoManager.saveVideoToAlbum(url: u) { [weak self] (suc, asset) in
+                        if suc, asset != nil {
+                            let m = ZLPhotoModel(asset: asset!)
+                            m.isSelected = true
+                            self?.arrSelectedModels.removeAll()
+                            self?.arrSelectedModels.append(m)
+                            self?.requestSelectPhoto()
+                        } else {
+                            showAlertView(localLanguageTextValue(.saveVideoError), self?.sender)
+                        }
                     }
+                } else {
+                    self?.arrSelectedModels.removeAll()
+                    self?.arrSelectedModels.append(model)
+                    self?.requestSelectPhoto()
                 }
             }
             vc.modalPresentationStyle = .fullScreen

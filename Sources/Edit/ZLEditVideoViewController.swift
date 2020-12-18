@@ -86,7 +86,7 @@ public class ZLEditVideoViewController: UIViewController {
         return g
     }()
     
-    @objc public var editFinishBlock: ( (URL) -> Void )?
+    @objc public var editFinishBlock: ( (URL?) -> Void )?
     
     public override var prefersStatusBarHidden: Bool {
         return true
@@ -263,6 +263,14 @@ public class ZLEditVideoViewController: UIViewController {
             showAlertView(message, self)
             return
         }
+        
+        if d == round(CGFloat(self.avAsset.duration.seconds)) {
+            self.dismiss(animated: self.animateDismiss) {
+                self.editFinishBlock?(nil)
+            }
+            return
+        }
+        
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         hud.show()
         
@@ -272,7 +280,7 @@ public class ZLEditVideoViewController: UIViewController {
                 showAlertView(er.localizedDescription, self)
             } else if url != nil {
                 self?.dismiss(animated: self?.animateDismiss ?? false) {
-                    self?.editFinishBlock?(url!)
+                    self?.editFinishBlock?(url)
                 }
             }
         }
