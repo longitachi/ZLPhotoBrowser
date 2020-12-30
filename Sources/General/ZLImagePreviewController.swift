@@ -78,6 +78,8 @@ public class ZLImagePreviewController: UIViewController {
     
     @objc public var doneBlock: ( ([Any]) -> Void )?
     
+    var orientation = UIApplication.shared.statusBarOrientation
+    
     public override var prefersStatusBarHidden: Bool {
         return false
     }
@@ -114,7 +116,6 @@ public class ZLImagePreviewController: UIViewController {
 
         self.setupUI()
         self.resetSubViewStatus()
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationChanged(_:)), name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -140,7 +141,6 @@ public class ZLImagePreviewController: UIViewController {
         }
         
         self.collectionView.frame = CGRect(x: -ZLPhotoPreviewController.colItemSpacing / 2, y: 0, width: self.view.frame.width + ZLPhotoPreviewController.colItemSpacing, height: self.view.frame.height)
-        self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
         
         let navH = insets.top + 44
         self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: navH)
@@ -165,10 +165,22 @@ public class ZLImagePreviewController: UIViewController {
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
         self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
         
-        guard self.isFirstLayout else { return }
-        self.isFirstLayout = false
-        if self.currentIndex > 0 {
-            self.collectionView.contentOffset = CGPoint(x: (self.view.bounds.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.currentIndex), y: 0)
+        if self.isFirstLayout {
+            self.isFirstLayout = false
+            if self.currentIndex > 0 {
+                self.collectionView.contentOffset = CGPoint(x: (self.view.bounds.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.currentIndex), y: 0)
+            }
+        } else {
+            let ori = UIApplication.shared.statusBarOrientation
+            if ori != self.orientation {
+                self.orientation = ori
+                self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
+                 self.collectionView.performBatchUpdates({
+                    self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
+                 }) { (_) in
+                    
+                 }
+            }
         }
     }
     
@@ -322,10 +334,6 @@ public class ZLImagePreviewController: UIViewController {
         }
         self.doneBlock?(res)
         self.dismiss()
-    }
-    
-    @objc func deviceOrientationChanged(_ notify: Notification) {
-        self.indexBeforOrientationChanged = self.currentIndex
     }
     
     func tapPreviewCell() {

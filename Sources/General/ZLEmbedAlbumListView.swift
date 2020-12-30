@@ -94,7 +94,7 @@ class ZLEmbedAlbumListView: UIView {
         self.tableView.tableFooterView = UIView()
         self.tableView.rowHeight = ZLEmbedAlbumListView.rowH
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
-        self.tableView.separatorColor = .separatorColor
+        self.tableView.separatorColor = .separatorLineColor
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableBgView.addSubview(self.tableView)

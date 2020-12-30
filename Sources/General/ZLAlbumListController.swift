@@ -114,7 +114,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         self.tableView.tableFooterView = UIView()
         self.tableView.rowHeight = 65
         self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
-        self.tableView.separatorColor = .separatorColor
+        self.tableView.separatorColor = .separatorLineColor
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.view.addSubview(self.tableView)

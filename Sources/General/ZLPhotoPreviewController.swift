@@ -81,6 +81,8 @@ class ZLPhotoPreviewController: UIViewController {
     /// 界面消失时，通知上个界面刷新（针对预览视图）
     var backBlock: ( () -> Void )?
     
+    var orientation = UIApplication.shared.statusBarOrientation
+    
     override var prefersStatusBarHidden: Bool {
         return false
     }
@@ -112,8 +114,6 @@ class ZLPhotoPreviewController: UIViewController {
         
         self.addPopInteractiveTransition()
         self.resetSubViewStatus(animateIndexLabel: false)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationChanged(_:)), name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -140,7 +140,6 @@ class ZLPhotoPreviewController: UIViewController {
         }
         
         self.collectionView.frame = CGRect(x: -ZLPhotoPreviewController.colItemSpacing / 2, y: 0, width: self.view.frame.width + ZLPhotoPreviewController.colItemSpacing, height: self.view.frame.height)
-        self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
         
         let navH = insets.top + 44
         self.navView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: navH)
@@ -152,10 +151,22 @@ class ZLPhotoPreviewController: UIViewController {
         
         self.refreshBottomViewFrame()
         
-        guard self.isFirstLayout else { return }
-        self.isFirstLayout = false
-        if self.currentIndex > 0 {
-            self.collectionView.contentOffset = CGPoint(x: (self.view.bounds.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.currentIndex), y: 0)
+        if self.isFirstLayout {
+            self.isFirstLayout = false
+            if self.currentIndex > 0 {
+                self.collectionView.contentOffset = CGPoint(x: (self.view.bounds.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.currentIndex), y: 0)
+            }
+        } else {
+            let ori = UIApplication.shared.statusBarOrientation
+            if ori != self.orientation {
+                self.orientation = ori
+                self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
+                 self.collectionView.performBatchUpdates({
+                    self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
+                 }) { (_) in
+                    
+                 }
+            }
         }
     }
     
@@ -520,10 +531,6 @@ class ZLPhotoPreviewController: UIViewController {
         } else {
             nav.selectImageBlock?()
         }
-    }
-    
-    @objc func deviceOrientationChanged(_ notify: Notification) {
-        self.indexBeforOrientationChanged = self.currentIndex
     }
     
     func scrollToSelPreviewCell(_ model: ZLPhotoModel) {

@@ -79,7 +79,7 @@ extension UIColor {
     }
     
     /// 分割线颜色
-    class var separatorColor: UIColor {
+    class var separatorLineColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.separatorColor
     }
     
