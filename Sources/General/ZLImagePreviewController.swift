@@ -70,15 +70,13 @@ public class ZLImagePreviewController: UIViewController {
     
     var doneBtn: UIButton!
     
-    var isFirstLayout = true
-    
     var isFirstAppear = true
     
     var hideNavView = false
     
     @objc public var doneBlock: ( ([Any]) -> Void )?
     
-    var orientation = UIApplication.shared.statusBarOrientation
+    var orientation: UIInterfaceOrientation = .unknown
     
     public override var prefersStatusBarHidden: Bool {
         return false
@@ -165,22 +163,13 @@ public class ZLImagePreviewController: UIViewController {
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
         self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
         
-        if self.isFirstLayout {
-            self.isFirstLayout = false
-            if self.currentIndex > 0 {
-                self.collectionView.contentOffset = CGPoint(x: (self.view.bounds.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.currentIndex), y: 0)
-            }
-        } else {
-            let ori = UIApplication.shared.statusBarOrientation
-            if ori != self.orientation {
-                self.orientation = ori
+        let ori = UIApplication.shared.statusBarOrientation
+        if ori != self.orientation {
+            self.orientation = ori
+            self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
+             self.collectionView.performBatchUpdates({
                 self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
-                 self.collectionView.performBatchUpdates({
-                    self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
-                 }) { (_) in
-                    
-                 }
-            }
+             })
         }
     }
     

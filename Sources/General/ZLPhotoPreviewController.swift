@@ -67,8 +67,6 @@ class ZLPhotoPreviewController: UIViewController {
     
     var selPhotoPreview: ZLPhotoPreviewSelectedView?
     
-    var isFirstLayout = true
-    
     var isFirstAppear = true
     
     var hideNavView = false
@@ -81,7 +79,7 @@ class ZLPhotoPreviewController: UIViewController {
     /// 界面消失时，通知上个界面刷新（针对预览视图）
     var backBlock: ( () -> Void )?
     
-    var orientation = UIApplication.shared.statusBarOrientation
+    var orientation: UIInterfaceOrientation = .unknown
     
     override var prefersStatusBarHidden: Bool {
         return false
@@ -151,22 +149,13 @@ class ZLPhotoPreviewController: UIViewController {
         
         self.refreshBottomViewFrame()
         
-        if self.isFirstLayout {
-            self.isFirstLayout = false
-            if self.currentIndex > 0 {
-                self.collectionView.contentOffset = CGPoint(x: (self.view.bounds.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.currentIndex), y: 0)
-            }
-        } else {
-            let ori = UIApplication.shared.statusBarOrientation
-            if ori != self.orientation {
-                self.orientation = ori
+        let ori = UIApplication.shared.statusBarOrientation
+        if ori != self.orientation {
+            self.orientation = ori
+            self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
+             self.collectionView.performBatchUpdates({
                 self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
-                 self.collectionView.performBatchUpdates({
-                    self.collectionView.setContentOffset(CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0), animated: false)
-                 }) { (_) in
-                    
-                 }
-            }
+             })
         }
     }
     

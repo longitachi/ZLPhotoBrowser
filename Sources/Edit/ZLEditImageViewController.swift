@@ -272,6 +272,7 @@ public class ZLEditImageViewController: UIViewController {
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
         }
+        insets.top = max(20, insets.top)
         
         self.scrollView.frame = self.view.bounds
         self.resetContainerViewFrame()
