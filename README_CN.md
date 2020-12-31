@@ -98,9 +98,18 @@
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.2
+  新增:
+    滑动选择时手指在屏幕上方或下方时自动滚动功能;
+    在缩略图显示已编辑标签;
+    加载iCloud视频时显示进度条;
+    提供'cropVideoAfterSelectThumbnail'参数，支持微信朋友圈选择规则，非混合选择模式下，点击视频后可直接进入编辑状态;
+  Fix:
+    横屏进入编辑界面UI错误的bug;
+    iOS 10.x 系统导航条高度错误的bug;
 ● 4.1.1 - 4.1.0 Patch:
   Fix:
-    修复了预览本地和网络图片时，缩放后滑动会闪退的bug：
+    修复了预览本地和网络图片时，缩放后滑动会闪退的bug;
 ● 4.1.0:
   新增:
     编辑图片工具新增文本贴纸和图片贴纸;
@@ -111,11 +120,6 @@
     修改iOS14 limited权限下，选择更多照片的形式;
   Fix:
     修复请求图片失败导致crash的bug;
-● 4.0.9: 
-    支持更多国家的语言; 
-    完善iOS14 limited authority 权限的适配; 
-    提供可以同时预览PHAsset、本地图片/视频及网络图片/视频的功能; 优化部分UI效果; 
-    编辑图片可直接跳转裁剪界面;
 ...
 ```
 
@@ -143,7 +147,7 @@
 
 ### <a id="支持"></a> 支持
 * 给个[**★ Star**](#)
-* 请喝☕️ <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/aliPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wechatPay.png" width = "100" height = "125" />
+* 请喝☕️ <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/aliPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wechatPay.png" width = "100" height = "125" />  or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/Paypal.png" width = "150" height = "125" />
 
 ### <a id="效果图"></a> 效果图
 - 选择

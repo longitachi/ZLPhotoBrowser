@@ -2,6 +2,20 @@
 
 -----
 
+## [4.1.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.2) (2020-12-31)
+
+### Add:
+* When the slide select is active, it will auto scroll like system library.
+* Show edit tag in thumbnail interface.
+* Add progress when loading iCloud video.
+* Can crop the video directly after select thumbnail in non-mixed selection mode.
+
+### Fix:
+* The Image crop interface UI frame is incorrect when enter from landscape.[#558](https://github.com/longitachi/ZLPhotoBrowser/issues/558)
+* The navigation view height is incorrect in iOS 10.x.[#561](https://github.com/longitachi/ZLPhotoBrowser/issues/561)
+  
+---
+
 ## [4.1.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.1) (2020-11-25)
 
 ### Fix

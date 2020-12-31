@@ -91,6 +91,15 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.2
+  Add:
+    When the slide select is active, it will auto scroll like system library.
+    Show edit tag in thumbnail interface.
+    Add progress when loading iCloud video.
+    Can crop the video directly after select thumbnail in non-mixed selection mode.
+  Fix:
+    The Image crop interface UI frame is incorrect when enter from landscape.
+    The navigation view height is incorrect in iOS 10.x.
 ● 4.1.1 - 4.1.0 Patch:
   Fix:
     Fix a crash when using zoom to preview local images and network images.
@@ -104,12 +113,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     iOS14 limited mode, change the way to select more photos.
   Fix:
     Fix the bug that will crash when has request failed images.
-● 4.0.9: 
-    Support languages of more countries (French, German, Russian, Vietnamese, Korean, Malay, Italian).
-    Support iOS14 limited authority.
-    Provides the ability to preview PHAsset, local images and videos, network images and videos together.
-    Optimize some UI effects.
-    Support show image crop vc directly.
 ...
 ```
 
@@ -167,7 +170,7 @@ $ carthage update ZLPhotoBrowser
 
 ### <a id="Support"></a> Support
 * [**★ Star**](#) this repo.
-* Support with <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/aliPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wechatPay.png" width = "100" height = "125" />
+* Support with <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/aliPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wechatPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/Paypal.png" width = "150" height = "125" />
 
 ### <a id="DemoEffect"></a> Demo Effect
 - Selection
