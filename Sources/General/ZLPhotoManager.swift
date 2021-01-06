@@ -127,11 +127,11 @@ public class ZLPhotoManager: NSObject {
         }
         
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil) as! PHFetchResult<PHCollection>
+        let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil) as! PHFetchResult<PHCollection>
         let streamAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil) as! PHFetchResult<PHCollection>
-        let userAlbums = PHCollectionList.fetchTopLevelUserCollections(with: nil)
         let syncedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil) as! PHFetchResult<PHCollection>
         let sharedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil) as! PHFetchResult<PHCollection>
-        let arr = [smartAlbums, streamAlbums, userAlbums, syncedAlbums, sharedAlbums]
+        let arr = [smartAlbums, albums, streamAlbums, syncedAlbums, sharedAlbums]
         
         var albumList: [ZLAlbumListModel] = []
         arr.forEach { (album) in
