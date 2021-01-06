@@ -217,7 +217,7 @@ class ZLThumbnailViewController: UIViewController {
         let condition1 = config.editAfterSelectThumbnailImage &&
             config.maxSelectCount == 1 &&
             (config.allowEditImage || config.allowEditVideo)
-        let condition2 = config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
+        let condition2 = config.allowPreviewPhotos && config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
         if condition1 || condition2 {
             showBottomView = false
             insets.bottom = 0
