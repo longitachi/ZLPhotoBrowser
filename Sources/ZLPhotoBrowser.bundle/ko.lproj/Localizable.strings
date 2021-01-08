@@ -4,7 +4,7 @@
 "cancel" = "취소";
 
 "originalPhoto" = "전체 이미지";
-"done" = "끝난";
+"done" = "확인";
 "ok" = "확인";
 "editFinish" = "완료";
 
@@ -18,8 +18,8 @@
 "noPhotoTips" = "사진 없음";
 "notAllowMixSelect" = "비디오를 선택할 수 없습니다";
 
-"loading" = "로딩 중, 기다려주세요";
-"hudLoading" = "기다리는...";
+"loading" = "로딩 중... 기다려주세요";
+"hudLoading" = "기다리는 중...";
 
 "exceededMaxSelectCount" = "최대 선택 수: %ld";
 "longerThanMaxVideoDuration" = "길이가 %ld 초 보다 긴 동영상을 선택할 수 없습니다";
