@@ -165,6 +165,7 @@ class ZLThumbnailViewController: UIViewController {
         
         if ZLPhotoConfiguration.default().allowSlideSelect {
             self.panGes = UIPanGestureRecognizer(target: self, action: #selector(slideSelectAction(_:)))
+            self.panGes.delegate = self
             self.view.addGestureRecognizer(self.panGes)
         }
         
@@ -833,7 +834,24 @@ class ZLThumbnailViewController: UIViewController {
     
 }
 
+
+// MARK: Gesture delegate
+
+extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let config = ZLPhotoConfiguration.default()
+        if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
+            return false
+        }
+        return true
+    }
+    
+}
+
+
 // MARK: CollectionView Delegate & DataSource
+
 extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
