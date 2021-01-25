@@ -42,11 +42,11 @@ public class ZLPhotoConfiguration: NSObject {
     
     @objc public var statusBarStyle: UIStatusBarStyle = .lightContent
     
-    /// Photo sorting method, the preview interface is not affected by this parameter.
+    /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
     @objc public var sortAscending = true
     
     private var pri_maxSelectCount = 9
-    /// Anything superior than 1 will enable the multiple selection feature. Default is 9.
+    /// Anything superior than 1 will enable the multiple selection feature. Defaults to 9.
     @objc public var maxSelectCount: Int {
         set {
             pri_maxSelectCount = max(1, newValue)
@@ -57,7 +57,7 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     private var pri_maxVideoSelectCount = 0
-    /// A count for video max selection.
+    /// A count for video max selection. Defaults to 0.
     /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
     @objc public var maxVideoSelectCount: Int {
         set {
@@ -73,7 +73,7 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     private var pri_minVideoSelectCount = 0
-    /// A count for video min selection.
+    /// A count for video min selection. Defaults to 0.
     /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
     @objc public var minVideoSelectCount: Int {
         set {
@@ -85,29 +85,29 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     /// Whether photos and videos can be selected together. Default is true.
-    /// If set to false, only one video can be selected
+    /// If set to false, only one video can be selected. Defaults to true.
     @objc public var allowMixSelect = true
     
-    /// Preview selection max preview count, if the value is zero, only show `Camera`, `Album`, `Cancel` buttons.
+    /// Preview selection max preview count, if the value is zero, only show `Camera`, `Album`, `Cancel` buttons. Defaults to 20.
     @objc public var maxPreviewCount = 20
     
     @objc public var cellCornerRadio: CGFloat = 0
     
-    /// If set to false, gif and livephoto cannot be selected either.
+    /// If set to false, gif and livephoto cannot be selected either. Defaults to true.
     @objc public var allowSelectImage = true
     
     @objc public var allowSelectVideo = true
     
     /// Allow select Gif, it only controls whether it is displayed in Gif form.
-    /// If value is false, the Gif logo is not displayed.
+    /// If value is false, the Gif logo is not displayed. Defaults to true.
     @objc public var allowSelectGif = true
     
     /// Allow select LivePhoto, it only controls whether it is displayed in LivePhoto form.
-    /// If value is false, the LivePhoto logo is not displayed.
+    /// If value is false, the LivePhoto logo is not displayed. Defaults to false.
     @objc public var allowSelectLivePhoto = false
     
     private var pri_allowTakePhotoInLibrary = true
-    /// Allow take photos in the album.
+    /// Allow take photos in the album. Defaults to true.
     /// - warning: If allowTakePhoto and allowRecordVideo are both false, it will not be displayed.
     @objc public var allowTakePhotoInLibrary: Bool {
         set {
@@ -123,44 +123,47 @@ public class ZLPhotoConfiguration: NSObject {
     /// - warning: The video can only be edited when no photos are selected, or only one video is selected, and the selection callback is executed immediately after editing is completed.
     @objc public var allowEditVideo = false
     
-    /// After selecting a image/video in the thumbnail interface, enter the editing interface directly.
+    /// After selecting a image/video in the thumbnail interface, enter the editing interface directly. Defaults to false.
     /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.
     /// Editing video is only valid when allowEditVideo is true and maxSelectCount is 1.
     @objc public var editAfterSelectThumbnailImage = false
     
-    /// Only valid when allowMixSelect is false and allowEditVideo is true.
+    /// Only valid when allowMixSelect is false and allowEditVideo is true. Defaults to true.
     /// Just like the Wechat-Timeline selection style. If you want to crop the video after select thumbnail under allowMixSelect = true, please use **editAfterSelectThumbnailImage**.
     @objc public var cropVideoAfterSelectThumbnail = true
     
-    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Default is false.
+    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Defaults to false.
     @objc public var showClipDirectlyIfOnlyHasClipTool = false
     
-    /// Save the edited image to the album after editing.
+    /// Save the edited image to the album after editing. Defaults to true.
     @objc public var saveNewImageAfterEdit = true
     
-    /// If true, you can slide select photos in album. Default is true.
+    /// If true, you can slide select photos in album. Defaults to true.
     @objc public var allowSlideSelect = true
     
-    /// When slide select is active, will auto scroll to top or bottom when your finger at the top or bottom.
+    /// When slide select is active, will auto scroll to top or bottom when your finger at the top or bottom. Defaults to true.
     @objc public var autoScrollWhenSlideSelectIsActive = true
     
-    /// The max speed (pt/s) of auto scroll.
+    /// The max speed (pt/s) of auto scroll. Defaults to 600.
     @objc public var autoScrollMaxSpeed: CGFloat = 600
     
-    /// If true, you can drag select photo when preview selection style. Default is false.
+    /// If true, you can drag select photo when preview selection style. Defaults to false.
     @objc public var allowDragSelect = false
     
-    /// Allow select full image. Default is true.
+    /// Allow select full image. Defaults to true.
     @objc public var allowSelectOriginal = true
     
-    /// Allow access to the preview large image interface (That is, whether to allow access to the large image interface after clicking the thumbnail image).
+    /// Allow access to the preview large image interface (That is, whether to allow access to the large image interface after clicking the thumbnail image). Defaults to true.
     @objc public var allowPreviewPhotos = true
     
-    /// Whether to display the preview button (i.e. the preview button in the lower left corner of the thumbnail interface).
+    /// Whether to show the status bar when previewing photos. Defaults to false.
+    @objc public var showStatusBarInPreviewInterface = false
+    
+    /// Whether to show the preview button (i.e. the preview button in the lower left corner of the thumbnail interface). Defaults to true.
     @objc public var showPreviewButtonInAlbum = true
     
     private var pri_columnCount: Int = 4
-    /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Default is 4.
+    /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Defaults to 4.
     /// ```
     /// iPhone landscape mode: columnCount += 2.
     /// iPad portait mode: columnCount += 2.
@@ -175,13 +178,13 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// Maximum cropping time when editing video, unit: second. Default is 10.
+    /// Maximum cropping time when editing video, unit: second. Defaults to 10.
     @objc public var maxEditVideoTime: Second = 10
     
-    /// Allow to choose the maximum duration of the video.
+    /// Allow to choose the maximum duration of the video. Defaults to 120.
     @objc public var maxSelectVideoDuration: Second = 120
     
-    /// Allow to choose the minimum duration of the video.
+    /// Allow to choose the minimum duration of the video. Defaults to 0.
     @objc public var minSelectVideoDuration: Second = 0
     
     private var pri_editImageTools: [ZLEditImageViewController.EditImageTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
@@ -269,25 +272,25 @@ public class ZLPhotoConfiguration: NSObject {
     
     @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
     
-    /// Show the image captured by the camera is displayed on the camera button inside the album.
+    /// Show the image captured by the camera is displayed on the camera button inside the album. Defaults to false.
     @objc public var showCaptureImageOnTakePhotoBtn = false
     
-    /// In single selection mode, whether to display the selection button.
+    /// In single selection mode, whether to display the selection button. Defaults to false.
     @objc public var showSelectBtnWhenSingleSelect = false
     
-    /// Overlay a mask layer on top of the selected photos.
+    /// Overlay a mask layer on top of the selected photos. Defaults to true.
     @objc public var showSelectedMask = true
     
-    /// Display a border on the selected photos cell.
+    /// Display a border on the selected photos cell. Defaults to false.
     @objc public var showSelectedBorder = false
     
-    /// Overlay a mask layer above the cells that cannot be selected.
+    /// Overlay a mask layer above the cells that cannot be selected. Defaults to true.
     @objc public var showInvalidMask = true
     
-    /// Display the index of the selected photos.
+    /// Display the index of the selected photos. Defaults to true.
     @objc public var showSelectedIndex = true
     
-    /// Display the selected photos at the bottom of the preview large photos interface.
+    /// Display the selected photos at the bottom of the preview large photos interface. Defaults to true.
     @objc public var showSelectedPhotoPreview = true
     
     /// Developers can customize iamges, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
@@ -299,10 +302,10 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// Allow framework fetch photos when callback. Default is true.
+    /// Allow framework fetch photos when callback. Defaults to true.
     @objc public var shouldAnialysisAsset = true
     
-    /// Timeout for image parsing.
+    /// Timeout for image parsing. Defaults to 20.
     @objc public var timeout: TimeInterval = 20
     
     /// Language for framework.
@@ -339,11 +342,11 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// Whether to use custom camera.
+    /// Whether to use custom camera. Defaults to true.
     @objc public var useCustomCamera = true
     
     private var pri_allowTakePhoto = true
-    /// Allow taking photos in the camera (Need allowSelectImage to be true).
+    /// Allow taking photos in the camera (Need allowSelectImage to be true). Defaults to true.
     @objc public var allowTakePhoto: Bool {
         set {
             pri_allowTakePhoto = newValue
@@ -354,7 +357,7 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     private var pri_allowRecordVideo = true
-    /// Allow recording in the camera (Need allowSelectVideo to be true).
+    /// Allow recording in the camera (Need allowSelectVideo to be true). Defaults to true.
     @objc public var allowRecordVideo: Bool {
         set {
             pri_allowRecordVideo = newValue
@@ -365,7 +368,7 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     private var pri_minRecordDuration: Second = 0
-    /// Minimum recording duration. Default is 0.
+    /// Minimum recording duration. Defaults to 0.
     @objc public var minRecordDuration: Second {
         set {
             pri_minRecordDuration = max(0, newValue)
@@ -376,7 +379,7 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     private var pri_maxRecordDuration: Second = 10
-    /// Maximum recording duration. Default is 10, minimum is 1.
+    /// Maximum recording duration. Defaults to 10, minimum is 1.
     @objc public var maxRecordDuration: Second {
         set {
             pri_maxRecordDuration = max(1, newValue)
@@ -386,16 +389,16 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// Video resolution.
+    /// Video resolution. Defaults to hd1280x720.
     @objc public var sessionPreset: ZLCustomCamera.CaptureSessionPreset = .hd1280x720
     
-    /// Video export format for recording video and editing video.
+    /// Video export format for recording video and editing video. Defaults to mov.
     @objc public var videoExportType: ZLCustomCamera.VideoExportType = .mov
     
-    /// Camera flahs mode. Default is off.
+    /// Camera flahs mode. Default is off. Defaults to off.
     @objc public var cameraFlashMode: ZLCustomCamera.CameraFlashMode = .off
     
-    /// Hud style. Default is lightBlur.
+    /// Hud style. Defaults to lightBlur.
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .lightBlur
     
     /// Navigation bar blur effect.
@@ -419,12 +422,12 @@ public class ZLPhotoConfiguration: NSObject {
     /// - Tips: If the choice is not allowed, the developer can toast prompt the user for relevant information.
     @objc public var canSelectAsset: ( (PHAsset) -> Bool )?
     
-    /// If user choose limited Photo mode, a button with '+' will be added to the ZLThumbnailViewController. It will call PHPhotoLibrary.shared().presentLimitedLibraryPicker(from:) to add photo.
+    /// If user choose limited Photo mode, a button with '+' will be added to the ZLThumbnailViewController. It will call PHPhotoLibrary.shared().presentLimitedLibraryPicker(from:) to add photo. Defaults to true.
     /// E.g., Sina Weibo's ImagePicker
     @objc public var showAddPhotoButton: Bool = true
     
     /// iOS14 limited Photo mode, will show collection footer view in ZLThumbnailViewController.
-    /// Will go to system setting if clicked.
+    /// Will go to system setting if clicked. Defaults to true.
     @objc public var showEnterSettingFooter = true
     
     /// Callback after the no authority alert dismiss.

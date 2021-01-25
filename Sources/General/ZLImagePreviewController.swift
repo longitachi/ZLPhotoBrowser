@@ -79,7 +79,7 @@ public class ZLImagePreviewController: UIViewController {
     var orientation: UIInterfaceOrientation = .unknown
     
     public override var prefersStatusBarHidden: Bool {
-        return false
+        return !ZLPhotoConfiguration.default().showStatusBarInPreviewInterface
     }
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -137,6 +137,7 @@ public class ZLImagePreviewController: UIViewController {
         if #available(iOS 11.0, *) {
             insets = self.view.safeAreaInsets
         }
+        insets.top = max(20, insets.top)
         
         self.collectionView.frame = CGRect(x: -ZLPhotoPreviewController.colItemSpacing / 2, y: 0, width: self.view.frame.width + ZLPhotoPreviewController.colItemSpacing, height: self.view.frame.height)
         
