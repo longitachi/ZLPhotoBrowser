@@ -179,7 +179,7 @@ public class ZLImagePreviewController: UIViewController {
         }
         if let cell = cell as? ZLGifPreviewCell {
             cell.loadGifWhenCellDisplaying()
-        } else if let cell = cell as? ZLLivePhotoPewviewCell {
+        } else if let cell = cell as? ZLLivePhotoPreviewCell {
             cell.loadLivePhotoData()
         }
     }
@@ -231,7 +231,7 @@ public class ZLImagePreviewController: UIViewController {
         
         ZLPhotoPreviewCell.zl_register(self.collectionView)
         ZLGifPreviewCell.zl_register(self.collectionView)
-        ZLLivePhotoPewviewCell.zl_register(self.collectionView)
+        ZLLivePhotoPreviewCell.zl_register(self.collectionView)
         ZLVideoPreviewCell.zl_register(self.collectionView)
         ZLLocalImagePreviewCell.zl_register(self.collectionView)
         ZLNetImagePreviewCell.zl_register(self.collectionView)
@@ -363,7 +363,7 @@ extension ZLImagePreviewController {
         let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0))
         if let cell = cell as? ZLGifPreviewCell {
             cell.loadGifWhenCellDisplaying()
-        } else if let cell = cell as? ZLLivePhotoPewviewCell {
+        } else if let cell = cell as? ZLLivePhotoPreviewCell {
             cell.loadLivePhotoData()
         }
     }
@@ -412,7 +412,7 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
                 cell.model = model
                 baseCell = cell
             } else if config.allowSelectLivePhoto, model.type == .livePhoto {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLLivePhotoPewviewCell.zl_identifier(), for: indexPath) as! ZLLivePhotoPewviewCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLLivePhotoPreviewCell.zl_identifier(), for: indexPath) as! ZLLivePhotoPreviewCell
                 
                 cell.model = model
                 

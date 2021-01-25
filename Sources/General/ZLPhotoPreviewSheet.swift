@@ -273,12 +273,12 @@ public class ZLPhotoPreviewSheet: UIView {
         
         let status = PHPhotoLibrary.authorizationStatus()
         if status == .restricted || status == .denied {
-            showAlertView(String(format: localLanguageTextValue(.noPhotoLibratyAuthority), getAppName()), self.sender)
+            self.showNoAuthorityAlert()
         } else if status == .notDetermined {
             PHPhotoLibrary.requestAuthorization { (status) in
                 DispatchQueue.main.async {
                     if status == .denied {
-                        showAlertView(String(format: localLanguageTextValue(.noPhotoLibratyAuthority), getAppName()), self.sender)
+                        self.showNoAuthorityAlert()
                     } else if status == .authorized {
                         if self.preview {
                             self.loadPhotos()
@@ -366,6 +366,15 @@ public class ZLPhotoPreviewSheet: UIView {
         if let temp = self.senderTabBarIsHidden {
             self.sender?.tabBarController?.tabBar.isHidden = temp
         }
+    }
+    
+    func showNoAuthorityAlert() {
+        let alert = UIAlertController(title: nil, message: String(format: localLanguageTextValue(.noPhotoLibratyAuthority), getAppName()), preferredStyle: .alert)
+        let action = UIAlertAction(title: localLanguageTextValue(.ok), style: .default) { (_) in
+            ZLPhotoConfiguration.default().noAuthorityCallback?(.library)
+        }
+        alert.addAction(action)
+        self.sender?.showDetailViewController(alert, sender: nil)
     }
     
     @objc func tapAction(_ tap: UITapGestureRecognizer) {

@@ -427,6 +427,16 @@ public class ZLPhotoConfiguration: NSObject {
     /// Will go to system setting if clicked.
     @objc public var showEnterSettingFooter = true
     
+    /// Callback after the no authority alert dismiss.
+    @objc public var noAuthorityCallback: ( (ZLNoAuthorityType) -> Void )?
+    
+}
+
+
+@objc public enum ZLNoAuthorityType: Int {
+    case library
+    case camera
+    case microphone
 }
 
 

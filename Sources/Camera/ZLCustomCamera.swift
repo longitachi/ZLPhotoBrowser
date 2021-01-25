@@ -150,14 +150,14 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
                     AVCaptureDevice.requestAccess(for: .audio) { (audioGranted) in
                         if !audioGranted {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()))
+                                self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()), type: .microphone)
                             }
                         }
                     }
                 }
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                    self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noCameraAuthority), getAppName()))
+                    self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), type: .camera)
                 })
             }
         }
@@ -170,12 +170,12 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-            showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable))
+            showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable), type: .camera)
         } else if !ZLPhotoConfiguration.default().allowTakePhoto, !ZLPhotoConfiguration.default().allowRecordVideo {
             #if DEBUG
-            fatalError("参数配置错误")
+            fatalError("Error configuration of camera")
             #else
-            showAlertAndDismissAfterDoneAction(message: "相机参数配置错误")
+            showAlertAndDismissAfterDoneAction(message: "Error configuration of camera", type: nil)
             #endif
         } else if self.cameraConfigureFinish, self.viewDidAppearCount == 0 {
             self.showTipsLabel(animate: true)
@@ -481,10 +481,14 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
     }
     
-    func showAlertAndDismissAfterDoneAction(message: String) {
+    func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: localLanguageTextValue(.done), style: .default) { (_) in
-            self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true) {
+                if let t = type {
+                    ZLPhotoConfiguration.default().noAuthorityCallback?(t)
+                }
+            }
         }
         alert.addAction(action)
         self.showDetailViewController(alert, sender: nil)

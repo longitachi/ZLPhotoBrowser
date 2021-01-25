@@ -350,7 +350,7 @@ class ZLGifPreviewCell: ZLPreviewBaseCell {
 
 
 // MARK: live photo preview cell
-class ZLLivePhotoPewviewCell: ZLPreviewBaseCell {
+class ZLLivePhotoPreviewCell: ZLPreviewBaseCell {
     
     override var currentImage: UIImage? {
         return self.imageView.image

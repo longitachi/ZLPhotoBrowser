@@ -146,6 +146,17 @@ class ViewController: UIViewController {
             return true
         }
         
+        config.noAuthorityCallback = { (type) in
+            switch type {
+            case .library:
+                debugPrint("No library authority")
+            case .camera:
+                debugPrint("No camera authority")
+            case .microphone:
+                debugPrint("No microphone authority")
+            }
+        }
+        
         let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
         ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
             self?.selectedImages = images
