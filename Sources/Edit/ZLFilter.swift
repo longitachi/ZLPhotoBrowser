@@ -26,7 +26,7 @@
 
 import UIKit
 
-/// 滤镜代码参考自 https://github.com/Yummypets/YPImagePicker
+/// Filter code reference from https://github.com/Yummypets/YPImagePicker
 
 public typealias ZLFilterApplierType = ((_ image: UIImage) -> UIImage)
 

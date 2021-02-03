@@ -85,13 +85,21 @@ class ViewController: UIViewController {
             make.centerY.equalTo(cameraBtn)
         }
         
+        let wechatMomentDemoBtn = createBtn("Create WeChat moment Demo", #selector(createWeChatMomentDemo))
+        self.view.addSubview(wechatMomentDemoBtn)
+        wechatMomentDemoBtn.snp.makeConstraints { (make) in
+            make.left.equalTo(configBtn.snp.left)
+            make.top.equalTo(cameraBtn.snp.bottom).offset(20)
+        }
+        
         let takeLabel = UILabel()
         takeLabel.font = UIFont.systemFont(ofSize: 14)
+        takeLabel.textColor = .black
         takeLabel.text = "Record selected photos："
         self.view.addSubview(takeLabel)
         takeLabel.snp.makeConstraints { (make) in
             make.left.equalTo(configBtn.snp.left)
-            make.top.equalTo(cameraBtn.snp.bottom).offset(20)
+            make.top.equalTo(wechatMomentDemoBtn.snp.bottom).offset(20)
         }
         
         self.takeSelectedAssetsSwitch = UISwitch()
@@ -282,6 +290,11 @@ class ViewController: UIViewController {
                 self.collectionView.reloadData()
             }
         }
+    }
+    
+    @objc func createWeChatMomentDemo() {
+        let vc = WeChatMomentDemoViewController()
+        self.show(vc, sender: nil)
     }
     
 }

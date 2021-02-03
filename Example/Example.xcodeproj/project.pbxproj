@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E42F8ADB25CA9CDF009775A3 /* WeChatMomentDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42F8ADA25CA9CDF009775A3 /* WeChatMomentDemoViewController.swift */; };
 		E44A20F02567763A00FE6CAE /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */; };
 		E462467024EE6F9A00EF6C57 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E462466F24EE6F9A00EF6C57 /* ImageCell.swift */; };
 		E4765F72254189E4007B2C0F /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4765F33254189E4007B2C0F /* Storage.swift */; };
@@ -124,6 +125,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E42F8ADA25CA9CDF009775A3 /* WeChatMomentDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeChatMomentDemoViewController.swift; sourceTree = "<group>"; };
 		E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStickerContainerView.swift; sourceTree = "<group>"; };
 		E462466F24EE6F9A00EF6C57 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		E463C1512509FA9500FE1401 /* Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 				E480050725316920008A2B67 /* ZLCustomFilter.swift */,
 				E4A4109624F39DF700EEC20B /* PhotoConfigureViewController.swift */,
 				E4C69FED253EDA8600AE466C /* PhotoConfigureCNViewController.swift */,
+				E42F8ADA25CA9CDF009775A3 /* WeChatMomentDemoViewController.swift */,
 				E4C69FEB253ED19600AE466C /* LanguagePickerView.swift */,
 				E44A20EF2567763A00FE6CAE /* ImageStickerContainerView.swift */,
 				E462466F24EE6F9A00EF6C57 /* ImageCell.swift */,
@@ -591,6 +594,7 @@
 				E4A410DB24F39F0000EEC20B /* ConstraintView+Extensions.swift in Sources */,
 				E4765F88254189E4007B2C0F /* ImageModifier.swift in Sources */,
 				E4A410CC24F39F0000EEC20B /* ConstraintInsetTarget.swift in Sources */,
+				E42F8ADB25CA9CDF009775A3 /* WeChatMomentDemoViewController.swift in Sources */,
 				E4765F7E254189E4007B2C0F /* KingfisherManager.swift in Sources */,
 				E4A410D324F39F0000EEC20B /* ConstraintLayoutSupport.swift in Sources */,
 				E4765F8D254189E4007B2C0F /* Image.swift in Sources */,
