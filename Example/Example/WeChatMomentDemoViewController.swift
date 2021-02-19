@@ -49,7 +49,7 @@ class WeChatMomentDemoViewController: UIViewController {
         config.cropVideoAfterSelectThumbnail = true
         config.allowEditVideo = true
         config.allowMixSelect = false
-        config.maxSelectCount = 9
+        config.maxSelectCount = 9 - self.images.count
         config.maxEditVideoTime = 15
         
         // You can provide the selected assets so as not to repeat selection.
@@ -72,7 +72,7 @@ class WeChatMomentDemoViewController: UIViewController {
 extension WeChatMomentDemoViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.hasSelectVideo ? 1 : min(9, images.count + 1)
+        return hasSelectVideo ? 1 : min(9, images.count + 1)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -151,7 +151,7 @@ extension WeChatMomentDemoViewController: UICollectionViewDataSource, UICollecti
             }
             
             previewVC.modalPresentationStyle = .fullScreen
-            self.showDetailViewController(previewVC, sender: nil)
+            showDetailViewController(previewVC, sender: nil)
         }
     }
     

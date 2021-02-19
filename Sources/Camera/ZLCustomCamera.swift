@@ -626,6 +626,10 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     // 点击拍照
     @objc func takePicture() {
+        guard ZLPhotoManager.hasCameraAuthority() else {
+            return
+        }
+        
         let connection = self.imageOutput.connection(with: .video)
         connection?.videoOrientation = self.orientation
         if self.videoInput?.device.position == .front, connection?.isVideoMirroringSupported == true {
@@ -641,6 +645,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     // 长按录像
     @objc func longPressAction(_ longGes: UILongPressGestureRecognizer) {
         if longGes.state == .began {
+            guard ZLPhotoManager.hasCameraAuthority(), ZLPhotoManager.hasMicrophoneAuthority() else {
+                return
+            }
             self.startRecord()
         } else if longGes.state == .cancelled || longGes.state == .ended {
             self.finishRecord()

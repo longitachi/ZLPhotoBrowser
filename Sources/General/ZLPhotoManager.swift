@@ -399,11 +399,11 @@ public class ZLPhotoManager: NSObject {
 /// Authority related.
 extension ZLPhotoManager {
     
-    public class func havePhotoLibratyAuthority() -> Bool {
+    public class func hasPhotoLibratyAuthority() -> Bool {
         return PHPhotoLibrary.authorizationStatus() == .authorized
     }
     
-    public class func haveCameraAuthority() -> Bool {
+    public class func hasCameraAuthority() -> Bool {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
         if status == .restricted || status == .denied {
             return false
@@ -411,7 +411,7 @@ extension ZLPhotoManager {
         return true
     }
     
-    public class func haveMicrophoneAuthority() -> Bool {
+    public class func hasMicrophoneAuthority() -> Bool {
         let status = AVCaptureDevice.authorizationStatus(for: .audio)
         if status == .restricted || status == .denied {
             return false
