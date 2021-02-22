@@ -91,6 +91,11 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.3
+  Add:
+    Add a callback after closing the framework's no authority alert.
+    Can control whether to show the status bar when previewing photos.
+    Can separately control whether to display the selection button and bottom view in ZLImagePreviewController.
 ● 4.1.2
   Add:
     When the slide select is active, it will auto scroll like system library.
@@ -103,16 +108,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ● 4.1.1 - 4.1.0 Patch:
   Fix:
     Fix a crash when using zoom to preview local images and network images.
-● 4.1.0:
-  Add:
-    Image editor add text sticker and image sticker feature.
-    Customizable order of editing image tools.
-    Can set the maximum and minimum number of choices for the video.
-    Pinch to adjust zoom factor of the custom camera.
-    Long press to save the local image and network image.
-    iOS14 limited mode, change the way to select more photos.
-  Fix:
-    Fix the bug that will crash when has request failed images.
 ...
 ```
 

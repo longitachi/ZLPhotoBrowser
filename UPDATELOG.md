@@ -2,6 +2,15 @@
 
 -----
 
+## [4.1.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.3) (2021-01-22)
+
+### Add:
+* Add a callback after closing the framework's no authority alert.
+* Can control whether to show the status bar when previewing photos.
+* Can separately control whether to display the selection button and bottom view in ZLImagePreviewController.[#587](https://github.com/longitachi/ZLPhotoBrowser/issues/587)
+  
+---
+
 ## [4.1.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.2) (2020-12-31)
 
 ### Add:
