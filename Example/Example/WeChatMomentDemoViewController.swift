@@ -49,7 +49,7 @@ class WeChatMomentDemoViewController: UIViewController {
         config.cropVideoAfterSelectThumbnail = true
         config.allowEditVideo = true
         config.allowMixSelect = false
-        config.maxSelectCount = 9 - self.images.count
+        config.maxSelectCount = 9 - images.count
         config.maxEditVideoTime = 15
         
         // You can provide the selected assets so as not to repeat selection.

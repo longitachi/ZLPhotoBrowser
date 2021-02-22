@@ -48,6 +48,8 @@ public class ZLImagePreviewController: UIViewController {
     
     let showSelectBtn: Bool
     
+    let showBottomView: Bool
+    
     var currentIndex: Int
     
     var indexBeforOrientationChanged: Int
@@ -88,10 +90,11 @@ public class ZLImagePreviewController: UIViewController {
     
     /// - Parameters:
     ///   - datas: Must be one of PHAsset, UIImage and URL, will filter ohers in init function.
+    ///   - showBottomView: If showSelectBtn is true, showBottomView is always true.
     ///   - index: Index for first display.
     ///   - urlType: Tell me the url is image or video.
     ///   - urlImageLoader: Called when cell will display, cell will layout after callback when image load finish. The first block is progress callback, second is load finish callback.
-    @objc public init(datas: [Any], index: Int = 0, showSelectBtn: Bool = true, urlType: ( (URL) -> ZLURLType )? = nil, urlImageLoader: ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ),  @escaping ( () -> Void )) -> Void )? = nil) {
+    @objc public init(datas: [Any], index: Int = 0, showSelectBtn: Bool = true, showBottomView: Bool = true, urlType: ( (URL) -> ZLURLType )? = nil, urlImageLoader: ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ),  @escaping ( () -> Void )) -> Void )? = nil) {
         let filterDatas = datas.filter { (obj) -> Bool in
             return obj is PHAsset || obj is UIImage || obj is URL
         }
@@ -100,6 +103,7 @@ public class ZLImagePreviewController: UIViewController {
         self.currentIndex = index >= filterDatas.count ? 0 : index
         self.indexBeforOrientationChanged = self.currentIndex
         self.showSelectBtn = showSelectBtn
+        self.showBottomView = showSelectBtn ? true : showBottomView
         self.urlType = urlType
         self.urlImageLoader = urlImageLoader
         super.init(nibName: nil, bundle: nil)
@@ -154,15 +158,7 @@ public class ZLImagePreviewController: UIViewController {
         self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height-insets.bottom-bottomViewH, width: self.view.frame.width, height: bottomViewH+insets.bottom)
         self.bottomBlurView?.frame = self.bottomView.bounds
         
-        let btnY: CGFloat = 7
-        
-        var doneTitle = localLanguageTextValue(.done)
-        let selCount = self.selectStatus.filter{ $0 }.count
-        if selCount > 0 {
-            doneTitle += "(" + String(selCount) + ")"
-        }
-        let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
-        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        self.resetBottomViewFrame()
         
         let ori = UIApplication.shared.statusBarOrientation
         if ori != self.orientation {
@@ -270,19 +266,30 @@ public class ZLImagePreviewController: UIViewController {
     func resetSubViewStatus() {
         self.indexLabel.text = String(self.currentIndex + 1) + " / " + String(self.datas.count)
         
-        guard self.showSelectBtn else {
+        if self.showSelectBtn {
+            self.selectBtn.isSelected = self.selectStatus[self.currentIndex]
+        } else {
             self.selectBtn.isHidden = true
-            self.bottomView.isHidden = true
-            return
         }
         
-        self.selectBtn.isSelected = self.selectStatus[self.currentIndex]
-        var doneTitle = localLanguageTextValue(.done)
-        let selCount = self.selectStatus.filter{ $0 }.count
-        if selCount > 0 {
-            doneTitle += "(" + String(selCount) + ")"
+        self.resetBottomViewFrame()
+    }
+    
+    func resetBottomViewFrame() {
+        if self.showBottomView {
+            let btnY: CGFloat = 7
+            
+            var doneTitle = localLanguageTextValue(.done)
+            let selCount = self.selectStatus.filter{ $0 }.count
+            if self.showSelectBtn, selCount > 0 {
+                doneTitle += "(" + String(selCount) + ")"
+            }
+            let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
+            self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+            self.doneBtn.setTitle(doneTitle, for: .normal)
+        } else {
+            self.bottomView.isHidden = true
         }
-        self.doneBtn.setTitle(doneTitle, for: .normal)
     }
     
     func dismiss() {
@@ -317,12 +324,17 @@ public class ZLImagePreviewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
-        let res = self.datas.enumerated().filter { (index, value) -> Bool in
-            return self.selectStatus[index]
-        }.map { (_, v) -> Any in
-            return v
+        if self.showSelectBtn {
+            let res = self.datas.enumerated().filter { (index, value) -> Bool in
+                return self.selectStatus[index]
+            }.map { (_, v) -> Any in
+                return v
+            }
+            self.doneBlock?(res)
+        } else {
+            self.doneBlock?(self.datas)
         }
-        self.doneBlock?(res)
+        
         self.dismiss()
     }
     
@@ -335,7 +347,9 @@ public class ZLImagePreviewController: UIViewController {
             }
         }
         self.navView.isHidden = self.hideNavView
-        self.bottomView.isHidden = self.hideNavView
+        if self.showBottomView {
+            self.bottomView.isHidden = self.hideNavView
+        }
     }
     
 }
