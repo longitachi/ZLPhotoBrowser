@@ -19,8 +19,31 @@ class WeChatMomentDemoViewController: UIViewController {
     
     var hasSelectVideo = false
     
+    static let propertyLabel: Set<String> = ["allowSelectImage", "allowSelectVideo", "allowSelectGif", "allowSelectLivePhoto", "allowSelectOriginal", "cropVideoAfterSelectThumbnail", "allowEditVideo", "allowMixSelect", "pri_maxSelectCount", "maxEditVideoTime"]
+    
+    let originalConfig: [String: Any] = {
+        let mirror = Mirror(reflecting: ZLPhotoConfiguration.default())
+        var dic = [String: Any]()
+        for child in mirror.children {
+            if let label = child.label, propertyLabel.contains(label) {
+                dic[label] = child.value
+            }
+        }
+        return dic
+    }()
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
+    }
+    
+    deinit {
+        for label in WeChatMomentDemoViewController.propertyLabel {
+            var key = label
+            if key.hasPrefix("pri_") {
+                key = String(key[key.index(key.startIndex, offsetBy: 4)...])
+            }
+            ZLPhotoConfiguration.default().setValue(originalConfig[label], forKey: key)
+        }
     }
     
     override func viewDidLoad() {
