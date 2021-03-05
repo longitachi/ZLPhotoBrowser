@@ -826,9 +826,6 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
         }
         self.arrSelectedModels.remove(at: index)
         self.collectionView.deleteItems(at: [IndexPath(row: index, section: 0)])
-        if index > 0 {
-            self.collectionView.scrollToItem(at: IndexPath(row: index - 1, section: 0), at: .centeredHorizontally, animated: true)
-        }
     }
     
     func refreshCell(for model: ZLPhotoModel) {
