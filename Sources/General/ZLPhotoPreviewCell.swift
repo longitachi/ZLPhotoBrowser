@@ -970,7 +970,7 @@ class ZLPreviewView: UIView {
                 return
             }
             if let imageRequestID = self?.imageRequestID {
-                ZLPhotoManager.cancelImageRequest(imageRequestID)
+                PHImageManager.default().cancelImageRequest(imageRequestID)
             }
             if !isDegraded {
                 self?.fetchGifDone = true
