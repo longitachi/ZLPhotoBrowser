@@ -110,7 +110,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.indexLabel.adjustsFontSizeToFitWidth = true
         self.indexLabel.minimumScaleFactor = 0.5
         self.indexLabel.textAlignment = .center
-        self.contentView.addSubview(self.indexLabel)
+        self.btnSelect.addSubview(self.indexLabel)
         
         self.bottomShadowView = UIImageView(image: getImage("zl_shadow"))
         self.contentView.addSubview(self.bottomShadowView)
@@ -143,7 +143,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.imageView.frame = self.bounds
         self.coverView.frame = self.bounds
         self.btnSelect.frame = CGRect(x: self.bounds.width - 30, y: 8, width: 23, height: 23)
-        self.indexLabel.frame = self.btnSelect.frame
+        self.indexLabel.frame = self.btnSelect.bounds
         self.bottomShadowView.frame = CGRect(x: 0, y: self.bounds.height - 25, width: self.bounds.width, height: 25)
         self.videoTag.frame = CGRect(x: 5, y: 1, width: 20, height: 15)
         self.livePhotoTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)

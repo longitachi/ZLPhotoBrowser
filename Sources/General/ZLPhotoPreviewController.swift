@@ -111,7 +111,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.setupUI()
         
         self.addPopInteractiveTransition()
-        self.resetSubViewStatus(animateIndexLabel: false)
+        self.resetSubViewStatus()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -246,7 +246,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.indexLabel.layer.cornerRadius = 25.0 / 2
         self.indexLabel.layer.masksToBounds = true
         self.indexLabel.isHidden = true
-        self.navView.addSubview(self.indexLabel)
+        self.selectBtn.addSubview(self.indexLabel)
         
         // collection view
         let layout = UICollectionViewFlowLayout()
@@ -368,7 +368,7 @@ class ZLPhotoPreviewController: UIViewController {
         }
     }
     
-    func resetSubViewStatus(animateIndexLabel: Bool) {
+    func resetSubViewStatus() {
         let nav = self.navigationController as! ZLImageNavController
         let config = ZLPhotoConfiguration.default()
         let currentModel = self.arrDataSources[self.currentIndex]
@@ -379,7 +379,7 @@ class ZLPhotoPreviewController: UIViewController {
             self.selectBtn.isHidden = false
         }
         self.selectBtn.isSelected = self.arrDataSources[self.currentIndex].isSelected
-        self.resetIndexLabelStatus(animate: animateIndexLabel)
+        self.resetIndexLabelStatus()
         
         guard self.showBottomViewAndSelectBtn else {
             self.selectBtn.isHidden = true
@@ -412,7 +412,7 @@ class ZLPhotoPreviewController: UIViewController {
         }
     }
     
-    func resetIndexLabelStatus(animate: Bool) {
+    func resetIndexLabelStatus() {
         guard ZLPhotoConfiguration.default().showSelectedIndex else {
             self.indexLabel.isHidden = true
             return
@@ -423,9 +423,6 @@ class ZLPhotoPreviewController: UIViewController {
             self.indexLabel.text = String(index + 1)
         } else {
             self.indexLabel.isHidden = true
-        }
-        if animate {
-            self.indexLabel.layer.add(getSpringAnimation(), forKey: nil)
         }
     }
     
@@ -456,7 +453,7 @@ class ZLPhotoPreviewController: UIViewController {
             nav.arrSelectedModels.append(currentModel)
             self.selPhotoPreview?.addSelModel(model: currentModel)
         }
-        self.resetSubViewStatus(animateIndexLabel: true)
+        self.resetSubViewStatus()
     }
     
     @objc func editBtnClick() {
@@ -542,7 +539,7 @@ class ZLPhotoPreviewController: UIViewController {
         guard ZLPhotoConfiguration.default().showSelectedIndex else {
             return
         }
-        self.resetIndexLabelStatus(animate: false)
+        self.resetIndexLabelStatus()
     }
     
     func tapPreviewCell() {
@@ -567,7 +564,7 @@ class ZLPhotoPreviewController: UIViewController {
             if nav?.arrSelectedModels.contains(where: { $0 == model }) == false {
                 model.isSelected = true
                 nav?.arrSelectedModels.append(model)
-                self.resetSubViewStatus(animateIndexLabel: false)
+                self.resetSubViewStatus()
                 self.selPhotoPreview?.addSelModel(model: model)
             } else {
                 self.selPhotoPreview?.refreshCell(for: model)
@@ -637,7 +634,7 @@ extension ZLPhotoPreviewController {
             return
         }
         self.currentIndex = page
-        self.resetSubViewStatus(animateIndexLabel: false)
+        self.resetSubViewStatus()
         self.selPhotoPreview?.currentShowModelChanged(model: self.arrDataSources[self.currentIndex])
     }
     

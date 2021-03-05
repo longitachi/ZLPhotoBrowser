@@ -815,7 +815,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         if ZLPhotoConfiguration.default().showSelectedIndex {
             for (index, selM) in self.arrSelectedModels.enumerated() {
                 if model == selM {
-                    self.setCellIndex(cell, showIndexLabel: true, index: index + 1, animate: false)
+                    self.setCellIndex(cell, showIndexLabel: true, index: index + 1)
                     break
                 }
             }
@@ -908,15 +908,12 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         return flag && (canEditImage || canEditVideo)
     }
     
-    func setCellIndex(_ cell: ZLThumbnailPhotoCell?, showIndexLabel: Bool, index: Int, animate: Bool) {
+    func setCellIndex(_ cell: ZLThumbnailPhotoCell?, showIndexLabel: Bool, index: Int) {
         guard ZLPhotoConfiguration.default().showSelectedIndex else {
             return
         }
         cell?.index = index
         cell?.indexLabel.isHidden = !showIndexLabel
-        if animate {
-            cell?.indexLabel.layer.add(getSpringAnimation(), forKey: nil)
-        }
     }
     
     func refreshCellIndex() {
@@ -947,7 +944,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 }
             }
             if showIndex {
-                self.setCellIndex(cell, showIndexLabel: show, index: idx, animate: false)
+                self.setCellIndex(cell, showIndexLabel: show, index: idx)
             }
             if showMask {
                 self.setCellMaskView(cell, isSelected: isSelected, model: m)
