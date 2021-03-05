@@ -123,6 +123,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// - warning: The video can only be edited when no photos are selected, or only one video is selected, and the selection callback is executed immediately after editing is completed.
     @objc public var allowEditVideo = false
     
+    /// Animation duration for select button
+    @objc public var selectBtnAnimationDuration: CFTimeInterval = 0.4
+    
     /// After selecting a image/video in the thumbnail interface, enter the editing interface directly. Defaults to false.
     /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.
     /// Editing video is only valid when allowEditVideo is true and maxSelectCount is 1.
@@ -293,7 +296,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// Display the selected photos at the bottom of the preview large photos interface. Defaults to true.
     @objc public var showSelectedPhotoPreview = true
     
-    /// Developers can customize iamges, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
+    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
     /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
     /// ["zl_btn_selected", "zl_btn_unselected"].
     @objc public var customImageNames: [String] = [] {

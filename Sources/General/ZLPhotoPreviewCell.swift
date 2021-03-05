@@ -936,13 +936,16 @@ class ZLPreviewView: UIView {
     
     func loadGifFirstFrame() {
         self.onFetchingGif = false
+        self.fetchGifDone = false
         
         self.imageRequestID = ZLPhotoManager.fetchImage(for: self.model.asset, size: self.requestPhotoSize(gif: true), completion: { [weak self] (image, isDegraded) in
             guard self?.imageIdentifier == self?.model.ident else {
                 return
             }
-            self?.imageView.image = image
-            self?.resetSubViewSize()
+            if self?.fetchGifDone == false {
+                self?.imageView.image = image
+                self?.resetSubViewSize()
+            }
         })
     }
     
@@ -971,12 +974,7 @@ class ZLPreviewView: UIView {
             }
             if !isDegraded {
                 self?.fetchGifDone = true
-                if let gifImage = UIImage.zl_animateGifImage(data: data) {
-                    if let imageRequestID = self?.imageRequestID {
-                        PHImageManager.default().cancelImageRequest(imageRequestID)
-                    }
-                    self?.imageView.image = gifImage
-                }
+                self?.imageView.image = UIImage.zl_animateGifImage(data: data)
                 self?.resetSubViewSize()
             }
         })
