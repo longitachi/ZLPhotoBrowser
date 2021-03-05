@@ -819,11 +819,8 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
     func addSelModel(model: ZLPhotoModel) {
         self.arrSelectedModels.append(model)
         let ip = IndexPath(row: self.arrSelectedModels.count-1, section: 0)
-        self.collectionView.performBatchUpdates({
-            self.collectionView.insertItems(at: [ip])
-        }) { (_) in
-            self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
-        }
+        self.collectionView.insertItems(at: [ip])
+        self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
     }
     
     func removeSelModel(model: ZLPhotoModel) {
@@ -831,9 +828,10 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
             return
         }
         self.arrSelectedModels.remove(at: index)
-        self.collectionView.performBatchUpdates({
-            self.collectionView.deleteItems(at: [IndexPath(row: index, section: 0)])
-        }, completion: nil)
+        self.collectionView.deleteItems(at: [IndexPath(row: index, section: 0)])
+        if index > 0 {
+            self.collectionView.scrollToItem(at: IndexPath(row: index - 1, section: 0), at: .centeredHorizontally, animated: true)
+        }
     }
     
     func refreshCell(for model: ZLPhotoModel) {
