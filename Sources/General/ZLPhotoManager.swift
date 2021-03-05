@@ -392,7 +392,6 @@ public class ZLPhotoManager: NSObject {
             completion(path)
         }
     }
-    
 }
 
 

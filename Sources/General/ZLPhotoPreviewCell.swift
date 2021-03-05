@@ -971,7 +971,12 @@ class ZLPreviewView: UIView {
             }
             if !isDegraded {
                 self?.fetchGifDone = true
-                self?.imageView.image = UIImage.zl_animateGifImage(data: data)
+                if let gifImage = UIImage.zl_animateGifImage(data: data) {
+                    if let imageRequestID = self?.imageRequestID {
+                        PHImageManager.default().cancelImageRequest(imageRequestID)
+                    }
+                    self?.imageView.image = gifImage
+                }
                 self?.resetSubViewSize()
             }
         })

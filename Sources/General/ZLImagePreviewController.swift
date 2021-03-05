@@ -311,7 +311,7 @@ public class ZLImagePreviewController: UIViewController {
     
     @objc func selectBtnClick() {
         var isSelected = self.selectStatus[self.currentIndex]
-        
+        self.selectBtn.layer.removeAllAnimations()
         if isSelected {
             isSelected = false
         } else {
