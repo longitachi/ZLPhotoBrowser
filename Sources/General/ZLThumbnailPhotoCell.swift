@@ -159,6 +159,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             return
         }
         
+        self.btnSelect.layer.removeAllAnimations()
         if !self.btnSelect.isSelected {
             self.btnSelect.layer.add(getSpringAnimation(), forKey: nil)
         }

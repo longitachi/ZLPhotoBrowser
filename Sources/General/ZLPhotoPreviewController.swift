@@ -442,7 +442,7 @@ class ZLPhotoPreviewController: UIViewController {
     @objc func selectBtnClick() {
         let nav = self.navigationController as! ZLImageNavController
         let currentModel = self.arrDataSources[self.currentIndex]
-        
+        self.selectBtn.layer.removeAllAnimations()
         if currentModel.isSelected {
             currentModel.isSelected = false
             nav.arrSelectedModels.removeAll { $0 == currentModel }
