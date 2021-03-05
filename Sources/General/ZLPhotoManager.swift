@@ -393,6 +393,10 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
+    @objc public class func cancelImageRequest(_ requestID: PHImageRequestID) {
+        PHImageManager.default().cancelImageRequest(requestID)
+    }
+    
 }
 
 
