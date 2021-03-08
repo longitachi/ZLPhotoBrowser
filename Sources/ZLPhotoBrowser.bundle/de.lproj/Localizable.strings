@@ -61,5 +61,5 @@
 "myPhotoStream" = "Mein Fotostream";
 
 "noTitleAlbumListPlaceholder" = "Alle Fotos";
-"unableToAccessAllPhotos" = "Sie können nicht auf alle Fotos zugreifen und gehen Sie zu den Einstellungen";
+"unableToAccessAllPhotos" = "Zugriff auf alle Fotos im Album nicht möglich.\nZugriff auf \"Alle Fotos\" unter \"Fotos\" zulassen.";
 "textStickerRemoveTips" = "Zum Entfernen hierher ziehen";

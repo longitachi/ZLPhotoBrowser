@@ -61,5 +61,5 @@
 "myPhotoStream" = "나의 사진 스트림";
 
 "noTitleAlbumListPlaceholder" = "모든 사진";
-"unableToAccessAllPhotos" = "모든 사진에 액세스 할 수 없습니다. 설정으로 이동하세요";
+"unableToAccessAllPhotos" = "앨범 사진에 접근할 수 없습니다.\n\"사진\"에서 \"모든 사진\"에 대한 접근을 허용합니다.";
 "textStickerRemoveTips" = "제거하려면 여기로 드래그하세요";

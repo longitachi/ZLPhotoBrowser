@@ -431,7 +431,7 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// iOS14 limited Photo mode, will show collection footer view in ZLThumbnailViewController.
     /// Will go to system setting if clicked. Defaults to true.
-    @objc public var showEnterSettingFooter = true
+    @objc public var showEnterSettingTips = true
     
     /// Callback after the no authority alert dismiss.
     @objc public var noAuthorityCallback: ( (ZLNoAuthorityType) -> Void )?

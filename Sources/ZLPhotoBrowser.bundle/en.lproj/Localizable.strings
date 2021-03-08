@@ -61,5 +61,5 @@
 "myPhotoStream" = "My Photo Stream";
 
 "noTitleAlbumListPlaceholder" = "All Photos";
-"unableToAccessAllPhotos" = "Unable to access all photos, go to settings";
+"unableToAccessAllPhotos" = "Unable to access all photos in the album.\nAllow access to \"All Photos\" in \"Photos\".";
 "textStickerRemoveTips" = "Drag here to remove";

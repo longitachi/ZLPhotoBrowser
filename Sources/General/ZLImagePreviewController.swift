@@ -277,7 +277,7 @@ public class ZLImagePreviewController: UIViewController {
     
     func resetBottomViewFrame() {
         if self.showBottomView {
-            let btnY: CGFloat = 7
+            let btnY: CGFloat = ZLLayout.bottomToolBtnY
             
             var doneTitle = localLanguageTextValue(.done)
             let selCount = self.selectStatus.filter{ $0 }.count

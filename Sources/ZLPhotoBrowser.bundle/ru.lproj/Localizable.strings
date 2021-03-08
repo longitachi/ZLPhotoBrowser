@@ -3,7 +3,7 @@
 "previewAlbum" = "Альбом";
 "cancel" = "Отмена";
 
-"originalPhoto" = "Полное изображение";
+"originalPhoto" = "Полный формат";
 "done" = "Готово";
 "ok" = "в порядке";
 "editFinish" = "Готово";
@@ -61,5 +61,5 @@
 "myPhotoStream" = "Мой фотопоток";
 
 "noTitleAlbumListPlaceholder" = "Все фотографии";
-"unableToAccessAllPhotos" = "Невозможно получить доступ ко всем фотографиям, перейдите в настройки";
+"unableToAccessAllPhotos" = "Невозможно получить доступ к фотографиям в альбоме.\nРазрешить доступ ко \"Всем фотографиям\" в \"Фото\".";
 "textStickerRemoveTips" = "Перетащите сюда, чтобы удалить";

@@ -61,5 +61,5 @@
 "myPhotoStream" = "Kho ảnh của tôi";
 
 "noTitleAlbumListPlaceholder" = "Tất cả ảnh";
-"unableToAccessAllPhotos" = "Không thể truy cập tất cả ảnh, hãy chuyển đến cài đặt";
+"unableToAccessAllPhotos" = "Không thể truy cập tất cả ảnh trong album.\nCho phép truy cập vào \"Tất cả ảnh\" trong \"Ành\".";
 "textStickerRemoveTips" = "Kéo vào đây để xóa";

@@ -61,5 +61,5 @@
 "myPhotoStream" = "Mon flux de photos";
 
 "noTitleAlbumListPlaceholder" = "Toutes les photos";
-"unableToAccessAllPhotos" = "Impossible d'accéder à toutes les photos, accédez aux paramètres";
+"unableToAccessAllPhotos" = "Impossible d'accéder à toutes les photos de l'album.\nAutorisez l'accès à « Toutes les photos » dans « Photos ».";
 "textStickerRemoveTips" = "Faites glisser ici pour supprimer";

@@ -61,5 +61,5 @@
 "myPhotoStream" = "Strim Foto Saya";
 
 "noTitleAlbumListPlaceholder" = "Semua Foto";
-"unableToAccessAllPhotos" = "Tidak dapat mengakses semua foto, pergi ke tetapan";
+"unableToAccessAllPhotos" = "Tidak dapat mengakses semua foto dalam album.\nBenarkan akses kepada \"Semua Foto\" dalam \"Foto\".";
 "textStickerRemoveTips" = "Seret ke sini untuk mengalih keluar";

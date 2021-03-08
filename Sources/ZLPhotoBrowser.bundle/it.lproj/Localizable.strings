@@ -61,5 +61,5 @@
 "myPhotoStream" = "II mio streaming foto";
 
 "noTitleAlbumListPlaceholder" = "Tutte le foto";
-"unableToAccessAllPhotos" = "Impossibile accedere a tutte le foto, vai alle impostazioni";
+"unableToAccessAllPhotos" = "Impossibile accedere a tutte le foto nell'album.\nConsenti l'accesso a \"Tutte le foto\" in \"Foto\"";
 "textStickerRemoveTips" = "Trascina qui per rimuovere";

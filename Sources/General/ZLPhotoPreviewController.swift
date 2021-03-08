@@ -191,7 +191,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height-insets.bottom-bottomViewH, width: self.view.frame.width, height: bottomViewH+insets.bottom)
         self.bottomBlurView?.frame = self.bottomView.bounds
         
-        let btnY: CGFloat = showSelPhotoPreview ? ZLPhotoPreviewController.selPhotoPreviewH + 7 : 7
+        let btnY: CGFloat = showSelPhotoPreview ? ZLPhotoPreviewController.selPhotoPreviewH + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
         
         let editTitle = localLanguageTextValue(.edit)
         let editBtnW = editTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width

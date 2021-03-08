@@ -57,6 +57,8 @@ class ZLThumbnailViewController: UIViewController {
     
     var bottomBlurView: UIVisualEffectView?
     
+    var limitAuthTipsView: ZLLimitedAuthorityTipsView?
+    
     var previewBtn: UIButton!
     
     var originalBtn: UIButton!
@@ -111,6 +113,14 @@ class ZLThumbnailViewController: UIViewController {
     var autoScrollTimer: CADisplayLink?
     
     var lastPanUpdateTime = CACurrentMediaTime()
+    
+    let showLimitAuthTipsView: Bool = {
+        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited, ZLPhotoConfiguration.default().showEnterSettingTips {
+            return true
+        } else {
+            return false
+        }
+    }()
     
     private enum AutoScrollDirection {
         case none
@@ -212,7 +222,7 @@ class ZLThumbnailViewController: UIViewController {
         
         self.embedAlbumListView?.frame = CGRect(x: 0, y: navViewFrame.maxY, width: self.view.bounds.width, height: self.view.bounds.height-navViewFrame.maxY)
         
-        var showBottomView = true
+        var showBottomToolBtns = true
         
         let config = ZLPhotoConfiguration.default()
         let condition1 = config.editAfterSelectThumbnailImage &&
@@ -220,10 +230,19 @@ class ZLThumbnailViewController: UIViewController {
             (config.allowEditImage || config.allowEditVideo)
         let condition2 = config.allowPreviewPhotos && config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
         if condition1 || condition2 {
-            showBottomView = false
-            insets.bottom = 0
+            showBottomToolBtns = false
         }
-        let bottomViewH = showBottomView ? ZLLayout.bottomToolViewH : 0
+        
+        let bottomViewH: CGFloat
+        if self.showLimitAuthTipsView, showBottomToolBtns {
+            bottomViewH = ZLLayout.bottomToolViewH + ZLLimitedAuthorityTipsView.height
+        } else if self.showLimitAuthTipsView {
+            bottomViewH = ZLLimitedAuthorityTipsView.height
+        } else if showBottomToolBtns {
+            bottomViewH = ZLLayout.bottomToolViewH
+        } else {
+            bottomViewH = 0
+        }
         
         let totalWidth = self.view.frame.width - insets.left - insets.right
         self.collectionView.frame = CGRect(x: insets.left, y: 0, width: totalWidth, height: self.view.frame.height)
@@ -239,24 +258,29 @@ class ZLThumbnailViewController: UIViewController {
             }
         }
         
-        guard showBottomView else { return }
+        guard showBottomToolBtns || self.showLimitAuthTipsView else { return }
         
         let btnH = ZLLayout.bottomToolBtnH
         
         self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height-insets.bottom-bottomViewH, width: self.view.bounds.width, height: bottomViewH+insets.bottom)
         self.bottomBlurView?.frame = self.bottomView.bounds
         
-        let btnY: CGFloat = 7
+        if self.showLimitAuthTipsView {
+            self.limitAuthTipsView?.frame = CGRect(x: 0, y: 0, width: self.bottomView.bounds.width, height: ZLLimitedAuthorityTipsView.height)
+        }
         
-        let previewTitle = localLanguageTextValue(.preview)
-        let previewBtnW = previewTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
-        self.previewBtn.frame = CGRect(x: 15, y: btnY, width: previewBtnW, height: btnH)
-        
-        let originalTitle = localLanguageTextValue(.originalPhoto)
-        let originBtnW = originalTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
-        self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-originBtnW)/2-5, y: btnY, width: originBtnW, height: btnH)
-        
-        self.refreshDoneBtnFrame()
+        if showBottomToolBtns {
+            let btnY = self.showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
+            let previewTitle = localLanguageTextValue(.preview)
+            let previewBtnW = previewTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
+            self.previewBtn.frame = CGRect(x: 15, y: btnY, width: previewBtnW, height: btnH)
+            
+            let originalTitle = localLanguageTextValue(.originalPhoto)
+            let originBtnW = originalTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
+            self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-originBtnW)/2-5, y: btnY, width: originBtnW, height: btnH)
+            
+            self.refreshDoneBtnFrame()
+        }
     }
     
     func setupUI() {
@@ -279,7 +303,6 @@ class ZLThumbnailViewController: UIViewController {
         
         ZLCameraCell.zl_register(self.collectionView)
         ZLThumbnailPhotoCell.zl_register(self.collectionView)
-        self.collectionView.register(ZLThumbnailColViewFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(ZLThumbnailColViewFooter.classForCoder()))
         ZLAddPhotoCell.zl_register(self.collectionView)
         
         self.bottomView = UIView()
@@ -289,6 +312,11 @@ class ZLThumbnailViewController: UIViewController {
         if let effect = ZLPhotoConfiguration.default().bottomToolViewBlurEffect {
             self.bottomBlurView = UIVisualEffectView(effect: effect)
             self.bottomView.addSubview(self.bottomBlurView!)
+        }
+        
+        if self.showLimitAuthTipsView {
+            self.limitAuthTipsView = ZLLimitedAuthorityTipsView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: ZLLimitedAuthorityTipsView.height))
+            self.bottomView.addSubview(self.limitAuthTipsView!)
         }
         
         func createBtn(_ title: String, _ action: Selector) -> UIButton {
@@ -649,7 +677,9 @@ class ZLThumbnailViewController: UIViewController {
             doneTitle += "(" + String(selCount) + ")"
         }
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
-        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: 7, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        
+        let btnY = self.showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
+        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
     func scrollToBottom() {
@@ -871,31 +901,6 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         let totalW = collectionView.bounds.width - (columnCount - 1) * ZLLayout.thumbCollectionViewItemSpacing
         let singleW = totalW / columnCount
         return CGSize(width: singleW, height: singleW)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited, ZLPhotoConfiguration.default().showEnterSettingFooter, self.albumList.isCameraRoll {
-            return CGSize(width: collectionView.bounds.width, height: 50)
-        } else {
-            return .zero
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(ZLThumbnailColViewFooter.classForCoder()), for: indexPath) as! ZLThumbnailColViewFooter
-        
-        if #available(iOS 14, *) {
-            view.selectMoreBlock = {
-                guard let url = URL(string: UIApplication.openSettingsURLString) else {
-                    return
-                }
-                if UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
-            }
-        }
-        
-        return view
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -1417,34 +1422,58 @@ class ZLExternalAlbumListNavView: UIView {
 }
 
 
-class ZLThumbnailColViewFooter: UICollectionReusableView {
+class ZLLimitedAuthorityTipsView: UIView {
     
-    var selectPhotoLabel: UILabel!
+    static let height: CGFloat = 70
     
-    var selectMoreBlock: ( () -> Void )?
+    var icon: UIImageView!
+    
+    var tipsLabel: UILabel!
+    
+    var arrow: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.selectPhotoLabel = UILabel(frame: CGRect(x: 20, y: 0, width: self.bounds.width - 40, height: self.bounds.height))
-        self.selectPhotoLabel.font = getFont(14)
-        self.selectPhotoLabel.numberOfLines = 2
-        self.selectPhotoLabel.textAlignment = .center
-        self.selectPhotoLabel.textColor = .selectMorePhotoWhenAuthIsLismitedTitleColor
-        self.selectPhotoLabel.text = localLanguageTextValue(.unableToAccessAllPhotos)
-        self.addSubview(self.selectPhotoLabel)
+        self.icon = UIImageView(image: getImage("zl_warning"))
+        self.addSubview(self.icon)
         
-        let control = UIControl(frame: self.bounds)
-        control.addTarget(self, action: #selector(selectMorePhoto), for: .touchUpInside)
-        self.addSubview(control)
+        self.tipsLabel = UILabel()
+        self.tipsLabel.font = getFont(14)
+        self.tipsLabel.text = localLanguageTextValue(.unableToAccessAllPhotos)
+        self.tipsLabel.textColor = .bottomToolViewBtnDisableTitleColor
+        self.tipsLabel.numberOfLines = 2
+        self.tipsLabel.lineBreakMode = .byTruncatingTail
+        self.tipsLabel.adjustsFontSizeToFitWidth = true
+        self.tipsLabel.minimumScaleFactor = 0.5
+        self.addSubview(self.tipsLabel)
+        
+        self.arrow = UIImageView(image: getImage("zl_right_arrow"))
+        self.addSubview(self.arrow)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        self.addGestureRecognizer(tap)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func selectMorePhoto() {
-        self.selectMoreBlock?()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.icon.frame = CGRect(x: 18, y: (ZLLimitedAuthorityTipsView.height - 25) / 2, width: 25, height: 25)
+        self.tipsLabel.frame = CGRect(x: 55, y: (ZLLimitedAuthorityTipsView.height - 40) / 2, width: self.frame.width-55-30, height: 40)
+        self.arrow.frame = CGRect(x: self.frame.width-25, y: (ZLLimitedAuthorityTipsView.height - 12) / 2, width: 12, height: 12)
+    }
+    
+    @objc func tapAction() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
     
 }

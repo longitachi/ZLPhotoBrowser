@@ -61,5 +61,5 @@
 "myPhotoStream" = "我的照片流";
 
 "noTitleAlbumListPlaceholder" = "所有照片";
-"unableToAccessAllPhotos" = "无法访问所有照片，前往设置";
+"unableToAccessAllPhotos" = "无法访问相册中所有照片，\n请允许访问「照片」中的「所有照片」。";
 "textStickerRemoveTips" = "拖到此处删除";
