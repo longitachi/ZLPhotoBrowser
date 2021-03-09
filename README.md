@@ -91,23 +91,26 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.4
+  Add:
+    In the iOS14 photo limit authority, show WeChat-style “go to setting” tips view.
+    Support customize animation duration for select button.
+  Fix:
+    Sometimes gif is not playing.
 ● 4.1.3
   Add:
     Add a callback after closing the framework's no authority alert.
-    Can control whether to show the status bar when previewing photos.
-    Can separately control whether to display the selection button and bottom view in ZLImagePreviewController.
+    Support control whether to show the status bar when previewing photos.
+    Support separately control whether to display the selection button and bottom view in ZLImagePreviewController.
 ● 4.1.2
   Add:
     When the slide select is active, it will auto scroll like system library.
     Show edit tag in thumbnail interface.
     Add progress when loading iCloud video.
-    Can crop the video directly after select thumbnail in non-mixed selection mode.
+    Support crop the video directly after select thumbnail in non-mixed selection mode.
   Fix:
     The Image crop interface UI frame is incorrect when enter from landscape.
     The navigation view height is incorrect in iOS 10.x.
-● 4.1.1 - 4.1.0 Patch:
-  Fix:
-    Fix a crash when using zoom to preview local images and network images.
 ...
 ```
 

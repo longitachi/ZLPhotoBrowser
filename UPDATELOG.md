@@ -2,7 +2,18 @@
 
 -----
 
-## [4.1.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.3) (2021-01-22)
+## [4.1.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.3) (2021-03-09)
+
+### Add:
+* In the iOS14 photo limit authority, show WeChat-style “go to setting” tips view.
+* Support customize animation duration for select button.
+
+### Fix:
+* Sometimes gif is not playing.
+
+---
+
+## [4.1.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.3) (2021-02-22)
 
 ### Add:
 * Add a callback after closing the framework's no authority alert.

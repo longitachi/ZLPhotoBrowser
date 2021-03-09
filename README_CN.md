@@ -98,6 +98,12 @@
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.4
+  新增:
+    优化iOS14 limit权限下的提示（放微信样式）;
+    支持自定义选中按钮的动画时长;
+  Fix:
+    修复切换图片时，gif可能不自动播放的bug;
 ● 4.1.3
   新增:
     框架内无权限(图片、相机、麦克风)alert点击确认之后，添加一个回调;
@@ -112,9 +118,6 @@
   Fix:
     横屏进入编辑界面UI错误的bug;
     iOS 10.x 系统导航条高度错误的bug;
-● 4.1.1 - 4.1.0 Patch:
-  Fix:
-    修复了预览本地和网络图片时，缩放后滑动会闪退的bug;
 ...
 ```
 
