@@ -245,7 +245,6 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     @objc func cancelBtnClick() {
-        self.cleanTimer()
         self.dismiss(animated: self.animateDismiss, completion: nil)
     }
     
@@ -372,17 +371,18 @@ public class ZLEditVideoViewController: UIViewController {
         }
     }
     
+    @objc func playPartVideo() {
+        self.playerLayer.player?.seek(to: self.getStartTime(), toleranceBefore: .zero, toleranceAfter: .zero)
+        if (self.playerLayer.player?.rate ?? 0) == 0 {
+            self.playerLayer.player?.play()
+        }
+    }
+    
     func startTimer() {
         self.cleanTimer()
         let duration = self.interval * TimeInterval(self.clipRect().width / ZLEditVideoViewController.frameImageSize.width)
         
-        self.timer = Timer.scheduledTimer(withTimeInterval: duration, repeats: true, block: { (_) in
-            self.playerLayer.player?.seek(to: self.getStartTime(), toleranceBefore: .zero, toleranceAfter: .zero)
-            if (self.playerLayer.player?.rate ?? 0) == 0 {
-                self.playerLayer.player?.play()
-            }
-        })
-        
+        self.timer = Timer.scheduledTimer(timeInterval: duration, target: ZLWeakProxy(target: self), selector: #selector(playPartVideo), userInfo: nil, repeats: true)
         self.timer?.fire()
         RunLoop.main.add(self.timer!, forMode: .common)
         

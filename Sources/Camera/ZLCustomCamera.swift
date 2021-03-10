@@ -507,7 +507,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     func hideTipsLabel(animate: Bool) {
-        self.cleanTimer()
         self.tipsLabel.layer.removeAllAnimations()
         if animate {
             UIView.animate(withDuration: 0.25) {
@@ -518,11 +517,15 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
     }
     
+    @objc func hideTipsLabel_timerFunc() {
+        self.cleanTimer()
+        self.hideTipsLabel(animate: true)
+    }
+    
     func startHideTipsLabelTimer() {
         self.cleanTimer()
-        self.hideTipsTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false, block: { (timer) in
-            self.hideTipsLabel(animate: true)
-        })
+        self.hideTipsTimer = Timer.scheduledTimer(timeInterval: 3, target: ZLWeakProxy(target: self), selector: #selector(hideTipsLabel_timerFunc), userInfo: nil, repeats: false)
+        RunLoop.current.add(self.hideTipsTimer!, forMode: .common)
     }
     
     func cleanTimer() {

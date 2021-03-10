@@ -157,6 +157,7 @@ class ZLThumbnailViewController: UIViewController {
     
     deinit {
         zl_debugPrint("ZLThumbnailViewController deinit")
+        self.cleanTimer()
     }
     
     init(albumList: ZLAlbumListModel) {
@@ -624,7 +625,7 @@ class ZLThumbnailViewController: UIViewController {
         
         if self.autoScrollTimer == nil {
             self.cleanTimer()
-            self.autoScrollTimer = CADisplayLink(target: self, selector: #selector(autoScrollAction))
+            self.autoScrollTimer = CADisplayLink(target: ZLWeakProxy(target: self), selector: #selector(autoScrollAction))
             self.autoScrollTimer?.add(to: RunLoop.current, forMode: .common)
         }
     }
