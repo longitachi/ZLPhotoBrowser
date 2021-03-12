@@ -9,9 +9,9 @@
 
 ----------------------------------------
 
-ZLPhotoBrowser is a Wechat-like image picker. Support select normal photos, videos, gif and livePhoto. Support edit image and crop video.
+English | [简体中文](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README_CN.md)
 
-[中文简介](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README_CN.md)
+ZLPhotoBrowser is a Wechat-like image picker. Support select normal photos, videos, gif and livePhoto. Support edit image and crop video.
 
 ### Directory
 * [Features](#Features)

@@ -31,10 +31,14 @@ public typealias Second = Int
 
 public class ZLPhotoConfiguration: NSObject {
 
-    private static let single = ZLPhotoConfiguration()
+    private static var single = ZLPhotoConfiguration()
     
     @objc public class func `default`() -> ZLPhotoConfiguration {
         return ZLPhotoConfiguration.single
+    }
+    
+    @objc public class func resetConfiguration() {
+        ZLPhotoConfiguration.single = ZLPhotoConfiguration()
     }
     
     /// Framework style.
