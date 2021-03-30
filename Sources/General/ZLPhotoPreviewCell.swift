@@ -221,6 +221,7 @@ class ZLNetImagePreviewCell: ZLLocalImagePreviewCell {
     
     override func resetSubViewStatusWhenCellEndDisplay() {
         self.progressView.isHidden = true
+        self.preview.scrollView.zoomScale = 1
     }
     
 }
