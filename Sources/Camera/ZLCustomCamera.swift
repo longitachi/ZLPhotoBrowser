@@ -179,7 +179,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             #endif
         } else if self.cameraConfigureFinish, self.viewDidAppearCount == 0 {
             self.showTipsLabel(animate: true)
-            self.session.startRunning()
+            DispatchQueue.main.async {
+                self.session.startRunning()
+            }
             self.setFocusCusor(point: self.view.center)
         }
         self.viewDidAppearCount += 1

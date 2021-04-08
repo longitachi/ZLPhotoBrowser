@@ -71,7 +71,9 @@ class ZLFetchImageOperation: Operation {
             self.didChangeValue(forKey: "isCancelled")
         }
     }
-
+    
+    var requestImageID: PHImageRequestID = PHInvalidImageRequestID
+    
     override var isCancelled: Bool {
         return self.pri_isCancelled
     }
@@ -109,7 +111,7 @@ class ZLFetchImageOperation: Operation {
         }
         
         if ZLPhotoConfiguration.default().allowSelectGif, self.model.type == .gif {
-            ZLPhotoManager.fetchOriginalImageData(for: self.model.asset) { [weak self] (data, _, isDegraded) in
+            self.requestImageID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset) { [weak self] (data, _, isDegraded) in
                 if !isDegraded {
                     let image = UIImage.zl_animateGifImage(data: data)
                     self?.completion(image, nil)
@@ -120,14 +122,15 @@ class ZLFetchImageOperation: Operation {
         }
         
         if self.isOriginal {
-            ZLPhotoManager.fetchOriginalImage(for: self.model.asset, progress: self.progress) { [weak self] (image, isDegraded) in
+            self.requestImageID = ZLPhotoManager.fetchOriginalImage(for: self.model.asset, progress: self.progress) { [weak self] (image, isDegraded) in
                 if !isDegraded {
+                    zl_debugPrint("---- 下载完成 \(String(describing: self?.isCancelled))")
                     self?.completion(image?.fixOrientation(), nil)
                     self?.fetchFinish()
                 }
             }
         } else {
-            ZLPhotoManager.fetchImage(for: self.model.asset, size: self.model.previewSize, progress: self.progress) { [weak self] (image, isDegraded) in
+            self.requestImageID = ZLPhotoManager.fetchImage(for: self.model.asset, size: self.model.previewSize, progress: self.progress) { [weak self] (image, isDegraded) in
                 if !isDegraded {
                     self?.completion(self?.scaleImage(image?.fixOrientation()), nil)
                     self?.fetchFinish()
@@ -163,7 +166,12 @@ class ZLFetchImageOperation: Operation {
     
     override func cancel() {
         super.cancel()
+        zl_debugPrint("---- cancel \(self.isExecuting) \(self.requestImageID)")
+        PHImageManager.default().cancelImageRequest(self.requestImageID)
         self.pri_isCancelled = true
+        if self.isExecuting {
+            self.fetchFinish()
+        }
     }
     
 }
