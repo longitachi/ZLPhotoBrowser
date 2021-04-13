@@ -102,6 +102,10 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.5
+  新增:
+    提供一个可重置照片配置的方法;
+    请求图片超时后，取消队列中的图片请求;
 ● 4.1.4
   新增:
     优化iOS14 limit权限下的提示（放微信样式）;
@@ -113,15 +117,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     框架内无权限(图片、相机、麦克风)alert点击确认之后，添加一个回调;
     可控制预览照片时候是否显示状态栏;
     ZLImagePreviewContoller中可分别控制选择按钮和底部工具条的显示状态;
-● 4.1.2
-  新增:
-    滑动选择时手指在屏幕上方或下方时自动滚动功能;
-    在缩略图显示已编辑标签;
-    加载iCloud视频时显示进度条;
-    提供'cropVideoAfterSelectThumbnail'参数，支持微信朋友圈选择规则，非混合选择模式下，点击视频后可直接进入编辑状态;
-  Fix:
-    横屏进入编辑界面UI错误的bug;
-    iOS 10.x 系统导航条高度错误的bug;
 ...
 ```
 

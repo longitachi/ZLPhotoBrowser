@@ -2,7 +2,15 @@
 
 -----
 
-## [4.1.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.3) (2021-03-09)
+## [4.1.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.5) (2021-04-13)
+
+### Add:
+* Provide a method to reset the configuration.
+* Cancel the image request when operation is cancelled.
+
+---
+
+## [4.1.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.4) (2021-03-09)
 
 ### Add:
 * In the iOS14 photo limit authority, show WeChat-style “go to setting” tips view.
