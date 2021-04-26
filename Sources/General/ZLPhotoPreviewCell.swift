@@ -123,7 +123,7 @@ class ZLPreviewBaseCell: UICollectionViewCell {
 }
 
 
-// MARK: local and net image preview cell
+// MARK: local image preview cell
 class ZLLocalImagePreviewCell: ZLPreviewBaseCell {
     
     override var currentImage: UIImage? {

@@ -397,7 +397,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 picker.allowsEditing = false
                 picker.videoQuality = .typeHigh
                 picker.sourceType = .camera
-                picker.cameraFlashMode = config.cameraFlashMode.imagePickerFlashMode
+                picker.cameraFlashMode = config.cameraConfiguration.flashMode.imagePickerFlashMode
                 var mediaTypes = [String]()
                 if config.allowTakePhoto {
                     mediaTypes.append("public.image")

@@ -190,9 +190,9 @@ class ViewController: UIViewController {
     @objc func previewLocalAndNetImage() {
         var datas: [Any] = []
         // network image
-        datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/08/31/03/21/girl-5531217_1280.jpg")!)
         datas.append(URL(string: "https://cdn.pixabay.com/photo/2020/10/14/18/35/sign-post-5655110_1280.png")!)
-        datas.append(URL(string: "https://cdn.pixabay.com/photo/2015/10/07/18/56/aircraft-976685_1280.jpg")!)
+        datas.append(URL(string: "https://pic.netbian.com/uploads/allimg/190518/174718-1558172838db13.jpg")!)
+        datas.append(URL(string: "http://5b0988e595225.cdn.sohucs.com/images/20190420/1d1070881fd540db817b2a3bdd967f37.gif")!)
         datas.append(URL(string: "https://cdn.pixabay.com/photo/2019/11/08/11/56/cat-4611189_1280.jpg")!)
         
         // network video

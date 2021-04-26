@@ -427,7 +427,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             audioInput = try? AVCaptureDeviceInput(device: microphone)
         }
         
-        let preset = ZLPhotoConfiguration.default().sessionPreset.avSessionPreset
+        let preset = ZLPhotoConfiguration.default().cameraConfiguration.sessionPreset.avSessionPreset
         if self.session.canSetSessionPreset(preset) {
             self.session.sessionPreset = preset
         } else {
@@ -642,7 +642,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         let setting = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecJPEG])
         if self.videoInput?.device.hasFlash == true {
-            setting.flashMode = ZLPhotoConfiguration.default().cameraFlashMode.avFlashMode
+            setting.flashMode = ZLPhotoConfiguration.default().cameraConfiguration.flashMode.avFlashMode
         }
         self.imageOutput.capturePhoto(with: setting, delegate: self)
     }
@@ -683,7 +683,11 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         // ui坐标转换为摄像头坐标
         let cameraPoint = self.previewLayer?.captureDevicePointConverted(fromLayerPoint: point) ?? self.view.center
-        self.focusCamera(mode: .autoFocus, exposureMode: .autoExpose, point: cameraPoint)
+        self.focusCamera(
+            mode: ZLPhotoConfiguration.default().cameraConfiguration.focusMode.avFocusMode,
+            exposureMode: ZLPhotoConfiguration.default().cameraConfiguration.exposureMode.avFocusMode,
+            point: cameraPoint
+        )
     }
     
     // 调整焦距
@@ -988,86 +992,3 @@ extension ZLCustomCamera: UIGestureRecognizerDelegate {
     
 }
 
-
-extension ZLCustomCamera {
-    
-    @objc public enum CaptureSessionPreset: Int {
-        
-        var avSessionPreset: AVCaptureSession.Preset {
-            switch self {
-            case .cif352x288:
-                return .cif352x288
-            case .vga640x480:
-                return .vga640x480
-            case .hd1280x720:
-                return .hd1280x720
-            case .hd1920x1080:
-                return .hd1920x1080
-            case .hd4K3840x2160:
-                return .hd4K3840x2160
-            }
-        }
-        
-        case cif352x288
-        case vga640x480
-        case hd1280x720
-        case hd1920x1080
-        case hd4K3840x2160
-    }
-    
-    @objc public enum CameraFlashMode: Int  {
-        
-        // 转自定义相机
-        var avFlashMode: AVCaptureDevice.FlashMode {
-            switch self {
-            case .auto:
-                return .auto
-            case .on:
-                return .on
-            case .off:
-                return .off
-            }
-        }
-        
-        // 转系统相机
-        var imagePickerFlashMode: UIImagePickerController.CameraFlashMode {
-            switch self {
-            case .auto:
-                return .auto
-            case .on:
-                return .on
-            case .off:
-                return .off
-            }
-        }
-        
-        case auto
-        case on
-        case off
-    }
-    
-    @objc public enum VideoExportType: Int {
-        
-        var format: String {
-            switch self {
-            case .mov:
-                return "mov"
-            case .mp4:
-                return "mp4"
-            }
-        }
-        
-        var avFileType: AVFileType {
-            switch self {
-            case .mov:
-                return .mov
-            case .mp4:
-                return .mp4
-            }
-        }
-        
-        case mov
-        case mp4
-    }
-    
-}

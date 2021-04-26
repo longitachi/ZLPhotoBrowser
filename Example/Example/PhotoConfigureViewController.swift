@@ -858,7 +858,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.cameraFlashSegment = UISegmentedControl(items: ["Auto", "On", "Off"])
-        cameraFlashSegment.selectedSegmentIndex = config.cameraFlashMode.rawValue
+        cameraFlashSegment.selectedSegmentIndex = config.cameraConfiguration.flashMode.rawValue
         self.cameraFlashSegment.addTarget(self, action: #selector(cameraFlashSegmentChanged), for: .valueChanged)
         containerView.addSubview(self.cameraFlashSegment)
         self.cameraFlashSegment.snp.makeConstraints { (make) in
@@ -1059,7 +1059,7 @@ class PhotoConfigureViewController: UIViewController {
     }
     
     @objc func cameraFlashSegmentChanged() {
-        config.cameraFlashMode = ZLCustomCamera.CameraFlashMode(rawValue: cameraFlashSegment.selectedSegmentIndex)!
+        config.cameraConfiguration.flashMode = ZLCameraConfiguration.FlashMode(rawValue: cameraFlashSegment.selectedSegmentIndex)!
     }
 
 }

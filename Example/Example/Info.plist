@@ -30,6 +30,11 @@
 	<string>需要写入相册权限</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要访问相册权限</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
 	<false/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

@@ -30,7 +30,7 @@ import AVFoundation
 public class ZLVideoManager: NSObject {
     
     class func getVideoExportFilePath() -> String {
-        let format = ZLPhotoConfiguration.default().videoExportType.format
+        let format = ZLPhotoConfiguration.default().cameraConfiguration.videoExportType.format
         return NSTemporaryDirectory().appendingFormat("/%@.%@", UUID().uuidString, format)
     }
     
@@ -41,7 +41,7 @@ public class ZLVideoManager: NSObject {
             return
         }
         exportSession.outputURL = outputUrl
-        exportSession.outputFileType = ZLPhotoConfiguration.default().videoExportType.avFileType
+        exportSession.outputFileType = ZLPhotoConfiguration.default().cameraConfiguration.videoExportType.avFileType
         exportSession.timeRange = range
         
         exportSession.exportAsynchronously(completionHandler: {
@@ -116,7 +116,7 @@ public class ZLVideoManager: NSObject {
             let outputUrl = URL(fileURLWithPath: ZLVideoManager.getVideoExportFilePath())
             exportSession.outputURL = outputUrl
             exportSession.shouldOptimizeForNetworkUse = true
-            exportSession.outputFileType = ZLPhotoConfiguration.default().videoExportType.avFileType
+            exportSession.outputFileType = ZLPhotoConfiguration.default().cameraConfiguration.videoExportType.avFileType
             exportSession.videoComposition = mainComposition
             exportSession.exportAsynchronously(completionHandler: {
                 let suc = exportSession.status == .completed
