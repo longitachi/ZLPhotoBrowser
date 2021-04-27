@@ -356,13 +356,13 @@ public class ZLPhotoPreviewSheet: UIView {
                 self.baseView.frame = frame
             }) { (_) in
                 self.isHidden = true
-                self.removeFromSuperview()
                 completion?()
+                self.removeFromSuperview()
             }
         } else {
             self.isHidden = true
-            self.removeFromSuperview()
             completion?()
+            self.removeFromSuperview()
         }
         
         if let temp = self.senderTabBarIsHidden {
@@ -380,8 +380,9 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     @objc func tapAction(_ tap: UITapGestureRecognizer) {
-        self.cancelBlock?()
-        self.hide()
+        self.hide {
+            self.cancelBlock?()
+        }
     }
     
     @objc func cameraBtnClick() {
@@ -424,8 +425,9 @@ public class ZLPhotoPreviewSheet: UIView {
     
     @objc func cancelBtnClick() {
         guard !self.arrSelectedModels.isEmpty else {
-            self.cancelBlock?()
-            self.hide()
+            self.hide {
+                self.cancelBlock?()
+            }
             return
         }
         self.requestSelectPhoto()
@@ -713,8 +715,9 @@ public class ZLPhotoPreviewSheet: UIView {
         }
         
         nav.cancelBlock = { [weak self] in
-            self?.cancelBlock?()
-            self?.hide()
+            self?.hide {
+                self?.cancelBlock?()
+            }
         }
         nav.isSelectedOriginal = self.isSelectOriginal
         nav.arrSelectedModels.removeAll()
