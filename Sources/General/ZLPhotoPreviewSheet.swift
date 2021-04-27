@@ -347,7 +347,7 @@ public class ZLPhotoPreviewSheet: UIView {
         }
     }
     
-    func hide() {
+    func hide(completion: ( () -> Void )? = nil) {
         if self.animate {
             var frame = self.baseView.frame
             frame.origin.y += self.baseViewHeight
@@ -357,10 +357,12 @@ public class ZLPhotoPreviewSheet: UIView {
             }) { (_) in
                 self.isHidden = true
                 self.removeFromSuperview()
+                completion?()
             }
         } else {
             self.isHidden = true
             self.removeFromSuperview()
+            completion?()
         }
         
         if let temp = self.senderTabBarIsHidden {
@@ -530,12 +532,35 @@ public class ZLPhotoPreviewSheet: UIView {
         
         hud.show(timeout: ZLPhotoConfiguration.default().timeout)
         
-        guard ZLPhotoConfiguration.default().shouldAnialysisAsset else {
+        let callback = { [weak self] (sucImages: [UIImage], sucAssets: [PHAsset], errorAssets: [PHAsset], errorIndexs: [Int]) in
             hud.hide()
-            self.selectImageBlock?([], self.arrSelectedModels.map { $0.asset }, self.isSelectOriginal)
-            self.arrSelectedModels.removeAll()
-            self.hide()
-            viewController?.dismiss(animated: true, completion: nil)
+            
+            func call() {
+                self?.selectImageBlock?(sucImages, sucAssets, self?.isSelectOriginal ?? false)
+                if !errorAssets.isEmpty {
+                    self?.selectImageRequestErrorBlock?(errorAssets, errorIndexs)
+                }
+            }
+            
+            if let vc = viewController {
+                self?.isHidden = true
+                self?.animate = false
+                vc.dismiss(animated: true) {
+                    call()
+                    self?.hide()
+                }
+            } else {
+                self?.hide(completion: {
+                    call()
+                })
+            }
+            
+            self?.arrSelectedModels.removeAll()
+            self?.arrDataSources.removeAll()
+        }
+        
+        guard ZLPhotoConfiguration.default().shouldAnialysisAsset else {
+            callback([], self.arrSelectedModels.map { $0.asset }, [], [])
             return
         }
         
@@ -547,7 +572,7 @@ public class ZLPhotoPreviewSheet: UIView {
         var sucCount = 0
         let totalCount = self.arrSelectedModels.count
         for (i, m) in self.arrSelectedModels.enumerated() {
-            let operation = ZLFetchImageOperation(model: m, isOriginal: self.isSelectOriginal) { [weak self] (image, asset) in
+            let operation = ZLFetchImageOperation(model: m, isOriginal: self.isSelectOriginal) { (image, asset) in
                 guard !timeout else { return }
                 
                 sucCount += 1
@@ -563,18 +588,13 @@ public class ZLPhotoPreviewSheet: UIView {
                 }
                 
                 guard sucCount >= totalCount else { return }
-                let sucImages = images.compactMap { $0 }
-                let sucAssets = assets.compactMap { $0 }
-                hud.hide()
                 
-                self?.selectImageBlock?(sucImages, sucAssets, self?.isSelectOriginal ?? false)
-                self?.arrSelectedModels.removeAll()
-                if !errorAssets.isEmpty {
-                    self?.selectImageRequestErrorBlock?(errorAssets, errorIndexs)
-                }
-                self?.arrDataSources.removeAll()
-                self?.hide()
-                viewController?.dismiss(animated: true, completion: nil)
+                callback(
+                    images.compactMap { $0 },
+                    assets.compactMap { $0 },
+                    errorAssets,
+                    errorIndexs
+                )
             }
             self.fetchImageQueue.addOperation(operation)
         }
