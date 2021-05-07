@@ -146,7 +146,7 @@ class ZLPhotoPreviewController: UIViewController {
         
         self.backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
         self.selectBtn.frame = CGRect(x: self.view.frame.width - 40 - insets.right, y: insets.top + (44 - 25) / 2, width: 25, height: 25)
-        self.indexLabel.frame = self.selectBtn.frame
+        self.indexLabel.frame = self.selectBtn.bounds
         
         self.refreshBottomViewFrame()
         
