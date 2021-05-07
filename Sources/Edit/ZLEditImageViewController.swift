@@ -318,7 +318,7 @@ public class ZLEditImageViewController: UIViewController {
         } else {
             size = CGSize(width: fixLength, height: fixLength / ratio)
         }
-        let thumbnailImage = self.originalImage.resize(size) ?? self.originalImage
+        let thumbnailImage = self.originalImage.resize_vI(size) ?? self.originalImage
         
         DispatchQueue.global().async {
             self.thumbnailFilterImages = ZLPhotoConfiguration.default().filters.map { $0.applier?(thumbnailImage) ?? thumbnailImage }

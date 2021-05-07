@@ -25,6 +25,7 @@
 //  THE SOFTWARE.
 
 import UIKit
+import Accelerate
 
 /// https://github.com/kiritmodi2702/GIF-Swift
 // MARK: data 转 gif image
@@ -308,27 +309,26 @@ extension UIImage {
     }
     
     func rotate(degress: CGFloat) -> UIImage {
+        guard let cgImg = self.cgImage else {
+            return self
+        }
+        
         let rotatedViewBox = UIView(frame: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
         let t = CGAffineTransform(rotationAngle: degress)
         rotatedViewBox.transform = t
         let rotatedSize = rotatedViewBox.frame.size
 
         UIGraphicsBeginImageContext(rotatedSize)
+        
         let bitmap = UIGraphicsGetCurrentContext()
-
         bitmap?.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
-
         bitmap?.rotate(by: degress)
-
         bitmap?.scaleBy(x: 1.0, y: -1.0)
-        guard let cgImg = self.cgImage else {
-            return self
-        }
+        
         bitmap?.draw(cgImg, in: CGRect(x: -self.size.width/2, y: -self.size.height/2, width: self.size.width, height: self.size.height))
-
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
+        
         return newImage ?? self
     }
     
@@ -362,6 +362,49 @@ extension UIImage {
         let temp = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return temp
+    }
+    
+    /// Processing speed is better than resize(:) method
+    func resize_vI(_ size: CGSize) -> UIImage? {
+        guard  let cgImage = self.cgImage else { return nil }
+        
+        var format = vImage_CGImageFormat(bitsPerComponent: 8, bitsPerPixel: 32, colorSpace: nil,
+                                          bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.first.rawValue),
+                                          version: 0, decode: nil, renderingIntent: .defaultIntent)
+        
+        var sourceBuffer = vImage_Buffer()
+        defer {
+            if #available(iOS 13.0, *) {
+                sourceBuffer.free()
+            } else {
+                sourceBuffer.data.deallocate()
+            }
+        }
+        
+        var error = vImageBuffer_InitWithCGImage(&sourceBuffer, &format, nil, cgImage, numericCast(kvImageNoFlags))
+        guard error == kvImageNoError else { return nil }
+        
+        let destWidth = Int(size.width)
+        let destHeight = Int(size.height)
+        let bytesPerPixel = cgImage.bitsPerPixel / 8
+        let destBytesPerRow = destWidth * bytesPerPixel
+        
+        let destData = UnsafeMutablePointer<UInt8>.allocate(capacity: destHeight * destBytesPerRow)
+        defer {
+            destData.deallocate()
+        }
+        var destBuffer = vImage_Buffer(data: destData, height: vImagePixelCount(destHeight), width: vImagePixelCount(destWidth), rowBytes: destBytesPerRow)
+        
+        // scale the image
+        error = vImageScale_ARGB8888(&sourceBuffer, &destBuffer, nil, numericCast(kvImageHighQualityResampling))
+        guard error == kvImageNoError else { return nil }
+        
+        // create a CGImage from vImage_Buffer
+        guard let destCGImage = vImageCreateCGImageFromBuffer(&destBuffer, &format, nil, nil, numericCast(kvImageNoFlags), &error)?.takeRetainedValue() else { return nil }
+        guard error == kvImageNoError else { return nil }
+        
+        // create a UIImage
+        return UIImage(cgImage: destCGImage, scale: self.scale, orientation: self.imageOrientation)
     }
     
     func toCIImage() -> CIImage? {

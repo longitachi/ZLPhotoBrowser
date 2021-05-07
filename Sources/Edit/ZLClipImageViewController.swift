@@ -376,7 +376,7 @@ class ZLClipImageViewController: UIViewController {
         } else {
             size = CGSize(width: fixLength, height: fixLength / ratio)
         }
-        self.thumbnailImage = self.editImage.resize(size)
+        self.thumbnailImage = self.editImage.resize_vI(size)
     }
     
     func calculateClipRect() {
