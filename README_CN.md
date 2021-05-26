@@ -102,6 +102,13 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.6
+  新增:
+    新增ZLCameraConfiguration类统一相机配置;
+    调整选择照片callback时机，在框架界面dismiss后回调;
+    优化图片压缩方法;
+  Fix:
+    解决预览长图时候frame不正确的bug;
 ● 4.1.5
   新增:
     提供一个可重置照片配置的方法;
@@ -112,11 +119,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     支持自定义选中按钮的动画时长;
   Fix:
     修复切换图片时，gif可能不自动播放的bug;
-● 4.1.3
-  新增:
-    框架内无权限(图片、相机、麦克风)alert点击确认之后，添加一个回调;
-    可控制预览照片时候是否显示状态栏;
-    ZLImagePreviewContoller中可分别控制选择按钮和底部工具条的显示状态;
 ...
 ```
 

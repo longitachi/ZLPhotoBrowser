@@ -91,6 +91,13 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.6
+  Add:
+    Add ZLCameraConfiguration class to deploy camera.
+    Call select image block after dismiss.
+    Optimizing the method of processing images.
+  Fix
+    UI frame is incorrect when preview the long image.
 ● 4.1.5
   Add:
     Provide a method to reset the configuration.
@@ -101,11 +108,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Support customize animation duration for select button.
   Fix:
     Sometimes gif is not playing.
-● 4.1.3
-  Add:
-    Add a callback after closing the framework's no authority alert.
-    Support control whether to show the status bar when previewing photos.
-    Support separately control whether to display the selection button and bottom view in ZLImagePreviewController.
 ...
 ```
 

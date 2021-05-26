@@ -5,7 +5,7 @@
 Please fill in the detailed description of the issue (full output of any stack trace, compiler error, ...) and the steps to reproduce the issue.
 
 #### Info
-   ZLPhotoBrowser version:  e.g. 4.1.5
+   ZLPhotoBrowser version:  e.g. 4.1.6
    Device:  e.g. iPhone X
    Device version:  e.g. iOS 14.0
    Xcode version:  e.g. Xcode 12.0

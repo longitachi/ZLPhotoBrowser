@@ -2,6 +2,18 @@
 
 -----
 
+## [4.1.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.5) (2021-05-26)
+
+### Add:
+* Add ZLCameraConfiguration class to deploy camera.
+* Call select image block after dismiss.
+* Optimizing the method of processing images.
+
+### Fix
+* UI frame is incorrect when preview the long image. [#610](https://github.com/longitachi/ZLPhotoBrowser/issues/610)
+
+---
+
 ## [4.1.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.5) (2021-04-13)
 
 ### Add:
