@@ -127,6 +127,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// - warning: The video can only be edited when no photos are selected, or only one video is selected, and the selection callback is executed immediately after editing is completed.
     @objc public var allowEditVideo = false
     
+    /// Control whether to display the selection button animation when selecting. Defaults to true.
+    @objc public var animateSelectBtnWhenSelect = true
+    
     /// Animation duration for select button
     @objc public var selectBtnAnimationDuration: CFTimeInterval = 0.4
     
@@ -403,10 +406,32 @@ public class ZLPhotoConfiguration: NSObject {
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .lightBlur
     
     /// Navigation bar blur effect.
-    @objc public var navViewBlurEffect: UIBlurEffect? = UIBlurEffect(style: .dark)
+    @available(*, deprecated, message: "Use navViewBlurEffectOfAlbumList, this property will be removed")
+    @objc public var navViewBlurEffect: UIBlurEffect? {
+        didSet {
+            self.navViewBlurEffectOfAlbumList = self.navViewBlurEffect
+        }
+    }
     
     /// Bottom too bar blur effect.
-    @objc public var bottomToolViewBlurEffect: UIBlurEffect? = UIBlurEffect(style: .dark)
+    @available(*, deprecated, message: "Use bottomViewBlurEffectOfAlbumList, this property will be removed")
+    @objc public var bottomToolViewBlurEffect: UIBlurEffect? {
+        didSet {
+            self.bottomViewBlurEffectOfAlbumList = self.bottomToolViewBlurEffect
+        }
+    }
+    
+    /// The blur effect of the navigation bar in the album list
+    @objc public var navViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
+    
+    /// The blur effect of the navigation bar in the preview interface
+    @objc public var navViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
+    
+    /// The blur effect of the bottom tool bar in the album list
+    @objc public var bottomViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
+    
+    /// The blur effect of the bottom tool bar in the preview interface
+    @objc public var bottomViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
     
     /// Color configuration for framework.
     @objc public var themeColorDeploy: ZLPhotoThemeColorDeploy = .default()
@@ -613,8 +638,14 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     /// A color for navigation bar spinner.
     @objc public var navBarColor = zlRGB(160, 160, 160).withAlphaComponent(0.65)
     
+    /// A color for navigation bar in preview interface.
+    @objc public var navBarColorOfPreviewVC = zlRGB(160, 160, 160).withAlphaComponent(0.65)
+    
     /// A color for Navigation bar text.
     @objc public var navTitleColor = UIColor.white
+    
+    /// A color for Navigation bar text of preview vc.
+    @objc public var navTitleColorOfPreviewVC = UIColor.white
     
     /// The background color of the title view when the frame style is embedAlbumList.
     @objc public var navEmbedTitleViewBgColor = zlRGB(80, 80, 80)
@@ -637,17 +668,32 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     /// A color for background in bottom tool view.
     @objc public var bottomToolViewBgColor = zlRGB(35, 35, 35).withAlphaComponent(0.3)
     
+    /// A color for background in bottom tool view in preview interface.
+    @objc public var bottomToolViewBgColorOfPreviewVC = zlRGB(35, 35, 35).withAlphaComponent(0.3)
+    
     /// The normal state title color of bottom tool view buttons.
     @objc public var bottomToolViewBtnNormalTitleColor = UIColor.white
+    
+    /// The normal state title color of bottom tool view buttons in preview interface.
+    @objc public var bottomToolViewBtnNormalTitleColorOfPreviewVC = UIColor.white
     
     /// The disable state title color of bottom tool view buttons.
     @objc public var bottomToolViewBtnDisableTitleColor = zlRGB(168, 168, 168)
     
+    /// The disable state title color of bottom tool view buttons in preview interface.
+    @objc public var bottomToolViewBtnDisableTitleColorOfPreviewVC = zlRGB(168, 168, 168)
+    
     /// The normal state background color of bottom tool view buttons.
     @objc public var bottomToolViewBtnNormalBgColor = zlRGB(80, 169, 56)
     
+    /// The normal state background color of bottom tool view buttons in preview interface.
+    @objc public var bottomToolViewBtnNormalBgColorOfPreviewVC = zlRGB(80, 169, 56)
+    
     /// The disable state background color of bottom tool view buttons.
     @objc public var bottomToolViewBtnDisableBgColor = zlRGB(50, 50, 50)
+    
+    /// The disable state background color of bottom tool view buttons in preview interface.
+    @objc public var bottomToolViewBtnDisableBgColorOfPreviewVC = zlRGB(50, 50, 50)
     
     /// With iOS14 limited authority, a color for select more photos at the bottom of the thumbnail interface.
     @objc public var selectMorePhotoWhenAuthIsLismitedTitleColor = UIColor.white

@@ -129,7 +129,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         self.navView.backgroundColor = .navBarColor
         self.view.addSubview(self.navView)
         
-        if let effect = ZLPhotoConfiguration.default().navViewBlurEffect {
+        if let effect = ZLPhotoConfiguration.default().navViewBlurEffectOfAlbumList {
             self.navBlurView = UIVisualEffectView(effect: effect)
             self.navView.addSubview(self.navBlurView!)
         }

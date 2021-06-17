@@ -217,10 +217,10 @@ class ZLPhotoPreviewController: UIViewController {
         let config = ZLPhotoConfiguration.default()
         // nav view
         self.navView = UIView()
-        self.navView.backgroundColor = .navBarColor
+        self.navView.backgroundColor = .navBarColorOfPreviewVC
         self.view.addSubview(self.navView)
         
-        if let effect = config.navViewBlurEffect {
+        if let effect = config.navViewBlurEffectOfPreview {
             self.navBlurView = UIVisualEffectView(effect: effect)
             self.navView.addSubview(self.navBlurView!)
         }
@@ -267,10 +267,10 @@ class ZLPhotoPreviewController: UIViewController {
         
         // bottom view
         self.bottomView = UIView()
-        self.bottomView.backgroundColor = .bottomToolViewBgColor
+        self.bottomView.backgroundColor = .bottomToolViewBgColorOfPreviewVC
         self.view.addSubview(self.bottomView)
         
-        if let effect = config.bottomToolViewBlurEffect {
+        if let effect = config.bottomViewBlurEffectOfPreview {
             self.bottomBlurView = UIVisualEffectView(effect: effect)
             self.bottomView.addSubview(self.bottomBlurView!)
         }
@@ -291,8 +291,8 @@ class ZLPhotoPreviewController: UIViewController {
             let btn = UIButton(type: .custom)
             btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
             btn.setTitle(title, for: .normal)
-            btn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
-            btn.setTitleColor(.bottomToolViewBtnDisableTitleColor, for: .disabled)
+            btn.setTitleColor(.bottomToolViewBtnNormalTitleColorOfPreviewVC, for: .normal)
+            btn.setTitleColor(.bottomToolViewBtnDisableTitleColorOfPreviewVC, for: .disabled)
             btn.addTarget(self, action: action, for: .touchUpInside)
             return btn
         }
@@ -310,7 +310,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.bottomView.addSubview(self.originalBtn)
         
         self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick))
-        self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
+        self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColorOfPreviewVC
         self.doneBtn.layer.masksToBounds = true
         self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         self.bottomView.addSubview(self.doneBtn)
@@ -445,7 +445,9 @@ class ZLPhotoPreviewController: UIViewController {
             nav.arrSelectedModels.removeAll { $0 == currentModel }
             self.selPhotoPreview?.removeSelModel(model: currentModel)
         } else {
-            self.selectBtn.layer.add(getSpringAnimation(), forKey: nil)
+            if ZLPhotoConfiguration.default().animateSelectBtnWhenSelect {
+                self.selectBtn.layer.add(getSpringAnimation(), forKey: nil)
+            }
             if !canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
                 return
             }
@@ -969,7 +971,7 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.layer.borderColor = UIColor.bottomToolViewBtnNormalBgColor.cgColor
+        self.layer.borderColor = UIColor.bottomToolViewBtnNormalBgColorOfPreviewVC.cgColor
         
         self.imageView = UIImageView()
         self.imageView.contentMode = .scaleAspectFill

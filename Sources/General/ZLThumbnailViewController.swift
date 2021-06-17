@@ -310,7 +310,7 @@ class ZLThumbnailViewController: UIViewController {
         self.bottomView.backgroundColor = .bottomToolViewBgColor
         self.view.addSubview(self.bottomView)
         
-        if let effect = ZLPhotoConfiguration.default().bottomToolViewBlurEffect {
+        if let effect = ZLPhotoConfiguration.default().bottomViewBlurEffectOfAlbumList {
             self.bottomBlurView = UIVisualEffectView(effect: effect)
             self.bottomView.addSubview(self.bottomBlurView!)
         }
@@ -1282,7 +1282,7 @@ class ZLEmbedAlbumListNavView: UIView {
     func setupUI() {
         self.backgroundColor = .navBarColor
         
-        if let effect = ZLPhotoConfiguration.default().navViewBlurEffect {
+        if let effect = ZLPhotoConfiguration.default().navViewBlurEffectOfAlbumList {
             self.navBlurView = UIVisualEffectView(effect: effect)
             self.addSubview(self.navBlurView!)
         }
@@ -1387,7 +1387,7 @@ class ZLExternalAlbumListNavView: UIView {
     func setupUI() {
         self.backgroundColor = .navBarColor
         
-        if let effect = ZLPhotoConfiguration.default().navViewBlurEffect {
+        if let effect = ZLPhotoConfiguration.default().navViewBlurEffectOfAlbumList {
             self.navBlurView = UIVisualEffectView(effect: effect)
             self.addSubview(self.navBlurView!)
         }

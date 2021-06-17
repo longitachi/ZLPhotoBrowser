@@ -33,9 +33,18 @@ extension UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.navBarColor
     }
     
-    /// 导航标题颜色
+    class var navBarColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.navBarColorOfPreviewVC
+    }
+    
+    /// 相册列表界面导航标题颜色
     class var navTitleColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.navTitleColor
+    }
+    
+    /// 预览大图界面导航标题颜色
+    class var navTitleColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.navTitleColorOfPreviewVC
     }
     
     /// 框架样式为 embedAlbumList 时，title view 背景色
@@ -88,29 +97,54 @@ extension UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.thumbnailBgColor
     }
     
-    /// 底部工具条底色
+    /// 相册列表界面底部工具条底色
     class var bottomToolViewBgColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBgColor
     }
     
-    /// 底部工具栏按钮 可交互 状态标题颜色
+    /// 预览大图界面底部工具条底色
+    class var bottomToolViewBgColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBgColorOfPreviewVC
+    }
+    
+    /// 相册列表界面底部工具栏按钮 可交互 状态标题颜色
     class var bottomToolViewBtnNormalTitleColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnNormalTitleColor
     }
     
-    /// 底部工具栏按钮 不可交互 状态标题颜色
+    /// 预览大图界面底部工具栏按钮 可交互 状态标题颜色
+    class var bottomToolViewBtnNormalTitleColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnNormalTitleColorOfPreviewVC
+    }
+    
+    /// 相册列表界面底部工具栏按钮 不可交互 状态标题颜色
     class var bottomToolViewBtnDisableTitleColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnDisableTitleColor
     }
     
-    /// 底部工具栏按钮 可交互 状态背景颜色
+    /// 预览大图界面底部工具栏按钮 不可交互 状态标题颜色
+    class var bottomToolViewBtnDisableTitleColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnDisableTitleColorOfPreviewVC
+    }
+    
+    /// 相册列表界面底部工具栏按钮 可交互 状态背景颜色
     class var bottomToolViewBtnNormalBgColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnNormalBgColor
     }
     
-    /// 底部工具栏按钮 不可交互 状态背景颜色
+    /// 预览大图界面底部工具栏按钮 可交互 状态背景颜色
+    class var bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnNormalBgColorOfPreviewVC
+    }
+    
+    /// 相册列表界面底部工具栏按钮 不可交互 状态背景颜色
     class var bottomToolViewBtnDisableBgColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnDisableBgColor
+    }
+    
+    /// 预览大图界面底部工具栏按钮 不可交互 状态背景颜色
+    class var bottomToolViewBtnDisableBgColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnDisableBgColorOfPreviewVC
     }
     
     /// iOS14 limited 权限时候，小图界面下方显示 选择更多图片 标题颜色
