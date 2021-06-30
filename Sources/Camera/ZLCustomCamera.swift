@@ -46,6 +46,8 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     @objc public var takeDoneBlock: ( (UIImage?, URL?) -> Void )?
     
+    @objc public var cancelBlock: ( () -> Void )?
+    
     var tipsLabel: UILabel!
     
     var hideTipsTimer: Timer?
@@ -551,7 +553,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     @objc func dismissBtnClick() {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true) {
+            self.cancelBlock?()
+        }
     }
     
     @objc func retakeBtnClick() {
