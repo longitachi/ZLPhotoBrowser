@@ -178,8 +178,7 @@ class ZLPhotoPreviewController: UIViewController {
         }
         var bottomViewH = ZLLayout.bottomToolViewH
         var showSelPhotoPreview = false
-        if ZLPhotoConfiguration.default().showSelectedPhotoPreview {
-            let nav = self.navigationController as! ZLImageNavController
+        if ZLPhotoConfiguration.default().showSelectedPhotoPreview, let nav = self.navigationController as? ZLImageNavController {
             if !nav.arrSelectedModels.isEmpty {
                 showSelPhotoPreview = true
                 bottomViewH += ZLPhotoPreviewController.selPhotoPreviewH
