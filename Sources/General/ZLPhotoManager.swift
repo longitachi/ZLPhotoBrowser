@@ -370,6 +370,8 @@ public class ZLPhotoManager: NSObject {
                 DispatchQueue.main.async {
                     if let avAsset = session?.asset {
                         completion(avAsset, info)
+                    } else {
+                        completion(nil, info)
                     }
                 }
             }

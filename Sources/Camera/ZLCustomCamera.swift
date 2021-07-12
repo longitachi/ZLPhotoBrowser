@@ -627,7 +627,8 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     @objc func doneBtnClick() {
         self.recordVideoPlayerLayer?.player?.pause()
-        self.recordVideoPlayerLayer?.player = nil
+        // 置为nil会导致卡顿，先注释，不影响内存释放
+//        self.recordVideoPlayerLayer?.player = nil
         self.dismiss(animated: true) {
             self.takeDoneBlock?(self.takedImage, self.videoUrl)
         }

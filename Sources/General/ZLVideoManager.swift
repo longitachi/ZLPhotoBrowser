@@ -26,33 +26,24 @@
 
 import UIKit
 import AVFoundation
+import Photos
 
 public class ZLVideoManager: NSObject {
     
     class func getVideoExportFilePath() -> String {
         let format = ZLPhotoConfiguration.default().cameraConfiguration.videoExportType.format
-        return NSTemporaryDirectory().appendingFormat("/%@.%@", UUID().uuidString, format)
+        return NSTemporaryDirectory().appendingFormat("%@.%@", UUID().uuidString, format)
     }
     
-    @objc public class func exportEditVideo(for asset: AVAsset, range: CMTimeRange, completion: @escaping ( (URL?, Error?) -> Void )) {
-        let outputUrl = URL(fileURLWithPath: self.getVideoExportFilePath())
-        guard let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetPassthrough) else {
-            completion(nil, NSError(domain: "", code: -1000, userInfo: [NSLocalizedDescriptionKey: "video export failed"]))
-            return
+    class func exportEditVideo(for asset: AVAsset, range: CMTimeRange, complete: @escaping ( (URL?, Error?) -> Void )) {
+        let type: ZLVideoManager.ExportType = ZLPhotoConfiguration.default().cameraConfiguration.videoExportType == .mov ? .mov : .mp4
+        self.exportVideo(for: asset, range: range, exportType: type, presetName: AVAssetExportPresetPassthrough) { url, error in
+            if url != nil {
+                complete(url!, error)
+            } else {
+                complete(nil, error)
+            }
         }
-        exportSession.outputURL = outputUrl
-        exportSession.outputFileType = ZLPhotoConfiguration.default().cameraConfiguration.videoExportType.avFileType
-        exportSession.timeRange = range
-        
-        exportSession.exportAsynchronously(completionHandler: {
-            let suc = exportSession.status == .completed
-            if exportSession.status == .failed {
-                zl_debugPrint("ZLPhotoBrowser: video export failed: \(exportSession.error?.localizedDescription ?? "")")
-            }
-            DispatchQueue.main.async {
-                completion(suc ? outputUrl : nil, exportSession.error)
-            }
-        })
     }
     
     /// 没有针对不同分辨率视频做处理，仅用于处理相机拍照的视频
@@ -109,7 +100,7 @@ public class ZLVideoManager: NSObject {
             }
             
             guard let exportSession = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPreset1280x720) else {
-                completion(nil, NSError(domain: "", code: -1000, userInfo: [NSLocalizedDescriptionKey: "video merge failed"]))
+                completion(nil, NSError(domain: "com.ZLPhotoBrowser.error", code: -1000, userInfo: [NSLocalizedDescriptionKey: "video merge failed"]))
                 return
             }
             
@@ -152,6 +143,78 @@ public class ZLVideoManager: NSObject {
             assetOrientation = .down
         }
         return (assetOrientation, isPortrait)
+    }
+    
+}
+
+
+// MARK: export methods
+extension ZLVideoManager {
+    
+    @objc public class func exportVideo(for asset: PHAsset, exportType: ZLVideoManager.ExportType = .mov, presetName: String = AVAssetExportPresetMediumQuality, complete: @escaping ( (URL?, Error?) -> Void )) {
+        guard asset.mediaType == .video else {
+            complete(nil, NSError(domain: "com.ZLPhotoBrowser.error", code: -1, userInfo: [NSLocalizedDescriptionKey: "The mediaType of asset must be video"]))
+            return
+        }
+        
+        _ = ZLPhotoManager.fetchAVAsset(forVideo: asset) { avAsset, _ in
+            if let set = avAsset {
+                self.exportVideo(for: set, exportType: exportType, presetName: presetName, complete: complete)
+            } else {
+                complete(nil, NSError(domain: "com.ZLPhotoBrowser.error", code: -1, userInfo: [NSLocalizedDescriptionKey: "Export failed"]))
+            }
+        }
+    }
+    
+    @objc public class func exportVideo(for asset: AVAsset, range: CMTimeRange = CMTimeRange(start: .zero, duration: .positiveInfinity), exportType: ZLVideoManager.ExportType = .mov, presetName: String = AVAssetExportPresetMediumQuality, complete: @escaping ( (URL?, Error?) -> Void )) {
+        let outputUrl = URL(fileURLWithPath: self.getVideoExportFilePath())
+        guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetName) else {
+            complete(nil, NSError(domain: "com.ZLPhotoBrowser.error", code: -1000, userInfo: [NSLocalizedDescriptionKey: "Export failed"]))
+            return
+        }
+        exportSession.outputURL = outputUrl
+        exportSession.outputFileType = exportType.avFileType
+        exportSession.timeRange = range
+        
+        exportSession.exportAsynchronously(completionHandler: {
+            let suc = exportSession.status == .completed
+            if exportSession.status == .failed {
+                zl_debugPrint("ZLPhotoBrowser: video export failed: \(exportSession.error?.localizedDescription ?? "")")
+            }
+            DispatchQueue.main.async {
+                complete(suc ? outputUrl : nil, exportSession.error)
+            }
+        })
+    }
+    
+}
+
+
+extension ZLVideoManager {
+    
+    @objc public enum ExportType: Int {
+        
+        var format: String {
+            switch self {
+            case .mov:
+                return "mov"
+            case .mp4:
+                return "mp4"
+            }
+        }
+        
+        var avFileType: AVFileType {
+            switch self {
+            case .mov:
+                return .mov
+            case .mp4:
+                return .mp4
+            }
+        }
+        
+        case mov
+        case mp4
+        
     }
     
 }
