@@ -1,15 +1,24 @@
 # Update Log
 
 -----
+## [4.1.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.7) (2021-07-30)
+### Add:
+* Add a property to control whether to display the selection button animation when selecting.
+* Separate the colors shared by album list interface and perview interface.
+* Add a cancel block in the camera view controller.
+* Support export video.
 
-## [4.1.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.5) (2021-05-26)
+### Fix:
+* Modify some force cast.[#629](https://github.com/longitachi/ZLPhotoBrowser/issues/629)
+
+## [4.1.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.6) (2021-05-26)
 
 ### Add:
 * Add ZLCameraConfiguration class to deploy camera.
 * Call select image block after dismiss.
 * Optimizing the method of processing images.
 
-### Fix
+### Fix:
 * UI frame is incorrect when preview the long image. [#610](https://github.com/longitachi/ZLPhotoBrowser/issues/610)
 
 ---

@@ -91,6 +91,12 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.7
+  Add:
+    Add a property to control whether to display the selection button animation when selecting.
+    Separate the colors shared by album list interface and perview interface.
+    Add a cancel block in the camera view controller.
+    Support export video.
 ● 4.1.6
   Add:
     Add ZLCameraConfiguration class to deploy camera.
@@ -102,12 +108,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Add:
     Provide a method to reset the configuration.
     Cancel the image request when operation is cancelled.
-● 4.1.4
-  Add:
-    In the iOS14 photo limit authority, show WeChat-style “go to setting” tips view.
-    Support customize animation duration for select button.
-  Fix:
-    Sometimes gif is not playing.
 ...
 ```
 
