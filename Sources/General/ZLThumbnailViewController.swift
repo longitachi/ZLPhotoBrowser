@@ -680,7 +680,7 @@ class ZLThumbnailViewController: UIViewController {
         }
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
         
-        let btnY = self.showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
+        let btnY = self.showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height - ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
         self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
