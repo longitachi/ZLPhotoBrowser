@@ -27,6 +27,7 @@
 import UIKit
 import AVFoundation
 import CoreMotion
+import CallKit
 
 public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
 
@@ -108,6 +109,17 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     var recordUrls: [URL] = []
     
+    var phoneOnCalling: Bool {
+        var onCalling = false
+        for call in self.callObserver.calls where !call.hasEnded {
+            onCalling = true
+            break
+        }
+        return onCalling
+    }
+    
+    lazy var callObserver = CXCallObserver()
+    
     // 仅支持竖屏
     public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -164,7 +176,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             }
         }
         if ZLPhotoConfiguration.default().allowRecordVideo {
-            try? AVAudioSession.sharedInstance().setCategory(.playAndRecord)
+            try? AVAudioSession.sharedInstance().setCategory(.soloAmbient)
             try? AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
         }
     }
@@ -222,7 +234,8 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
         self.dismissBtn.frame = CGRect(x: 60, y: (ZLCustomCamera.Layout.bottomViewH-25)/2, width: 25, height: 25)
         
-        self.tipsLabel.frame = CGRect(x: 0, y: self.bottomView.frame.minY-20, width: self.view.bounds.width, height: 20)
+        let tipsTextHeight = (self.tipsLabel.text ?? " ").boundingRect(font: getFont(14), limitSize: CGSize(width: self.view.bounds.width - 20, height: .greatestFiniteMagnitude)).height
+        self.tipsLabel.frame = CGRect(x: 10, y: self.bottomView.frame.minY - tipsTextHeight, width: self.view.bounds.width - 20, height: tipsTextHeight)
         
         self.retakeBtn.frame = CGRect(x: 30, y: insets.top+10, width: 28, height: 28)
         self.switchCameraBtn.frame = CGRect(x: self.view.bounds.width-30-28, y: insets.top+10, width: 28, height: 28)
@@ -254,6 +267,8 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.tipsLabel.font = getFont(14)
         self.tipsLabel.textColor = .white
         self.tipsLabel.textAlignment = .center
+        self.tipsLabel.numberOfLines = 2
+        self.tipsLabel.lineBreakMode = .byWordWrapping
         self.tipsLabel.alpha = 0
         if ZLPhotoConfiguration.default().allowTakePhoto, ZLPhotoConfiguration.default().allowRecordVideo {
             self.tipsLabel.text = localLanguageTextValue(.customCameraTips)
@@ -367,7 +382,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             self.recordVideoPlayerLayer?.isHidden = true
             self.view.layer.insertSublayer(self.recordVideoPlayerLayer!, at: 0)
             
-            NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         }
         
         let pinchGes = UIPinchGestureRecognizer(target: self, action: #selector(pinchToAdjustCameraFocus(_:)))
@@ -416,18 +431,12 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     func setupCamera() {
         guard let backCamera = self.getCamera(position: .back) else { return }
-        
         guard let input = try? AVCaptureDeviceInput(device: backCamera) else { return }
+        
         // 相机画面输入流
         self.videoInput = input
         // 照片输出流
         self.imageOutput = AVCapturePhotoOutput()
-        
-        // 音频输入流
-        var audioInput: AVCaptureDeviceInput?
-        if ZLPhotoConfiguration.default().allowRecordVideo, let microphone = self.getMicrophone() {
-            audioInput = try? AVCaptureDeviceInput(device: microphone)
-        }
         
         let preset = ZLPhotoConfiguration.default().cameraConfiguration.sessionPreset.avSessionPreset
         if self.session.canSetSessionPreset(preset) {
@@ -440,13 +449,13 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         // 解决视频录制超过10s没有声音的bug
         self.movieFileOutput.movieFragmentInterval = .invalid
         
-        // 将视频及音频输入流添加到session
+        // 添加视频输入
         if let vi = self.videoInput, self.session.canAddInput(vi) {
             self.session.addInput(vi)
         }
-        if let ai = audioInput, self.session.canAddInput(ai) {
-            self.session.addInput(ai)
-        }
+        // 添加音频输入
+        self.addAudioInput()
+        
         // 将输出流添加到session
         if self.session.canAddOutput(self.imageOutput) {
             self.session.addOutput(self.imageOutput)
@@ -477,11 +486,53 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInMicrophone], mediaType: .audio, position: .unspecified).devices.first
     }
     
+    func addAudioInput() {
+        guard ZLPhotoConfiguration.default().allowRecordVideo else { return }
+        // 音频输入流
+        var audioInput: AVCaptureDeviceInput?
+        if let microphone = self.getMicrophone() {
+            audioInput = try? AVCaptureDeviceInput(device: microphone)
+        }
+        guard !self.phoneOnCalling, let ai = audioInput else { return }
+        self.removeAudioInput()
+        
+        if self.session.isRunning {
+            self.session.beginConfiguration()
+        }
+        if self.session.canAddInput(ai) {
+            self.session.addInput(ai)
+        }
+        if self.session.isRunning {
+            self.session.commitConfiguration()
+        }
+    }
+    
+    func removeAudioInput() {
+        var audioInput: AVCaptureInput?
+        for input in self.session.inputs {
+            if (input as? AVCaptureDeviceInput)?.device.deviceType == .builtInMicrophone {
+                audioInput = input
+            }
+        }
+        guard let ai = audioInput else { return }
+        
+        if self.session.isRunning {
+            self.session.beginConfiguration()
+        }
+        self.session.removeInput(ai)
+        if self.session.isRunning {
+            self.session.commitConfiguration()
+        }
+    }
+    
     func addNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         
         if ZLPhotoConfiguration.default().allowRecordVideo {
             NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(handleAudioSessionInterruption), name: AVAudioSession.interruptionNotification, object: nil)
+            
+            self.callObserver.setDelegate(self, queue: DispatchQueue.main)
         }
     }
     
@@ -548,6 +599,21 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     @objc func appDidBecomeActive() {
         if self.videoUrl != nil, let player = self.recordVideoPlayerLayer?.player {
+            player.play()
+        }
+    }
+    
+    @objc func handleAudioSessionInterruption(_ notify: Notification) {
+        guard self.recordVideoPlayerLayer?.isHidden == false, let player = self.recordVideoPlayerLayer?.player else {
+            return
+        }
+        guard player.rate == 0 else {
+            return
+        }
+        
+        let type = notify.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+        let option = notify.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
+        if type == AVAudioSession.InterruptionType.ended.rawValue, option == AVAudioSession.InterruptionOptions.shouldResume.rawValue {
             player.play()
         }
     }
@@ -880,6 +946,19 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.recordVideoPlayerLayer?.player?.play()
     }
 
+}
+
+
+extension ZLCustomCamera: CXCallObserverDelegate {
+    
+    public func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
+        if call.hasEnded {
+            self.addAudioInput()
+        } else {
+            self.removeAudioInput()
+        }
+    }
+    
 }
 
 
