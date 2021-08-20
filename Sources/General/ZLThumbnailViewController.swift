@@ -873,7 +873,7 @@ extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let config = ZLPhotoConfiguration.default()
-        if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
+        if (config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect) || self.embedAlbumListView?.isHidden == false {
             return false
         }
         return true
