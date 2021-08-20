@@ -191,7 +191,7 @@ public class ZLEditImageViewController: UIViewController {
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
             vc.clipDoneBlock = { (angle, editRect, ratio) in
                 let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, selectRatio: ratio, selectFilter: .normal, textStickers: nil, imageStickers: nil)
-                completion?(image.clipImage(angle, editRect) ?? image, m)
+                completion?(image.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
             }
             vc.animate = animate
             vc.modalPresentationStyle = .fullScreen
@@ -208,8 +208,8 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
-        self.originalImage = image
-        self.editImage = image
+        self.originalImage = image.fixOrientation()
+        self.editImage = self.originalImage
         self.editRect = editModel?.editRect ?? CGRect(origin: .zero, size: image.size)
         self.drawColors = ZLPhotoConfiguration.default().editImageDrawColors
         self.currentFilter = editModel?.selectFilter ?? .normal
@@ -347,7 +347,14 @@ public class ZLEditImageViewController: UIViewController {
         let w = ratio * editSize.width * self.scrollView.zoomScale
         let h = ratio * editSize.height * self.scrollView.zoomScale
         self.containerView.frame = CGRect(x: max(0, (scrollViewSize.width-w)/2), y: max(0, (scrollViewSize.height-h)/2), width: w, height: h)
-        
+        if self.selectRatio?.isCircle == true {
+            let mask = CAShapeLayer()
+            let path = UIBezierPath(arcCenter: CGPoint(x: w / 2, y: h / 2), radius: w / 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            mask.path = path.cgPath
+            self.containerView.layer.mask = mask
+        } else {
+            self.containerView.layer.mask = nil
+        }
         let scaleImageOrigin = CGPoint(x: -self.editRect.origin.x*ratio, y: -self.editRect.origin.y*ratio)
         let scaleImageSize = CGSize(width: self.imageSize.width * ratio, height: self.imageSize.height * ratio)
         self.imageView.frame = CGRect(origin: scaleImageOrigin, size: scaleImageSize)
@@ -595,7 +602,7 @@ public class ZLEditImageViewController: UIViewController {
         let vc = ZLClipImageViewController(image: currentEditImage, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio)
         let rect = self.scrollView.convert(self.containerView.frame, to: self.view)
         vc.presentAnimateFrame = rect
-        vc.presentAnimateImage = currentEditImage.clipImage(self.angle, self.editRect)
+        vc.presentAnimateImage = currentEditImage.clipImage(angle: self.angle, editRect: self.editRect, isCircle: self.selectRatio?.isCircle ?? false)
         vc.modalPresentationStyle = .fullScreen
         
         vc.clipDoneBlock = { [weak self] (angle, editFrame, selectRatio) in
@@ -682,7 +689,7 @@ public class ZLEditImageViewController: UIViewController {
         var editModel: ZLEditImageModel? = nil
         if hasEdit {
             resImage = self.buildImage()
-            resImage = resImage.clipImage(self.angle, self.editRect) ?? resImage
+            resImage = resImage.clipImage(angle: self.angle, editRect: self.editRect, isCircle: self.selectRatio?.isCircle ?? false) ?? resImage
             editModel = ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio, selectFilter: self.currentFilter, textStickers: textStickers, imageStickers: imageStickers)
         }
         self.editFinishBlock?(resImage, editModel)
@@ -803,7 +810,8 @@ public class ZLEditImageViewController: UIViewController {
         r.origin.y *= scale
         r.size.width *= scale
         r.size.height *= scale
-        let bgImage = self.buildImage().clipImage(self.angle, self.editRect)?.clipImage(0, r)
+        let isCircle = self.selectRatio?.isCircle ?? false
+        let bgImage = self.buildImage().clipImage(angle: self.angle, editRect: self.editRect, isCircle: isCircle)?.clipImage(angle: 0, editRect: r, isCircle: isCircle)
         let vc = ZLInputTextViewController(image: bgImage, text: text, textColor: textColor, bgColor: bgColor)
         
         vc.endInput = { (text, textColor, bgColor) in
@@ -872,7 +880,7 @@ public class ZLEditImageViewController: UIViewController {
     func reCalculateStickersFrame(_ oldSize: CGSize, _ oldAngle: CGFloat, _ newAngle: CGFloat) {
         let currSize = self.stickersContainer.frame.size
         let scale: CGFloat
-        if Int(newAngle - oldAngle) % 180 == 0{
+        if Int(newAngle - oldAngle) % 180 == 0 {
             scale = currSize.width / oldSize.width
         } else {
             scale = currSize.height / oldSize.width
@@ -1288,13 +1296,16 @@ extension ZLEditImageViewController {
 
 public class ZLImageClipRatio: NSObject {
     
-    let title: String
+    public var title: String
     
-    let whRatio: CGFloat
+    public var whRatio: CGFloat
     
-    @objc public init(title: String, whRatio: CGFloat) {
+    var isCircle: Bool
+    
+    @objc public init(title: String, whRatio: CGFloat, isCircle: Bool = false) {
         self.title = title
-        self.whRatio = whRatio
+        self.whRatio = isCircle ? 1 : whRatio
+        self.isCircle = isCircle
     }
     
 }
@@ -1308,6 +1319,8 @@ func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
 extension ZLImageClipRatio {
     
     @objc public static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
+    
+    @objc public static let circle = ZLImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
     
     @objc public static let wh1x1 = ZLImageClipRatio(title: "1 : 1", whRatio: 1)
     

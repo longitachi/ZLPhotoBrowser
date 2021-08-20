@@ -725,7 +725,9 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         self.playerLayer?.removeFromSuperlayer()
         self.playerLayer = nil
         
-        self.player = AVPlayer(playerItem: AVPlayerItem(url: self.videoUrl))
+        let asset = AVURLAsset(url: self.videoUrl, options: ["AVURLAssetHTTPHeaderFieldsKey": [:]])
+        let item = AVPlayerItem(asset: asset)
+        self.player = AVPlayer(playerItem: item)
         self.playerLayer = AVPlayerLayer(player: self.player)
         self.playerLayer?.frame = self.bounds
         self.layer.insertSublayer(self.playerLayer!, at: 0)

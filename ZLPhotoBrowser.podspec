@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.swift_versions        = ['5.0', '5.1', '5.2']
 
   s.requires_arc          = true
-  s.frameworks            = 'UIKit','Photos','PhotosUI','AVFoundation','CoreMotion', 'Accelerate'
+  s.frameworks            = 'UIKit','Photos','PhotosUI','AVFoundation','CoreMotion', 'Accelerate', 'CallKit'
 
   s.resources             = 'Sources/*.{png,bundle}'
 
