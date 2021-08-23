@@ -1298,21 +1298,26 @@ public class ZLImageClipRatio: NSObject {
     
     public var title: String
     
-    public var whRatio: CGFloat
+    public let whRatio: CGFloat
     
-    var isCircle: Bool
+    let isCircle: Bool
     
     @objc public init(title: String, whRatio: CGFloat, isCircle: Bool = false) {
         self.title = title
         self.whRatio = isCircle ? 1 : whRatio
         self.isCircle = isCircle
+        super.init()
     }
     
 }
 
 
-func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
-    return lhs.whRatio == rhs.whRatio
+extension ZLImageClipRatio {
+    
+    static func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
+        return lhs.whRatio == rhs.whRatio && lhs.title == rhs.title
+    }
+    
 }
 
 

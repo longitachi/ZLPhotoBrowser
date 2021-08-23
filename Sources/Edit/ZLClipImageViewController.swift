@@ -1136,7 +1136,13 @@ class ZLClipOverlayView: UIView {
     
     var horLines: [UIView] = []
     
-    var isCircle = false
+    var isCircle = false {
+        didSet {
+            if oldValue != self.isCircle {
+                self.setNeedsDisplay()
+            }
+        }
+    }
     
     var isEditing = false {
         didSet {
