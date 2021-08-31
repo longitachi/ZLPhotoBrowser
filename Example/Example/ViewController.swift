@@ -144,7 +144,7 @@ class ViewController: UIViewController {
     
     func showImagePicker(_ preview: Bool) {
         let config = ZLPhotoConfiguration.default()
-//        config.editImageClipRatios = [.custom, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)]
+//        config.editImageClipRatios = [.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)]
 //        config.filters = [.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)]
         
         config.imageStickerContainerView = ImageStickerContainerView()

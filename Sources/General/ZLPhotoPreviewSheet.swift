@@ -98,23 +98,27 @@ public class ZLPhotoPreviewSheet: UIView {
         zl_debugPrint("ZLPhotoPreviewSheet deinit")
     }
     
+    @available(*, unavailable)
+    public override init(frame: CGRect) {
+        fatalError()
+    }
     
     /// - Parameter selectedAssets: preselected assets
-    @objc public init(selectedAssets: [PHAsset] = []) {
+    @objc public init(selectedAssets: [PHAsset]? = nil) {
         super.init(frame: .zero)
-        
-        if !ZLPhotoConfiguration.default().allowSelectImage &&
-            !ZLPhotoConfiguration.default().allowSelectVideo {
+        let config = ZLPhotoConfiguration.default()
+        if !config.allowSelectImage &&
+            !config.allowSelectVideo {
             assert(false, "ZLPhotoBrowser: error configuration")
-            ZLPhotoConfiguration.default().allowSelectImage = true
+            config.allowSelectImage = true
         }
         
         self.fetchImageQueue.maxConcurrentOperationCount = 3
         self.setupUI()
         
         self.arrSelectedModels.removeAll()
-        selectedAssets.removeDuplicate().forEach { (asset) in
-            if !ZLPhotoConfiguration.default().allowMixSelect, asset.mediaType == .video {
+        selectedAssets?.removeDuplicate().forEach { (asset) in
+            if !config.allowMixSelect, asset.mediaType == .video {
                 return
             }
             
