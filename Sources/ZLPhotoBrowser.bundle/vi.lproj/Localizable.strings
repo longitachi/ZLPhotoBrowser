@@ -27,10 +27,12 @@
 "exceededMaxVideoSelectCount" = "Số lượng lựa chọn tối đa của video: %ld";
 "lessThanMinVideoSelectCount" = "Số phút chọn tối thiểu của video: %ld";
 
-"noCameraAuthority" = "Vui lòng cho phép %@ truy cập máy ảnh trên thiết bị của bạn trong \"Cài đặt\" -> \"Quyền riêng tư\" -> \"Máy ảnh\"";
-"noPhotoLibratyAuthority" = "Vui lòng cho phép %@ truy cập anbom của bạn trong \"Cài đặt\" -> \"Bảo mật\" -> \"Ảnh\"";
-"noMicrophoneAuthority" = "Vui lòng cho phép %@ truy cập micrô trên thiết bị của bạn trong \"Cài đặt\" -> \"Quyền riêng tư\" -> \"Micrô\"";
+"noCameraAuthority" = "Vui lòng cho phép %@ truy cập máy ảnh trên thiết bị của bạn trong \"Cài đặt\" > \"Quyền riêng tư\" > \"Máy ảnh\"";
+"noPhotoLibratyAuthority" = "Vui lòng cho phép %@ truy cập anbom của bạn trong \"Cài đặt\" > \"Bảo mật\" > \"Ảnh\"";
+"noMicrophoneAuthority" = "Không thểghi hình. Đi tới \"Cài đặt\" > \"%@\" và bật quyên truy cập mic.";
 "cameraUnavailable" = "Máy ảnh không khả dụng";
+"keepRecording" = "Tiếp tục ghi hình";
+"gotoSettings" = "Đi đến Cài đặt";
 
 "iCloudVideoLoadFaild" = "Không thể đồng bộ hóa từ iCloud";
 "imageLoadFailed" = "tải không thành công";

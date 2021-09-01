@@ -159,20 +159,20 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.addNotification()
         
         AVCaptureDevice.requestAccess(for: .video) { (videoGranted) in
-            if videoGranted {
-                if ZLPhotoConfiguration.default().allowRecordVideo {
-                    AVCaptureDevice.requestAccess(for: .audio) { (audioGranted) in
-                        if !audioGranted {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()), type: .microphone)
-                            }
-                        }
-                    }
-                }
-            } else {
+            guard videoGranted else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                     self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), type: .camera)
                 })
+                return
+            }
+            guard ZLPhotoConfiguration.default().allowRecordVideo else { return }
+            
+            AVCaptureDevice.requestAccess(for: .audio) { (audioGranted) in
+                if !audioGranted {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.showNoMicrophoneAuthorityAlert()
+                    }
+                }
             }
         }
         if ZLPhotoConfiguration.default().allowRecordVideo {
@@ -534,6 +534,22 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             
             self.callObserver.setDelegate(self, queue: DispatchQueue.main)
         }
+    }
+    
+    func showNoMicrophoneAuthorityAlert() {
+        let alert = UIAlertController(title: nil, message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()), preferredStyle: .alert)
+        let continueAction = UIAlertAction(title: localLanguageTextValue(.keepRecording), style: .default, handler: nil)
+        let gotoSettingsAction = UIAlertAction(title: localLanguageTextValue(.gotoSettings), style: .default) { (_) in
+            guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+        alert.addAction(continueAction)
+        alert.addAction(gotoSettingsAction)
+        self.showDetailViewController(alert, sender: nil)
     }
     
     func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {

@@ -27,10 +27,12 @@
 "exceededMaxVideoSelectCount" = "動画の最大選択数: %ld";
 "lessThanMinVideoSelectCount" = "動画の最小選択数: %ld";
 
-"noCameraAuthority" = "「設定」->「プライパシー」->「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
-"noPhotoLibratyAuthority" = "%@があなたのアルバムにアクセスするには「設定」->「プライバシー」->「写真」";
-"noMicrophoneAuthority" = "「設定」->「プライパシー」->「マイク」から、%@があなたのデバイスのマイクにアクセスする許可をしてください";
+"noCameraAuthority" = "「設定」>「プライパシー」>「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
+"noPhotoLibratyAuthority" = "%@があなたのアルバムにアクセスするには「設定」>「プライバシー」>「写真」";
+"noMicrophoneAuthority" = "音声を録音できません。「設定」 >「%@」に移動し、マイクへのアクセスを有効にしてください。";
 "cameraUnavailable" = "カメラは利用できません";
+"keepRecording" = "撮影を続ける";
+"gotoSettings" = "設定に移動";
 
 "iCloudVideoLoadFaild" = "iCloudから同期できません";
 "imageLoadFailed" = "ロード失敗";
