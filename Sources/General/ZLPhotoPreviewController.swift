@@ -187,18 +187,21 @@ class ZLPhotoPreviewController: UIViewController {
         }
         let btnH = ZLLayout.bottomToolBtnH
         
-        self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height-insets.bottom-bottomViewH, width: self.view.frame.width, height: bottomViewH+insets.bottom)
+        self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height - insets.bottom - bottomViewH, width: self.view.frame.width, height: bottomViewH + insets.bottom)
         self.bottomBlurView?.frame = self.bottomView.bounds
         
         let btnY: CGFloat = showSelPhotoPreview ? ZLPhotoPreviewController.selPhotoPreviewH + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
         
+        let btnMaxWidth = (self.bottomView.bounds.width - 30) / 3
+        
         let editTitle = localLanguageTextValue(.edit)
         let editBtnW = editTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
-        self.editBtn.frame = CGRect(x: 15, y: btnY, width: editBtnW, height: btnH)
+        self.editBtn.frame = CGRect(x: 15, y: btnY, width: min(btnMaxWidth, editBtnW), height: btnH)
         
-        let originalTitle = localLanguageTextValue(.originalPhoto)
-        let w = originalTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
-        self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-w)/2-5, y: btnY, width: w, height: btnH)
+        let originTitle = localLanguageTextValue(.originalPhoto)
+        let originBtnW = originTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
+        let originBtnMaxW = min(btnMaxWidth, originBtnW)
+        self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width - originBtnMaxW) / 2 - 5, y: btnY, width: originBtnMaxW, height: btnH)
         
         let selCount = (self.navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
         var doneTitle = localLanguageTextValue(.done)
@@ -206,7 +209,7 @@ class ZLPhotoPreviewController: UIViewController {
             doneTitle += "(" + String(selCount) + ")"
         }
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
-        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: btnH)
+        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width - doneBtnW - 15, y: btnY, width: doneBtnW, height: btnH)
     }
     
     func setupUI() {
@@ -297,10 +300,16 @@ class ZLPhotoPreviewController: UIViewController {
         }
         
         self.editBtn = createBtn(localLanguageTextValue(.edit), #selector(editBtnClick))
+        self.editBtn.titleLabel?.lineBreakMode = .byCharWrapping
+        self.editBtn.titleLabel?.numberOfLines = 0
+        self.editBtn.contentHorizontalAlignment = .left
         self.editBtn.isHidden = (!config.allowEditImage && !config.allowEditVideo)
         self.bottomView.addSubview(self.editBtn)
         
         self.originalBtn = createBtn(localLanguageTextValue(.originalPhoto), #selector(originalPhotoClick))
+        self.originalBtn.titleLabel?.lineBreakMode = .byCharWrapping
+        self.originalBtn.titleLabel?.numberOfLines = 2
+        self.originalBtn.contentHorizontalAlignment = .left
         self.originalBtn.setImage(getImage("zl_btn_original_circle"), for: .normal)
         self.originalBtn.setImage(getImage("zl_btn_original_selected"), for: .selected)
         self.originalBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)

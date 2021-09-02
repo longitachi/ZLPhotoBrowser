@@ -98,9 +98,8 @@ public class ZLPhotoPreviewSheet: UIView {
         zl_debugPrint("ZLPhotoPreviewSheet deinit")
     }
     
-    @available(*, unavailable)
-    public override init(frame: CGRect) {
-        fatalError()
+    convenience public override init(frame: CGRect) {
+        self.init(selectedAssets: nil)
     }
     
     /// - Parameter selectedAssets: preselected assets

@@ -271,14 +271,17 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         if showBottomToolBtns {
+            let btnMaxWidth = (self.bottomView.bounds.width - 30) / 3
+            
             let btnY = self.showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
             let previewTitle = localLanguageTextValue(.preview)
             let previewBtnW = previewTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
-            self.previewBtn.frame = CGRect(x: 15, y: btnY, width: previewBtnW, height: btnH)
+            self.previewBtn.frame = CGRect(x: 15, y: btnY, width: min(btnMaxWidth, previewBtnW), height: btnH)
             
             let originalTitle = localLanguageTextValue(.originalPhoto)
             let originBtnW = originalTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 30
-            self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width-originBtnW)/2-5, y: btnY, width: originBtnW, height: btnH)
+            let originBtnMaxW = min(btnMaxWidth, originBtnW)
+            self.originalBtn.frame = CGRect(x: (self.bottomView.bounds.width - originBtnMaxW) / 2 - 5, y: btnY, width: originBtnMaxW, height: btnH)
             
             self.refreshDoneBtnFrame()
         }
@@ -331,10 +334,16 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         self.previewBtn = createBtn(localLanguageTextValue(.preview), #selector(previewBtnClick))
+        self.previewBtn.titleLabel?.lineBreakMode = .byCharWrapping
+        self.previewBtn.titleLabel?.numberOfLines = 2
+        self.previewBtn.contentHorizontalAlignment = .left
         self.previewBtn.isHidden = !ZLPhotoConfiguration.default().showPreviewButtonInAlbum
         self.bottomView.addSubview(self.previewBtn)
         
         self.originalBtn = createBtn(localLanguageTextValue(.originalPhoto), #selector(originalPhotoClick))
+        self.originalBtn.titleLabel?.lineBreakMode = .byCharWrapping
+        self.originalBtn.titleLabel?.numberOfLines = 2
+        self.originalBtn.contentHorizontalAlignment = .left
         self.originalBtn.setImage(getImage("zl_btn_original_circle"), for: .normal)
         self.originalBtn.setImage(getImage("zl_btn_original_selected"), for: .selected)
         self.originalBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
