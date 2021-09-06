@@ -685,12 +685,6 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         return false
     }
     
-    var videoUrl: URL! {
-        didSet {
-            self.configureCell()
-        }
-    }
-    
     deinit {
         zl_debugPrint("v deinit")
     }
@@ -720,12 +714,12 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
     }
     
-    func configureCell() {
+    func configureCell(videoUrl: URL, httpHeader: [String: Any]?) {
         self.player = nil
         self.playerLayer?.removeFromSuperlayer()
         self.playerLayer = nil
         
-        let asset = AVURLAsset(url: self.videoUrl, options: ["AVURLAssetHTTPHeaderFieldsKey": [:]])
+        let asset = AVURLAsset(url: videoUrl, options: ["AVURLAssetHTTPHeaderFieldsKey": httpHeader as Any])
         let item = AVPlayerItem(asset: asset)
         self.player = AVPlayer(playerItem: item)
         self.playerLayer = AVPlayerLayer(player: self.player)
