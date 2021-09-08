@@ -719,7 +719,9 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         self.playerLayer?.removeFromSuperlayer()
         self.playerLayer = nil
         
-        let asset = AVURLAsset(url: videoUrl, options: ["AVURLAssetHTTPHeaderFieldsKey": httpHeader as Any])
+        var options: [String : Any] = [:]
+        options["AVURLAssetHTTPHeaderFieldsKey"] = httpHeader
+        let asset = AVURLAsset(url: videoUrl, options: options)
         let item = AVPlayerItem(asset: asset)
         self.player = AVPlayer(playerItem: item)
         self.playerLayer = AVPlayerLayer(player: self.player)
