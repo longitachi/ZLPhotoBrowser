@@ -936,10 +936,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         
         if #available(iOS 14, *) {
             if self.showAddPhotoCell && ((config.sortAscending && indexPath.row == self.arrDataSources.count - 1 + self.offset) || (!config.sortAscending && indexPath.row == self.offset - 1)) {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLAddPhotoCell.zl_identifier(), for: indexPath) as? ZLAddPhotoCell else {
-                    return UICollectionViewCell()
-                }
-                return cell
+                return collectionView.dequeueReusableCell(withReuseIdentifier: ZLAddPhotoCell.zl_identifier(), for: indexPath)
             }
         }
         

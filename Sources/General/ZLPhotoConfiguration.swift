@@ -122,10 +122,26 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    @objc public var allowEditImage = true
+    var pri_allowEditImage = true
+    @objc public var allowEditImage: Bool {
+        set {
+            pri_allowEditImage = newValue
+        }
+        get {
+            return pri_allowEditImage && shouldAnialysisAsset
+        }
+    }
     
     /// - warning: The video can only be edited when no photos are selected, or only one video is selected, and the selection callback is executed immediately after editing is completed.
-    @objc public var allowEditVideo = false
+    var pri_allowEditVideo = false
+    @objc public var allowEditVideo: Bool {
+        set {
+            pri_allowEditVideo = newValue
+        }
+        get {
+            return pri_allowEditVideo && shouldAnialysisAsset
+        }
+    }
     
     /// Control whether to display the selection button animation when selecting. Defaults to true.
     @objc public var animateSelectBtnWhenSelect = true

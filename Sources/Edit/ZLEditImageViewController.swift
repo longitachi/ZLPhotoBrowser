@@ -171,7 +171,9 @@ public class ZLEditImageViewController: UIViewController {
         return self.originalImage.size
     }
     
-    @objc public var editFinishBlock: ( (UIImage, ZLEditImageModel?) -> Void )?
+    @objc public var editFinishBlock: ((UIImage, ZLEditImageModel?) -> Void)?
+    
+    @objc public var cancelEditBlock: (() -> Void)?
     
     public override var prefersStatusBarHidden: Bool {
         return true
@@ -185,7 +187,7 @@ public class ZLEditImageViewController: UIViewController {
         zl_debugPrint("ZLEditImageViewController deinit")
     }
     
-    @objc public class func showEditImageVC(parentVC: UIViewController?, animate: Bool = false, image: UIImage, editModel: ZLEditImageModel? = nil, completion: ( (UIImage, ZLEditImageModel?) -> Void )? ) {
+    @objc public class func showEditImageVC(parentVC: UIViewController?, animate: Bool = false, image: UIImage, editModel: ZLEditImageModel? = nil, cancel: (() -> Void)? = nil, completion: ((UIImage, ZLEditImageModel?) -> Void)?) {
         let tools = ZLPhotoConfiguration.default().editImageTools
         if ZLPhotoConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0, selectRatio: editModel?.selectRatio)
@@ -193,6 +195,7 @@ public class ZLEditImageViewController: UIViewController {
                 let m = ZLEditImageModel(drawPaths: [], mosaicPaths: [], editRect: editRect, angle: angle, selectRatio: ratio, selectFilter: .normal, textStickers: nil, imageStickers: nil)
                 completion?(image.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
             }
+            vc.cancelClipBlock = cancel
             vc.animate = animate
             vc.modalPresentationStyle = .fullScreen
             parentVC?.present(vc, animated: animate, completion: nil)
@@ -201,6 +204,7 @@ public class ZLEditImageViewController: UIViewController {
             vc.editFinishBlock = {  (ei, editImageModel) in
                 completion?(ei, editImageModel)
             }
+            vc.cancelEditBlock = cancel
             vc.animate = animate
             vc.modalPresentationStyle = .fullScreen
             parentVC?.present(vc, animated: animate, completion: nil)
@@ -581,7 +585,9 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc func cancelBtnClick() {
-        self.dismiss(animated: self.animate, completion: nil)
+        self.dismiss(animated: self.animate) {
+            self.cancelEditBlock?()
+        }
     }
     
     func drawBtnClick() {
@@ -692,9 +698,10 @@ public class ZLEditImageViewController: UIViewController {
             resImage = resImage.clipImage(angle: self.angle, editRect: self.editRect, isCircle: self.selectRatio?.isCircle ?? false) ?? resImage
             editModel = ZLEditImageModel(drawPaths: self.drawPaths, mosaicPaths: self.mosaicPaths, editRect: self.editRect, angle: self.angle, selectRatio: self.selectRatio, selectFilter: self.currentFilter, textStickers: textStickers, imageStickers: imageStickers)
         }
-        self.editFinishBlock?(resImage, editModel)
         
-        self.dismiss(animated: self.animate, completion: nil)
+        self.dismiss(animated: self.animate) {
+            self.editFinishBlock?(resImage, editModel)
+        }
     }
     
     @objc func revokeBtnClick() {

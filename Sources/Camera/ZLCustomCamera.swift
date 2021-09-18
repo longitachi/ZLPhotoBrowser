@@ -63,8 +63,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     var retakeBtn: UIButton!
     
-    var editBtn: UIButton!
-    
     var doneBtn: UIButton!
     
     var dismissBtn: UIButton!
@@ -240,11 +238,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.retakeBtn.frame = CGRect(x: 30, y: insets.top+10, width: 28, height: 28)
         self.switchCameraBtn.frame = CGRect(x: self.view.bounds.width-30-28, y: insets.top+10, width: 28, height: 28)
         
-        let editBtnW = localLanguageTextValue(.edit).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width
-        self.editBtn.frame = CGRect(x: 20, y: self.view.bounds.height - insets.bottom - ZLLayout.bottomToolBtnH - 40, width: editBtnW, height: ZLLayout.bottomToolBtnH)
-        
         let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width + 20
-        self.doneBtn.frame = CGRect(x: self.view.bounds.width - doneBtnW - 20, y: self.view.bounds.height - insets.bottom - ZLLayout.bottomToolBtnH - 40, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        let doneBtnY = self.view.bounds.height - 57 - insets.bottom
+        self.doneBtn.frame = CGRect(x: self.view.bounds.width - doneBtnW - 20, y: doneBtnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
     func setupUI() {
@@ -342,18 +338,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.switchCameraBtn.zl_enlargeValidTouchArea(inset: 30)
         self.switchCameraBtn.isHidden = cameraCount <= 1
         self.view.addSubview(self.switchCameraBtn)
-        
-        self.editBtn = UIButton(type: .custom)
-        self.editBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
-        self.editBtn.setTitle(localLanguageTextValue(.edit), for: .normal)
-        self.editBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
-        self.editBtn.addTarget(self, action: #selector(editBtnClick), for: .touchUpInside)
-        self.editBtn.isHidden = true
-        // 字体周围添加一点阴影
-        self.editBtn.titleLabel?.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
-        self.editBtn.titleLabel?.layer.shadowOffset = .zero
-        self.editBtn.titleLabel?.layer.shadowOpacity = 1;
-        self.view.addSubview(self.editBtn)
         
         self.doneBtn = UIButton(type: .custom)
         self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
@@ -697,13 +681,16 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
     }
     
-    @objc func editBtnClick() {
-        guard let image = self.takedImage else {
+    @objc func editImage() {
+        guard ZLPhotoConfiguration.default().allowEditImage, let image = self.takedImage else {
             return
         }
-        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image) { [weak self] (ei, _) in
-            self?.takedImage = ei
-            self?.takedImageView.image = ei
+        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image) { [weak self] in
+            self?.retakeBtnClick()
+        } completion: { [weak self] (editImage, _) in
+            self?.takedImage = editImage
+            self?.takedImageView.image = editImage
+            self?.doneBtnClick()
         }
     }
     
@@ -932,7 +919,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             self.dismissBtn.isHidden = false
             self.switchCameraBtn.isHidden = false
             self.retakeBtn.isHidden = true
-            self.editBtn.isHidden = true
             self.doneBtn.isHidden = true
             self.takedImageView.isHidden = true
             self.takedImage = nil
@@ -942,9 +928,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             self.dismissBtn.isHidden = true
             self.switchCameraBtn.isHidden = true
             self.retakeBtn.isHidden = false
-            if ZLPhotoConfiguration.default().allowEditImage {
-                self.editBtn.isHidden = self.takedImage == nil
-            }
             self.doneBtn.isHidden = false
         }
     }
@@ -992,6 +975,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
             self.takedImageView.image = self.takedImage
             self.takedImageView.isHidden = false
             self.resetSubViewStatus()
+            self.editImage()
         } else {
             zl_debugPrint("拍照失败，data为空")
         }
