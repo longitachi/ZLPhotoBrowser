@@ -1,6 +1,18 @@
 # Update Log
 
 -----
+## [4.1.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.8) (2021-09-18)
+### Add:
+* Support crop round image.
+* Show an alert to prompt that app cannot access the microphone.[#643](https://github.com/longitachi/ZLPhotoBrowser/issues/643)
+* Wrap to display when the text is too long.
+* The http header of the network video can be configured.[#642](https://github.com/longitachi/ZLPhotoBrowser/issues/642)
+* Improve the judgment logic of Live Photo.[#648](https://github.com/longitachi/ZLPhotoBrowser/issues/648)
+* Edit the image directly after taking the photo.
+
+### Fix:
+* Camera cannot turning on while calling.[#641](https://github.com/longitachi/ZLPhotoBrowser/issues/641)
+
 ## [4.1.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.7) (2021-07-30)
 ### Add:
 * Add a property to control whether to display the selection button animation when selecting.

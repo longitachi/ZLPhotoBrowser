@@ -91,6 +91,16 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.8
+  Add:
+    Support crop round image.
+    Show an alert to prompt that app cannot access the microphone.
+    Wrap to display when the text is too long.
+    The http header of the network video can be configured.
+    Improve the judgment logic of Live Photo.
+    Edit the image directly after taking the photo.
+  Fix:
+    Camera cannot turning on while calling.
 ● 4.1.7
   Add:
     Add a property to control whether to display the selection button animation when selecting.
@@ -102,12 +112,8 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Add ZLCameraConfiguration class to deploy camera.
     Call select image block after dismiss.
     Optimizing the method of processing images.
-  Fix
+  Fix:
     UI frame is incorrect when preview the long image.
-● 4.1.5
-  Add:
-    Provide a method to reset the configuration.
-    Cancel the image request when operation is cancelled.
 ...
 ```
 
