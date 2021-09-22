@@ -8,6 +8,7 @@
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
 ----------------------------------------
+# Warning: If your APP includes China in the App Store sales area, please use version 4.1.7 first. [issue](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
 
 English | [简体中文](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README_CN.md)
 

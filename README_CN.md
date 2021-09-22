@@ -8,6 +8,7 @@
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
 ----------------------------------------
+# Warning: 如果您的App在中国地区上架，请先使用4.1.7版本。[issue](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
 
 [English](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README.md) | 简体中文
 
