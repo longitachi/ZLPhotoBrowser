@@ -8,7 +8,7 @@
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
 ----------------------------------------
-# Warning: If your APP includes China in the App Store sales area, please use version 4.1.7 first. [issue](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
+# Warning: If your APP includes China in the App Store sales area, please update to the latest version(>= 4.1.9). [issue](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
 
 English | [简体中文](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README_CN.md)
 
@@ -92,6 +92,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.9
+  Fix:
+    Remove CallKit.
 ● 4.1.8
   Add:
     Support crop round image.
@@ -108,13 +111,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Separate the colors shared by album list interface and perview interface.
     Add a cancel block in the camera view controller.
     Support export video.
-● 4.1.6
-  Add:
-    Add ZLCameraConfiguration class to deploy camera.
-    Call select image block after dismiss.
-    Optimizing the method of processing images.
-  Fix:
-    UI frame is incorrect when preview the long image.
 ...
 ```
 

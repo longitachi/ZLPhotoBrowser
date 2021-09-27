@@ -1,6 +1,12 @@
 # Update Log
 
 -----
+## [4.1.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.9) (2021-09-27)
+### Fix:
+* Remove CallKit because it resulted in rejection of app review.[#650](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
+
+---
+
 ## [4.1.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.8) (2021-09-18)
 ### Add:
 * Support crop round image.
@@ -13,6 +19,8 @@
 ### Fix:
 * Camera cannot turning on while calling.[#641](https://github.com/longitachi/ZLPhotoBrowser/issues/641)
 
+---
+
 ## [4.1.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.7) (2021-07-30)
 ### Add:
 * Add a property to control whether to display the selection button animation when selecting.
@@ -22,6 +30,8 @@
 
 ### Fix:
 * Modify some force cast.[#629](https://github.com/longitachi/ZLPhotoBrowser/issues/629)
+
+---
 
 ## [4.1.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.6) (2021-05-26)
 

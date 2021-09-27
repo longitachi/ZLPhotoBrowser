@@ -8,7 +8,7 @@
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
 ----------------------------------------
-# Warning: 如果您的App在中国地区上架，请先使用4.1.7版本。[issue](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
+# Warning: 如果您的App在中国地区上架，请更新至最新版本(>=4.1.9)。[issue](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
 
 [English](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README.md) | 简体中文
 
@@ -103,6 +103,9 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.1.9
+  Fix:
+    移除CallKit
 ● 4.1.8
   新增:
     图片支持圆形裁剪;
@@ -119,13 +122,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     相册列表界面和小图预览界面背景色拆分成两个属性;
     自定义相机添加取消回调;
     支持导出视频;
-● 4.1.6
-  新增:
-    新增ZLCameraConfiguration类统一相机配置;
-    调整选择照片callback时机，在框架界面dismiss后回调;
-    优化图片压缩方法;
-  Fix:
-    解决预览长图时候frame不正确的bug;
 ...
 ```
 
