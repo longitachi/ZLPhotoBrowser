@@ -27,7 +27,6 @@
 import UIKit
 import AVFoundation
 import CoreMotion
-import CallKit
 
 public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
 
@@ -107,16 +106,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     var recordUrls: [URL] = []
     
-    var phoneOnCalling: Bool {
-        var onCalling = false
-        for call in self.callObserver.calls where !call.hasEnded {
-            onCalling = true
-            break
-        }
-        return onCalling
-    }
-    
-    lazy var callObserver = CXCallObserver()
+    var microPhontIsAvailable = true
     
     // 仅支持竖屏
     public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -130,9 +120,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     deinit {
         zl_debugPrint("ZLCustomCamera deinit")
         self.cleanTimer()
-        if self.session.isRunning {
-            self.session.stopRunning()
-        }
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }
     
@@ -152,7 +139,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             return
         }
-        self.setupCamera()
+        
         self.observerDeviceMotion()
         self.addNotification()
         
@@ -173,10 +160,19 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
                 }
             }
         }
+        
         if ZLPhotoConfiguration.default().allowRecordVideo {
-            try? AVAudioSession.sharedInstance().setCategory(.soloAmbient)
-            try? AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+            do {
+                try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoRecording, options: .mixWithOthers)
+                try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+            } catch {
+                if (error as NSError).code == AVAudioSession.ErrorCode.insufficientPriority.rawValue {
+                    self.microPhontIsAvailable = false
+                }
+            }
         }
+        
+        self.setupCamera()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -207,7 +203,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.session.stopRunning()
+        if self.session.isRunning {
+            self.session.stopRunning()
+        }
     }
     
     public override func viewDidLayoutSubviews() {
@@ -477,7 +475,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         if let microphone = self.getMicrophone() {
             audioInput = try? AVCaptureDeviceInput(device: microphone)
         }
-        guard !self.phoneOnCalling, let ai = audioInput else { return }
+        guard self.microPhontIsAvailable, let ai = audioInput else { return }
         self.removeAudioInput()
         
         if self.session.isRunning {
@@ -515,8 +513,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         if ZLPhotoConfiguration.default().allowRecordVideo {
             NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(handleAudioSessionInterruption), name: AVAudioSession.interruptionNotification, object: nil)
-            
-            self.callObserver.setDelegate(self, queue: DispatchQueue.main)
         }
     }
     
@@ -882,6 +878,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         guard self.movieFileOutput.isRecording else {
             return
         }
+        try? AVAudioSession.sharedInstance().setCategory(.playback)
         self.movieFileOutput.stopRecording()
         self.stopRecordAnimation()
     }
@@ -945,19 +942,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.recordVideoPlayerLayer?.player?.play()
     }
 
-}
-
-
-extension ZLCustomCamera: CXCallObserverDelegate {
-    
-    public func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
-        if call.hasEnded {
-            self.addAudioInput()
-        } else {
-            self.removeAudioInput()
-        }
-    }
-    
 }
 
 
