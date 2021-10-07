@@ -166,7 +166,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
                 try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoRecording, options: .mixWithOthers)
                 try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
             } catch {
-                if (error as NSError).code == AVAudioSession.ErrorCode.insufficientPriority.rawValue {
+                let err = error as NSError
+                if err.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue ||
+                    err.code == AVAudioSession.ErrorCode.isBusy.rawValue {
                     self.microPhontIsAvailable = false
                 }
             }
