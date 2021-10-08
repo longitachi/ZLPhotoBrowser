@@ -29,7 +29,7 @@ import Photos
 
 public class ZLEditVideoViewController: UIViewController {
 
-    static let frameImageSize = CGSize(width: 50.0 * 2.0 / 3.0, height: 50.0)
+    static let frameImageSize = CGSize(width: CGFloat(round(50.0 * 2.0 / 3.0)), height: 50.0)
     
     let avAsset: AVAsset
     
