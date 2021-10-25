@@ -132,7 +132,7 @@ public class ZLProgressHUD: UIView {
     }
     
     @objc public func show(timeout: TimeInterval = 100) {
-        DispatchQueue.main.async {
+        ZLMainAsync {
             UIApplication.shared.keyWindow?.addSubview(self)
         }
         if timeout > 0 {
@@ -144,7 +144,7 @@ public class ZLProgressHUD: UIView {
     
     @objc public func hide() {
         self.cleanTimer()
-        DispatchQueue.main.async {
+        ZLMainAsync {
             self.removeFromSuperview()
         }
     }

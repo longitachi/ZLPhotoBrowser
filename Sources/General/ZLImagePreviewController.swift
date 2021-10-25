@@ -475,11 +475,11 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
                 cell.image = nil
                 
                 self.urlImageLoader?(url, cell.preview.imageView, { [weak cell] (progress) in
-                    DispatchQueue.main.async {
+                    ZLMainAsync {
                         cell?.progress = progress
                     }
                 }, { [weak cell] in
-                    DispatchQueue.main.async {
+                    ZLMainAsync {
                         cell?.preview.resetSubViewSize()
                     }
                 })

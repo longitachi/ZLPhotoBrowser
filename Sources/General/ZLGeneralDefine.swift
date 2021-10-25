@@ -186,6 +186,18 @@ func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewC
     return true
 }
 
+func ZLMainAsync(after: TimeInterval = 0, handler: @escaping (() -> Void)) {
+    if after > 0 {
+        DispatchQueue.main.asyncAfter(deadline: .now() + after) {
+            handler()
+        }
+    } else {
+        DispatchQueue.main.async {
+            handler()
+        }
+    }
+}
+
 func zl_debugPrint(_ message: Any...) {
 //    message.forEach { debugPrint($0) }
 }

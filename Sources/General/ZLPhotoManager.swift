@@ -43,7 +43,7 @@ public class ZLPhotoManager: NSObject {
             let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
             placeholderAsset = newAssetRequest.placeholderForCreatedAsset
         }) { (suc, error) in
-            DispatchQueue.main.async {
+            ZLMainAsync {
                 if suc {
                     let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
                     completion?(suc, asset)
@@ -68,7 +68,7 @@ public class ZLPhotoManager: NSObject {
             let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
             placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
         }) { (suc, error) in
-            DispatchQueue.main.async {
+            ZLMainAsync {
                 if suc {
                     let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
                     completion?(suc, asset)
@@ -266,7 +266,7 @@ public class ZLPhotoManager: NSObject {
         option.resizeMode = .fast
         option.deliveryMode = .highQualityFormat
         option.progressHandler = { (pro, error, stop, info) in
-            DispatchQueue.main.async {
+            ZLMainAsync {
                 progress?(CGFloat(pro), error, stop, info)
             }
         }
@@ -286,7 +286,7 @@ public class ZLPhotoManager: NSObject {
         option.resizeMode = resizeMode
         option.isNetworkAccessAllowed = true
         option.progressHandler = { (pro, error, stop, info) in
-            DispatchQueue.main.async {
+            ZLMainAsync {
                 progress?(CGFloat(pro), error, stop, info)
             }
         }
@@ -319,7 +319,7 @@ public class ZLPhotoManager: NSObject {
         let option = PHVideoRequestOptions()
         option.isNetworkAccessAllowed = true
         option.progressHandler = { (pro, error, stop, info) in
-            DispatchQueue.main.async {
+            ZLMainAsync {
                 progress?(CGFloat(pro), error, stop, info)
             }
         }
@@ -329,7 +329,7 @@ public class ZLPhotoManager: NSObject {
         if asset.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { (session, info) in
                 // iOS11 and earlier, callback is not on the main thread.
-                DispatchQueue.main.async {
+                ZLMainAsync {
                     let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
                     if let avAsset = session?.asset {
                         let item = AVPlayerItem(asset: avAsset)
@@ -340,7 +340,7 @@ public class ZLPhotoManager: NSObject {
         } else {
             return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { (item, info) in
                 // iOS11 and earlier, callback is not on the main thread.
-                DispatchQueue.main.async {
+                ZLMainAsync {
                     let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
                     completion(item, info, isDegraded)
                 }
@@ -367,7 +367,7 @@ public class ZLPhotoManager: NSObject {
         if asset.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: options, exportPreset: AVAssetExportPresetHighestQuality) { (session, info) in
                 // iOS11 and earlier, callback is not on the main thread.
-                DispatchQueue.main.async {
+                ZLMainAsync {
                     if let avAsset = session?.asset {
                         completion(avAsset, info)
                     } else {
@@ -377,7 +377,7 @@ public class ZLPhotoManager: NSObject {
             }
         } else {
             return PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { (avAsset, _, info) in
-                DispatchQueue.main.async {
+                ZLMainAsync {
                     completion(avAsset, info)
                 }
             }

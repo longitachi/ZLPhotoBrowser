@@ -80,6 +80,8 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     var orientation: AVCaptureVideoOrientation = .portrait
     
+    let sessionQueue = DispatchQueue(label: "com.zl.camera.sessionQueue")
+    
     let session = AVCaptureSession()
     
     var videoInput: AVCaptureDeviceInput?
@@ -145,16 +147,16 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
         AVCaptureDevice.requestAccess(for: .video) { (videoGranted) in
             guard videoGranted else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                ZLMainAsync(after: 1) {
                     self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), type: .camera)
-                })
+                }
                 return
             }
             guard ZLPhotoConfiguration.default().allowRecordVideo else { return }
             
             AVCaptureDevice.requestAccess(for: .audio) { (audioGranted) in
                 if !audioGranted {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    ZLMainAsync(after: 1) {
                         self.showNoMicrophoneAuthorityAlert()
                     }
                 }
@@ -175,6 +177,9 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         
         self.setupCamera()
+        self.sessionQueue.async {
+            self.session.startRunning()
+        }
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -189,9 +194,12 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             #endif
         } else if self.cameraConfigureFinish, self.viewDidAppearCount == 0 {
             self.showTipsLabel(animate: true)
-            DispatchQueue.main.async {
-                self.session.startRunning()
-            }
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.toValue = 1
+            animation.duration = 0.15
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            self.previewLayer?.add(animation, forKey: nil)
             self.setFocusCusor(point: self.view.center)
         }
         self.viewDidAppearCount += 1
@@ -375,7 +383,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     func observerDeviceMotion() {
         if !Thread.isMainThread {
-            DispatchQueue.main.async {
+            ZLMainAsync {
                 self.observerDeviceMotion()
             }
             return
@@ -417,6 +425,8 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         guard let backCamera = self.getCamera(position: .back) else { return }
         guard let input = try? AVCaptureDeviceInput(device: backCamera) else { return }
         
+        self.session.beginConfiguration()
+        
         // 相机画面输入流
         self.videoInput = input
         // 照片输出流
@@ -447,9 +457,12 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         if self.session.canAddOutput(self.movieFileOutput) {
             self.session.addOutput(self.movieFileOutput)
         }
+        
+        self.session.commitConfiguration()
         // 预览layer
         self.previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
         self.previewLayer?.videoGravity = .resizeAspect
+        self.previewLayer?.opacity = 0
         self.view.layer.masksToBounds = true
         self.view.layer.insertSublayer(self.previewLayer!, at: 0)
         
@@ -950,20 +963,22 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
 extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        if photoSampleBuffer == nil || error != nil {
-            zl_debugPrint("拍照失败 \(error?.localizedDescription ?? "")")
-            return
-        }
-        
-        if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
-            self.session.stopRunning()
-            self.takedImage = UIImage(data: data)?.fixOrientation()
-            self.takedImageView.image = self.takedImage
-            self.takedImageView.isHidden = false
-            self.resetSubViewStatus()
-            self.editImage()
-        } else {
-            zl_debugPrint("拍照失败，data为空")
+        ZLMainAsync {
+            if photoSampleBuffer == nil || error != nil {
+                zl_debugPrint("拍照失败 \(error?.localizedDescription ?? "")")
+                return
+            }
+            
+            if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
+                self.session.stopRunning()
+                self.takedImage = UIImage(data: data)?.fixOrientation()
+                self.takedImageView.image = self.takedImage
+                self.takedImageView.isHidden = false
+                self.resetSubViewStatus()
+                self.editImage()
+            } else {
+                zl_debugPrint("拍照失败，data为空")
+            }
         }
     }
     
@@ -976,7 +991,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
         if self.restartRecordAfterSwitchCamera {
             self.restartRecordAfterSwitchCamera = false
             // 稍微加一个延时，否则切换摄像头后拍摄时间会略小于设置的最大值
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            ZLMainAsync(after: 0.1) {
                 let pauseTime = self.animateLayer.timeOffset
                 self.animateLayer.speed = 1
                 self.animateLayer.timeOffset = 0
@@ -985,58 +1000,62 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
                 self.animateLayer.beginTime = timeSincePause
             }
         } else {
-            self.startRecordAnimation()
+            ZLMainAsync {
+                self.startRecordAnimation()
+            }
         }
     }
     
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        if self.restartRecordAfterSwitchCamera {
+        ZLMainAsync {
+            if self.restartRecordAfterSwitchCamera {
+                self.recordUrls.append(outputFileURL)
+                self.startRecord()
+                return
+            }
             self.recordUrls.append(outputFileURL)
-            self.startRecord()
-            return
-        }
-        self.recordUrls.append(outputFileURL)
-        
-        var duration: Double = 0
-        if self.recordUrls.count == 1 {
-            duration = output.recordedDuration.seconds
-        } else {
-            for url in self.recordUrls {
-                let temp = AVAsset(url: url)
-                duration += temp.duration.seconds
-            }
-        }
-        
-        // 重置焦距
-        self.setVideoZoomFactor(1)
-        if duration < Double(ZLPhotoConfiguration.default().minRecordDuration) {
-            showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), ZLPhotoConfiguration.default().minRecordDuration), self)
-            self.resetSubViewStatus()
-            self.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
-            self.recordUrls.removeAll()
-            return
-        }
-        
-        // 拼接视频
-        self.session.stopRunning()
-        self.resetSubViewStatus()
-        if self.recordUrls.count > 1 {
-            ZLVideoManager.mergeVideos(fileUrls: self.recordUrls) { [weak self] (url, error) in
-                if let url = url, error == nil {
-                    self?.videoUrl = url
-                    self?.playRecordVideo(fileUrl: url)
-                } else if let error = error {
-                    self?.videoUrl = nil
-                    showAlertView(error.localizedDescription, self)
+            
+            var duration: Double = 0
+            if self.recordUrls.count == 1 {
+                duration = output.recordedDuration.seconds
+            } else {
+                for url in self.recordUrls {
+                    let temp = AVAsset(url: url)
+                    duration += temp.duration.seconds
                 }
-
-                self?.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
-                self?.recordUrls.removeAll()
             }
-        } else {
-            self.videoUrl = outputFileURL
-            self.playRecordVideo(fileUrl: outputFileURL)
-            self.recordUrls.removeAll()
+            
+            // 重置焦距
+            self.setVideoZoomFactor(1)
+            if duration < Double(ZLPhotoConfiguration.default().minRecordDuration) {
+                showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), ZLPhotoConfiguration.default().minRecordDuration), self)
+                self.resetSubViewStatus()
+                self.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
+                self.recordUrls.removeAll()
+                return
+            }
+            
+            // 拼接视频
+            self.session.stopRunning()
+            self.resetSubViewStatus()
+            if self.recordUrls.count > 1 {
+                ZLVideoManager.mergeVideos(fileUrls: self.recordUrls) { [weak self] (url, error) in
+                    if let url = url, error == nil {
+                        self?.videoUrl = url
+                        self?.playRecordVideo(fileUrl: url)
+                    } else if let error = error {
+                        self?.videoUrl = nil
+                        showAlertView(error.localizedDescription, self)
+                    }
+
+                    self?.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
+                    self?.recordUrls.removeAll()
+                }
+            } else {
+                self.videoUrl = outputFileURL
+                self.playRecordVideo(fileUrl: outputFileURL)
+                self.recordUrls.removeAll()
+            }
         }
     }
     

@@ -640,7 +640,7 @@ class ZLEditVideoFetchFrameImageOperation: Operation {
         self.generator.generateCGImagesAsynchronously(forTimes: [NSValue(time: self.time)]) { (_, cgImage, _, result, error) in
             if result == .succeeded, let cg = cgImage {
                 let image = UIImage(cgImage: cg)
-                DispatchQueue.main.async {
+                ZLMainAsync {
                     self.completion(image, self.time)
                 }
                 self.fetchFinish()

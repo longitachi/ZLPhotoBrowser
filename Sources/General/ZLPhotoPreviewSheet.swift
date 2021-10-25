@@ -279,7 +279,7 @@ public class ZLPhotoPreviewSheet: UIView {
             self.showNoAuthorityAlert()
         } else if status == .notDetermined {
             PHPhotoLibrary.requestAuthorization { (status) in
-                DispatchQueue.main.async {
+                ZLMainAsync {
                     if status == .denied {
                         self.showNoAuthorityAlert()
                     } else if status == .authorized {
@@ -1049,7 +1049,7 @@ extension ZLPhotoPreviewSheet: PHPhotoLibraryChangeObserver {
     
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
-        DispatchQueue.main.async {
+        ZLMainAsync {
             self.loadPhotos()
         }
     }

@@ -327,7 +327,7 @@ public class ZLEditImageViewController: UIViewController {
         DispatchQueue.global().async {
             self.thumbnailFilterImages = ZLPhotoConfiguration.default().filters.map { $0.applier?(thumbnailImage) ?? thumbnailImage }
             
-            DispatchQueue.main.async {
+            ZLMainAsync {
                 self.filterCollectionView.reloadData()
                 self.filterCollectionView.performBatchUpdates {
                     

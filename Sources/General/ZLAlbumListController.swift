@@ -72,7 +72,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
                 self?.arrDataSource.append(contentsOf: albumList)
                 
                 self?.shouldReloadAlbumList = false
-                DispatchQueue.main.async {
+                ZLMainAsync {
                     self?.tableView.reloadData()
                 }
             }
