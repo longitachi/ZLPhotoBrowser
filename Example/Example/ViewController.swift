@@ -143,27 +143,24 @@ class ViewController: UIViewController {
     }
     
     func showImagePicker(_ preview: Bool) {
-        let config = ZLPhotoConfiguration.default()
-//        config.editImageClipRatios = [.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)]
-//        config.filters = [.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)]
-        
-        config.imageStickerContainerView = ImageStickerContainerView()
-        
-        // You can first determine whether the asset is allowed to be selected.
-        config.canSelectAsset = { (asset) -> Bool in
-            return true
-        }
-        
-        config.noAuthorityCallback = { (type) in
-            switch type {
-            case .library:
-                debugPrint("No library authority")
-            case .camera:
-                debugPrint("No camera authority")
-            case .microphone:
-                debugPrint("No microphone authority")
+        ZLPhotoConfiguration.default()
+//            .editImageClipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
+//            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
+            .imageStickerContainerView(ImageStickerContainerView())
+            // You can first determine whether the asset is allowed to be selected.
+            .canSelectAsset { asset in
+                return true
             }
-        }
+            .noAuthorityCallback { type in
+                switch type {
+                case .library:
+                    debugPrint("No library authority")
+                case .camera:
+                    debugPrint("No camera authority")
+                case .microphone:
+                    debugPrint("No microphone authority")
+                }
+            }
         
         let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
         ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
