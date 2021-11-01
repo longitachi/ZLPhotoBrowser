@@ -233,6 +233,7 @@ extension ZLPhotoConfiguration {
         return self
     }
     
+    @discardableResult
     public func editImageTools(_ tools: [ZLEditImageViewController.EditImageTool]) -> ZLPhotoConfiguration {
         editImageTools = tools
         return self
