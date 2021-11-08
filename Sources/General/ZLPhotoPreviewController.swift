@@ -507,12 +507,30 @@ class ZLPhotoPreviewController: UIViewController {
     }
     
     @objc func originalPhotoClick() {
-        self.originalBtn.isSelected = !self.originalBtn.isSelected
-        let nav = (self.navigationController as? ZLImageNavController)
-        nav?.isSelectedOriginal = self.originalBtn.isSelected
+        let config = ZLPhotoConfiguration.default()
+        
+        let nav = (navigationController as? ZLImageNavController)
+        nav?.isSelectedOriginal = originalBtn.isSelected
         if nav?.arrSelectedModels.count == 0 {
-            self.selectBtnClick()
+            selectBtnClick()
+        } else if config.maxSelectCount == 1,
+                  !config.showSelectBtnWhenSingleSelect,
+                  originalBtn.isSelected,
+                  nav?.arrSelectedModels.count == 1,
+                  let currentModel = nav?.arrSelectedModels.first {
+            currentModel.isSelected = false
+            currentModel.editImage = nil
+            currentModel.editImageModel = nil
+            nav?.arrSelectedModels.removeAll { $0 == currentModel }
+            selPhotoPreview?.removeSelModel(model: currentModel)
+            resetSubViewStatus()
+            let index = config.sortAscending ? arrDataSources.lastIndex { $0 == currentModel } : arrDataSources.firstIndex { $0 == currentModel }
+            if let index = index {
+                collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+            }
         }
+        
+        originalBtn.isSelected.toggle()
     }
     
     @objc func doneBtnClick() {
