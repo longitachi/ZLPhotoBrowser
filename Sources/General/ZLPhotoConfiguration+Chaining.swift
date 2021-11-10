@@ -41,6 +41,13 @@ extension ZLPhotoConfiguration {
         return self
     }
     
+    
+    @discardableResult
+    public func navCancelButtonStyle(_ style: ZLPhotoConfiguration.CancelButtonStyle) -> ZLPhotoConfiguration {
+        navCancelButtonStyle = style
+        return self
+    }
+    
     @discardableResult
     public func sortAscending(_ ascending: Bool) -> ZLPhotoConfiguration {
         sortAscending = ascending

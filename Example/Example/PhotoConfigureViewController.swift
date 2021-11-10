@@ -294,7 +294,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         // 相册样式
-        let styleLabel = createLabel("Framework style")
+        let styleLabel = createLabel("Style")
         containerView.addSubview(styleLabel)
         styleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(cellRadiusLabel.snp.bottom).offset(velSpacing)
@@ -307,6 +307,7 @@ class PhotoConfigureViewController: UIViewController {
         containerView.addSubview(self.styleSegment)
         self.styleSegment.snp.makeConstraints { (make) in
             make.left.equalTo(styleLabel.snp.right).offset(horSpacing)
+            make.right.lessThanOrEqualToSuperview().offset(-10)
             make.centerY.equalTo(styleLabel)
         }
         

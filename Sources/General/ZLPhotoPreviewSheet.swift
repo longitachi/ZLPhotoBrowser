@@ -108,7 +108,7 @@ public class ZLPhotoPreviewSheet: UIView {
         let config = ZLPhotoConfiguration.default()
         if !config.allowSelectImage &&
             !config.allowSelectVideo {
-            assert(false, "ZLPhotoBrowser: error configuration")
+            assert(false, "ZLPhotoBrowser: error configuration. The values of allowSelectImage and allowSelectVideo are both false")
             config.allowSelectImage = true
         }
         

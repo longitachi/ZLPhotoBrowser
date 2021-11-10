@@ -144,9 +144,10 @@ class ViewController: UIViewController {
     
     func showImagePicker(_ preview: Bool) {
         ZLPhotoConfiguration.default()
-//            .editImageClipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
+            .editImageClipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
 //            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
             .imageStickerContainerView(ImageStickerContainerView())
+            .navCancelButtonStyle(.image)
             // You can first determine whether the asset is allowed to be selected.
             .canSelectAsset { asset in
                 return true
