@@ -223,16 +223,7 @@ class ZLThumbnailViewController: UIViewController {
         
         self.embedAlbumListView?.frame = CGRect(x: 0, y: navViewFrame.maxY, width: self.view.bounds.width, height: self.view.bounds.height-navViewFrame.maxY)
         
-        var showBottomToolBtns = true
-        
-        let config = ZLPhotoConfiguration.default()
-        let condition1 = config.editAfterSelectThumbnailImage &&
-            config.maxSelectCount == 1 &&
-            (config.allowEditImage || config.allowEditVideo)
-        let condition2 = config.allowPreviewPhotos && config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
-        if condition1 || condition2 {
-            showBottomToolBtns = false
-        }
+        let showBottomToolBtns = showBottomToolBar()
         
         let bottomViewH: CGFloat
         if self.showLimitAuthTipsView, showBottomToolBtns {
@@ -441,6 +432,18 @@ class ZLThumbnailViewController: UIViewController {
             self.collectionView.reloadData()
             self.scrollToBottom()
         }
+    }
+    
+    func showBottomToolBar() -> Bool {
+        let config = ZLPhotoConfiguration.default()
+        let condition1 = config.editAfterSelectThumbnailImage &&
+            config.maxSelectCount == 1 &&
+            (config.allowEditImage || config.allowEditVideo)
+        let condition2 = config.allowPreviewPhotos && config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
+        if condition1 || condition2 {
+            return false
+        }
+        return true
     }
     
     // MARK: btn actions
@@ -666,6 +669,8 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     func resetBottomToolBtnStatus() {
+        guard showBottomToolBar() else { return }
+        
         let nav = self.navigationController as! ZLImageNavController
         if nav.arrSelectedModels.count > 0 {
             self.previewBtn.isEnabled = true

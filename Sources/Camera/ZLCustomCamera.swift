@@ -143,7 +143,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         
         self.observerDeviceMotion()
-        self.addNotification()
         
         AVCaptureDevice.requestAccess(for: .video) { (videoGranted) in
             guard videoGranted else {
@@ -152,9 +151,13 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
                 }
                 return
             }
-            guard ZLPhotoConfiguration.default().allowRecordVideo else { return }
+            guard ZLPhotoConfiguration.default().allowRecordVideo else {
+                self.addNotification()
+                return
+            }
             
             AVCaptureDevice.requestAccess(for: .audio) { (audioGranted) in
+                self.addNotification()
                 if !audioGranted {
                     ZLMainAsync(after: 1) {
                         self.showNoMicrophoneAuthorityAlert()
