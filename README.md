@@ -92,6 +92,14 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.2.0
+  Add:
+    Add chained calls.
+    Optmize the custom camera code.
+    Add image style of cancel button.
+  Fix:
+    Selected video duplicates after editing mode.[#655]
+    Unable to deselect photos under certain conditions.[#659]
 ● 4.1.9
   Fix:
     Remove CallKit.
@@ -105,12 +113,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Edit the image directly after taking the photo.
   Fix:
     Camera cannot turning on while calling.
-● 4.1.7
-  Add:
-    Add a property to control whether to display the selection button animation when selecting.
-    Separate the colors shared by album list interface and perview interface.
-    Add a cancel block in the camera view controller.
-    Support export video.
 ...
 ```
 

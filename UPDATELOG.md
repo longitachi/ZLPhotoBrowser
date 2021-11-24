@@ -1,6 +1,18 @@
 # Update Log
 
 -----
+## [4.2.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.0) (2021-11-24)
+### Add:
+* Add chained calls.
+* Optmize the custom camera code.
+* Add image style of cancel button.
+  
+### Fix:
+* Selected video duplicates after editing mode.[#655](https://github.com/longitachi/ZLPhotoBrowser/issues/655)
+* Unable to deselect photos under certain conditions.[#659](https://github.com/longitachi/ZLPhotoBrowser/issues/659)
+
+---
+
 ## [4.1.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.9) (2021-09-27)
 ### Fix:
 * Remove CallKit because it resulted in rejection of app review.[#650](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
