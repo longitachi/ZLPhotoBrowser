@@ -58,13 +58,39 @@ public class ZLEditImageModel: NSObject {
     
 }
 
-public class ZLEditImageViewController: UIViewController {
-
-    static let filterColViewH: CGFloat = 80
+open class ZLEditImageViewController: UIViewController {
     
     static let maxDrawLineImageWidth: CGFloat = 600
     
-    static let ashbinNormalBgColor = zlRGB(40, 40, 40).withAlphaComponent(0.8)
+    @objc public var filterColViewH: CGFloat = 80
+    
+    @objc public var ashbinNormalBgColor = zlRGB(40, 40, 40).withAlphaComponent(0.8)
+    
+    @objc public lazy var cancelBtn = UIButton(type: .custom)
+    
+    @objc public lazy var scrollView = UIScrollView()
+    
+    // 上方渐变阴影层
+    @objc public lazy var topShadowView = UIView()
+    
+    @objc public lazy var topShadowLayer = CAGradientLayer()
+     
+    // 下方渐变阴影层
+    @objc public var bottomShadowView = UIView()
+    
+    @objc public var bottomShadowLayer = CAGradientLayer()
+    
+    @objc public var doneBtn = UIButton(type: .custom)
+    
+    @objc public var revokeBtn = UIButton(type: .custom)
+    
+    @objc public lazy var ashbinView = UIView()
+    
+    @objc public lazy var ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
+    
+    @objc public var drawLineWidth: CGFloat = 5
+    
+    @objc public var mosaicLineWidth: CGFloat = 25
     
     var animate = false
     
@@ -82,20 +108,16 @@ public class ZLEditImageViewController: UIViewController {
     
     var editImage: UIImage
     
-    var cancelBtn: UIButton!
-    
-    var scrollView: UIScrollView!
-    
-    var containerView: UIView!
+    lazy var containerView = UIView()
     
     // Show image.
-    var imageView: UIImageView!
+    lazy var imageView = UIImageView(image: originalImage)
     
     // Show draw lines.
-    var drawingImageView: UIImageView!
+    lazy var drawingImageView = UIImageView()
     
     // Show text and image stickers.
-    var stickersContainer: UIView!
+    lazy var stickersContainer = UIView()
     
     // 处理好的马赛克图片
     var mosaicImage: UIImage?
@@ -106,20 +128,6 @@ public class ZLEditImageViewController: UIViewController {
     // 显示马赛克图片的layer的mask
     var mosaicImageLayerMaskLayer: CAShapeLayer?
     
-    // 上方渐变阴影层
-    var topShadowView: UIView!
-    
-    var topShadowLayer: CAGradientLayer!
-     
-    // 下方渐变阴影层
-    var bottomShadowView: UIView!
-    
-    var bottomShadowLayer: CAGradientLayer!
-    
-    var doneBtn: UIButton!
-    
-    var revokeBtn: UIButton!
-    
     var selectedTool: ZLEditImageViewController.EditImageTool?
     
     var editToolCollectionView: UICollectionView!
@@ -128,21 +136,13 @@ public class ZLEditImageViewController: UIViewController {
     
     var filterCollectionView: UICollectionView!
     
-    var ashbinView: UIView!
-    
-    var ashbinImgView: UIImageView!
-    
     let drawColors: [UIColor]
     
     var currentDrawColor = ZLPhotoConfiguration.default().editImageDefaultDrawColor
     
     var drawPaths: [ZLDrawPath]
     
-    var drawLineWidth: CGFloat = 5
-    
     var mosaicPaths: [ZLMosaicPath]
-    
-    var mosaicLineWidth: CGFloat = 25
     
     // collectionview 中的添加滤镜的小图
     var thumbnailFilterImages: [UIImage] = []
@@ -250,11 +250,11 @@ public class ZLEditImageViewController: UIViewController {
         self.stickers = stickers.compactMap { $0 }
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupUI()
@@ -265,7 +265,7 @@ public class ZLEditImageViewController: UIViewController {
         }
     }
     
-    public override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard self.shouldLayout else {
             return
@@ -291,7 +291,7 @@ public class ZLEditImageViewController: UIViewController {
         self.drawColorCollectionView.frame = CGRect(x: 20, y: 20, width: self.view.frame.width - 80, height: 50)
         self.revokeBtn.frame = CGRect(x: self.view.frame.width - 15 - 35, y: 30, width: 35, height: 30)
         
-        self.filterCollectionView.frame = CGRect(x: 20, y: 0, width: self.view.frame.width-40, height: ZLEditImageViewController.filterColViewH)
+        self.filterCollectionView.frame = CGRect(x: 20, y: 0, width: self.view.frame.width - 40, height: filterColViewH)
         
         let toolY: CGFloat = 85
         
@@ -384,52 +384,43 @@ public class ZLEditImageViewController: UIViewController {
     func setupUI() {
         self.view.backgroundColor = .black
         
-        self.scrollView = UIScrollView()
         self.scrollView.backgroundColor = .black
         self.scrollView.minimumZoomScale = 1
         self.scrollView.maximumZoomScale = 3
         self.scrollView.delegate = self
         self.view.addSubview(self.scrollView)
         
-        self.containerView = UIView()
         self.containerView.clipsToBounds = true
         self.scrollView.addSubview(self.containerView)
         
-        self.imageView = UIImageView(image: self.originalImage)
         self.imageView.contentMode = .scaleAspectFit
         self.imageView.clipsToBounds = true
         self.imageView.backgroundColor = .black
         self.containerView.addSubview(self.imageView)
         
-        self.drawingImageView = UIImageView()
         self.drawingImageView.contentMode = .scaleAspectFit
         self.drawingImageView.isUserInteractionEnabled = true
         self.containerView.addSubview(self.drawingImageView)
         
-        self.stickersContainer = UIView()
         self.containerView.addSubview(self.stickersContainer)
         
         let color1 = UIColor.black.withAlphaComponent(0.35).cgColor
         let color2 = UIColor.black.withAlphaComponent(0).cgColor
-        self.topShadowView = UIView()
+        
         self.view.addSubview(self.topShadowView)
         
-        self.topShadowLayer = CAGradientLayer()
         self.topShadowLayer.colors = [color1, color2]
         self.topShadowLayer.locations = [0, 1]
         self.topShadowView.layer.addSublayer(self.topShadowLayer)
         
-        self.cancelBtn = UIButton(type: .custom)
         self.cancelBtn.setImage(getImage("zl_retake"), for: .normal)
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         self.cancelBtn.adjustsImageWhenHighlighted = false
         self.cancelBtn.zl_enlargeValidTouchArea(inset: 30)
         self.topShadowView.addSubview(self.cancelBtn)
         
-        self.bottomShadowView = UIView()
         self.view.addSubview(self.bottomShadowView)
         
-        self.bottomShadowLayer = CAGradientLayer()
         self.bottomShadowLayer.colors = [color2, color1]
         self.bottomShadowLayer.locations = [0, 1]
         self.bottomShadowView.layer.addSublayer(self.bottomShadowLayer)
@@ -448,7 +439,6 @@ public class ZLEditImageViewController: UIViewController {
         
         ZLEditToolCell.zl_register(self.editToolCollectionView)
         
-        self.doneBtn = UIButton(type: .custom)
         self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         self.doneBtn.setTitle(localLanguageTextValue(.editFinish), for: .normal)
@@ -474,7 +464,7 @@ public class ZLEditImageViewController: UIViewController {
         ZLDrawColorCell.zl_register(self.drawColorCollectionView)
         
         let filterLayout = UICollectionViewFlowLayout()
-        filterLayout.itemSize = CGSize(width: ZLEditImageViewController.filterColViewH-20, height: ZLEditImageViewController.filterColViewH)
+        filterLayout.itemSize = CGSize(width: filterColViewH - 20, height: filterColViewH)
         filterLayout.minimumLineSpacing = 15
         filterLayout.minimumInteritemSpacing = 15
         filterLayout.scrollDirection = .horizontal
@@ -488,7 +478,6 @@ public class ZLEditImageViewController: UIViewController {
         
         ZLFilterImageCell.zl_register(self.filterCollectionView)
         
-        self.revokeBtn = UIButton(type: .custom)
         self.revokeBtn.setImage(getImage("zl_revoke_disable"), for: .disabled)
         self.revokeBtn.setImage(getImage("zl_revoke"), for: .normal)
         self.revokeBtn.adjustsImageWhenHighlighted = false
@@ -498,14 +487,18 @@ public class ZLEditImageViewController: UIViewController {
         self.bottomShadowView.addSubview(self.revokeBtn)
         
         let ashbinSize = CGSize(width: 160, height: 80)
-        self.ashbinView = UIView(frame: CGRect(x: (self.view.frame.width-ashbinSize.width)/2, y: self.view.frame.height-ashbinSize.height-40, width: ashbinSize.width, height: ashbinSize.height))
-        self.ashbinView.backgroundColor = ZLEditImageViewController.ashbinNormalBgColor
+        self.ashbinView.frame = CGRect(
+            x: (self.view.frame.width - ashbinSize.width) / 2,
+            y: self.view.frame.height - ashbinSize.height - 40,
+            width: ashbinSize.width,
+            height: ashbinSize.height
+        )
+        self.ashbinView.backgroundColor = ashbinNormalBgColor
         self.ashbinView.layer.cornerRadius = 15
         self.ashbinView.layer.masksToBounds = true
         self.ashbinView.isHidden = true
         self.view.addSubview(self.ashbinView)
         
-        self.ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
         self.ashbinImgView.frame = CGRect(x: (ashbinSize.width-25)/2, y: 15, width: 25, height: 25)
         self.ashbinView.addSubview(self.ashbinImgView)
         
@@ -1229,7 +1222,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
                 }
             }
         } else {
-            self.ashbinView.backgroundColor = ZLEditImageViewController.ashbinNormalBgColor
+            self.ashbinView.backgroundColor = ashbinNormalBgColor
             self.ashbinImgView.isHighlighted = false
             if sticker.alpha != 1 {
                 sticker.layer.removeAllAnimations()

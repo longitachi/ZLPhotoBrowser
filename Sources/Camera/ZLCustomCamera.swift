@@ -28,7 +28,7 @@ import UIKit
 import AVFoundation
 import CoreMotion
 
-public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
+open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
 
     struct Layout {
         
@@ -48,29 +48,35 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     @objc public var cancelBlock: ( () -> Void )?
     
-    var tipsLabel: UILabel!
+    public lazy var tipsLabel = UILabel()
+    
+    public lazy var bottomView = UIView()
+    
+    public lazy var largeCircleView: UIVisualEffectView = {
+        if #available(iOS 13.0, *) {
+            return UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialLight))
+        } else {
+            return UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        }
+    }()
+    
+    public lazy var smallCircleView = UIView()
+    
+    public lazy var animateLayer = CAShapeLayer()
+    
+    public lazy var retakeBtn = UIButton(type: .custom)
+    
+    public lazy var doneBtn = UIButton(type: .custom)
+    
+    public lazy var dismissBtn = UIButton(type: .custom)
+    
+    public lazy var switchCameraBtn = UIButton(type: .custom)
+    
+    public lazy var focusCursorView = UIImageView(image: getImage("zl_focus"))
+    
+    public lazy var takedImageView = UIImageView()
     
     var hideTipsTimer: Timer?
-    
-    var bottomView: UIView!
-    
-    var largeCircleView: UIVisualEffectView!
-    
-    var smallCircleView: UIView!
-    
-    var animateLayer: CAShapeLayer!
-    
-    var retakeBtn: UIButton!
-    
-    var doneBtn: UIButton!
-    
-    var dismissBtn: UIButton!
-    
-    var switchCameraBtn: UIButton!
-    
-    var focusCursorView: UIImageView!
-    
-    var takedImageView: UIImageView!
     
     var takedImage: UIImage?
     
@@ -130,11 +136,11 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.modalPresentationStyle = .fullScreen
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupUI()
@@ -185,7 +191,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
     }
     
-    public override func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable), type: .camera)
@@ -208,20 +214,20 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.viewDidAppearCount += 1
     }
     
-    public override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.motionManager?.stopDeviceMotionUpdates()
         self.motionManager = nil
     }
     
-    public override func viewDidDisappear(_ animated: Bool) {
+    open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if self.session.isRunning {
             self.session.stopRunning()
         }
     }
     
-    public override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard !self.layoutOK else { return }
         self.layoutOK = true
@@ -257,20 +263,17 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     func setupUI() {
         self.view.backgroundColor = .black
         
-        self.takedImageView = UIImageView()
         self.takedImageView.backgroundColor = .black
         self.takedImageView.isHidden = true
         self.takedImageView.contentMode = .scaleAspectFit
         self.view.addSubview(self.takedImageView)
         
-        self.focusCursorView = UIImageView(image: getImage("zl_focus"))
         self.focusCursorView.contentMode = .scaleAspectFit
         self.focusCursorView.clipsToBounds = true
         self.focusCursorView.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
         self.focusCursorView.alpha = 0
         self.view.addSubview(self.focusCursorView)
         
-        self.tipsLabel = UILabel()
         self.tipsLabel.font = getFont(14)
         self.tipsLabel.textColor = .white
         self.tipsLabel.textAlignment = .center
@@ -286,33 +289,24 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         
         self.view.addSubview(self.tipsLabel)
-        
-        self.bottomView = UIView()
         self.view.addSubview(self.bottomView)
         
-        self.dismissBtn = UIButton(type: .custom)
         self.dismissBtn.setImage(getImage("zl_arrow_down"), for: .normal)
         self.dismissBtn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
         self.dismissBtn.adjustsImageWhenHighlighted = false
         self.dismissBtn.zl_enlargeValidTouchArea(inset: 30)
         self.bottomView.addSubview(self.dismissBtn)
-        if #available(iOS 13.0, *) {
-            self.largeCircleView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialLight))
-        } else {
-            self.largeCircleView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        }
+        
         self.largeCircleView.layer.masksToBounds = true
         self.largeCircleView.layer.cornerRadius = ZLCustomCamera.Layout.largeCircleRadius / 2
         self.bottomView.addSubview(self.largeCircleView)
         
-        self.smallCircleView = UIView()
         self.smallCircleView.layer.masksToBounds = true
         self.smallCircleView.layer.cornerRadius = ZLCustomCamera.Layout.smallCircleRadius / 2
         self.smallCircleView.isUserInteractionEnabled = false
         self.smallCircleView.backgroundColor = .white
         self.bottomView.addSubview(self.smallCircleView)
         
-        self.animateLayer = CAShapeLayer()
         let animateLayerRadius = ZLCustomCamera.Layout.largeCircleRadius
         let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: animateLayerRadius, height: animateLayerRadius), cornerRadius: animateLayerRadius/2)
         self.animateLayer.path = path.cgPath
@@ -333,7 +327,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             takePictureTap?.require(toFail: recordLongPress)
         }
         
-        self.retakeBtn = UIButton(type: .custom)
         self.retakeBtn.setImage(getImage("zl_retake"), for: .normal)
         self.retakeBtn.addTarget(self, action: #selector(retakeBtnClick), for: .touchUpInside)
         self.retakeBtn.isHidden = true
@@ -342,7 +335,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.view.addSubview(self.retakeBtn)
         
         let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
-        self.switchCameraBtn = UIButton(type: .custom)
         self.switchCameraBtn.setImage(getImage("zl_toggle_camera"), for: .normal)
         self.switchCameraBtn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
         self.switchCameraBtn.adjustsImageWhenHighlighted = false
@@ -350,7 +342,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.switchCameraBtn.isHidden = cameraCount <= 1
         self.view.addSubview(self.switchCameraBtn)
         
-        self.doneBtn = UIButton(type: .custom)
         self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
         self.doneBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
@@ -964,6 +955,15 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
 
 
 extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
+    
+    public func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        DispatchQueue.main.async {
+            self.previewLayer?.opacity = 0
+            UIView.animate(withDuration: 0.25) {
+                self.previewLayer?.opacity = 1
+            }
+        }
+    }
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         ZLMainAsync {
