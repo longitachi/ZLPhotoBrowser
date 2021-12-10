@@ -331,6 +331,12 @@ extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    public func customImageForKey(_ map: [String: UIImage?]) -> ZLPhotoConfiguration {
+        customImageForKey = map
+        return self
+    }
+    
+    @discardableResult
     public func shouldAnialysisAsset(_ value: Bool) -> ZLPhotoConfiguration {
         shouldAnialysisAsset = value
         return self

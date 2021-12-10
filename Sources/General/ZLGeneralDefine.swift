@@ -53,8 +53,11 @@ func zlRGB(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) -> UIColor {
 }
 
 func getImage(_ named: String) -> UIImage? {
-    if ZLCustomImageDeploy.deploy.contains(named) {
-        return UIImage(named: named)
+    if ZLCustomImageDeploy.imageNames.contains(named), let image = UIImage(named: named) {
+        return image
+    }
+    if let image = ZLCustomImageDeploy.imageForKey[named] {
+        return image
     }
     return UIImage(named: named, in: Bundle.zlPhotoBrowserBundle, compatibleWith: nil)
 }
