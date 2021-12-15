@@ -117,7 +117,7 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ```
 
 ### <a id="Languages"></a>Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩Indonesian.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLPhotoBrowser in your project:

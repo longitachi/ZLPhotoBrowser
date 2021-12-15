@@ -39,6 +39,7 @@ import Foundation
     case korean
     case malay
     case italian
+    case indonesian
 }
 
 public struct ZLLocalLanguageKey: Hashable {
