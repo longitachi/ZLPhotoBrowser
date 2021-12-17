@@ -143,10 +143,16 @@ class ViewController: UIViewController {
     }
     
     func showImagePicker(_ preview: Bool) {
-        ZLPhotoConfiguration.default()
-            .editImageClipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
-//            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
+        let editImageConfiguration = ZLPhotoConfiguration.default().editImageConfiguration
+        editImageConfiguration
             .imageStickerContainerView(ImageStickerContainerView())
+//            .tools([.draw, .filter, .adjust, .mosaic, .clip, .textSticker, .imageSticker])
+//            .clipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
+//            .imageStickerContainerView(ImageStickerContainerView())
+//            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
+        
+        ZLPhotoConfiguration.default()
+            .editImageConfiguration(editImageConfiguration)
             .navCancelButtonStyle(.image)
             // You can first determine whether the asset is allowed to be selected.
             .canSelectAsset { asset in

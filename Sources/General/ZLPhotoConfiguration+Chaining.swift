@@ -241,41 +241,61 @@ extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    public func editImageTools(_ tools: [ZLEditImageViewController.EditImageTool]) -> ZLPhotoConfiguration {
+    public func editImageConfiguration(_ configuration: ZLEditImageConfiguration) -> ZLPhotoConfiguration {
+        editImageConfiguration = configuration
+        return self
+    }
+    
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
+    @discardableResult
+    public func editImageTools(_ tools: [ZLEditImageConfiguration.EditTool]) -> ZLPhotoConfiguration {
         editImageTools = tools
         return self
     }
     
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @discardableResult
     public func editImageDrawColors(_ colors: [UIColor]) -> ZLPhotoConfiguration {
         editImageDrawColors = colors
         return self
     }
     
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
+    @discardableResult
+    public func editImageDefaultDrawColor(_ color: UIColor) -> ZLPhotoConfiguration {
+        editImageDefaultDrawColor = color
+        return self
+    }
+    
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @discardableResult
     public func editImageClipRatios(_ ratios: [ZLImageClipRatio]) -> ZLPhotoConfiguration {
         editImageClipRatios = ratios
         return self
     }
     
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @discardableResult
     public func textStickerTextColors(_ colors: [UIColor]) -> ZLPhotoConfiguration {
         textStickerTextColors = colors
         return self
     }
     
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @discardableResult
     public func textStickerDefaultTextColor(_ color: UIColor) -> ZLPhotoConfiguration {
         textStickerDefaultTextColor = color
         return self
     }
     
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @discardableResult
     public func filters(_ filters: [ZLFilter]) -> ZLPhotoConfiguration {
         self.filters = filters
         return self
     }
     
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @discardableResult
     public func imageStickerContainerView(_ view: (UIView & ZLImageStickerContainerDelegate)?) -> ZLPhotoConfiguration {
         imageStickerContainerView = view

@@ -532,8 +532,10 @@ class PhotoConfigureViewController: UIViewController {
             make.left.equalTo(self.editImageToolView)
         }
         
+        let editImageConfig = config.editImageConfiguration
+        
         self.editImageDrawToolSwitch = UISwitch()
-        self.editImageDrawToolSwitch.isOn = config.editImageTools.contains(.draw)
+        self.editImageDrawToolSwitch.isOn = editImageConfig.tools.contains(.draw)
         self.editImageDrawToolSwitch.addTarget(self, action: #selector(drawToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageDrawToolSwitch)
         self.editImageDrawToolSwitch.snp.makeConstraints { (make) in
@@ -550,7 +552,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageClipToolSwitch = UISwitch()
-        self.editImageClipToolSwitch.isOn = config.editImageTools.contains(.clip)
+        self.editImageClipToolSwitch.isOn = editImageConfig.tools.contains(.clip)
         self.editImageClipToolSwitch.addTarget(self, action: #selector(clipToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageClipToolSwitch)
         self.editImageClipToolSwitch.snp.makeConstraints { (make) in
@@ -567,7 +569,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageImageStickerToolSwitch = UISwitch()
-        self.editImageImageStickerToolSwitch.isOn = config.editImageTools.contains(.imageSticker)
+        self.editImageImageStickerToolSwitch.isOn = editImageConfig.tools.contains(.imageSticker)
         self.editImageImageStickerToolSwitch.addTarget(self, action: #selector(imageStickerToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageImageStickerToolSwitch)
         self.editImageImageStickerToolSwitch.snp.makeConstraints { (make) in
@@ -584,7 +586,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageTextStickerToolSwitch = UISwitch()
-        self.editImageTextStickerToolSwitch.isOn = config.editImageTools.contains(.textSticker)
+        self.editImageTextStickerToolSwitch.isOn = editImageConfig.tools.contains(.textSticker)
         self.editImageTextStickerToolSwitch.addTarget(self, action: #selector(textStickerToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageTextStickerToolSwitch)
         self.editImageTextStickerToolSwitch.snp.makeConstraints { (make) in
@@ -601,7 +603,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageMosaicToolSwitch = UISwitch()
-        self.editImageMosaicToolSwitch.isOn = config.editImageTools.contains(.mosaic)
+        self.editImageMosaicToolSwitch.isOn = editImageConfig.tools.contains(.mosaic)
         self.editImageMosaicToolSwitch.addTarget(self, action: #selector(mosaicToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageMosaicToolSwitch)
         self.editImageMosaicToolSwitch.snp.makeConstraints { (make) in
@@ -618,7 +620,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageFilterToolSwitch = UISwitch()
-        self.editImageFilterToolSwitch.isOn = config.editImageTools.contains(.filter)
+        self.editImageFilterToolSwitch.isOn = editImageConfig.tools.contains(.filter)
         self.editImageFilterToolSwitch.addTarget(self, action: #selector(filterToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageFilterToolSwitch)
         self.editImageFilterToolSwitch.snp.makeConstraints { (make) in
@@ -963,50 +965,50 @@ class PhotoConfigureViewController: UIViewController {
     }
     
     @objc func drawToolChanged() {
-        if config.editImageTools.contains(.draw) {
-            config.editImageTools.removeAll { $0 == .draw }
+        if config.editImageConfiguration.tools.contains(.draw) {
+            config.editImageConfiguration.tools.removeAll { $0 == .draw }
         } else {
-            config.editImageTools.append(.draw)
+            config.editImageConfiguration.tools.append(.draw)
         }
     }
     
     @objc func clipToolChanged() {
-        if config.editImageTools.contains(.clip) {
-            config.editImageTools.removeAll { $0 == .clip }
+        if config.editImageConfiguration.tools.contains(.clip) {
+            config.editImageConfiguration.tools.removeAll { $0 == .clip }
         } else {
-            config.editImageTools.append(.clip)
+            config.editImageConfiguration.tools.append(.clip)
         }
     }
     
     @objc func imageStickerToolChanged() {
-        if config.editImageTools.contains(.imageSticker) {
-            config.editImageTools.removeAll { $0 == .imageSticker }
+        if config.editImageConfiguration.tools.contains(.imageSticker) {
+            config.editImageConfiguration.tools.removeAll { $0 == .imageSticker }
         } else {
-            config.editImageTools.append(.imageSticker)
+            config.editImageConfiguration.tools.append(.imageSticker)
         }
     }
     
     @objc func textStickerToolChanged() {
-        if config.editImageTools.contains(.textSticker) {
-            config.editImageTools.removeAll { $0 == .textSticker }
+        if config.editImageConfiguration.tools.contains(.textSticker) {
+            config.editImageConfiguration.tools.removeAll { $0 == .textSticker }
         } else {
-            config.editImageTools.append(.textSticker)
+            config.editImageConfiguration.tools.append(.textSticker)
         }
     }
     
     @objc func mosaicToolChanged() {
-        if config.editImageTools.contains(.mosaic) {
-            config.editImageTools.removeAll { $0 == .mosaic }
+        if config.editImageConfiguration.tools.contains(.mosaic) {
+            config.editImageConfiguration.tools.removeAll { $0 == .mosaic }
         } else {
-            config.editImageTools.append(.mosaic)
+            config.editImageConfiguration.tools.append(.mosaic)
         }
     }
     
     @objc func filterToolChanged() {
-        if config.editImageTools.contains(.filter) {
-            config.editImageTools.removeAll { $0 == .filter }
+        if config.editImageConfiguration.tools.contains(.filter) {
+            config.editImageConfiguration.tools.removeAll { $0 == .filter }
         } else {
-            config.editImageTools.append(.filter)
+            config.editImageConfiguration.tools.append(.filter)
         }
     }
     

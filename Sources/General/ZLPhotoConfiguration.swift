@@ -51,7 +51,7 @@ public class ZLPhotoConfiguration: NSObject {
     
     @objc public var statusBarStyle: UIStatusBarStyle = .lightContent
     
-    /// text: Cancel.  image: 'x'
+    /// text: Cancel.  image: 'x'. Default to text.
     @objc public var navCancelButtonStyle: ZLPhotoConfiguration.CancelButtonStyle = .text
     
     /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
@@ -221,89 +221,80 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow to choose the minimum duration of the video. Defaults to 0.
     @objc public var minSelectVideoDuration: Second = 0
     
-    private var pri_editImageTools: [ZLEditImageViewController.EditImageTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
-    /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker, mosaic, filtter)
-    /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
-    /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
-    public var editImageTools: [ZLEditImageViewController.EditImageTool] {
+    /// Image editor configuration.
+    @objc public var editImageConfiguration = ZLEditImageConfiguration()
+    
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
+    public var editImageTools: [ZLEditImageConfiguration.EditTool] {
         set {
-            pri_editImageTools = newValue
+            editImageConfiguration.tools = newValue
         }
         get {
-            if pri_editImageTools.isEmpty {
-                return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
-            } else {
-                return pri_editImageTools
-            }
+            return editImageConfiguration.tools
         }
     }
     
-    private var pri_editImageDrawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
-    /// Draw colors for image editor.
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var editImageDrawColors: [UIColor] {
         set {
-            pri_editImageDrawColors = newValue
+            editImageConfiguration.drawColors = newValue
         }
         get {
-            if pri_editImageDrawColors.isEmpty {
-                return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
-            } else {
-                return pri_editImageDrawColors
-            }
+            return editImageConfiguration.drawColors
         }
     }
     
-    /// The default draw color. If this color not in editImageDrawColors, will pick the first color in editImageDrawColors as the default.
-    @objc public var editImageDefaultDrawColor = zlRGB(241, 79, 79)
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
+    @objc public var editImageDefaultDrawColor: UIColor {
+        set {
+            editImageConfiguration.defaultDrawColor = newValue
+        }
+        get {
+            return editImageConfiguration.defaultDrawColor
+        }
+    }
     
-    private var pri_editImageClipRatios: [ZLImageClipRatio] = [.custom]
-    /// Edit ratios for image editor.
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var editImageClipRatios: [ZLImageClipRatio] {
         set {
-            pri_editImageClipRatios = newValue
+            editImageConfiguration.clipRatios = newValue
         }
         get {
-            if pri_editImageClipRatios.isEmpty {
-                return [.custom]
-            } else {
-                return pri_editImageClipRatios
-            }
+            return editImageConfiguration.clipRatios
         }
     }
     
-    private var pri_textStickerTextColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
-    /// Text sticker colors for image editor.
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var textStickerTextColors: [UIColor] {
         set {
-            pri_textStickerTextColors = newValue
+            editImageConfiguration.textStickerTextColors = newValue
         }
         get {
-            if pri_textStickerTextColors.isEmpty {
-                return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
-            } else {
-                return pri_textStickerTextColors
-            }
+            return editImageConfiguration.textStickerTextColors
         }
     }
     
-    /// The default text sticker color. If this color not in textStickerTextColors, will pick the first color in textStickerTextColors as the default.
-    @objc public var textStickerDefaultTextColor = UIColor.white
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
+    @objc public var textStickerDefaultTextColor: UIColor {
+        set {
+            editImageConfiguration.textStickerDefaultTextColor = newValue
+        }
+        get {
+            return editImageConfiguration.textStickerDefaultTextColor
+        }
+    }
     
-    private var pri_filters: [ZLFilter] = ZLFilter.all
-    /// Filters for image editor.
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var filters: [ZLFilter] {
         set {
-            pri_filters = newValue
+            editImageConfiguration.filters = newValue
         }
         get {
-            if pri_filters.isEmpty {
-                return ZLFilter.all
-            } else {
-                return pri_filters
-            }
+            return editImageConfiguration.filters
         }
     }
     
+    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
     
     /// Show the image captured by the camera is displayed on the camera button inside the album. Defaults to false.
@@ -446,22 +437,6 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// Hud style. Defaults to lightBlur.
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .lightBlur
-    
-    /// Navigation bar blur effect.
-    @available(*, deprecated, message: "Use navViewBlurEffectOfAlbumList, this property will be removed")
-    @objc public var navViewBlurEffect: UIBlurEffect? {
-        didSet {
-            self.navViewBlurEffectOfAlbumList = self.navViewBlurEffect
-        }
-    }
-    
-    /// Bottom too bar blur effect.
-    @available(*, deprecated, message: "Use bottomViewBlurEffectOfAlbumList, this property will be removed")
-    @objc public var bottomToolViewBlurEffect: UIBlurEffect? {
-        didSet {
-            self.bottomViewBlurEffectOfAlbumList = self.bottomToolViewBlurEffect
-        }
-    }
     
     /// The blur effect of the navigation bar in the album list
     @objc public var navViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
@@ -648,16 +623,5 @@ struct ZLCustomImageDeploy {
     static var imageNames: [String] = []
     
     static var imageForKey: [String: UIImage] = [:]
-    
-}
-
-
-@objc public protocol ZLImageStickerContainerDelegate where Self: UIView {
-    
-    @objc var selectImageBlock: ( (UIImage) -> Void )? { get set }
-    
-    @objc var hideBlock: ( () -> Void )? { get set }
-    
-    @objc func show(in view: UIView)
     
 }
