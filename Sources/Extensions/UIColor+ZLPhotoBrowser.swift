@@ -182,4 +182,14 @@ extension UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.cameraCellBgColor
     }
     
+    /// 调整图片slider默认色
+    class var adjustSliderNormalColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.adjustSliderNormalColor
+    }
+    
+    /// 调整图片slider高亮色
+    class var adjustSliderTintColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.adjustSliderTintColor
+    }
+    
 }

@@ -60,11 +60,11 @@ public class ZLPhotoConfiguration: NSObject {
     private var pri_maxSelectCount = 9
     /// Anything superior than 1 will enable the multiple selection feature. Defaults to 9.
     @objc public var maxSelectCount: Int {
-        set {
-            pri_maxSelectCount = max(1, newValue)
-        }
         get {
             return pri_maxSelectCount
+        }
+        set {
+            pri_maxSelectCount = max(1, newValue)
         }
     }
     
@@ -72,9 +72,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// A count for video max selection. Defaults to 0.
     /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
     @objc public var maxVideoSelectCount: Int {
-        set {
-            pri_maxVideoSelectCount = newValue
-        }
         get {
             if pri_maxVideoSelectCount <= 0 {
                 return maxSelectCount
@@ -82,17 +79,20 @@ public class ZLPhotoConfiguration: NSObject {
                 return max(minVideoSelectCount, min(pri_maxVideoSelectCount, maxSelectCount))
             }
         }
+        set {
+            pri_maxVideoSelectCount = newValue
+        }
     }
     
     private var pri_minVideoSelectCount = 0
     /// A count for video min selection. Defaults to 0.
     /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
     @objc public var minVideoSelectCount: Int {
-        set {
-            pri_minVideoSelectCount = newValue
-        }
         get {
             return min(maxSelectCount, max(pri_minVideoSelectCount, 0))
+        }
+        set {
+            pri_minVideoSelectCount = newValue
         }
     }
     
@@ -122,32 +122,32 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow take photos in the album. Defaults to true.
     /// - warning: If allowTakePhoto and allowRecordVideo are both false, it will not be displayed.
     @objc public var allowTakePhotoInLibrary: Bool {
-        set {
-            pri_allowTakePhotoInLibrary = newValue
-        }
         get {
             return pri_allowTakePhotoInLibrary && (allowTakePhoto || allowRecordVideo)
+        }
+        set {
+            pri_allowTakePhotoInLibrary = newValue
         }
     }
     
     var pri_allowEditImage = true
     @objc public var allowEditImage: Bool {
-        set {
-            pri_allowEditImage = newValue
-        }
         get {
             return pri_allowEditImage && shouldAnialysisAsset
+        }
+        set {
+            pri_allowEditImage = newValue
         }
     }
     
     /// - warning: The video can only be edited when no photos are selected, or only one video is selected, and the selection callback is executed immediately after editing is completed.
     var pri_allowEditVideo = false
     @objc public var allowEditVideo: Bool {
-        set {
-            pri_allowEditVideo = newValue
-        }
         get {
             return pri_allowEditVideo && shouldAnialysisAsset
+        }
+        set {
+            pri_allowEditVideo = newValue
         }
     }
     
@@ -204,11 +204,11 @@ public class ZLPhotoConfiguration: NSObject {
     /// iPad landscape mode: columnCount += 4.
     /// ```
     @objc public var columnCount: Int {
-        set {
-            pri_columnCount = min(6, max(newValue, 2))
-        }
         get {
             return pri_columnCount
+        }
+        set {
+            pri_columnCount = min(6, max(newValue, 2))
         }
     }
     
@@ -226,71 +226,71 @@ public class ZLPhotoConfiguration: NSObject {
     
     @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     public var editImageTools: [ZLEditImageConfiguration.EditTool] {
-        set {
-            editImageConfiguration.tools = newValue
-        }
         get {
             return editImageConfiguration.tools
+        }
+        set {
+            editImageConfiguration.tools = newValue
         }
     }
     
     @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var editImageDrawColors: [UIColor] {
-        set {
-            editImageConfiguration.drawColors = newValue
-        }
         get {
             return editImageConfiguration.drawColors
+        }
+        set {
+            editImageConfiguration.drawColors = newValue
         }
     }
     
     @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var editImageDefaultDrawColor: UIColor {
-        set {
-            editImageConfiguration.defaultDrawColor = newValue
-        }
         get {
             return editImageConfiguration.defaultDrawColor
+        }
+        set {
+            editImageConfiguration.defaultDrawColor = newValue
         }
     }
     
     @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var editImageClipRatios: [ZLImageClipRatio] {
-        set {
-            editImageConfiguration.clipRatios = newValue
-        }
         get {
             return editImageConfiguration.clipRatios
+        }
+        set {
+            editImageConfiguration.clipRatios = newValue
         }
     }
     
     @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var textStickerTextColors: [UIColor] {
-        set {
-            editImageConfiguration.textStickerTextColors = newValue
-        }
         get {
             return editImageConfiguration.textStickerTextColors
+        }
+        set {
+            editImageConfiguration.textStickerTextColors = newValue
         }
     }
     
     @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var textStickerDefaultTextColor: UIColor {
-        set {
-            editImageConfiguration.textStickerDefaultTextColor = newValue
-        }
         get {
             return editImageConfiguration.textStickerDefaultTextColor
+        }
+        set {
+            editImageConfiguration.textStickerDefaultTextColor = newValue
         }
     }
     
     @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
     @objc public var filters: [ZLFilter] {
-        set {
-            editImageConfiguration.filters = newValue
-        }
         get {
             return editImageConfiguration.filters
+        }
+        set {
+            editImageConfiguration.filters = newValue
         }
     }
     
@@ -391,44 +391,44 @@ public class ZLPhotoConfiguration: NSObject {
     private var pri_allowTakePhoto = true
     /// Allow taking photos in the camera (Need allowSelectImage to be true). Defaults to true.
     @objc public var allowTakePhoto: Bool {
-        set {
-            pri_allowTakePhoto = newValue
-        }
         get {
             return pri_allowTakePhoto && allowSelectImage
+        }
+        set {
+            pri_allowTakePhoto = newValue
         }
     }
     
     private var pri_allowRecordVideo = true
     /// Allow recording in the camera (Need allowSelectVideo to be true). Defaults to true.
     @objc public var allowRecordVideo: Bool {
-        set {
-            pri_allowRecordVideo = newValue
-        }
         get {
             return pri_allowRecordVideo && allowSelectVideo
+        }
+        set {
+            pri_allowRecordVideo = newValue
         }
     }
     
     private var pri_minRecordDuration: Second = 0
     /// Minimum recording duration. Defaults to 0.
     @objc public var minRecordDuration: Second {
-        set {
-            pri_minRecordDuration = max(0, newValue)
-        }
         get {
             return pri_minRecordDuration
+        }
+        set {
+            pri_minRecordDuration = max(0, newValue)
         }
     }
     
     private var pri_maxRecordDuration: Second = 10
     /// Maximum recording duration. Defaults to 10, minimum is 1.
     @objc public var maxRecordDuration: Second {
-        set {
-            pri_maxRecordDuration = max(1, newValue)
-        }
         get {
             return pri_maxRecordDuration
+        }
+        set {
+            pri_maxRecordDuration = max(1, newValue)
         }
     }
     
@@ -596,8 +596,13 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     /// The background color of camera cell inside album.
     @objc public var cameraCellBgColor = UIColor(white: 0.3, alpha: 1)
     
+    /// The normal color of adjust slider.
+    @objc public var adjustSliderNormalColor = UIColor.white
+    
+    /// The tint color of adjust slider.
+    @objc public var adjustSliderTintColor = zlRGB(80, 169, 56)
+    
 }
-
 
 /// Font deply
 public struct ZLCustomFontDeploy {
@@ -605,7 +610,6 @@ public struct ZLCustomFontDeploy {
     static var fontName: String? = nil
     
 }
-
 
 /// Language deploy
 struct ZLCustomLanguageDeploy {
@@ -615,7 +619,6 @@ struct ZLCustomLanguageDeploy {
     static var deploy: [ZLLocalLanguageKey: String] = [:]
     
 }
-
 
 /// Image source deploy
 struct ZLCustomImageDeploy {

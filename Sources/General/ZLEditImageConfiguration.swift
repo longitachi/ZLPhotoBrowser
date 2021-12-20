@@ -26,9 +26,9 @@ import UIKit
 
 @objc public protocol ZLImageStickerContainerDelegate where Self: UIView {
     
-    @objc var selectImageBlock: ( (UIImage) -> Void )? { get set }
+    @objc var selectImageBlock: ((UIImage) -> Void)? { get set }
     
-    @objc var hideBlock: ( () -> Void )? { get set }
+    @objc var hideBlock: (() -> Void)? { get set }
     
     @objc func show(in view: UIView)
     
@@ -57,9 +57,6 @@ public class ZLEditImageConfiguration: NSObject {
     /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
     /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
     public var tools: [ZLEditImageConfiguration.EditTool] {
-        set {
-            pri_tools = newValue
-        }
         get {
             if pri_tools.isEmpty {
                 return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
@@ -67,20 +64,23 @@ public class ZLEditImageConfiguration: NSObject {
                 return pri_tools
             }
         }
+        set {
+            pri_tools = newValue
+        }
     }
     
     private var pri_drawColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
     /// Draw colors for image editor.
     @objc public var drawColors: [UIColor] {
-        set {
-            pri_drawColors = newValue
-        }
         get {
             if pri_drawColors.isEmpty {
                 return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
             } else {
                 return pri_drawColors
             }
+        }
+        set {
+            pri_drawColors = newValue
         }
     }
     
@@ -90,9 +90,6 @@ public class ZLEditImageConfiguration: NSObject {
     private var pri_clipRatios: [ZLImageClipRatio] = [.custom]
     /// Edit ratios for image editor.
     @objc public var clipRatios: [ZLImageClipRatio] {
-        set {
-            pri_clipRatios = newValue
-        }
         get {
             if pri_clipRatios.isEmpty {
                 return [.custom]
@@ -100,20 +97,23 @@ public class ZLEditImageConfiguration: NSObject {
                 return pri_clipRatios
             }
         }
+        set {
+            pri_clipRatios = newValue
+        }
     }
     
     private var pri_textStickerTextColors: [UIColor] = [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
     /// Text sticker colors for image editor.
     @objc public var textStickerTextColors: [UIColor] {
-        set {
-            pri_textStickerTextColors = newValue
-        }
         get {
             if pri_textStickerTextColors.isEmpty {
                 return [.white, .black, zlRGB(241, 79, 79), zlRGB(243, 170, 78), zlRGB(80, 169, 56), zlRGB(30, 183, 243), zlRGB(139, 105, 234)]
             } else {
                 return pri_textStickerTextColors
             }
+        }
+        set {
+            pri_textStickerTextColors = newValue
         }
     }
     
@@ -123,15 +123,15 @@ public class ZLEditImageConfiguration: NSObject {
     private var pri_filters: [ZLFilter] = ZLFilter.all
     /// Filters for image editor.
     @objc public var filters: [ZLFilter] {
-        set {
-            pri_filters = newValue
-        }
         get {
             if pri_filters.isEmpty {
                 return ZLFilter.all
             } else {
                 return pri_filters
             }
+        }
+        set {
+            pri_filters = newValue
         }
     }
     
@@ -142,9 +142,6 @@ public class ZLEditImageConfiguration: NSObject {
     /// Valid when the tools contain EditTool.adjust
     /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
     public var adjustTools: [ZLEditImageConfiguration.AdjustTool] {
-        set {
-            pri_adjustTools = newValue
-        }
         get {
             if pri_adjustTools.isEmpty {
                 return [.brightness, .contrast, .saturation]
@@ -152,7 +149,16 @@ public class ZLEditImageConfiguration: NSObject {
                 return pri_adjustTools
             }
         }
+        set {
+            pri_adjustTools = newValue
+        }
     }
+    
+    /// Give an impact feedback when the adjust slider value is zero. Defaults to true.
+    public var impactFeedbackWhenAdjustSliderValueIsZero = true
+    
+    /// Impact feedback style. Defaults to .medium
+    public var impactFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
     
 }
 
@@ -206,6 +212,23 @@ extension ZLEditImageConfiguration {
         return self
     }
     
+    @discardableResult
+    public func adjustTools(_ tools: [ZLEditImageConfiguration.AdjustTool]) -> ZLEditImageConfiguration {
+        adjustTools = tools
+        return self
+    }
+    
+    @discardableResult
+    public func impactFeedbackWhenAdjustSliderValueIsZero(_ value: Bool) -> ZLEditImageConfiguration {
+        impactFeedbackWhenAdjustSliderValueIsZero = value
+        return self
+    }
+    
+    @discardableResult
+    public func impactFeedbackStyle(_ style: UIImpactFeedbackGenerator.FeedbackStyle) -> ZLEditImageConfiguration {
+        impactFeedbackStyle = style
+        return self
+    }
 }
 
 // MARK: 裁剪比例
