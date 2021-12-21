@@ -11,6 +11,9 @@
 "back" = "戻る";
 "edit" = "編集";
 "revert" = "元に戻す";
+"brightness" = "明るさ";
+"contrast" = "コントラスト";
+"saturation" = "飽和";
 
 "photo" = "写真";
 "preview" = "プレビュー";

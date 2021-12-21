@@ -70,6 +70,16 @@ class PhotoConfigureViewController: UIViewController {
     
     var editImageFilterToolSwitch: UISwitch!
     
+    var editImageAdjustToolSwitch = UISwitch()
+    
+    var editImageAdjustToolView = UIView()
+    
+    var editImageBrightnessSwitch = UISwitch()
+    
+    var editImageContrastSwitch = UISwitch()
+    
+    var editImageSaturationSwitch = UISwitch()
+    
     var saveEditImageSwitch: UISwitch!
     
     var editVideoLabel: UILabel!
@@ -532,8 +542,10 @@ class PhotoConfigureViewController: UIViewController {
             make.left.equalTo(self.editImageToolView)
         }
         
+        let editImageConfig = config.editImageConfiguration
+        
         self.editImageDrawToolSwitch = UISwitch()
-        self.editImageDrawToolSwitch.isOn = config.editImageTools.contains(.draw)
+        self.editImageDrawToolSwitch.isOn = editImageConfig.tools.contains(.draw)
         self.editImageDrawToolSwitch.addTarget(self, action: #selector(drawToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageDrawToolSwitch)
         self.editImageDrawToolSwitch.snp.makeConstraints { (make) in
@@ -550,7 +562,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageClipToolSwitch = UISwitch()
-        self.editImageClipToolSwitch.isOn = config.editImageTools.contains(.clip)
+        self.editImageClipToolSwitch.isOn = editImageConfig.tools.contains(.clip)
         self.editImageClipToolSwitch.addTarget(self, action: #selector(clipToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageClipToolSwitch)
         self.editImageClipToolSwitch.snp.makeConstraints { (make) in
@@ -567,7 +579,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageImageStickerToolSwitch = UISwitch()
-        self.editImageImageStickerToolSwitch.isOn = config.editImageTools.contains(.imageSticker)
+        self.editImageImageStickerToolSwitch.isOn = editImageConfig.tools.contains(.imageSticker)
         self.editImageImageStickerToolSwitch.addTarget(self, action: #selector(imageStickerToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageImageStickerToolSwitch)
         self.editImageImageStickerToolSwitch.snp.makeConstraints { (make) in
@@ -584,7 +596,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageTextStickerToolSwitch = UISwitch()
-        self.editImageTextStickerToolSwitch.isOn = config.editImageTools.contains(.textSticker)
+        self.editImageTextStickerToolSwitch.isOn = editImageConfig.tools.contains(.textSticker)
         self.editImageTextStickerToolSwitch.addTarget(self, action: #selector(textStickerToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageTextStickerToolSwitch)
         self.editImageTextStickerToolSwitch.snp.makeConstraints { (make) in
@@ -601,7 +613,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageMosaicToolSwitch = UISwitch()
-        self.editImageMosaicToolSwitch.isOn = config.editImageTools.contains(.mosaic)
+        self.editImageMosaicToolSwitch.isOn = editImageConfig.tools.contains(.mosaic)
         self.editImageMosaicToolSwitch.addTarget(self, action: #selector(mosaicToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageMosaicToolSwitch)
         self.editImageMosaicToolSwitch.snp.makeConstraints { (make) in
@@ -618,24 +630,91 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.editImageFilterToolSwitch = UISwitch()
-        self.editImageFilterToolSwitch.isOn = config.editImageTools.contains(.filter)
+        self.editImageFilterToolSwitch.isOn = editImageConfig.tools.contains(.filter)
         self.editImageFilterToolSwitch.addTarget(self, action: #selector(filterToolChanged), for: .valueChanged)
         self.editImageToolView.addSubview(self.editImageFilterToolSwitch)
         self.editImageFilterToolSwitch.snp.makeConstraints { (make) in
             make.left.equalTo(filterToolLabel.snp.right).offset(horSpacing)
             make.centerY.equalTo(filterToolLabel)
-            make.bottom.equalTo(self.editImageToolView)
+        }
+        
+        // 色值调整
+        let adjustToolLabel = createLabel("Adjust")
+        self.editImageToolView.addSubview(adjustToolLabel)
+        adjustToolLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(filterToolLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(self.editImageToolView)
+        }
+        
+        self.editImageAdjustToolSwitch = UISwitch()
+        self.editImageAdjustToolSwitch.isOn = editImageConfig.tools.contains(.adjust)
+        self.editImageAdjustToolSwitch.addTarget(self, action: #selector(adjustToolChanged), for: .valueChanged)
+        self.editImageToolView.addSubview(self.editImageAdjustToolSwitch)
+        self.editImageAdjustToolSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(adjustToolLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(adjustToolLabel)
+        }
+        
+        editImageToolView.addSubview(editImageAdjustToolView)
+        editImageAdjustToolView.snp.makeConstraints { make in
+            make.top.equalTo(adjustToolLabel.snp.bottom).offset(velSpacing)
+            make.height.equalTo(editImageConfig.tools.contains(.adjust) ? 100 : 0)
+            make.left.equalToSuperview().offset(horSpacing)
+            make.right.bottom.equalToSuperview()
+        }
+        
+        // 亮度
+        let brightnessLabel = createLabel("Brightness")
+        editImageAdjustToolView.addSubview(brightnessLabel)
+        brightnessLabel.snp.makeConstraints { (make) in
+            make.top.left.equalToSuperview()
+        }
+        
+        editImageBrightnessSwitch.isOn = editImageConfig.adjustTools.contains(.brightness)
+        editImageBrightnessSwitch.addTarget(self, action: #selector(brightnessChanged), for: .valueChanged)
+        editImageAdjustToolView.addSubview(editImageBrightnessSwitch)
+        editImageBrightnessSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(brightnessLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(brightnessLabel)
+        }
+        
+        // 对比度
+        let contrastLabel = createLabel("Contrast")
+        editImageAdjustToolView.addSubview(contrastLabel)
+        contrastLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(brightnessLabel.snp.bottom).offset(velSpacing)
+            make.left.equalToSuperview()
+        }
+        
+        editImageContrastSwitch.isOn = editImageConfig.adjustTools.contains(.contrast)
+        editImageContrastSwitch.addTarget(self, action: #selector(contrastChanged), for: .valueChanged)
+        editImageAdjustToolView.addSubview(editImageContrastSwitch)
+        editImageContrastSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(contrastLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(contrastLabel)
+        }
+        
+        // 饱和度
+        let saturationLabel = createLabel("Saturation")
+        editImageAdjustToolView.addSubview(saturationLabel)
+        saturationLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(contrastLabel.snp.bottom).offset(velSpacing)
+            make.left.equalToSuperview()
+        }
+        
+        editImageSaturationSwitch.isOn = editImageConfig.adjustTools.contains(.saturation)
+        editImageSaturationSwitch.addTarget(self, action: #selector(saturationChanged), for: .valueChanged)
+        editImageAdjustToolView.addSubview(editImageSaturationSwitch)
+        editImageSaturationSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(saturationLabel.snp.right).offset(horSpacing)
+            make.centerY.equalTo(saturationLabel)
         }
         
         // 编辑视频开关
         editVideoLabel = createLabel("Edit video")
         containerView.addSubview(editVideoLabel)
         editVideoLabel.snp.makeConstraints { (make) in
-            if config.allowEditImage {
-                make.top.equalTo(editImageLabel.snp.bottom).offset(260)
-            } else {
-                make.top.equalTo(editImageLabel.snp.bottom).offset(velSpacing)
-            }
+            make.top.equalTo(editImageToolView.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -953,7 +1032,7 @@ class PhotoConfigureViewController: UIViewController {
             self.editImageToolView.alpha = self.config.allowEditImage ? 1 : 0
             self.editVideoLabel.snp.updateConstraints({ (make) in
                 if self.config.allowEditImage {
-                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(260)
+                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(290)
                 } else {
                     make.top.equalTo(self.editImageLabel.snp.bottom).offset(20)
                 }
@@ -963,50 +1042,91 @@ class PhotoConfigureViewController: UIViewController {
     }
     
     @objc func drawToolChanged() {
-        if config.editImageTools.contains(.draw) {
-            config.editImageTools.removeAll { $0 == .draw }
+        if config.editImageConfiguration.tools.contains(.draw) {
+            config.editImageConfiguration.tools.removeAll { $0 == .draw }
         } else {
-            config.editImageTools.append(.draw)
+            config.editImageConfiguration.tools.append(.draw)
         }
     }
     
     @objc func clipToolChanged() {
-        if config.editImageTools.contains(.clip) {
-            config.editImageTools.removeAll { $0 == .clip }
+        if config.editImageConfiguration.tools.contains(.clip) {
+            config.editImageConfiguration.tools.removeAll { $0 == .clip }
         } else {
-            config.editImageTools.append(.clip)
+            config.editImageConfiguration.tools.append(.clip)
         }
     }
     
     @objc func imageStickerToolChanged() {
-        if config.editImageTools.contains(.imageSticker) {
-            config.editImageTools.removeAll { $0 == .imageSticker }
+        if config.editImageConfiguration.tools.contains(.imageSticker) {
+            config.editImageConfiguration.tools.removeAll { $0 == .imageSticker }
         } else {
-            config.editImageTools.append(.imageSticker)
+            config.editImageConfiguration.tools.append(.imageSticker)
         }
     }
     
     @objc func textStickerToolChanged() {
-        if config.editImageTools.contains(.textSticker) {
-            config.editImageTools.removeAll { $0 == .textSticker }
+        if config.editImageConfiguration.tools.contains(.textSticker) {
+            config.editImageConfiguration.tools.removeAll { $0 == .textSticker }
         } else {
-            config.editImageTools.append(.textSticker)
+            config.editImageConfiguration.tools.append(.textSticker)
         }
     }
     
     @objc func mosaicToolChanged() {
-        if config.editImageTools.contains(.mosaic) {
-            config.editImageTools.removeAll { $0 == .mosaic }
+        if config.editImageConfiguration.tools.contains(.mosaic) {
+            config.editImageConfiguration.tools.removeAll { $0 == .mosaic }
         } else {
-            config.editImageTools.append(.mosaic)
+            config.editImageConfiguration.tools.append(.mosaic)
         }
     }
     
     @objc func filterToolChanged() {
-        if config.editImageTools.contains(.filter) {
-            config.editImageTools.removeAll { $0 == .filter }
+        if config.editImageConfiguration.tools.contains(.filter) {
+            config.editImageConfiguration.tools.removeAll { $0 == .filter }
         } else {
-            config.editImageTools.append(.filter)
+            config.editImageConfiguration.tools.append(.filter)
+        }
+    }
+    
+    @objc func adjustToolChanged() {
+        var isOn = false
+        if config.editImageConfiguration.tools.contains(.adjust) {
+            config.editImageConfiguration.tools.removeAll { $0 == .adjust }
+        } else {
+            isOn.toggle()
+            config.editImageConfiguration.tools.append(.adjust)
+        }
+        UIView.animate(withDuration: 0.25) {
+            self.editImageAdjustToolView.alpha = isOn ? 1 : 0
+            self.editImageAdjustToolView.snp.updateConstraints { make in
+                make.height.equalTo(isOn ? 100 : 0)
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func brightnessChanged() {
+        if config.editImageConfiguration.adjustTools.contains(.brightness) {
+            config.editImageConfiguration.adjustTools.removeAll { $0 == .brightness }
+        } else {
+            config.editImageConfiguration.adjustTools.append(.brightness)
+        }
+    }
+    
+    @objc func contrastChanged() {
+        if config.editImageConfiguration.adjustTools.contains(.contrast) {
+            config.editImageConfiguration.adjustTools.removeAll { $0 == .contrast }
+        } else {
+            config.editImageConfiguration.adjustTools.append(.contrast)
+        }
+    }
+    
+    @objc func saturationChanged() {
+        if config.editImageConfiguration.adjustTools.contains(.saturation) {
+            config.editImageConfiguration.adjustTools.removeAll { $0 == .saturation }
+        } else {
+            config.editImageConfiguration.adjustTools.append(.saturation)
         }
     }
     

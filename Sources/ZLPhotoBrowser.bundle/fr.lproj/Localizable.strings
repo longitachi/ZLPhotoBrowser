@@ -11,6 +11,9 @@
 "back" = "Retour";
 "edit" = "Modifier";
 "revert" = "Annuler";
+"brightness" = "Luminosité";
+"contrast" = "Contraste";
+"saturation" = "Saturation";
 
 "photo" = "Photos";
 "preview" = "Aperçu";

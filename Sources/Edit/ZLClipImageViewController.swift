@@ -160,7 +160,7 @@ class ZLClipImageViewController: UIViewController {
     
     init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0, selectRatio: ZLImageClipRatio?) {
         self.originalImage = image
-        self.clipRatios = ZLPhotoConfiguration.default().editImageClipRatios
+        self.clipRatios = ZLPhotoConfiguration.default().editImageConfiguration.clipRatios
         self.editRect = editRect ?? .zero
         self.angle = angle
         if angle == -90 {
@@ -177,7 +177,7 @@ class ZLClipImageViewController: UIViewController {
             self.selectedRatio = sr
         } else {
             firstEnter = true
-            self.selectedRatio = ZLPhotoConfiguration.default().editImageClipRatios.first!
+            self.selectedRatio = ZLPhotoConfiguration.default().editImageConfiguration.clipRatios.first!
         }
         super.init(nibName: nil, bundle: nil)
         if firstEnter {

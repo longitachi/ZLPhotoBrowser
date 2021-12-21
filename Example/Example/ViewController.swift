@@ -24,7 +24,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Main"
+        setupUI()
+    }
+    
+    func setupUI() {
+        title = "Main"
         self.view.backgroundColor = .white
         
         func createBtn(_ title: String, _ action: Selector) -> UIButton {
@@ -39,54 +43,54 @@ class ViewController: UIViewController {
         }
         
         let configBtn = createBtn("Configuration", #selector(configureClick))
-        self.view.addSubview(configBtn)
+        view.addSubview(configBtn)
         configBtn.snp.makeConstraints { (make) in
             if #available(iOS 11.0, *) {
-                make.top.equalTo(self.view.snp.topMargin).offset(20)
+                make.top.equalTo(view.snp.topMargin).offset(20)
             } else {
-                make.top.equalTo(self.topLayoutGuide.snp.bottom).offset(20)
+                make.top.equalTo(topLayoutGuide.snp.bottom).offset(20)
             }
             
-            make.left.equalTo(self.view).offset(30)
+            make.left.equalToSuperview().offset(30)
         }
         
         let configBtn_cn = createBtn("相册配置 (中文)", #selector(cn_configureClick))
-        self.view.addSubview(configBtn_cn)
+        view.addSubview(configBtn_cn)
         configBtn_cn.snp.makeConstraints { (make) in
             make.top.equalTo(configBtn.snp.top)
             make.left.equalTo(configBtn.snp.right).offset(30)
         }
         
         let previewSelectBtn = createBtn("Preview selection", #selector(previewSelectPhoto))
-        self.view.addSubview(previewSelectBtn)
+        view.addSubview(previewSelectBtn)
         previewSelectBtn.snp.makeConstraints { (make) in
             make.top.equalTo(configBtn.snp.bottom).offset(20)
             make.left.equalTo(configBtn.snp.left)
         }
         
         let libratySelectBtn = createBtn("Library selection", #selector(librarySelectPhoto))
-        self.view.addSubview(libratySelectBtn)
+        view.addSubview(libratySelectBtn)
         libratySelectBtn.snp.makeConstraints { (make) in
             make.top.equalTo(previewSelectBtn.snp.top)
             make.left.equalTo(previewSelectBtn.snp.right).offset(20)
         }
         
         let cameraBtn = createBtn("Custom camera", #selector(showCamera))
-        self.view.addSubview(cameraBtn)
+        view.addSubview(cameraBtn)
         cameraBtn.snp.makeConstraints { (make) in
             make.left.equalTo(configBtn.snp.left)
             make.top.equalTo(previewSelectBtn.snp.bottom).offset(20)
         }
         
         let previewLocalAndNetImageBtn = createBtn("Preview local and net image", #selector(previewLocalAndNetImage))
-        self.view.addSubview(previewLocalAndNetImageBtn)
+        view.addSubview(previewLocalAndNetImageBtn)
         previewLocalAndNetImageBtn.snp.makeConstraints { (make) in
             make.left.equalTo(cameraBtn.snp.right).offset(20)
             make.centerY.equalTo(cameraBtn)
         }
         
         let wechatMomentDemoBtn = createBtn("Create WeChat moment Demo", #selector(createWeChatMomentDemo))
-        self.view.addSubview(wechatMomentDemoBtn)
+        view.addSubview(wechatMomentDemoBtn)
         wechatMomentDemoBtn.snp.makeConstraints { (make) in
             make.left.equalTo(configBtn.snp.left)
             make.top.equalTo(cameraBtn.snp.bottom).offset(20)
@@ -96,57 +100,64 @@ class ViewController: UIViewController {
         takeLabel.font = UIFont.systemFont(ofSize: 14)
         takeLabel.textColor = .black
         takeLabel.text = "Record selected photos："
-        self.view.addSubview(takeLabel)
+        view.addSubview(takeLabel)
         takeLabel.snp.makeConstraints { (make) in
             make.left.equalTo(configBtn.snp.left)
             make.top.equalTo(wechatMomentDemoBtn.snp.bottom).offset(20)
         }
         
-        self.takeSelectedAssetsSwitch = UISwitch()
-        self.takeSelectedAssetsSwitch.isOn = false
-        self.view.addSubview(self.takeSelectedAssetsSwitch)
-        self.takeSelectedAssetsSwitch.snp.makeConstraints { (make) in
+        takeSelectedAssetsSwitch = UISwitch()
+        takeSelectedAssetsSwitch.isOn = false
+        view.addSubview(takeSelectedAssetsSwitch)
+        takeSelectedAssetsSwitch.snp.makeConstraints { (make) in
             make.left.equalTo(takeLabel.snp.right).offset(20)
             make.centerY.equalTo(takeLabel.snp.centerY)
         }
         
         let layout = UICollectionViewFlowLayout()
-        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        self.collectionView.backgroundColor = .clear
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        self.view.addSubview(self.collectionView)
-        self.collectionView.snp.makeConstraints { (make) in
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { (make) in
             make.top.equalTo(takeLabel.snp.bottom).offset(30)
-            make.left.bottom.right.equalTo(self.view)
+            make.left.bottom.right.equalToSuperview()
         }
         
-        self.collectionView.register(ImageCell.classForCoder(), forCellWithReuseIdentifier: "ImageCell")
+        collectionView.register(ImageCell.classForCoder(), forCellWithReuseIdentifier: "ImageCell")
     }
     
     @objc func configureClick() {
         let vc = PhotoConfigureViewController()
-        self.showDetailViewController(vc, sender: nil)
+        showDetailViewController(vc, sender: nil)
     }
     
     @objc func cn_configureClick() {
         let vc = PhotoConfigureCNViewController()
-        self.showDetailViewController(vc, sender: nil)
+        showDetailViewController(vc, sender: nil)
     }
     
     @objc func previewSelectPhoto() {
-        self.showImagePicker(true)
+        showImagePicker(true)
     }
     
     @objc func librarySelectPhoto() {
-        self.showImagePicker(false)
+        showImagePicker(false)
     }
     
     func showImagePicker(_ preview: Bool) {
-        ZLPhotoConfiguration.default()
-            .editImageClipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
-//            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
+        let editImageConfiguration = ZLPhotoConfiguration.default().editImageConfiguration
+        editImageConfiguration
             .imageStickerContainerView(ImageStickerContainerView())
+//            .tools([.draw, .filter, .adjust, .mosaic])
+//            .adjustTools([.brightness, .contrast, .saturation])
+//            .clipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
+//            .imageStickerContainerView(ImageStickerContainerView())
+//            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
+        
+        ZLPhotoConfiguration.default()
+            .editImageConfiguration(editImageConfiguration)
             .navCancelButtonStyle(.image)
             // You can first determine whether the asset is allowed to be selected.
             .canSelectAsset { asset in
@@ -163,7 +174,7 @@ class ViewController: UIViewController {
                 }
             }
         
-        let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
+        let ac = ZLPhotoPreviewSheet(selectedAssets: takeSelectedAssetsSwitch.isOn ? selectedAssets : [])
         ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
             self?.selectedImages = images
             self?.selectedAssets = assets
@@ -198,8 +209,8 @@ class ViewController: UIViewController {
         datas.append(URL(string: netVideoUrlString)!)
         
         // phasset
-        if self.takeSelectedAssetsSwitch.isOn {
-            datas.append(contentsOf: self.selectedAssets)
+        if takeSelectedAssetsSwitch.isOn {
+            datas.append(contentsOf: selectedAssets)
         }
         
         // local image
@@ -233,7 +244,7 @@ class ViewController: UIViewController {
         }
         
         vc.modalPresentationStyle = .fullScreen
-        self.showDetailViewController(vc, sender: nil)
+        showDetailViewController(vc, sender: nil)
     }
     
     @objc func showCamera() {
@@ -241,7 +252,7 @@ class ViewController: UIViewController {
         camera.takeDoneBlock = { [weak self] (image, videoUrl) in
             self?.save(image: image, videoUrl: videoUrl)
         }
-        self.showDetailViewController(camera, sender: nil)
+        showDetailViewController(camera, sender: nil)
     }
     
     func save(image: UIImage?, videoUrl: URL?) {
@@ -292,7 +303,7 @@ class ViewController: UIViewController {
     
     @objc func createWeChatMomentDemo() {
         let vc = WeChatMomentDemoViewController()
-        self.show(vc, sender: nil)
+        show(vc, sender: nil)
     }
     
 }
@@ -319,13 +330,13 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.selectedImages.count
+        return selectedImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCell
         
-        cell.imageView.image = self.selectedImages[indexPath.row]
+        cell.imageView.image = selectedImages[indexPath.row]
         
         return cell
     }
@@ -340,7 +351,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
             debugPrint("\(images)   \(assets)   \(isOriginal)")
         }
         
-        ac.previewAssets(sender: self, assets: self.selectedAssets, index: indexPath.row, isOriginal: self.isOriginal, showBottomViewAndSelectBtn: true)
+        ac.previewAssets(sender: self, assets: selectedAssets, index: indexPath.row, isOriginal: isOriginal, showBottomViewAndSelectBtn: true)
     }
     
 }

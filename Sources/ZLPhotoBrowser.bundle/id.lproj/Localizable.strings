@@ -11,6 +11,9 @@
 "back" = "Kembali";
 "edit" = "Edit";
 "revert" = "Batalkan";
+"brightness" = "Kecerahan";
+"contrast" = "Kontras";
+"saturation" = "Saturasi";
 
 "photo" = "Foto";
 "preview" = "Pratinjau";
