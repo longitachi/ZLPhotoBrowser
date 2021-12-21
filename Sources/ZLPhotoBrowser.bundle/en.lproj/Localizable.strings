@@ -11,6 +11,9 @@
 "back" = "Back";
 "edit" = "Edit";
 "revert" = "Undo";
+"brightness" = "Brightness";
+"contrast" = "Contrast";
+"saturation" = "Saturation";
 
 "photo" = "Photos";
 "preview" = "Preview";

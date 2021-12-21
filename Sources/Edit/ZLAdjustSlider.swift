@@ -36,6 +36,8 @@ class ZLAdjustSlider: UIView {
     
     lazy var separator = UIView()
     
+    lazy var shadowView = UIView()
+    
     lazy var whiteView = UIView()
     
     lazy var tintView = UIView()
@@ -80,6 +82,7 @@ class ZLAdjustSlider: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        shadowView.frame = CGRect(x: 40, y: 0, width: sliderWidth, height: bounds.height)
         whiteView.frame = CGRect(x: 40, y: 0, width: sliderWidth, height: bounds.height)
         tintView.frame = calculateTintFrame()
         let separatorH: CGFloat = 1
@@ -88,6 +91,14 @@ class ZLAdjustSlider: UIView {
     }
     
     private func setupUI() {
+        shadowView.backgroundColor = .adjustSliderNormalColor
+        shadowView.layer.cornerRadius = sliderWidth / 2
+        shadowView.layer.shadowColor = UIColor.black.withAlphaComponent(0.4).cgColor
+        shadowView.layer.shadowOffset = .zero
+        shadowView.layer.shadowOpacity = 1
+        shadowView.layer.shadowRadius = 3
+        addSubview(shadowView)
+        
         whiteView.backgroundColor = .adjustSliderNormalColor
         whiteView.layer.cornerRadius = sliderWidth / 2
         whiteView.layer.masksToBounds = true
@@ -96,14 +107,14 @@ class ZLAdjustSlider: UIView {
         tintView.backgroundColor = .adjustSliderTintColor
         whiteView.addSubview(tintView)
         
-        separator.backgroundColor = zlRGB(200, 200, 200)
+        separator.backgroundColor = zlRGB(230, 230, 230)
         whiteView.addSubview(separator)
         
         valueLabel.font = getFont(12)
-        valueLabel.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
+        valueLabel.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
         valueLabel.layer.shadowOffset = .zero
         valueLabel.layer.shadowOpacity = 1
-        valueLabel.textColor = .darkGray
+        valueLabel.textColor = .white
         valueLabel.textAlignment = .right
         valueLabel.adjustsFontSizeToFitWidth = true
         valueLabel.minimumScaleFactor = 0.6

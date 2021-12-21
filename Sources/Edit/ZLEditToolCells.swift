@@ -153,15 +153,15 @@ class ZLAdjustToolCell: UICollectionViewCell {
             case .brightness:
                 imageView.image = getImage("zl_brightness")
                 imageView.highlightedImage = getImage("zl_brightness_selected")
-                nameLabel.text = "亮度"
+                nameLabel.text = localLanguageTextValue(.brightness)
             case .contrast:
                 imageView.image = getImage("zl_contrast")
                 imageView.highlightedImage = getImage("zl_contrast_selected")
-                nameLabel.text = "对比度"
+                nameLabel.text = localLanguageTextValue(.contrast)
             case .saturation:
                 imageView.image = getImage("zl_saturation")
                 imageView.highlightedImage = getImage("zl_saturation_selected")
-                nameLabel.text = "饱和度"
+                nameLabel.text = localLanguageTextValue(.saturation)
             }
         }
     }
@@ -169,10 +169,12 @@ class ZLAdjustToolCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        nameLabel.frame = CGRect(x: 0, y: bounds.height - 20, width: bounds.width, height: 20)
+        nameLabel.frame = CGRect(x: 0, y: bounds.height - 30, width: bounds.width, height: 30)
         nameLabel.font = getFont(12)
         nameLabel.textColor = .white
         nameLabel.textAlignment = .center
+        nameLabel.numberOfLines = 2
+        nameLabel.lineBreakMode = .byCharWrapping
         nameLabel.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
         nameLabel.layer.shadowOffset = .zero
         nameLabel.layer.shadowOpacity = 1

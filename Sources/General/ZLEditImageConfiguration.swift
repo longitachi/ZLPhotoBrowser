@@ -50,6 +50,37 @@ public class ZLEditImageConfiguration: NSObject {
         case brightness
         case contrast
         case saturation
+        
+        var key: String {
+            switch self {
+            case .brightness:
+                return kCIInputBrightnessKey
+            case .contrast:
+                return kCIInputContrastKey
+            case .saturation:
+                return kCIInputSaturationKey
+            }
+        }
+        
+        func filterValue(_ value: Float) -> Float {
+            switch self {
+            case .brightness:
+                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
+                return value / 3
+            case .contrast:
+                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
+                let v: Float
+                if value < 0 {
+                    v = 1 + value * (1 / 2)
+                } else {
+                    v = 1 + value * (3 / 2)
+                }
+                return v
+            case .saturation:
+                // 饱和度范围0---2，默认1
+                return value + 1
+            }
+        }
     }
     
     private var pri_tools: [ZLEditImageConfiguration.EditTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
@@ -59,7 +90,7 @@ public class ZLEditImageConfiguration: NSObject {
     public var tools: [ZLEditImageConfiguration.EditTool] {
         get {
             if pri_tools.isEmpty {
-                return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter]
+                return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
             } else {
                 return pri_tools
             }

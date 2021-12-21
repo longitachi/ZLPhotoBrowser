@@ -480,43 +480,6 @@ extension CIImage {
 
 extension UIImage {
     
-    private enum AdjustType {
-        case brightness
-        case contrast
-        case saturation
-        
-        var key: String {
-            switch self {
-            case .brightness:
-                return kCIInputBrightnessKey
-            case .contrast:
-                return kCIInputContrastKey
-            case .saturation:
-                return kCIInputSaturationKey
-            }
-        }
-        
-        func filterValue(_ value: Float) -> Float {
-            switch self {
-            case .brightness:
-                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
-                return value / 3
-            case .contrast:
-                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
-                let v: Float
-                if value < 0 {
-                    v = 1 + value * (1 / 2)
-                } else {
-                    v = 1 + value * (3 / 2)
-                }
-                return v
-            case .saturation:
-                // 饱和度范围0---2，默认1
-                return value + 1
-            }
-        }
-    }
-    
     /// 调整图片亮度、对比度、饱和度
     /// - Parameters:
     ///   - brightness: value in [-1, 1]
@@ -529,9 +492,9 @@ extension UIImage {
         
         let filter = CIFilter(name: "CIColorControls")
         filter?.setValue(ciImage, forKey: kCIInputImageKey)
-        filter?.setValue(AdjustType.brightness.filterValue(brightness), forKey: AdjustType.brightness.key)
-        filter?.setValue(AdjustType.contrast.filterValue(contrast), forKey: AdjustType.contrast.key)
-        filter?.setValue(AdjustType.saturation.filterValue(saturation), forKey: AdjustType.saturation.key)
+        filter?.setValue(ZLEditImageConfiguration.AdjustTool.brightness.filterValue(brightness), forKey: ZLEditImageConfiguration.AdjustTool.brightness.key)
+        filter?.setValue(ZLEditImageConfiguration.AdjustTool.contrast.filterValue(contrast), forKey: ZLEditImageConfiguration.AdjustTool.contrast.key)
+        filter?.setValue(ZLEditImageConfiguration.AdjustTool.saturation.filterValue(saturation), forKey: ZLEditImageConfiguration.AdjustTool.saturation.key)
         let outputCIImage = filter?.outputImage
         return outputCIImage?.toUIImage()
     }
