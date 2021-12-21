@@ -617,7 +617,11 @@ public class ZLPhotoPreviewSheet: UIView {
                 let tvc = ZLThumbnailViewController(albumList: cameraRoll)
                 nav.pushViewController(tvc, animated: true)
             }
-            self.sender?.showDetailViewController(nav, sender: nil)
+            if deviceIsiPad() {
+                self.sender?.present(nav, animated: true, completion: nil)
+            } else {
+                self.sender?.showDetailViewController(nav, sender: nil)
+            }
         }
     }
     
