@@ -136,6 +136,10 @@ extension Bundle {
                 language = "it"
             } else if language.hasPrefix("id") {
                 language = "id"
+            } else if language.hasPrefix("pt") {
+                language = "pt-BR"
+            } else if language.hasPrefix("es") {
+                language = "es"
             } else {
                 language = "en"
             }
@@ -163,6 +167,10 @@ extension Bundle {
             language = "it"
         case .indonesian:
             language = "id"
+        case .portuguese:
+            language = "pt-BR"
+        case .spanish:
+            language = "es"
         }
         
         return language
