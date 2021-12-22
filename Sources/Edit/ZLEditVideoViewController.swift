@@ -263,7 +263,7 @@ public class ZLEditVideoViewController: UIViewController {
             return
         }
         
-        if d == round(CGFloat(self.avAsset.duration.seconds)) {
+        if round(d) == round(CGFloat(self.avAsset.duration.seconds)) {
             self.dismiss(animated: self.animateDismiss) {
                 self.editFinishBlock?(nil)
             }
