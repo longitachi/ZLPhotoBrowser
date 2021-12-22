@@ -186,10 +186,10 @@ public class ZLEditImageConfiguration: NSObject {
     }
     
     /// Give an impact feedback when the adjust slider value is zero. Defaults to true.
-    public var impactFeedbackWhenAdjustSliderValueIsZero = true
+    @objc public var impactFeedbackWhenAdjustSliderValueIsZero = true
     
     /// Impact feedback style. Defaults to .medium
-    public var impactFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
+    @objc public var impactFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
     
 }
 

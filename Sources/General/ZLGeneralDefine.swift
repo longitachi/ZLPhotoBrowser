@@ -202,5 +202,5 @@ func ZLMainAsync(after: TimeInterval = 0, handler: @escaping (() -> Void)) {
 }
 
 func zl_debugPrint(_ message: Any...) {
-    message.forEach { debugPrint($0) }
+//    message.forEach { debugPrint($0) }
 }

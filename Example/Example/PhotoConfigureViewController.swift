@@ -529,7 +529,7 @@ class PhotoConfigureViewController: UIViewController {
         self.editImageToolView.alpha = config.allowEditImage ? 1 : 0
         containerView.addSubview(self.editImageToolView)
         self.editImageToolView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.allowEditImageSwitch.snp.bottom)
+            make.top.equalTo(self.allowEditImageSwitch.snp.bottom).offset(velSpacing)
             make.left.equalTo(previewCountLabel.snp.left)
             make.right.equalTo(containerView)
         }
@@ -538,7 +538,7 @@ class PhotoConfigureViewController: UIViewController {
         let drawToolLabel = createLabel("Draw")
         self.editImageToolView.addSubview(drawToolLabel)
         drawToolLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.editImageToolView).offset(velSpacing)
+            make.top.equalTo(self.editImageToolView)
             make.left.equalTo(self.editImageToolView)
         }
         
@@ -714,7 +714,11 @@ class PhotoConfigureViewController: UIViewController {
         editVideoLabel = createLabel("Edit video")
         containerView.addSubview(editVideoLabel)
         editVideoLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(editImageToolView.snp.bottom).offset(velSpacing)
+            if config.allowEditImage {
+                make.top.equalTo(editImageToolView.snp.bottom).offset(velSpacing)
+            } else {
+                make.top.equalTo(editImageToolView.snp.top)
+            }
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -1030,11 +1034,12 @@ class PhotoConfigureViewController: UIViewController {
         
         UIView.animate(withDuration: 0.25) {
             self.editImageToolView.alpha = self.config.allowEditImage ? 1 : 0
-            self.editVideoLabel.snp.updateConstraints({ (make) in
+            self.editVideoLabel.snp.remakeConstraints({ (make) in
+                make.left.equalToSuperview().offset(20)
                 if self.config.allowEditImage {
-                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(290)
+                    make.top.equalTo(self.editImageToolView.snp.bottom).offset(20)
                 } else {
-                    make.top.equalTo(self.editImageLabel.snp.bottom).offset(20)
+                    make.top.equalTo(self.editImageToolView.snp.top)
                 }
             })
             self.view.layoutIfNeeded()

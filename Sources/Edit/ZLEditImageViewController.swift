@@ -50,7 +50,7 @@ public class ZLEditImageModel: NSObject {
     
     public let imageStickers: [(state: ZLImageStickerState, index: Int)]?
     
-    init(
+    public init(
         drawPaths: [ZLDrawPath],
         mosaicPaths: [ZLMosaicPath],
         editRect: CGRect?,
@@ -244,7 +244,7 @@ open class ZLEditImageViewController: UIViewController {
             parentVC?.present(vc, animated: animate, completion: nil)
         } else {
             let vc = ZLEditImageViewController(image: image, editModel: editModel)
-            vc.editFinishBlock = {  (ei, editImageModel) in
+            vc.editFinishBlock = { (ei, editImageModel) in
                 completion?(ei, editImageModel)
             }
             vc.cancelEditBlock = cancel
@@ -336,7 +336,7 @@ open class ZLEditImageViewController: UIViewController {
         self.topShadowLayer.frame = self.topShadowView.bounds
         self.cancelBtn.frame = CGRect(x: 30, y: insets.top+10, width: 28, height: 28)
         
-        self.bottomShadowView.frame = CGRect(x: 0, y: self.view.frame.height-140-insets.bottom, width: self.view.frame.width, height: 140+insets.bottom)
+        self.bottomShadowView.frame = CGRect(x: 0, y: self.view.frame.height - 140 - insets.bottom, width: self.view.frame.width, height: 140 + insets.bottom)
         self.bottomShadowLayer.frame = self.bottomShadowView.bounds
         
         self.drawColorCollectionView?.frame = CGRect(x: 20, y: 20, width: view.frame.width - 80, height: drawColViewH)
@@ -391,7 +391,6 @@ open class ZLEditImageViewController: UIViewController {
                         self.filterCollectionView?.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
                     }
                 }
-
             }
         }
     }
@@ -509,8 +508,8 @@ open class ZLEditImageViewController: UIViewController {
             drawColorLayout.minimumLineSpacing = 15
             drawColorLayout.minimumInteritemSpacing = 15
             drawColorLayout.scrollDirection = .horizontal
-            let drawColorTopBottonInset = (drawColViewH - drawColorItemWidth) / 2
-            drawColorLayout.sectionInset = UIEdgeInsets(top: drawColorTopBottonInset, left: 0, bottom: drawColorTopBottonInset, right: 0)
+            let drawColorTopBottomInset = (drawColViewH - drawColorItemWidth) / 2
+            drawColorLayout.sectionInset = UIEdgeInsets(top: drawColorTopBottomInset, left: 0, bottom: drawColorTopBottomInset, right: 0)
             
             let drawCV = UICollectionView(frame: .zero, collectionViewLayout: drawColorLayout)
             drawCV.backgroundColor = .clear
@@ -729,6 +728,7 @@ open class ZLEditImageViewController: UIViewController {
             self.scrollView.alpha = 0
             self.topShadowView.alpha = 0
             self.bottomShadowView.alpha = 0
+            self.adjustSlider?.alpha = 0
         }
     }
     
@@ -810,7 +810,7 @@ open class ZLEditImageViewController: UIViewController {
     @objc func doneBtnClick() {
         var textStickers: [(ZLTextStickerState, Int)] = []
         var imageStickers: [(ZLImageStickerState, Int)] = []
-        for (index, view) in self.stickersContainer.subviews.enumerated() {
+        for (index, view) in stickersContainer.subviews.enumerated() {
             if let ts = view as? ZLTextStickerView, let _ = ts.label.text {
                 textStickers.append((ts.state, index))
             } else if let ts = view as? ZLImageStickerView {
@@ -823,15 +823,15 @@ open class ZLEditImageViewController: UIViewController {
             hasEdit = false
         }
         
-        var resImage = self.originalImage
+        var resImage = originalImage
         var editModel: ZLEditImageModel? = nil
         if hasEdit {
-            resImage = self.buildImage()
+            resImage = buildImage()
             resImage = resImage.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false) ?? resImage
             editModel = ZLEditImageModel(drawPaths: drawPaths, mosaicPaths: mosaicPaths, editRect: editRect, angle: angle, brightness: brightness, contrast: contrast, saturation: saturation, selectRatio: selectRatio, selectFilter: currentFilter, textStickers: textStickers, imageStickers: imageStickers)
         }
         
-        self.dismiss(animated: self.animate) {
+        dismiss(animated: animate) {
             self.editFinishBlock?(resImage, editModel)
         }
     }
@@ -973,9 +973,9 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     func setToolView(show: Bool) {
-        self.topShadowView.layer.removeAllAnimations()
-        self.bottomShadowView.layer.removeAllAnimations()
-        self.adjustSlider?.layer.removeAllAnimations()
+        topShadowView.layer.removeAllAnimations()
+        bottomShadowView.layer.removeAllAnimations()
+        adjustSlider?.layer.removeAllAnimations()
         if show {
             UIView.animate(withDuration: 0.25) {
                 self.topShadowView.alpha = 1
@@ -1216,6 +1216,7 @@ open class ZLEditImageViewController: UIViewController {
         UIView.animate(withDuration: 0.1) {
             self.topShadowView.alpha = 1
             self.bottomShadowView.alpha = 1
+            self.adjustSlider?.alpha = 1
         }
     }
 

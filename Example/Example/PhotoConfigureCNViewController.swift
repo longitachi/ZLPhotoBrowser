@@ -712,7 +712,11 @@ class PhotoConfigureCNViewController: UIViewController {
         editVideoLabel = createLabel("允许编辑视频")
         containerView.addSubview(editVideoLabel)
         editVideoLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(editImageToolView.snp.bottom).offset(velSpacing)
+            if config.allowEditImage {
+                make.top.equalTo(editImageToolView.snp.bottom).offset(velSpacing)
+            } else {
+                make.top.equalTo(editImageToolView.snp.top)
+            }
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
@@ -1028,11 +1032,12 @@ class PhotoConfigureCNViewController: UIViewController {
         
         UIView.animate(withDuration: 0.25) {
             self.editImageToolView.alpha = self.config.allowEditImage ? 1 : 0
-            self.editVideoLabel.snp.updateConstraints({ (make) in
+            self.editVideoLabel.snp.remakeConstraints({ (make) in
+                make.left.equalToSuperview().offset(20)
                 if self.config.allowEditImage {
                     make.top.equalTo(self.editImageToolView.snp.bottom).offset(20)
                 } else {
-                    make.top.equalTo(self.editImageToolView.snp.bottom).offset(-self.editImageToolView.bounds.height)
+                    make.top.equalTo(self.editImageToolView.snp.top)
                 }
             })
             self.view.layoutIfNeeded()
