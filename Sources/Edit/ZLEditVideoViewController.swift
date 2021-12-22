@@ -191,6 +191,7 @@ public class ZLEditVideoViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         layout.scrollDirection = .horizontal
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        self.collectionView.backgroundColor = .clear
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.showsHorizontalScrollIndicator = false

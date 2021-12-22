@@ -37,7 +37,7 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 - [x] Image/Gif/LivePhoto/Video.
 - [x] Customize the maximum number of previews or selection, the maximum and minimum optional duration of the video.
 - [x] Customize the number of columns displayed in each row.
-- [x] Image editor (Draw/Crop/Image sticker/Text sticker/Mosaic/Filter), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
+- [x] Image editor (Draw/Crop/Image sticker/Text sticker/Mosaic/Filter/Adjust(Brightness, Contrast and Saturation)), (Draw color can be customized; Crop ratio can be customized; Filter effect can be customized; You can choose the editing tool you want).
 - [x] Video editor.
 - [x] Custom camera.
 - [x] Multi-language.
@@ -92,6 +92,13 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="UpdateLog"></a>Update Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
 ```
+● 4.2.1
+  Add:
+    Support adjusting the brightness and contrast and saturation of an image.
+    Support Indonesian.
+    Add ZLEditImageConfiguration class to configuration the image editor.
+  Fix:
+    Crash when calling showPhotoLibrary in UISplitViewController.
 ● 4.2.0
   Add:
     Add chained calls.
@@ -103,16 +110,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ● 4.1.9
   Fix:
     Remove CallKit.
-● 4.1.8
-  Add:
-    Support crop round image.
-    Show an alert to prompt that app cannot access the microphone.
-    Wrap to display when the text is too long.
-    The http header of the network video can be configured.
-    Improve the judgment logic of Live Photo.
-    Edit the image directly after taking the photo.
-  Fix:
-    Camera cannot turning on while calling.
 ...
 ```
 

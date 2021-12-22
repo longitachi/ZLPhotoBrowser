@@ -559,7 +559,6 @@ open class ZLEditImageViewController: UIViewController {
             adjustLayout.scrollDirection = .horizontal
             
             let adjustCV = UICollectionView(frame: .zero, collectionViewLayout: adjustLayout)
-            
             adjustCV.backgroundColor = .clear
             adjustCV.delegate = self
             adjustCV.dataSource = self

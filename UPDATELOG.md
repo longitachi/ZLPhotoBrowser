@@ -1,6 +1,18 @@
 # Update Log
 
 -----
+
+## [4.2.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.1) (2021-12-22)
+### Add:
+* Support adjusting the brightness and contrast and saturation of an image.[#673](https://github.com/longitachi/ZLPhotoBrowser/pull/673)
+* Support Indonesian.
+* Add ZLEditImageConfiguration class to configuration the image editor.
+  
+### Fix:
+* Crash when calling showPhotoLibrary in UISplitViewController.[#671](https://github.com/longitachi/ZLPhotoBrowser/issues/671)
+
+---
+
 ## [4.2.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.0) (2021-11-24)
 ### Add:
 * Add chained calls.
