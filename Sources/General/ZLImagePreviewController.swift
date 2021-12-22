@@ -532,7 +532,8 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
             }
         }
         
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: deviceIsiPad() ? .alert : .actionSheet)
+        
         let save = UIAlertAction(title: localLanguageTextValue(.save), style: .default) { (_) in
             saveImage()
         }
