@@ -1,0 +1,70 @@
+"previewCamera" = "Câmara";
+"previewCameraRecord" = "Recorde";
+"previewAlbum" = "Álbum";
+"cancel" = "Cancelar";
+
+"originalPhoto" = "Imagem completa";
+"done" = "Feito";
+"ok" = "OK";
+"editFinish" = "Feito";
+
+"back" = "Voltar";
+"edit" = "Editar";
+"revert" = "Desfazer";
+"brightness" = "Brilho";
+"contrast" = "Contraste";
+"saturation" = "Saturação";
+
+"photo" = "Fotos";
+"preview" = "Pré-visualização";
+
+"noPhotoTips" = "Sem Fotos";
+"notAllowMixSelect" = "Não foi possível selecionar o vídeo";
+
+"loading" = "carregamento, esperando por favor";
+"hudLoading" = "à espera...";
+
+"exceededMaxSelectCount" = "Contagem máxima para seleção: %ld";
+"longerThanMaxVideoDuration" = "Incapaz de selecionar vídeos com duração superior a %lds";
+"shorterThanMaxVideoDuration" = "Incapaz de selecionar vídeos com duração inferior a %lds";
+"exceededMaxVideoSelectCount" = "Contagem máxima para seleção de vídeo: %ld";
+"lessThanMinVideoSelectCount" = "Contagem mínima para seleção de vídeo: %ld";
+
+"noCameraAuthority" = "Por favor, permita a %@ aceder à câmara do seu dispositivo em \"Definições\" > \"Privacidade\" > \"Câmara\".";
+"noPhotoLibratyAuthority" = "Por favor, permita que %@ acesse seu álbum em \"Configurações\" > \"Privacidade\" > \"Fotos\".";
+"noMicrophoneAuthority" = "Incapaz de gravar áudio. Vá para \"Configurações\" > \"%@\" e habilite o acesso ao microfone.";
+"cameraUnavailable" = "A câmara não está disponível";
+"keepRecording" = "Continuar Gravando";
+"gotoSettings" = "Ir para Configurações";
+
+"iCloudVideoLoadFaild" = "Incapaz de sincronizar a partir do iCloud";
+"imageLoadFailed" = "carregamento fracassado";
+
+"save" = "Salvar";
+"saveImageError" = "Falha em salvar a imagem";
+"saveVideoError" = "Falha ao salvar o vídeo";
+"timeout" = "Pedidos com tempo limite";
+
+"customCameraTips" = "Toque para tirar foto e segure para gravar vídeo";
+"customCameraTakePhotoTips" = "Toque para tirar foto";
+"customCameraRecordVideoTips" = "Segure para gravar vídeo";
+"minRecordTimeTips" = "Registre pelo menos %lds";
+
+"cameraRoll" = "Recentes";
+"panoramas" = "Panoramas";
+"videos" = "Vídeos";
+"favorites" = "Favoritos";
+"timelapses" = "Prazo";
+"recentlyAdded" = "Adicionado recentemente";
+"bursts" = "Rebentamentos";
+"slomoVideos" = "Slo-mo";
+"selfPortraits" = "Selfies";
+"screenshots" = "Imagens de tela";
+"depthEffect" = "Retrato";
+"livePhotos" = "Fotos ao vivo";
+"animated" = "Animado";
+"myPhotoStream" = "Meu fluxo de fotos";
+
+"noTitleAlbumListPlaceholder" = "Todas as fotos";
+"unableToAccessAllPhotos" = "Incapaz de aceder a todas as fotografias do álbum.\nPermitir o acesso a \"Todas as fotos\" em \"Fotos\".";
+"textStickerRemoveTips" = "Arraste aqui para remover";
