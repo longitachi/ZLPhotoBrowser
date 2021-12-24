@@ -15,6 +15,8 @@ Pod::Spec.new do |s|
   s.license               = { :type => "MIT", :file => "LICENSE" }
 
   s.author                = {'longitachi' => 'longitachi@163.com'}
+  s.social_media_url      = "https://github.com/longitachi"
+
   s.source                = {:git => 'https://github.com/longitachi/ZLPhotoBrowser.git', :tag => s.version}
 
   s.ios.deployment_target = '10.0'

@@ -101,7 +101,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
  
  
 ### <a id="更新日志"></a>更新日志
-> [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
+> [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
 ● 4.2.0
   新增:

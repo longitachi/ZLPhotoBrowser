@@ -1,8 +1,8 @@
 [![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](https://cocoapods.org/pods/ZLPhotoBrowser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
-[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
+[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
+[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
@@ -18,7 +18,7 @@ ZLPhotoBrowser is a Wechat-like image picker. Support select normal photos, vide
 * [Features](#Features)
 * [Requirements](#Requirements)
 * [Usage](#Usage)
-* [Update Log](#UpdateLog)
+* [Change Log](#ChangeLog)
 * [Languages](#Languages)
 * [Installation(Support Cocoapods/Carthage/SPM)](#Installation)
 * [Support](#Support)
@@ -89,8 +89,8 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
  ```
  
  
-### <a id="UpdateLog"></a>Update Log
-> [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
+### <a id="ChangeLog"></a>Change Log
+> [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
 ● 4.2.1
   Add:

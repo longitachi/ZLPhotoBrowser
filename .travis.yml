@@ -1,4 +1,4 @@
-language: objective-c
+language: Swift
 osx_image: xcode10.1
 xcode_workspace: ZLPhotoBrowser
 xcode_scheme: ZLPhotoBrowser
