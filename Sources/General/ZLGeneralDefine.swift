@@ -157,6 +157,7 @@ func canAddModel(_ model: ZLPhotoModel, selectedModels: [ZLPhotoModel]?, sender:
     guard (ZLPhotoConfiguration.default().canSelectAsset?(model.asset, selectedModels) ?? true) else {
         return false
     }
+    let currentSelectCount = selectedModels?.count ?? 0
     
     if currentSelectCount >= ZLPhotoConfiguration.default().maxSelectCount {
         if showAlert {
