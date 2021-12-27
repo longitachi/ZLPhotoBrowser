@@ -160,7 +160,7 @@ class ViewController: UIViewController {
             .editImageConfiguration(editImageConfiguration)
             .navCancelButtonStyle(.image)
             // You can first determine whether the asset is allowed to be selected.
-            .canSelectAsset { asset in
+            .canSelectAsset { asset, _ in
                 return true
             }
             .noAuthorityCallback { type in

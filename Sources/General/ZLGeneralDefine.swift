@@ -153,8 +153,8 @@ func showAlertView(_ message: String, _ sender: UIViewController?) {
     (sender ?? UIApplication.shared.keyWindow?.rootViewController)?.showDetailViewController(alert, sender: nil)
 }
 
-func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
-    guard (ZLPhotoConfiguration.default().canSelectAsset?(model.asset) ?? true) else {
+func canAddModel(_ model: ZLPhotoModel, selectedModels: [ZLPhotoModel]?, sender: UIViewController?, showAlert: Bool = true) -> Bool {
+    guard (ZLPhotoConfiguration.default().canSelectAsset?(model.asset, selectedModels) ?? true) else {
         return false
     }
     

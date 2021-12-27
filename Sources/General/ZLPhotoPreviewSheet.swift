@@ -766,7 +766,7 @@ public class ZLPhotoPreviewSheet: UIView {
         if !ZLPhotoConfiguration.default().allowMixSelect, newModel.type == .video {
             canSelect = false
         }
-        if canSelect, canAddModel(newModel, currentSelectCount: arrSelectedModels.count, sender: sender, showAlert: false) {
+        if canSelect, canAddModel(newModel, selectedModels: arrSelectedModels, sender: sender, showAlert: false) {
             if !shouldDirectEdit(newModel) {
                 newModel.isSelected = true
                 arrSelectedModels.append(newModel)
@@ -820,7 +820,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         cell.selectedBlock = { [weak self, weak cell] (isSelected) in
             guard let `self` = self else { return }
             if !isSelected {
-                guard canAddModel(model, currentSelectCount: self.arrSelectedModels.count, sender: self.sender) else {
+                guard canAddModel(model, selectedModels: self.arrSelectedModels, sender: self.sender) else {
                     return
                 }
                 if !self.shouldDirectEdit(model) {

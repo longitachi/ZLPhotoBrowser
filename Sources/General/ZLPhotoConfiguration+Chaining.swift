@@ -459,7 +459,7 @@ extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    @objc public func canSelectAsset(_ block: ((PHAsset) -> Bool)?) -> ZLPhotoConfiguration {
+    @objc public func canSelectAsset(_ block: ((PHAsset, [ZLPhotoModel]?) -> Bool)?) -> ZLPhotoConfiguration {
         canSelectAsset = block
         return self
     }

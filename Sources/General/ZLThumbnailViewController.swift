@@ -491,7 +491,7 @@ class ZLThumbnailViewController: UIViewController {
                 self.panSelectType = m.isSelected ? .cancel : .select
                 self.beginSlideIndexPath = indexPath
                 
-                if !m.isSelected, nav.arrSelectedModels.count < config.maxSelectCount, canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
+                if !m.isSelected, nav.arrSelectedModels.count < config.maxSelectCount, canAddModel(m, selectedModels: nav.arrSelectedModels, sender: self) {
                     if self.shouldDirectEdit(m) {
                         self.panSelectType = .none
                         return
@@ -555,7 +555,7 @@ class ZLThumbnailViewController: UIViewController {
                     if self.panSelectType == .select {
                         if inSection,
                            !m.isSelected,
-                           canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self, showAlert: false) {
+                           canAddModel(m, selectedModels: nav.arrSelectedModels, sender: self, showAlert: false) {
                             m.isSelected = true
                         }
                     } else if self.panSelectType == .cancel {
@@ -789,7 +789,7 @@ class ZLThumbnailViewController: UIViewController {
         if !config.allowMixSelect, newModel.type == .video {
             canSelect = false
         }
-        if canSelect, canAddModel(newModel, currentSelectCount: nav?.arrSelectedModels.count ?? 0, sender: self, showAlert: false) {
+        if canSelect, canAddModel(newModel, selectedModels: nav?.arrSelectedModels, sender: self, showAlert: false) {
             if !self.shouldDirectEdit(newModel) {
                 newModel.isSelected = true
                 nav?.arrSelectedModels.append(newModel)
@@ -958,8 +958,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         let nav = self.navigationController as? ZLImageNavController
         cell.selectedBlock = { [weak self, weak nav, weak cell] (isSelected) in
             if !isSelected {
-                let currentSelectCount = nav?.arrSelectedModels.count ?? 0
-                guard canAddModel(model, currentSelectCount: currentSelectCount, sender: self) else {
+                guard canAddModel(model, selectedModels: nav?.arrSelectedModels, sender: self) else {
                     return
                 }
                 if self?.shouldDirectEdit(model) == false {

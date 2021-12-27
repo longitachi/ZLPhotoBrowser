@@ -458,7 +458,7 @@ class ZLPhotoPreviewController: UIViewController {
             if ZLPhotoConfiguration.default().animateSelectBtnWhenSelect {
                 self.selectBtn.layer.add(getSpringAnimation(), forKey: nil)
             }
-            if !canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
+            if !canAddModel(currentModel, selectedModels: nav.arrSelectedModels, sender: self) {
                 return
             }
             currentModel.isSelected = true
@@ -538,7 +538,7 @@ class ZLPhotoPreviewController: UIViewController {
         let currentModel = self.arrDataSources[self.currentIndex]
         
         if self.autoSelectCurrentIfNotSelectAnyone {
-            if nav.arrSelectedModels.isEmpty, canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
+            if nav.arrSelectedModels.isEmpty, canAddModel(currentModel, selectedModels: nav.arrSelectedModels, sender: self) {
                 nav.arrSelectedModels.append(currentModel)
             }
             
