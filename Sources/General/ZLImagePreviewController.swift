@@ -539,7 +539,7 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
         let cancel = UIAlertAction(title: localLanguageTextValue(.cancel), style: .cancel, handler: nil)
         alert.addAction(save)
         alert.addAction(cancel)
-        self.showDetailViewController(alert, sender: nil)
+        showAlertController(alert)
     }
     
 }

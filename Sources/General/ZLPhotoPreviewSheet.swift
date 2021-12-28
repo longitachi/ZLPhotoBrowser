@@ -377,7 +377,7 @@ public class ZLPhotoPreviewSheet: UIView {
             ZLPhotoConfiguration.default().noAuthorityCallback?(.library)
         }
         alert.addAction(action)
-        sender?.showDetailViewController(alert, sender: nil)
+        sender?.showAlertController(alert)
     }
     
     @objc func tapAction(_ tap: UITapGestureRecognizer) {

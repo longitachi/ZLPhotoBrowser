@@ -538,7 +538,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         alert.addAction(continueAction)
         alert.addAction(gotoSettingsAction)
-        self.showDetailViewController(alert, sender: nil)
+        showAlertController(alert)
     }
     
     func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
@@ -551,7 +551,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             }
         }
         alert.addAction(action)
-        self.showDetailViewController(alert, sender: nil)
+        showAlertController(alert)
     }
     
     func showTipsLabel(animate: Bool) {

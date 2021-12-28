@@ -433,7 +433,7 @@ public class ZLEditVideoViewController: UIViewController {
             self.dismiss(animated: false, completion: nil)
         }
         alert.addAction(action)
-        self.showDetailViewController(alert, sender: nil)
+        showAlertController(alert)
     }
     
 }
