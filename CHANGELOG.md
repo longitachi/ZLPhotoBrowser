@@ -2,6 +2,15 @@
 
 -----
 
+## [4.2.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.2) (2022-01-13)
+### Add:
+* Support Spanish and Portuguese.[#677](https://github.com/longitachi/ZLPhotoBrowser/pull/677)
+  
+### Fix:
+* Fix the crash when UIAlertController is displayed on iPad.
+
+---
+
 ## [4.2.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.1) (2021-12-22)
 ### Add:
 * Support adjusting the brightness and contrast and saturation of an image.[#673](https://github.com/longitachi/ZLPhotoBrowser/pull/673)

@@ -1,8 +1,8 @@
-[![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
+[![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](https://cocoapods.org/pods/ZLPhotoBrowser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
-[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
+[![SPM supported](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
+[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
+[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
@@ -103,6 +103,11 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.1.9
+  新增:
+    支持西班牙语和葡萄牙语;
+  Fix:
+    修复iPad上显示UIAlertController时crash的bug;
 ● 4.2.0
   新增:
     编辑图片时支持调整图片亮度、对比度和饱和度;
@@ -118,14 +123,11 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   Fix:
     编辑视频未操作进度条的情况下也会重建一个新视频.[#655]
     某些条件下，无法取消选择已选的照片.[#659]
-● 4.1.9
-  Fix:
-    移除CallKit
 ...
 ```
 
 ### <a id="国际化语言"></a>国际化语言
-🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语, 🇮🇩印度尼西亚语.
+🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语, 🇮🇩印度尼西亚语, 🇪🇸西班牙语, 🇵🇹葡萄牙语.
 
 ### <a id="安装方法"></a>使用方法
 

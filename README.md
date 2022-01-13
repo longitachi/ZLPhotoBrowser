@@ -1,6 +1,6 @@
 [![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](https://cocoapods.org/pods/ZLPhotoBrowser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
+[![SPM supported](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
 [![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
@@ -92,6 +92,11 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.2.2
+  Add:
+    Support Spanish and Portuguese.
+  Fix:
+    Fix the crash when UIAlertController is displayed on iPad.
 ● 4.2.1
   Add:
     Support adjusting the brightness and contrast and saturation of an image.
@@ -107,14 +112,11 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Fix:
     Selected video duplicates after editing mode.[#655]
     Unable to deselect photos under certain conditions.[#659]
-● 4.1.9
-  Fix:
-    Remove CallKit.
 ...
 ```
 
 ### <a id="Languages"></a>Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩Indonesian.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩Indonesian, 🇪🇸Spanish, 🇵🇹Portuguese.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLPhotoBrowser in your project:
