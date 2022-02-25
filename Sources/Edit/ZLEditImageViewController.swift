@@ -496,6 +496,7 @@ open class ZLEditImageViewController: UIViewController {
         self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         self.doneBtn.setTitle(localLanguageTextValue(.editFinish), for: .normal)
+        self.doneBtn.setTitleColor(.bottomToolViewDoneBtnNormalTitleColor, for: .normal)
         self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         self.doneBtn.layer.masksToBounds = true
         self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius

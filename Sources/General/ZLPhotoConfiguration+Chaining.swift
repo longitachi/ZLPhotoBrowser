@@ -590,8 +590,20 @@ extension ZLPhotoThemeColorDeploy {
     }
     
     @discardableResult
+    public func bottomToolViewDoneBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
+        bottomToolViewDoneBtnNormalTitleColor = color
+        return self
+    }
+    
+    @discardableResult
     public func bottomToolViewBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
         bottomToolViewBtnNormalTitleColorOfPreviewVC = color
+        return self
+    }
+    
+    @discardableResult
+    public func bottomToolViewDoneBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
+        bottomToolViewDoneBtnNormalTitleColorOfPreviewVC = color
         return self
     }
     
@@ -602,8 +614,20 @@ extension ZLPhotoThemeColorDeploy {
     }
     
     @discardableResult
+    public func bottomToolViewDoneBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
+        bottomToolViewDoneBtnDisableTitleColor = color
+        return self
+    }
+    
+    @discardableResult
     public func bottomToolViewBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
         bottomToolViewBtnDisableTitleColorOfPreviewVC = color
+        return self
+    }
+    
+    @discardableResult
+    public func bottomToolViewDoneBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
+        bottomToolViewDoneBtnDisableTitleColorOfPreviewVC = color
         return self
     }
     

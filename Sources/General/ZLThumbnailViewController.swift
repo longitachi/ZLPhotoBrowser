@@ -314,12 +314,12 @@ class ZLThumbnailViewController: UIViewController {
             self.bottomView.addSubview(self.limitAuthTipsView!)
         }
         
-        func createBtn(_ title: String, _ action: Selector) -> UIButton {
+        func createBtn(_ title: String, _ action: Selector, _ isDone: Bool = false) -> UIButton {
             let btn = UIButton(type: .custom)
             btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
             btn.setTitle(title, for: .normal)
-            btn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
-            btn.setTitleColor(.bottomToolViewBtnDisableTitleColor, for: .disabled)
+            btn.setTitleColor(isDone ? .bottomToolViewDoneBtnNormalTitleColor : .bottomToolViewBtnNormalTitleColor, for: .normal)
+            btn.setTitleColor(isDone ? .bottomToolViewDoneBtnDisableTitleColor : .bottomToolViewBtnDisableTitleColor, for: .disabled)
             btn.addTarget(self, action: action, for: .touchUpInside)
             return btn
         }
@@ -344,7 +344,7 @@ class ZLThumbnailViewController: UIViewController {
         self.originalBtn.isSelected = (self.navigationController as! ZLImageNavController).isSelectedOriginal
         self.bottomView.addSubview(self.originalBtn)
         
-        self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick))
+        self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick), true)
         self.doneBtn.layer.masksToBounds = true
         self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         self.bottomView.addSubview(self.doneBtn)

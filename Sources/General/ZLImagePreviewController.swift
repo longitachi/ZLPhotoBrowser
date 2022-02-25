@@ -44,7 +44,7 @@ public class ZLImagePreviewController: UIViewController {
     
     let urlType: ( (URL) -> ZLURLType )?
     
-    let urlImageLoader: ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ), @escaping ( () -> Void )) -> Void )?
+    let urlImageLoader: ((URL, UIImageView, @escaping (CGFloat) -> Void, @escaping () -> Void) -> Void )?
     
     let showSelectBtn: Bool
     
@@ -91,7 +91,7 @@ public class ZLImagePreviewController: UIViewController {
     }
     
     /// - Parameters:
-    ///   - datas: Must be one of PHAsset, UIImage and URL, will filter ohers in init function.
+    ///   - datas: Must be one of PHAsset, UIImage and URL, will filter others in init function.
     ///   - showBottomView: If showSelectBtn is true, showBottomView is always true.
     ///   - index: Index for first display.
     ///   - urlType: Tell me the url is image or video.
@@ -101,8 +101,8 @@ public class ZLImagePreviewController: UIViewController {
         index: Int = 0,
         showSelectBtn: Bool = true,
         showBottomView: Bool = true,
-        urlType: ( (URL) -> ZLURLType )? = nil,
-        urlImageLoader: ( (URL, UIImageView, @escaping ( (CGFloat) -> Void ),  @escaping ( () -> Void )) -> Void )? = nil
+        urlType: ((URL) -> ZLURLType)? = nil,
+        urlImageLoader: ((URL, UIImageView, @escaping (CGFloat) -> Void,  @escaping () -> Void) -> Void)? = nil
     ) {
         let filterDatas = datas.filter { (obj) -> Bool in
             return obj is PHAsset || obj is UIImage || obj is URL
@@ -257,8 +257,8 @@ public class ZLImagePreviewController: UIViewController {
             let btn = UIButton(type: .custom)
             btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
             btn.setTitle(title, for: .normal)
-            btn.setTitleColor(.bottomToolViewBtnNormalTitleColorOfPreviewVC, for: .normal)
-            btn.setTitleColor(.bottomToolViewBtnDisableTitleColorOfPreviewVC, for: .disabled)
+            btn.setTitleColor(.bottomToolViewDoneBtnNormalTitleColorOfPreviewVC, for: .normal)
+            btn.setTitleColor(.bottomToolViewDoneBtnDisableTitleColorOfPreviewVC, for: .disabled)
             btn.addTarget(self, action: action, for: .touchUpInside)
             return btn
         }

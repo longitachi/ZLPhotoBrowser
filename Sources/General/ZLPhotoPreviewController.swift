@@ -289,12 +289,12 @@ class ZLPhotoPreviewController: UIViewController {
             self.bottomView.addSubview(self.selPhotoPreview!)
         }
         
-        func createBtn(_ title: String, _ action: Selector) -> UIButton {
+        func createBtn(_ title: String, _ action: Selector, _ isDone: Bool = false) -> UIButton {
             let btn = UIButton(type: .custom)
             btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
             btn.setTitle(title, for: .normal)
-            btn.setTitleColor(.bottomToolViewBtnNormalTitleColorOfPreviewVC, for: .normal)
-            btn.setTitleColor(.bottomToolViewBtnDisableTitleColorOfPreviewVC, for: .disabled)
+            btn.setTitleColor(isDone ? .bottomToolViewDoneBtnNormalTitleColorOfPreviewVC : .bottomToolViewBtnNormalTitleColorOfPreviewVC, for: .normal)
+            btn.setTitleColor(isDone ? .bottomToolViewDoneBtnDisableTitleColorOfPreviewVC : .bottomToolViewBtnDisableTitleColorOfPreviewVC, for: .disabled)
             btn.addTarget(self, action: action, for: .touchUpInside)
             return btn
         }
@@ -319,7 +319,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.originalBtn.isSelected = (self.navigationController as! ZLImageNavController).isSelectedOriginal
         self.bottomView.addSubview(self.originalBtn)
         
-        self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick))
+        self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick), true)
         self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColorOfPreviewVC
         self.doneBtn.layer.masksToBounds = true
         self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
