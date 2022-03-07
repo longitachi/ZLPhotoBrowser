@@ -8,7 +8,6 @@
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
 ----------------------------------------
-# Warning: 如果您的App在中国地区上架，请更新至最新版本(>=4.1.9)。[issue](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
 
 [English](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README.md) | 简体中文
 
@@ -103,26 +102,21 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.1.9
+● 4.2.3
+  新增:
+    `完成`按钮的标题颜色可以单独定义;
+● 4.2.2
   新增:
     支持西班牙语和葡萄牙语;
   Fix:
     修复iPad上显示UIAlertController时crash的bug;
-● 4.2.0
+● 4.2.1
   新增:
     编辑图片时支持调整图片亮度、对比度和饱和度;
     支持印尼语;
-    抽出图片编辑相关配置类：ZLEditImageConfiguration.
+    抽出图片编辑相关配置类：ZLEditImageConfiguration;
   Fix:
-    Crash when calling showPhotoLibrary in UISplitViewController.
-● 4.2.0
-  新增:
-    支持链式调用;
-    优化自定义相机代码;
-    小图界面取消按钮添加图片类型;
-  Fix:
-    编辑视频未操作进度条的情况下也会重建一个新视频.[#655]
-    某些条件下，无法取消选择已选的照片.[#659]
+    Crash when calling showPhotoLibrary in UISplitViewController;
 ...
 ```
 

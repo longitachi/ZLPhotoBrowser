@@ -8,7 +8,6 @@
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
 ----------------------------------------
-# Warning: If your APP includes China in the App Store sales area, please update to the latest version(>= 4.1.9). [issue](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
 
 English | [简体中文](https://github.com/longitachi/ZLPhotoBrowser/blob/master/README_CN.md)
 
@@ -92,6 +91,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.2.3
+  Add:
+    Done button title color can be defined separately.
 ● 4.2.2
   Add:
     Support Spanish and Portuguese.
@@ -104,14 +106,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Add ZLEditImageConfiguration class to configuration the image editor.
   Fix:
     Crash when calling showPhotoLibrary in UISplitViewController.
-● 4.2.0
-  Add:
-    Add chained calls.
-    Optmize the custom camera code.
-    Add image style of cancel button.
-  Fix:
-    Selected video duplicates after editing mode.[#655]
-    Unable to deselect photos under certain conditions.[#659]
 ...
 ```
 

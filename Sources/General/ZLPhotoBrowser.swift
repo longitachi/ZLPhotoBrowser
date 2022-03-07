@@ -24,4 +24,4 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-let version = "4.2.2"
+let version = "4.2.3"

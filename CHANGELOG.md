@@ -2,6 +2,12 @@
 
 -----
 
+## [4.2.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.3) (2022-03-07)
+### Add:
+* Done button title color can be defined separately.
+
+---
+
 ## [4.2.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.2) (2022-01-13)
 ### Add:
 * Support Spanish and Portuguese.[#677](https://github.com/longitachi/ZLPhotoBrowser/pull/677)

@@ -541,7 +541,7 @@ public class ZLPhotoThemeColorDeploy: NSObject {
     
     /// A color for background in album list.
     /// 相册列表背景色
-    @objc public var albumListBgColor = zlRGB(205, 45, 45)
+    @objc public var albumListBgColor = zlRGB(45, 45, 45)
     
     /// A color for album list title label.
     /// 相册列表标题颜色

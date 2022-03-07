@@ -145,7 +145,10 @@ public class ZLPhotoModel: NSObject {
     
 }
 
-
-public func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
-    return lhs.ident == rhs.ident
+extension ZLPhotoModel {
+    
+    public static func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
+        return lhs.ident == rhs.ident
+    }
+    
 }
