@@ -102,6 +102,9 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.2.1
+  Fix:
+    修复预览界面选择原图功能相关的bug;
 ● 4.2.3
   新增:
     `完成`按钮的标题颜色可以单独定义;
@@ -110,13 +113,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     支持西班牙语和葡萄牙语;
   Fix:
     修复iPad上显示UIAlertController时crash的bug;
-● 4.2.1
-  新增:
-    编辑图片时支持调整图片亮度、对比度和饱和度;
-    支持印尼语;
-    抽出图片编辑相关配置类：ZLEditImageConfiguration;
-  Fix:
-    Crash when calling showPhotoLibrary in UISplitViewController;
 ...
 ```
 

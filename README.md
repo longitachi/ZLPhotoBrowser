@@ -91,6 +91,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.2.4
+  Fix:
+    Fixes the bug when select the original photo in the preview.
 ● 4.2.3
   Add:
     Done button title color can be defined separately.
@@ -99,13 +102,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Support Spanish and Portuguese.
   Fix:
     Fix the crash when UIAlertController is displayed on iPad.
-● 4.2.1
-  Add:
-    Support adjusting the brightness and contrast and saturation of an image.
-    Support Indonesian.
-    Add ZLEditImageConfiguration class to configuration the image editor.
-  Fix:
-    Crash when calling showPhotoLibrary in UISplitViewController.
 ...
 ```
 
