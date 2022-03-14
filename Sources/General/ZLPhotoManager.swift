@@ -30,7 +30,7 @@ import Photos
 public class ZLPhotoManager: NSObject {
 
     /// Save image to album.
-    @objc public class func saveImageToAlbum(image: UIImage, completion: ( (Bool, PHAsset?) -> Void )? ) {
+    @objc public class func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)? ) {
         let status = PHPhotoLibrary.authorizationStatus()
         
         if status == .denied || status == .restricted {
@@ -55,7 +55,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Save video to album.
-    @objc public class func saveVideoToAlbum(url: URL, completion: ( (Bool, PHAsset?) -> Void )? ) {
+    @objc public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void )?) {
         let status = PHPhotoLibrary.authorizationStatus()
         
         if status == .denied || status == .restricted {
@@ -117,7 +117,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch all album list.
-    @objc public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, completion: ( ([ZLAlbumListModel]) -> Void )) {
+    @objc public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, completion: ([ZLAlbumListModel]) -> Void) {
         let option = PHFetchOptions()
         if !allowSelectImage {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
@@ -164,7 +164,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch camera roll album.
-    @objc public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping ( (ZLAlbumListModel) -> Void )) {
+    @objc public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping (ZLAlbumListModel) -> Void) {
         let option = PHFetchOptions()
         if !allowSelectImage {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
@@ -246,18 +246,18 @@ public class ZLPhotoManager: NSObject {
     }
     
     @discardableResult
-    @objc public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
+    @objc public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
         return self.fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
     }
     
     @discardableResult
-    @objc public class func fetchOriginalImage(for asset: PHAsset, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void)) -> PHImageRequestID {
+    @objc public class func fetchOriginalImage(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
         return self.fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
     }
     
     /// Fetch asset data.
     @discardableResult
-    @objc public class func fetchOriginalImageData(for asset: PHAsset, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (Data, [AnyHashable: Any]?, Bool) -> Void)) -> PHImageRequestID {
+    @objc public class func fetchOriginalImageData(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         if (asset.value(forKey: "filename") as? String)?.hasSuffix("GIF") == true {
             option.version = .original
@@ -281,7 +281,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch image for asset.
-    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
+    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         option.resizeMode = resizeMode
         option.isNetworkAccessAllowed = true
@@ -303,7 +303,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    @objc public class func fetchLivePhoto(for asset: PHAsset, completion: @escaping ( (PHLivePhoto?, [AnyHashable: Any]?, Bool) -> Void )) -> PHImageRequestID {
+    @objc public class func fetchLivePhoto(for asset: PHAsset, completion: @escaping (PHLivePhoto?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
         let option = PHLivePhotoRequestOptions()
         option.version = .current
         option.deliveryMode = .opportunistic
@@ -315,7 +315,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    @objc public class func fetchVideo(for asset: PHAsset, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void )) -> PHImageRequestID {
+    @objc public class func fetchVideo(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
         let option = PHVideoRequestOptions()
         option.isNetworkAccessAllowed = true
         option.progressHandler = { (pro, error, stop, info) in
@@ -325,7 +325,6 @@ public class ZLPhotoManager: NSObject {
         }
         
         // https://github.com/longitachi/ZLPhotoBrowser/issues/369#issuecomment-728679135
-        
         if asset.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { (session, info) in
                 // iOS11 and earlier, callback is not on the main thread.
@@ -334,6 +333,8 @@ public class ZLPhotoManager: NSObject {
                     if let avAsset = session?.asset {
                         let item = AVPlayerItem(asset: avAsset)
                         completion(item, info, isDegraded)
+                    } else {
+                        completion(nil, nil, true)
                     }
                 }
             })
@@ -358,7 +359,7 @@ public class ZLPhotoManager: NSObject {
         return false
     }
     
-    @objc public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping ( (AVAsset?, [AnyHashable: Any]?) -> Void )) -> PHImageRequestID {
+    @objc public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping (AVAsset?, [AnyHashable: Any]?) -> Void) -> PHImageRequestID {
         let options = PHVideoRequestOptions()
         options.version = .original
         options.deliveryMode = .automatic
@@ -385,7 +386,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch asset local file path.
-    @objc public class func fetchAssetFilePath(asset: PHAsset, completion: @escaping (String?) -> Void ) {
+    @objc public class func fetchAssetFilePath(asset: PHAsset, completion: @escaping (String?) -> Void) {
         asset.requestContentEditingInput(with: nil) { (input, info) in
             var path = input?.fullSizeImageURL?.absoluteString
             if path == nil, let dir = asset.value(forKey: "directory") as? String, let name = asset.value(forKey: "filename") as? String {

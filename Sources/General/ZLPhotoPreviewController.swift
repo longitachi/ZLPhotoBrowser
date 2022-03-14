@@ -507,6 +507,8 @@ class ZLPhotoPreviewController: UIViewController {
     }
     
     @objc func originalPhotoClick() {
+        originalBtn.isSelected.toggle()
+        
         let config = ZLPhotoConfiguration.default()
         
         let nav = (navigationController as? ZLImageNavController)
@@ -515,7 +517,7 @@ class ZLPhotoPreviewController: UIViewController {
             selectBtnClick()
         } else if config.maxSelectCount == 1,
                   !config.showSelectBtnWhenSingleSelect,
-                  originalBtn.isSelected,
+                  !originalBtn.isSelected,
                   nav?.arrSelectedModels.count == 1,
                   let currentModel = nav?.arrSelectedModels.first {
             currentModel.isSelected = false
@@ -529,8 +531,6 @@ class ZLPhotoPreviewController: UIViewController {
                 collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
             }
         }
-        
-        originalBtn.isSelected.toggle()
     }
     
     @objc func doneBtnClick() {

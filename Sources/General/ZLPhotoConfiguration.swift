@@ -52,7 +52,7 @@ public class ZLPhotoConfiguration: NSObject {
     @objc public var statusBarStyle: UIStatusBarStyle = .lightContent
     
     /// text: Cancel.  image: 'x'. Default to text.
-    @objc public var navCancelButtonStyle: ZLPhotoConfiguration.CancelButtonStyle = .text
+    @objc public var navCancelButtonStyle: ZLPhotoConfiguration.CancelButtonStyle = .image
     
     /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
     @objc public var sortAscending = true
