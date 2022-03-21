@@ -148,8 +148,8 @@ github "longitachi/ZLPhotoBrowser"
 
 Then, run the following command to build the ZLPhotoBrowser framework:
 
-```
-$ carthage update ZLPhotoBrowser
+```shell
+$ carthage update
 ```
 
 If you get an error like `Building universal frameworks with common architectures is not possible. The device and simulator slices for "ZLPhotoBrowser" both build for: arm64

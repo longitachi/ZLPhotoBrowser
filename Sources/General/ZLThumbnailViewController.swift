@@ -341,7 +341,7 @@ class ZLThumbnailViewController: UIViewController {
         self.originalBtn.adjustsImageWhenHighlighted = false
         self.originalBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         self.originalBtn.isHidden = !(ZLPhotoConfiguration.default().allowSelectOriginal && ZLPhotoConfiguration.default().allowSelectImage)
-        self.originalBtn.isSelected = (self.navigationController as! ZLImageNavController).isSelectedOriginal
+        self.originalBtn.isSelected = (navigationController as? ZLImageNavController)?.isSelectedOriginal ?? false
         self.bottomView.addSubview(self.originalBtn)
         
         self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick), true)
@@ -410,8 +410,11 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     func loadPhotos() {
-        let nav = self.navigationController as! ZLImageNavController
-        if self.albumList.models.isEmpty {
+        guard let nav = navigationController as? ZLImageNavController else {
+            return
+        }
+        
+        if albumList.models.isEmpty {
             let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
             hud.show()
             DispatchQueue.global().async {
@@ -426,11 +429,11 @@ class ZLThumbnailViewController: UIViewController {
                 }
             }
         } else {
-            self.arrDataSources.removeAll()
-            self.arrDataSources.append(contentsOf: self.albumList.models)
-            markSelected(source: &self.arrDataSources, selected: &nav.arrSelectedModels)
-            self.collectionView.reloadData()
-            self.scrollToBottom()
+            arrDataSources.removeAll()
+            arrDataSources.append(contentsOf: albumList.models)
+            markSelected(source: &arrDataSources, selected: &nav.arrSelectedModels)
+            collectionView.reloadData()
+            scrollToBottom()
         }
     }
     
@@ -449,18 +452,21 @@ class ZLThumbnailViewController: UIViewController {
     // MARK: btn actions
     
     @objc func previewBtnClick() {
-        let nav = self.navigationController as! ZLImageNavController
+        guard let nav = navigationController as? ZLImageNavController else {
+            zlLoggerInDebug("Navigation controller is null")
+            return
+        }
         let vc = ZLPhotoPreviewController(photos: nav.arrSelectedModels, index: 0)
-        self.show(vc, sender: nil)
+        show(vc, sender: nil)
     }
     
     @objc func originalPhotoClick() {
-        self.originalBtn.isSelected = !self.originalBtn.isSelected
-        (self.navigationController as? ZLImageNavController)?.isSelectedOriginal = self.originalBtn.isSelected
+        originalBtn.isSelected.toggle()
+        (navigationController as? ZLImageNavController)?.isSelectedOriginal = originalBtn.isSelected
     }
     
     @objc func doneBtnClick() {
-        let nav = self.navigationController as? ZLImageNavController
+        let nav = navigationController as? ZLImageNavController
         nav?.selectImageBlock?()
     }
     
@@ -471,29 +477,29 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     @objc func slideSelectAction(_ pan: UIPanGestureRecognizer) {
-        let point = pan.location(in: self.collectionView)
-        guard let indexPath = self.collectionView.indexPathForItem(at: point) else {
+        let point = pan.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: point) else {
             return
         }
         let config = ZLPhotoConfiguration.default()
-        let nav = self.navigationController as! ZLImageNavController
+        let nav = navigationController as! ZLImageNavController
         
-        let cell = self.collectionView.cellForItem(at: indexPath) as? ZLThumbnailPhotoCell
+        let cell = collectionView.cellForItem(at: indexPath) as? ZLThumbnailPhotoCell
         let asc = config.sortAscending
         
         if pan.state == .began {
-            self.beginPanSelect = (cell != nil)
+            beginPanSelect = (cell != nil)
             
-            if self.beginPanSelect {
-                let index = asc ? indexPath.row : indexPath.row - self.offset
+            if beginPanSelect {
+                let index = asc ? indexPath.row : indexPath.row - offset
                 
-                let m = self.arrDataSources[index]
-                self.panSelectType = m.isSelected ? .cancel : .select
-                self.beginSlideIndexPath = indexPath
+                let m = arrDataSources[index]
+                panSelectType = m.isSelected ? .cancel : .select
+                beginSlideIndexPath = indexPath
                 
                 if !m.isSelected, nav.arrSelectedModels.count < config.maxSelectCount, canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
-                    if self.shouldDirectEdit(m) {
-                        self.panSelectType = .none
+                    if shouldDirectEdit(m) {
+                        panSelectType = .none
                         return
                     } else {
                         m.isSelected = true
@@ -505,23 +511,23 @@ class ZLThumbnailViewController: UIViewController {
                 }
                 
                 cell?.btnSelect.isSelected = m.isSelected
-                self.refreshCellIndexAndMaskView()
-                self.resetBottomToolBtnStatus()
-                self.lastSlideIndex = indexPath.row
+                refreshCellIndexAndMaskView()
+                resetBottomToolBtnStatus()
+                lastSlideIndex = indexPath.row
             }
         } else if pan.state == .changed {
-            self.autoScrollWhenSlideSelect(pan)
+            autoScrollWhenSlideSelect(pan)
             
-            if !self.beginPanSelect || indexPath.row == self.lastSlideIndex || self.panSelectType == .none || cell == nil {
+            if !beginPanSelect || indexPath.row == lastSlideIndex || panSelectType == .none || cell == nil {
                 return
             }
-            guard let beginIndexPath = self.beginSlideIndexPath else {
+            guard let beginIndexPath = beginSlideIndexPath else {
                 return
             }
-            self.lastPanUpdateTime = CACurrentMediaTime()
+            lastPanUpdateTime = CACurrentMediaTime()
             
-            let visiblePaths = self.collectionView.indexPathsForVisibleItems
-            self.slideCalculateQueue.async {
+            let visiblePaths = collectionView.indexPathsForVisibleItems
+            slideCalculateQueue.async {
                 self.lastSlideIndex = indexPath.row
                 let minIndex = min(indexPath.row, beginIndexPath.row)
                 let maxIndex = max(indexPath.row, beginIndexPath.row)
@@ -594,11 +600,11 @@ class ZLThumbnailViewController: UIViewController {
                 }
             }
         } else if pan.state == .ended || pan.state == .cancelled {
-            self.cleanTimer()
-            self.panSelectType = .none
-            self.arrSlideIndexPaths.removeAll()
-            self.dicOriSelectStatus.removeAll()
-            self.resetBottomToolBtnStatus()
+            cleanTimer()
+            panSelectType = .none
+            arrSlideIndexPaths.removeAll()
+            dicOriSelectStatus.removeAll()
+            resetBottomToolBtnStatus()
         }
     }
     
@@ -670,34 +676,36 @@ class ZLThumbnailViewController: UIViewController {
     
     func resetBottomToolBtnStatus() {
         guard showBottomToolBar() else { return }
-        
-        let nav = self.navigationController as! ZLImageNavController
-        if nav.arrSelectedModels.count > 0 {
-            self.previewBtn.isEnabled = true
-            self.doneBtn.isEnabled = true
-            let doneTitle = localLanguageTextValue(.done) + "(" + String(nav.arrSelectedModels.count) + ")"
-            self.doneBtn.setTitle(doneTitle, for: .normal)
-            self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
-        } else {
-            self.previewBtn.isEnabled = false
-            self.doneBtn.isEnabled = false
-            self.doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
-            self.doneBtn.backgroundColor = .bottomToolViewBtnDisableBgColor
+        guard let nav = navigationController as? ZLImageNavController else {
+            zlLoggerInDebug("Navigation controller is null")
+            return
         }
-        self.originalBtn.isSelected = nav.isSelectedOriginal
-        self.refreshDoneBtnFrame()
+        if nav.arrSelectedModels.count > 0 {
+            previewBtn.isEnabled = true
+            doneBtn.isEnabled = true
+            let doneTitle = localLanguageTextValue(.done) + "(" + String(nav.arrSelectedModels.count) + ")"
+            doneBtn.setTitle(doneTitle, for: .normal)
+            doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
+        } else {
+            previewBtn.isEnabled = false
+            doneBtn.isEnabled = false
+            doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
+            doneBtn.backgroundColor = .bottomToolViewBtnDisableBgColor
+        }
+        originalBtn.isSelected = nav.isSelectedOriginal
+        refreshDoneBtnFrame()
     }
     
     func refreshDoneBtnFrame() {
-        let selCount = (self.navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
+        let selCount = (navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
         var doneTitle = localLanguageTextValue(.done)
         if selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
         }
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
         
-        let btnY = self.showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
-        self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        let btnY = showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
+        doneBtn.frame = CGRect(x: bottomView.bounds.width - doneBtnW - 15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
     func scrollToBottom() {
@@ -808,7 +816,10 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     func showEditImageVC(model: ZLPhotoModel) {
-        let nav = self.navigationController as! ZLImageNavController
+        guard let nav = navigationController as? ZLImageNavController else {
+            zlLoggerInDebug("Navigation controller is null")
+            return
+        }
         
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         hud.show()
@@ -833,7 +844,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     func showEditVideoVC(model: ZLPhotoModel) {
-        let nav = self.navigationController as! ZLImageNavController
+        let nav = navigationController as? ZLImageNavController
         let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
         
         var requestAvAssetID: PHImageRequestID?
@@ -866,7 +877,7 @@ class ZLThumbnailViewController: UIViewController {
                 }
             }
             vc.modalPresentationStyle = .fullScreen
-            self.showDetailViewController(vc, sender: nil)
+            showDetailViewController(vc, sender: nil)
         }
         
         // 提前fetch一下 avasset
@@ -1189,11 +1200,14 @@ extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let changes = changeInstance.changeDetails(for: self.albumList.result)
             else { return }
+        guard let nav = navigationController as? ZLImageNavController else {
+            zlLoggerInDebug("Navigation controller is null")
+            return
+        }
         ZLMainAsync {
             // 变化后再次显示相册列表需要刷新
             self.hasTakeANewAsset = true
             self.albumList.result = changes.fetchResultAfterChanges
-            let nav = (self.navigationController as! ZLImageNavController)
             if changes.hasIncrementalChanges {
                 for sm in nav.arrSelectedModels {
                     let isDelete = changeInstance.changeDetails(for: sm.asset)?.objectWasDeleted ?? false
