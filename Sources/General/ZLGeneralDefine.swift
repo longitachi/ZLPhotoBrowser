@@ -113,11 +113,11 @@ func getAppName() -> String {
 }
 
 func deviceIsiPhone() -> Bool {
-    return UI_USER_INTERFACE_IDIOM() == .phone
+    return UIDevice.current.userInterfaceIdiom == .phone
 }
 
 func deviceIsiPad() -> Bool {
-    return UI_USER_INTERFACE_IDIOM() == .pad
+    return UIDevice.current.userInterfaceIdiom == .pad
 }
 
 func deviceSafeAreaInsets() -> UIEdgeInsets {
@@ -203,4 +203,10 @@ func ZLMainAsync(after: TimeInterval = 0, handler: @escaping (() -> Void)) {
 
 func zl_debugPrint(_ message: Any...) {
 //    message.forEach { debugPrint($0) }
+}
+
+func zlLoggerInDebug(_ lastMessage: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+    #if DEBUG
+        print("\(file):\(line): \(lastMessage())")
+    #endif
 }
