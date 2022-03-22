@@ -160,7 +160,7 @@ class ZLClipImageViewController: UIViewController {
     
     init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0, selectRatio: ZLImageClipRatio?) {
         self.originalImage = image
-        self.clipRatios = ZLPhotoConfiguration.default().editImageClipRatios
+        self.clipRatios = ZLPhotoConfiguration.default().editImageConfiguration.clipRatios
         self.editRect = editRect ?? .zero
         self.angle = angle
         if angle == -90 {
@@ -177,7 +177,7 @@ class ZLClipImageViewController: UIViewController {
             self.selectedRatio = sr
         } else {
             firstEnter = true
-            self.selectedRatio = ZLPhotoConfiguration.default().editImageClipRatios.first!
+            self.selectedRatio = ZLPhotoConfiguration.default().editImageConfiguration.clipRatios.first!
         }
         super.init(nibName: nil, bundle: nil)
         if firstEnter {
@@ -520,11 +520,17 @@ class ZLClipImageViewController: UIViewController {
     }
     
     @objc func doneBtnClick() {
-        let image = self.clipImage()
-        self.dismissAnimateFromRect = self.clipBoxFrame
-        self.dismissAnimateImage = image.clipImage
-        self.clipDoneBlock?(self.angle, image.editRect, self.selectedRatio)
-        self.dismiss(animated: self.animate, completion: nil)
+        let image = clipImage()
+        dismissAnimateFromRect = clipBoxFrame
+        dismissAnimateImage = image.clipImage
+        if presentingViewController is ZLCustomCamera {
+            dismiss(animated: animate) {
+                self.clipDoneBlock?(self.angle, image.editRect, self.selectedRatio)
+            }
+        } else {
+            clipDoneBlock?(angle, image.editRect, selectedRatio)
+            dismiss(animated: animate, completion: nil)
+        }
     }
     
     @objc func rotateBtnClick() {

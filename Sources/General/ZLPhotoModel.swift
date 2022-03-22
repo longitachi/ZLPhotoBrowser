@@ -113,7 +113,7 @@ public class ZLPhotoModel: NSObject {
                 return .gif
             }
             if #available(iOS 9.1, *) {
-                if asset.mediaSubtypes == .photoLive || asset.mediaSubtypes.rawValue == 10 {
+                if asset.mediaSubtypes.contains(.photoLive) {
                     return .livePhoto
                 }
             }
@@ -145,7 +145,10 @@ public class ZLPhotoModel: NSObject {
     
 }
 
-
-public func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
-    return lhs.ident == rhs.ident
+extension ZLPhotoModel {
+    
+    public static func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
+        return lhs.ident == rhs.ident
+    }
+    
 }

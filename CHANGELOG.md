@@ -1,6 +1,77 @@
-# Update Log
+# Change Log
 
 -----
+
+## [4.2.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.5) (2022-03-21)
+### Fix:
+* Fix the bug of failing to archive with Xcode 13.3.[#699](https://github.com/longitachi/ZLPhotoBrowser/issues/699)
+
+---
+
+## [4.2.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.4) (2022-03-14)
+### Fix:
+* Fixes the bug when select the original photo in the preview.
+
+---
+
+## [4.2.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.3) (2022-03-07)
+### Add:
+* Done button title color can be defined separately.
+
+---
+
+## [4.2.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.2) (2022-01-13)
+### Add:
+* Support Spanish and Portuguese.[#677](https://github.com/longitachi/ZLPhotoBrowser/pull/677)
+  
+### Fix:
+* Fix the crash when UIAlertController is displayed on iPad.
+
+---
+
+## [4.2.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.1) (2021-12-22)
+### Add:
+* Support adjusting the brightness and contrast and saturation of an image.[#673](https://github.com/longitachi/ZLPhotoBrowser/pull/673)
+* Support Indonesian.
+* Add ZLEditImageConfiguration class to configuration the image editor.
+  
+### Fix:
+* Crash when calling showPhotoLibrary in UISplitViewController.[#671](https://github.com/longitachi/ZLPhotoBrowser/issues/671)
+
+---
+
+## [4.2.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.0) (2021-11-24)
+### Add:
+* Add chained calls.
+* Optmize the custom camera code.
+* Add image style of cancel button.
+  
+### Fix:
+* Selected video duplicates after editing mode.[#655](https://github.com/longitachi/ZLPhotoBrowser/issues/655)
+* Unable to deselect photos under certain conditions.[#659](https://github.com/longitachi/ZLPhotoBrowser/issues/659)
+
+---
+
+## [4.1.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.9) (2021-09-27)
+### Fix:
+* Remove CallKit because it resulted in rejection of app review.[#650](https://github.com/longitachi/ZLPhotoBrowser/issues/650)
+
+---
+
+## [4.1.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.8) (2021-09-18)
+### Add:
+* Support crop round image.
+* Show an alert to prompt that app cannot access the microphone.[#643](https://github.com/longitachi/ZLPhotoBrowser/issues/643)
+* Wrap to display when the text is too long.
+* The http header of the network video can be configured.[#642](https://github.com/longitachi/ZLPhotoBrowser/issues/642)
+* Improve the judgment logic of Live Photo.[#648](https://github.com/longitachi/ZLPhotoBrowser/issues/648)
+* Edit the image directly after taking the photo.
+
+### Fix:
+* Camera cannot turning on while calling.[#641](https://github.com/longitachi/ZLPhotoBrowser/issues/641)
+
+---
+
 ## [4.1.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.7) (2021-07-30)
 ### Add:
 * Add a property to control whether to display the selection button animation when selecting.
@@ -10,6 +81,8 @@
 
 ### Fix:
 * Modify some force cast.[#629](https://github.com/longitachi/ZLPhotoBrowser/issues/629)
+
+---
 
 ## [4.1.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.1.6) (2021-05-26)
 

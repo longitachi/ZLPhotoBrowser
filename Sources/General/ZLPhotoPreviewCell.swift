@@ -1064,7 +1064,7 @@ class ZLPreviewView: UIView {
             }
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+        ZLMainAsync(after: 0.01) {
             self.scrollView.contentSize = contenSize
             self.imageView.frame = self.containerView.bounds
             self.scrollView.contentOffset = .zero

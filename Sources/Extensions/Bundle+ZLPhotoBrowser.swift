@@ -134,6 +134,12 @@ extension Bundle {
                 language = "ms"
             } else if language.hasPrefix("it") {
                 language = "it"
+            } else if language.hasPrefix("id") {
+                language = "id"
+            } else if language.hasPrefix("pt") {
+                language = "pt-BR"
+            } else if language.hasPrefix("es") {
+                language = "es-419"
             } else {
                 language = "en"
             }
@@ -159,6 +165,12 @@ extension Bundle {
             language = "ms"
         case .italian:
             language = "it"
+        case .indonesian:
+            language = "id"
+        case .portuguese:
+            language = "pt-BR"
+        case .spanish:
+            language = "es-419"
         }
         
         return language

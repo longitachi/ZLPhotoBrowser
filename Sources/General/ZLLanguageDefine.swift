@@ -39,6 +39,9 @@ import Foundation
     case korean
     case malay
     case italian
+    case indonesian
+    case portuguese
+    case spanish
 }
 
 public struct ZLLocalLanguageKey: Hashable {
@@ -117,6 +120,15 @@ public struct ZLLocalLanguageKey: Hashable {
     
     /// Undo (还原)
     public static let revert = ZLLocalLanguageKey(rawValue: "revert")
+    
+    /// Brightness (亮度)
+    public static let brightness = ZLLocalLanguageKey(rawValue: "brightness")
+    
+    /// Contrast (对比度)
+    public static let contrast = ZLLocalLanguageKey(rawValue: "contrast")
+    
+    /// Saturation (饱和度)
+    public static let saturation = ZLLocalLanguageKey(rawValue: "saturation")
     
     /// Preview (预览)
     public static let preview = ZLLocalLanguageKey(rawValue: "preview")

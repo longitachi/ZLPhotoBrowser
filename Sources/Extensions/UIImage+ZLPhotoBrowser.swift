@@ -477,3 +477,26 @@ extension CIImage {
     }
     
 }
+
+extension UIImage {
+    
+    /// 调整图片亮度、对比度、饱和度
+    /// - Parameters:
+    ///   - brightness: value in [-1, 1]
+    ///   - contrast: value in [-1, 1]
+    ///   - saturation: value in [-1, 1]
+    func adjust(brightness: Float, contrast: Float, saturation: Float) -> UIImage? {
+        guard let ciImage = toCIImage() else {
+            return self
+        }
+        
+        let filter = CIFilter(name: "CIColorControls")
+        filter?.setValue(ciImage, forKey: kCIInputImageKey)
+        filter?.setValue(ZLEditImageConfiguration.AdjustTool.brightness.filterValue(brightness), forKey: ZLEditImageConfiguration.AdjustTool.brightness.key)
+        filter?.setValue(ZLEditImageConfiguration.AdjustTool.contrast.filterValue(contrast), forKey: ZLEditImageConfiguration.AdjustTool.contrast.key)
+        filter?.setValue(ZLEditImageConfiguration.AdjustTool.saturation.filterValue(saturation), forKey: ZLEditImageConfiguration.AdjustTool.saturation.key)
+        let outputCIImage = filter?.outputImage
+        return outputCIImage?.toUIImage()
+    }
+    
+}

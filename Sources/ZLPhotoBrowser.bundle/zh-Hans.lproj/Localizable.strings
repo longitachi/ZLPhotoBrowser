@@ -11,6 +11,9 @@
 "back" = "返回";
 "edit" = "编辑";
 "revert" = "还原";
+"brightness" = "亮度";
+"contrast" = "对比度";
+"saturation" = "饱和度";
 
 "photo" = "照片";
 "preview" = "预览";

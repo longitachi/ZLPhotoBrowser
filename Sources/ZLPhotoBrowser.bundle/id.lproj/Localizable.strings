@@ -1,0 +1,70 @@
+"previewCamera" = "Kamera";
+"previewCameraRecord" = "Merekam";
+"previewAlbum" = "Album";
+"cancel" = "Membatalkan";
+
+"originalPhoto" = "Gambar Penuh";
+"done" = "Selesai";
+"ok" = "Oke";
+"editFinish" = "Selesai";
+
+"back" = "Kembali";
+"edit" = "Edit";
+"revert" = "Batalkan";
+"brightness" = "Kecerahan";
+"contrast" = "Kontras";
+"saturation" = "Saturasi";
+
+"photo" = "Foto";
+"preview" = "Pratinjau";
+
+"noPhotoTips" = "Tidak ada fotos";
+"notAllowMixSelect" = "Tidak dapat memilih video";
+
+"loading" = "sedang memuat, tolong tunggu";
+"hudLoading" = "menunggu...";
+
+"exceededMaxSelectCount" = "Jumlah maksimum untuk seleksi: %ld";
+"longerThanMaxVideoDuration" = "Tidak dapat memilih video dengan durasi lebih dari %ld detik";
+"shorterThanMaxVideoDuration" = "Tidak dapat memilih video dengan durasi lebih pendek dari %ld detik";
+"exceededMaxVideoSelectCount" = "Jumlah maksimum untuk pemilihan video: %ld";
+"lessThanMinVideoSelectCount" = "Jumlah minimum untuk pemilihan video: %ld";
+
+"noCameraAuthority" = "Izinkan akses kamera di \"Pengaturan\" > \"%@\" iPhone Anda.";
+"noPhotoLibratyAuthority" = "Izinkan %@ mengakses album Anda di \"Setelan\" > \"Privasi\" > \"Foto\"";
+"noMicrophoneAuthority" = "Tidak dapat merekam audio. Buka \"Setelan\" > \"%@\" dan aktifkan akses mikrofon.";
+"cameraUnavailable" = "Kamera tidak tersedia";
+"keepRecording" = "Terus Merekam";
+"gotoSettings" = "Pergi ke pengaturan";
+
+"iCloudVideoLoadFaild" = "Tidak dapat menyinkronkan dari iCloud";
+"imageLoadFailed" = "Gagal Memuat";
+
+"save" = "Menghemat";
+"saveImageError" = "Gagal menyimpan gambar";
+"saveVideoError" = "Gagal menyimpan video";
+"timeout" = "Waktu permintaan habis";
+
+"customCameraTips" = "Ketuk untuk mengambil video dan tahan untuk merekam";
+"customCameraTakePhotoTips" = "Ketuk untuk mengambil foto";
+"customCameraRecordVideoTips" = "Tahan untuk merekam video";
+"minRecordTimeTips" = "Merekam setidaknya %ld detik";
+
+"cameraRoll" = "Terbaru";
+"panoramas" = "Panorama";
+"videos" = "Video";
+"favorites" = "Favorit";
+"timelapses" = "Selang Waktu";
+"recentlyAdded" = "Terkini";
+"bursts" = "Foto Beruntun";
+"slomoVideos" = "Slo-mo";
+"selfPortraits" = "Selfie";
+"screenshots" = "Jepretan Layer";
+"depthEffect" = "Potret";
+"livePhotos" = "Live Photos";
+"animated" = "Animasi";
+"myPhotoStream" = "Aliran Foto Saya";
+
+"noTitleAlbumListPlaceholder" = "Semua Foto";
+"unableToAccessAllPhotos" = "Tidak dapat mengakses semua foto dalam album.\nIzinkan akses ke \"Semua Foto\" di \"Foto\".";
+"textStickerRemoveTips" = "Seret ke sini untuk menghapus";

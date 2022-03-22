@@ -76,7 +76,7 @@ public typealias ZLFilterApplierType = ((_ image: UIImage) -> UIImage)
 
 public class ZLFilter: NSObject {
     
-    let name: String
+    public var name: String
     
     let applier: ZLFilterApplierType?
     

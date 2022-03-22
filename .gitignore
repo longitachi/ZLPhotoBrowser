@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/cocoapods,objective-c
+# Created by https://www.gitignore.io/api/cocoapods,swift
 
 ### CocoaPods ###
 ## CocoaPods GitIgnore Template
@@ -9,7 +9,7 @@
 #           - AS PER https://guides.cocoapods.org/using/using-cocoapods.html NEVER IGNORE THE LOCK FILE
 Pods/
 
-### Objective-C ###
+### Swift ###
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore

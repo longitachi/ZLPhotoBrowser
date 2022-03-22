@@ -112,7 +112,7 @@ class ZLEmbedAlbumListView: UIView {
                 self?.arrDataSource.removeAll()
                 self?.arrDataSource.append(contentsOf: albumList)
                 
-                DispatchQueue.main.async {
+                ZLMainAsync {
                     completion?()
                     self?.tableView.reloadData()
                 }

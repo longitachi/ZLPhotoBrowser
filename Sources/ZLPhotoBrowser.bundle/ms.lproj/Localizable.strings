@@ -11,11 +11,14 @@
 "back" = "Belakang";
 "edit" = "Edit";
 "revert" = "Buat asal";
+"brightness" = "Kecerahan";
+"contrast" = "Contrast";
+"saturation" = "Ketepuan";
 
 "photo" = "Gambar";
 "preview" = "Pratonton";
 
-"noPhotoTips" = "Tiada gambar";
+"noPhotoTips" = "Tiada Foto";
 "notAllowMixSelect" = "Tidak dapat memilih video";
 
 "loading" = "Memuatkan, tunggu";

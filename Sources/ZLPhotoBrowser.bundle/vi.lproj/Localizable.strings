@@ -11,6 +11,9 @@
 "back" = "Trở lại";
 "edit" = "Chỉnh sửa";
 "revert" = "Hoàn tác";
+"brightness" = "độ sáng";
+"contrast" = "Sự tương phản";
+"saturation" = "Bão hòa";
 
 "photo" = "Ảnh";
 "preview" = "Xem trước";

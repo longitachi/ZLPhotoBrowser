@@ -1,8 +1,8 @@
-[![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
+[![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](https://cocoapods.org/pods/ZLPhotoBrowser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
-[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](http://cocoadocs.org/docsets/ZLPhotoBrowser)
+[![SPM supported](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
+[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
+[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
@@ -44,7 +44,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 - [x] 图片/Gif/LivePhoto/Video 混合选择
 - [x] 自定义最大预览数/选择数/视频最大最小可选时长，控制可否选择原图
 - [x] 自定义每行显示列数
-- [x] 图片编辑（涂鸦/裁剪/图片贴纸/文字贴纸/马赛克/滤镜）（图片编辑可编辑多张；涂鸦/文字颜色可自定义；裁剪比例可自定义；滤镜效果可自定义；编辑工具可根据需要自行选择）
+- [x] 图片编辑（涂鸦/裁剪/图片贴纸/文字贴纸/马赛克/滤镜/色值调整(亮度、对比度和饱和度)）（图片编辑可编辑多张；涂鸦/文字颜色可自定义；裁剪比例可自定义；滤镜效果可自定义；编辑工具可根据需要自行选择）
 - [x] 视频编辑（自定义最大裁剪时长）（效果参照微信视频编辑；支持编辑本地视频）
 - [x] 自定义相机（效果参照微信拍照，点击拍照、长按拍摄；上滑调整焦距；可设置最大/最小录制时间及视频分辨率；可设置闪光灯模式及视频导出格式；可根据自己需要控制是否使用自定义相机）
 - [x] 多语言国际化支持（中文简/繁，英文，日文，开发者可选根据系统或自己指定，多语言文案可自定义）
@@ -100,30 +100,22 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
  
  
 ### <a id="更新日志"></a>更新日志
-> [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/UPDATELOG.md)
+> [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.1.7
-  新增:
-    可控制是否显示选择按钮动画;
-    相册列表界面和小图预览界面背景色拆分成两个属性;
-    自定义相机添加取消回调;
-    支持导出视频;
-● 4.1.6
-  新增:
-    新增ZLCameraConfiguration类统一相机配置;
-    调整选择照片callback时机，在框架界面dismiss后回调;
-    优化图片压缩方法;
+● 4.2.5
   Fix:
-    解决预览长图时候frame不正确的bug;
-● 4.1.5
+    修复用Xcode13.3打包失败的bug;
+● 4.2.4
+  Fix:
+    修复预览界面选择原图功能相关的bug;
+● 4.2.3
   新增:
-    提供一个可重置照片配置的方法;
-    请求图片超时后，取消队列中的图片请求;
+    `完成`按钮的标题颜色可以单独定义;
 ...
 ```
 
 ### <a id="国际化语言"></a>国际化语言
-🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语.
+🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语, 🇮🇩印度尼西亚语, 🇪🇸西班牙语, 🇵🇹葡萄牙语.
 
 ### <a id="安装方法"></a>使用方法
 
@@ -137,7 +129,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   
 * Carthage
   * 1.在Cartfile 中添加 `github "longitachi/ZLPhotoBrowser" ~> 4.0.0`
-  * 2.执行 `carthage update ZLPhotoBrowser --platform iOS`
+  * 2.执行 `$ carthage update`
   > 如果执行时遇到`Building universal frameworks with common architectures is not possible. The device and simulator slices for "ZLPhotoBrowser" both build for: arm64
   Rebuild with --use-xcframeworks to create an xcframework bundle instead.`这个错误，点击[这里](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md)
   

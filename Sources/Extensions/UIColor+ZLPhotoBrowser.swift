@@ -112,9 +112,19 @@ extension UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnNormalTitleColor
     }
     
+    /// 相册列表界面底部工具栏 `完成` 按钮 可交互 状态标题颜色
+    class var bottomToolViewDoneBtnNormalTitleColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewDoneBtnNormalTitleColor
+    }
+    
     /// 预览大图界面底部工具栏按钮 可交互 状态标题颜色
     class var bottomToolViewBtnNormalTitleColorOfPreviewVC: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnNormalTitleColorOfPreviewVC
+    }
+    
+    /// 预览大图界面底部工具栏 `完成` 按钮 可交互 状态标题颜色
+    class var bottomToolViewDoneBtnNormalTitleColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewDoneBtnNormalTitleColorOfPreviewVC
     }
     
     /// 相册列表界面底部工具栏按钮 不可交互 状态标题颜色
@@ -122,9 +132,19 @@ extension UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnDisableTitleColor
     }
     
+    /// 相册列表界面底部工具栏 `完成` 按钮 不可交互 状态标题颜色
+    class var bottomToolViewDoneBtnDisableTitleColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewDoneBtnDisableTitleColor
+    }
+    
     /// 预览大图界面底部工具栏按钮 不可交互 状态标题颜色
     class var bottomToolViewBtnDisableTitleColorOfPreviewVC: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewBtnDisableTitleColorOfPreviewVC
+    }
+    
+    /// 预览大图界面底部工具栏 `完成` 按钮 不可交互 状态标题颜色
+    class var bottomToolViewDoneBtnDisableTitleColorOfPreviewVC: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.bottomToolViewDoneBtnDisableTitleColorOfPreviewVC
     }
     
     /// 相册列表界面底部工具栏按钮 可交互 状态背景颜色
@@ -180,6 +200,16 @@ extension UIColor {
     /// 拍照cell 背景颜色
     class var cameraCellBgColor: UIColor {
         ZLPhotoConfiguration.default().themeColorDeploy.cameraCellBgColor
+    }
+    
+    /// 调整图片slider默认色
+    class var adjustSliderNormalColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.adjustSliderNormalColor
+    }
+    
+    /// 调整图片slider高亮色
+    class var adjustSliderTintColor: UIColor {
+        ZLPhotoConfiguration.default().themeColorDeploy.adjustSliderTintColor
     }
     
 }

@@ -11,6 +11,9 @@
 "back" = "뒤";
 "edit" = "편집";
 "revert" = "실행 취소";
+"brightness" = "밝기";
+"contrast" = "대비";
+"saturation" = "채도";
 
 "photo" = "사진";
 "preview" = "미리 보기";
