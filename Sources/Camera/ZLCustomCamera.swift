@@ -116,6 +116,12 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     var microPhontIsAvailable = true
     
+    var focusCursorTapGes = UITapGestureRecognizer()
+    
+    var cameraFocusPanGes: UIPanGestureRecognizer?
+    
+    var recordLongGes: UILongPressGestureRecognizer?
+    
     // 仅支持竖屏
     public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -261,118 +267,118 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     func setupUI() {
-        self.view.backgroundColor = .black
+        view.backgroundColor = .black
         
-        self.takedImageView.backgroundColor = .black
-        self.takedImageView.isHidden = true
-        self.takedImageView.contentMode = .scaleAspectFit
-        self.view.addSubview(self.takedImageView)
+        takedImageView.backgroundColor = .black
+        takedImageView.isHidden = true
+        takedImageView.contentMode = .scaleAspectFit
+        view.addSubview(takedImageView)
         
-        self.focusCursorView.contentMode = .scaleAspectFit
-        self.focusCursorView.clipsToBounds = true
-        self.focusCursorView.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
-        self.focusCursorView.alpha = 0
-        self.view.addSubview(self.focusCursorView)
+        focusCursorView.contentMode = .scaleAspectFit
+        focusCursorView.clipsToBounds = true
+        focusCursorView.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
+        focusCursorView.alpha = 0
+        view.addSubview(focusCursorView)
         
-        self.tipsLabel.font = getFont(14)
-        self.tipsLabel.textColor = .white
-        self.tipsLabel.textAlignment = .center
-        self.tipsLabel.numberOfLines = 2
-        self.tipsLabel.lineBreakMode = .byWordWrapping
-        self.tipsLabel.alpha = 0
+        tipsLabel.font = getFont(14)
+        tipsLabel.textColor = .white
+        tipsLabel.textAlignment = .center
+        tipsLabel.numberOfLines = 2
+        tipsLabel.lineBreakMode = .byWordWrapping
+        tipsLabel.alpha = 0
         if ZLPhotoConfiguration.default().allowTakePhoto, ZLPhotoConfiguration.default().allowRecordVideo {
-            self.tipsLabel.text = localLanguageTextValue(.customCameraTips)
+            tipsLabel.text = localLanguageTextValue(.customCameraTips)
         } else if ZLPhotoConfiguration.default().allowTakePhoto {
-            self.tipsLabel.text = localLanguageTextValue(.customCameraTakePhotoTips)
+            tipsLabel.text = localLanguageTextValue(.customCameraTakePhotoTips)
         } else if ZLPhotoConfiguration.default().allowRecordVideo {
-            self.tipsLabel.text = localLanguageTextValue(.customCameraRecordVideoTips)
+            tipsLabel.text = localLanguageTextValue(.customCameraRecordVideoTips)
         }
         
-        self.view.addSubview(self.tipsLabel)
-        self.view.addSubview(self.bottomView)
+        view.addSubview(tipsLabel)
+        view.addSubview(bottomView)
         
-        self.dismissBtn.setImage(getImage("zl_arrow_down"), for: .normal)
-        self.dismissBtn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
-        self.dismissBtn.adjustsImageWhenHighlighted = false
-        self.dismissBtn.zl_enlargeValidTouchArea(inset: 30)
-        self.bottomView.addSubview(self.dismissBtn)
+        dismissBtn.setImage(getImage("zl_arrow_down"), for: .normal)
+        dismissBtn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
+        dismissBtn.adjustsImageWhenHighlighted = false
+        dismissBtn.zl_enlargeValidTouchArea(inset: 30)
+        bottomView.addSubview(self.dismissBtn)
         
-        self.largeCircleView.layer.masksToBounds = true
-        self.largeCircleView.layer.cornerRadius = ZLCustomCamera.Layout.largeCircleRadius / 2
-        self.bottomView.addSubview(self.largeCircleView)
+        largeCircleView.layer.masksToBounds = true
+        largeCircleView.layer.cornerRadius = ZLCustomCamera.Layout.largeCircleRadius / 2
+        bottomView.addSubview(self.largeCircleView)
         
-        self.smallCircleView.layer.masksToBounds = true
-        self.smallCircleView.layer.cornerRadius = ZLCustomCamera.Layout.smallCircleRadius / 2
-        self.smallCircleView.isUserInteractionEnabled = false
-        self.smallCircleView.backgroundColor = .white
-        self.bottomView.addSubview(self.smallCircleView)
+        smallCircleView.layer.masksToBounds = true
+        smallCircleView.layer.cornerRadius = ZLCustomCamera.Layout.smallCircleRadius / 2
+        smallCircleView.isUserInteractionEnabled = false
+        smallCircleView.backgroundColor = .white
+        bottomView.addSubview(self.smallCircleView)
         
         let animateLayerRadius = ZLCustomCamera.Layout.largeCircleRadius
         let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: animateLayerRadius, height: animateLayerRadius), cornerRadius: animateLayerRadius/2)
-        self.animateLayer.path = path.cgPath
-        self.animateLayer.strokeColor = UIColor.cameraRecodeProgressColor.cgColor
-        self.animateLayer.fillColor = UIColor.clear.cgColor
-        self.animateLayer.lineWidth = 8
+        animateLayer.path = path.cgPath
+        animateLayer.strokeColor = UIColor.cameraRecodeProgressColor.cgColor
+        animateLayer.fillColor = UIColor.clear.cgColor
+        animateLayer.lineWidth = 8
         
         var takePictureTap: UITapGestureRecognizer?
         if ZLPhotoConfiguration.default().allowTakePhoto {
             takePictureTap = UITapGestureRecognizer(target: self, action: #selector(takePicture))
-            self.largeCircleView.addGestureRecognizer(takePictureTap!)
+            largeCircleView.addGestureRecognizer(takePictureTap!)
         }
         if ZLPhotoConfiguration.default().allowRecordVideo {
-            let recordLongPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
-            recordLongPress.minimumPressDuration = 0.3
-            recordLongPress.delegate = self
-            self.largeCircleView.addGestureRecognizer(recordLongPress)
-            takePictureTap?.require(toFail: recordLongPress)
-        }
-        
-        self.retakeBtn.setImage(getImage("zl_retake"), for: .normal)
-        self.retakeBtn.addTarget(self, action: #selector(retakeBtnClick), for: .touchUpInside)
-        self.retakeBtn.isHidden = true
-        self.retakeBtn.adjustsImageWhenHighlighted = false
-        self.retakeBtn.zl_enlargeValidTouchArea(inset: 30)
-        self.view.addSubview(self.retakeBtn)
-        
-        let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
-        self.switchCameraBtn.setImage(getImage("zl_toggle_camera"), for: .normal)
-        self.switchCameraBtn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
-        self.switchCameraBtn.adjustsImageWhenHighlighted = false
-        self.switchCameraBtn.zl_enlargeValidTouchArea(inset: 30)
-        self.switchCameraBtn.isHidden = cameraCount <= 1
-        self.view.addSubview(self.switchCameraBtn)
-        
-        self.doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
-        self.doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
-        self.doneBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
-        self.doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
-        self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
-        self.doneBtn.isHidden = true
-        self.doneBtn.layer.masksToBounds = true
-        self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
-        self.view.addSubview(self.doneBtn)
-        
-        let focusCursorTap = UITapGestureRecognizer(target: self, action: #selector(adjustFocusPoint))
-        focusCursorTap.delegate = self
-        self.view.addGestureRecognizer(focusCursorTap)
-        
-        if ZLPhotoConfiguration.default().allowRecordVideo {
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(adjustCameraFocus(_:)))
-            pan.delegate = self
-            pan.maximumNumberOfTouches = 1
-            self.view.addGestureRecognizer(pan)
+            let longGes = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
+            longGes.minimumPressDuration = 0.3
+            longGes.delegate = self
+            largeCircleView.addGestureRecognizer(longGes)
+            takePictureTap?.require(toFail: longGes)
+            recordLongGes = longGes
             
-            self.recordVideoPlayerLayer = AVPlayerLayer()
-            self.recordVideoPlayerLayer?.backgroundColor = UIColor.black.cgColor
-            self.recordVideoPlayerLayer?.videoGravity = .resizeAspect
-            self.recordVideoPlayerLayer?.isHidden = true
-            self.view.layer.insertSublayer(self.recordVideoPlayerLayer!, at: 0)
+            let panGes = UIPanGestureRecognizer(target: self, action: #selector(adjustCameraFocus(_:)))
+            panGes.delegate = self
+            panGes.maximumNumberOfTouches = 1
+            largeCircleView.addGestureRecognizer(panGes)
+            cameraFocusPanGes = panGes
+            
+            recordVideoPlayerLayer = AVPlayerLayer()
+            recordVideoPlayerLayer?.backgroundColor = UIColor.black.cgColor
+            recordVideoPlayerLayer?.videoGravity = .resizeAspect
+            recordVideoPlayerLayer?.isHidden = true
+            view.layer.insertSublayer(recordVideoPlayerLayer!, at: 0)
             
             NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         }
         
+        retakeBtn.setImage(getImage("zl_retake"), for: .normal)
+        retakeBtn.addTarget(self, action: #selector(retakeBtnClick), for: .touchUpInside)
+        retakeBtn.isHidden = true
+        retakeBtn.adjustsImageWhenHighlighted = false
+        retakeBtn.zl_enlargeValidTouchArea(inset: 30)
+        view.addSubview(retakeBtn)
+        
+        let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
+        switchCameraBtn.setImage(getImage("zl_toggle_camera"), for: .normal)
+        switchCameraBtn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
+        switchCameraBtn.adjustsImageWhenHighlighted = false
+        switchCameraBtn.zl_enlargeValidTouchArea(inset: 30)
+        switchCameraBtn.isHidden = cameraCount <= 1
+        view.addSubview(switchCameraBtn)
+        
+        doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
+        doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
+        doneBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
+        doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
+        doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
+        doneBtn.isHidden = true
+        doneBtn.layer.masksToBounds = true
+        doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
+        view.addSubview(doneBtn)
+        
+        focusCursorTapGes.addTarget(self, action: #selector(adjustFocusPoint))
+        focusCursorTapGes.delegate = self
+        view.addGestureRecognizer(focusCursorTapGes)
+        
         let pinchGes = UIPinchGestureRecognizer(target: self, action: #selector(pinchToAdjustCameraFocus(_:)))
-        self.view.addGestureRecognizer(pinchGes)
+        view.addGestureRecognizer(pinchGes)
     }
     
     func observerDeviceMotion() {
@@ -645,40 +651,37 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     @objc func switchCameraBtnClick() {
         do {
-            guard !self.restartRecordAfterSwitchCamera else {
+            guard !restartRecordAfterSwitchCamera else {
                 return
             }
             
-            guard let currInput = self.videoInput else {
+            guard let currInput = videoInput else {
                 return
             }
             var newVideoInput: AVCaptureDeviceInput?
-            if currInput.device.position == .back, let front = self.getCamera(position: .front) {
+            if currInput.device.position == .back, let front = getCamera(position: .front) {
                 newVideoInput = try AVCaptureDeviceInput(device: front)
-            } else if currInput.device.position == .front, let back = self.getCamera(position: .back) {
+            } else if currInput.device.position == .front, let back = getCamera(position: .back) {
                 newVideoInput = try AVCaptureDeviceInput(device: back)
             } else {
                 return
             }
             
-            let zoomFactor = currInput.device.videoZoomFactor
-            
             if let ni = newVideoInput {
-                self.session.beginConfiguration()
-                self.session.removeInput(currInput)
-                if self.session.canAddInput(ni) {
-                    self.session.addInput(ni)
-                    self.videoInput = ni
-                    ni.device.videoZoomFactor = zoomFactor
+                session.beginConfiguration()
+                session.removeInput(currInput)
+                if session.canAddInput(ni) {
+                    session.addInput(ni)
+                    videoInput = ni
                 } else {
-                    self.session.addInput(currInput)
+                    session.addInput(currInput)
                 }
-                self.session.commitConfiguration()
-                if self.movieFileOutput.isRecording {
-                    let pauseTime = self.animateLayer.convertTime(CACurrentMediaTime(), from: nil)
-                    self.animateLayer.speed = 0
-                    self.animateLayer.timeOffset = pauseTime
-                    self.restartRecordAfterSwitchCamera = true
+                session.commitConfiguration()
+                if movieFileOutput.isRecording {
+                    let pauseTime = animateLayer.convertTime(CACurrentMediaTime(), from: nil)
+                    animateLayer.speed = 0
+                    animateLayer.timeOffset = pauseTime
+                    restartRecordAfterSwitchCamera = true
                 }
             }
         } catch {
@@ -771,29 +774,26 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     // 调整焦距
     @objc func adjustCameraFocus(_ pan: UIPanGestureRecognizer) {
-        let convertRect = self.bottomView.convert(self.largeCircleView.frame, to: self.view)
-        let point = pan.location(in: self.view)
+        let convertRect = bottomView.convert(largeCircleView.frame, to: view)
+        let point = pan.location(in: view)
         
         if pan.state == .began {
-            if !convertRect.contains(point) {
-                return
-            }
-            self.dragStart = true
-            self.startRecord()
+            dragStart = true
+            startRecord()
         } else if pan.state == .changed {
-            guard self.dragStart else {
+            guard dragStart else {
                 return
             }
-            let maxZoomFactor = self.getMaxZoomFactor()
+            let maxZoomFactor = getMaxZoomFactor()
             var zoomFactor = (convertRect.midY - point.y) / convertRect.midY * maxZoomFactor
             zoomFactor = max(1, min(zoomFactor, maxZoomFactor))
-            self.setVideoZoomFactor(zoomFactor)
+            setVideoZoomFactor(zoomFactor)
         } else if pan.state == .cancelled || pan.state == .ended {
-            guard self.dragStart else {
+            guard dragStart else {
                 return
             }
-            self.dragStart = false
-            self.finishRecord()
+            dragStart = false
+            finishRecord()
         }
     }
     
@@ -810,13 +810,13 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     func getMaxZoomFactor() -> CGFloat {
-        guard let device = self.videoInput?.device else {
+        guard let device = videoInput?.device else {
             return 1
         }
         if #available(iOS 11.0, *) {
-            return device.maxAvailableVideoZoomFactor
+            return device.maxAvailableVideoZoomFactor / 2
         } else {
-            return device.activeFormat.videoMaxZoomFactor
+            return device.activeFormat.videoMaxZoomFactor / 2
         }
     }
     
@@ -1068,18 +1068,14 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
 extension ZLCustomCamera: UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if gestureRecognizer is UILongPressGestureRecognizer, otherGestureRecognizer is UIPanGestureRecognizer {
-//            return true
-//        }
-        return true
-    }
-    
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        if gestureRecognizer is UIPanGestureRecognizer, touch.view is UIControl {
-            // 解决拖动改变焦距时，无法点击其他按钮的问题
-            return false
-        }
-        return true
+        let gesTuples: [(UIGestureRecognizer?, UIGestureRecognizer?)] = [(recordLongGes, cameraFocusPanGes), (recordLongGes, focusCursorTapGes), (cameraFocusPanGes, focusCursorTapGes)]
+        
+        let result = gesTuples.map { (ges1, ges2) in
+            return (ges1 == gestureRecognizer && ges2 == otherGestureRecognizer) ||
+            (ges2 == otherGestureRecognizer && ges1 == gestureRecognizer)
+        }.filter { $0 == true}
+        
+        return result.count > 0
     }
     
 }
