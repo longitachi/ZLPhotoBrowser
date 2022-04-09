@@ -1,0 +1,70 @@
+"previewCamera" = "Kamera";
+"previewCameraRecord" = "Kayıt Et";
+"previewAlbum" = "Albüm";
+"cancel" = "İptal";
+
+"originalPhoto" = "Orijinal Resim";
+"done" = "Bitti";
+"ok" = "OK";
+"editFinish" = "Bitti";
+
+"back" = "Geri";
+"edit" = "Düzenle";
+"revert" = "Geri Al";
+"brightness" = "Parlaklık";
+"contrast" = "Kontrast";
+"saturation" = "Canlılık";
+
+"photo" = "Fotoğrafşar";
+"preview" = "Önizle";
+
+"noPhotoTips" = "Fotoğraf yok";
+"notAllowMixSelect" = "Video seçilemedi";
+
+"loading" = "yükleniyor, lütfen bekleyin...";
+"hudLoading" = "bekleyin...";
+
+"exceededMaxSelectCount" = "Maksimum seçim adeti: %ld";
+"longerThanMaxVideoDuration" = "%lds'dan uzun süreli videolar seçilemiyor.";
+"shorterThanMaxVideoDuration" = "%lds'dan kıza süreli videolar seçilemiyor.";
+"exceededMaxVideoSelectCount" = "Maksimum video seçim adeti: %ld";
+"lessThanMinVideoSelectCount" = "Minimum video seçim adeti: %ld";
+
+"noCameraAuthority" = "Lütfen %@'nin \"Ayarlar\" > \"Gizlilik\" > \"Kamera\" bölümünden cihazınızın kamerasına erişmesine izin verin";
+"noPhotoLibratyAuthority" = "Lütfen %@'nin \"Ayarlar\" > \"Gizlilik\" > \"Fotoğraflar\" bölümünde albümünüze erişmesine izin verin";
+"noMicrophoneAuthority" = "Ses kaydedilemiyor. \"Ayarlar\" > \"%@\" seçeneğine gidin ve mikrofon erişimini etkinleştirin.";
+"cameraUnavailable" = "Kamera kullanılamıyor";
+"keepRecording" = "Kayda Devam Et";
+"gotoSettings" = "Ayarlara git";
+
+"iCloudVideoLoadFaild" = "iCloud'dan senkronize edilemiyor";
+"imageLoadFailed" = "Yüklenemedi!";
+
+"save" = "Kaydet";
+"saveImageError" = "Resim kaydedilemedi!";
+"saveVideoError" = "Video kaydedilemedi!";
+"timeout" = "İstek zaman aşımına uğradı";
+
+"customCameraTips" = "Fotoğraf çekmek için dokunun ve video kaydetmek için basılı tutun";
+"customCameraTakePhotoTips" = "Fotoğraf çekmek için dokunun";
+"customCameraRecordVideoTips" = "Video çekmek için basılı tutun";
+"minRecordTimeTips" = "En az %lds kaydedin";
+
+"cameraRoll" = "Son Çekimler";
+"panoramas" = "Panoramalar";
+"videos" = "Videolar";
+"favorites" = "Favoriler";
+"timelapses" = "Hızlandırılmışlar";
+"recentlyAdded" = "Yeni Eklenenler";
+"bursts" = "Bursts";
+"slomoVideos" = "Yavaş Çekimler";
+"selfPortraits" = "Selfie'ler";
+"screenshots" = "Ekran Görüntüleri";
+"depthEffect" = "Portreler";
+"livePhotos" = "Live Photo'lar";
+"animated" = "Hareketli";
+"myPhotoStream" = "Fotoğraf Akışım";
+
+"noTitleAlbumListPlaceholder" = "Tüm Fotoğraflar";
+"unableToAccessAllPhotos" = "Albümdeki tüm fotoğraflara erişilemiyor.\n\"Fotoğraflar\"da \"Tüm Fotoğraflar\"a erişime izin verin.";
+"textStickerRemoveTips" = "Kaldırmak için buraya sürükleyin";
