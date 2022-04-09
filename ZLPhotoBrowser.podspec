@@ -11,13 +11,13 @@ Pod::Spec.new do |s|
                               更多自定义功能请查看 ZLPhotoConfiguration 定义
                               DESC
 
-  s.homepage              = 'https://github.com/longitachi/ZLPhotoBrowser'
+  s.homepage              = 'https://github.com/emirkanacar/ZLPhotoBrowser'
   s.license               = { :type => "MIT", :file => "LICENSE" }
 
   s.author                = {'longitachi' => 'longitachi@163.com'}
   s.social_media_url      = "https://github.com/longitachi"
 
-  s.source                = {:git => 'https://github.com/longitachi/ZLPhotoBrowser.git', :tag => s.version}
+  s.source                = {:git => 'https://github.com/emirkanacar/ZLPhotoBrowser.git', :tag => s.version}
 
   s.ios.deployment_target = '10.0'
 
