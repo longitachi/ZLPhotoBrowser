@@ -359,6 +359,17 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
+    /// Developers can customize languages.
+    /// - example: If you needs to replace
+    /// key: .loading, value: "loading, waiting please" language,
+    /// The dictionary that needs to be passed in is [.loading: "text to be replaced"].
+    /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
+    public var customLanguageKeyValue: [ZLLocalLanguageKey: String] = [:] {
+        didSet {
+            ZLCustomLanguageDeploy.deploy = self.customLanguageKeyValue
+        }
+    }
+    
     /// Developers can customize languages (This property is only for objc).
     /// - example: If you needs to replace
     /// key: @"loading", value: @"loading, waiting please" language,
@@ -371,17 +382,6 @@ public class ZLPhotoConfiguration: NSObject {
                 swiftParams[ZLLocalLanguageKey(rawValue: key)] = value
             }
             self.customLanguageKeyValue = swiftParams
-        }
-    }
-    
-    /// Developers can customize languages.
-    /// - example: If you needs to replace
-    /// key: .loading, value: "loading, waiting please" language,
-    /// The dictionary that needs to be passed in is [.loading: "text to be replaced"].
-    /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
-    public var customLanguageKeyValue: [ZLLocalLanguageKey: String] = [:] {
-        didSet {
-            ZLCustomLanguageDeploy.deploy = self.customLanguageKeyValue
         }
     }
     

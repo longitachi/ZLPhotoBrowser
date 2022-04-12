@@ -36,7 +36,7 @@ import UIKit
 
 public class ZLEditImageConfiguration: NSObject {
 
-    @objc public enum EditTool: Int {
+    @objc public enum EditTool: Int, CaseIterable {
         case draw
         case clip
         case imageSticker
@@ -46,7 +46,7 @@ public class ZLEditImageConfiguration: NSObject {
         case adjust
     }
     
-    @objc public enum AdjustTool: Int {
+    @objc public enum AdjustTool: Int, CaseIterable {
         case brightness
         case contrast
         case saturation
@@ -83,20 +83,28 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
-    private var pri_tools: [ZLEditImageConfiguration.EditTool] = [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
+    private var pri_tools: [ZLEditImageConfiguration.EditTool] = ZLEditImageConfiguration.EditTool.allCases
     /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker, mosaic, filtter)
     /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
     /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
     public var tools: [ZLEditImageConfiguration.EditTool] {
         get {
             if pri_tools.isEmpty {
-                return [.draw, .clip, .imageSticker, .textSticker, .mosaic, .filter, .adjust]
+                return ZLEditImageConfiguration.EditTool.allCases
             } else {
                 return pri_tools
             }
         }
         set {
             pri_tools = newValue
+        }
+    }
+    
+    /// Edit image tools.  (This property is only for objc).
+    /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
+    @objc public var tools_objc: [Int] = [] {
+        didSet {
+            tools = tools_objc.compactMap { ZLEditImageConfiguration.EditTool(rawValue: $0) }
         }
     }
     
@@ -168,20 +176,28 @@ public class ZLEditImageConfiguration: NSObject {
     
     @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
     
-    private var pri_adjustTools: [ZLEditImageConfiguration.AdjustTool] = [.brightness, .contrast, .saturation]
+    private var pri_adjustTools: [ZLEditImageConfiguration.AdjustTool] = ZLEditImageConfiguration.AdjustTool.allCases
     /// Adjust image tools. (Default order is brightness, contrast, saturation)
     /// Valid when the tools contain EditTool.adjust
     /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
     public var adjustTools: [ZLEditImageConfiguration.AdjustTool] {
         get {
             if pri_adjustTools.isEmpty {
-                return [.brightness, .contrast, .saturation]
+                return ZLEditImageConfiguration.AdjustTool.allCases
             } else {
                 return pri_adjustTools
             }
         }
         set {
             pri_adjustTools = newValue
+        }
+    }
+    
+    /// Adjust image tools.  (This property is only for objc).
+    /// Valid when the tools contain EditTool.adjust
+    @objc public var adjustTools_objc: [Int] = [] {
+        didSet {
+            adjustTools = adjustTools_objc.compactMap { ZLEditImageConfiguration.AdjustTool(rawValue: $0) }
         }
     }
     
