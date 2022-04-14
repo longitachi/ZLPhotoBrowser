@@ -42,6 +42,8 @@ extension ZLLanguageType {
             return "Português (Portuguese)"
         case .spanish:
             return "Español (Spanish)"
+        case .turkish:
+            return "Türkçe (Turkish)"    
         }
     }
     

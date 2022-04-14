@@ -140,6 +140,8 @@ extension Bundle {
                 language = "pt-BR"
             } else if language.hasPrefix("es") {
                 language = "es-419"
+            } else if language.hasPrefix("tr") {
+                language = "tr"
             } else {
                 language = "en"
             }
@@ -171,6 +173,8 @@ extension Bundle {
             language = "pt-BR"
         case .spanish:
             language = "es-419"
+        case .turkish:
+            language = "tr"
         }
         
         return language
