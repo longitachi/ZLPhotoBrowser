@@ -91,20 +91,25 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.2.6
+  Add:
+    Turkish supported.
+    Change 'ZLPhotoThemeColorDeploy' to 'ZLPhotoColorConfiguration'.
+    Add some properties to edit configuration to support Objective-C.
+    Add some customize color properties.
+    Add long press callback in ZLImagePreviewController.
+    Add property to allow user to do something before select photo result callback.
 ● 4.2.5
   Fix:
     Fix the bug of failing to archive with Xcode 13.3.
 ● 4.2.4
   Fix:
     Fixes the bug when select the original photo in the preview.
-● 4.2.3
-  Add:
-    Done button title color can be defined separately.
 ...
 ```
 
 ### <a id="Languages"></a>Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩Indonesian, 🇪🇸Spanish, 🇵🇹Portuguese.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩Indonesian, 🇪🇸Spanish, 🇵🇹Portuguese, 🇹🇷Turkish.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLPhotoBrowser in your project:

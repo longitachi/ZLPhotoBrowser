@@ -102,20 +102,25 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.2.6
+  Add:
+    支持土耳其语;
+    将类 'ZLPhotoThemeColorDeploy' 更名为 'ZLPhotoColorConfiguration';
+    编辑图片工具类中新增部分属性以支持OC调用;
+    新增部分UI支持自定义color;
+    ZLImagePreviewController 中添加长按事件回调;
+    新增属性 'operateBeforeDoneAction'，支持用户在点击完成按钮，照片回调之前做一些操作;
 ● 4.2.5
   Fix:
     修复用Xcode13.3打包失败的bug;
 ● 4.2.4
   Fix:
     修复预览界面选择原图功能相关的bug;
-● 4.2.3
-  新增:
-    `完成`按钮的标题颜色可以单独定义;
 ...
 ```
 
 ### <a id="国际化语言"></a>国际化语言
-🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语, 🇮🇩印度尼西亚语, 🇪🇸西班牙语, 🇵🇹葡萄牙语.
+🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语, 🇮🇩印度尼西亚语, 🇪🇸西班牙语, 🇵🇹葡萄牙语, 🇹🇷土耳其语.
 
 ### <a id="安装方法"></a>使用方法
 

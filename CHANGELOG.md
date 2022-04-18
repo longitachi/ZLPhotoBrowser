@@ -2,6 +2,17 @@
 
 -----
 
+## [4.2.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.6) (2022-04-18)
+### Add:
+* Turkish supported.[#712](https://github.com/longitachi/ZLPhotoBrowser/pull/712)
+* Change 'ZLPhotoThemeColorDeploy' to 'ZLPhotoColorConfiguration'.
+* Add some properties to edit configuration to support Objective-C.
+* Add some customize color properties.
+* Add long press callback in ZLImagePreviewController.
+* Add property to allow user to do something before select photo result callback.
+
+---
+
 ## [4.2.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.2.5) (2022-03-21)
 ### Fix:
 * Fix the bug of failing to archive with Xcode 13.3.[#699](https://github.com/longitachi/ZLPhotoBrowser/issues/699)
