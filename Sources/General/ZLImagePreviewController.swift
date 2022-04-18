@@ -78,7 +78,9 @@ public class ZLImagePreviewController: UIViewController {
     
     var orientation: UIInterfaceOrientation = .unknown
     
-    @objc public var doneBlock: ( ([Any]) -> Void )?
+    @objc public var longPressBlock: ((ZLImagePreviewController?, UIImage?, Int) -> Void)?
+    
+    @objc public var doneBlock: (([Any]) -> Void)?
     
     @objc public var videoHttpHeader: [String: Any]?
     
@@ -211,7 +213,7 @@ public class ZLImagePreviewController: UIViewController {
         self.navView.addSubview(self.backBtn)
         
         self.indexLabel = UILabel()
-        self.indexLabel.textColor = ZLPhotoConfiguration.default().themeColorDeploy.navTitleColorOfPreviewVC
+        self.indexLabel.textColor = .indexLabelTextColor
         self.indexLabel.font = ZLLayout.navTitleFont
         self.indexLabel.textAlignment = .center
         self.navView.addSubview(self.indexLabel)
@@ -285,19 +287,21 @@ public class ZLImagePreviewController: UIViewController {
     }
     
     func resetBottomViewFrame() {
-        if self.showBottomView {
+        if showBottomView {
             let btnY: CGFloat = ZLLayout.bottomToolBtnY
             
             var doneTitle = localLanguageTextValue(.done)
-            let selCount = self.selectStatus.filter{ $0 }.count
-            if self.showSelectBtn, selCount > 0 {
+            let selCount = selectStatus.filter{ $0 }.count
+            if showSelectBtn,
+               ZLPhotoConfiguration.default().showSelectCountOnDoneBtn,
+               selCount > 0 {
                 doneTitle += "(" + String(selCount) + ")"
             }
             let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
-            self.doneBtn.frame = CGRect(x: self.bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
-            self.doneBtn.setTitle(doneTitle, for: .normal)
+            doneBtn.frame = CGRect(x: bottomView.bounds.width-doneBtnW-15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+            doneBtn.setTitle(doneTitle, for: .normal)
         } else {
-            self.bottomView.isHidden = true
+            bottomView.isHidden = true
         }
     }
     
@@ -504,8 +508,12 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
             self?.tapPreviewCell()
         }
         
-        (baseCell as? ZLLocalImagePreviewCell)?.longPressBlock = { [weak self] in
-            self?.showSaveImageAlert()
+        (baseCell as? ZLLocalImagePreviewCell)?.longPressBlock = { [weak self, weak baseCell] in
+            if let callback = self?.longPressBlock {
+                callback(self, baseCell?.currentImage, indexPath.row)
+            } else {
+                self?.showSaveImageAlert()
+            }
         }
         
         return baseCell

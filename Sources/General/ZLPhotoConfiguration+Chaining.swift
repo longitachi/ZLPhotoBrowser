@@ -217,6 +217,12 @@ extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    public func showSelectCountOnDoneBtn(_ value: Bool) -> ZLPhotoConfiguration {
+        showSelectCountOnDoneBtn = value
+        return self
+    }
+    
+    @discardableResult
     public func columnCount(_ count: Int) -> ZLPhotoConfiguration {
         columnCount = count
         return self
@@ -447,8 +453,8 @@ extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    public func themeColorDeploy(_ deploy: ZLPhotoThemeColorDeploy) -> ZLPhotoConfiguration {
-        themeColorDeploy = deploy
+    public func colorConfiguration(_ config: ZLPhotoColorConfiguration) -> ZLPhotoConfiguration {
+        colorConfiguration = config
         return self
     }
     
@@ -482,218 +488,9 @@ extension ZLPhotoConfiguration {
         return self
     }
     
-}
-
-
-extension ZLPhotoThemeColorDeploy {
-    
     @discardableResult
-    public func previewBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        previewBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func previewBtnBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        previewBtnBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func previewBtnTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        previewBtnTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func previewBtnHighlightTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        previewBtnHighlightTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func navBarColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        navBarColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func navBarColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        navBarColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func navTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        navTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func navTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        navTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func navEmbedTitleViewBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        navEmbedTitleViewBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func albumListBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        albumListBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func albumListTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        albumListTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func albumListCountColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        albumListCountColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func separatorColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        separatorColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func thumbnailBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        thumbnailBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBgColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBtnNormalTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewDoneBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewDoneBtnNormalTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBtnNormalTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewDoneBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewDoneBtnNormalTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBtnDisableTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewDoneBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewDoneBtnDisableTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBtnDisableTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewDoneBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewDoneBtnDisableTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnNormalBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBtnNormalBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnNormalBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBtnNormalBgColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnDisableBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBtnDisableBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnDisableBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        bottomToolViewBtnDisableBgColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func selectMorePhotoWhenAuthIsLismitedTitleColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        selectMorePhotoWhenAuthIsLismitedTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func cameraRecodeProgressColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        cameraRecodeProgressColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func selectedMaskColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        selectedMaskColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func selectedBorderColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        selectedBorderColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func invalidMaskColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        invalidMaskColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func indexLabelBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        indexLabelBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func cameraCellBgColor(_ color: UIColor) -> ZLPhotoThemeColorDeploy {
-        cameraCellBgColor = color
+    @objc public func operateBeforeDoneAction(_ block: ((UIViewController, @escaping () -> Void) -> Void)?) -> ZLPhotoConfiguration {
+        operateBeforeDoneAction = block
         return self
     }
     

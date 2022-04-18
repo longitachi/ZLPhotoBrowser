@@ -51,15 +51,14 @@ class ZLImageNavController: UINavigationController {
     
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        self.navigationBar.barStyle = .black
-        self.navigationBar.isTranslucent = true
-        self.modalPresentationStyle = .fullScreen
-        self.isNavigationBarHidden = true
+        navigationBar.barStyle = .black
+        navigationBar.isTranslucent = true
+        modalPresentationStyle = .fullScreen
+        isNavigationBarHidden = true
         
-        let colorDeploy = ZLPhotoConfiguration.default().themeColorDeploy
-        self.navigationBar.setBackgroundImage(self.image(color: colorDeploy.navBarColor), for: .default)
-        self.navigationBar.tintColor = colorDeploy.navTitleColor
-        self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: colorDeploy.navTitleColor]
+        navigationBar.setBackgroundImage(self.image(color: .navBarColor), for: .default)
+        navigationBar.tintColor = .navTitleColor
+        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.navTitleColor]
     }
     
     required init?(coder aDecoder: NSCoder) {

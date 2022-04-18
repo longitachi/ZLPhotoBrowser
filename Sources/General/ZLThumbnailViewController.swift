@@ -467,7 +467,13 @@ class ZLThumbnailViewController: UIViewController {
     
     @objc func doneBtnClick() {
         let nav = navigationController as? ZLImageNavController
-        nav?.selectImageBlock?()
+        if let block = ZLPhotoConfiguration.default().operateBeforeDoneAction {
+            block(self, { [weak nav] in
+                nav?.selectImageBlock?()
+            })
+        } else {
+            nav?.selectImageBlock?()
+        }
     }
     
     @objc func deviceOrientationChanged(_ notify: Notification) {
@@ -680,16 +686,20 @@ class ZLThumbnailViewController: UIViewController {
             zlLoggerInDebug("Navigation controller is null")
             return
         }
+        var doneTitle = localLanguageTextValue(.done)
+        if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn,
+           nav.arrSelectedModels.count > 0 {
+            doneTitle += "(" + String(nav.arrSelectedModels.count) + ")"
+        }
         if nav.arrSelectedModels.count > 0 {
             previewBtn.isEnabled = true
             doneBtn.isEnabled = true
-            let doneTitle = localLanguageTextValue(.done) + "(" + String(nav.arrSelectedModels.count) + ")"
             doneBtn.setTitle(doneTitle, for: .normal)
             doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         } else {
             previewBtn.isEnabled = false
             doneBtn.isEnabled = false
-            doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
+            doneBtn.setTitle(doneTitle, for: .normal)
             doneBtn.backgroundColor = .bottomToolViewBtnDisableBgColor
         }
         originalBtn.isSelected = nav.isSelectedOriginal
@@ -699,7 +709,7 @@ class ZLThumbnailViewController: UIViewController {
     func refreshDoneBtnFrame() {
         let selCount = (navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
         var doneTitle = localLanguageTextValue(.done)
-        if selCount > 0 {
+        if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn, selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
         }
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20

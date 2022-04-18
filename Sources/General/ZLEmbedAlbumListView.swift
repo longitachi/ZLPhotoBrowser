@@ -84,7 +84,7 @@ class ZLEmbedAlbumListView: UIView {
     func setupUI() {
         self.clipsToBounds = true
         
-        self.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+        self.backgroundColor = .embedAlbumListTranslucentColor
         
         self.tableBgView = UIView()
         self.addSubview(self.tableBgView)

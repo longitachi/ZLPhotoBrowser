@@ -173,6 +173,10 @@ class ViewController: UIViewController {
                     debugPrint("No microphone authority")
                 }
             }
+//            .operateBeforeDoneAction { currVC, block in
+//                // Do something before select photo result callback, and then call block to continue done action.
+//                block()
+//            }
         
         let ac = ZLPhotoPreviewSheet(selectedAssets: takeSelectedAssetsSwitch.isOn ? selectedAssets : [])
         ac.selectImageBlock = { [weak self] (images, assets, isOriginal) in
@@ -242,6 +246,10 @@ class ViewController: UIViewController {
         vc.doneBlock = { (datas) in
             debugPrint(datas)
         }
+        
+//        vc.longPressBlock = { (controller, image, index) in
+//            debugPrint(String(describing: controller), String(describing: image), index)
+//        }
         
         vc.modalPresentationStyle = .fullScreen
         showDetailViewController(vc, sender: nil)

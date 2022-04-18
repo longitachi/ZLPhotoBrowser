@@ -205,7 +205,7 @@ class ZLPhotoPreviewController: UIViewController {
         
         let selCount = (self.navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
         var doneTitle = localLanguageTextValue(.done)
-        if selCount > 0 {
+        if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn, selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
         }
         let doneBtnW = doneTitle.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
@@ -401,7 +401,8 @@ class ZLPhotoPreviewController: UIViewController {
         }
         let selCount = nav.arrSelectedModels.count
         var doneTitle = localLanguageTextValue(.done)
-        if selCount > 0 {
+        if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn,
+           selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
         }
         self.doneBtn.setTitle(doneTitle, for: .normal)
@@ -547,18 +548,28 @@ class ZLPhotoPreviewController: UIViewController {
             zlLoggerInDebug("Navigation controller is null")
             return
         }
-        let currentModel = arrDataSources[currentIndex]
         
+        func callBackBeforeDone() {
+            if let block = ZLPhotoConfiguration.default().operateBeforeDoneAction {
+                block(self, { [weak nav] in
+                    nav?.selectImageBlock?()
+                })
+            } else {
+                nav.selectImageBlock?()
+            }
+        }
+        
+        let currentModel = arrDataSources[currentIndex]
         if autoSelectCurrentIfNotSelectAnyone {
             if nav.arrSelectedModels.isEmpty, canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
                 nav.arrSelectedModels.append(currentModel)
             }
             
             if !nav.arrSelectedModels.isEmpty {
-                nav.selectImageBlock?()
+                callBackBeforeDone()
             }
         } else {
-            nav.selectImageBlock?()
+            callBackBeforeDone()
         }
     }
     
