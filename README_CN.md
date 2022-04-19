@@ -102,9 +102,10 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.2.6
+● 4.3.0
   Add:
     支持土耳其语;
+    从ZLPhotoConfiguration类中，将自定义颜色、文案、字体、图片拆分出来，放到新的类ZLPhotoUIConfiguration中;
     将类 'ZLPhotoThemeColorDeploy' 更名为 'ZLPhotoColorConfiguration';
     编辑图片工具类中新增部分属性以支持OC调用;
     新增部分UI支持自定义color;

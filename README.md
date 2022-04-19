@@ -91,10 +91,10 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.2.6
+● 4.3.0
   Add:
     Turkish supported.
-    Change 'ZLPhotoThemeColorDeploy' to 'ZLPhotoColorConfiguration'.
+    Separate UI-related properties such as color, text, font, and image from ZLPhotoConfiguration and put them in ZLPhotoUIConfiguration.
     Add some properties to edit configuration to support Objective-C.
     Add some customize color properties.
     Add long press callback in ZLImagePreviewController.
