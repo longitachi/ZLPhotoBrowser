@@ -213,7 +213,7 @@ class ZLPhotoPreviewController: UIViewController {
     }
     
     func setupUI() {
-        self.view.backgroundColor = .black
+        self.view.backgroundColor = .previewVCBgColor
         self.automaticallyAdjustsScrollViewInsets = false
         
         let config = ZLPhotoConfiguration.default()
@@ -222,7 +222,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.navView.backgroundColor = .navBarColorOfPreviewVC
         self.view.addSubview(self.navView)
         
-        if let effect = config.navViewBlurEffectOfPreview {
+        if let effect = ZLPhotoUIConfiguration.default().navViewBlurEffectOfPreview {
             self.navBlurView = UIVisualEffectView(effect: effect)
             self.navView.addSubview(self.navBlurView!)
         }
@@ -272,7 +272,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.bottomView.backgroundColor = .bottomToolViewBgColorOfPreviewVC
         self.view.addSubview(self.bottomView)
         
-        if let effect = config.bottomViewBlurEffectOfPreview {
+        if let effect = ZLPhotoUIConfiguration.default().bottomViewBlurEffectOfPreview {
             self.bottomBlurView = UIVisualEffectView(effect: effect)
             self.bottomView.addSubview(self.bottomBlurView!)
         }

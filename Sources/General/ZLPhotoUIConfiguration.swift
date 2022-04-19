@@ -1,5 +1,5 @@
 //
-//  ZLPhotoColorConfiguration.swift
+//  ZLPhotoUIConfiguration.swift
 //  ZLPhotoBrowser
 //
 //  Created by long on 2022/4/18.
@@ -26,28 +26,116 @@
 
 import UIKit
 
-/// Color deploy
-public class ZLPhotoColorConfiguration: NSObject {
+/// Custom UI configuration (include colors, images, text, font)
+public class ZLPhotoUIConfiguration: NSObject {
     
-    @objc public class func `default`() -> ZLPhotoColorConfiguration {
-        return ZLPhotoColorConfiguration()
+    private static var single = ZLPhotoUIConfiguration()
+    
+    @objc public class func `default`() -> ZLPhotoUIConfiguration {
+        return ZLPhotoUIConfiguration.single
     }
     
-    /// Preview selection mode, transparent background color above.
+    @objc public class func resetConfiguration() {
+        ZLPhotoUIConfiguration.single = ZLPhotoUIConfiguration()
+    }
+    
+    // MARK: Navigation and bottom tool bar
+    
+    /// The blur effect of the navigation bar in the album list
+    @objc public var navViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
+    
+    /// The blur effect of the navigation bar in the preview interface
+    @objc public var navViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
+    
+    /// The blur effect of the bottom tool bar in the album list
+    @objc public var bottomViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
+    
+    /// The blur effect of the bottom tool bar in the preview interface
+    @objc public var bottomViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
+    
+    // MARK: Image properties
+    
+    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
+    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
+    /// ["zl_btn_selected", "zl_btn_unselected"].
+    @objc public var customImageNames: [String] = [] {
+        didSet {
+            ZLCustomImageDeploy.imageNames = customImageNames
+        }
+    }
+    
+    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
+    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
+    /// ["zl_btn_selected": selectedImage, "zl_btn_unselected": unselectedImage].
+    public var customImageForKey: [String: UIImage?] = [:] {
+        didSet {
+            customImageForKey.forEach { ZLCustomImageDeploy.imageForKey[$0.key] = $0.value }
+        }
+    }
+    
+    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
+    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
+    /// ["zl_btn_selected": selectedImage, "zl_btn_unselected": unselectedImage].
+    @objc public var customImageForKey_objc: [String: UIImage] = [:] {
+        didSet {
+            ZLCustomImageDeploy.imageForKey = customImageForKey_objc
+        }
+    }
+    
+    // MARK: Language properties
+    
+    /// Developers can customize languages.
+    /// - example: If you needs to replace
+    /// key: .loading, value: "loading, waiting please" language,
+    /// The dictionary that needs to be passed in is [.loading: "text to be replaced"].
+    /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
+    public var customLanguageKeyValue: [ZLLocalLanguageKey: String] = [:] {
+        didSet {
+            ZLCustomLanguageDeploy.deploy = self.customLanguageKeyValue
+        }
+    }
+    
+    /// Developers can customize languages (This property is only for objc).
+    /// - example: If you needs to replace
+    /// key: @"loading", value: @"loading, waiting please" language,
+    /// The dictionary that needs to be passed in is @[@"loading": @"text to be replaced"].
+    /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
+    @objc public var customLanguageKeyValue_objc: [String: String] = [:] {
+        didSet {
+            var swiftParams: [ZLLocalLanguageKey: String] = [:]
+            customLanguageKeyValue_objc.forEach { (key, value) in
+                swiftParams[ZLLocalLanguageKey(rawValue: key)] = value
+            }
+            customLanguageKeyValue = swiftParams
+        }
+    }
+    
+    // MARK: Font
+    
+    /// Font name.
+    @objc public var themeFontName: String? = nil {
+        didSet {
+            ZLCustomFontDeploy.fontName = themeFontName
+        }
+    }
+    
+    // MARK: Color properties
+    
+    /// Preview selection mode, translucent background color above.
     /// 预览快速选择模式下，上方透明区域背景色
-    @objc public var previewBgColor = UIColor.black.withAlphaComponent(0.1)
+    @objc public var sheetTranslucentColor = UIColor.black.withAlphaComponent(0.1)
     
     /// Preview selection mode, a background color for `Camera`, `Album`, `Cancel` buttons.
     /// 预览快速选择模式下，按钮背景颜色
-    @objc public var previewBtnBgColor = UIColor.white
+    @objc public var sheetBtnBgColor = UIColor.white
     
     /// Preview selection mode, a text color for `Camera`, `Album`, `Cancel` buttons.
     /// 预览快速选择模式下，按钮标题颜色
-    @objc public var previewBtnTitleColor = UIColor.black
+    @objc public var sheetBtnTitleColor = UIColor.black
     
     /// Preview selection mode, cancel button title color when the selection amount is superior than 0.
     /// 预览快速选择模式下，按钮标题高亮颜色
-    @objc public var previewBtnHighlightTitleColor = zlRGB(80, 169, 56)
+    @objc public var sheetBtnTitleTintColor = zlRGB(80, 169, 56)
     
     /// A color for navigation bar.
     /// 相册列表及小图界面导航条背景色
@@ -92,6 +180,10 @@ public class ZLPhotoColorConfiguration: NSObject {
     /// A color for background in thumbnail interface.
     /// 相册小图界面背景色
     @objc public var thumbnailBgColor = zlRGB(50, 50, 50)
+    
+    /// A color for background in preview interface..
+    /// 预览大图界面背景色
+    @objc public var previewVCBgColor = UIColor.black
     
     /// A color for background in bottom tool view.
     /// 相册小图界面底部工具条背景色
@@ -191,217 +283,18 @@ public class ZLPhotoColorConfiguration: NSObject {
     
 }
 
-// MARK: chaining
-extension ZLPhotoColorConfiguration {
+/// Font deply
+struct ZLCustomFontDeploy {
     
-    @discardableResult
-    public func previewBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        previewBgColor = color
-        return self
-    }
+    static var fontName: String? = nil
     
-    @discardableResult
-    public func previewBtnBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        previewBtnBgColor = color
-        return self
-    }
+}
+
+/// Image source deploy
+struct ZLCustomImageDeploy {
     
-    @discardableResult
-    public func previewBtnTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        previewBtnTitleColor = color
-        return self
-    }
+    static var imageNames: [String] = []
     
-    @discardableResult
-    public func previewBtnHighlightTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        previewBtnHighlightTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func navBarColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        navBarColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func navBarColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        navBarColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func navTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        navTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func navTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        navTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func navEmbedTitleViewBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        navEmbedTitleViewBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func albumListBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        albumListBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func albumListTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        albumListTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func albumListCountColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        albumListCountColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func separatorColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        separatorColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func thumbnailBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        thumbnailBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBgColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBtnNormalTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewDoneBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewDoneBtnNormalTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBtnNormalTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewDoneBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewDoneBtnNormalTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBtnDisableTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewDoneBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewDoneBtnDisableTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBtnDisableTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewDoneBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewDoneBtnDisableTitleColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnNormalBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBtnNormalBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnNormalBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBtnNormalBgColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnDisableBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBtnDisableBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func bottomToolViewBtnDisableBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        bottomToolViewBtnDisableBgColorOfPreviewVC = color
-        return self
-    }
-    
-    @discardableResult
-    public func selectMorePhotoWhenAuthIsLismitedTitleColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        selectMorePhotoWhenAuthIsLismitedTitleColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func cameraRecodeProgressColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        cameraRecodeProgressColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func selectedMaskColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        selectedMaskColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func selectedBorderColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        selectedBorderColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func invalidMaskColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        invalidMaskColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func indexLabelBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        indexLabelBgColor = color
-        return self
-    }
-    
-    @discardableResult
-    public func cameraCellBgColor(_ color: UIColor) -> ZLPhotoColorConfiguration {
-        cameraCellBgColor = color
-        return self
-    }
+    static var imageForKey: [String: UIImage] = [:]
     
 }

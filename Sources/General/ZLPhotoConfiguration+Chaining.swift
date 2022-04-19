@@ -351,18 +351,6 @@ extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    public func customImageNames(_ names: [String]) -> ZLPhotoConfiguration {
-        customImageNames = names
-        return self
-    }
-    
-    @discardableResult
-    public func customImageForKey(_ map: [String: UIImage?]) -> ZLPhotoConfiguration {
-        customImageForKey = map
-        return self
-    }
-    
-    @discardableResult
     public func shouldAnialysisAsset(_ value: Bool) -> ZLPhotoConfiguration {
         shouldAnialysisAsset = value
         return self
@@ -377,12 +365,6 @@ extension ZLPhotoConfiguration {
     @discardableResult
     public func languageType(_ type: ZLLanguageType) -> ZLPhotoConfiguration {
         languageType = type
-        return self
-    }
-    
-    @discardableResult
-    public func customLanguageKeyValue(_ value: [ZLLocalLanguageKey: String]) -> ZLPhotoConfiguration {
-        customLanguageKeyValue = value
         return self
     }
     
@@ -425,42 +407,6 @@ extension ZLPhotoConfiguration {
     @discardableResult
     public func hudStyle(_ style: ZLProgressHUD.HUDStyle) -> ZLPhotoConfiguration {
         hudStyle = style
-        return self
-    }
-    
-    @discardableResult
-    public func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoConfiguration {
-        navViewBlurEffectOfAlbumList = effect
-        return self
-    }
-    
-    @discardableResult
-    public func navViewBlurEffectOfPreview(_ effect: UIBlurEffect?) -> ZLPhotoConfiguration {
-        navViewBlurEffectOfPreview = effect
-        return self
-    }
-    
-    @discardableResult
-    public func bottomViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoConfiguration {
-        bottomViewBlurEffectOfAlbumList = effect
-        return self
-    }
-    
-    @discardableResult
-    public func bottomViewBlurEffectOfPreview(_ effect: UIBlurEffect?) -> ZLPhotoConfiguration {
-        bottomViewBlurEffectOfPreview = effect
-        return self
-    }
-    
-    @discardableResult
-    public func colorConfiguration(_ config: ZLPhotoColorConfiguration) -> ZLPhotoConfiguration {
-        colorConfiguration = config
-        return self
-    }
-    
-    @discardableResult
-    public func themeFontName(_ name: String?) -> ZLPhotoConfiguration {
-        themeFontName = name
         return self
     }
     

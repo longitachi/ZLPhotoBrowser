@@ -147,6 +147,15 @@ class ViewController: UIViewController {
     }
     
     func showImagePicker(_ preview: Bool) {
+        /**
+          // Custom UI
+         ZLPhotoUIConfiguration.default()
+             .navBarColor(.white)
+             .navViewBlurEffectOfAlbumList(nil)
+             .indexLabelBgColor(.black)
+             .indexLabelTextColor(.white)
+         */
+        
         let editImageConfiguration = ZLPhotoConfiguration.default().editImageConfiguration
         editImageConfiguration
             .imageStickerContainerView(ImageStickerContainerView())

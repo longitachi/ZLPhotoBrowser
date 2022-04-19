@@ -321,33 +321,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Display the selected photos at the bottom of the preview large photos interface. Defaults to true.
     @objc public var showSelectedPhotoPreview = true
     
-    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
-    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
-    /// ["zl_btn_selected", "zl_btn_unselected"].
-    @objc public var customImageNames: [String] = [] {
-        didSet {
-            ZLCustomImageDeploy.imageNames = customImageNames
-        }
-    }
-    
-    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
-    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
-    /// ["zl_btn_selected": selectedImage, "zl_btn_unselected": unselectedImage].
-    public var customImageForKey: [String: UIImage?] = [:] {
-        didSet {
-            customImageForKey.forEach { ZLCustomImageDeploy.imageForKey[$0.key] = $0.value }
-        }
-    }
-    
-    /// Developers can customize images, but the name of the custom image resource must be consistent with the image name in the replaced bundle.
-    /// - example: Developers need to replace the selected and unselected image resources, and the array that needs to be passed in is
-    /// ["zl_btn_selected": selectedImage, "zl_btn_unselected": unselectedImage].
-    @objc public var customImageForKey_objc: [String: UIImage] = [:] {
-        didSet {
-            ZLCustomImageDeploy.imageForKey = customImageForKey_objc
-        }
-    }
-    
     /// Allow framework fetch photos when callback. Defaults to true.
     @objc public var shouldAnialysisAsset = true
     
@@ -359,32 +332,6 @@ public class ZLPhotoConfiguration: NSObject {
         didSet {
             ZLCustomLanguageDeploy.language = self.languageType
             Bundle.resetLanguage()
-        }
-    }
-    
-    /// Developers can customize languages.
-    /// - example: If you needs to replace
-    /// key: .loading, value: "loading, waiting please" language,
-    /// The dictionary that needs to be passed in is [.loading: "text to be replaced"].
-    /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
-    public var customLanguageKeyValue: [ZLLocalLanguageKey: String] = [:] {
-        didSet {
-            ZLCustomLanguageDeploy.deploy = self.customLanguageKeyValue
-        }
-    }
-    
-    /// Developers can customize languages (This property is only for objc).
-    /// - example: If you needs to replace
-    /// key: @"loading", value: @"loading, waiting please" language,
-    /// The dictionary that needs to be passed in is @[@"loading": @"text to be replaced"].
-    /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
-    @objc public var customLanguageKeyValue_objc: [String: String] = [:] {
-        didSet {
-            var swiftParams: [ZLLocalLanguageKey: String] = [:]
-            customLanguageKeyValue_objc.forEach { (key, value) in
-                swiftParams[ZLLocalLanguageKey(rawValue: key)] = value
-            }
-            self.customLanguageKeyValue = swiftParams
         }
     }
     
@@ -441,28 +388,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Hud style. Defaults to lightBlur.
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .lightBlur
     
-    /// The blur effect of the navigation bar in the album list
-    @objc public var navViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
-    
-    /// The blur effect of the navigation bar in the preview interface
-    @objc public var navViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
-    
-    /// The blur effect of the bottom tool bar in the album list
-    @objc public var bottomViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
-    
-    /// The blur effect of the bottom tool bar in the preview interface
-    @objc public var bottomViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
-    
-    /// Color configuration for framework.
-    @objc public var colorConfiguration: ZLPhotoColorConfiguration = .default()
-    
-    /// Font name.
-    @objc public var themeFontName: String? = nil {
-        didSet {
-            ZLCustomFontDeploy.fontName = self.themeFontName
-        }
-    }
-    
     /// This block will be called before selecting an image, the developer can first determine whether the asset is allowed to be selected.
     /// Only control whether it is allowed to be selected, and will not affect the selection logic in the framework.
     /// - Tips: If the choice is not allowed, the developer can toast prompt the user for relevant information.
@@ -487,13 +412,11 @@ public class ZLPhotoConfiguration: NSObject {
     
 }
 
-
 @objc public enum ZLNoAuthorityType: Int {
     case library
     case camera
     case microphone
 }
-
 
 @objc public enum ZLPhotoBrowserStyle: Int {
     
@@ -505,27 +428,11 @@ public class ZLPhotoConfiguration: NSObject {
     
 }
 
-/// Font deply
-struct ZLCustomFontDeploy {
-    
-    static var fontName: String? = nil
-    
-}
-
 /// Language deploy
 struct ZLCustomLanguageDeploy {
     
     static var language: ZLLanguageType = .system
     
     static var deploy: [ZLLocalLanguageKey: String] = [:]
-    
-}
-
-/// Image source deploy
-struct ZLCustomImageDeploy {
-    
-    static var imageNames: [String] = []
-    
-    static var imageForKey: [String: UIImage] = [:]
     
 }
