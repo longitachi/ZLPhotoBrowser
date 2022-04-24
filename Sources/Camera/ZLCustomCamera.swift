@@ -64,13 +64,13 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     public lazy var animateLayer = CAShapeLayer()
     
-    public lazy var retakeBtn = UIButton(type: .custom)
+    public lazy var retakeBtn = ZLEnlargeButton(type: .custom)
     
     public lazy var doneBtn = UIButton(type: .custom)
     
-    public lazy var dismissBtn = UIButton(type: .custom)
+    public lazy var dismissBtn = ZLEnlargeButton(type: .custom)
     
-    public lazy var switchCameraBtn = UIButton(type: .custom)
+    public lazy var switchCameraBtn = ZLEnlargeButton(type: .custom)
     
     public lazy var focusCursorView = UIImageView(image: getImage("zl_focus"))
     
@@ -300,7 +300,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         dismissBtn.setImage(getImage("zl_arrow_down"), for: .normal)
         dismissBtn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
         dismissBtn.adjustsImageWhenHighlighted = false
-        dismissBtn.zl_enlargeValidTouchArea(inset: 30)
+        dismissBtn.enlargeInset = 30
         bottomView.addSubview(self.dismissBtn)
         
         largeCircleView.layer.masksToBounds = true
@@ -352,14 +352,14 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         retakeBtn.addTarget(self, action: #selector(retakeBtnClick), for: .touchUpInside)
         retakeBtn.isHidden = true
         retakeBtn.adjustsImageWhenHighlighted = false
-        retakeBtn.zl_enlargeValidTouchArea(inset: 30)
+        retakeBtn.enlargeInset = 30
         view.addSubview(retakeBtn)
         
         let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
         switchCameraBtn.setImage(getImage("zl_toggle_camera"), for: .normal)
         switchCameraBtn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
         switchCameraBtn.adjustsImageWhenHighlighted = false
-        switchCameraBtn.zl_enlargeValidTouchArea(inset: 30)
+        switchCameraBtn.enlargeInset = 30
         switchCameraBtn.isHidden = cameraCount <= 1
         view.addSubview(switchCameraBtn)
         

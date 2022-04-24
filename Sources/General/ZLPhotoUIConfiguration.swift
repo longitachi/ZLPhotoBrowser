@@ -51,7 +51,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     @objc public var statusBarStyle: UIStatusBarStyle = .lightContent
     
     /// text: Cancel.  image: 'x'. Default to image.
-    @objc public var navCancelButtonStyle: ZLPhotoUIConfiguration.CancelButtonStyle = .text
+    @objc public var navCancelButtonStyle: ZLPhotoUIConfiguration.CancelButtonStyle = .image
     
     /// Whether to show the status bar when previewing photos. Defaults to false.
     @objc public var showStatusBarInPreviewInterface = false

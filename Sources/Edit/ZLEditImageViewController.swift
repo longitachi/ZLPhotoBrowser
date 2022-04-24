@@ -91,7 +91,7 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public var ashbinNormalBgColor = zlRGB(40, 40, 40).withAlphaComponent(0.8)
     
-    @objc public lazy var cancelBtn = UIButton(type: .custom)
+    @objc public lazy var cancelBtn = ZLEnlargeButton(type: .custom)
     
     @objc public lazy var mainScrollView = UIScrollView()
     
@@ -470,7 +470,7 @@ open class ZLEditImageViewController: UIViewController {
         self.cancelBtn.setImage(getImage("zl_retake"), for: .normal)
         self.cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         self.cancelBtn.adjustsImageWhenHighlighted = false
-        self.cancelBtn.zl_enlargeValidTouchArea(inset: 30)
+        self.cancelBtn.enlargeInset = 30
         self.topShadowView.addSubview(self.cancelBtn)
         
         self.view.addSubview(self.bottomShadowView)

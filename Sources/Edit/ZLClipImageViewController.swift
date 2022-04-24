@@ -89,13 +89,13 @@ class ZLClipImageViewController: UIViewController {
     
     lazy var bottomToolLineView = UIView()
     
-    lazy var cancelBtn = UIButton(type: .custom)
+    lazy var cancelBtn = ZLEnlargeButton(type: .custom)
     
-    lazy var revertBtn = UIButton(type: .custom)
+    lazy var revertBtn = ZLEnlargeButton(type: .custom)
     
-    lazy var doneBtn = UIButton(type: .custom)
+    lazy var doneBtn = ZLEnlargeButton(type: .custom)
     
-    lazy var rotateBtn = UIButton(type: .custom)
+    lazy var rotateBtn = ZLEnlargeButton(type: .custom)
     
     lazy var clipRatioColView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -318,26 +318,26 @@ class ZLClipImageViewController: UIViewController {
         
         cancelBtn.setImage(getImage("zl_close"), for: .normal)
         cancelBtn.adjustsImageWhenHighlighted = false
-        cancelBtn.zl_enlargeValidTouchArea(inset: 20)
+        cancelBtn.enlargeInset = 20
         cancelBtn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         bottomToolView.addSubview(cancelBtn)
         
         revertBtn.setTitleColor(.white, for: .normal)
         revertBtn.setTitle(localLanguageTextValue(.revert), for: .normal)
-        revertBtn.zl_enlargeValidTouchArea(inset: 20)
+        revertBtn.enlargeInset = 20
         revertBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         revertBtn.addTarget(self, action: #selector(revertBtnClick), for: .touchUpInside)
         bottomToolView.addSubview(revertBtn)
         
         doneBtn.setImage(getImage("zl_right"), for: .normal)
         doneBtn.adjustsImageWhenHighlighted = false
-        doneBtn.zl_enlargeValidTouchArea(inset: 20)
+        doneBtn.enlargeInset = 20
         doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         bottomToolView.addSubview(doneBtn)
         
         rotateBtn.setImage(getImage("zl_rotateimage"), for: .normal)
         rotateBtn.adjustsImageWhenHighlighted = false
-        rotateBtn.zl_enlargeValidTouchArea(inset: 20)
+        rotateBtn.enlargeInset = 20
         rotateBtn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
         view.addSubview(rotateBtn)
         

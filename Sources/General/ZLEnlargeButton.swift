@@ -1,8 +1,8 @@
 //
-//  UIControl+ZLPhotoBrowser.swift
+//  ZLEnlargeButton.swift
 //  ZLPhotoBrowser
 //
-//  Created by long on 2020/8/17.
+//  Created by long on 2022/4/24.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -26,55 +26,43 @@
 
 import UIKit
 
-private var edgeKey = "edgeKey"
+public class ZLEnlargeButton: UIButton {
 
-extension UIControl {
+    /// 扩大点击区域
+    public var enlargeInsets: UIEdgeInsets = .zero
     
-    private var zl_insets: UIEdgeInsets? {
-        get {
-            if let temp = objc_getAssociatedObject(self, &edgeKey) as? UIEdgeInsets  {
-                return temp
-            }
-            return nil
-        }
-        set {
-            objc_setAssociatedObject(self, &edgeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    /// 上下左右均扩大该值的点击范围
+    public var enlargeInset: CGFloat = 0 {
+        didSet {
+            let inset = max(0, enlargeInset)
+            enlargeInsets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         }
     }
     
-    
-    open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        guard !self.isHidden && self.alpha != 0 else {
+    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard !isHidden && alpha != 0 else {
             return false
         }
         
-        let rect = self.enlargeRect()
-        
-        if rect.equalTo(self.bounds) {
+        let rect = enlargeRect()
+        if rect.equalTo(bounds) {
             return super.point(inside: point, with: event)
         }
         return rect.contains(point) ? true : false
     }
     
     private func enlargeRect() -> CGRect {
-        guard let edge = self.zl_insets else {
-            return self.bounds
+        guard enlargeInsets != .zero  else {
+            return bounds
         }
         
-        let rect = CGRect(x: self.bounds.minX - edge.left, y: self.bounds.minY - edge.top, width: self.bounds.width + edge.left + edge.right, height: self.bounds.height + edge.top + edge.bottom)
-        
+        let rect = CGRect(
+            x: bounds.minX - enlargeInsets.left,
+            y: bounds.minY - enlargeInsets.top,
+            width: bounds.width + enlargeInsets.left + enlargeInsets.right,
+            height: bounds.height + enlargeInsets.top + enlargeInsets.bottom
+        )
         return rect
     }
-    
-    func zl_enlargeValidTouchArea(insets: UIEdgeInsets) {
-        self.zl_insets = insets
-    }
-    
-    func zl_enlargeValidTouchArea(inset: CGFloat) {
-        guard inset != 0 else {
-            return
-        }
-        self.zl_insets = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-    }
-    
+
 }

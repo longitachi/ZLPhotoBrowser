@@ -31,7 +31,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     var imageView: UIImageView!
     
-    var btnSelect: UIButton!
+    var btnSelect: ZLEnlargeButton!
     
     var bottomShadowView: UIImageView!
     
@@ -95,11 +95,11 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         self.coverView.isHidden = true
         self.contentView.addSubview(self.coverView)
         
-        self.btnSelect = UIButton(type: .custom)
+        self.btnSelect = ZLEnlargeButton(type: .custom)
         self.btnSelect.setBackgroundImage(getImage("zl_btn_unselected"), for: .normal)
         self.btnSelect.setBackgroundImage(getImage("zl_btn_selected"), for: .selected)
         self.btnSelect.addTarget(self, action: #selector(btnSelectClick), for: .touchUpInside)
-        self.btnSelect.zl_enlargeValidTouchArea(insets: UIEdgeInsets(top: 5, left: 20, bottom: 20, right: 5))
+        self.btnSelect.enlargeInsets = UIEdgeInsets(top: 5, left: 20, bottom: 20, right: 5)
         self.contentView.addSubview(self.btnSelect)
         
         self.indexLabel = UILabel()

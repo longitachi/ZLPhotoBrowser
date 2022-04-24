@@ -51,7 +51,7 @@ class ZLPhotoPreviewController: UIViewController {
     
     var backBtn: UIButton!
     
-    var selectBtn: UIButton!
+    var selectBtn: ZLEnlargeButton!
     
     var indexLabel: UILabel!
     
@@ -233,10 +233,10 @@ class ZLPhotoPreviewController: UIViewController {
         self.backBtn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
         self.navView.addSubview(self.backBtn)
         
-        self.selectBtn = UIButton(type: .custom)
+        self.selectBtn = ZLEnlargeButton(type: .custom)
         self.selectBtn.setImage(getImage("zl_btn_circle"), for: .normal)
         self.selectBtn.setImage(getImage("zl_btn_selected"), for: .selected)
-        self.selectBtn.zl_enlargeValidTouchArea(inset: 10)
+        self.selectBtn.enlargeInset = 10
         self.selectBtn.addTarget(self, action: #selector(selectBtnClick), for: .touchUpInside)
         self.navView.addSubview(self.selectBtn)
         

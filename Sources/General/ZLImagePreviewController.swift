@@ -64,7 +64,7 @@ public class ZLImagePreviewController: UIViewController {
     
     var indexLabel: UILabel!
     
-    var selectBtn: UIButton!
+    var selectBtn: ZLEnlargeButton!
     
     var bottomView: UIView!
     
@@ -218,10 +218,10 @@ public class ZLImagePreviewController: UIViewController {
         self.indexLabel.textAlignment = .center
         self.navView.addSubview(self.indexLabel)
         
-        self.selectBtn = UIButton(type: .custom)
+        self.selectBtn = ZLEnlargeButton(type: .custom)
         self.selectBtn.setImage(getImage("zl_btn_circle"), for: .normal)
         self.selectBtn.setImage(getImage("zl_btn_selected"), for: .selected)
-        self.selectBtn.zl_enlargeValidTouchArea(inset: 10)
+        self.selectBtn.enlargeInset = 10
         self.selectBtn.addTarget(self, action: #selector(selectBtnClick), for: .touchUpInside)
         self.navView.addSubview(self.selectBtn)
         
