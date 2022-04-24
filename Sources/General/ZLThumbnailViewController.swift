@@ -150,7 +150,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return ZLPhotoConfiguration.default().statusBarStyle
+        return ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
     var panGes: UIPanGestureRecognizer!
@@ -353,7 +353,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     func setupNavView() {
-        if ZLPhotoConfiguration.default().style == .embedAlbumList {
+        if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
             self.embedNavView = ZLEmbedAlbumListNavView(title: self.albumList.title)
             
             self.embedNavView?.selectAlbumBlock = { [weak self] in
@@ -392,7 +392,7 @@ class ZLThumbnailViewController: UIViewController {
             }
             
             self.view.addSubview(self.embedAlbumListView!)
-        } else if ZLPhotoConfiguration.default().style == .externalAlbumList {
+        } else if ZLPhotoUIConfiguration.default().style == .externalAlbumList {
             self.externalNavView = ZLExternalAlbumListNavView(title: self.albumList.title)
             
             self.externalNavView?.backBlock = { [weak self] in
@@ -1293,7 +1293,7 @@ class ZLEmbedAlbumListNavView: UIView {
         }
         
         refreshTitleViewFrame()
-        if ZLPhotoConfiguration.default().navCancelButtonStyle == .text {
+        if ZLPhotoUIConfiguration.default().navCancelButtonStyle == .text {
             let cancelBtnW = localLanguageTextValue(.cancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width
             cancelBtn.frame = CGRect(x: insets.left + 20, y: insets.top, width: cancelBtnW, height: 44)
         } else {
@@ -1353,7 +1353,7 @@ class ZLEmbedAlbumListNavView: UIView {
         arrow.contentMode = .scaleAspectFill
         titleBgControl.addSubview(arrow)
 
-        if ZLPhotoConfiguration.default().navCancelButtonStyle == .text {
+        if ZLPhotoUIConfiguration.default().navCancelButtonStyle == .text {
             cancelBtn.titleLabel?.font = ZLLayout.navTitleFont
             cancelBtn.setTitle(localLanguageTextValue(.cancel), for: .normal)
             cancelBtn.setTitleColor(.navTitleColor, for: .normal)
@@ -1429,7 +1429,7 @@ class ZLExternalAlbumListNavView: UIView {
         backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
         let albumTitleW = min(bounds.width / 2, title.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width)
         albumTitleLabel.frame = CGRect(x: (bounds.width - albumTitleW) / 2, y: insets.top, width: albumTitleW, height: 44)
-        if ZLPhotoConfiguration.default().navCancelButtonStyle == .text {
+        if ZLPhotoUIConfiguration.default().navCancelButtonStyle == .text {
             let cancelBtnW = localLanguageTextValue(.cancel).boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width + 40
             cancelBtn.frame = CGRect(x: bounds.width - insets.right - cancelBtnW, y: insets.top, width: cancelBtnW, height: 44)
         } else {
@@ -1457,7 +1457,7 @@ class ZLExternalAlbumListNavView: UIView {
         albumTitleLabel.textAlignment = .center
         addSubview(albumTitleLabel)
 
-        if ZLPhotoConfiguration.default().navCancelButtonStyle == .text {
+        if ZLPhotoUIConfiguration.default().navCancelButtonStyle == .text {
             cancelBtn.titleLabel?.font = ZLLayout.navTitleFont
             cancelBtn.setTitle(localLanguageTextValue(.cancel), for: .normal)
             cancelBtn.setTitleColor(.navTitleColor, for: .normal)

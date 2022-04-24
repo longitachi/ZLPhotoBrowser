@@ -167,7 +167,6 @@ class ViewController: UIViewController {
         
         ZLPhotoConfiguration.default()
             .editImageConfiguration(editImageConfiguration)
-            .navCancelButtonStyle(.image)
             // You can first determine whether the asset is allowed to be selected.
             .canSelectAsset { asset in
                 return true

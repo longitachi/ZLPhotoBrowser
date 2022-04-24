@@ -31,11 +31,6 @@ public typealias Second = Int
 
 public class ZLPhotoConfiguration: NSObject {
 
-    @objc public enum CancelButtonStyle: Int {
-        case text
-        case image
-    }
-    
     private static var single = ZLPhotoConfiguration()
     
     @objc public class func `default`() -> ZLPhotoConfiguration {
@@ -45,14 +40,6 @@ public class ZLPhotoConfiguration: NSObject {
     @objc public class func resetConfiguration() {
         ZLPhotoConfiguration.single = ZLPhotoConfiguration()
     }
-    
-    /// Framework style.
-    @objc public var style: ZLPhotoBrowserStyle = .embedAlbumList
-    
-    @objc public var statusBarStyle: UIStatusBarStyle = .lightContent
-    
-    /// text: Cancel.  image: 'x'. Default to text.
-    @objc public var navCancelButtonStyle: ZLPhotoConfiguration.CancelButtonStyle = .image
     
     /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
     @objc public var sortAscending = true
@@ -190,9 +177,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow access to the preview large image interface (That is, whether to allow access to the large image interface after clicking the thumbnail image). Defaults to true.
     @objc public var allowPreviewPhotos = true
     
-    /// Whether to show the status bar when previewing photos. Defaults to false.
-    @objc public var showStatusBarInPreviewInterface = false
-    
     /// Whether to show the preview button (i.e. the preview button in the lower left corner of the thumbnail interface). Defaults to true.
     @objc public var showPreviewButtonInAlbum = true
     
@@ -226,79 +210,6 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// Image editor configuration.
     @objc public var editImageConfiguration = ZLEditImageConfiguration()
-    
-    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-    public var editImageTools: [ZLEditImageConfiguration.EditTool] {
-        get {
-            return editImageConfiguration.tools
-        }
-        set {
-            editImageConfiguration.tools = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-    @objc public var editImageDrawColors: [UIColor] {
-        get {
-            return editImageConfiguration.drawColors
-        }
-        set {
-            editImageConfiguration.drawColors = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-    @objc public var editImageDefaultDrawColor: UIColor {
-        get {
-            return editImageConfiguration.defaultDrawColor
-        }
-        set {
-            editImageConfiguration.defaultDrawColor = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-    @objc public var editImageClipRatios: [ZLImageClipRatio] {
-        get {
-            return editImageConfiguration.clipRatios
-        }
-        set {
-            editImageConfiguration.clipRatios = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-    @objc public var textStickerTextColors: [UIColor] {
-        get {
-            return editImageConfiguration.textStickerTextColors
-        }
-        set {
-            editImageConfiguration.textStickerTextColors = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-    @objc public var textStickerDefaultTextColor: UIColor {
-        get {
-            return editImageConfiguration.textStickerDefaultTextColor
-        }
-        set {
-            editImageConfiguration.textStickerDefaultTextColor = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-    @objc public var filters: [ZLFilter] {
-        get {
-            return editImageConfiguration.filters
-        }
-        set {
-            editImageConfiguration.filters = newValue
-        }
-    }
-    
-    @available(*, deprecated, message: "Use editImageConfiguration, this property will be removed")
-    @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
     
     /// Show the image captured by the camera is displayed on the camera button inside the album. Defaults to false.
     @objc public var showCaptureImageOnTakePhotoBtn = false
@@ -416,16 +327,6 @@ public class ZLPhotoConfiguration: NSObject {
     case library
     case camera
     case microphone
-}
-
-@objc public enum ZLPhotoBrowserStyle: Int {
-    
-    /// The album list is embedded in the navigation of the thumbnail interface, click the drop-down display.
-    case embedAlbumList
-    
-    /// The display relationship between the album list and the thumbnail interface is push.
-    case externalAlbumList
-    
 }
 
 /// Language deploy

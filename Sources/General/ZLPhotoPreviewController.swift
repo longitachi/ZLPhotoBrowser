@@ -82,11 +82,11 @@ class ZLPhotoPreviewController: UIViewController {
     var orientation: UIInterfaceOrientation = .unknown
     
     override var prefersStatusBarHidden: Bool {
-        return !ZLPhotoConfiguration.default().showStatusBarInPreviewInterface
+        return !ZLPhotoUIConfiguration.default().showStatusBarInPreviewInterface
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return ZLPhotoConfiguration.default().statusBarStyle
+        return ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
     deinit {

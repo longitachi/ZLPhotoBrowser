@@ -29,6 +29,11 @@ import UIKit
 /// Custom UI configuration (include colors, images, text, font)
 public class ZLPhotoUIConfiguration: NSObject {
     
+    @objc public enum CancelButtonStyle: Int {
+        case text
+        case image
+    }
+    
     private static var single = ZLPhotoUIConfiguration()
     
     @objc public class func `default`() -> ZLPhotoUIConfiguration {
@@ -38,6 +43,18 @@ public class ZLPhotoUIConfiguration: NSObject {
     @objc public class func resetConfiguration() {
         ZLPhotoUIConfiguration.single = ZLPhotoUIConfiguration()
     }
+    
+    // MARK: Framework style.
+    
+    @objc public var style: ZLPhotoBrowserStyle = .embedAlbumList
+    
+    @objc public var statusBarStyle: UIStatusBarStyle = .lightContent
+    
+    /// text: Cancel.  image: 'x'. Default to image.
+    @objc public var navCancelButtonStyle: ZLPhotoUIConfiguration.CancelButtonStyle = .text
+    
+    /// Whether to show the status bar when previewing photos. Defaults to false.
+    @objc public var showStatusBarInPreviewInterface = false
     
     // MARK: Navigation and bottom tool bar
     
@@ -296,5 +313,15 @@ struct ZLCustomImageDeploy {
     static var imageNames: [String] = []
     
     static var imageForKey: [String: UIImage] = [:]
+    
+}
+
+@objc public enum ZLPhotoBrowserStyle: Int {
+    
+    /// The album list is embedded in the navigation of the thumbnail interface, click the drop-down display.
+    case embedAlbumList
+    
+    /// The display relationship between the album list and the thumbnail interface is push.
+    case externalAlbumList
     
 }

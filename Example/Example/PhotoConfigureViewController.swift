@@ -12,6 +12,8 @@ class PhotoConfigureViewController: UIViewController {
 
     let config = ZLPhotoConfiguration.default()
     
+    let uiConfig = ZLPhotoUIConfiguration.default()
+    
     var scrollView: UIScrollView!
     
     var previewCountTextField: UITextField!
@@ -312,7 +314,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         self.styleSegment = UISegmentedControl(items: ["First (like wechat)", "Second"])
-        self.styleSegment.selectedSegmentIndex = config.style.rawValue
+        self.styleSegment.selectedSegmentIndex = uiConfig.style.rawValue
         self.styleSegment.addTarget(self, action: #selector(styleSegmentChanged), for: .valueChanged)
         containerView.addSubview(self.styleSegment)
         self.styleSegment.snp.makeConstraints { (make) in
@@ -957,7 +959,7 @@ class PhotoConfigureViewController: UIViewController {
     }
     
     @objc func styleSegmentChanged() {
-        config.style = styleSegment.selectedSegmentIndex == 0 ? .embedAlbumList : .externalAlbumList
+        uiConfig.style = styleSegment.selectedSegmentIndex == 0 ? .embedAlbumList : .externalAlbumList
     }
     
     @objc func languageButtonClick() {

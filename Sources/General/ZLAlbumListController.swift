@@ -40,7 +40,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
     var shouldReloadAlbumList = true
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return ZLPhotoConfiguration.default().statusBarStyle
+        return ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
     deinit {

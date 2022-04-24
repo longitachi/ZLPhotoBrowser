@@ -607,7 +607,7 @@ public class ZLPhotoPreviewSheet: UIView {
         ZLPhotoManager.getCameraRollAlbum(allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (cameraRoll) in
             guard let `self` = self else { return }
             let nav: ZLImageNavController
-            if ZLPhotoConfiguration.default().style == .embedAlbumList {
+            if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
                 let tvc = ZLThumbnailViewController(albumList: cameraRoll)
                 nav = self.getImageNav(rootViewController: tvc)
             } else {

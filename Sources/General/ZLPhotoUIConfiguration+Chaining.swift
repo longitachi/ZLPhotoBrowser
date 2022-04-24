@@ -30,6 +30,30 @@ import UIKit
 extension ZLPhotoUIConfiguration {
     
     @discardableResult
+    public func style(_ style: ZLPhotoBrowserStyle) -> ZLPhotoUIConfiguration {
+        self.style = style
+        return self
+    }
+    
+    @discardableResult
+    public func statusBarStyle(_ statusBarStyle: UIStatusBarStyle) -> ZLPhotoUIConfiguration {
+        self.statusBarStyle = statusBarStyle
+        return self
+    }
+    
+    @discardableResult
+    public func navCancelButtonStyle(_ style: ZLPhotoUIConfiguration.CancelButtonStyle) -> ZLPhotoUIConfiguration {
+        navCancelButtonStyle = style
+        return self
+    }
+    
+    @discardableResult
+    public func showStatusBarInPreviewInterface(_ value: Bool) -> ZLPhotoUIConfiguration {
+        showStatusBarInPreviewInterface = value
+        return self
+    }
+    
+    @discardableResult
     public func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfAlbumList = effect
         return self
