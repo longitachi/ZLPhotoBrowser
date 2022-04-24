@@ -143,6 +143,16 @@ func getSpringAnimation() -> CAKeyframeAnimation {
     return animate
 }
 
+func getFadeAnimation(fromValue: CGFloat, toValue: CGFloat, duration: TimeInterval) -> CAAnimation {
+    let animation = CABasicAnimation(keyPath: "opacity")
+    animation.fromValue = fromValue
+    animation.toValue = toValue
+    animation.duration = duration
+    animation.fillMode = .forwards
+    animation.isRemovedOnCompletion = false
+    return animation
+}
+
 func showAlertView(_ message: String, _ sender: UIViewController?) {
     let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
     let action = UIAlertAction(title: localLanguageTextValue(.ok), style: .default, handler: nil)

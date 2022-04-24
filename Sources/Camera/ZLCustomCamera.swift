@@ -122,6 +122,9 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     var recordLongGes: UILongPressGestureRecognizer?
     
+    /// 是否正在调整焦距
+    var isAdjustingFocusPoint = false
+    
     // 仅支持竖屏
     public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -209,11 +212,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             #endif
         } else if self.cameraConfigureFinish, self.viewDidAppearCount == 0 {
             self.showTipsLabel(animate: true)
-            let animation = CABasicAnimation(keyPath: "opacity")
-            animation.toValue = 1
-            animation.duration = 0.15
-            animation.fillMode = .forwards
-            animation.isRemovedOnCompletion = false
+            let animation = getFadeAnimation(fromValue: 0, toValue: 1, duration: 0.15)
             self.previewLayer?.add(animation, forKey: nil)
             self.setFocusCusor(point: self.view.center)
         }
@@ -743,7 +742,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     // 调整焦点
     @objc func adjustFocusPoint(_ tap: UITapGestureRecognizer) {
-        guard self.session.isRunning else {
+        guard session.isRunning, !isAdjustingFocusPoint else {
             return
         }
         let point = tap.location(in: self.view)
@@ -754,6 +753,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     func setFocusCusor(point: CGPoint) {
+        isAdjustingFocusPoint = true
         self.focusCursorView.center = point
         self.focusCursorView.layer.removeAllAnimations()
         self.focusCursorView.alpha = 1
@@ -761,6 +761,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         UIView.animate(withDuration: 0.5, animations: {
             self.focusCursorView.layer.transform = CATransform3DIdentity
         }) { (_) in
+            self.isAdjustingFocusPoint = false
             self.focusCursorView.alpha = 0
         }
         // ui坐标转换为摄像头坐标
@@ -957,11 +958,9 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
 extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
     
     public func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
-        DispatchQueue.main.async {
-            self.previewLayer?.opacity = 0
-            UIView.animate(withDuration: 0.25) {
-                self.previewLayer?.opacity = 1
-            }
+        ZLMainAsync {
+            let animation = getFadeAnimation(fromValue: 0, toValue: 1, duration: 0.25)
+            self.previewLayer?.add(animation, forKey: nil)
         }
     }
     
