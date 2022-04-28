@@ -91,7 +91,13 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.3.0
+● 4.3.1 - 4.3.0 Patch
+  Add:
+    Remove deprecated properties. 
+    Moved some UI related properties to ZLPhotoUIConfiguration.
+    Add ZLEnlargeButton class instead of extending UIControl to enlarge button click area.
+    Add fade animation when taking photos.
+● 4.3.0 - Beta
   Add:
     Turkish supported.
     Separate UI-related properties such as color, text, font, and image from ZLPhotoConfiguration and put them in ZLPhotoUIConfiguration.
@@ -102,9 +108,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ● 4.2.5
   Fix:
     Fix the bug of failing to archive with Xcode 13.3.
-● 4.2.4
-  Fix:
-    Fixes the bug when select the original photo in the preview.
 ...
 ```
 

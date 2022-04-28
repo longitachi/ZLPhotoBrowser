@@ -24,7 +24,9 @@
 
 import UIKit
 
-@objc public protocol ZLImageStickerContainerDelegate where Self: UIView {
+/// Provide an image sticker container view that conform to this protocol must be a subclass of UIView
+/// 必须是UIView的子类遵循这个协议
+@objc public protocol ZLImageStickerContainerDelegate {
     
     @objc var selectImageBlock: ((UIImage) -> Void)? { get set }
     

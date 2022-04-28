@@ -2,7 +2,16 @@
 
 -----
 
-## [4.3.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.0) (2022-04-19)
+## [4.3.1 - 4.3.0 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.0) (2022-04-28)
+### Add:
+* Remove deprecated properties. 
+* Moved some UI related properties to ZLPhotoUIConfiguration.
+* Add ZLEnlargeButton class instead of extending UIControl to enlarge button click area.
+* Add fade animation when taking photos.
+
+---
+
+## [4.3.0 - Beta](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.0) (2022-04-19)
 ### Add:
 * Turkish supported.[#712](https://github.com/longitachi/ZLPhotoBrowser/pull/712)
 * Separate UI-related properties such as color, text, font, and image from ZLPhotoConfiguration and put them in ZLPhotoUIConfiguration.

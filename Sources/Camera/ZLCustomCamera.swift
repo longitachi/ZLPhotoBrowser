@@ -157,8 +157,6 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             return
         }
         
-        self.observerDeviceMotion()
-        
         AVCaptureDevice.requestAccess(for: .video) { (videoGranted) in
             guard videoGranted else {
                 ZLMainAsync(after: 1) {
@@ -198,6 +196,11 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.sessionQueue.async {
             self.session.startRunning()
         }
+    }
+    
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        observerDeviceMotion()
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -391,9 +394,9 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.motionManager?.deviceMotionUpdateInterval = 0.5
         
         if self.motionManager?.isDeviceMotionAvailable == true {
-            self.motionManager?.startDeviceMotionUpdates(to: OperationQueue.main, withHandler: { (motion, error) in
-                if let _ = motion {
-                    self.handleDeviceMotion(motion!)
+            self.motionManager?.startDeviceMotionUpdates(to: .main, withHandler: { (motion, error) in
+                if let motion = motion {
+                    self.handleDeviceMotion(motion)
                 }
             })
         } else {

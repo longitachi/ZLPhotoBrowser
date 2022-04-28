@@ -102,11 +102,16 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.3.0
+● 4.3.1 - 4.3.0 Patch
+  Add:
+    删除已废弃的属性(图片编辑配置相关);
+    从ZLPhotoConfiguration中将部分UI相关的属性移动到ZLPhotoUIConfiguration中;
+    添加UIButton子类ZLEnlargeButton替代之前的UIControl扩展，来增加按钮的点击范围;
+    拍照时新增一个fade动画;
+● 4.3.0 - Beta
   Add:
     支持土耳其语;
     从ZLPhotoConfiguration类中，将自定义颜色、文案、字体、图片拆分出来，放到新的类ZLPhotoUIConfiguration中;
-    将类 'ZLPhotoThemeColorDeploy' 更名为 'ZLPhotoColorConfiguration';
     编辑图片工具类中新增部分属性以支持OC调用;
     新增部分UI支持自定义color;
     ZLImagePreviewController 中添加长按事件回调;
@@ -114,9 +119,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ● 4.2.5
   Fix:
     修复用Xcode13.3打包失败的bug;
-● 4.2.4
-  Fix:
-    修复预览界面选择原图功能相关的bug;
 ...
 ```
 
