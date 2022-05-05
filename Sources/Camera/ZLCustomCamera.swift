@@ -367,7 +367,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
         doneBtn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
-        doneBtn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
+        doneBtn.setTitleColor(.bottomToolViewDoneBtnNormalTitleColor, for: .normal)
         doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         doneBtn.isHidden = true
