@@ -27,17 +27,15 @@ import UIKit
 /// Provide an image sticker container view that conform to this protocol must be a subclass of UIView
 /// 必须是UIView的子类遵循这个协议
 @objc public protocol ZLImageStickerContainerDelegate {
-    
     @objc var selectImageBlock: ((UIImage) -> Void)? { get set }
     
     @objc var hideBlock: (() -> Void)? { get set }
     
     @objc func show(in view: UIView)
-    
 }
 
 public class ZLEditImageConfiguration: NSObject {
-
+    
     @objc public enum EditTool: Int, CaseIterable {
         case draw
         case clip
@@ -176,7 +174,7 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
-    @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)? = nil
+    @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)?
     
     private var pri_adjustTools: [ZLEditImageConfiguration.AdjustTool] = ZLEditImageConfiguration.AdjustTool.allCases
     /// Adjust image tools. (Default order is brightness, contrast, saturation)
@@ -212,75 +210,78 @@ public class ZLEditImageConfiguration: NSObject {
 }
 
 // MARK: chaining
-extension ZLEditImageConfiguration {
+
+public extension ZLEditImageConfiguration {
     
     @discardableResult
-    public func tools(_ tools: [ZLEditImageConfiguration.EditTool]) -> ZLEditImageConfiguration {
+    func tools(_ tools: [ZLEditImageConfiguration.EditTool]) -> ZLEditImageConfiguration {
         self.tools = tools
         return self
     }
     
     @discardableResult
-    public func drawColors(_ colors: [UIColor]) -> ZLEditImageConfiguration {
+    func drawColors(_ colors: [UIColor]) -> ZLEditImageConfiguration {
         drawColors = colors
         return self
     }
     
-    public func defaultDrawColor(_ color: UIColor) -> ZLEditImageConfiguration {
+    func defaultDrawColor(_ color: UIColor) -> ZLEditImageConfiguration {
         defaultDrawColor = color
         return self
     }
     
     @discardableResult
-    public func clipRatios(_ ratios: [ZLImageClipRatio]) -> ZLEditImageConfiguration {
+    func clipRatios(_ ratios: [ZLImageClipRatio]) -> ZLEditImageConfiguration {
         clipRatios = ratios
         return self
     }
     
     @discardableResult
-    public func textStickerTextColors(_ colors: [UIColor]) -> ZLEditImageConfiguration {
+    func textStickerTextColors(_ colors: [UIColor]) -> ZLEditImageConfiguration {
         textStickerTextColors = colors
         return self
     }
     
     @discardableResult
-    public func textStickerDefaultTextColor(_ color: UIColor) -> ZLEditImageConfiguration {
+    func textStickerDefaultTextColor(_ color: UIColor) -> ZLEditImageConfiguration {
         textStickerDefaultTextColor = color
         return self
     }
     
     @discardableResult
-    public func filters(_ filters: [ZLFilter]) -> ZLEditImageConfiguration {
+    func filters(_ filters: [ZLFilter]) -> ZLEditImageConfiguration {
         self.filters = filters
         return self
     }
     
     @discardableResult
-    public func imageStickerContainerView(_ view: (UIView & ZLImageStickerContainerDelegate)?) -> ZLEditImageConfiguration {
+    func imageStickerContainerView(_ view: (UIView & ZLImageStickerContainerDelegate)?) -> ZLEditImageConfiguration {
         imageStickerContainerView = view
         return self
     }
     
     @discardableResult
-    public func adjustTools(_ tools: [ZLEditImageConfiguration.AdjustTool]) -> ZLEditImageConfiguration {
+    func adjustTools(_ tools: [ZLEditImageConfiguration.AdjustTool]) -> ZLEditImageConfiguration {
         adjustTools = tools
         return self
     }
     
     @discardableResult
-    public func impactFeedbackWhenAdjustSliderValueIsZero(_ value: Bool) -> ZLEditImageConfiguration {
+    func impactFeedbackWhenAdjustSliderValueIsZero(_ value: Bool) -> ZLEditImageConfiguration {
         impactFeedbackWhenAdjustSliderValueIsZero = value
         return self
     }
     
     @discardableResult
-    public func impactFeedbackStyle(_ style: UIImpactFeedbackGenerator.FeedbackStyle) -> ZLEditImageConfiguration {
+    func impactFeedbackStyle(_ style: UIImpactFeedbackGenerator.FeedbackStyle) -> ZLEditImageConfiguration {
         impactFeedbackStyle = style
         return self
     }
+    
 }
 
 // MARK: 裁剪比例
+
 public class ZLImageClipRatio: NSObject {
     
     public var title: String
@@ -306,24 +307,24 @@ extension ZLImageClipRatio {
     
 }
 
-extension ZLImageClipRatio {
+public extension ZLImageClipRatio {
     
-    @objc public static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
+    @objc static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
     
-    @objc public static let circle = ZLImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
+    @objc static let circle = ZLImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
     
-    @objc public static let wh1x1 = ZLImageClipRatio(title: "1 : 1", whRatio: 1)
+    @objc static let wh1x1 = ZLImageClipRatio(title: "1 : 1", whRatio: 1)
     
-    @objc public static let wh3x4 = ZLImageClipRatio(title: "3 : 4", whRatio: 3.0/4.0)
+    @objc static let wh3x4 = ZLImageClipRatio(title: "3 : 4", whRatio: 3.0 / 4.0)
     
-    @objc public static let wh4x3 = ZLImageClipRatio(title: "4 : 3", whRatio: 4.0/3.0)
+    @objc static let wh4x3 = ZLImageClipRatio(title: "4 : 3", whRatio: 4.0 / 3.0)
     
-    @objc public static let wh2x3 = ZLImageClipRatio(title: "2 : 3", whRatio: 2.0/3.0)
+    @objc static let wh2x3 = ZLImageClipRatio(title: "2 : 3", whRatio: 2.0 / 3.0)
     
-    @objc public static let wh3x2 = ZLImageClipRatio(title: "3 : 2", whRatio: 3.0/2.0)
+    @objc static let wh3x2 = ZLImageClipRatio(title: "3 : 2", whRatio: 3.0 / 2.0)
     
-    @objc public static let wh9x16 = ZLImageClipRatio(title: "9 : 16", whRatio: 9.0/16.0)
+    @objc static let wh9x16 = ZLImageClipRatio(title: "9 : 16", whRatio: 9.0 / 16.0)
     
-    @objc public static let wh16x9 = ZLImageClipRatio(title: "16 : 9", whRatio: 16.0/9.0)
+    @objc static let wh16x9 = ZLImageClipRatio(title: "16 : 9", whRatio: 16.0 / 9.0)
     
 }

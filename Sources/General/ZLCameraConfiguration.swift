@@ -24,8 +24,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
 import AVFoundation
+import UIKit
 
 public class ZLCameraConfiguration: NSObject {
     
@@ -52,7 +52,7 @@ public class ZLCameraConfiguration: NSObject {
         case hd4K3840x2160
     }
     
-    @objc public enum FocusMode: Int  {
+    @objc public enum FocusMode: Int {
         var avFocusMode: AVCaptureDevice.FocusMode {
             switch self {
             case .autoFocus:
@@ -66,7 +66,7 @@ public class ZLCameraConfiguration: NSObject {
         case continuousAutoFocus
     }
     
-    @objc public enum ExposureMode: Int  {
+    @objc public enum ExposureMode: Int {
         var avFocusMode: AVCaptureDevice.ExposureMode {
             switch self {
             case .autoExpose:
@@ -80,7 +80,7 @@ public class ZLCameraConfiguration: NSObject {
         case continuousAutoExposure
     }
     
-    @objc public enum FlashMode: Int  {
+    @objc public enum FlashMode: Int {
         var avFlashMode: AVCaptureDevice.FlashMode {
             switch self {
             case .auto:
@@ -146,38 +146,37 @@ public class ZLCameraConfiguration: NSObject {
     
     /// Video export format for recording video and editing video. Defaults to mov.
     @objc public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
-    
 }
 
 // MARK: chaining
-extension ZLCameraConfiguration {
-    
+
+public extension ZLCameraConfiguration {
     @discardableResult
-    public func sessionPreset(_ sessionPreset: ZLCameraConfiguration.CaptureSessionPreset) -> ZLCameraConfiguration {
+    func sessionPreset(_ sessionPreset: ZLCameraConfiguration.CaptureSessionPreset) -> ZLCameraConfiguration {
         self.sessionPreset = sessionPreset
         return self
     }
     
     @discardableResult
-    public func focusMode(_ mode: ZLCameraConfiguration.FocusMode) -> ZLCameraConfiguration {
+    func focusMode(_ mode: ZLCameraConfiguration.FocusMode) -> ZLCameraConfiguration {
         focusMode = mode
         return self
     }
     
     @discardableResult
-    public func exposureMode(_ mode: ZLCameraConfiguration.ExposureMode) -> ZLCameraConfiguration {
+    func exposureMode(_ mode: ZLCameraConfiguration.ExposureMode) -> ZLCameraConfiguration {
         exposureMode = mode
         return self
     }
     
     @discardableResult
-    public func flashMode(_ mode: ZLCameraConfiguration.FlashMode) -> ZLCameraConfiguration {
+    func flashMode(_ mode: ZLCameraConfiguration.FlashMode) -> ZLCameraConfiguration {
         flashMode = mode
         return self
     }
     
     @discardableResult
-    public func videoExportType(_ type: ZLCameraConfiguration.VideoExportType) -> ZLCameraConfiguration {
+    func videoExportType(_ type: ZLCameraConfiguration.VideoExportType) -> ZLCameraConfiguration {
         videoExportType = type
         return self
     }

@@ -116,7 +116,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
     public var customLanguageKeyValue: [ZLLocalLanguageKey: String] = [:] {
         didSet {
-            ZLCustomLanguageDeploy.deploy = self.customLanguageKeyValue
+            ZLCustomLanguageDeploy.deploy = customLanguageKeyValue
         }
     }
     
@@ -128,7 +128,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     @objc public var customLanguageKeyValue_objc: [String: String] = [:] {
         didSet {
             var swiftParams: [ZLLocalLanguageKey: String] = [:]
-            customLanguageKeyValue_objc.forEach { (key, value) in
+            customLanguageKeyValue_objc.forEach { key, value in
                 swiftParams[ZLLocalLanguageKey(rawValue: key)] = value
             }
             customLanguageKeyValue = swiftParams
@@ -138,7 +138,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     // MARK: Font
     
     /// Font name.
-    @objc public var themeFontName: String? = nil {
+    @objc public var themeFontName: String? {
         didSet {
             ZLCustomFontDeploy.fontName = themeFontName
         }
@@ -309,27 +309,21 @@ public class ZLPhotoUIConfiguration: NSObject {
 }
 
 /// Font deply
-struct ZLCustomFontDeploy {
-    
-    static var fontName: String? = nil
-    
+enum ZLCustomFontDeploy {
+    static var fontName: String?
 }
 
 /// Image source deploy
-struct ZLCustomImageDeploy {
-    
+enum ZLCustomImageDeploy {
     static var imageNames: [String] = []
     
     static var imageForKey: [String: UIImage] = [:]
-    
 }
 
 @objc public enum ZLPhotoBrowserStyle: Int {
-    
     /// The album list is embedded in the navigation of the thumbnail interface, click the drop-down display.
     case embedAlbumList
     
     /// The display relationship between the album list and the thumbnail interface is push.
     case externalAlbumList
-    
 }

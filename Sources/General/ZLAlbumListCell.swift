@@ -27,20 +27,46 @@
 import UIKit
 
 class ZLAlbumListCell: UITableViewCell {
-
-    var coverImageView: UIImageView!
     
-    var titleLabel: UILabel!
+    private lazy var coverImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        if ZLPhotoConfiguration.default().cellCornerRadio > 0 {
+            view.layer.masksToBounds = true
+            view.layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
+        }
+        return view
+    }()
     
-    var countLabel: UILabel!
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = getFont(17)
+        label.textColor = .albumListTitleColor
+        label.lineBreakMode = .byTruncatingTail
+        return label
+    }()
     
-    var selectBtn: UIButton!
+    private lazy var countLabel: UILabel = {
+        let label = UILabel()
+        label.font = getFont(16)
+        label.textColor = .albumListCountColor
+        return label
+    }()
     
-    var imageIdentifier: String?
+    private var imageIdentifier: String?
     
-    var model: ZLAlbumListModel!
+    private var model: ZLAlbumListModel!
     
-    var style: ZLPhotoBrowserStyle = .embedAlbumList
+    private var style: ZLPhotoBrowserStyle = .embedAlbumList
+    
+    lazy var selectBtn: UIButton = {
+        let btn = UIButton(type: .custom)
+        btn.isUserInteractionEnabled = false
+        btn.isHidden = true
+        btn.setImage(getImage("zl_albumSelect"), for: .selected)
+        return btn
+    }()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -49,9 +75,10 @@ class ZLAlbumListCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.setupUI()
+        setupUI()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -60,78 +87,57 @@ class ZLAlbumListCell: UITableViewCell {
         super.layoutSubviews()
         
         let imageViewX: CGFloat
-        if self.style == .embedAlbumList {
+        if style == .embedAlbumList {
             imageViewX = 0
         } else {
             imageViewX = 12
         }
         
-        self.coverImageView.frame = CGRect(x: imageViewX, y: 2, width: self.bounds.height-4, height: self.bounds.height-4)
-        if let m = self.model {
-            let titleW = min(self.bounds.width / 3 * 2, m.title.boundingRect(font: getFont(17), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width)
-            self.titleLabel.frame = CGRect(x: self.coverImageView.frame.maxX + 10, y: (self.bounds.height - 30)/2, width: titleW, height: 30)
+        coverImageView.frame = CGRect(x: imageViewX, y: 2, width: bounds.height - 4, height: bounds.height - 4)
+        if let m = model {
+            let titleW = min(bounds.width / 3 * 2, m.title.boundingRect(font: getFont(17), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width)
+            titleLabel.frame = CGRect(x: coverImageView.frame.maxX + 10, y: (bounds.height - 30) / 2, width: titleW, height: 30)
             
-            let countSize = ("(" + String(self.model.count) + ")").boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30))
-            self.countLabel.frame = CGRect(x: self.titleLabel.frame.maxX + 10, y: (self.bounds.height - 30)/2, width: countSize.width, height: 30)
+            let countSize = ("(" + String(model.count) + ")").boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30))
+            countLabel.frame = CGRect(x: titleLabel.frame.maxX + 10, y: (bounds.height - 30) / 2, width: countSize.width, height: 30)
         }
-        self.selectBtn.frame = CGRect(x: self.bounds.width - 20 - 20, y: (self.bounds.height - 20) / 2, width: 20, height: 20)
+        selectBtn.frame = CGRect(x: bounds.width - 20 - 20, y: (bounds.height - 20) / 2, width: 20, height: 20)
     }
     
     func setupUI() {
-        self.backgroundColor = .albumListBgColor
-        self.selectionStyle = .none
+        backgroundColor = .albumListBgColor
+        selectionStyle = .none
         
-        self.coverImageView = UIImageView()
-        self.coverImageView.contentMode = .scaleAspectFill
-        self.coverImageView.clipsToBounds = true
-        if ZLPhotoConfiguration.default().cellCornerRadio > 0 {
-            self.coverImageView.layer.masksToBounds = true
-            self.coverImageView.layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
-        }
-        self.contentView.addSubview(self.coverImageView)
-        
-        self.titleLabel = UILabel()
-        self.titleLabel.font = getFont(17)
-        self.titleLabel.textColor = .albumListTitleColor
-        self.titleLabel.lineBreakMode = .byTruncatingTail
-        self.contentView.addSubview(self.titleLabel)
-        
-        self.countLabel = UILabel()
-        self.countLabel.font = getFont(16)
-        self.countLabel.textColor = .albumListCountColor
-        self.contentView.addSubview(self.countLabel)
-        
-        self.selectBtn = UIButton(type: .custom)
-        self.selectBtn.isUserInteractionEnabled = false
-        self.selectBtn.isHidden = true
-        self.selectBtn.setImage(getImage("zl_albumSelect"), for: .selected)
-        self.contentView.addSubview(self.selectBtn)
+        contentView.addSubview(coverImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(countLabel)
+        contentView.addSubview(selectBtn)
     }
     
     func configureCell(model: ZLAlbumListModel, style: ZLPhotoBrowserStyle) {
         self.model = model
         self.style = style
         
-        self.titleLabel.text = self.model.title
-        self.countLabel.text = "(" + String(self.model.count) + ")"
+        titleLabel.text = self.model.title
+        countLabel.text = "(" + String(self.model.count) + ")"
         
         if style == .embedAlbumList {
-            self.accessoryType = .none
-            self.selectBtn.isHidden = false
+            accessoryType = .none
+            selectBtn.isHidden = false
         } else {
-            self.accessoryType = .disclosureIndicator
-            self.selectBtn.isHidden = true
+            accessoryType = .disclosureIndicator
+            selectBtn.isHidden = true
         }
         
-        self.imageIdentifier = self.model.headImageAsset?.localIdentifier
+        imageIdentifier = self.model.headImageAsset?.localIdentifier
         if let asset = self.model.headImageAsset {
-            let w = self.bounds.height * 2.5
-            ZLPhotoManager.fetchImage(for: asset, size: CGSize(width: w, height: w)) { [weak self] (image, _) in
+            let w = bounds.height * 2.5
+            ZLPhotoManager.fetchImage(for: asset, size: CGSize(width: w, height: w)) { [weak self] image, _ in
                 if self?.imageIdentifier == self?.model.headImageAsset?.localIdentifier {
                     self?.coverImageView.image = image ?? getImage("zl_defaultphoto")
                 }
             }
         }
     }
-
+    
 }

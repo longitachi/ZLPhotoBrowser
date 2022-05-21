@@ -24,34 +24,46 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
 import Photos
+import UIKit
 
 class ZLEmbedAlbumListView: UIView {
-
+    
     static let rowH: CGFloat = 60
     
-    var selectedAlbum: ZLAlbumListModel
+    private var selectedAlbum: ZLAlbumListModel
     
-    var tableBgView: UIView!
+    private lazy var tableBgView = UIView()
     
-    var tableView: UITableView!
+    private lazy var tableView: UITableView = {
+        let view = UITableView(frame: .zero, style: .plain)
+        view.backgroundColor = .albumListBgColor
+        view.tableFooterView = UIView()
+        view.rowHeight = ZLEmbedAlbumListView.rowH
+        view.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+        view.separatorColor = .separatorLineColor
+        view.delegate = self
+        view.dataSource = self
+        ZLAlbumListCell.zl_register(view)
+        return view
+    }()
     
-    var arrDataSource: [ZLAlbumListModel] = []
+    private var arrDataSource: [ZLAlbumListModel] = []
     
-    var selectAlbumBlock: ( (ZLAlbumListModel) -> Void )?
+    var selectAlbumBlock: ((ZLAlbumListModel) -> Void)?
     
-    var hideBlock: ( () -> Void )?
+    var hideBlock: (() -> Void)?
     
-    var orientation: UIInterfaceOrientation = UIApplication.shared.statusBarOrientation
+    private var orientation: UIInterfaceOrientation = UIApplication.shared.statusBarOrientation
     
     init(selectedAlbum: ZLAlbumListModel) {
         self.selectedAlbum = selectedAlbum
         super.init(frame: .zero)
-        self.setupUI()
-        self.loadAlbumList()
+        setupUI()
+        loadAlbumList()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -60,55 +72,43 @@ class ZLEmbedAlbumListView: UIView {
         super.layoutSubviews()
         let currOri = UIApplication.shared.statusBarOrientation
         
-        guard currOri != self.orientation else {
+        guard currOri != orientation else {
             return
         }
-        self.orientation = currOri
+        orientation = currOri
         
-        guard !self.isHidden else {
+        guard !isHidden else {
             return
         }
         
-        let bgFrame = self.calculateBgViewBounds()
+        let bgFrame = calculateBgViewBounds()
         
-        let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.frame.width, height: bgFrame.height), byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 8, height: 8))
-        self.tableBgView.layer.mask = nil
+        let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.width, height: bgFrame.height), byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 8, height: 8))
+        tableBgView.layer.mask = nil
         let maskLayer = CAShapeLayer()
         maskLayer.path = path.cgPath
-        self.tableBgView.layer.mask = maskLayer
+        tableBgView.layer.mask = maskLayer
         
-        self.tableBgView.frame = bgFrame
-        self.tableView.frame = self.tableBgView.bounds
+        tableBgView.frame = bgFrame
+        tableView.frame = tableBgView.bounds
     }
     
-    func setupUI() {
-        self.clipsToBounds = true
+    private func setupUI() {
+        clipsToBounds = true
         
-        self.backgroundColor = .embedAlbumListTranslucentColor
+        backgroundColor = .embedAlbumListTranslucentColor
         
-        self.tableBgView = UIView()
-        self.addSubview(self.tableBgView)
-        
-        self.tableView = UITableView(frame: .zero, style: .plain)
-        self.tableView.backgroundColor = .albumListBgColor
-        self.tableView.tableFooterView = UIView()
-        self.tableView.rowHeight = ZLEmbedAlbumListView.rowH
-        self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
-        self.tableView.separatorColor = .separatorLineColor
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableBgView.addSubview(self.tableView)
-        
-        ZLAlbumListCell.zl_register(self.tableView)
+        addSubview(tableBgView)
+        tableBgView.addSubview(tableView)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
         tap.delegate = self
-        self.addGestureRecognizer(tap)
+        addGestureRecognizer(tap)
     }
     
-    func loadAlbumList(completion: ( () -> Void )? = nil) {
+    private func loadAlbumList(completion: (() -> Void)? = nil) {
         DispatchQueue.global().async {
-            ZLPhotoManager.getPhotoAlbumList(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (albumList) in
+            ZLPhotoManager.getPhotoAlbumList(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] albumList in
                 self?.arrDataSource.removeAll()
                 self?.arrDataSource.append(contentsOf: albumList)
                 
@@ -120,39 +120,44 @@ class ZLEmbedAlbumListView: UIView {
         }
     }
     
-    func calculateBgViewBounds() -> CGRect {
-        let contentH = CGFloat(self.arrDataSource.count) * ZLEmbedAlbumListView.rowH
+    private func calculateBgViewBounds() -> CGRect {
+        let contentH = CGFloat(arrDataSource.count) * ZLEmbedAlbumListView.rowH
         
         let maxH: CGFloat
         if UIApplication.shared.statusBarOrientation.isPortrait {
-            maxH = min(self.frame.height * 0.7, contentH)
+            maxH = min(frame.height * 0.7, contentH)
         } else {
-            maxH = min(self.frame.height * 0.8, contentH)
+            maxH = min(frame.height * 0.8, contentH)
         }
         
-        return CGRect(x: 0, y: 0, width: self.frame.width, height: maxH)
+        return CGRect(x: 0, y: 0, width: frame.width, height: maxH)
+    }
+    
+    @objc private func tapAction(_ tap: UITapGestureRecognizer) {
+        hide()
+        hideBlock?()
     }
     
     /// 这里不采用监听相册发生变化的方式，是因为每次变化，系统都会回调多次，造成重复获取相册列表
     func show(reloadAlbumList: Bool) {
         func animateShow() {
-            let toFrame = self.calculateBgViewBounds()
+            let toFrame = calculateBgViewBounds()
             
-            self.isHidden = false
-            self.alpha = 0
+            isHidden = false
+            alpha = 0
             var newFrame = toFrame
             newFrame.origin.y -= newFrame.height
             
-            if newFrame != self.tableBgView.frame {
+            if newFrame != tableBgView.frame {
                 let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: newFrame.width, height: newFrame.height), byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 8, height: 8))
-                self.tableBgView.layer.mask = nil
+                tableBgView.layer.mask = nil
                 let maskLayer = CAShapeLayer()
                 maskLayer.path = path.cgPath
-                self.tableBgView.layer.mask = maskLayer
+                tableBgView.layer.mask = maskLayer
             }
             
-            self.tableBgView.frame = newFrame
-            self.tableView.frame = self.tableBgView.bounds
+            tableBgView.frame = newFrame
+            tableView.frame = tableBgView.bounds
             UIView.animate(withDuration: 0.25) {
                 self.alpha = 1
                 self.tableBgView.frame = toFrame
@@ -165,7 +170,7 @@ class ZLEmbedAlbumListView: UIView {
                     animateShow()
                 }
             } else {
-                self.loadAlbumList()
+                loadAlbumList()
                 animateShow()
             }
         } else {
@@ -174,59 +179,52 @@ class ZLEmbedAlbumListView: UIView {
     }
     
     func hide() {
-        var toFrame = self.tableBgView.frame
+        var toFrame = tableBgView.frame
         toFrame.origin.y = -toFrame.height
         
         UIView.animate(withDuration: 0.25, animations: {
             self.alpha = 0
             self.tableBgView.frame = toFrame
-        }) { (_) in
+        }) { _ in
             self.isHidden = true
             self.alpha = 1
         }
     }
     
-    @objc func tapAction(_ tap: UITapGestureRecognizer) {
-        self.hide()
-        self.hideBlock?()
-    }
-    
 }
-
 
 extension ZLEmbedAlbumListView: UIGestureRecognizerDelegate {
     
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        let p = gestureRecognizer.location(in: self)
-        return !self.tableBgView.frame.contains(p)
+        let point = gestureRecognizer.location(in: self)
+        return !tableBgView.frame.contains(point)
     }
     
 }
 
-
 extension ZLEmbedAlbumListView: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.arrDataSource.count
+        return arrDataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ZLAlbumListCell.zl_identifier(), for: indexPath) as! ZLAlbumListCell
         
-        let m = self.arrDataSource[indexPath.row]
+        let m = arrDataSource[indexPath.row]
         
         cell.configureCell(model: m, style: .embedAlbumList)
         
-        cell.selectBtn.isSelected = m == self.selectedAlbum
+        cell.selectBtn.isSelected = m == selectedAlbum
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let m = self.arrDataSource[indexPath.row]
-        self.selectedAlbum = m
-        self.selectAlbumBlock?(m)
-        self.hide()
+        let m = arrDataSource[indexPath.row]
+        selectedAlbum = m
+        selectAlbumBlock?(m)
+        hide()
         if let inx = tableView.indexPathsForVisibleRows {
             tableView.reloadRows(at: inx, with: .none)
         }

@@ -24,12 +24,12 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
 import Photos
+import UIKit
 
-extension ZLPhotoModel {
+public extension ZLPhotoModel {
     
-    public enum MediaType: Int {
+    enum MediaType: Int {
         case unknown = 0
         case image
         case gif
@@ -39,9 +39,8 @@ extension ZLPhotoModel {
     
 }
 
-
 public class ZLPhotoModel: NSObject {
-
+    
     public let ident: String
     
     public let asset: PHAsset
@@ -52,13 +51,14 @@ public class ZLPhotoModel: NSObject {
     
     public var isSelected: Bool = false
     
-    private var pri_editImage: UIImage? = nil
+    private var pri_editImage: UIImage?
+    
     public var editImage: UIImage? {
         set {
             pri_editImage = newValue
         }
         get {
-            if let _ = self.editImageModel {
+            if let _ = editImageModel {
                 return pri_editImage
             } else {
                 return nil
@@ -74,18 +74,18 @@ public class ZLPhotoModel: NSObject {
     }
     
     public var whRatio: CGFloat {
-        return CGFloat(self.asset.pixelWidth) / CGFloat(self.asset.pixelHeight)
+        return CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
     }
     
     public var previewSize: CGSize {
-        let scale: CGFloat = 2 //UIScreen.main.scale
-        if self.whRatio > 1 {
+        let scale: CGFloat = 2 // UIScreen.main.scale
+        if whRatio > 1 {
             let h = min(UIScreen.main.bounds.height, ZLMaxImageWidth) * scale
-            let w = h * self.whRatio
+            let w = h * whRatio
             return CGSize(width: w, height: h)
         } else {
             let w = min(UIScreen.main.bounds.width, ZLMaxImageWidth) * scale
-            let h = w / self.whRatio
+            let h = w / whRatio
             return CGSize(width: w, height: h)
         }
     }
@@ -94,13 +94,13 @@ public class ZLPhotoModel: NSObject {
     public var editImageModel: ZLEditImageModel?
     
     public init(asset: PHAsset) {
-        self.ident = asset.localIdentifier
+        ident = asset.localIdentifier
         self.asset = asset
         super.init()
         
-        self.type = self.transformAssetType(for: asset)
-        if self.type == .video {
-            self.duration = self.transformDuration(for: asset)
+        type = transformAssetType(for: asset)
+        if type == .video {
+            duration = transformDuration(for: asset)
         }
     }
     
@@ -127,9 +127,9 @@ public class ZLPhotoModel: NSObject {
         let dur = Int(round(asset.duration))
         
         switch dur {
-        case 0..<60:
+        case 0 ..< 60:
             return String(format: "00:%02d", dur)
-        case 60..<3600:
+        case 60 ..< 3600:
             let m = dur / 60
             let s = dur % 60
             return String(format: "%02d:%02d", m, s)
@@ -145,9 +145,9 @@ public class ZLPhotoModel: NSObject {
     
 }
 
-extension ZLPhotoModel {
+public extension ZLPhotoModel {
     
-    public static func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
+    static func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
         return lhs.ident == rhs.ident
     }
     

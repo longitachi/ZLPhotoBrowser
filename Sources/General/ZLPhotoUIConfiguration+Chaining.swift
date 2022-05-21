@@ -27,322 +27,323 @@
 import UIKit
 
 // MARK: chaining
-extension ZLPhotoUIConfiguration {
+
+public extension ZLPhotoUIConfiguration {
     
     @discardableResult
-    public func style(_ style: ZLPhotoBrowserStyle) -> ZLPhotoUIConfiguration {
+    func style(_ style: ZLPhotoBrowserStyle) -> ZLPhotoUIConfiguration {
         self.style = style
         return self
     }
     
     @discardableResult
-    public func statusBarStyle(_ statusBarStyle: UIStatusBarStyle) -> ZLPhotoUIConfiguration {
+    func statusBarStyle(_ statusBarStyle: UIStatusBarStyle) -> ZLPhotoUIConfiguration {
         self.statusBarStyle = statusBarStyle
         return self
     }
     
     @discardableResult
-    public func navCancelButtonStyle(_ style: ZLPhotoUIConfiguration.CancelButtonStyle) -> ZLPhotoUIConfiguration {
+    func navCancelButtonStyle(_ style: ZLPhotoUIConfiguration.CancelButtonStyle) -> ZLPhotoUIConfiguration {
         navCancelButtonStyle = style
         return self
     }
     
     @discardableResult
-    public func showStatusBarInPreviewInterface(_ value: Bool) -> ZLPhotoUIConfiguration {
+    func showStatusBarInPreviewInterface(_ value: Bool) -> ZLPhotoUIConfiguration {
         showStatusBarInPreviewInterface = value
         return self
     }
     
     @discardableResult
-    public func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
+    func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfAlbumList = effect
         return self
     }
     
     @discardableResult
-    public func navViewBlurEffectOfPreview(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
+    func navViewBlurEffectOfPreview(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfPreview = effect
         return self
     }
     
     @discardableResult
-    public func bottomViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
+    func bottomViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         bottomViewBlurEffectOfAlbumList = effect
         return self
     }
     
     @discardableResult
-    public func bottomViewBlurEffectOfPreview(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
+    func bottomViewBlurEffectOfPreview(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         bottomViewBlurEffectOfPreview = effect
         return self
     }
     
     @discardableResult
-    public func customImageNames(_ names: [String]) -> ZLPhotoUIConfiguration {
+    func customImageNames(_ names: [String]) -> ZLPhotoUIConfiguration {
         customImageNames = names
         return self
     }
     
     @discardableResult
-    public func customImageForKey(_ map: [String: UIImage?]) -> ZLPhotoUIConfiguration {
+    func customImageForKey(_ map: [String: UIImage?]) -> ZLPhotoUIConfiguration {
         customImageForKey = map
         return self
     }
     
     @discardableResult
-    public func languageType(_ type: ZLLanguageType) -> ZLPhotoUIConfiguration {
+    func languageType(_ type: ZLLanguageType) -> ZLPhotoUIConfiguration {
         languageType = type
         return self
     }
     
     @discardableResult
-    public func customLanguageKeyValue(_ map: [ZLLocalLanguageKey: String]) -> ZLPhotoUIConfiguration {
+    func customLanguageKeyValue(_ map: [ZLLocalLanguageKey: String]) -> ZLPhotoUIConfiguration {
         customLanguageKeyValue = map
         return self
     }
     
     @discardableResult
-    public func themeFontName(_ name: String) -> ZLPhotoUIConfiguration {
+    func themeFontName(_ name: String) -> ZLPhotoUIConfiguration {
         themeFontName = name
         return self
     }
     
     @discardableResult
-    public func sheetTranslucentColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func sheetTranslucentColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         sheetTranslucentColor = color
         return self
     }
     
     @discardableResult
-    public func sheetBtnBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func sheetBtnBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         sheetBtnBgColor = color
         return self
     }
     
     @discardableResult
-    public func sheetBtnTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func sheetBtnTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         sheetBtnTitleColor = color
         return self
     }
     
     @discardableResult
-    public func sheetBtnTitleTintColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func sheetBtnTitleTintColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         sheetBtnTitleTintColor = color
         return self
     }
     
     @discardableResult
-    public func navBarColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func navBarColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         navBarColor = color
         return self
     }
     
     @discardableResult
-    public func navBarColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func navBarColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         navBarColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func navTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func navTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         navTitleColor = color
         return self
     }
     
     @discardableResult
-    public func navTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func navTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         navTitleColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func navEmbedTitleViewBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func navEmbedTitleViewBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         navEmbedTitleViewBgColor = color
         return self
     }
     
     @discardableResult
-    public func albumListBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func albumListBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         albumListBgColor = color
         return self
     }
     
     @discardableResult
-    public func embedAlbumListTranslucentColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func embedAlbumListTranslucentColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         embedAlbumListTranslucentColor = color
         return self
     }
     
     @discardableResult
-    public func albumListTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func albumListTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         albumListTitleColor = color
         return self
     }
     
     @discardableResult
-    public func albumListCountColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func albumListCountColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         albumListCountColor = color
         return self
     }
     
     @discardableResult
-    public func separatorColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func separatorColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         separatorColor = color
         return self
     }
     
     @discardableResult
-    public func thumbnailBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func thumbnailBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         thumbnailBgColor = color
         return self
     }
     
     @discardableResult
-    public func previewVCBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func previewVCBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         previewVCBgColor = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBgColor = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBgColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnNormalTitleColor = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewDoneBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewDoneBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewDoneBtnNormalTitleColor = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnNormalTitleColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewDoneBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewDoneBtnNormalTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewDoneBtnNormalTitleColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnDisableTitleColor = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewDoneBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewDoneBtnDisableTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewDoneBtnDisableTitleColor = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnDisableTitleColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewDoneBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewDoneBtnDisableTitleColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewDoneBtnDisableTitleColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBtnNormalBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBtnNormalBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnNormalBgColor = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBtnNormalBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBtnNormalBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnNormalBgColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBtnDisableBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBtnDisableBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnDisableBgColor = color
         return self
     }
     
     @discardableResult
-    public func bottomToolViewBtnDisableBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func bottomToolViewBtnDisableBgColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnDisableBgColorOfPreviewVC = color
         return self
     }
     
     @discardableResult
-    public func selectMorePhotoWhenAuthIsLismitedTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func selectMorePhotoWhenAuthIsLismitedTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         selectMorePhotoWhenAuthIsLismitedTitleColor = color
         return self
     }
     
     @discardableResult
-    public func cameraRecodeProgressColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func cameraRecodeProgressColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         cameraRecodeProgressColor = color
         return self
     }
     
     @discardableResult
-    public func selectedMaskColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func selectedMaskColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         selectedMaskColor = color
         return self
     }
     
     @discardableResult
-    public func selectedBorderColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func selectedBorderColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         selectedBorderColor = color
         return self
     }
     
     @discardableResult
-    public func invalidMaskColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func invalidMaskColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         invalidMaskColor = color
         return self
     }
     
     @discardableResult
-    public func indexLabelTextColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func indexLabelTextColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         indexLabelTextColor = color
         return self
     }
     
     @discardableResult
-    public func indexLabelBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func indexLabelBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         indexLabelBgColor = color
         return self
     }
     
     @discardableResult
-    public func cameraCellBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func cameraCellBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         cameraCellBgColor = color
         return self
     }
     
     @discardableResult
-    public func adjustSliderNormalColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func adjustSliderNormalColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         adjustSliderNormalColor = color
         return self
     }
     
     @discardableResult
-    public func adjustSliderTintColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+    func adjustSliderTintColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         adjustSliderTintColor = color
         return self
     }

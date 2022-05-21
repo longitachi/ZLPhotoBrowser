@@ -46,7 +46,6 @@ import Foundation
 }
 
 public struct ZLLocalLanguageKey: Hashable {
-    
     public let rawValue: String
     
     public init(rawValue: String) {
@@ -231,7 +230,6 @@ public struct ZLLocalLanguageKey: Hashable {
     
     /// Drag here to remove (拖到此处删除)
     public static let textStickerRemoveTips = ZLLocalLanguageKey(rawValue: "textStickerRemoveTips")
-    
 }
 
 func localLanguageTextValue(_ key: ZLLocalLanguageKey) -> String {

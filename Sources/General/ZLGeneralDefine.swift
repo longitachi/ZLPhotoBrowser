@@ -28,8 +28,7 @@ import UIKit
 
 let ZLMaxImageWidth: CGFloat = 600
 
-struct ZLLayout {
-    
+enum ZLLayout {
     static let navTitleFont = getFont(17)
     
     static let bottomToolViewH: CGFloat = 55
@@ -45,7 +44,6 @@ struct ZLLayout {
     static let thumbCollectionViewItemSpacing: CGFloat = 2
     
     static let thumbCollectionViewLineSpacing: CGFloat = 2
-    
 }
 
 func zlRGB(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) -> UIColor {
@@ -87,7 +85,7 @@ func markSelected(source: inout [ZLPhotoModel], selected: inout [ZLPhotoModel]) 
         selIdAndIndex[m.ident] = index
     }
     
-    source.forEach { (m) in
+    source.forEach { m in
         if selIds[m.ident] == true {
             m.isSelected = true
             m.editImage = selEditImage[m.ident]
@@ -164,7 +162,7 @@ func showAlertView(_ message: String, _ sender: UIViewController?) {
 }
 
 func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
-    guard (ZLPhotoConfiguration.default().canSelectAsset?(model.asset) ?? true) else {
+    guard ZLPhotoConfiguration.default().canSelectAsset?(model.asset) ?? true else {
         return false
     }
     

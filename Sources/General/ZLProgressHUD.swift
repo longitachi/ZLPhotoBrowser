@@ -27,15 +27,11 @@
 import UIKit
 
 public class ZLProgressHUD: UIView {
-
+    
     @objc public enum HUDStyle: Int {
-        
         case light
-        
         case lightBlur
-        
         case dark
-        
         case darkBlur
         
         func bgColor() -> UIColor {
@@ -77,14 +73,13 @@ public class ZLProgressHUD: UIView {
                 return .dark
             }
         }
-        
     }
     
-    let style: ZLProgressHUD.HUDStyle
+    private let style: ZLProgressHUD.HUDStyle
     
-    var timeoutBlock: ( () -> Void )?
+    private var timer: Timer?
     
-    var timer: Timer?
+    var timeoutBlock: (() -> Void)?
     
     deinit {
         self.cleanTimer()
@@ -93,42 +88,43 @@ public class ZLProgressHUD: UIView {
     @objc public init(style: ZLProgressHUD.HUDStyle) {
         self.style = style
         super.init(frame: UIScreen.main.bounds)
-        self.setupUI()
+        setupUI()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupUI() {
+    private func setupUI() {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 110, height: 90))
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 5.0
-        view.backgroundColor = self.style.bgColor()
+        view.backgroundColor = style.bgColor()
         view.clipsToBounds = true
         view.alpha = 0.8
-        view.center = self.center
+        view.center = center
         
-        if self.style == .lightBlur || self.style == .darkBlur {
-            let effect = UIBlurEffect(style: self.style.blurEffectStyle()!)
+        if style == .lightBlur || style == .darkBlur {
+            let effect = UIBlurEffect(style: style.blurEffectStyle()!)
             let effectView = UIVisualEffectView(effect: effect)
             effectView.frame = view.bounds
             view.addSubview(effectView)
         }
         
-        let indicator = UIActivityIndicatorView(style: self.style.indicatorStyle())
-        indicator.frame = CGRect(x: (view.bounds.width - indicator.bounds.width)/2, y: 18, width: indicator.bounds.width, height: indicator.bounds.height)
+        let indicator = UIActivityIndicatorView(style: style.indicatorStyle())
+        indicator.frame = CGRect(x: (view.bounds.width - indicator.bounds.width) / 2, y: 18, width: indicator.bounds.width, height: indicator.bounds.height)
         indicator.startAnimating()
         view.addSubview(indicator)
         
         let label = UILabel(frame: CGRect(x: 0, y: 50, width: view.bounds.width, height: 30))
         label.textAlignment = .center
-        label.textColor = self.style.textColor()
+        label.textColor = style.textColor()
         label.font = getFont(16)
         label.text = localLanguageTextValue(.hudLoading)
         view.addSubview(label)
         
-        self.addSubview(view)
+        addSubview(view)
     }
     
     @objc public func show(timeout: TimeInterval = 100) {
@@ -136,27 +132,27 @@ public class ZLProgressHUD: UIView {
             UIApplication.shared.keyWindow?.addSubview(self)
         }
         if timeout > 0 {
-            self.cleanTimer()
-            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: ZLWeakProxy(target: self), selector: #selector(timeout(_:)), userInfo: nil, repeats: false)
-            RunLoop.current.add(self.timer!, forMode: .default)
+            cleanTimer()
+            timer = Timer.scheduledTimer(timeInterval: timeout, target: ZLWeakProxy(target: self), selector: #selector(timeout(_:)), userInfo: nil, repeats: false)
+            RunLoop.current.add(timer!, forMode: .default)
         }
     }
     
     @objc public func hide() {
-        self.cleanTimer()
+        cleanTimer()
         ZLMainAsync {
             self.removeFromSuperview()
         }
     }
     
     @objc func timeout(_ timer: Timer) {
-        self.timeoutBlock?()
-        self.hide()
+        timeoutBlock?()
+        hide()
     }
     
     func cleanTimer() {
-        self.timer?.invalidate()
-        self.timer = nil
+        timer?.invalidate()
+        timer = nil
     }
     
 }

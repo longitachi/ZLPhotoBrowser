@@ -24,13 +24,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
 import Photos
+import UIKit
 
 public typealias Second = Int
 
 public class ZLPhotoConfiguration: NSObject {
-
+    
     private static var single = ZLPhotoConfiguration()
     
     @objc public class func `default`() -> ZLPhotoConfiguration {
@@ -294,7 +294,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// This block will be called before selecting an image, the developer can first determine whether the asset is allowed to be selected.
     /// Only control whether it is allowed to be selected, and will not affect the selection logic in the framework.
     /// - Tips: If the choice is not allowed, the developer can toast prompt the user for relevant information.
-    @objc public var canSelectAsset: ( (PHAsset) -> Bool )?
+    @objc public var canSelectAsset: ((PHAsset) -> Bool)?
     
     /// If user choose limited Photo mode, a button with '+' will be added to the ZLThumbnailViewController. It will call PHPhotoLibrary.shared().presentLimitedLibraryPicker(from:) to add photo. Defaults to true.
     /// E.g., Sina Weibo's ImagePicker
@@ -322,10 +322,8 @@ public class ZLPhotoConfiguration: NSObject {
 }
 
 /// Language deploy
-struct ZLCustomLanguageDeploy {
-    
+enum ZLCustomLanguageDeploy {
     static var language: ZLLanguageType = .system
     
     static var deploy: [ZLLocalLanguageKey: String] = [:]
-    
 }

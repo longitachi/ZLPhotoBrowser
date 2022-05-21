@@ -24,53 +24,109 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
 import AVFoundation
+import UIKit
 
 class ZLCameraCell: UICollectionViewCell {
     
-    var imageView: UIImageView!
+    private lazy var imageView: UIImageView = {
+        let view = UIImageView(image: getImage("zl_takePhoto"))
+        view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
+        return view
+    }()
     
-    var session: AVCaptureSession?
+    private var session: AVCaptureSession?
     
-    var videoInput: AVCaptureDeviceInput?
+    private var videoInput: AVCaptureDeviceInput?
     
-    var photoOutput: AVCapturePhotoOutput?
+    private var photoOutput: AVCapturePhotoOutput?
     
-    var previewLayer: AVCaptureVideoPreviewLayer?
+    private var previewLayer: AVCaptureVideoPreviewLayer?
     
     deinit {
-        self.session?.stopRunning()
-        self.session = nil
+        session?.stopRunning()
+        session = nil
         zl_debugPrint("ZLCameraCell deinit")
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setupUI()
+        setupUI()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.imageView.frame = CGRect(x: 0, y: 0, width: self.bounds.width / 3, height: self.bounds.width / 3)
-        self.imageView.center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
         
-        self.previewLayer?.frame = self.contentView.layer.bounds
+        imageView.frame = CGRect(x: 0, y: 0, width: bounds.width / 3, height: bounds.width / 3)
+        imageView.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        
+        previewLayer?.frame = contentView.layer.bounds
     }
     
-    func setupUI() {
-        self.layer.masksToBounds = true
-        self.layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
+    private func setupUI() {
+        layer.masksToBounds = true
+        layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
         
-        self.imageView = UIImageView(image: getImage("zl_takePhoto"))
-        self.imageView.contentMode = .scaleAspectFit
-        self.imageView.clipsToBounds = true
-        self.contentView.addSubview(self.imageView)
-        self.backgroundColor = .cameraCellBgColor
+        contentView.addSubview(imageView)
+        backgroundColor = .cameraCellBgColor
+    }
+    
+    private func setupSession() {
+        guard session == nil, (session?.isRunning ?? false) == false else {
+            return
+        }
+        session?.stopRunning()
+        if let input = videoInput {
+            session?.removeInput(input)
+        }
+        if let output = photoOutput {
+            session?.removeOutput(output)
+        }
+        session = nil
+        previewLayer?.removeFromSuperlayer()
+        previewLayer = nil
+        
+        guard let camera = backCamera() else {
+            return
+        }
+        guard let input = try? AVCaptureDeviceInput(device: camera) else {
+            return
+        }
+        videoInput = input
+        photoOutput = AVCapturePhotoOutput()
+        
+        session = AVCaptureSession()
+        
+        if session?.canAddInput(input) == true {
+            session?.addInput(input)
+        }
+        if session?.canAddOutput(photoOutput!) == true {
+            session?.addOutput(photoOutput!)
+        }
+        
+        previewLayer = AVCaptureVideoPreviewLayer(session: session!)
+        contentView.layer.masksToBounds = true
+        previewLayer?.frame = contentView.layer.bounds
+        previewLayer?.videoGravity = .resizeAspectFill
+        contentView.layer.insertSublayer(previewLayer!, at: 0)
+        
+        session?.startRunning()
+    }
+    
+    private func backCamera() -> AVCaptureDevice? {
+        let devices = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back).devices
+        for device in devices {
+            if device.position == .back {
+                return device
+            }
+        }
+        return nil
     }
     
     func startCapture() {
@@ -81,7 +137,7 @@ class ZLCameraCell: UICollectionViewCell {
         }
         
         if status == .notDetermined {
-            AVCaptureDevice.requestAccess(for: .video) { (granted) in
+            AVCaptureDevice.requestAccess(for: .video) { granted in
                 if granted {
                     ZLMainAsync {
                         self.setupSession()
@@ -89,65 +145,8 @@ class ZLCameraCell: UICollectionViewCell {
                 }
             }
         } else {
-            self.setupSession()
+            setupSession()
         }
     }
-    
-    func setupSession() {
-        guard self.session == nil, (self.session?.isRunning ?? false) == false else {
-            return
-        }
-        self.session?.stopRunning()
-        if let input = self.videoInput {
-            self.session?.removeInput(input)
-        }
-        if let output = self.photoOutput {
-            self.session?.removeOutput(output)
-        }
-        self.session = nil
-        self.previewLayer?.removeFromSuperlayer()
-        self.previewLayer = nil
-        
-        guard let camera = self.backCamera() else {
-            return
-        }
-        guard let input = try? AVCaptureDeviceInput(device: camera) else {
-            return
-        }
-        self.videoInput = input
-        self.photoOutput = AVCapturePhotoOutput()
-        
-        self.session = AVCaptureSession()
-        
-        if self.session?.canAddInput(input) == true {
-            self.session?.addInput(input)
-        }
-        if self.session?.canAddOutput(self.photoOutput!) == true {
-            self.session?.addOutput(self.photoOutput!)
-        }
-        
-        self.previewLayer = AVCaptureVideoPreviewLayer(session: self.session!)
-        self.contentView.layer.masksToBounds = true
-        self.previewLayer?.frame = self.contentView.layer.bounds
-        self.previewLayer?.videoGravity = .resizeAspectFill
-        self.contentView.layer.insertSublayer(self.previewLayer!, at: 0)
-        
-        self.session?.startRunning()
-    }
-    
-    func backCamera() -> AVCaptureDevice? {
-        let devices = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back).devices
-        for device in devices {
-            if device.position == .back {
-                return device
-            }
-        }
-        return nil
-    }
-    
-}
-
-
-extension ZLCameraCell: AVCapturePhotoCaptureDelegate {
     
 }

@@ -24,52 +24,89 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
 import Photos
+import UIKit
 
 class ZLThumbnailPhotoCell: UICollectionViewCell {
     
-    var imageView: UIImageView!
+    private lazy var bottomShadowView = UIImageView(image: getImage("zl_shadow"))
     
-    var btnSelect: ZLEnlargeButton!
+    private lazy var videoTag = UIImageView(image: getImage("zl_video"))
     
-    var bottomShadowView: UIImageView!
+    private lazy var livePhotoTag = UIImageView(image: getImage("zl_livePhoto"))
     
-    var videoTag: UIImageView!
+    private lazy var editImageTag = UIImageView(image: getImage("zl_editImage_tag"))
     
-    var livePhotoTag: UIImageView!
+    private lazy var descLabel: UILabel = {
+        let label = UILabel()
+        label.font = getFont(13)
+        label.textAlignment = .right
+        label.textColor = .white
+        return label
+    }()
     
-    var editImageTag: UIImageView!
+    private lazy var progressView: ZLProgressView = {
+        let view = ZLProgressView()
+        view.isHidden = true
+        return view
+    }()
     
-    var descLabel: UILabel!
+    private var imageIdentifier: String = ""
     
-    var coverView: UIView!
+    private var smallImageRequestID: PHImageRequestID = PHInvalidImageRequestID
     
-    var indexLabel: UILabel!
+    private var bigImageReqeustID: PHImageRequestID = PHInvalidImageRequestID
+    
+    lazy var imageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        return view
+    }()
+    
+    lazy var btnSelect: ZLEnlargeButton = {
+        let btn = ZLEnlargeButton(type: .custom)
+        btn.setBackgroundImage(getImage("zl_btn_unselected"), for: .normal)
+        btn.setBackgroundImage(getImage("zl_btn_selected"), for: .selected)
+        btn.addTarget(self, action: #selector(btnSelectClick), for: .touchUpInside)
+        btn.enlargeInsets = UIEdgeInsets(top: 5, left: 20, bottom: 20, right: 5)
+        return btn
+    }()
+    
+    lazy var coverView: UIView = {
+        let view = UIView()
+        view.isUserInteractionEnabled = false
+        view.isHidden = true
+        return view
+    }()
+    
+    lazy var indexLabel: UILabel = {
+        let label = UILabel()
+        label.layer.cornerRadius = 23.0 / 2
+        label.layer.masksToBounds = true
+        label.textColor = .white
+        label.font = getFont(14)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.textAlignment = .center
+        return label
+    }()
     
     var enableSelect: Bool = true
     
-    var progressView: ZLProgressView!
-    
-    var selectedBlock: ( (Bool) -> Void )?
+    var selectedBlock: ((Bool) -> Void)?
     
     var model: ZLPhotoModel! {
         didSet {
-            self.configureCell()
+            configureCell()
         }
     }
     
     var index: Int = 0 {
         didSet {
-            self.indexLabel.text = String(index)
+            indexLabel.text = String(index)
         }
     }
-    
-    var imageIdentifier: String = ""
-    
-    var smallImageRequestID: PHImageRequestID = PHInvalidImageRequestID
-    
-    var bigImageReqeustID: PHImageRequestID = PHInvalidImageRequestID
     
     deinit {
         zl_debugPrint("ZLThumbnailPhotoCell deinit")
@@ -77,143 +114,106 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setupUI()
+        setupUI()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func setupUI() {
-        self.imageView = UIImageView()
-        self.imageView.contentMode = .scaleAspectFill
-        self.imageView.clipsToBounds = true
-        self.contentView.addSubview(self.imageView)
-        
-        self.coverView = UIView()
-        self.coverView.isUserInteractionEnabled = false
-        self.coverView.isHidden = true
-        self.contentView.addSubview(self.coverView)
-        
-        self.btnSelect = ZLEnlargeButton(type: .custom)
-        self.btnSelect.setBackgroundImage(getImage("zl_btn_unselected"), for: .normal)
-        self.btnSelect.setBackgroundImage(getImage("zl_btn_selected"), for: .selected)
-        self.btnSelect.addTarget(self, action: #selector(btnSelectClick), for: .touchUpInside)
-        self.btnSelect.enlargeInsets = UIEdgeInsets(top: 5, left: 20, bottom: 20, right: 5)
-        self.contentView.addSubview(self.btnSelect)
-        
-        self.indexLabel = UILabel()
-        self.indexLabel.layer.cornerRadius = 23.0 / 2
-        self.indexLabel.layer.masksToBounds = true
-        self.indexLabel.textColor = .white
-        self.indexLabel.font = getFont(14)
-        self.indexLabel.adjustsFontSizeToFitWidth = true
-        self.indexLabel.minimumScaleFactor = 0.5
-        self.indexLabel.textAlignment = .center
-        self.btnSelect.addSubview(self.indexLabel)
-        
-        self.bottomShadowView = UIImageView(image: getImage("zl_shadow"))
-        self.contentView.addSubview(self.bottomShadowView)
-        
-        self.videoTag = UIImageView(image: getImage("zl_video"))
-        self.bottomShadowView.addSubview(self.videoTag)
-        
-        self.livePhotoTag = UIImageView(image: getImage("zl_livePhoto"))
-        self.bottomShadowView.addSubview(self.livePhotoTag)
-        
-        self.editImageTag = UIImageView(image: getImage("zl_editImage_tag"))
-        self.bottomShadowView.addSubview(self.editImageTag)
-        
-        self.descLabel = UILabel()
-        self.descLabel.font = getFont(13)
-        self.descLabel.textAlignment = .right
-        self.descLabel.textColor = .white
-        self.bottomShadowView.addSubview(self.descLabel)
-        
-        self.progressView = ZLProgressView()
-        self.progressView.isHidden = true
-        self.contentView.addSubview(self.progressView)
+        contentView.addSubview(imageView)
+        contentView.addSubview(coverView)
+        contentView.addSubview(btnSelect)
+        btnSelect.addSubview(indexLabel)
+        contentView.addSubview(bottomShadowView)
+        bottomShadowView.addSubview(videoTag)
+        bottomShadowView.addSubview(livePhotoTag)
+        bottomShadowView.addSubview(editImageTag)
+        bottomShadowView.addSubview(descLabel)
+        contentView.addSubview(progressView)
         
         if ZLPhotoConfiguration.default().showSelectedBorder {
-            self.layer.borderColor = UIColor.selectedBorderColor.cgColor
+            layer.borderColor = UIColor.selectedBorderColor.cgColor
         }
     }
     
     override func layoutSubviews() {
-        self.imageView.frame = self.bounds
-        self.coverView.frame = self.bounds
-        self.btnSelect.frame = CGRect(x: self.bounds.width - 30, y: 8, width: 23, height: 23)
-        self.indexLabel.frame = self.btnSelect.bounds
-        self.bottomShadowView.frame = CGRect(x: 0, y: self.bounds.height - 25, width: self.bounds.width, height: 25)
-        self.videoTag.frame = CGRect(x: 5, y: 1, width: 20, height: 15)
-        self.livePhotoTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
-        self.editImageTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
-        self.descLabel.frame = CGRect(x: 30, y: 1, width: self.bounds.width - 35, height: 17)
-        self.progressView.frame = CGRect(x: (self.bounds.width - 20)/2, y: (self.bounds.height - 20)/2, width: 20, height: 20)
+        imageView.frame = bounds
+        coverView.frame = bounds
+        btnSelect.frame = CGRect(x: bounds.width - 30, y: 8, width: 23, height: 23)
+        indexLabel.frame = btnSelect.bounds
+        bottomShadowView.frame = CGRect(x: 0, y: bounds.height - 25, width: bounds.width, height: 25)
+        videoTag.frame = CGRect(x: 5, y: 1, width: 20, height: 15)
+        livePhotoTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
+        editImageTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
+        descLabel.frame = CGRect(x: 30, y: 1, width: bounds.width - 35, height: 17)
+        progressView.frame = CGRect(x: (bounds.width - 20) / 2, y: (bounds.height - 20) / 2, width: 20, height: 20)
         
         super.layoutSubviews()
     }
     
     @objc func btnSelectClick() {
-        if !self.enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
+        if !enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
             return
         }
         
-        self.btnSelect.layer.removeAllAnimations()
-        if !self.btnSelect.isSelected, ZLPhotoConfiguration.default().animateSelectBtnWhenSelect {
-            self.btnSelect.layer.add(getSpringAnimation(), forKey: nil)
+        btnSelect.layer.removeAllAnimations()
+        if !btnSelect.isSelected, ZLPhotoConfiguration.default().animateSelectBtnWhenSelect {
+            btnSelect.layer.add(getSpringAnimation(), forKey: nil)
         }
         
-        self.selectedBlock?(self.btnSelect.isSelected)
+        selectedBlock?(btnSelect.isSelected)
         
-        if self.btnSelect.isSelected {
-            self.fetchBigImage()
+        if btnSelect.isSelected {
+            fetchBigImage()
         } else {
-            self.progressView.isHidden = true
-            self.cancelFetchBigImage()
+            progressView.isHidden = true
+            cancelFetchBigImage()
         }
     }
     
-    func configureCell() {
+    private func configureCell() {
         if ZLPhotoConfiguration.default().cellCornerRadio > 0 {
-            self.layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
-            self.layer.masksToBounds = true
+            layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
+            layer.masksToBounds = true
         }
         
-        if self.model.type == .video {
-            self.bottomShadowView.isHidden = false
-            self.videoTag.isHidden = false
-            self.livePhotoTag.isHidden = true
-            self.editImageTag.isHidden = true
-            self.descLabel.text = self.model.duration
-        } else if self.model.type == .gif {
-            self.bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectGif
-            self.videoTag.isHidden = true
-            self.livePhotoTag.isHidden = true
-            self.editImageTag.isHidden = true
-            self.descLabel.text = "GIF"
-        } else if self.model.type == .livePhoto {
-            self.bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectLivePhoto
-            self.videoTag.isHidden = true
-            self.livePhotoTag.isHidden = false
-            self.editImageTag.isHidden = true
-            self.descLabel.text = "Live"
+        if model.type == .video {
+            bottomShadowView.isHidden = false
+            videoTag.isHidden = false
+            livePhotoTag.isHidden = true
+            editImageTag.isHidden = true
+            descLabel.text = model.duration
+        } else if model.type == .gif {
+            bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectGif
+            videoTag.isHidden = true
+            livePhotoTag.isHidden = true
+            editImageTag.isHidden = true
+            descLabel.text = "GIF"
+        } else if model.type == .livePhoto {
+            bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectLivePhoto
+            videoTag.isHidden = true
+            livePhotoTag.isHidden = false
+            editImageTag.isHidden = true
+            descLabel.text = "Live"
         } else {
-            if let _ = self.model.editImage {
-                self.bottomShadowView.isHidden = false
-                self.videoTag.isHidden = true
-                self.livePhotoTag.isHidden = true
-                self.editImageTag.isHidden = false
-                self.descLabel.text = ""
+            if let _ = model.editImage {
+                bottomShadowView.isHidden = false
+                videoTag.isHidden = true
+                livePhotoTag.isHidden = true
+                editImageTag.isHidden = false
+                descLabel.text = ""
             } else {
-                self.bottomShadowView.isHidden = true
+                bottomShadowView.isHidden = true
             }
         }
         
         let showSelBtn: Bool
         if ZLPhotoConfiguration.default().maxSelectCount > 1 {
             if !ZLPhotoConfiguration.default().allowMixSelect {
-                showSelBtn = self.model.type.rawValue < ZLPhotoModel.MediaType.video.rawValue
+                showSelBtn = model.type.rawValue < ZLPhotoModel.MediaType.video.rawValue
             } else {
                 showSelBtn = true
             }
@@ -221,43 +221,43 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             showSelBtn = ZLPhotoConfiguration.default().showSelectBtnWhenSingleSelect
         }
         
-        self.btnSelect.isHidden = !showSelBtn
-        self.btnSelect.isUserInteractionEnabled = showSelBtn
-        self.btnSelect.isSelected = self.model.isSelected
+        btnSelect.isHidden = !showSelBtn
+        btnSelect.isUserInteractionEnabled = showSelBtn
+        btnSelect.isSelected = model.isSelected
         
-        self.indexLabel.backgroundColor = .indexLabelBgColor
+        indexLabel.backgroundColor = .indexLabelBgColor
         
-        if self.model.isSelected {
-            self.fetchBigImage()
+        if model.isSelected {
+            fetchBigImage()
         } else {
-            self.cancelFetchBigImage()
+            cancelFetchBigImage()
         }
         
-        if let ei = self.model.editImage {
-            self.imageView.image = ei
+        if let ei = model.editImage {
+            imageView.image = ei
         } else {
-            self.fetchSmallImage()
+            fetchSmallImage()
         }
     }
     
-    func fetchSmallImage() {
+    private func fetchSmallImage() {
         let size: CGSize
-        let maxSideLength = self.bounds.width * 1.2
-        if self.model.whRatio > 1 {
-            let w = maxSideLength * self.model.whRatio
+        let maxSideLength = bounds.width * 1.2
+        if model.whRatio > 1 {
+            let w = maxSideLength * model.whRatio
             size = CGSize(width: w, height: maxSideLength)
         } else {
-            let h = maxSideLength / self.model.whRatio
+            let h = maxSideLength / model.whRatio
             size = CGSize(width: maxSideLength, height: h)
         }
         
-        if self.smallImageRequestID > PHInvalidImageRequestID {
-            PHImageManager.default().cancelImageRequest(self.smallImageRequestID)
+        if smallImageRequestID > PHInvalidImageRequestID {
+            PHImageManager.default().cancelImageRequest(smallImageRequestID)
         }
         
-        self.imageIdentifier = self.model.ident
-        self.imageView.image = nil
-        self.smallImageRequestID = ZLPhotoManager.fetchImage(for: self.model.asset, size: size, completion: { [weak self] (image, isDegraded) in
+        imageIdentifier = model.ident
+        imageView.image = nil
+        smallImageRequestID = ZLPhotoManager.fetchImage(for: model.asset, size: size, completion: { [weak self] image, isDegraded in
             if self?.imageIdentifier == self?.model.ident {
                 self?.imageView.image = image
             }
@@ -267,10 +267,10 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         })
     }
     
-    func fetchBigImage() {
-        self.cancelFetchBigImage()
+    private func fetchBigImage() {
+        cancelFetchBigImage()
         
-        self.bigImageReqeustID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset, progress: { [weak self] (progress, error, _, _) in
+        bigImageReqeustID = ZLPhotoManager.fetchOriginalImageData(for: model.asset, progress: { [weak self] progress, _, _, _ in
             if self?.model.isSelected == true {
                 self?.progressView.isHidden = false
                 self?.progressView.progress = max(0.1, progress)
@@ -281,21 +281,21 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             } else {
                 self?.cancelFetchBigImage()
             }
-        }, completion: { [weak self] (_, _, _) in
+        }, completion: { [weak self] _, _, _ in
             self?.resetProgressViewStatus()
         })
     }
     
-    func cancelFetchBigImage() {
-        if self.bigImageReqeustID > PHInvalidImageRequestID {
-            PHImageManager.default().cancelImageRequest(self.bigImageReqeustID)
+    private func cancelFetchBigImage() {
+        if bigImageReqeustID > PHInvalidImageRequestID {
+            PHImageManager.default().cancelImageRequest(bigImageReqeustID)
         }
-        self.resetProgressViewStatus()
+        resetProgressViewStatus()
     }
     
-    func resetProgressViewStatus() {
-        self.progressView.isHidden = true
-        self.imageView.alpha = 1
+    private func resetProgressViewStatus() {
+        progressView.isHidden = true
+        imageView.alpha = 1
     }
     
 }

@@ -24,20 +24,36 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
 import Photos
+import UIKit
 
-class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    lazy var navView = ZLExternalAlbumListNavView(title: localLanguageTextValue(.photo))
+class ZLAlbumListController: UIViewController {
     
-    var navBlurView: UIVisualEffectView?
+    private lazy var navView = ZLExternalAlbumListNavView(title: localLanguageTextValue(.photo))
     
-    lazy var tableView = UITableView(frame: .zero, style: .plain)
+    private var navBlurView: UIVisualEffectView?
     
-    var arrDataSource: [ZLAlbumListModel] = []
+    private lazy var tableView: UITableView = {
+        let view = UITableView(frame: .zero, style: .plain)
+        view.backgroundColor = .albumListBgColor
+        view.tableFooterView = UIView()
+        view.rowHeight = 65
+        view.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
+        view.separatorColor = .separatorLineColor
+        view.delegate = self
+        view.dataSource = self
+        
+        if #available(iOS 11.0, *) {
+            view.contentInsetAdjustmentBehavior = .always
+        }
+        
+        ZLAlbumListCell.zl_register(view)
+        return view
+    }()
     
-    var shouldReloadAlbumList = true
+    private var arrDataSource: [ZLAlbumListModel] = []
+    
+    private var shouldReloadAlbumList = true
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return ZLPhotoUIConfiguration.default().statusBarStyle
@@ -63,7 +79,7 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         DispatchQueue.global().async {
-            ZLPhotoManager.getPhotoAlbumList(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (albumList) in
+            ZLPhotoManager.getPhotoAlbumList(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] albumList in
                 self?.arrDataSource.removeAll()
                 self?.arrDataSource.append(contentsOf: albumList)
                 
@@ -96,23 +112,10 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         tableView.scrollIndicatorInsets = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
     }
     
-    func setupUI() {
+    private func setupUI() {
         view.backgroundColor = .albumListBgColor
         
-        tableView.backgroundColor = .albumListBgColor
-        tableView.tableFooterView = UIView()
-        tableView.rowHeight = 65
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
-        tableView.separatorColor = .separatorLineColor
-        tableView.delegate = self
-        tableView.dataSource = self
         view.addSubview(tableView)
-        
-        ZLAlbumListCell.zl_register(self.tableView)
-        
-        if #available(iOS 11.0, *) {
-            tableView.contentInsetAdjustmentBehavior = .always
-        }
         
         navView.backBtn.isHidden = true
         navView.cancelBlock = { [weak self] in
@@ -122,7 +125,11 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         }
         view.addSubview(navView)
     }
+    
+}
 
+extension ZLAlbumListController: UITableViewDataSource, UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrDataSource.count
     }
@@ -139,9 +146,8 @@ class ZLAlbumListController: UIViewController, UITableViewDataSource, UITableVie
         let vc = ZLThumbnailViewController(albumList: arrDataSource[indexPath.row])
         show(vc, sender: nil)
     }
-
+    
 }
-
 
 extension ZLAlbumListController: PHPhotoLibraryChangeObserver {
     

@@ -24,13 +24,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
 import Photos
+import UIKit
 
 public class ZLPhotoManager: NSObject {
-
+    
     /// Save image to album.
-    @objc public class func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)? ) {
+    @objc public class func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()
         
         if status == .denied || status == .restricted {
@@ -38,11 +38,11 @@ public class ZLPhotoManager: NSObject {
             return
         }
         
-        var placeholderAsset: PHObjectPlaceholder? = nil
+        var placeholderAsset: PHObjectPlaceholder?
         PHPhotoLibrary.shared().performChanges({
             let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
             placeholderAsset = newAssetRequest.placeholderForCreatedAsset
-        }) { (suc, error) in
+        }) { suc, _ in
             ZLMainAsync {
                 if suc {
                     let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
@@ -55,7 +55,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Save video to album.
-    @objc public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void )?) {
+    @objc public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()
         
         if status == .denied || status == .restricted {
@@ -63,11 +63,11 @@ public class ZLPhotoManager: NSObject {
             return
         }
         
-        var placeholderAsset: PHObjectPlaceholder? = nil
+        var placeholderAsset: PHObjectPlaceholder?
         PHPhotoLibrary.shared().performChanges({
             let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
             placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
-        }) { (suc, error) in
+        }) { suc, _ in
             ZLMainAsync {
                 if suc {
                     let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
@@ -84,7 +84,7 @@ public class ZLPhotoManager: NSObject {
             return nil
         }
         let result = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil)
-        if result.count > 0{
+        if result.count > 0 {
             return result[0]
         }
         return nil
@@ -96,7 +96,7 @@ public class ZLPhotoManager: NSObject {
         let option: NSEnumerationOptions = ascending ? .init(rawValue: 0) : .reverse
         var count = 1
         
-        result.enumerateObjects(options: option) { (asset, index, stop) in
+        result.enumerateObjects(options: option) { asset, _, stop in
             let m = ZLPhotoModel(asset: asset)
             
             if m.type == .image, !allowSelectImage {
@@ -134,8 +134,8 @@ public class ZLPhotoManager: NSObject {
         let arr = [smartAlbums, albums, streamAlbums, syncedAlbums, sharedAlbums]
         
         var albumList: [ZLAlbumListModel] = []
-        arr.forEach { (album) in
-            album.enumerateObjects { (collection, _, _) in
+        arr.forEach { album in
+            album.enumerateObjects { collection, _, _ in
                 guard let collection = collection as? PHAssetCollection else { return }
                 if collection.assetCollectionSubtype == .smartAlbumAllHidden {
                     return
@@ -174,7 +174,7 @@ public class ZLPhotoManager: NSObject {
         }
         
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
-        smartAlbums.enumerateObjects { (collection, _, stop) in
+        smartAlbums.enumerateObjects { collection, _, stop in
             if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                 let result = PHAsset.fetchAssets(in: collection, options: option)
                 let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
@@ -188,7 +188,7 @@ public class ZLPhotoManager: NSObject {
     private class func getCollectionTitle(_ collection: PHAssetCollection) -> String {
         if collection.assetCollectionType == .album {
             // Albums created by user.
-            var title: String? = nil
+            var title: String?
             if ZLCustomLanguageDeploy.language == .system {
                 title = collection.localizedTitle
             } else {
@@ -202,7 +202,7 @@ public class ZLPhotoManager: NSObject {
             return title ?? localLanguageTextValue(.noTitleAlbumListPlaceholder)
         }
         
-        var title: String? = nil
+        var title: String?
         if ZLCustomLanguageDeploy.language == .system {
             title = collection.localizedTitle
         } else {
@@ -246,18 +246,18 @@ public class ZLPhotoManager: NSObject {
     }
     
     @discardableResult
-    @objc public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
-        return self.fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
+    @objc public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
+        return fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
     }
     
     @discardableResult
-    @objc public class func fetchOriginalImage(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
+    @objc public class func fetchOriginalImage(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
         return fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
     }
     
     /// Fetch asset data.
     @discardableResult
-    @objc public class func fetchOriginalImageData(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
+    @objc public class func fetchOriginalImageData(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         if (asset.value(forKey: "filename") as? String)?.hasSuffix("GIF") == true {
             option.version = .original
@@ -265,13 +265,13 @@ public class ZLPhotoManager: NSObject {
         option.isNetworkAccessAllowed = true
         option.resizeMode = .fast
         option.deliveryMode = .highQualityFormat
-        option.progressHandler = { (pro, error, stop, info) in
+        option.progressHandler = { pro, error, stop, info in
             ZLMainAsync {
                 progress?(CGFloat(pro), error, stop, info)
             }
         }
         
-        return PHImageManager.default().requestImageData(for: asset, options: option) { (data, _, _, info) in
+        return PHImageManager.default().requestImageData(for: asset, options: option) { data, _, _, info in
             let cancel = info?[PHImageCancelledKey] as? Bool ?? false
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
             if !cancel, let data = data {
@@ -281,17 +281,17 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch image for asset.
-    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
+    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         option.resizeMode = resizeMode
         option.isNetworkAccessAllowed = true
-        option.progressHandler = { (pro, error, stop, info) in
+        option.progressHandler = { pro, error, stop, info in
             ZLMainAsync {
                 progress?(CGFloat(pro), error, stop, info)
             }
         }
         
-        return PHImageManager.default().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { (image, info) in
+        return PHImageManager.default().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { image, info in
             var downloadFinished = false
             if let info = info {
                 downloadFinished = !(info[PHImageCancelledKey] as? Bool ?? false) && (info[PHImageErrorKey] == nil)
@@ -309,16 +309,16 @@ public class ZLPhotoManager: NSObject {
         option.deliveryMode = .opportunistic
         option.isNetworkAccessAllowed = true
         
-        return PHImageManager.default().requestLivePhoto(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option) { (livePhoto, info) in
+        return PHImageManager.default().requestLivePhoto(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option) { livePhoto, info in
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
             completion(livePhoto, info, isDegraded)
         }
     }
     
-    @objc public class func fetchVideo(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void)? = nil, completion: @escaping (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
+    @objc public class func fetchVideo(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
         let option = PHVideoRequestOptions()
         option.isNetworkAccessAllowed = true
-        option.progressHandler = { (pro, error, stop, info) in
+        option.progressHandler = { pro, error, stop, info in
             ZLMainAsync {
                 progress?(CGFloat(pro), error, stop, info)
             }
@@ -326,7 +326,7 @@ public class ZLPhotoManager: NSObject {
         
         // https://github.com/longitachi/ZLPhotoBrowser/issues/369#issuecomment-728679135
         if asset.isInCloud {
-            return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { (session, info) in
+            return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { session, info in
                 // iOS11 and earlier, callback is not on the main thread.
                 ZLMainAsync {
                     let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
@@ -339,7 +339,7 @@ public class ZLPhotoManager: NSObject {
                 }
             })
         } else {
-            return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { (item, info) in
+            return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { item, info in
                 // iOS11 and earlier, callback is not on the main thread.
                 ZLMainAsync {
                     let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
@@ -363,10 +363,10 @@ public class ZLPhotoManager: NSObject {
         let options = PHVideoRequestOptions()
         options.version = .original
         options.deliveryMode = .automatic
-        options.isNetworkAccessAllowed =  true
+        options.isNetworkAccessAllowed = true
         
         if asset.isInCloud {
-            return PHImageManager.default().requestExportSession(forVideo: asset, options: options, exportPreset: AVAssetExportPresetHighestQuality) { (session, info) in
+            return PHImageManager.default().requestExportSession(forVideo: asset, options: options, exportPreset: AVAssetExportPresetHighestQuality) { session, info in
                 // iOS11 and earlier, callback is not on the main thread.
                 ZLMainAsync {
                     if let avAsset = session?.asset {
@@ -377,7 +377,7 @@ public class ZLPhotoManager: NSObject {
                 }
             }
         } else {
-            return PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { (avAsset, _, info) in
+            return PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { avAsset, _, info in
                 ZLMainAsync {
                     completion(avAsset, info)
                 }
@@ -387,7 +387,7 @@ public class ZLPhotoManager: NSObject {
     
     /// Fetch asset local file path.
     @objc public class func fetchAssetFilePath(asset: PHAsset, completion: @escaping (String?) -> Void) {
-        asset.requestContentEditingInput(with: nil) { (input, info) in
+        asset.requestContentEditingInput(with: nil) { input, _ in
             var path = input?.fullSizeImageURL?.absoluteString
             if path == nil, let dir = asset.value(forKey: "directory") as? String, let name = asset.value(forKey: "filename") as? String {
                 path = String(format: "file:///var/mobile/Media/%@/%@", dir, name)
@@ -397,15 +397,13 @@ public class ZLPhotoManager: NSObject {
     }
 }
 
-
 /// Authority related.
-extension ZLPhotoManager {
-    
-    @objc public class func hasPhotoLibratyAuthority() -> Bool {
+public extension ZLPhotoManager {
+    @objc class func hasPhotoLibratyAuthority() -> Bool {
         return PHPhotoLibrary.authorizationStatus() == .authorized
     }
     
-    @objc public class func hasCameraAuthority() -> Bool {
+    @objc class func hasCameraAuthority() -> Bool {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
         if status == .restricted || status == .denied {
             return false
@@ -413,7 +411,7 @@ extension ZLPhotoManager {
         return true
     }
     
-    @objc public class func hasMicrophoneAuthority() -> Bool {
+    @objc class func hasMicrophoneAuthority() -> Bool {
         let status = AVCaptureDevice.authorizationStatus(for: .audio)
         if status == .restricted || status == .denied {
             return false

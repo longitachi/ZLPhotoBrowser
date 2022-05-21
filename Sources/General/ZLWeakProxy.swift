@@ -27,7 +27,7 @@
 import UIKit
 
 class ZLWeakProxy: NSObject {
-
+    
     private weak var target: NSObjectProtocol?
     
     init(target: NSObjectProtocol) {
@@ -36,7 +36,7 @@ class ZLWeakProxy: NSObject {
     }
     
     class func proxy(withTarget target: NSObjectProtocol) -> ZLWeakProxy {
-        return ZLWeakProxy.init(target: target)
+        return ZLWeakProxy(target: target)
     }
     
     override func forwardingTarget(for aSelector: Selector!) -> Any? {
