@@ -332,7 +332,7 @@ class PhotoConfigureCNViewController: UIViewController {
         
         self.languageButton = UIButton(type: .custom)
         self.languageButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        self.languageButton.setTitle(config.languageType.toString(), for: .normal)
+        self.languageButton.setTitle(uiConfig.languageType.toString(), for: .normal)
         self.languageButton.addTarget(self, action: #selector(languageButtonClick), for: .touchUpInside)
         self.languageButton.setTitleColor(.white, for: .normal)
         self.languageButton.layer.cornerRadius = 5
@@ -961,11 +961,11 @@ class PhotoConfigureCNViewController: UIViewController {
     }
     
     @objc func languageButtonClick() {
-        let languagePicker = LanguagePickerView(selectedLanguage: config.languageType)
+        let languagePicker = LanguagePickerView(selectedLanguage: uiConfig.languageType)
         
         languagePicker.selectBlock = { [weak self] (language) in
             self?.languageButton.setTitle(language.toString(), for: .normal)
-            self?.config.languageType = language
+            self?.uiConfig.languageType = language
         }
         
         languagePicker.show(in: self.view)

@@ -282,12 +282,6 @@ extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    public func languageType(_ type: ZLLanguageType) -> ZLPhotoConfiguration {
-        languageType = type
-        return self
-    }
-    
-    @discardableResult
     public func useCustomCamera(_ value: Bool) -> ZLPhotoConfiguration {
         useCustomCamera = value
         return self

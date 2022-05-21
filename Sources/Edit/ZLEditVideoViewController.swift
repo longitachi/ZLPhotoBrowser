@@ -264,7 +264,8 @@ public class ZLEditVideoViewController: UIViewController {
             return
         }
         
-        if d == round(CGFloat(self.avAsset.duration.seconds)) {
+        // Max deviation is 0.01
+        if abs((d - round(CGFloat(avAsset.duration.seconds)))) <= 0.01 {
             self.dismiss(animated: self.animateDismiss) {
                 self.editFinishBlock?(nil)
             }

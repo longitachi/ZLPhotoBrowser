@@ -90,6 +90,12 @@ extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    public func languageType(_ type: ZLLanguageType) -> ZLPhotoUIConfiguration {
+        languageType = type
+        return self
+    }
+    
+    @discardableResult
     public func customLanguageKeyValue(_ map: [ZLLocalLanguageKey: String]) -> ZLPhotoUIConfiguration {
         customLanguageKeyValue = map
         return self

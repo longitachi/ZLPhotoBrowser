@@ -101,6 +101,14 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     // MARK: Language properties
     
+    /// Language for framework.
+    @objc public var languageType: ZLLanguageType = .system {
+        didSet {
+            ZLCustomLanguageDeploy.language = languageType
+            Bundle.resetLanguage()
+        }
+    }
+    
     /// Developers can customize languages.
     /// - example: If you needs to replace
     /// key: .loading, value: "loading, waiting please" language,

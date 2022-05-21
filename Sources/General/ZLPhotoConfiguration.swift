@@ -238,14 +238,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Timeout for image parsing. Defaults to 20.
     @objc public var timeout: TimeInterval = 20
     
-    /// Language for framework.
-    @objc public var languageType: ZLLanguageType = .system {
-        didSet {
-            ZLCustomLanguageDeploy.language = self.languageType
-            Bundle.resetLanguage()
-        }
-    }
-    
     /// Whether to use custom camera. Defaults to true.
     @objc public var useCustomCamera = true
     
