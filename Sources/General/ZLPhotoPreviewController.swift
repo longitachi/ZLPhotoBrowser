@@ -24,8 +24,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Photos
 import UIKit
+import Photos
 
 class ZLPhotoPreviewController: UIViewController {
     
@@ -122,7 +122,7 @@ class ZLPhotoPreviewController: UIViewController {
         btn.contentHorizontalAlignment = .left
         btn.setImage(getImage("zl_btn_original_circle"), for: .normal)
         btn.setImage(getImage("zl_btn_original_selected"), for: .selected)
-        btn.setImage(getImage("zl_btn_original_selected"), for: .highlighted)
+        btn.setImage(getImage("zl_btn_original_selected"), for: [.selected, .highlighted])
         btn.adjustsImageWhenHighlighted = false
         btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         return btn
