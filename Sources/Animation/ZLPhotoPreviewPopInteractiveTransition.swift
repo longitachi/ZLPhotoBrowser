@@ -170,8 +170,13 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         let toVCVisiableIndexPaths = toVC.collectionView.indexPathsForVisibleItems
         
         var diff = 0
-        if toVC.showCameraCell, !ZLPhotoConfiguration.default().sortAscending {
-            diff = -1
+        if !ZLPhotoConfiguration.default().sortAscending {
+            if toVC.showCameraCell {
+                diff = -1
+            }
+            if #available(iOS 14.0, *), toVC.showAddPhotoCell {
+                diff -= 1
+            }
         }
         var toIndex: Int? = nil
         for indexPath in toVCVisiableIndexPaths {

@@ -144,11 +144,6 @@ class ZLThumbnailViewController: UIViewController {
     
     private var autoScrollInfo: (direction: AutoScrollDirection, speed: CGFloat) = (.none, 0)
     
-    @available(iOS 14, *)
-    private var showAddPhotoCell: Bool {
-        PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited && ZLPhotoConfiguration.default().showAddPhotoButton && albumList.isCameraRoll
-    }
-    
     /// 照相按钮+添加图片按钮的数量
     /// the count of addPhotoButton & cameraButton
     private var offset: Int {
@@ -191,6 +186,11 @@ class ZLThumbnailViewController: UIViewController {
             return true
         }
         return false
+    }
+    
+    @available(iOS 14, *)
+    var showAddPhotoCell: Bool {
+        PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited && ZLPhotoConfiguration.default().showAddPhotoButton && albumList.isCameraRoll
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -1216,13 +1216,15 @@ extension ZLThumbnailViewController: UIImagePickerControllerDelegate, UINavigati
 extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        guard let changes = changeInstance.changeDetails(for: albumList.result)
-        else { return }
-        guard let nav = navigationController as? ZLImageNavController else {
-            zlLoggerInDebug("Navigation controller is null")
+        guard let changes = changeInstance.changeDetails(for: albumList.result) else {
             return
         }
+        
         ZLMainAsync {
+            guard let nav = self.navigationController as? ZLImageNavController else {
+                zlLoggerInDebug("Navigation controller is null")
+                return
+            }
             // 变化后再次显示相册列表需要刷新
             self.hasTakeANewAsset = true
             self.albumList.result = changes.fetchResultAfterChanges
