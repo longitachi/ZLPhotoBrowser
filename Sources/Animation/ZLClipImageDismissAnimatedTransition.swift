@@ -27,7 +27,6 @@
 import UIKit
 
 class ZLClipImageDismissAnimatedTransition: NSObject, UIViewControllerAnimatedTransitioning {
-    
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.25
     }
@@ -49,11 +48,10 @@ class ZLClipImageDismissAnimatedTransition: NSObject, UIViewControllerAnimatedTr
         
         UIView.animate(withDuration: 0.3, animations: {
             imageView.frame = toVC.originalFrame
-        }) { (_) in
+        }) { _ in
             toVC.finishClipDismissAnimate()
             imageView.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }
-    
 }

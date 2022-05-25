@@ -28,7 +28,6 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    
     class var navBarColor: UIColor {
         ZLPhotoUIConfiguration.default().navBarColor
     }
@@ -226,5 +225,4 @@ extension UIColor {
     class var adjustSliderTintColor: UIColor {
         ZLPhotoUIConfiguration.default().adjustSliderTintColor
     }
-    
 }

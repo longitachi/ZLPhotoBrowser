@@ -29,8 +29,7 @@ import Foundation
 private class BundleFinder {}
 
 extension Bundle {
-    
-    private static var bundle: Bundle? = nil
+    private static var bundle: Bundle?
     
     static var normal_module: Bundle? = {
         let bundleName = "ZLPhotoBrowser"
@@ -38,17 +37,17 @@ extension Bundle {
         var candidates = [
             // Bundle should be present here when the package is linked into an App.
             Bundle.main.resourceURL,
-
+            
             // Bundle should be present here when the package is linked into a framework.
             Bundle(for: ZLPhotoPreviewSheet.self).resourceURL,
-
+            
             // For command-line tools.
             Bundle.main.bundleURL,
         ]
         
         #if SWIFT_PACKAGE
-        // For SWIFT_PACKAGE.
-        candidates.append(Bundle.module.bundleURL)
+            // For SWIFT_PACKAGE.
+            candidates.append(Bundle.module.bundleURL)
         #endif
 
         for candidate in candidates {
@@ -67,10 +66,10 @@ extension Bundle {
         let candidates = [
             // Bundle should be present here when the package is linked into an App.
             Bundle.main.resourceURL,
-
+            
             // Bundle should be present here when the package is linked into a framework.
             Bundle(for: BundleFinder.self).resourceURL,
-
+            
             // For command-line tools.
             Bundle.main.bundleURL,
         ]
@@ -90,18 +89,18 @@ extension Bundle {
     }
     
     class func resetLanguage() {
-        self.bundle = nil
+        bundle = nil
     }
     
     class func zlLocalizedString(_ key: String) -> String {
-        if self.bundle == nil {
-            guard let path = Bundle.zlPhotoBrowserBundle?.path(forResource: self.getLanguage(), ofType: "lproj") else {
+        if bundle == nil {
+            guard let path = Bundle.zlPhotoBrowserBundle?.path(forResource: getLanguage(), ofType: "lproj") else {
                 return ""
             }
-            self.bundle = Bundle(path: path)
+            bundle = Bundle(path: path)
         }
         
-        let value = self.bundle?.localizedString(forKey: key, value: nil, table: nil)
+        let value = bundle?.localizedString(forKey: key, value: nil, table: nil)
         return Bundle.main.localizedString(forKey: key, value: value, table: nil)
     }
     
@@ -179,6 +178,4 @@ extension Bundle {
         
         return language
     }
-    
-    
 }

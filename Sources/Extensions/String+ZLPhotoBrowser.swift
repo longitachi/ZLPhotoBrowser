@@ -28,7 +28,6 @@ import Foundation
 import UIKit
 
 extension String {
-    
     func boundingRect(font: UIFont, limitSize: CGSize) -> CGSize {
         let style = NSMutableParagraphStyle()
         style.lineBreakMode = .byCharWrapping
@@ -41,5 +40,4 @@ extension String {
         
         return CGSize(width: ceil(size.width), height: ceil(size.height))
     }
-    
 }

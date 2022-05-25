@@ -27,12 +27,10 @@
 import UIKit
 
 extension UIViewController {
-    
     func showAlertController(_ alertController: UIAlertController) {
         if deviceIsiPad() {
             alertController.popoverPresentationController?.sourceView = view
         }
         showDetailViewController(alertController, sender: nil)
     }
-    
 }

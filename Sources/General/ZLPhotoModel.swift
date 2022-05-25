@@ -127,9 +127,9 @@ public class ZLPhotoModel: NSObject {
         let dur = Int(round(asset.duration))
         
         switch dur {
-        case 0 ..< 60:
+        case 0..<60:
             return String(format: "00:%02d", dur)
-        case 60 ..< 3600:
+        case 60..<3600:
             let m = dur / 60
             let s = dur % 60
             return String(format: "%02d:%02d", m, s)

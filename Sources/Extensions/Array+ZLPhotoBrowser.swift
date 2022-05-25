@@ -27,13 +27,9 @@
 import Foundation
 
 extension Array where Element: Equatable {
-    
     func removeDuplicate() -> Array {
-        return self.enumerated().filter { (index, value) -> Bool in
-            return self.firstIndex(of: value) == index
-        }.map { (_, value) in
-            return value
-        }
+        return enumerated().filter { index, value -> Bool in
+            self.firstIndex(of: value) == index
+        }.map { $0.element }
     }
-    
 }

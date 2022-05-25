@@ -27,25 +27,21 @@
 import UIKit
 
 extension UICollectionViewCell {
-    
     class func zl_identifier() -> String {
-        return NSStringFromClass(self.classForCoder())
+        return NSStringFromClass(classForCoder())
     }
     
     class func zl_register(_ collectionView: UICollectionView) {
-        collectionView.register(self.classForCoder(), forCellWithReuseIdentifier: self.zl_identifier())
+        collectionView.register(classForCoder(), forCellWithReuseIdentifier: zl_identifier())
     }
-    
 }
 
 extension UITableViewCell {
-    
     class func zl_identifier() -> String {
-        return NSStringFromClass(self.classForCoder())
+        return NSStringFromClass(classForCoder())
     }
     
     class func zl_register(_ tableView: UITableView) {
-        tableView.register(self.classForCoder(), forCellReuseIdentifier: self.zl_identifier())
+        tableView.register(classForCoder(), forCellReuseIdentifier: zl_identifier())
     }
-    
 }

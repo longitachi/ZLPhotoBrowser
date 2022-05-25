@@ -25,26 +25,61 @@
 import UIKit
 
 class ZLAdjustSlider: UIView {
-
-    static let maximumValue: Float = 1
+    private static let maximumValue: Float = 1
     
-    static let minimumValue: Float = -1
+    private static let minimumValue: Float = -1
     
-    let sliderWidth: CGFloat = 5
+    private let sliderWidth: CGFloat = 5
     
-    lazy var valueLabel = UILabel()
+    private lazy var valueLabel: UILabel = {
+        let label = UILabel()
+        label.font = getFont(12)
+        label.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
+        label.layer.shadowOffset = .zero
+        label.layer.shadowOpacity = 1
+        label.textColor = .white
+        label.textAlignment = .right
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.6
+        return label
+    }()
     
-    lazy var separator = UIView()
+    private lazy var separator: UIView = {
+        let view = UIView()
+        view.backgroundColor = zlRGB(230, 230, 230)
+        return view
+    }()
     
-    lazy var shadowView = UIView()
+    private lazy var shadowView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .adjustSliderNormalColor
+        view.layer.cornerRadius = sliderWidth / 2
+        view.layer.shadowColor = UIColor.black.withAlphaComponent(0.4).cgColor
+        view.layer.shadowOffset = .zero
+        view.layer.shadowOpacity = 1
+        view.layer.shadowRadius = 3
+        return view
+    }()
     
-    lazy var whiteView = UIView()
+    private lazy var whiteView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .adjustSliderNormalColor
+        view.layer.cornerRadius = sliderWidth / 2
+        view.layer.masksToBounds = true
+        return view
+    }()
     
-    lazy var tintView = UIView()
+    private lazy var tintView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .adjustSliderTintColor
+        return view
+    }()
     
-    lazy var pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
+    private lazy var pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
     
-    var impactFeedback: UIImpactFeedbackGenerator?
+    private var impactFeedback: UIImpactFeedbackGenerator?
+    
+    private var valueForPanBegan: Float = 0
     
     var value: Float = 0 {
         didSet {
@@ -52,8 +87,6 @@ class ZLAdjustSlider: UIView {
             tintView.frame = calculateTintFrame()
         }
     }
-    
-    private var valueForPanBegan: Float = 0
     
     var beginAdjust: (() -> Void)?
     
@@ -67,6 +100,7 @@ class ZLAdjustSlider: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupUI()
         let editConfig = ZLPhotoConfiguration.default().editImageConfiguration
         if editConfig.impactFeedbackWhenAdjustSliderValueIsZero {
@@ -75,6 +109,7 @@ class ZLAdjustSlider: UIView {
         addGestureRecognizer(pan)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -91,33 +126,10 @@ class ZLAdjustSlider: UIView {
     }
     
     private func setupUI() {
-        shadowView.backgroundColor = .adjustSliderNormalColor
-        shadowView.layer.cornerRadius = sliderWidth / 2
-        shadowView.layer.shadowColor = UIColor.black.withAlphaComponent(0.4).cgColor
-        shadowView.layer.shadowOffset = .zero
-        shadowView.layer.shadowOpacity = 1
-        shadowView.layer.shadowRadius = 3
         addSubview(shadowView)
-        
-        whiteView.backgroundColor = .adjustSliderNormalColor
-        whiteView.layer.cornerRadius = sliderWidth / 2
-        whiteView.layer.masksToBounds = true
         addSubview(whiteView)
-        
-        tintView.backgroundColor = .adjustSliderTintColor
         whiteView.addSubview(tintView)
-        
-        separator.backgroundColor = zlRGB(230, 230, 230)
         whiteView.addSubview(separator)
-        
-        valueLabel.font = getFont(12)
-        valueLabel.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
-        valueLabel.layer.shadowOffset = .zero
-        valueLabel.layer.shadowOpacity = 1
-        valueLabel.textColor = .white
-        valueLabel.textAlignment = .right
-        valueLabel.adjustsFontSizeToFitWidth = true
-        valueLabel.minimumScaleFactor = 0.6
         addSubview(valueLabel)
     }
     
@@ -159,5 +171,4 @@ class ZLAdjustSlider: UIView {
             endAdjust?()
         }
     }
-
 }
