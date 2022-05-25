@@ -420,6 +420,10 @@ class ZLLivePhotoPreviewCell: ZLPreviewBaseCell {
         return convert(imageView.frame, to: view)
     }
     
+    override func resetSubViewStatusWhenCellEndDisplay() {
+        PHImageManager.default().cancelImageRequest(livePhotoRequestID)
+    }
+    
     private func setupUI() {
         contentView.addSubview(livePhotoView)
         contentView.addSubview(imageView)
