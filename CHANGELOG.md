@@ -2,7 +2,17 @@
 
 -----
 
-## [4.3.1 - 4.3.0 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.0) (2022-04-28)
+## [4.3.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.2) (2022-05-25)
+### Add:
+* Add Tolerance in Video Editing.
+* Format code style.
+  
+### Fix:
+* Fix some bugs when iOS14 album permissions are limited.
+
+---
+
+## [4.3.1 - 4.3.0 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.1) (2022-04-28)
 ### Add:
 * Remove deprecated properties. 
 * Moved some UI related properties to ZLPhotoUIConfiguration.

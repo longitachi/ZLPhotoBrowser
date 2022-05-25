@@ -91,6 +91,12 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.2
+  Add:
+    Add Tolerance in Video Editing.
+    Format code style.
+  Fix:
+    Fix some bugs when iOS14 album permissions are limited.
 ● 4.3.1 - 4.3.0 Patch
   Add:
     Remove deprecated properties. 
@@ -105,9 +111,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Add some customize color properties.
     Add long press callback in ZLImagePreviewController.
     Add property to allow user to do something before select photo result callback.
-● 4.2.5
-  Fix:
-    Fix the bug of failing to archive with Xcode 13.3.
 ...
 ```
 
