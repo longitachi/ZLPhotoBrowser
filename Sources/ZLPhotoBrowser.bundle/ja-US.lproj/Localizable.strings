@@ -26,7 +26,7 @@
 
 "exceededMaxSelectCount" = "最大選択数: %ld";
 "longerThanMaxVideoDuration" = "%ld秒より長い動画は選択できません";
-"shorterThanMaxVideoDuration" = "％ld秒より短い動画は選択できません";
+"shorterThanMaxVideoDuration" = "％ld秒より短い動画は選択できません";`
 "exceededMaxVideoSelectCount" = "動画の最大選択数: %ld";
 "lessThanMinVideoSelectCount" = "動画の最小選択数: %ld";
 
