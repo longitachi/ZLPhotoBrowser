@@ -3,35 +3,35 @@
 "previewAlbum" = "アルバム";
 "cancel" = "キャンセル";
 
-"originalPhoto" = "完全な画像";
+"originalPhoto" = "元の画像";
 "done" = "確定";
 "ok" = "確定";
-"editFinish" = "完了";
+"editFinish" = "編集完了";
 
 "back" = "戻る";
 "edit" = "編集";
 "revert" = "元に戻す";
-"brightness" = "明るさ";
+"brightness" = "明度";
 "contrast" = "コントラスト";
-"saturation" = "飽和";
+"saturation" = "彩度";
 
 "photo" = "写真";
 "preview" = "プレビュー";
 
-"noPhotoTips" = "写真でない";
+"noPhotoTips" = "写真がありません";
 "notAllowMixSelect" = "ビデオを選択できません";
 
-"loading" = "ロード中，お待ち下さい";
-"hudLoading" = "後ほど...";
+"loading" = "ロードしています";
+"hudLoading" = "お待ち下さい";
 
 "exceededMaxSelectCount" = "最大選択数: %ld";
-"longerThanMaxVideoDuration" = "%ldsより長い動画は選択できません";
-"shorterThanMaxVideoDuration" = "％ldsより短い動画は選択できません";
+"longerThanMaxVideoDuration" = "%ld秒より長い動画は選択できません";
+"shorterThanMaxVideoDuration" = "％ld秒より短い動画は選択できません";
 "exceededMaxVideoSelectCount" = "動画の最大選択数: %ld";
 "lessThanMinVideoSelectCount" = "動画の最小選択数: %ld";
 
 "noCameraAuthority" = "「設定」>「プライパシー」>「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
-"noPhotoLibratyAuthority" = "%@があなたのアルバムにアクセスするには「設定」>「プライバシー」>「写真」";
+"noPhotoLibratyAuthority" = "「設定」>「プライバシー」>「写真」から、%@があなたのアルバムにアクセスする許可をしてください";
 "noMicrophoneAuthority" = "音声を録音できません。「設定」 >「%@」に移動し、マイクへのアクセスを有効にしてください。";
 "cameraUnavailable" = "カメラは利用できません";
 "keepRecording" = "撮影を続ける";
@@ -43,12 +43,12 @@
 "save" = "セーブ";
 "saveImageError" = "画像の保存に失敗しました";
 "saveVideoError" = "ビデオの保存に失敗しました";
-"timeout" = "要求タイムアウト";
+"timeout" = "タイムアウトしました";
 
-"customCameraTips" = "タップして撮影、長押しで記録";
-"customCameraTakePhotoTips" = "タップして撮影";
-"customCameraRecordVideoTips" = "長押しで記録";
-"minRecordTimeTips" = "%lds以上記録する";
+"customCameraTips" = "タップして撮影、長押しして記録できます";
+"customCameraTakePhotoTips" = "タップして撮影できます";
+"customCameraRecordVideoTips" = "長押しで記録できます";
+"minRecordTimeTips" = "最低 %ld秒以上記録してください";
 
 "cameraRoll" = "最近の項目";
 "panoramas" = "パノラマ";
