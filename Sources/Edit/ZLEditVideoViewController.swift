@@ -285,7 +285,7 @@ public class ZLEditVideoViewController: UIViewController {
             return
         }
         
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         hud.show()
         
         ZLVideoManager.exportEditVideo(for: avAsset, range: getTimeRange()) { [weak self] url, error in

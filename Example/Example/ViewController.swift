@@ -272,7 +272,7 @@ class ViewController: UIViewController {
     }
     
     func save(image: UIImage?, videoUrl: URL?) {
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         if let image = image {
             hud.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] (suc, asset) in

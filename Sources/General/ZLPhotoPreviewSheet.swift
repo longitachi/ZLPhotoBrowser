@@ -542,7 +542,7 @@ public class ZLPhotoPreviewSheet: UIView {
             }
         }
         
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         
         var timeout = false
         hud.timeoutBlock = { [weak self] in
@@ -657,7 +657,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func showEditImageVC(model: ZLPhotoModel) {
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         hud.show()
         
         ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
@@ -679,7 +679,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func showEditVideoVC(model: ZLPhotoModel) {
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         
         var requestAvAssetID: PHImageRequestID?
         
@@ -750,7 +750,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func save(image: UIImage?, videoUrl: URL?) {
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         if let image = image {
             hud.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
@@ -899,7 +899,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             return
         }
         let config = ZLPhotoConfiguration.default()
-        let hud = ZLProgressHUD(style: config.hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         hud.show()
         
         ZLPhotoManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { [weak self] cameraRoll in

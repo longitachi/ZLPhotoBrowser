@@ -427,7 +427,7 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         if albumList.models.isEmpty {
-            let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+            let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
             hud.show()
             DispatchQueue.global().async {
                 self.albumList.refetchPhotos()
@@ -772,7 +772,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     private func save(image: UIImage?, videoUrl: URL?) {
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         if let image = image {
             hud.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
@@ -844,7 +844,7 @@ class ZLThumbnailViewController: UIViewController {
             return
         }
         
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         hud.show()
         
         hud.show()
@@ -868,7 +868,7 @@ class ZLThumbnailViewController: UIViewController {
     
     private func showEditVideoVC(model: ZLPhotoModel) {
         let nav = navigationController as? ZLImageNavController
-        let hud = ZLProgressHUD(style: ZLPhotoConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         
         var requestAvAssetID: PHImageRequestID?
         

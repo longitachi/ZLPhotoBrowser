@@ -509,7 +509,7 @@ class ZLPhotoPreviewController: UIViewController {
     @objc private func editBtnClick() {
         let config = ZLPhotoConfiguration.default()
         let model = arrDataSources[currentIndex]
-        let hud = ZLProgressHUD(style: config.hudStyle)
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         
         if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
             hud.show()

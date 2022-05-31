@@ -55,6 +55,12 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func hudStyle(_ style: ZLProgressHUD.HUDStyle) -> ZLPhotoUIConfiguration {
+        hudStyle = style
+        return self
+    }
+    
+    @discardableResult
     func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfAlbumList = effect
         return self

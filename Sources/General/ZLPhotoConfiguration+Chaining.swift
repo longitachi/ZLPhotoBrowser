@@ -318,12 +318,6 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    func hudStyle(_ style: ZLProgressHUD.HUDStyle) -> ZLPhotoConfiguration {
-        hudStyle = style
-        return self
-    }
-    
-    @discardableResult
     func canSelectAsset(_ block: ((PHAsset) -> Bool)?) -> ZLPhotoConfiguration {
         canSelectAsset = block
         return self

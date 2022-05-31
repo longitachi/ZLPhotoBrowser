@@ -56,6 +56,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Whether to show the status bar when previewing photos. Defaults to false.
     @objc public var showStatusBarInPreviewInterface = false
     
+    /// HUD style. Defaults to dark.
+    @objc public var hudStyle: ZLProgressHUD.HUDStyle = .dark
+    
     // MARK: Navigation and bottom tool bar
     
     /// The blur effect of the navigation bar in the album list
