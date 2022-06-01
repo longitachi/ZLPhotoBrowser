@@ -271,7 +271,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// With iOS14 limited authority, a color for select more photos at the bottom of the thumbnail interface.
     /// iOS14 limited权限下，下方提示选择更多图片信息文字的颜色
-    @objc public var selectMorePhotoWhenAuthIsLismitedTitleColor = UIColor.white
+    @objc public var limitedAuthorityTipsColor = UIColor.white
     
     /// The record progress color of custom camera.
     /// 自定义相机录制视频时进度条颜色

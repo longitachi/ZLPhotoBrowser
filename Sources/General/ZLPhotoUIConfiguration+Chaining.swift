@@ -295,8 +295,8 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
-    func selectMorePhotoWhenAuthIsLismitedTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
-        selectMorePhotoWhenAuthIsLismitedTitleColor = color
+    func limitedAuthorityTipsColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        limitedAuthorityTipsColor = color
         return self
     }
     

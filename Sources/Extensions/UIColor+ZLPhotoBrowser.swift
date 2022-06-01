@@ -177,8 +177,8 @@ extension UIColor {
     }
     
     /// iOS14 limited 权限时候，小图界面下方显示 选择更多图片 标题颜色
-    class var selectMorePhotoWhenAuthIsLismitedTitleColor: UIColor {
-        return ZLPhotoUIConfiguration.default().selectMorePhotoWhenAuthIsLismitedTitleColor
+    class var limitedAuthorityTipsColor: UIColor {
+        return ZLPhotoUIConfiguration.default().limitedAuthorityTipsColor
     }
     
     /// 自定义相机录制视频时，进度条颜色

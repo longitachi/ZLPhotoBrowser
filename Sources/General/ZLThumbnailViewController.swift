@@ -1518,7 +1518,7 @@ class ZLLimitedAuthorityTipsView: UIView {
         let label = UILabel()
         label.font = getFont(14)
         label.text = localLanguageTextValue(.unableToAccessAllPhotos)
-        label.textColor = .bottomToolViewBtnDisableTitleColor
+        label.textColor = .limitedAuthorityTipsColor
         label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
         label.adjustsFontSizeToFitWidth = true
