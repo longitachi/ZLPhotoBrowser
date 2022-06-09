@@ -67,9 +67,6 @@ public struct ZLLocalLanguageKey: Hashable {
     /// No Photo (无照片)
     public static let noPhotoTips = ZLLocalLanguageKey(rawValue: "noPhotoTips")
     
-    /// loading, waiting please (加载中，请稍后)
-    public static let loading = ZLLocalLanguageKey(rawValue: "loading")
-    
     /// waiting... (正在处理...)
     public static let hudLoading = ZLLocalLanguageKey(rawValue: "hudLoading")
     
@@ -132,9 +129,6 @@ public struct ZLLocalLanguageKey: Hashable {
     
     /// Preview (预览)
     public static let preview = ZLLocalLanguageKey(rawValue: "preview")
-    
-    /// Unable to select video (不能同时选择照片和视频)
-    public static let notAllowMixSelect = ZLLocalLanguageKey(rawValue: "notAllowMixSelect")
     
     /// Save (保存)
     public static let save = ZLLocalLanguageKey(rawValue: "save")

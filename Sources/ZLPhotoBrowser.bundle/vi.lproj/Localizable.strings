@@ -19,9 +19,7 @@
 "preview" = "Xem trước";
 
 "noPhotoTips" = "Không có ảnh";
-"notAllowMixSelect" = "Không thể chọn video";
 
-"loading" = "đang tải, vui lòng đợi";
 "hudLoading" = "đang chờ đợi...";
 
 "exceededMaxSelectCount" = "Số lượng lựa chọn tối đa: %ld";

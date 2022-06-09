@@ -19,9 +19,7 @@
 "preview" = "Pratinjau";
 
 "noPhotoTips" = "Tidak ada fotos";
-"notAllowMixSelect" = "Tidak dapat memilih video";
 
-"loading" = "sedang memuat, tolong tunggu";
 "hudLoading" = "menunggu...";
 
 "exceededMaxSelectCount" = "Jumlah maksimum untuk seleksi: %ld";

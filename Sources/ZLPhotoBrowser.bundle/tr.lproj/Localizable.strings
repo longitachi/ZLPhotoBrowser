@@ -19,9 +19,7 @@
 "preview" = "Önizle";
 
 "noPhotoTips" = "Fotoğraf yok";
-"notAllowMixSelect" = "Video seçilemedi";
 
-"loading" = "yükleniyor, lütfen bekleyin...";
 "hudLoading" = "bekleyin...";
 
 "exceededMaxSelectCount" = "Maksimum seçim adeti: %ld";

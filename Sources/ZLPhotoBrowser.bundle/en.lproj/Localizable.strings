@@ -19,9 +19,7 @@
 "preview" = "Preview";
 
 "noPhotoTips" = "No Photos";
-"notAllowMixSelect" = "Unable to select video";
 
-"loading" = "loading, waiting please";
 "hudLoading" = "waiting...";
 
 "exceededMaxSelectCount" = "Max count for selection: %ld";

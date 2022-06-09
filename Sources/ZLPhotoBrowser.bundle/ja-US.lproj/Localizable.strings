@@ -19,9 +19,7 @@
 "preview" = "プレビュー";
 
 "noPhotoTips" = "写真がありません";
-"notAllowMixSelect" = "ビデオを選択できません";
 
-"loading" = "ロードしています";
 "hudLoading" = "お待ち下さい";
 
 "exceededMaxSelectCount" = "最大選択数: %ld";

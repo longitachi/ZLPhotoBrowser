@@ -19,9 +19,7 @@
 "preview" = "Pré-visualização";
 
 "noPhotoTips" = "Sem Fotos";
-"notAllowMixSelect" = "Não foi possível selecionar o vídeo";
 
-"loading" = "carregamento, esperando por favor";
 "hudLoading" = "à espera...";
 
 "exceededMaxSelectCount" = "Contagem máxima para seleção: %ld";

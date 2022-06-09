@@ -19,9 +19,7 @@
 "preview" = "Pratonton";
 
 "noPhotoTips" = "Tiada Foto";
-"notAllowMixSelect" = "Tidak dapat memilih video";
 
-"loading" = "Memuatkan, tunggu";
 "hudLoading" = "menunggu...";
 
 "exceededMaxSelectCount" = "Kiraan maksimum untuk pemilihan: %ld";

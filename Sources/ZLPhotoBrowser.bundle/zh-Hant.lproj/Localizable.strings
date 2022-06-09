@@ -19,9 +19,7 @@
 "preview" = "預覽";
 
 "noPhotoTips" = "無照片";
-"notAllowMixSelect" = "不能同時選擇照片和視頻";
 
-"loading" = "加載中，請稍後";
 "hudLoading" = "正在處理...";
 
 "exceededMaxSelectCount" = "最多只能選擇%ld張圖片";
