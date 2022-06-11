@@ -1,5 +1,5 @@
 //
-//  Int+ZLPhotoBrowser.swift
+//  Bool+ZLPhotoBrowser.swift
 //  ZLPhotoBrowser
 //
 //  Created by ruby109 on 2020/11/3.
@@ -26,8 +26,8 @@
 
 import Foundation
 
-extension Int {
-    init(_ bool: Bool) {
-        self = bool ? 1 : 0
+extension ZLPhotoBrowserWrapper where Base == Bool {
+    var intValue: Int {
+        base ? 1 : 0
     }
 }

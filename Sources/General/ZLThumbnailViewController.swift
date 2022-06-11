@@ -148,9 +148,9 @@ class ZLThumbnailViewController: UIViewController {
     /// the count of addPhotoButton & cameraButton
     private var offset: Int {
         if #available(iOS 14, *) {
-            return Int(self.showAddPhotoCell) + Int(self.showCameraCell)
+            return showAddPhotoCell.zl.intValue + showCameraCell.zl.intValue
         } else {
-            return Int(self.showCameraCell)
+            return showCameraCell.zl.intValue
         }
     }
     

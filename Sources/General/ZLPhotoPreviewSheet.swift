@@ -163,7 +163,7 @@ public class ZLPhotoPreviewSheet: UIView {
         setupUI()
         
         arrSelectedModels.removeAll()
-        selectedAssets?.removeDuplicate().forEach { asset in
+        selectedAssets?.zl.removeDuplicate().forEach { asset in
             if !config.allowMixSelect, asset.mediaType == .video {
                 return
             }
@@ -264,7 +264,7 @@ public class ZLPhotoPreviewSheet: UIView {
         isOriginal: Bool,
         showBottomViewAndSelectBtn: Bool = true
     ) {
-        let models = assets.removeDuplicate().map { asset -> ZLPhotoModel in
+        let models = assets.zl.removeDuplicate().map { asset -> ZLPhotoModel in
             let m = ZLPhotoModel(asset: asset)
             m.isSelected = true
             return m

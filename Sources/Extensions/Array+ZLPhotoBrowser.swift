@@ -24,12 +24,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Foundation
+import Photos
+import UIKit
 
-extension Array where Element: Equatable {
-    func removeDuplicate() -> Array {
-        return enumerated().filter { index, value -> Bool in
-            self.firstIndex(of: value) == index
+extension ZLPhotoBrowserWrapper where Base == [PHAsset] {
+    func removeDuplicate() -> [PHAsset] {
+        return base.enumerated().filter { index, value -> Bool in
+            base.firstIndex(of: value) == index
         }.map { $0.element }
     }
 }
