@@ -182,12 +182,10 @@ class ZLImageStickerView: UIView, ZLStickerViewAdditional {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        guard firstLayout else {
-            return
-        }
+        guard firstLayout else { return }
         
         // Rotate must be first when first layout.
-        transform = transform.rotated(by: originAngle.toPi)
+        transform = transform.rotated(by: originAngle.zl.toPi)
         
         if totalTranslationPoint != .zero {
             if originAngle == 90 {

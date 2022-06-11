@@ -35,11 +35,11 @@ class ZLAlbumListController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
-        view.backgroundColor = .albumListBgColor
+        view.backgroundColor = .zl.albumListBgColor
         view.tableFooterView = UIView()
         view.rowHeight = 65
         view.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
-        view.separatorColor = .separatorLineColor
+        view.separatorColor = .zl.separatorLineColor
         view.delegate = self
         view.dataSource = self
         
@@ -47,7 +47,7 @@ class ZLAlbumListController: UIViewController {
             view.contentInsetAdjustmentBehavior = .always
         }
         
-        ZLAlbumListCell.zl_register(view)
+        ZLAlbumListCell.zl.register(view)
         return view
     }()
     
@@ -113,7 +113,7 @@ class ZLAlbumListController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .albumListBgColor
+        view.backgroundColor = .zl.albumListBgColor
         
         view.addSubview(tableView)
         
@@ -135,7 +135,7 @@ extension ZLAlbumListController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ZLAlbumListCell.zl_identifier(), for: indexPath) as! ZLAlbumListCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ZLAlbumListCell.zl.identifier, for: indexPath) as! ZLAlbumListCell
         
         cell.configureCell(model: arrDataSource[indexPath.row], style: .externalAlbumList)
         

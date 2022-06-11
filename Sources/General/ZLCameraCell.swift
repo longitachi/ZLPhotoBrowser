@@ -74,7 +74,7 @@ class ZLCameraCell: UICollectionViewCell {
         layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
         
         contentView.addSubview(imageView)
-        backgroundColor = .cameraCellBgColor
+        backgroundColor = .zl.cameraCellBgColor
     }
     
     private func setupSession() {

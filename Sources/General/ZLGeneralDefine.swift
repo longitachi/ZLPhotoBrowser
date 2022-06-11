@@ -158,7 +158,7 @@ func showAlertView(_ message: String, _ sender: UIViewController?) {
     if deviceIsiPad() {
         alert.popoverPresentationController?.sourceView = sender?.view
     }
-    (sender ?? UIApplication.shared.keyWindow?.rootViewController)?.showAlertController(alert)
+    (sender ?? UIApplication.shared.keyWindow?.rootViewController)?.zl.showAlertController(alert)
 }
 
 func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {

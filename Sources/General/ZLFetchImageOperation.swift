@@ -118,7 +118,7 @@ class ZLFetchImageOperation: Operation {
         if ZLPhotoConfiguration.default().allowSelectGif, model.type == .gif {
             requestImageID = ZLPhotoManager.fetchOriginalImageData(for: model.asset) { [weak self] data, _, isDegraded in
                 if !isDegraded {
-                    let image = UIImage.zl_animateGifImage(data: data)
+                    let image = UIImage.zl.animateGifImage(data: data)
                     self?.completion(image, nil)
                     self?.fetchFinish()
                 }
@@ -130,14 +130,14 @@ class ZLFetchImageOperation: Operation {
             requestImageID = ZLPhotoManager.fetchOriginalImage(for: model.asset, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
                     zl_debugPrint("---- 下载完成 \(String(describing: self?.isCancelled))")
-                    self?.completion(image?.fixOrientation(), nil)
+                    self?.completion(image?.zl.fixOrientation(), nil)
                     self?.fetchFinish()
                 }
             }
         } else {
             requestImageID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
-                    self?.completion(self?.scaleImage(image?.fixOrientation()), nil)
+                    self?.completion(self?.scaleImage(image?.zl.fixOrientation()), nil)
                     self?.fetchFinish()
                 }
             }

@@ -51,12 +51,12 @@ public class ZLPhotoPreviewSheet: UIView {
         layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.backgroundColor = .previewBtnBgColor
+        view.backgroundColor = .zl.previewBtnBgColor
         view.delegate = self
         view.dataSource = self
         view.isHidden = ZLPhotoConfiguration.default().maxPreviewCount == 0
         view.backgroundView = placeholderLabel
-        ZLThumbnailPhotoCell.zl_register(view)
+        ZLThumbnailPhotoCell.zl.register(view)
         
         return view
     }()
@@ -87,7 +87,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private lazy var flexibleView: UIView = {
         let view = UIView()
-        view.backgroundColor = .previewBtnBgColor
+        view.backgroundColor = .zl.previewBtnBgColor
         return view
     }()
     
@@ -96,7 +96,7 @@ public class ZLPhotoPreviewSheet: UIView {
         label.font = getFont(15)
         label.text = localLanguageTextValue(.noPhotoTips)
         label.textAlignment = .center
-        label.textColor = .previewBtnTitleColor
+        label.textColor = .zl.previewBtnTitleColor
         return label
     }()
     
@@ -202,7 +202,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     func setupUI() {
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundColor = .previewBgColor
+        backgroundColor = .zl.previewBgColor
         
         let showCameraBtn = canShowCameraBtn()
         var btnHeight: CGFloat = 0
@@ -234,8 +234,8 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private func createBtn(_ title: String) -> UIButton {
         let btn = UIButton(type: .custom)
-        btn.backgroundColor = .previewBtnBgColor
-        btn.setTitleColor(.previewBtnTitleColor, for: .normal)
+        btn.backgroundColor = .zl.previewBtnBgColor
+        btn.setTitleColor(.zl.previewBtnTitleColor, for: .normal)
         btn.setTitle(title, for: .normal)
         btn.titleLabel?.font = getFont(17)
         return btn
@@ -354,13 +354,13 @@ public class ZLPhotoPreviewSheet: UIView {
         }
         
         if animate {
-            backgroundColor = UIColor.previewBgColor.withAlphaComponent(0)
+            backgroundColor = .zl.previewBgColor.withAlphaComponent(0)
             var frame = baseView.frame
             frame.origin.y = bounds.height
             baseView.frame = frame
             frame.origin.y -= baseViewHeight
             UIView.animate(withDuration: 0.2) {
-                self.backgroundColor = UIColor.previewBgColor
+                self.backgroundColor = .zl.previewBgColor
                 self.baseView.frame = frame
             }
         }
@@ -371,7 +371,7 @@ public class ZLPhotoPreviewSheet: UIView {
             var frame = baseView.frame
             frame.origin.y += baseViewHeight
             UIView.animate(withDuration: 0.2, animations: {
-                self.backgroundColor = UIColor.previewBgColor.withAlphaComponent(0)
+                self.backgroundColor = .zl.previewBgColor.withAlphaComponent(0)
                 self.baseView.frame = frame
             }) { _ in
                 self.isHidden = true
@@ -395,7 +395,7 @@ public class ZLPhotoPreviewSheet: UIView {
             ZLPhotoConfiguration.default().noAuthorityCallback?(.library)
         }
         alert.addAction(action)
-        sender?.showAlertController(alert)
+        sender?.zl.showAlertController(alert)
     }
     
     @objc private func tapAction(_ tap: UITapGestureRecognizer) {
@@ -829,7 +829,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLThumbnailPhotoCell.zl_identifier(), for: indexPath) as! ZLThumbnailPhotoCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLThumbnailPhotoCell.zl.identifier, for: indexPath) as! ZLThumbnailPhotoCell
         
         let model = arrDataSources[indexPath.row]
         
@@ -1002,7 +1002,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         let config = ZLPhotoConfiguration.default()
         
         if isSelected {
-            cell.coverView.backgroundColor = .selectedMaskColor
+            cell.coverView.backgroundColor = .zl.selectedMaskColor
             cell.coverView.isHidden = !config.showSelectedMask
             if config.showSelectedBorder {
                 cell.layer.borderWidth = 4
@@ -1013,21 +1013,21 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 if config.allowMixSelect {
                     let videoCount = arrSelectedModels.filter { $0.type == .video }.count
                     if videoCount >= config.maxVideoSelectCount, model.type == .video {
-                        cell.coverView.backgroundColor = .invalidMaskColor
+                        cell.coverView.backgroundColor = .zl.invalidMaskColor
                         cell.coverView.isHidden = !config.showInvalidMask
                         cell.enableSelect = false
                     } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
-                        cell.coverView.backgroundColor = .invalidMaskColor
+                        cell.coverView.backgroundColor = .zl.invalidMaskColor
                         cell.coverView.isHidden = !config.showInvalidMask
                         cell.enableSelect = false
                     }
                 } else if selCount > 0 {
-                    cell.coverView.backgroundColor = .invalidMaskColor
+                    cell.coverView.backgroundColor = .zl.invalidMaskColor
                     cell.coverView.isHidden = (!config.showInvalidMask || model.type != .video)
                     cell.enableSelect = model.type != .video
                 }
             } else if selCount >= config.maxSelectCount {
-                cell.coverView.backgroundColor = .invalidMaskColor
+                cell.coverView.backgroundColor = .zl.invalidMaskColor
                 cell.coverView.isHidden = !config.showInvalidMask
                 cell.enableSelect = false
             }
@@ -1040,10 +1040,10 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     private func changeCancelBtnTitle() {
         if arrSelectedModels.count > 0 {
             cancelBtn.setTitle(String(format: "%@(%ld)", localLanguageTextValue(.done), arrSelectedModels.count), for: .normal)
-            cancelBtn.setTitleColor(.previewBtnHighlightTitleColor, for: .normal)
+            cancelBtn.setTitleColor(.zl.previewBtnHighlightTitleColor, for: .normal)
         } else {
             cancelBtn.setTitle(localLanguageTextValue(.cancel), for: .normal)
-            cancelBtn.setTitleColor(.previewBtnTitleColor, for: .normal)
+            cancelBtn.setTitleColor(.zl.previewBtnTitleColor, for: .normal)
         }
     }
     

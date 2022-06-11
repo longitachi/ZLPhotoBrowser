@@ -52,7 +52,7 @@ class ZLAdjustSlider: UIView {
     
     private lazy var shadowView: UIView = {
         let view = UIView()
-        view.backgroundColor = .adjustSliderNormalColor
+        view.backgroundColor = .zl.adjustSliderNormalColor
         view.layer.cornerRadius = sliderWidth / 2
         view.layer.shadowColor = UIColor.black.withAlphaComponent(0.4).cgColor
         view.layer.shadowOffset = .zero
@@ -63,7 +63,7 @@ class ZLAdjustSlider: UIView {
     
     private lazy var whiteView: UIView = {
         let view = UIView()
-        view.backgroundColor = .adjustSliderNormalColor
+        view.backgroundColor = .zl.adjustSliderNormalColor
         view.layer.cornerRadius = sliderWidth / 2
         view.layer.masksToBounds = true
         return view
@@ -71,7 +71,7 @@ class ZLAdjustSlider: UIView {
     
     private lazy var tintView: UIView = {
         let view = UIView()
-        view.backgroundColor = .adjustSliderTintColor
+        view.backgroundColor = .zl.adjustSliderTintColor
         return view
     }()
     

@@ -135,7 +135,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         contentView.addSubview(progressView)
         
         if ZLPhotoConfiguration.default().showSelectedBorder {
-            layer.borderColor = UIColor.selectedBorderColor.cgColor
+            layer.borderColor = UIColor.zl.selectedBorderColor.cgColor
         }
     }
     
@@ -225,7 +225,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         btnSelect.isUserInteractionEnabled = showSelBtn
         btnSelect.isSelected = model.isSelected
         
-        indexLabel.backgroundColor = .indexLabelBgColor
+        indexLabel.backgroundColor = .zl.indexLabelBgColor
         
         if model.isSelected {
             fetchBigImage()

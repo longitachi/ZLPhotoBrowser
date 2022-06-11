@@ -55,7 +55,7 @@ class ZLInputTextViewController: UIViewController {
         textView.returnKeyType = .done
         textView.delegate = self
         textView.backgroundColor = .clear
-        textView.tintColor = .bottomToolViewBtnNormalBgColor
+        textView.tintColor = .zl.bottomToolViewBtnNormalBgColor
         textView.textColor = currentTextColor
         textView.text = text
         textView.font = UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
@@ -83,7 +83,7 @@ class ZLInputTextViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsHorizontalScrollIndicator = false
-        ZLDrawColorCell.zl_register(collectionView)
+        ZLDrawColorCell.zl.register(collectionView)
         
         return collectionView
     }()
@@ -148,10 +148,10 @@ class ZLInputTextViewController: UIViewController {
         }
         
         let btnY = insets.top + 20
-        let cancelBtnW = localLanguageTextValue(.cancel).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
+        let cancelBtnW = localLanguageTextValue(.cancel).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
         cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLLayout.bottomToolBtnH)
         
-        let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
+        let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
         doneBtn.frame = CGRect(x: view.bounds.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
         
         textView.frame = CGRect(x: 20, y: cancelBtn.frame.maxY + 20, width: view.bounds.width - 40, height: 150)
@@ -164,7 +164,7 @@ class ZLInputTextViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .black
         
-        let bgImageView = UIImageView(image: image?.blurImage(level: 4))
+        let bgImageView = UIImageView(image: image?.zl.blurImage(level: 4))
         bgImageView.frame = view.bounds
         bgImageView.contentMode = .scaleAspectFit
         view.addSubview(bgImageView)
@@ -211,7 +211,7 @@ extension ZLInputTextViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLDrawColorCell.zl_identifier(), for: indexPath) as! ZLDrawColorCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLDrawColorCell.zl.identifier, for: indexPath) as! ZLDrawColorCell
         
         let c = ZLPhotoConfiguration.default().editImageConfiguration.textStickerTextColors[indexPath.row]
         cell.color = c

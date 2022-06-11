@@ -37,7 +37,7 @@ public class ZLEditVideoViewController: UIViewController {
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setTitle(localLanguageTextValue(.cancel), for: .normal)
-        btn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
+        btn.setTitleColor(.zl.bottomToolViewBtnNormalTitleColor, for: .normal)
         btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         return btn
@@ -46,10 +46,10 @@ public class ZLEditVideoViewController: UIViewController {
     private lazy var doneBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setTitle(localLanguageTextValue(.done), for: .normal)
-        btn.setTitleColor(.bottomToolViewBtnNormalTitleColor, for: .normal)
+        btn.setTitleColor(.zl.bottomToolViewBtnNormalTitleColor, for: .normal)
         btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
-        btn.backgroundColor = .bottomToolViewBtnNormalBgColor
+        btn.backgroundColor = .zl.bottomToolViewBtnNormalBgColor
         btn.layer.masksToBounds = true
         btn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         return btn
@@ -75,7 +75,7 @@ public class ZLEditVideoViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.showsHorizontalScrollIndicator = false
-        ZLEditVideoFrameImageCell.zl_register(view)
+        ZLEditVideoFrameImageCell.zl.register(view)
         return view
     }()
     
@@ -219,9 +219,9 @@ public class ZLEditVideoViewController: UIViewController {
         
         playerLayer.frame = CGRect(x: 15, y: insets.top + 20, width: view.bounds.width - 30, height: view.bounds.height - playerLayerY - diffBottom)
         
-        let cancelBtnW = localLanguageTextValue(.cancel).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width
+        let cancelBtnW = localLanguageTextValue(.cancel).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width
         cancelBtn.frame = CGRect(x: 20, y: view.bounds.height - insets.bottom - btnH, width: cancelBtnW, height: btnH)
-        let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width + 20
+        let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnH)).width + 20
         doneBtn.frame = CGRect(x: view.bounds.width - doneBtnW - 20, y: view.bounds.height - insets.bottom - btnH, width: doneBtnW, height: btnH)
         
         collectionView.frame = CGRect(x: 0, y: doneBtn.frame.minY - bottomBtnAndColSpacing - ZLEditVideoViewController.frameImageSize.height, width: view.bounds.width, height: ZLEditVideoViewController.frameImageSize.height)
@@ -370,7 +370,7 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     private func requestVideoMeasureFrameImage() {
-        for i in 0 ..< measureCount {
+        for i in 0..<measureCount {
             let mes = TimeInterval(i) * interval
             let time = CMTimeMakeWithSeconds(Float64(mes), preferredTimescale: avAsset.duration.timescale)
             
@@ -447,7 +447,7 @@ public class ZLEditVideoViewController: UIViewController {
             self.dismiss(animated: false, completion: nil)
         }
         alert.addAction(action)
-        showAlertController(alert)
+        zl.showAlertController(alert)
     }
 }
 
@@ -495,7 +495,7 @@ extension ZLEditVideoViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLEditVideoFrameImageCell.zl_identifier(), for: indexPath) as! ZLEditVideoFrameImageCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLEditVideoFrameImageCell.zl.identifier, for: indexPath) as! ZLEditVideoFrameImageCell
         
         if let image = frameImageCache[indexPath.row] {
             cell.imageView.image = image
@@ -567,7 +567,6 @@ class ZLEditVideoFrameImageCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         
         contentView.addSubview(imageView)
     }

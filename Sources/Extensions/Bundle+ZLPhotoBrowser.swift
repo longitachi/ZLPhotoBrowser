@@ -31,7 +31,7 @@ private class BundleFinder {}
 extension Bundle {
     private static var bundle: Bundle?
     
-    static var normal_module: Bundle? = {
+    static var normalModule: Bundle? = {
         let bundleName = "ZLPhotoBrowser"
 
         var candidates = [
@@ -60,7 +60,7 @@ extension Bundle {
         return nil
     }()
     
-    static var spm_module: Bundle? = {
+    static var spmModule: Bundle? = {
         let bundleName = "ZLPhotoBrowser_ZLPhotoBrowser"
 
         let candidates = [
@@ -85,7 +85,7 @@ extension Bundle {
     }()
     
     static var zlPhotoBrowserBundle: Bundle? {
-        return normal_module ?? spm_module
+        return normalModule ?? spmModule
     }
     
     class func resetLanguage() {

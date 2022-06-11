@@ -93,7 +93,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
         let layer = CAShapeLayer()
         layer.path = path.cgPath
-        layer.strokeColor = UIColor.cameraRecodeProgressColor.cgColor
+        layer.strokeColor = UIColor.zl.cameraRecodeProgressColor.cgColor
         layer.fillColor = UIColor.clear.cgColor
         layer.lineWidth = 8
         return layer
@@ -113,8 +113,8 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         let btn = UIButton(type: .custom)
         btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
         btn.setTitle(localLanguageTextValue(.done), for: .normal)
-        btn.setTitleColor(.bottomToolViewDoneBtnNormalTitleColor, for: .normal)
-        btn.backgroundColor = .bottomToolViewBtnNormalBgColor
+        btn.setTitleColor(.zl.bottomToolViewDoneBtnNormalTitleColor, for: .normal)
+        btn.backgroundColor = .zl.bottomToolViewBtnNormalBgColor
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         btn.isHidden = true
         btn.layer.masksToBounds = true
@@ -348,13 +348,13 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
         dismissBtn.frame = CGRect(x: 60, y: (ZLCustomCamera.Layout.bottomViewH - 25) / 2, width: 25, height: 25)
         
-        let tipsTextHeight = (tipsLabel.text ?? " ").boundingRect(font: getFont(14), limitSize: CGSize(width: view.bounds.width - 20, height: .greatestFiniteMagnitude)).height
+        let tipsTextHeight = (tipsLabel.text ?? " ").zl.boundingRect(font: getFont(14), limitSize: CGSize(width: view.bounds.width - 20, height: .greatestFiniteMagnitude)).height
         tipsLabel.frame = CGRect(x: 10, y: bottomView.frame.minY - tipsTextHeight, width: view.bounds.width - 20, height: tipsTextHeight)
         
         retakeBtn.frame = CGRect(x: 30, y: insets.top + 10, width: 28, height: 28)
         switchCameraBtn.frame = CGRect(x: view.bounds.width - 30 - 28, y: insets.top + 10, width: 28, height: 28)
         
-        let doneBtnW = localLanguageTextValue(.done).boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width + 20
+        let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width + 20
         let doneBtnY = view.bounds.height - 57 - insets.bottom
         doneBtn.frame = CGRect(x: view.bounds.width - doneBtnW - 20, y: doneBtnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
@@ -571,7 +571,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         alert.addAction(continueAction)
         alert.addAction(gotoSettingsAction)
-        showAlertController(alert)
+        zl.showAlertController(alert)
     }
     
     private func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
@@ -584,7 +584,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             }
         }
         alert.addAction(action)
-        showAlertController(alert)
+        zl.showAlertController(alert)
     }
     
     private func showTipsLabel(animate: Bool) {
@@ -997,7 +997,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
             
             if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
                 self.session.stopRunning()
-                self.takedImage = UIImage(data: data)?.fixOrientation()
+                self.takedImage = UIImage(data: data)?.zl.fixOrientation()
                 self.takedImageView.image = self.takedImage
                 self.takedImageView.isHidden = false
                 self.resetSubViewStatus()

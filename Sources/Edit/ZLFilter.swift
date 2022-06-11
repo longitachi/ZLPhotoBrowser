@@ -84,13 +84,13 @@ public class ZLFilter: NSObject {
         
         if filterType != .normal {
             applier = { image -> UIImage in
-                guard let ciImage = image.toCIImage() else {
+                guard let ciImage = image.zl.toCIImage() else {
                     return image
                 }
                 
                 let filter = CIFilter(name: filterType.coreImageFilterName)
                 filter?.setValue(ciImage, forKey: kCIInputImageKey)
-                guard let outputImage = filter?.outputImage?.toUIImage() else {
+                guard let outputImage = filter?.outputImage?.zl.toUIImage() else {
                     return image
                 }
                 return outputImage
@@ -109,7 +109,7 @@ public class ZLFilter: NSObject {
 
 extension ZLFilter {
     class func clarendonFilter(image: UIImage) -> UIImage {
-        guard let ciImage = image.toCIImage() else {
+        guard let ciImage = image.zl.toCIImage() else {
             return image
         }
         
@@ -122,14 +122,14 @@ extension ZLFilter {
             "inputBrightness": 0.05,
             "inputContrast": 1.1,
         ])
-        guard let outputImage = outputCIImage.toUIImage() else {
+        guard let outputImage = outputCIImage.zl.toUIImage() else {
             return image
         }
         return outputImage
     }
     
     class func nashvilleFilter(image: UIImage) -> UIImage {
-        guard let ciImage = image.toCIImage() else {
+        guard let ciImage = image.zl.toCIImage() else {
             return image
         }
         
@@ -151,14 +151,14 @@ extension ZLFilter {
                 "inputBackgroundImage": backgroundImage2,
             ])
         
-        guard let outputImage = outputCIImage.toUIImage() else {
+        guard let outputImage = outputCIImage.zl.toUIImage() else {
             return image
         }
         return outputImage
     }
     
     class func apply1977Filter(image: UIImage) -> UIImage {
-        guard let ciImage = image.toCIImage() else {
+        guard let ciImage = image.zl.toCIImage() else {
             return image
         }
         
@@ -185,14 +185,14 @@ extension ZLFilter {
                 "inputPoint4": CIVector(x: 1, y: 1),
             ])
         
-        guard let outputImage = outputCIImage.toUIImage() else {
+        guard let outputImage = outputCIImage.zl.toUIImage() else {
             return image
         }
         return outputImage
     }
     
     class func toasterFilter(image: UIImage) -> UIImage {
-        guard let ciImage = image.toCIImage() else {
+        guard let ciImage = image.zl.toCIImage() else {
             return image
         }
         
@@ -223,7 +223,7 @@ extension ZLFilter {
                 "inputBackgroundImage": circle!,
             ])
         
-        guard let outputImage = outputCIImage.toUIImage() else {
+        guard let outputImage = outputCIImage.zl.toUIImage() else {
             return image
         }
         return outputImage

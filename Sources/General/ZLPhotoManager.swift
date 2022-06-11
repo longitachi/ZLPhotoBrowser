@@ -325,7 +325,7 @@ public class ZLPhotoManager: NSObject {
         }
         
         // https://github.com/longitachi/ZLPhotoBrowser/issues/369#issuecomment-728679135
-        if asset.isInCloud {
+        if asset.zl.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { session, info in
                 // iOS11 and earlier, callback is not on the main thread.
                 ZLMainAsync {
@@ -365,7 +365,7 @@ public class ZLPhotoManager: NSObject {
         options.deliveryMode = .automatic
         options.isNetworkAccessAllowed = true
         
-        if asset.isInCloud {
+        if asset.zl.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: options, exportPreset: AVAssetExportPresetHighestQuality) { session, info in
                 // iOS11 and earlier, callback is not on the main thread.
                 ZLMainAsync {

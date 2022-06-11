@@ -115,7 +115,7 @@ public class ZLProgressHUD: UIView {
             view.addSubview(effectView)
         }
         
-        loadingView.frame = CGRect(x: 135 / 2 - 22, y: 25, width: 44, height: 44)
+        loadingView.frame = CGRect(x: 135 / 2 - 20, y: 27, width: 40, height: 40)
         view.addSubview(loadingView)
         
         let label = UILabel(frame: CGRect(x: 0, y: 85, width: view.bounds.width, height: 30))

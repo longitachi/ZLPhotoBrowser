@@ -203,7 +203,7 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
         }
         
         // Rotate must be first when first layout.
-        transform = transform.rotated(by: originAngle.toPi)
+        transform = transform.rotated(by: originAngle.zl.toPi)
         
         if totalTranslationPoint != .zero {
             if originAngle == 90 {
@@ -416,7 +416,7 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
         transform = transform.scaledBy(x: 1 / gesScale, y: 1 / gesScale)
         // Revert ges rotation.
         transform = transform.rotated(by: -gesRotation)
-        transform = transform.rotated(by: -originAngle.toPi)
+        transform = transform.rotated(by: -originAngle.zl.toPi)
         
         // Recalculate current frame.
         let center = CGPoint(x: self.frame.midX, y: self.frame.midY)
@@ -442,12 +442,15 @@ class ZLTextStickerView: UIView, ZLStickerViewAdditional {
         transform = transform.scaledBy(x: gesScale, y: gesScale)
         // Readd ges rotation.
         transform = transform.rotated(by: gesRotation)
-        transform = transform.rotated(by: originAngle.toPi)
+        transform = transform.rotated(by: originAngle.zl.toPi)
     }
     
     class func calculateSize(text: String, width: CGFloat) -> CGSize {
         let diff = ZLTextStickerView.edgeInset * 2
-        let size = text.boundingRect(font: UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize), limitSize: CGSize(width: width - diff, height: CGFloat.greatestFiniteMagnitude))
+        let size = text.zl.boundingRect(
+            font: UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize),
+            limitSize: CGSize(width: width - diff, height: CGFloat.greatestFiniteMagnitude)
+        )
         return CGSize(width: size.width + diff * 2, height: size.height + diff * 2)
     }
 }

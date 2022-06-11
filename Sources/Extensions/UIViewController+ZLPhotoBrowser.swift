@@ -26,11 +26,11 @@
 
 import UIKit
 
-extension UIViewController {
+extension ZLPhotoBrowserWrapper where Base: UIViewController {
     func showAlertController(_ alertController: UIAlertController) {
         if deviceIsiPad() {
-            alertController.popoverPresentationController?.sourceView = view
+            alertController.popoverPresentationController?.sourceView = base.view
         }
-        showDetailViewController(alertController, sender: nil)
+        base.showDetailViewController(alertController, sender: nil)
     }
 }

@@ -55,10 +55,6 @@ class ZLImageNavController: UINavigationController {
         navigationBar.isTranslucent = true
         modalPresentationStyle = .fullScreen
         isNavigationBarHidden = true
-        
-        navigationBar.setBackgroundImage(UIImage.image(withColor: .navBarColor), for: .default)
-        navigationBar.tintColor = .navTitleColor
-        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.navTitleColor]
     }
     
     @available(*, unavailable)

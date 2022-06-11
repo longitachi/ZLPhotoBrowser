@@ -42,7 +42,7 @@ class ZLAlbumListCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = getFont(17)
-        label.textColor = .albumListTitleColor
+        label.textColor = .zl.albumListTitleColor
         label.lineBreakMode = .byTruncatingTail
         return label
     }()
@@ -50,7 +50,7 @@ class ZLAlbumListCell: UITableViewCell {
     private lazy var countLabel: UILabel = {
         let label = UILabel()
         label.font = getFont(16)
-        label.textColor = .albumListCountColor
+        label.textColor = .zl.albumListCountColor
         return label
     }()
     
@@ -95,17 +95,23 @@ class ZLAlbumListCell: UITableViewCell {
         
         coverImageView.frame = CGRect(x: imageViewX, y: 2, width: bounds.height - 4, height: bounds.height - 4)
         if let m = model {
-            let titleW = min(bounds.width / 3 * 2, m.title.boundingRect(font: getFont(17), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width)
+            let titleW = min(
+                bounds.width / 3 * 2,
+                m.title.zl.boundingRect(
+                    font: getFont(17),
+                    limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
+                ).width
+            )
             titleLabel.frame = CGRect(x: coverImageView.frame.maxX + 10, y: (bounds.height - 30) / 2, width: titleW, height: 30)
             
-            let countSize = ("(" + String(model.count) + ")").boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30))
+            let countSize = ("(" + String(model.count) + ")").zl.boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30))
             countLabel.frame = CGRect(x: titleLabel.frame.maxX + 10, y: (bounds.height - 30) / 2, width: countSize.width, height: 30)
         }
         selectBtn.frame = CGRect(x: bounds.width - 20 - 20, y: (bounds.height - 20) / 2, width: 20, height: 20)
     }
     
     func setupUI() {
-        backgroundColor = .albumListBgColor
+        backgroundColor = .zl.albumListBgColor
         selectionStyle = .none
         
         contentView.addSubview(coverImageView)

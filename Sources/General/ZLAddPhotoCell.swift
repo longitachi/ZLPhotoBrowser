@@ -61,7 +61,7 @@ class ZLAddPhotoCell: UICollectionViewCell {
         layer.masksToBounds = true
         layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
         
-        backgroundColor = .cameraCellBgColor
+        backgroundColor = .zl.cameraCellBgColor
         contentView.addSubview(imageView)
     }
     

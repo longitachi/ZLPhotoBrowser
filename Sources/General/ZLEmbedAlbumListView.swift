@@ -37,14 +37,14 @@ class ZLEmbedAlbumListView: UIView {
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
-        view.backgroundColor = .albumListBgColor
+        view.backgroundColor = .zl.albumListBgColor
         view.tableFooterView = UIView()
         view.rowHeight = ZLEmbedAlbumListView.rowH
         view.separatorInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
-        view.separatorColor = .separatorLineColor
+        view.separatorColor = .zl.separatorLineColor
         view.delegate = self
         view.dataSource = self
-        ZLAlbumListCell.zl_register(view)
+        ZLAlbumListCell.zl.register(view)
         return view
     }()
     
@@ -96,7 +96,7 @@ class ZLEmbedAlbumListView: UIView {
     private func setupUI() {
         clipsToBounds = true
         
-        backgroundColor = .embedAlbumListTranslucentColor
+        backgroundColor = .zl.embedAlbumListTranslucentColor
         
         addSubview(tableBgView)
         tableBgView.addSubview(tableView)
@@ -209,7 +209,7 @@ extension ZLEmbedAlbumListView: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ZLAlbumListCell.zl_identifier(), for: indexPath) as! ZLAlbumListCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ZLAlbumListCell.zl.identifier, for: indexPath) as! ZLAlbumListCell
         
         let m = arrDataSource[indexPath.row]
         

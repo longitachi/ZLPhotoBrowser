@@ -26,8 +26,8 @@
 
 import UIKit
 
-extension CGFloat {
+extension ZLPhotoBrowserWrapper where Base == CGFloat {
     var toPi: CGFloat {
-        return self / 180 * .pi
+        return base / 180 * .pi
     }
 }
