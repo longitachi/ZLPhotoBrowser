@@ -129,7 +129,7 @@ class ZLFetchImageOperation: Operation {
         if isOriginal {
             requestImageID = ZLPhotoManager.fetchOriginalImage(for: model.asset, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
-                    zl_debugPrint("---- 下载完成 \(String(describing: self?.isCancelled))")
+                    zl_debugPrint("---- 原图加载完成 \(String(describing: self?.isCancelled))")
                     self?.completion(image?.zl.fixOrientation(), nil)
                     self?.fetchFinish()
                 }
@@ -137,6 +137,7 @@ class ZLFetchImageOperation: Operation {
         } else {
             requestImageID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
+                    zl_debugPrint("---- 加载完成 \(String(describing: self?.isCancelled))")
                     self?.completion(self?.scaleImage(image?.zl.fixOrientation()), nil)
                     self?.fetchFinish()
                 }
@@ -166,7 +167,7 @@ class ZLFetchImageOperation: Operation {
         if data.count < Int(0.2 * mUnit) {
             return i
         }
-        let scale: CGFloat = (data.count > Int(mUnit) ? 0.5 : 0.7)
+        let scale: CGFloat = (data.count > Int(mUnit) ? 0.6 : 0.8)
         
         guard let d = i.jpegData(compressionQuality: scale) else {
             return i

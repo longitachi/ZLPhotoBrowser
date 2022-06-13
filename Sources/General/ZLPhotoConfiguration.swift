@@ -174,6 +174,10 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow select full image. Defaults to true.
     @objc public var allowSelectOriginal = true
     
+    /// Always return the original photo.
+    /// - warning: Only valid when `allowSelectOriginal = false`, Defaults to false.
+    @objc public var alwaysRequestOriginal = false
+    
     /// Allow access to the preview large image interface (That is, whether to allow access to the large image interface after clicking the thumbnail image). Defaults to true.
     @objc public var allowPreviewPhotos = true
     

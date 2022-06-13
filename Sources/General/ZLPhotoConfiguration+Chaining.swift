@@ -180,6 +180,12 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func alwaysRequestOriginal(_ value: Bool) -> ZLPhotoConfiguration {
+        alwaysRequestOriginal = value
+        return self
+    }
+    
+    @discardableResult
     func allowPreviewPhotos(_ value: Bool) -> ZLPhotoConfiguration {
         allowPreviewPhotos = value
         return self

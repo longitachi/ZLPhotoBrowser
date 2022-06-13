@@ -553,11 +553,13 @@ public class ZLPhotoPreviewSheet: UIView {
         
         hud.show(timeout: ZLPhotoConfiguration.default().timeout)
         
+        let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
+        
         let callback = { [weak self] (sucImages: [UIImage], sucAssets: [PHAsset], errorAssets: [PHAsset], errorIndexs: [Int]) in
             hud.hide()
             
             func call() {
-                self?.selectImageBlock?(sucImages, sucAssets, self?.isSelectOriginal ?? false)
+                self?.selectImageBlock?(sucImages, sucAssets, isOriginal)
                 if !errorAssets.isEmpty {
                     self?.selectImageRequestErrorBlock?(errorAssets, errorIndexs)
                 }
@@ -592,8 +594,9 @@ public class ZLPhotoPreviewSheet: UIView {
         
         var sucCount = 0
         let totalCount = arrSelectedModels.count
+        
         for (i, m) in arrSelectedModels.enumerated() {
-            let operation = ZLFetchImageOperation(model: m, isOriginal: isSelectOriginal) { image, asset in
+            let operation = ZLFetchImageOperation(model: m, isOriginal: isOriginal) { image, asset in
                 guard !timeout else { return }
                 
                 sucCount += 1
