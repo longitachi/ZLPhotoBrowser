@@ -1197,7 +1197,14 @@ open class ZLEditImageViewController: UIViewController {
             } else {
                 drawImage = originalImage
             }
-            drawImage = drawImage?.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation)
+            
+            if tools.contains(.adjust),
+               brightness != 0,
+               contrast != 0,
+               saturation != 0 {
+                drawImage = drawImage?.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation)
+            }
+            
             drawImage?.draw(at: .zero)
         }
         
