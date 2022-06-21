@@ -345,7 +345,7 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         let currCiImage = CIImage(cgImage: cgImage)
         let filter = CIFilter(name: "CIPixellate")
         filter?.setValue(currCiImage, forKey: kCIInputImageKey)
-        filter?.setValue(20, forKey: kCIInputScaleKey)
+        filter?.setValue(15, forKey: kCIInputScaleKey)
         guard let outputImage = filter?.outputImage else { return nil }
         
         let context = CIContext()

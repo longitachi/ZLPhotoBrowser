@@ -102,6 +102,11 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.3
+  Add:
+    优化加载等待框样式;
+    添加ZLPhotoBrowserWrapper，避免与其他extension命名冲突;
+    当'allowSelectOriginal = false'时候，支持请求原图;
 ● 4.3.2
   Add:
     视频编辑时间对比时，添加一个0.01的容差;
@@ -114,14 +119,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     从ZLPhotoConfiguration中将部分UI相关的属性移动到ZLPhotoUIConfiguration中;
     添加UIButton子类ZLEnlargeButton替代之前的UIControl扩展，来增加按钮的点击范围;
     拍照时新增一个fade动画;
-● 4.3.0 - Beta
-  Add:
-    支持土耳其语;
-    从ZLPhotoConfiguration类中，将自定义颜色、文案、字体、图片拆分出来，放到新的类ZLPhotoUIConfiguration中;
-    编辑图片工具类中新增部分属性以支持OC调用;
-    新增部分UI支持自定义color;
-    ZLImagePreviewController 中添加长按事件回调;
-    新增属性 'operateBeforeDoneAction'，支持用户在点击完成按钮，照片回调之前做一些操作;
 ...
 ```
 

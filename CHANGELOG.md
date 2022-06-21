@@ -2,6 +2,14 @@
 
 -----
 
+## [4.3.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.3) (2022-06-21)
+### Add:
+* Adjust loading progress hud style to make it prettier.
+* Add wrapper for ZLPhotoBrowser compatible types.
+* Support for requesting original images when 'allowSelectOriginal = false'.
+
+---
+
 ## [4.3.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.2) (2022-05-25)
 ### Add:
 * Add Tolerance in Video Editing.
