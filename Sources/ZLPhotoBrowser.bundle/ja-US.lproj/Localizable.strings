@@ -30,7 +30,7 @@
 
 "noCameraAuthority" = "「設定」>「プライパシー」>「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
 "noPhotoLibratyAuthority" = "「設定」>「プライバシー」>「写真」から、%@があなたのアルバムにアクセスする許可をしてください";
-"noMicrophoneAuthority" = "音声を録音できません。「設定」 >「%@」に移動し、マイクへのアクセスを有効にしてください。";
+"noMicrophoneAuthority" = "音声を録音できません。「設定」 >「%@」に移動し、マイクへのアクセスを有効にしてください";
 "cameraUnavailable" = "カメラは利用できません";
 "keepRecording" = "撮影を続ける";
 "gotoSettings" = "設定に移動";

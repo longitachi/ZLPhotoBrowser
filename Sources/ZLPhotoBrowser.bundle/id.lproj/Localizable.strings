@@ -30,7 +30,7 @@
 
 "noCameraAuthority" = "Izinkan akses kamera di \"Pengaturan\" > \"%@\" iPhone Anda.";
 "noPhotoLibratyAuthority" = "Izinkan %@ mengakses album Anda di \"Setelan\" > \"Privasi\" > \"Foto\"";
-"noMicrophoneAuthority" = "Tidak dapat merekam audio. Buka \"Setelan\" > \"%@\" dan aktifkan akses mikrofon.";
+"noMicrophoneAuthority" = "Tidak dapat merekam audio. Buka \"Setelan\" > \"%@\" dan aktifkan akses mikrofon";
 "cameraUnavailable" = "Kamera tidak tersedia";
 "keepRecording" = "Terus Merekam";
 "gotoSettings" = "Pergi ke pengaturan";
