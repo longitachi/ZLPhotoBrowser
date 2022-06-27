@@ -102,6 +102,9 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.4
+  Fix:
+    修复图片编辑器的一个bug;
 ● 4.3.3
   Add:
     优化加载等待框样式;
@@ -113,12 +116,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     统一代码风格;
   Fix:
     修复iOS14相册权限为limited时的一些bug;
-● 4.3.1 - 4.3.0 Patch
-  Add:
-    删除已废弃的属性(图片编辑配置相关);
-    从ZLPhotoConfiguration中将部分UI相关的属性移动到ZLPhotoUIConfiguration中;
-    添加UIButton子类ZLEnlargeButton替代之前的UIControl扩展，来增加按钮的点击范围;
-    拍照时新增一个fade动画;
 ...
 ```
 

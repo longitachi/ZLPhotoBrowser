@@ -2,6 +2,13 @@
 
 -----
 
+## [4.3.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.4) (2022-06-27)
+
+## Fix:
+* Fix a bug of the image editor.
+
+---
+
 ## [4.3.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.3) (2022-06-21)
 ### Add:
 * Adjust loading progress hud style to make it prettier.

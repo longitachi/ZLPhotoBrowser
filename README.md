@@ -91,6 +91,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.4
+  Fix:
+    Fix a bug of the image editor.
 ● 4.3.3
   Add:
     Adjust loading progress hud style to make it prettier.
@@ -102,12 +105,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Format code style.
   Fix:
     Fix some bugs when iOS14 album permissions are limited.
-● 4.3.1 - 4.3.0 Patch
-  Add:
-    Remove deprecated properties. 
-    Moved some UI related properties to ZLPhotoUIConfiguration.
-    Add ZLEnlargeButton class instead of extending UIControl to enlarge button click area.
-    Add fade animation when taking photos.
 ...
 ```
 
