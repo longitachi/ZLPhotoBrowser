@@ -235,7 +235,7 @@ class ZLClipImageViewController: UIViewController {
     
     deinit {
         zl_debugPrint("ZLClipImageViewController deinit")
-        self.cleanTimer()
+        cleanTimer()
     }
     
     init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0, selectRatio: ZLImageClipRatio?) {
@@ -816,17 +816,16 @@ class ZLClipImageViewController: UIViewController {
         }
     }
     
-    private func endEditing() {
+    @objc private func endEditing() {
         overlayView.isEditing = false
         moveClipContentToCenter()
     }
     
     private func startTimer() {
         cleanTimer()
-        resetTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false, block: { _ in
-            self.cleanTimer()
-            self.endEditing()
-        })
+        // TODO: 换target写法
+        resetTimer = Timer.scheduledTimer(timeInterval: 0.8, target: ZLWeakProxy(target: self), selector: #selector(endEditing), userInfo: nil, repeats: false)
+        RunLoop.current.add(resetTimer!, forMode: .common)
     }
     
     private func cleanTimer() {
