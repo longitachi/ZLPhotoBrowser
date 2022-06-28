@@ -686,21 +686,21 @@ public class ZLPhotoPreviewSheet: UIView {
         
         var requestAvAssetID: PHImageRequestID?
         
-        hud.show(timeout: 20)
+        hud.show(timeout: ZLPhotoConfiguration.default().timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self?.sender)
-            if let _ = requestAvAssetID {
-                PHImageManager.default().cancelImageRequest(requestAvAssetID!)
+            if let requestAvAssetID = requestAvAssetID {
+                PHImageManager.default().cancelImageRequest(requestAvAssetID)
             }
         }
         
         func inner_showEditVideoVC(_ avAsset: AVAsset) {
             let vc = ZLEditVideoViewController(avAsset: avAsset)
             vc.editFinishBlock = { [weak self] url in
-                if let u = url {
-                    ZLPhotoManager.saveVideoToAlbum(url: u) { [weak self] suc, asset in
-                        if suc, asset != nil {
-                            let m = ZLPhotoModel(asset: asset!)
+                if let url = url {
+                    ZLPhotoManager.saveVideoToAlbum(url: url) { [weak self] suc, asset in
+                        if suc, let asset = asset {
+                            let m = ZLPhotoModel(asset: asset)
                             m.isSelected = true
                             self?.arrSelectedModels.removeAll()
                             self?.arrSelectedModels.append(m)
@@ -722,8 +722,8 @@ public class ZLPhotoPreviewSheet: UIView {
         // 提前fetch一下 avasset
         requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
             hud.hide()
-            if let _ = avAsset {
-                inner_showEditVideoVC(avAsset!)
+            if let avAsset = avAsset {
+                inner_showEditVideoVC(avAsset)
             } else {
                 showAlertView(localLanguageTextValue(.timeout), self?.sender)
             }

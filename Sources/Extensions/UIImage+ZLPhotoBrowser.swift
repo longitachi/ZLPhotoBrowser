@@ -190,16 +190,15 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         
         var transform = CGAffineTransform.identity
         
-        let size = base.size
         switch base.imageOrientation {
         case .down, .downMirrored:
-            transform = CGAffineTransform(translationX: size.width, y: size.height)
+            transform = CGAffineTransform(translationX: width, y: height)
             transform = transform.rotated(by: .pi)
         case .left, .leftMirrored:
-            transform = CGAffineTransform(translationX: size.width, y: 0)
+            transform = CGAffineTransform(translationX: width, y: 0)
             transform = transform.rotated(by: CGFloat.pi / 2)
         case .right, .rightMirrored:
-            transform = CGAffineTransform(translationX: 0, y: size.height)
+            transform = CGAffineTransform(translationX: 0, y: height)
             transform = transform.rotated(by: -CGFloat.pi / 2)
         default:
             break
@@ -207,10 +206,10 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         
         switch base.imageOrientation {
         case .upMirrored, .downMirrored:
-            transform = transform.translatedBy(x: size.width, y: 0)
+            transform = transform.translatedBy(x: width, y: 0)
             transform = transform.scaledBy(x: -1, y: 1)
         case .leftMirrored, .rightMirrored:
-            transform = transform.translatedBy(x: size.height, y: 0)
+            transform = transform.translatedBy(x: height, y: 0)
             transform = transform.scaledBy(x: -1, y: 1)
         default:
             break
@@ -221,8 +220,8 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         }
         let context = CGContext(
             data: nil,
-            width: Int(size.width),
-            height: Int(size.height),
+            width: Int(width),
+            height: Int(height),
             bitsPerComponent: cgImage.bitsPerComponent,
             bytesPerRow: 0,
             space: colorSpace,
@@ -231,9 +230,9 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         context?.concatenate(transform)
         switch base.imageOrientation {
         case .left, .leftMirrored, .right, .rightMirrored:
-            context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: size.height, height: size.width))
+            context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: height, height: width))
         default:
-            context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
         }
         
         guard let newCgImage = context?.makeImage() else {
@@ -316,8 +315,7 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
             return base
         }
         
-        let size = base.size
-        let rotatedViewBox = UIView(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        let rotatedViewBox = UIView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         let t = CGAffineTransform(rotationAngle: degress)
         rotatedViewBox.transform = t
         let rotatedSize = rotatedViewBox.frame.size
@@ -329,7 +327,7 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         bitmap?.rotate(by: degress)
         bitmap?.scaleBy(x: 1.0, y: -1.0)
         
-        bitmap?.draw(cgImage, in: CGRect(x: -size.width / 2, y: -size.height / 2, width: size.width, height: size.height))
+        bitmap?.draw(cgImage, in: CGRect(x: -width / 2, y: -height / 2, width: width, height: height))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
@@ -342,10 +340,11 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
             return nil
         }
         
+        let scale = 8 * width / UIScreen.main.bounds.width
         let currCiImage = CIImage(cgImage: cgImage)
         let filter = CIFilter(name: "CIPixellate")
         filter?.setValue(currCiImage, forKey: kCIInputImageKey)
-        filter?.setValue(15, forKey: kCIInputScaleKey)
+        filter?.setValue(scale, forKey: kCIInputScaleKey)
         guard let outputImage = filter?.outputImage else { return nil }
         
         let context = CIContext()
@@ -505,6 +504,16 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
+    }
+}
+
+public extension ZLPhotoBrowserWrapper where Base: UIImage {
+    var width: CGFloat {
+        base.size.width
+    }
+    
+    var height: CGFloat {
+        base.size.height
     }
 }
 

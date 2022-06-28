@@ -206,6 +206,8 @@ open class ZLEditImageViewController: UIViewController {
         return pan
     }()
     
+    private var toolViewStateTimer: Timer?
+    
     // 第一次进入界面时，布局后frame，裁剪dimiss动画使用
     var originalFrame: CGRect = .zero
     
@@ -306,6 +308,7 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     deinit {
+        cleanToolViewStateTimer()
         zl_debugPrint("ZLEditImageViewController deinit")
     }
     
@@ -948,7 +951,7 @@ open class ZLEditImageViewController: UIViewController {
                 path?.addLine(to: point)
                 drawLine()
             } else if pan.state == .cancelled || pan.state == .ended {
-                setToolView(show: true)
+                setToolView(show: true, delay: 0.5)
                 revokeBtn.isEnabled = drawPaths.count > 0
             }
         } else if selectedTool == .mosaic {
@@ -973,7 +976,7 @@ open class ZLEditImageViewController: UIViewController {
                 path?.addLine(to: point)
                 mosaicImageLayerMaskLayer?.path = path?.path.cgPath
             } else if pan.state == .cancelled || pan.state == .ended {
-                setToolView(show: true)
+                setToolView(show: true, delay: 0.5)
                 revokeBtn.isEnabled = mosaicPaths.count > 0
                 generateNewMosaicImage()
             }
@@ -1029,11 +1032,27 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
-    private func setToolView(show: Bool) {
+    private func setToolView(show: Bool, delay: TimeInterval? = nil) {
+        cleanToolViewStateTimer()
+        if let delay = delay {
+            toolViewStateTimer = Timer.scheduledTimer(timeInterval: delay, target: ZLWeakProxy(target: self), selector: #selector(setToolViewShow_timerFunc(show:)), userInfo: ["show": show], repeats: false)
+            RunLoop.current.add(toolViewStateTimer!, forMode: .common)
+        } else {
+            setToolViewShow_timerFunc(show: show)
+        }
+    }
+    
+    @objc private func setToolViewShow_timerFunc(show: Bool) {
+        var flag = show
+        if let toolViewStateTimer = toolViewStateTimer {
+            let userInfo = toolViewStateTimer.userInfo as? [String: Any]
+            flag = userInfo?["show"] as? Bool ?? true
+            cleanToolViewStateTimer()
+        }
         topShadowView.layer.removeAllAnimations()
         bottomShadowView.layer.removeAllAnimations()
         adjustSlider?.layer.removeAllAnimations()
-        if show {
+        if flag {
             UIView.animate(withDuration: 0.25) {
                 self.topShadowView.alpha = 1
                 self.bottomShadowView.alpha = 1
@@ -1046,6 +1065,11 @@ open class ZLEditImageViewController: UIViewController {
                 self.adjustSlider?.alpha = 0
             }
         }
+    }
+    
+    private func cleanToolViewStateTimer() {
+        toolViewStateTimer?.invalidate()
+        toolViewStateTimer = nil
     }
     
     private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, bgColor: UIColor? = nil, completion: @escaping ((String, UIColor, UIColor) -> Void)) {
@@ -1230,6 +1254,8 @@ open class ZLEditImageViewController: UIViewController {
         midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
         
         UIGraphicsBeginImageContextWithOptions(originalImage.size, false, originalImage.scale)
+        // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
+        originalImage.draw(in: renderRect)
         (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
         midImage?.draw(in: renderRect)
         

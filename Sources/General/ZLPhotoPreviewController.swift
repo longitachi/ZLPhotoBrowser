@@ -515,11 +515,19 @@ class ZLPhotoPreviewController: UIViewController {
     @objc private func editBtnClick() {
         let config = ZLPhotoConfiguration.default()
         let model = arrDataSources[currentIndex]
+        
+        var requestAvAssetID: PHImageRequestID?
         let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
+        hud.timeoutBlock = { [weak self] in
+            showAlertView(localLanguageTextValue(.timeout), self)
+            if let requestAvAssetID = requestAvAssetID {
+                PHImageManager.default().cancelImageRequest(requestAvAssetID)
+            }
+        }
         
         if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
-            hud.show()
-            ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
+            hud.show(timeout: ZLPhotoConfiguration.default().timeout)
+            requestAvAssetID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
                 if !isDegraded {
                     if let image = image {
                         self?.showEditImageVC(image: image)
@@ -530,19 +538,12 @@ class ZLPhotoPreviewController: UIViewController {
                 }
             }
         } else if model.type == .video || config.allowEditVideo {
-            var requestAvAssetID: PHImageRequestID?
-            hud.show(timeout: 20)
-            hud.timeoutBlock = { [weak self] in
-                showAlertView(localLanguageTextValue(.timeout), self)
-                if let _ = requestAvAssetID {
-                    PHImageManager.default().cancelImageRequest(requestAvAssetID!)
-                }
-            }
+            hud.show(timeout: ZLPhotoConfiguration.default().timeout)
             // fetch avasset
             requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
                 hud.hide()
-                if let av = avAsset {
-                    self?.showEditVideoVC(model: model, avAsset: av)
+                if let avAsset = avAsset {
+                    self?.showEditVideoVC(model: model, avAsset: avAsset)
                 } else {
                     showAlertView(localLanguageTextValue(.timeout), self)
                 }

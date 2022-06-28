@@ -26,7 +26,7 @@
 
 import UIKit
 
-let ZLMaxImageWidth: CGFloat = 600
+let ZLMaxImageWidth: CGFloat = 500
 
 enum ZLLayout {
     static let navTitleFont = getFont(17)
