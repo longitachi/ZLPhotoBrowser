@@ -559,9 +559,8 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     private func showNoMicrophoneAuthorityAlert() {
-        let alert = UIAlertController(title: nil, message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()), preferredStyle: .alert)
-        let continueAction = UIAlertAction(title: localLanguageTextValue(.keepRecording), style: .default, handler: nil)
-        let gotoSettingsAction = UIAlertAction(title: localLanguageTextValue(.gotoSettings), style: .default) { _ in
+        let continueAction = ZLCustomAlertAction(title: localLanguageTextValue(.keepRecording), style: .default, handler: nil)
+        let gotoSettingsAction = ZLCustomAlertAction(title: localLanguageTextValue(.gotoSettings), style: .tint) { _ in
             guard let url = URL(string: UIApplication.openSettingsURLString) else {
                 return
             }
@@ -569,22 +568,18 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }
-        alert.addAction(continueAction)
-        alert.addAction(gotoSettingsAction)
-        zl.showAlertController(alert)
+        showAlertController(title: nil, message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()), style: .alert, actions: [continueAction, gotoSettingsAction], sender: self)
     }
     
     private func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: localLanguageTextValue(.done), style: .default) { _ in
-            self.dismiss(animated: true) {
+        let action = ZLCustomAlertAction(title: localLanguageTextValue(.done), style: .default) { [weak self] _ in
+            self?.dismiss(animated: true) {
                 if let type = type {
                     ZLPhotoConfiguration.default().noAuthorityCallback?(type)
                 }
             }
         }
-        alert.addAction(action)
-        zl.showAlertController(alert)
+        showAlertController(title: nil, message: message, style: .alert, actions: [action], sender: self)
     }
     
     private func showTipsLabel(animate: Bool) {

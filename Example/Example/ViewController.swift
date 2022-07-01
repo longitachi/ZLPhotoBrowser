@@ -25,6 +25,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        
+        ZLPhotoUIConfiguration.default()
+            .customAlertClass(CustomAlertController.self)
     }
     
     func setupUI() {
@@ -156,10 +159,11 @@ class ViewController: UIViewController {
              .indexLabelTextColor(.white)
          */
         
+        // Custom image editor
         let editImageConfiguration = ZLPhotoConfiguration.default().editImageConfiguration
         editImageConfiguration
             .imageStickerContainerView(ImageStickerContainerView())
-//            .tools([.draw, .filter, .adjust, .mosaic])
+//            .tools([.draw, .clip, .mosaic, .filter])
 //            .adjustTools([.brightness, .contrast, .saturation])
 //            .clipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
 //            .imageStickerContainerView(ImageStickerContainerView())

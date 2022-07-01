@@ -61,6 +61,12 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func customAlertClass(_ alertClass: ZLCustomAlertProtocol.Type?) -> ZLPhotoUIConfiguration {
+        customAlertClass = alertClass
+        return self
+    }
+    
+    @discardableResult
     func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfAlbumList = effect
         return self

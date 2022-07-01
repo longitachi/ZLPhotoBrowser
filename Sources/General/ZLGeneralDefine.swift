@@ -152,9 +152,22 @@ func getFadeAnimation(fromValue: CGFloat, toValue: CGFloat, duration: TimeInterv
 }
 
 func showAlertView(_ message: String, _ sender: UIViewController?) {
-    let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-    let action = UIAlertAction(title: localLanguageTextValue(.ok), style: .default, handler: nil)
-    alert.addAction(action)
+    let action = ZLCustomAlertAction(title: localLanguageTextValue(.ok), style: .default, handler: nil)
+    showAlertController(title: nil, message: message, style: .alert, actions: [action], sender: sender)
+}
+
+func showAlertController(title: String?, message: String?, style: ZLCustomAlertStyle, actions: [ZLCustomAlertAction], sender: UIViewController?) {
+    if let alertClass = ZLPhotoUIConfiguration.default().customAlertClass {
+        let alert = alertClass.instance(title: title, message: message ?? "", style: style)
+        actions.forEach { alert.addAction($0) }
+        alert.show(with: sender ?? UIApplication.shared.keyWindow?.rootViewController)
+        return
+    }
+    
+    let alert = UIAlertController(title: title, message: message, preferredStyle: style.toSystemAlertStyle)
+    actions
+        .map { $0.toSystemAlertAction() }
+        .forEach { alert.addAction($0) }
     if deviceIsiPad() {
         alert.popoverPresentationController?.sourceView = sender?.view
     }

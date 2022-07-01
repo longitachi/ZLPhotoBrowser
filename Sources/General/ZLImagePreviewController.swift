@@ -150,6 +150,10 @@ public class ZLImagePreviewController: UIViewController {
         return ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
+    deinit {
+        zl_debugPrint("ZLImagePreviewController deinit")
+    }
+    
     /// - Parameters:
     ///   - datas: Must be one of PHAsset, UIImage and URL, will filter others in init function.
     ///   - showBottomView: If showSelectBtn is true, showBottomView is always true.
@@ -551,14 +555,11 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
             }
         }
         
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let save = UIAlertAction(title: localLanguageTextValue(.save), style: .default) { _ in
+        let saveAction = ZLCustomAlertAction(title: localLanguageTextValue(.save), style: .default) { _ in
             saveImage()
         }
-        let cancel = UIAlertAction(title: localLanguageTextValue(.cancel), style: .cancel, handler: nil)
-        alert.addAction(save)
-        alert.addAction(cancel)
-        zl.showAlertController(alert)
+        let cancelAction = ZLCustomAlertAction(title: localLanguageTextValue(.cancel), style: .cancel, handler: nil)
+        showAlertController(title: nil, message: "", style: .actionSheet, actions: [saveAction, cancelAction], sender: self)
     }
     
 }

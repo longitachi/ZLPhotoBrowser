@@ -59,6 +59,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// HUD style. Defaults to dark.
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .dark
     
+    /// Custom alert class. Defaults to nil.
+    public var customAlertClass: ZLCustomAlertProtocol.Type?
+    
     // MARK: Navigation and bottom tool bar
     
     /// The blur effect of the navigation bar in the album list

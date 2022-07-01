@@ -108,6 +108,10 @@
 		E4C911AF24E283DA0061DA40 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4C911AD24E283DA0061DA40 /* LaunchScreen.storyboard */; };
 		E4CF57F624EA974F00BEBFC6 /* ZLPhotoBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CF57F124EA970A00BEBFC6 /* ZLPhotoBrowser.framework */; };
 		E4CF57F724EA974F00BEBFC6 /* ZLPhotoBrowser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4CF57F124EA970A00BEBFC6 /* ZLPhotoBrowser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FD7274B5286EC7C400FF8CAD /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B4286EC7C400FF8CAD /* CustomAlertController.swift */; };
+		FD7274B8286ECBE300FF8CAD /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B7286ECBE300FF8CAD /* UIColor+Hex.swift */; };
+		FD7274BA286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B9286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift */; };
+		FD7274BC286ED7F400FF8CAD /* CustomAlertControllerTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274BB286ED7F400FF8CAD /* CustomAlertControllerTransitionAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -256,6 +260,10 @@
 		FD53DB472769DA130093E815 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		FD53DB482769DA410093E815 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
 		FD53DB492769DA420093E815 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		FD7274B4286EC7C400FF8CAD /* CustomAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertController.swift; sourceTree = "<group>"; };
+		FD7274B7286ECBE300FF8CAD /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+		FD7274B9286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLCustomAlertAction+Color.swift"; sourceTree = "<group>"; };
+		FD7274BB286ED7F400FF8CAD /* CustomAlertControllerTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertControllerTransitionAnimation.swift; sourceTree = "<group>"; };
 		FDB34115280D8565008F20B3 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Main.strings; sourceTree = "<group>"; };
 		FDB34116280D8565008F20B3 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -469,6 +477,8 @@
 			children = (
 				E4765F31254189E4007B2C0F /* Kingfisher */,
 				E4A4109824F39F0000EEC20B /* SnapKit */,
+				FD7274B3286EC79D00FF8CAD /* CustomAlert */,
+				FD7274B6286ECB9D00FF8CAD /* Extension */,
 				E4C911A224E283D80061DA40 /* AppDelegate.swift */,
 				E4C911A624E283D80061DA40 /* ViewController.swift */,
 				E480050725316920008A2B67 /* ZLCustomFilter.swift */,
@@ -485,6 +495,24 @@
 				E463C1512509FA9500FE1401 /* Example-Bridging-Header.h */,
 			);
 			path = Example;
+			sourceTree = "<group>";
+		};
+		FD7274B3286EC79D00FF8CAD /* CustomAlert */ = {
+			isa = PBXGroup;
+			children = (
+				FD7274B4286EC7C400FF8CAD /* CustomAlertController.swift */,
+				FD7274B9286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift */,
+				FD7274BB286ED7F400FF8CAD /* CustomAlertControllerTransitionAnimation.swift */,
+			);
+			path = CustomAlert;
+			sourceTree = "<group>";
+		};
+		FD7274B6286ECB9D00FF8CAD /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				FD7274B7286ECBE300FF8CAD /* UIColor+Hex.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -604,10 +632,13 @@
 				E4765F80254189E4007B2C0F /* KingfisherOptionsInfo.swift in Sources */,
 				E4765F72254189E4007B2C0F /* Storage.swift in Sources */,
 				E4A4109724F39DF700EEC20B /* PhotoConfigureViewController.swift in Sources */,
+				FD7274BC286ED7F400FF8CAD /* CustomAlertControllerTransitionAnimation.swift in Sources */,
 				E4765F98254189E4007B2C0F /* WKInterfaceImage+Kingfisher.swift in Sources */,
 				E4C69FEC253ED19600AE466C /* LanguagePickerView.swift in Sources */,
 				E4C911A724E283D80061DA40 /* ViewController.swift in Sources */,
 				E4A410E324F39F0000EEC20B /* ConstraintDirectionalInsets.swift in Sources */,
+				FD7274B8286ECBE300FF8CAD /* UIColor+Hex.swift in Sources */,
+				FD7274B5286EC7C400FF8CAD /* CustomAlertController.swift in Sources */,
 				E4765FA2254189E4007B2C0F /* Delegate.swift in Sources */,
 				E4A410C624F39F0000EEC20B /* ConstraintPriorityTarget.swift in Sources */,
 				E4765F9A254189E4007B2C0F /* Indicator.swift in Sources */,
@@ -627,6 +658,7 @@
 				E4A410CB24F39F0000EEC20B /* ConstraintPriority.swift in Sources */,
 				E4765F86254189E4007B2C0F /* ImageDownloader.swift in Sources */,
 				E4765F91254189E4007B2C0F /* ImageProcessor.swift in Sources */,
+				FD7274BA286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift in Sources */,
 				E4765FA7254189E4007B2C0F /* String+MD5.swift in Sources */,
 				E4A410C024F39F0000EEC20B /* ConstraintMultiplierTarget.swift in Sources */,
 				E4A410C224F39F0000EEC20B /* ConstraintDescription.swift in Sources */,
