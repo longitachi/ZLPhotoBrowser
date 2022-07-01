@@ -261,7 +261,7 @@ extension CustomAlertController: UIViewControllerTransitioningDelegate {
 }
 
 extension CustomAlertController: ZLCustomAlertProtocol {
-    static func instance(title: String?, message: String, style: ZLCustomAlertStyle) -> ZLCustomAlertProtocol {
+    static func alert(title: String?, message: String, style: ZLCustomAlertStyle) -> ZLCustomAlertProtocol {
         return CustomAlertController(title: title, message: message, preferredStyle: style)
     }
     

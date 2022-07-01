@@ -158,7 +158,7 @@ func showAlertView(_ message: String, _ sender: UIViewController?) {
 
 func showAlertController(title: String?, message: String?, style: ZLCustomAlertStyle, actions: [ZLCustomAlertAction], sender: UIViewController?) {
     if let alertClass = ZLPhotoUIConfiguration.default().customAlertClass {
-        let alert = alertClass.instance(title: title, message: message ?? "", style: style)
+        let alert = alertClass.alert(title: title, message: message ?? "", style: style)
         actions.forEach { alert.addAction($0) }
         alert.show(with: sender ?? UIApplication.shared.keyWindow?.rootViewController)
         return
