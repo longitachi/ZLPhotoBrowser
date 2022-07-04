@@ -46,7 +46,7 @@ class ZLAdjustSlider: UIView {
     
     private lazy var separator: UIView = {
         let view = UIView()
-        view.backgroundColor = zlRGB(230, 230, 230)
+        view.backgroundColor = .zl.rgba(230, 230, 230)
         return view
     }()
     

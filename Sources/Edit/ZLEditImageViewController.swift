@@ -224,8 +224,6 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public var adjustColViewH: CGFloat = 60
     
-    @objc public var ashbinNormalBgColor = zlRGB(40, 40, 40).withAlphaComponent(0.8)
-    
     @objc public lazy var cancelBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
         btn.setImage(getImage("zl_retake"), for: .normal)
@@ -647,7 +645,7 @@ open class ZLEditImageViewController: UIViewController {
             width: ashbinSize.width,
             height: ashbinSize.height
         )
-        ashbinView.backgroundColor = ashbinNormalBgColor
+        ashbinView.backgroundColor = .zl.trashCanBackgroundNormalColor
         ashbinView.layer.cornerRadius = 15
         ashbinView.layer.masksToBounds = true
         ashbinView.isHidden = true
@@ -1424,9 +1422,9 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             cell.imageView.image = image
             
             if currentFilter === filter {
-                cell.nameLabel.textColor = .white
+                cell.nameLabel.textColor = .zl.imageEditorToolTitleTintColor
             } else {
-                cell.nameLabel.textColor = zlRGB(160, 160, 160)
+                cell.nameLabel.textColor = .zl.imageEditorToolTitleNormalColor
             }
             
             return cell
@@ -1441,9 +1439,9 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             cell.imageView.isHighlighted = isSelected
             
             if isSelected {
-                cell.nameLabel.textColor = .white
+                cell.nameLabel.textColor = .zl.imageEditorToolTitleTintColor
             } else {
-                cell.nameLabel.textColor = zlRGB(160, 160, 160)
+                cell.nameLabel.textColor = .zl.imageEditorToolTitleNormalColor
             }
             
             return cell
@@ -1535,7 +1533,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
     func stickerOnOperation(_ sticker: UIView, panGes: UIPanGestureRecognizer) {
         let point = panGes.location(in: view)
         if ashbinView.frame.contains(point) {
-            ashbinView.backgroundColor = zlRGB(241, 79, 79).withAlphaComponent(0.98)
+            ashbinView.backgroundColor = .zl.trashCanBackgroundTintColor
             ashbinImgView.isHighlighted = true
             if sticker.alpha == 1 {
                 sticker.layer.removeAllAnimations()
@@ -1544,7 +1542,7 @@ extension ZLEditImageViewController: ZLTextStickerViewDelegate {
                 }
             }
         } else {
-            ashbinView.backgroundColor = ashbinNormalBgColor
+            ashbinView.backgroundColor = .zl.trashCanBackgroundNormalColor
             ashbinImgView.isHighlighted = false
             if sticker.alpha != 1 {
                 sticker.layer.removeAllAnimations()

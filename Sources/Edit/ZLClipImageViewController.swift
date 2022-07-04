@@ -116,7 +116,7 @@ class ZLClipImageViewController: UIViewController {
     
     private lazy var bottomToolLineView: UIView = {
         let view = UIView()
-        view.backgroundColor = zlRGB(240, 240, 240)
+        view.backgroundColor = .zl.rgba(240, 240, 240)
         return view
     }()
     
@@ -934,9 +934,9 @@ extension ZLClipImageViewController: UICollectionViewDataSource, UICollectionVie
         cell.configureCell(image: thumbnailImage ?? editImage, ratio: ratio)
         
         if ratio == selectedRatio {
-            cell.titleLabel.textColor = .white
+            cell.titleLabel.textColor = .zl.imageEditorToolTitleTintColor
         } else {
-            cell.titleLabel.textColor = zlRGB(160, 160, 160)
+            cell.titleLabel.textColor = .zl.imageEditorToolTitleNormalColor
         }
         
         return cell

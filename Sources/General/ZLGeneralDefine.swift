@@ -46,10 +46,6 @@ enum ZLLayout {
     static let thumbCollectionViewLineSpacing: CGFloat = 2
 }
 
-func zlRGB(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) -> UIColor {
-    return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1)
-}
-
 func getImage(_ named: String) -> UIImage? {
     if ZLCustomImageDeploy.imageNames.contains(named), let image = UIImage(named: named) {
         return image
@@ -160,7 +156,7 @@ func showAlertController(title: String?, message: String?, style: ZLCustomAlertS
     if let alertClass = ZLPhotoUIConfiguration.default().customAlertClass {
         let alert = alertClass.alert(title: title, message: message ?? "", style: style)
         actions.forEach { alert.addAction($0) }
-        alert.show(with: sender ?? UIApplication.shared.keyWindow?.rootViewController)
+        alert.show(with: sender)
         return
     }
     

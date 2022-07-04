@@ -224,4 +224,35 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
     static var adjustSliderTintColor: UIColor {
         ZLPhotoUIConfiguration.default().adjustSliderTintColor
     }
+    
+    /// 图片编辑器中各种工具下方标题普通状态下的颜色
+    static var imageEditorToolTitleNormalColor: UIColor {
+        ZLPhotoUIConfiguration.default().imageEditorToolTitleNormalColor
+    }
+    
+    /// 图片编辑器中各种工具下方标题高亮状态下的颜色
+    static var imageEditorToolTitleTintColor: UIColor {
+        ZLPhotoUIConfiguration.default().imageEditorToolTitleTintColor
+    }
+    
+    /// 编辑器中垃圾箱普通状态下的颜色
+    static var trashCanBackgroundNormalColor: UIColor {
+        ZLPhotoUIConfiguration.default().trashCanBackgroundNormalColor
+    }
+    
+    /// 编辑器中垃圾箱高亮状态下的颜色
+    static var trashCanBackgroundTintColor: UIColor {
+        ZLPhotoUIConfiguration.default().trashCanBackgroundTintColor
+    }
+}
+
+extension ZLPhotoBrowserWrapper where Base: UIColor {
+    /// - Parameters:
+    ///   - r: 0~255
+    ///   - g: 0~255
+    ///   - b: 0~255
+    ///   - a: 0~1
+    static func rgba(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat = 1) -> UIColor {
+        return UIColor(red: r / 255, green: g / 255, blue: b / 255, alpha: a)
+    }
 }

@@ -69,7 +69,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         btn.setBackgroundImage(getImage("zl_btn_unselected"), for: .normal)
         btn.setBackgroundImage(getImage("zl_btn_selected"), for: .selected)
         btn.addTarget(self, action: #selector(btnSelectClick), for: .touchUpInside)
-        btn.enlargeInsets = UIEdgeInsets(top: 5, left: 20, bottom: 20, right: 5)
+        btn.enlargeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 10, right: 5)
         return btn
     }()
     

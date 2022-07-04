@@ -39,7 +39,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private lazy var baseView: UIView = {
         let view = UIView()
-        view.backgroundColor = zlRGB(230, 230, 230)
+        view.backgroundColor = .zl.rgba(230, 230, 230)
         return view
     }()
     
