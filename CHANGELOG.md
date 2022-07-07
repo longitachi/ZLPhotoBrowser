@@ -2,6 +2,14 @@
 
 -----
 
+## [4.3.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.5) (2022-07-07)
+
+## Add:
+* Support custom alert style.
+* Improve the experience of image editor.
+
+---
+
 ## [4.3.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.4) (2022-06-27)
 
 ## Fix:

@@ -91,6 +91,10 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.5
+  Add:
+    Support custom alert style.
+    Improve the experience of image editor.
 ● 4.3.4
   Fix:
     Fix a bug of the image editor.
@@ -99,17 +103,11 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Adjust loading progress hud style to make it prettier.
     Add wrapper for ZLPhotoBrowser compatible types.
     Support for requesting original images when 'allowSelectOriginal = false'.
-● 4.3.2
-  Add:
-    Add Tolerance in Video Editing.
-    Format code style.
-  Fix:
-    Fix some bugs when iOS14 album permissions are limited.
 ...
 ```
 
 ### <a id="Languages"></a>Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩Indonesian, 🇪🇸Spanish, 🇵🇹Portuguese, 🇹🇷Turkish.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLPhotoBrowser in your project:

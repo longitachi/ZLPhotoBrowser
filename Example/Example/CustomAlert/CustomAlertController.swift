@@ -100,8 +100,7 @@ class CustomAlertController: UIViewController {
         if preferredStyle == .alert {
             container.snp.makeConstraints { make in
                 make.center.equalToSuperview()
-                make.left.equalToSuperview().offset(36)
-                make.right.equalToSuperview().offset(-36)
+                make.width.equalTo(min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) * 0.8)
             }
         } else {
             container.snp.makeConstraints { make in
