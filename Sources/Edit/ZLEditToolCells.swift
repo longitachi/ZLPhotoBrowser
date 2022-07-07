@@ -33,26 +33,26 @@ class ZLEditToolCell: UICollectionViewCell {
         didSet {
             switch toolType {
             case .draw:
-                icon.image = getImage("zl_drawLine")
-                icon.highlightedImage = getImage("zl_drawLine_selected")
+                icon.image = .zl.getImage("zl_drawLine")
+                icon.highlightedImage = .zl.getImage("zl_drawLine_selected")
             case .clip:
-                icon.image = getImage("zl_clip")
-                icon.highlightedImage = getImage("zl_clip")
+                icon.image = .zl.getImage("zl_clip")
+                icon.highlightedImage = .zl.getImage("zl_clip")
             case .imageSticker:
-                icon.image = getImage("zl_imageSticker")
-                icon.highlightedImage = getImage("zl_imageSticker")
+                icon.image = .zl.getImage("zl_imageSticker")
+                icon.highlightedImage = .zl.getImage("zl_imageSticker")
             case .textSticker:
-                icon.image = getImage("zl_textSticker")
-                icon.highlightedImage = getImage("zl_textSticker")
+                icon.image = .zl.getImage("zl_textSticker")
+                icon.highlightedImage = .zl.getImage("zl_textSticker")
             case .mosaic:
-                icon.image = getImage("zl_mosaic")
-                icon.highlightedImage = getImage("zl_mosaic_selected")
+                icon.image = .zl.getImage("zl_mosaic")
+                icon.highlightedImage = .zl.getImage("zl_mosaic_selected")
             case .filter:
-                icon.image = getImage("zl_filter")
-                icon.highlightedImage = getImage("zl_filter_selected")
+                icon.image = .zl.getImage("zl_filter")
+                icon.highlightedImage = .zl.getImage("zl_filter_selected")
             case .adjust:
-                icon.image = getImage("zl_adjust")
-                icon.highlightedImage = getImage("zl_adjust_selected")
+                icon.image = .zl.getImage("zl_adjust")
+                icon.highlightedImage = .zl.getImage("zl_adjust_selected")
             }
         }
     }
@@ -118,7 +118,7 @@ class ZLFilterImageCell: UICollectionViewCell {
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.frame = CGRect(x: 0, y: bounds.height - 20, width: bounds.width, height: 20)
-        label.font = getFont(12)
+        label.font = .zl.font(ofSize: 12)
         label.textColor = .white
         label.textAlignment = .center
         label.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
@@ -156,7 +156,7 @@ class ZLAdjustToolCell: UICollectionViewCell {
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.frame = CGRect(x: 0, y: bounds.height - 30, width: bounds.width, height: 30)
-        label.font = getFont(12)
+        label.font = .zl.font(ofSize: 12)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -181,16 +181,16 @@ class ZLAdjustToolCell: UICollectionViewCell {
         didSet {
             switch adjustTool {
             case .brightness:
-                imageView.image = getImage("zl_brightness")
-                imageView.highlightedImage = getImage("zl_brightness_selected")
+                imageView.image = .zl.getImage("zl_brightness")
+                imageView.highlightedImage = .zl.getImage("zl_brightness_selected")
                 nameLabel.text = localLanguageTextValue(.brightness)
             case .contrast:
-                imageView.image = getImage("zl_contrast")
-                imageView.highlightedImage = getImage("zl_contrast_selected")
+                imageView.image = .zl.getImage("zl_contrast")
+                imageView.highlightedImage = .zl.getImage("zl_contrast_selected")
                 nameLabel.text = localLanguageTextValue(.contrast)
             case .saturation:
-                imageView.image = getImage("zl_saturation")
-                imageView.highlightedImage = getImage("zl_saturation_selected")
+                imageView.image = .zl.getImage("zl_saturation")
+                imageView.highlightedImage = .zl.getImage("zl_saturation_selected")
                 nameLabel.text = localLanguageTextValue(.saturation)
             }
         }

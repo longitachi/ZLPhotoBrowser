@@ -499,7 +499,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     
     private lazy var playBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(getImage("zl_playVideo"), for: .normal)
+        btn.setImage(.zl.getImage("zl_playVideo"), for: .normal)
         btn.addTarget(self, action: #selector(playBtnClick), for: .touchUpInside)
         return btn
     }()
@@ -507,10 +507,16 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     private lazy var syncErrorLabel: UILabel = {
         let attStr = NSMutableAttributedString()
         let attach = NSTextAttachment()
-        attach.image = getImage("zl_videoLoadFailed")
+        attach.image = .zl.getImage("zl_videoLoadFailed")
         attach.bounds = CGRect(x: 0, y: -10, width: 30, height: 30)
         attStr.append(NSAttributedString(attachment: attach))
-        let errorText = NSAttributedString(string: localLanguageTextValue(.iCloudVideoLoadFaild), attributes: [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: getFont(12)])
+        let errorText = NSAttributedString(
+            string: localLanguageTextValue(.iCloudVideoLoadFaild),
+            attributes: [
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.font: UIFont.zl.font(ofSize: 12)
+            ]
+        )
         attStr.append(errorText)
         
         let label = UILabel()
@@ -638,7 +644,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     private func configurePlayerLayer(_ item: AVPlayerItem) {
-        playBtn.setImage(getImage("zl_playVideo"), for: .normal)
+        playBtn.setImage(.zl.getImage("zl_playVideo"), for: .normal)
         playBtn.isEnabled = true
         
         player = AVPlayer(playerItem: item)
@@ -679,13 +685,13 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         if seekToZero {
             player?.seek(to: .zero)
         }
-        playBtn.setImage(getImage("zl_playVideo"), for: .normal)
+        playBtn.setImage(.zl.getImage("zl_playVideo"), for: .normal)
         singleTapBlock?()
     }
     
     func pauseWhileTransition() {
         player?.pause()
-        playBtn.setImage(getImage("zl_playVideo"), for: .normal)
+        playBtn.setImage(.zl.getImage("zl_playVideo"), for: .normal)
     }
     
 }
@@ -700,7 +706,7 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
     
     private lazy var playBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(getImage("zl_playVideo"), for: .normal)
+        btn.setImage(.zl.getImage("zl_playVideo"), for: .normal)
         btn.addTarget(self, action: #selector(playBtnClick), for: .touchUpInside)
         return btn
     }()
@@ -779,7 +785,7 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         if seekToZero {
             player?.seek(to: .zero)
         }
-        playBtn.setImage(getImage("zl_playVideo"), for: .normal)
+        playBtn.setImage(.zl.getImage("zl_playVideo"), for: .normal)
         singleTapBlock?()
     }
     
@@ -1010,7 +1016,7 @@ class ZLPreviewView: UIView {
     
     func resetSubViewSize() {
         let size: CGSize
-        if let _ = model {
+        if let model = model {
             if let ei = model.editImage {
                 size = ei.size
             } else {

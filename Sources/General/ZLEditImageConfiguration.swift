@@ -288,11 +288,11 @@ public extension ZLEditImageConfiguration {
 
 public class ZLImageClipRatio: NSObject {
     
-    public var title: String
+    @objc public var title: String
     
-    public let whRatio: CGFloat
+    @objc public let whRatio: CGFloat
     
-    let isCircle: Bool
+    @objc public let isCircle: Bool
     
     @objc public init(title: String, whRatio: CGFloat, isCircle: Bool = false) {
         self.title = title

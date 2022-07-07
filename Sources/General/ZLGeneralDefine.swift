@@ -29,7 +29,7 @@ import UIKit
 let ZLMaxImageWidth: CGFloat = 500
 
 enum ZLLayout {
-    static let navTitleFont = getFont(17)
+    static let navTitleFont: UIFont = .zl.font(ofSize: 17)
     
     static let bottomToolViewH: CGFloat = 55
     
@@ -37,31 +37,13 @@ enum ZLLayout {
     
     static let bottomToolBtnY: CGFloat = 10
     
-    static let bottomToolTitleFont = getFont(17)
+    static let bottomToolTitleFont: UIFont = .zl.font(ofSize: 17)
     
     static let bottomToolBtnCornerRadius: CGFloat = 5
     
     static let thumbCollectionViewItemSpacing: CGFloat = 2
     
     static let thumbCollectionViewLineSpacing: CGFloat = 2
-}
-
-func getImage(_ named: String) -> UIImage? {
-    if ZLCustomImageDeploy.imageNames.contains(named), let image = UIImage(named: named) {
-        return image
-    }
-    if let image = ZLCustomImageDeploy.imageForKey[named] {
-        return image
-    }
-    return UIImage(named: named, in: Bundle.zlPhotoBrowserBundle, compatibleWith: nil)
-}
-
-func getFont(_ size: CGFloat) -> UIFont {
-    guard let name = ZLCustomFontDeploy.fontName else {
-        return UIFont.systemFont(ofSize: size)
-    }
-    
-    return UIFont(name: name, size: size) ?? UIFont.systemFont(ofSize: size)
 }
 
 func markSelected(source: inout [ZLPhotoModel], selected: inout [ZLPhotoModel]) {

@@ -30,7 +30,7 @@ import AVFoundation
 class ZLCameraCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
-        let view = UIImageView(image: getImage("zl_takePhoto"))
+        let view = UIImageView(image: .zl.getImage("zl_takePhoto"))
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
         return view

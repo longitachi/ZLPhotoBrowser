@@ -517,6 +517,18 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
     }
 }
 
+extension ZLPhotoBrowserWrapper where Base: UIImage {
+    static func getImage(_ named: String) -> UIImage? {
+        if ZLCustomImageDeploy.imageNames.contains(named), let image = UIImage(named: named) {
+            return image
+        }
+        if let image = ZLCustomImageDeploy.imageForKey[named] {
+            return image
+        }
+        return UIImage(named: named, in: Bundle.zlPhotoBrowserBundle, compatibleWith: nil)
+    }
+}
+
 public extension ZLPhotoBrowserWrapper where Base: CIImage {
     func toUIImage() -> UIImage? {
         let context = CIContext()

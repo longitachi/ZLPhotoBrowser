@@ -93,7 +93,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(15)
+        label.font = .zl.font(ofSize: 15)
         label.text = localLanguageTextValue(.noPhotoTips)
         label.textAlignment = .center
         label.textColor = .zl.previewBtnTitleColor
@@ -237,7 +237,7 @@ public class ZLPhotoPreviewSheet: UIView {
         btn.backgroundColor = .zl.previewBtnBgColor
         btn.setTitleColor(.zl.previewBtnTitleColor, for: .normal)
         btn.setTitle(title, for: .normal)
-        btn.titleLabel?.font = getFont(17)
+        btn.titleLabel?.font = .zl.font(ofSize: 17)
         return btn
     }
     

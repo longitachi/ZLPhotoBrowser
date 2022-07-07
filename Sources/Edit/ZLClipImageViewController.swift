@@ -43,7 +43,7 @@ extension ZLClipImageViewController {
 class ZLClipImageViewController: UIViewController {
     private static let bottomToolViewH: CGFloat = 90
     
-    private static let clipRatioItemSize: CGSize = .init(width: 60, height: 70)
+    private static let clipRatioItemSize = CGSize(width: 60, height: 70)
     
     /// 取消裁剪时动画frame
     private var cancelClipAnimateFrame: CGRect = .zero
@@ -122,7 +122,7 @@ class ZLClipImageViewController: UIViewController {
     
     private lazy var cancelBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_close"), for: .normal)
+        btn.setImage(.zl.getImage("zl_close"), for: .normal)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 20
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
@@ -141,7 +141,7 @@ class ZLClipImageViewController: UIViewController {
     
     lazy var doneBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_right"), for: .normal)
+        btn.setImage(.zl.getImage("zl_right"), for: .normal)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 20
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
@@ -150,7 +150,7 @@ class ZLClipImageViewController: UIViewController {
     
     private lazy var rotateBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_rotateimage"), for: .normal)
+        btn.setImage(.zl.getImage("zl_rotateimage"), for: .normal)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 20
         btn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
@@ -667,8 +667,8 @@ class ZLClipImageViewController: UIViewController {
         let originFrame = clipOriginFrame
         
         var newPoint = point
-        newPoint.x = max(self.maxClipFrame.minX, newPoint.x)
-        newPoint.y = max(self.maxClipFrame.minY, newPoint.y)
+        newPoint.x = max(maxClipFrame.minX, newPoint.x)
+        newPoint.y = max(maxClipFrame.minY, newPoint.y)
         
         let diffX = ceil(newPoint.x - beginPanPoint.x)
         let diffY = ceil(newPoint.y - beginPanPoint.y)
@@ -1017,7 +1017,7 @@ class ZLImageClipRatioCell: UICollectionViewCell {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: bounds.height - 15, width: bounds.width, height: 12))
-        label.font = getFont(12)
+        label.font = .zl.font(ofSize: 12)
         label.textColor = .white
         label.textAlignment = .center
         label.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
@@ -1126,15 +1126,19 @@ class ZLClipOverlayView: UIView {
     
     var isCircle = false {
         didSet {
-            if oldValue != isCircle {
-                setNeedsDisplay()
+            guard oldValue != isCircle else {
+                return
             }
+            setNeedsDisplay()
         }
     }
     
     var isEditing = false {
         didSet {
-            self.setNeedsDisplay()
+            guard isCircle else {
+                return
+            }
+            setNeedsDisplay()
         }
     }
     

@@ -86,13 +86,13 @@ public class ZLEditVideoViewController: UIViewController {
     }()
     
     private lazy var leftSideView: UIImageView = {
-        let view = UIImageView(image: getImage("zl_ic_left"))
+        let view = UIImageView(image: .zl.getImage("zl_ic_left"))
         view.isUserInteractionEnabled = true
         return view
     }()
     
     private lazy var rightSideView: UIImageView = {
-        let view = UIImageView(image: getImage("zl_ic_right"))
+        let view = UIImageView(image: .zl.getImage("zl_ic_right"))
         view.isUserInteractionEnabled = true
         return view
     }()

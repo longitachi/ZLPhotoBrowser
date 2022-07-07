@@ -226,7 +226,7 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public lazy var cancelBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_retake"), for: .normal)
+        btn.setImage(.zl.getImage("zl_retake"), for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
@@ -276,8 +276,8 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public lazy var revokeBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(getImage("zl_revoke_disable"), for: .disabled)
-        btn.setImage(getImage("zl_revoke"), for: .normal)
+        btn.setImage(.zl.getImage("zl_revoke_disable"), for: .disabled)
+        btn.setImage(.zl.getImage("zl_revoke"), for: .normal)
         btn.adjustsImageWhenHighlighted = false
         btn.isEnabled = false
         btn.isHidden = true
@@ -287,7 +287,7 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public lazy var ashbinView = UIView()
     
-    @objc public lazy var ashbinImgView = UIImageView(image: getImage("zl_ashbin"), highlightedImage: getImage("zl_ashbin_open"))
+    @objc public lazy var ashbinImgView = UIImageView(image: .zl.getImage("zl_ashbin"), highlightedImage: .zl.getImage("zl_ashbin_open"))
     
     @objc public var drawLineWidth: CGFloat = 5
     
@@ -655,7 +655,7 @@ open class ZLEditImageViewController: UIViewController {
         ashbinView.addSubview(ashbinImgView)
         
         let asbinTipLabel = UILabel(frame: CGRect(x: 0, y: ashbinSize.height - 34, width: ashbinSize.width, height: 34))
-        asbinTipLabel.font = getFont(12)
+        asbinTipLabel.font = .zl.font(ofSize: 12)
         asbinTipLabel.textAlignment = .center
         asbinTipLabel.textColor = .white
         asbinTipLabel.text = localLanguageTextValue(.textStickerRemoveTips)

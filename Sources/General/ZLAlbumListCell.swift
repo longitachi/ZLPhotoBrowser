@@ -41,7 +41,7 @@ class ZLAlbumListCell: UITableViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(17)
+        label.font = .zl.font(ofSize: 17)
         label.textColor = .zl.albumListTitleColor
         label.lineBreakMode = .byTruncatingTail
         return label
@@ -49,7 +49,7 @@ class ZLAlbumListCell: UITableViewCell {
     
     private lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(16)
+        label.font = .zl.font(ofSize: 16)
         label.textColor = .zl.albumListCountColor
         return label
     }()
@@ -64,7 +64,7 @@ class ZLAlbumListCell: UITableViewCell {
         let btn = UIButton(type: .custom)
         btn.isUserInteractionEnabled = false
         btn.isHidden = true
-        btn.setImage(getImage("zl_albumSelect"), for: .selected)
+        btn.setImage(.zl.getImage("zl_albumSelect"), for: .selected)
         return btn
     }()
     
@@ -98,13 +98,17 @@ class ZLAlbumListCell: UITableViewCell {
             let titleW = min(
                 bounds.width / 3 * 2,
                 m.title.zl.boundingRect(
-                    font: getFont(17),
+                    font: .zl.font(ofSize: 17),
                     limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
                 ).width
             )
             titleLabel.frame = CGRect(x: coverImageView.frame.maxX + 10, y: (bounds.height - 30) / 2, width: titleW, height: 30)
             
-            let countSize = ("(" + String(model.count) + ")").zl.boundingRect(font: getFont(16), limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30))
+            let countSize = ("(" + String(model.count) + ")").zl
+                .boundingRect(
+                    font: .zl.font(ofSize: 16),
+                    limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
+                )
             countLabel.frame = CGRect(x: titleLabel.frame.maxX + 10, y: (bounds.height - 30) / 2, width: countSize.width, height: 30)
         }
         selectBtn.frame = CGRect(x: bounds.width - 20 - 20, y: (bounds.height - 20) / 2, width: 20, height: 20)
@@ -140,7 +144,7 @@ class ZLAlbumListCell: UITableViewCell {
             let w = bounds.height * 2.5
             ZLPhotoManager.fetchImage(for: asset, size: CGSize(width: w, height: w)) { [weak self] image, _ in
                 if self?.imageIdentifier == self?.model.headImageAsset?.localIdentifier {
-                    self?.coverImageView.image = image ?? getImage("zl_defaultphoto")
+                    self?.coverImageView.image = image ?? .zl.getImage("zl_defaultphoto")
                 }
             }
         }

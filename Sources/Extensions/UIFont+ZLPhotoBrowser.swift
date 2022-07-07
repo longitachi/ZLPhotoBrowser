@@ -1,8 +1,8 @@
 //
-//  ZLAddPhotoCell.swift
+//  UIFont+ZLPhotoBrowser.swift
 //  ZLPhotoBrowser
 //
-//  Created by ruby109 on 2020/11/3.
+//  Created by long on 2022/7/7.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -25,44 +25,13 @@
 //  THE SOFTWARE.
 
 import UIKit
-import Foundation
 
-class ZLAddPhotoCell: UICollectionViewCell {
-    
-    private lazy var imageView: UIImageView = {
-        let view = UIImageView(image: .zl.getImage("zl_addPhoto"))
-        view.contentMode = .scaleAspectFit
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    deinit {
-        zl_debugPrint("ZLAddPhotoCell deinit")
-    }
-    
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
+extension ZLPhotoBrowserWrapper where Base: UIFont {
+    static func font(ofSize fontSize: CGFloat) -> UIFont {
+        guard let name = ZLCustomFontDeploy.fontName else {
+            return UIFont.systemFont(ofSize: fontSize)
+        }
         
-        imageView.frame = CGRect(x: 0, y: 0, width: bounds.width / 3, height: bounds.width / 3)
-        imageView.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        return UIFont(name: name, size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)
     }
-    
-    func setupUI() {
-        layer.masksToBounds = true
-        layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
-        
-        backgroundColor = .zl.cameraCellBgColor
-        contentView.addSubview(imageView)
-    }
-    
 }

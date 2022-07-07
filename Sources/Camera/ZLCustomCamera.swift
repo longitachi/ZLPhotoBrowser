@@ -47,7 +47,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     public lazy var tipsLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(14)
+        label.font = .zl.font(ofSize: 14)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -101,7 +101,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     public lazy var retakeBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_retake"), for: .normal)
+        btn.setImage(.zl.getImage("zl_retake"), for: .normal)
         btn.addTarget(self, action: #selector(retakeBtnClick), for: .touchUpInside)
         btn.isHidden = true
         btn.adjustsImageWhenHighlighted = false
@@ -124,7 +124,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     public lazy var dismissBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_arrow_down"), for: .normal)
+        btn.setImage(.zl.getImage("zl_arrow_down"), for: .normal)
         btn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
@@ -135,7 +135,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
         
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_toggle_camera"), for: .normal)
+        btn.setImage(.zl.getImage("zl_toggle_camera"), for: .normal)
         btn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
@@ -144,7 +144,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }()
     
     public lazy var focusCursorView: UIImageView = {
-        let view = UIImageView(image: getImage("zl_focus"))
+        let view = UIImageView(image: .zl.getImage("zl_focus"))
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
         view.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
@@ -348,13 +348,23 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
         dismissBtn.frame = CGRect(x: 60, y: (ZLCustomCamera.Layout.bottomViewH - 25) / 2, width: 25, height: 25)
         
-        let tipsTextHeight = (tipsLabel.text ?? " ").zl.boundingRect(font: getFont(14), limitSize: CGSize(width: view.bounds.width - 20, height: .greatestFiniteMagnitude)).height
+        let tipsTextHeight = (tipsLabel.text ?? " ").zl
+            .boundingRect(
+                font: .zl.font(ofSize: 14),
+                limitSize: CGSize(width: view.bounds.width - 20, height: .greatestFiniteMagnitude)
+            )
+            .height
         tipsLabel.frame = CGRect(x: 10, y: bottomView.frame.minY - tipsTextHeight, width: view.bounds.width - 20, height: tipsTextHeight)
         
         retakeBtn.frame = CGRect(x: 30, y: insets.top + 10, width: 28, height: 28)
         switchCameraBtn.frame = CGRect(x: view.bounds.width - 30 - 28, y: insets.top + 10, width: 28, height: 28)
         
-        let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width + 20
+        let doneBtnW = localLanguageTextValue(.done).zl
+            .boundingRect(
+                font: ZLLayout.bottomToolTitleFont,
+                limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)
+            )
+            .width + 20
         let doneBtnY = view.bounds.height - 57 - insets.bottom
         doneBtn.frame = CGRect(x: view.bounds.width - doneBtnW - 20, y: doneBtnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }

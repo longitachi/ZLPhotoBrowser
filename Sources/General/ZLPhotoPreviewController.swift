@@ -72,7 +72,7 @@ class ZLPhotoPreviewController: UIViewController {
     
     private lazy var backBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(getImage("zl_navBack"), for: .normal)
+        btn.setImage(.zl.getImage("zl_navBack"), for: .normal)
         btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         btn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
         return btn
@@ -80,8 +80,8 @@ class ZLPhotoPreviewController: UIViewController {
     
     private lazy var selectBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_btn_circle"), for: .normal)
-        btn.setImage(getImage("zl_btn_selected"), for: .selected)
+        btn.setImage(.zl.getImage("zl_btn_circle"), for: .normal)
+        btn.setImage(.zl.getImage("zl_btn_selected"), for: .selected)
         btn.enlargeInset = 10
         btn.addTarget(self, action: #selector(selectBtnClick), for: .touchUpInside)
         return btn
@@ -90,7 +90,7 @@ class ZLPhotoPreviewController: UIViewController {
     private lazy var indexLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .zl.indexLabelBgColor
-        label.font = getFont(14)
+        label.font = .zl.font(ofSize: 14)
         label.textColor = .white
         label.textAlignment = .center
         label.layer.cornerRadius = 25.0 / 2
@@ -120,9 +120,9 @@ class ZLPhotoPreviewController: UIViewController {
         btn.titleLabel?.lineBreakMode = .byCharWrapping
         btn.titleLabel?.numberOfLines = 2
         btn.contentHorizontalAlignment = .left
-        btn.setImage(getImage("zl_btn_original_circle"), for: .normal)
-        btn.setImage(getImage("zl_btn_original_selected"), for: .selected)
-        btn.setImage(getImage("zl_btn_original_selected"), for: [.selected, .highlighted])
+        btn.setImage(.zl.getImage("zl_btn_original_circle"), for: .normal)
+        btn.setImage(.zl.getImage("zl_btn_original_selected"), for: .selected)
+        btn.setImage(.zl.getImage("zl_btn_original_selected"), for: [.selected, .highlighted])
         btn.adjustsImageWhenHighlighted = false
         btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         return btn
@@ -1055,7 +1055,7 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
     
     private lazy var tagLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(13)
+        label.font = .zl.font(ofSize: 13)
         label.textColor = .white
         return label
     }()
@@ -1101,7 +1101,7 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
         
         if model.type == .video {
             tagImageView.isHidden = false
-            tagImageView.image = getImage("zl_video")
+            tagImageView.image = .zl.getImage("zl_video")
             tagLabel.isHidden = true
         } else if ZLPhotoConfiguration.default().allowSelectGif, model.type == .gif {
             tagImageView.isHidden = true
@@ -1109,12 +1109,12 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
             tagLabel.text = "GIF"
         } else if ZLPhotoConfiguration.default().allowSelectLivePhoto, model.type == .livePhoto {
             tagImageView.isHidden = false
-            tagImageView.image = getImage("zl_livePhoto")
+            tagImageView.image = .zl.getImage("zl_livePhoto")
             tagLabel.isHidden = true
         } else {
             if let _ = model.editImage {
                 tagImageView.isHidden = false
-                tagImageView.image = getImage("zl_editImage_tag")
+                tagImageView.image = .zl.getImage("zl_editImage_tag")
             } else {
                 tagImageView.isHidden = true
                 tagLabel.isHidden = true
