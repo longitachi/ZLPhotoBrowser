@@ -30,7 +30,7 @@
 
 "noCameraAuthority" = "Lütfen %@'nin \"Ayarlar\" > \"Gizlilik\" > \"Kamera\" bölümünden cihazınızın kamerasına erişmesine izin verin";
 "noPhotoLibratyAuthority" = "Lütfen %@'nin \"Ayarlar\" > \"Gizlilik\" > \"Fotoğraflar\" bölümünde albümünüze erişmesine izin verin";
-"noMicrophoneAuthority" = "Ses kaydedilemiyor. \"Ayarlar\" > \"%@\" seçeneğine gidin ve mikrofon erişimini etkinleştirin.";
+"noMicrophoneAuthority" = "Ses kaydedilemiyor. \"Ayarlar\" > \"%@\" seçeneğine gidin ve mikrofon erişimini etkinleştirin";
 "cameraUnavailable" = "Kamera kullanılamıyor";
 "keepRecording" = "Kayda Devam Et";
 "gotoSettings" = "Ayarlara git";

@@ -29,17 +29,17 @@ import Photos
 
 class ZLThumbnailPhotoCell: UICollectionViewCell {
     
-    private lazy var bottomShadowView = UIImageView(image: getImage("zl_shadow"))
+    private lazy var bottomShadowView = UIImageView(image: .zl.getImage("zl_shadow"))
     
-    private lazy var videoTag = UIImageView(image: getImage("zl_video"))
+    private lazy var videoTag = UIImageView(image: .zl.getImage("zl_video"))
     
-    private lazy var livePhotoTag = UIImageView(image: getImage("zl_livePhoto"))
+    private lazy var livePhotoTag = UIImageView(image: .zl.getImage("zl_livePhoto"))
     
-    private lazy var editImageTag = UIImageView(image: getImage("zl_editImage_tag"))
+    private lazy var editImageTag = UIImageView(image: .zl.getImage("zl_editImage_tag"))
     
     private lazy var descLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(13)
+        label.font = .zl.font(ofSize: 13)
         label.textAlignment = .right
         label.textColor = .white
         return label
@@ -66,10 +66,10 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     lazy var btnSelect: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setBackgroundImage(getImage("zl_btn_unselected"), for: .normal)
-        btn.setBackgroundImage(getImage("zl_btn_selected"), for: .selected)
+        btn.setBackgroundImage(.zl.getImage("zl_btn_unselected"), for: .normal)
+        btn.setBackgroundImage(.zl.getImage("zl_btn_selected"), for: .selected)
         btn.addTarget(self, action: #selector(btnSelectClick), for: .touchUpInside)
-        btn.enlargeInsets = UIEdgeInsets(top: 5, left: 20, bottom: 20, right: 5)
+        btn.enlargeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 10, right: 5)
         return btn
     }()
     
@@ -85,7 +85,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         label.layer.cornerRadius = 23.0 / 2
         label.layer.masksToBounds = true
         label.textColor = .white
-        label.font = getFont(14)
+        label.font = .zl.font(ofSize: 14)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .center

@@ -72,7 +72,7 @@ class ZLPhotoPreviewController: UIViewController {
     
     private lazy var backBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(getImage("zl_navBack"), for: .normal)
+        btn.setImage(.zl.getImage("zl_navBack"), for: .normal)
         btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         btn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
         return btn
@@ -80,8 +80,8 @@ class ZLPhotoPreviewController: UIViewController {
     
     private lazy var selectBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_btn_circle"), for: .normal)
-        btn.setImage(getImage("zl_btn_selected"), for: .selected)
+        btn.setImage(.zl.getImage("zl_btn_circle"), for: .normal)
+        btn.setImage(.zl.getImage("zl_btn_selected"), for: .selected)
         btn.enlargeInset = 10
         btn.addTarget(self, action: #selector(selectBtnClick), for: .touchUpInside)
         return btn
@@ -90,7 +90,7 @@ class ZLPhotoPreviewController: UIViewController {
     private lazy var indexLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .zl.indexLabelBgColor
-        label.font = getFont(14)
+        label.font = .zl.font(ofSize: 14)
         label.textColor = .white
         label.textAlignment = .center
         label.layer.cornerRadius = 25.0 / 2
@@ -120,9 +120,9 @@ class ZLPhotoPreviewController: UIViewController {
         btn.titleLabel?.lineBreakMode = .byCharWrapping
         btn.titleLabel?.numberOfLines = 2
         btn.contentHorizontalAlignment = .left
-        btn.setImage(getImage("zl_btn_original_circle"), for: .normal)
-        btn.setImage(getImage("zl_btn_original_selected"), for: .selected)
-        btn.setImage(getImage("zl_btn_original_selected"), for: [.selected, .highlighted])
+        btn.setImage(.zl.getImage("zl_btn_original_circle"), for: .normal)
+        btn.setImage(.zl.getImage("zl_btn_original_selected"), for: .selected)
+        btn.setImage(.zl.getImage("zl_btn_original_selected"), for: [.selected, .highlighted])
         btn.adjustsImageWhenHighlighted = false
         btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         return btn
@@ -515,11 +515,19 @@ class ZLPhotoPreviewController: UIViewController {
     @objc private func editBtnClick() {
         let config = ZLPhotoConfiguration.default()
         let model = arrDataSources[currentIndex]
+        
+        var requestAvAssetID: PHImageRequestID?
         let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
+        hud.timeoutBlock = { [weak self] in
+            showAlertView(localLanguageTextValue(.timeout), self)
+            if let requestAvAssetID = requestAvAssetID {
+                PHImageManager.default().cancelImageRequest(requestAvAssetID)
+            }
+        }
         
         if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
-            hud.show()
-            ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
+            hud.show(timeout: ZLPhotoConfiguration.default().timeout)
+            requestAvAssetID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
                 if !isDegraded {
                     if let image = image {
                         self?.showEditImageVC(image: image)
@@ -530,19 +538,12 @@ class ZLPhotoPreviewController: UIViewController {
                 }
             }
         } else if model.type == .video || config.allowEditVideo {
-            var requestAvAssetID: PHImageRequestID?
-            hud.show(timeout: 20)
-            hud.timeoutBlock = { [weak self] in
-                showAlertView(localLanguageTextValue(.timeout), self)
-                if let _ = requestAvAssetID {
-                    PHImageManager.default().cancelImageRequest(requestAvAssetID!)
-                }
-            }
+            hud.show(timeout: ZLPhotoConfiguration.default().timeout)
             // fetch avasset
             requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
                 hud.hide()
-                if let av = avAsset {
-                    self?.showEditVideoVC(model: model, avAsset: av)
+                if let avAsset = avAsset {
+                    self?.showEditVideoVC(model: model, avAsset: avAsset)
                 } else {
                     showAlertView(localLanguageTextValue(.timeout), self)
                 }
@@ -1054,7 +1055,7 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
     
     private lazy var tagLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(13)
+        label.font = .zl.font(ofSize: 13)
         label.textColor = .white
         return label
     }()
@@ -1100,7 +1101,7 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
         
         if model.type == .video {
             tagImageView.isHidden = false
-            tagImageView.image = getImage("zl_video")
+            tagImageView.image = .zl.getImage("zl_video")
             tagLabel.isHidden = true
         } else if ZLPhotoConfiguration.default().allowSelectGif, model.type == .gif {
             tagImageView.isHidden = true
@@ -1108,12 +1109,12 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
             tagLabel.text = "GIF"
         } else if ZLPhotoConfiguration.default().allowSelectLivePhoto, model.type == .livePhoto {
             tagImageView.isHidden = false
-            tagImageView.image = getImage("zl_livePhoto")
+            tagImageView.image = .zl.getImage("zl_livePhoto")
             tagLabel.isHidden = true
         } else {
             if let _ = model.editImage {
                 tagImageView.isHidden = false
-                tagImageView.image = getImage("zl_editImage_tag")
+                tagImageView.image = .zl.getImage("zl_editImage_tag")
             } else {
                 tagImageView.isHidden = true
                 tagLabel.isHidden = true

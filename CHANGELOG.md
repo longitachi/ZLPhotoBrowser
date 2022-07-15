@@ -2,6 +2,29 @@
 
 -----
 
+## [4.3.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.5) (2022-07-07)
+
+## Add:
+* Support custom alert style.
+* Improve the experience of image editor.
+
+---
+
+## [4.3.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.4) (2022-06-27)
+
+## Fix:
+* Fix a bug of the image editor.
+
+---
+
+## [4.3.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.3) (2022-06-21)
+### Add:
+* Adjust loading progress hud style to make it prettier.
+* Add wrapper for ZLPhotoBrowser compatible types.
+* Support for requesting original images when 'allowSelectOriginal = false'.
+
+---
+
 ## [4.3.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.2) (2022-05-25)
 ### Add:
 * Add Tolerance in Video Editing.

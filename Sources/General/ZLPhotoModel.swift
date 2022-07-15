@@ -78,7 +78,7 @@ public class ZLPhotoModel: NSObject {
     }
     
     public var previewSize: CGSize {
-        let scale: CGFloat = 2 // UIScreen.main.scale
+        let scale: CGFloat = UIScreen.main.scale
         if whRatio > 1 {
             let h = min(UIScreen.main.bounds.height, ZLMaxImageWidth) * scale
             let w = h * whRatio

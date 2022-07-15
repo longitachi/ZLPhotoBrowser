@@ -102,31 +102,23 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.3.2
+● 4.3.5
   Add:
-    视频编辑时间对比时，添加一个0.01的容差;
-    统一代码风格;
+    支持自定义Alert样式;
+    优化图片编辑体验;
+● 4.3.4
   Fix:
-    修复iOS14相册权限为limited时的一些bug;
-● 4.3.1 - 4.3.0 Patch
+    修复图片编辑器的一个bug;
+● 4.3.3
   Add:
-    删除已废弃的属性(图片编辑配置相关);
-    从ZLPhotoConfiguration中将部分UI相关的属性移动到ZLPhotoUIConfiguration中;
-    添加UIButton子类ZLEnlargeButton替代之前的UIControl扩展，来增加按钮的点击范围;
-    拍照时新增一个fade动画;
-● 4.3.0 - Beta
-  Add:
-    支持土耳其语;
-    从ZLPhotoConfiguration类中，将自定义颜色、文案、字体、图片拆分出来，放到新的类ZLPhotoUIConfiguration中;
-    编辑图片工具类中新增部分属性以支持OC调用;
-    新增部分UI支持自定义color;
-    ZLImagePreviewController 中添加长按事件回调;
-    新增属性 'operateBeforeDoneAction'，支持用户在点击完成按钮，照片回调之前做一些操作;
+    优化加载等待框样式;
+    添加ZLPhotoBrowserWrapper，避免与其他extension命名冲突;
+    当'allowSelectOriginal = false'时候，支持请求原图;
 ...
 ```
 
 ### <a id="国际化语言"></a>国际化语言
-🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语, 🇮🇩印度尼西亚语, 🇪🇸西班牙语, 🇵🇹葡萄牙语, 🇹🇷土耳其语.
+🇨🇳 中文简/繁, 🇺🇸 英语, 🇯🇵 日语, 🇫🇷 法语, 🇩🇪 德语, 🇷🇺 俄语, 🇻🇳 越南语, 🇰🇷 韩语, 🇲🇾 马来语, 🇮🇹 意大利语, 🇮🇩 印度尼西亚语, 🇪🇸 西班牙语, 🇵🇹 葡萄牙语, 🇹🇷 土耳其语.
 
 ### <a id="安装方法"></a>使用方法
 

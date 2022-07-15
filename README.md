@@ -91,31 +91,23 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.3.2
+● 4.3.5
   Add:
-    Add Tolerance in Video Editing.
-    Format code style.
+    Support custom alert style.
+    Improve the experience of image editor.
+● 4.3.4
   Fix:
-    Fix some bugs when iOS14 album permissions are limited.
-● 4.3.1 - 4.3.0 Patch
+    Fix a bug of the image editor.
+● 4.3.3
   Add:
-    Remove deprecated properties. 
-    Moved some UI related properties to ZLPhotoUIConfiguration.
-    Add ZLEnlargeButton class instead of extending UIControl to enlarge button click area.
-    Add fade animation when taking photos.
-● 4.3.0 - Beta
-  Add:
-    Turkish supported.
-    Separate UI-related properties such as color, text, font, and image from ZLPhotoConfiguration and put them in ZLPhotoUIConfiguration.
-    Add some properties to edit configuration to support Objective-C.
-    Add some customize color properties.
-    Add long press callback in ZLImagePreviewController.
-    Add property to allow user to do something before select photo result callback.
+    Adjust loading progress hud style to make it prettier.
+    Add wrapper for ZLPhotoBrowser compatible types.
+    Support for requesting original images when 'allowSelectOriginal = false'.
 ...
 ```
 
 ### <a id="Languages"></a>Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩Indonesian, 🇪🇸Spanish, 🇵🇹Portuguese, 🇹🇷Turkish.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLPhotoBrowser in your project:

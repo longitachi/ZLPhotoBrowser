@@ -33,7 +33,7 @@ class ZLAdjustSlider: UIView {
     
     private lazy var valueLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(12)
+        label.font = .zl.font(ofSize: 12)
         label.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
         label.layer.shadowOffset = .zero
         label.layer.shadowOpacity = 1
@@ -46,7 +46,7 @@ class ZLAdjustSlider: UIView {
     
     private lazy var separator: UIView = {
         let view = UIView()
-        view.backgroundColor = zlRGB(230, 230, 230)
+        view.backgroundColor = .zl.rgba(230, 230, 230)
         return view
     }()
     

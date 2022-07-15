@@ -39,7 +39,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private lazy var baseView: UIView = {
         let view = UIView()
-        view.backgroundColor = zlRGB(230, 230, 230)
+        view.backgroundColor = .zl.rgba(230, 230, 230)
         return view
     }()
     
@@ -93,7 +93,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(15)
+        label.font = .zl.font(ofSize: 15)
         label.text = localLanguageTextValue(.noPhotoTips)
         label.textAlignment = .center
         label.textColor = .zl.previewBtnTitleColor
@@ -237,7 +237,7 @@ public class ZLPhotoPreviewSheet: UIView {
         btn.backgroundColor = .zl.previewBtnBgColor
         btn.setTitleColor(.zl.previewBtnTitleColor, for: .normal)
         btn.setTitle(title, for: .normal)
-        btn.titleLabel?.font = getFont(17)
+        btn.titleLabel?.font = .zl.font(ofSize: 17)
         return btn
     }
     
@@ -390,12 +390,10 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func showNoAuthorityAlert() {
-        let alert = UIAlertController(title: nil, message: String(format: localLanguageTextValue(.noPhotoLibratyAuthority), getAppName()), preferredStyle: .alert)
-        let action = UIAlertAction(title: localLanguageTextValue(.ok), style: .default) { _ in
+        let action = ZLCustomAlertAction(title: localLanguageTextValue(.ok), style: .default) { _ in
             ZLPhotoConfiguration.default().noAuthorityCallback?(.library)
         }
-        alert.addAction(action)
-        sender?.zl.showAlertController(alert)
+        showAlertController(title: nil, message: String(format: localLanguageTextValue(.noPhotoLibratyAuthority), getAppName()), style: .alert, actions: [action], sender: self.sender)
     }
     
     @objc private func tapAction(_ tap: UITapGestureRecognizer) {
@@ -686,21 +684,21 @@ public class ZLPhotoPreviewSheet: UIView {
         
         var requestAvAssetID: PHImageRequestID?
         
-        hud.show(timeout: 20)
+        hud.show(timeout: ZLPhotoConfiguration.default().timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self?.sender)
-            if let _ = requestAvAssetID {
-                PHImageManager.default().cancelImageRequest(requestAvAssetID!)
+            if let requestAvAssetID = requestAvAssetID {
+                PHImageManager.default().cancelImageRequest(requestAvAssetID)
             }
         }
         
         func inner_showEditVideoVC(_ avAsset: AVAsset) {
             let vc = ZLEditVideoViewController(avAsset: avAsset)
             vc.editFinishBlock = { [weak self] url in
-                if let u = url {
-                    ZLPhotoManager.saveVideoToAlbum(url: u) { [weak self] suc, asset in
-                        if suc, asset != nil {
-                            let m = ZLPhotoModel(asset: asset!)
+                if let url = url {
+                    ZLPhotoManager.saveVideoToAlbum(url: url) { [weak self] suc, asset in
+                        if suc, let asset = asset {
+                            let m = ZLPhotoModel(asset: asset)
                             m.isSelected = true
                             self?.arrSelectedModels.removeAll()
                             self?.arrSelectedModels.append(m)
@@ -722,8 +720,8 @@ public class ZLPhotoPreviewSheet: UIView {
         // 提前fetch一下 avasset
         requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
             hud.hide()
-            if let _ = avAsset {
-                inner_showEditVideoVC(avAsset!)
+            if let avAsset = avAsset {
+                inner_showEditVideoVC(avAsset)
             } else {
                 showAlertView(localLanguageTextValue(.timeout), self?.sender)
             }

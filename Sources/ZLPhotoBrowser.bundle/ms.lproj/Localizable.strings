@@ -30,7 +30,7 @@
 
 "noCameraAuthority" = "Izinkan %@ mengakses kamera peranti anda di \"Tetapan\" > \"Privasi\" > \"Kamera\"";
 "noPhotoLibratyAuthority" = "Izinkan %@ mengakses album anda di \"Tetapan\" > \"Privasi\" > \"Foto\"";
-"noMicrophoneAuthority" = "Tidak dapat merakam audio. Pergi Ke \"Tetapan\" > \"%@\" dan dayakan akses mikrofon.";
+"noMicrophoneAuthority" = "Tidak dapat merakam audio. Pergi Ke \"Tetapan\" > \"%@\" dan dayakan akses mikrofon";
 "cameraUnavailable" = "Kamera tidak tersedia";
 "keepRecording" = "Teruskan Perakaman";
 "gotoSettings" = "Pergi ke Tetapan";

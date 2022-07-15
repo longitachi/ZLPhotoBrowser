@@ -29,7 +29,6 @@ import UIKit
 // MARK: chaining
 
 public extension ZLPhotoUIConfiguration {
-    
     @discardableResult
     func style(_ style: ZLPhotoBrowserStyle) -> ZLPhotoUIConfiguration {
         self.style = style
@@ -57,6 +56,12 @@ public extension ZLPhotoUIConfiguration {
     @discardableResult
     func hudStyle(_ style: ZLProgressHUD.HUDStyle) -> ZLPhotoUIConfiguration {
         hudStyle = style
+        return self
+    }
+    
+    @discardableResult
+    func customAlertClass(_ alertClass: ZLCustomAlertProtocol.Type?) -> ZLPhotoUIConfiguration {
+        customAlertClass = alertClass
         return self
     }
     
@@ -354,4 +359,27 @@ public extension ZLPhotoUIConfiguration {
         return self
     }
     
+    @discardableResult
+    func imageEditorToolTitleNormalColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        imageEditorToolTitleNormalColor = color
+        return self
+    }
+    
+    @discardableResult
+    func imageEditorToolTitleTintColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        imageEditorToolTitleTintColor = color
+        return self
+    }
+    
+    @discardableResult
+    func trashCanBackgroundNormalColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        trashCanBackgroundNormalColor = color
+        return self
+    }
+    
+    @discardableResult
+    func trashCanBackgroundTintColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        trashCanBackgroundTintColor = color
+        return self
+    }
 }

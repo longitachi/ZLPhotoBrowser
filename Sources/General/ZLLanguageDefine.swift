@@ -79,7 +79,7 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Request timed out (请求超时)
     public static let timeout = ZLLocalLanguageKey(rawValue: "timeout")
     
-    /// Allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"
+    /// Please Allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"
     /// (请在iPhone的\"设置-隐私-照片\"选项中，允许%@访问你的照片)
     public static let noPhotoLibratyAuthority = ZLLocalLanguageKey(rawValue: "noPhotoLibratyAuthority")
     

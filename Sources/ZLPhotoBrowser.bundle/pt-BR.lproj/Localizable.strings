@@ -30,7 +30,7 @@
 
 "noCameraAuthority" = "Por favor, permita a %@ aceder à câmara do seu dispositivo em \"Definições\" > \"Privacidade\" > \"Câmara\".";
 "noPhotoLibratyAuthority" = "Por favor, permita que %@ acesse seu álbum em \"Configurações\" > \"Privacidade\" > \"Fotos\".";
-"noMicrophoneAuthority" = "Incapaz de gravar áudio. Vá para \"Configurações\" > \"%@\" e habilite o acesso ao microfone.";
+"noMicrophoneAuthority" = "Incapaz de gravar áudio. Vá para \"Configurações\" > \"%@\" e habilite o acesso ao microfone";
 "cameraUnavailable" = "A câmara não está disponível";
 "keepRecording" = "Continuar Gravando";
 "gotoSettings" = "Ir para Configurações";

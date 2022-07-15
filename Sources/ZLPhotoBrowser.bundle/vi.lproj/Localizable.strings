@@ -30,7 +30,7 @@
 
 "noCameraAuthority" = "Vui lòng cho phép %@ truy cập máy ảnh trên thiết bị của bạn trong \"Cài đặt\" > \"Quyền riêng tư\" > \"Máy ảnh\"";
 "noPhotoLibratyAuthority" = "Vui lòng cho phép %@ truy cập anbom của bạn trong \"Cài đặt\" > \"Bảo mật\" > \"Ảnh\"";
-"noMicrophoneAuthority" = "Không thểghi hình. Đi tới \"Cài đặt\" > \"%@\" và bật quyên truy cập mic.";
+"noMicrophoneAuthority" = "Không thểghi hình. Đi tới \"Cài đặt\" > \"%@\" và bật quyên truy cập mic";
 "cameraUnavailable" = "Máy ảnh không khả dụng";
 "keepRecording" = "Tiếp tục ghi hình";
 "gotoSettings" = "Đi đến Cài đặt";

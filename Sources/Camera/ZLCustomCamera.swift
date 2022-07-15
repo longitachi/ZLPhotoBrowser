@@ -56,7 +56,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     public lazy var tipsLabel: UILabel = {
         let label = UILabel()
-        label.font = getFont(14)
+        label.font = .zl.font(ofSize: 14)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 2
@@ -110,7 +110,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     public lazy var retakeBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_retake"), for: .normal)
+        btn.setImage(.zl.getImage("zl_retake"), for: .normal)
         btn.addTarget(self, action: #selector(retakeBtnClick), for: .touchUpInside)
         btn.isHidden = true
         btn.adjustsImageWhenHighlighted = false
@@ -139,6 +139,8 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             btn.setImage(getImage("zl_photo.circle"), for: .normal)
         }
         btn.addTarget(self, action: #selector(galleryBtnClick), for: .touchUpInside)
+        btn.setImage(.zl.getImage("zl_arrow_down"), for: .normal)
+        btn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
         return btn
@@ -148,7 +150,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
         
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(getImage("zl_toggle_camera"), for: .normal)
+        btn.setImage(.zl.getImage("zl_toggle_camera"), for: .normal)
         btn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
@@ -157,7 +159,7 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }()
     
     public lazy var focusCursorView: UIImageView = {
-        let view = UIImageView(image: getImage("zl_focus"))
+        let view = UIImageView(image: .zl.getImage("zl_focus"))
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
         view.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
@@ -361,13 +363,23 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
         galleryBtn.frame = CGRect(x: 60, y: (ZLCustomCamera.Layout.bottomViewH - 25) / 2, width: 25, height: 25)
         
-        let tipsTextHeight = (tipsLabel.text ?? " ").zl.boundingRect(font: getFont(14), limitSize: CGSize(width: view.bounds.width - 20, height: .greatestFiniteMagnitude)).height
+        let tipsTextHeight = (tipsLabel.text ?? " ").zl
+            .boundingRect(
+                font: .zl.font(ofSize: 14),
+                limitSize: CGSize(width: view.bounds.width - 20, height: .greatestFiniteMagnitude)
+            )
+            .height
         tipsLabel.frame = CGRect(x: 10, y: bottomView.frame.minY - tipsTextHeight, width: view.bounds.width - 20, height: tipsTextHeight)
         
         retakeBtn.frame = CGRect(x: 30, y: insets.top + 10, width: 28, height: 28)
         switchCameraBtn.frame = CGRect(x: view.bounds.width - 30 - 28, y: insets.top + 10, width: 28, height: 28)
         
-        let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)).width + 20
+        let doneBtnW = localLanguageTextValue(.done).zl
+            .boundingRect(
+                font: ZLLayout.bottomToolTitleFont,
+                limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)
+            )
+            .width + 20
         let doneBtnY = view.bounds.height - 57 - insets.bottom
         doneBtn.frame = CGRect(x: view.bounds.width - doneBtnW - 20, y: doneBtnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
@@ -572,9 +584,8 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     private func showNoMicrophoneAuthorityAlert() {
-        let alert = UIAlertController(title: nil, message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()), preferredStyle: .alert)
-        let continueAction = UIAlertAction(title: localLanguageTextValue(.keepRecording), style: .default, handler: nil)
-        let gotoSettingsAction = UIAlertAction(title: localLanguageTextValue(.gotoSettings), style: .default) { _ in
+        let continueAction = ZLCustomAlertAction(title: localLanguageTextValue(.keepRecording), style: .default, handler: nil)
+        let gotoSettingsAction = ZLCustomAlertAction(title: localLanguageTextValue(.gotoSettings), style: .tint) { _ in
             guard let url = URL(string: UIApplication.openSettingsURLString) else {
                 return
             }
@@ -582,22 +593,18 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }
-        alert.addAction(continueAction)
-        alert.addAction(gotoSettingsAction)
-        zl.showAlertController(alert)
+        showAlertController(title: nil, message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()), style: .alert, actions: [continueAction, gotoSettingsAction], sender: self)
     }
     
     private func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: localLanguageTextValue(.done), style: .default) { _ in
-            self.dismiss(animated: true) {
+        let action = ZLCustomAlertAction(title: localLanguageTextValue(.done), style: .default) { [weak self] _ in
+            self?.dismiss(animated: true) {
                 if let type = type {
                     ZLPhotoConfiguration.default().noAuthorityCallback?(type)
                 }
             }
         }
-        alert.addAction(action)
-        zl.showAlertController(alert)
+        showAlertController(title: nil, message: message, style: .alert, actions: [action], sender: self)
     }
     
     private func showTipsLabel(animate: Bool) {

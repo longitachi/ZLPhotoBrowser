@@ -49,9 +49,9 @@ public class ZLProgressHUD: UIView {
         var icon: UIImage? {
             switch self {
             case .light, .lightBlur:
-                return getImage("zl_loading_dark")
+                return .zl.getImage("zl_loading_dark")
             case .dark, .darkBlur:
-                return getImage("zl_loading_light")
+                return .zl.getImage("zl_loading_light")
             }
         }
         
@@ -121,7 +121,7 @@ public class ZLProgressHUD: UIView {
         let label = UILabel(frame: CGRect(x: 0, y: 85, width: view.bounds.width, height: 30))
         label.textAlignment = .center
         label.textColor = style.textColor
-        label.font = getFont(16)
+        label.font = .zl.font(ofSize: 16)
         label.text = localLanguageTextValue(.hudLoading)
         view.addSubview(label)
         

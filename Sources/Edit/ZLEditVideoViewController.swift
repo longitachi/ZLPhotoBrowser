@@ -86,13 +86,13 @@ public class ZLEditVideoViewController: UIViewController {
     }()
     
     private lazy var leftSideView: UIImageView = {
-        let view = UIImageView(image: getImage("zl_ic_left"))
+        let view = UIImageView(image: .zl.getImage("zl_ic_left"))
         view.isUserInteractionEnabled = true
         return view
     }()
     
     private lazy var rightSideView: UIImageView = {
-        let view = UIImageView(image: getImage("zl_ic_right"))
+        let view = UIImageView(image: .zl.getImage("zl_ic_right"))
         view.isUserInteractionEnabled = true
         return view
     }()
@@ -442,12 +442,10 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     private func showFetchFailedAlert() {
-        let alert = UIAlertController(title: nil, message: localLanguageTextValue(.iCloudVideoLoadFaild), preferredStyle: .alert)
-        let action = UIAlertAction(title: localLanguageTextValue(.ok), style: .default) { _ in
-            self.dismiss(animated: false, completion: nil)
+        let action = ZLCustomAlertAction(title: localLanguageTextValue(.ok), style: .default) { [weak self] _ in
+            self?.dismiss(animated: false)
         }
-        alert.addAction(action)
-        zl.showAlertController(alert)
+        showAlertController(title: nil, message: localLanguageTextValue(.iCloudVideoLoadFaild), style: .alert, actions: [action], sender: self)
     }
 }
 

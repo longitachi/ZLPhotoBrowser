@@ -30,7 +30,7 @@
 
 "noCameraAuthority" = "Veuillez autoriser %@ à accéder à la caméra de votre appareil dans \"Paramètres\" > \"Confidentialité\" > \"Caméra\"";
 "noPhotoLibratyAuthority" = "Veuillez autoriser %@ à accéder à votre album dans \"Paramètres\" > \"Confidentialité\" > \"Photos\"";
-"noMicrophoneAuthority" = "Impossible d'enregistrer le son. Rendez-vous dans « Paramètres >> > << %@ » et activez l'accès au microphone.";
+"noMicrophoneAuthority" = "Impossible d'enregistrer le son. Rendez-vous dans « Paramètres >> > << %@ » et activez l'accès au microphone";
 "cameraUnavailable" = "La caméra n'est pas disponible";
 "keepRecording" = "Continuer à enregistrer";
 "gotoSettings" = "Accéder à Paramètres";
