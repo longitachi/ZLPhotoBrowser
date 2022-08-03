@@ -49,7 +49,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     @objc public var statusBarStyle: UIStatusBarStyle = .lightContent
     
-    /// text: Cancel.  image: 'x'. Default to image.
+    /// text: Cancel.  image: 'x'. Defaults to image.
     @objc public var navCancelButtonStyle: ZLPhotoUIConfiguration.CancelButtonStyle = .image
     
     /// Whether to show the status bar when previewing photos. Defaults to false.
@@ -328,7 +328,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     @objc public var trashCanBackgroundTintColor: UIColor = .zl.rgba(241, 79, 79, 0.98)
 }
 
-/// Font deply
+/// Font deploy
 enum ZLCustomFontDeploy {
     static var fontName: String?
 }

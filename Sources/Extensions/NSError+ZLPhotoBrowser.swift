@@ -1,8 +1,8 @@
 //
-//  PHAsset+ZLPhotoBrowser.swift
+//  NSError+ZLPhotoBrowser.swift
 //  ZLPhotoBrowser
 //
-//  Created by long on 2020/12/16.
+//  Created by long on 2022/8/3.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -24,17 +24,21 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import Photos
+import Foundation
 
-extension ZLPhotoBrowserWrapper where Base: PHAsset {
-    var isInCloud: Bool {
-        guard let resource = resource else {
-            return false
-        }
-        return !(resource.value(forKey: "locallyAvailable") as? Bool ?? true)
+extension NSError {
+    convenience init(message: String) {
+        let userInfo = [NSLocalizedDescriptionKey: message]
+        self.init(domain: "com.ZLPhotoBrowser.error", code: -1, userInfo: userInfo)
     }
+}
+
+extension NSError {
+    static let videoMergeError = NSError(message: "video merge failed")
     
-    var resource: PHAssetResource? {
-        return PHAssetResource.assetResources(for: base).first
-    }
+    static let videoExportTypeError = NSError(message: "The mediaType of asset must be video")
+    
+    static let videoExportError = NSError(message: "Export failed")
+    
+    static let assetSaveError = NSError(message: "Asset save failed")
 }

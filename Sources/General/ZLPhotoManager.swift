@@ -395,6 +395,20 @@ public class ZLPhotoManager: NSObject {
             completion(path)
         }
     }
+    
+    /// Save asset to file url.
+    @objc public class func saveAsset(_ asset: PHAsset, toFile fileUrl: URL, completion: @escaping ((Error?) -> Void)) {
+        guard let resource = asset.zl.resource else {
+            completion(NSError.assetSaveError)
+            return
+        }
+        
+        PHAssetResourceManager.default().writeData(for: resource, toFile: fileUrl, options: nil) { error in
+            ZLMainAsync {
+                completion(error)
+            }
+        }
+    }
 }
 
 /// Authority related.

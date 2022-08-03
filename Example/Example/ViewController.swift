@@ -197,6 +197,9 @@ class ViewController: UIViewController {
             self?.isOriginal = isOriginal
             self?.collectionView.reloadData()
             debugPrint("\(images)   \(assets)   \(isOriginal)")
+            
+//            guard !assets.isEmpty else { return }
+//            self?.saveAsset(assets[0])
         }
         ac.cancelBlock = {
             debugPrint("cancel select")
@@ -209,6 +212,29 @@ class ViewController: UIViewController {
             ac.showPreview(animate: true, sender: self)
         } else {
             ac.showPhotoLibrary(sender: self)
+        }
+    }
+    
+    func saveAsset(_ asset: PHAsset) {
+        let filePath: String
+        if asset.mediaType == .video {
+            filePath = NSTemporaryDirectory().appendingFormat("%@.%@", UUID().uuidString, "mp4")
+        } else {
+            filePath = NSTemporaryDirectory().appendingFormat("%@.%@", UUID().uuidString, "jpg")
+        }
+        
+        debugPrint("---- \(filePath)")
+        let url = URL(fileURLWithPath: filePath)
+        ZLPhotoManager.saveAsset(asset, toFile: url) { error in
+            do {
+                if asset.mediaType == .video {
+                    let _ = AVURLAsset(url: url)
+                } else {
+                    let data = try Data(contentsOf: url)
+                    let _ = UIImage(data: data)
+                }
+            } catch {
+            }
         }
     }
     

@@ -64,6 +64,7 @@
 		FDB34114280D0D70008F20B3 /* ZLPhotoUIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB34113280D0D70008F20B3 /* ZLPhotoUIConfiguration.swift */; };
 		FDB34268280E6566008F20B3 /* ZLPhotoUIConfiguration+Chaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB34267280E6566008F20B3 /* ZLPhotoUIConfiguration+Chaining.swift */; };
 		FDC6B5FD273B6E1C00973E43 /* ZLCameraConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC6B5FC273B6E1C00973E43 /* ZLCameraConfiguration.swift */; };
+		FDE1DB76289A4B120003CA4D /* NSError+ZLPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE1DB75289A4B120003CA4D /* NSError+ZLPhotoBrowser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -126,6 +127,7 @@
 		FDB34113280D0D70008F20B3 /* ZLPhotoUIConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoUIConfiguration.swift; sourceTree = "<group>"; };
 		FDB34267280E6566008F20B3 /* ZLPhotoUIConfiguration+Chaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLPhotoUIConfiguration+Chaining.swift"; sourceTree = "<group>"; };
 		FDC6B5FC273B6E1C00973E43 /* ZLCameraConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLCameraConfiguration.swift; sourceTree = "<group>"; };
+		FDE1DB75289A4B120003CA4D /* NSError+ZLPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+ZLPhotoBrowser.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +204,7 @@
 				E49FD9FD258A150600185885 /* PHAsset+ZLPhotoBrowser.swift */,
 				FD1C586A277AB8790037A746 /* UIViewController+ZLPhotoBrowser.swift */,
 				FDA54B8A2876D8CA0077F4FA /* UIFont+ZLPhotoBrowser.swift */,
+				FDE1DB75289A4B120003CA4D /* NSError+ZLPhotoBrowser.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 				E406C81C251B4F9B00852E46 /* ZLVideoManager.swift in Sources */,
 				E4C911D424E288780061DA40 /* ZLPhotoConfiguration.swift in Sources */,
 				E410177925305C73004C4952 /* ZLFilter.swift in Sources */,
+				FDE1DB76289A4B120003CA4D /* NSError+ZLPhotoBrowser.swift in Sources */,
 				E492ABEB24E53575005E1BD5 /* Cell+ZLPhotoBrowser.swift in Sources */,
 				E49BD1FB24E3D515005D7DFB /* Bundle+ZLPhotoBrowser.swift in Sources */,
 				FD201F3F286C7D9B005C6B53 /* ZLCustomAlertProtocol.swift in Sources */,

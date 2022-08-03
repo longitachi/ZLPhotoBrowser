@@ -13,7 +13,7 @@ public enum ZLCustomAlertStyle {
 }
 
 public protocol ZLCustomAlertProtocol: AnyObject {
-    /// Should return an instance of ZLCustomAlertView
+    /// Should return an instance of ZLCustomAlertProtocol
     static func alert(title: String?, message: String, style: ZLCustomAlertStyle) -> ZLCustomAlertProtocol
     
     func addAction(_ action: ZLCustomAlertAction)

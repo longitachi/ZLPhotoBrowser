@@ -99,7 +99,7 @@ public class ZLVideoManager: NSObject {
             }
             
             guard let exportSession = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPreset1280x720) else {
-                completion(nil, NSError(domain: "com.ZLPhotoBrowser.error", code: -1000, userInfo: [NSLocalizedDescriptionKey: "video merge failed"]))
+                completion(nil, NSError.videoMergeError)
                 return
             }
             
@@ -152,7 +152,7 @@ public extension ZLVideoManager {
     
     @objc class func exportVideo(for asset: PHAsset, exportType: ZLVideoManager.ExportType = .mov, presetName: String = AVAssetExportPresetMediumQuality, complete: @escaping ((URL?, Error?) -> Void)) {
         guard asset.mediaType == .video else {
-            complete(nil, NSError(domain: "com.ZLPhotoBrowser.error", code: -1, userInfo: [NSLocalizedDescriptionKey: "The mediaType of asset must be video"]))
+            complete(nil, NSError.videoExportTypeError)
             return
         }
         
@@ -160,7 +160,7 @@ public extension ZLVideoManager {
             if let set = avAsset {
                 self.exportVideo(for: set, exportType: exportType, presetName: presetName, complete: complete)
             } else {
-                complete(nil, NSError(domain: "com.ZLPhotoBrowser.error", code: -1, userInfo: [NSLocalizedDescriptionKey: "Export failed"]))
+                complete(nil, NSError.videoExportError)
             }
         }
     }
@@ -168,7 +168,7 @@ public extension ZLVideoManager {
     @objc class func exportVideo(for asset: AVAsset, range: CMTimeRange = CMTimeRange(start: .zero, duration: .positiveInfinity), exportType: ZLVideoManager.ExportType = .mov, presetName: String = AVAssetExportPresetMediumQuality, complete: @escaping ((URL?, Error?) -> Void)) {
         let outputUrl = URL(fileURLWithPath: getVideoExportFilePath())
         guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetName) else {
-            complete(nil, NSError(domain: "com.ZLPhotoBrowser.error", code: -1000, userInfo: [NSLocalizedDescriptionKey: "Export failed"]))
+            complete(nil, NSError.videoExportError)
             return
         }
         exportSession.outputURL = outputUrl

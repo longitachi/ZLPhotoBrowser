@@ -411,7 +411,9 @@ public class ZLPhotoPreviewSheet: UIView {
             }
             sender?.showDetailViewController(camera, sender: nil)
         } else {
-            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            if !UIImagePickerController.isSourceTypeAvailable(.camera) {
+                showAlertView(localLanguageTextValue(.cameraUnavailable), sender)
+            } else if ZLPhotoManager.hasCameraAuthority() {
                 let picker = UIImagePickerController()
                 picker.delegate = self
                 picker.allowsEditing = false
@@ -429,7 +431,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 picker.videoMaximumDuration = TimeInterval(config.maxRecordDuration)
                 sender?.showDetailViewController(picker, sender: nil)
             } else {
-                showAlertView(localLanguageTextValue(.cameraUnavailable), sender)
+                showAlertView(String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), sender)
             }
         }
     }
