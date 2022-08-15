@@ -143,7 +143,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 
 ### <a id="支持"></a> 支持
 * 给个[**★ Star**](#)
-* 请喝☕️ <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/aliPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wechatPay.png" width = "100" height = "125" />  or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/Paypal.png" width = "150" height = "125" />
+* 请喝☕️ <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/ap.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wp.png" width = "100" height = "125" />  or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/pp.png" width = "150" height = "125" />
 
 ### <a id="效果图"></a> 效果图
 - 选择

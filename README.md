@@ -163,7 +163,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 ### <a id="Support"></a> Support
 * [**★ Star**](#) this repo.
-* Support with <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/aliPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wechatPay.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/Paypal.png" width = "150" height = "125" />
+* Support with <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/ap.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wp.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/pp.png" width = "150" height = "125" />
 
 ### <a id="DemoEffect"></a> Demo Effect
 - Selection
