@@ -128,7 +128,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Developers can customize languages (This property is only for objc).
     /// - example: If you needs to replace
     /// key: @"loading", value: @"loading, waiting please" language,
-    /// The dictionary that needs to be passed in is @[@"loading": @"text to be replaced"].
+    /// The dictionary that needs to be passed in is @[@"hudLoading": @"text to be replaced"].
     /// - warning: Please pay attention to the placeholders contained in languages when changing, such as %ld, %@.
     @objc public var customLanguageKeyValue_objc: [String: String] = [:] {
         didSet {
@@ -346,4 +346,11 @@ enum ZLCustomImageDeploy {
     
     /// The display relationship between the album list and the thumbnail interface is push.
     case externalAlbumList
+}
+
+/// Language deploy
+enum ZLCustomLanguageDeploy {
+    static var language: ZLLanguageType = .system
+    
+    static var deploy: [ZLLocalLanguageKey: String] = [:]
 }

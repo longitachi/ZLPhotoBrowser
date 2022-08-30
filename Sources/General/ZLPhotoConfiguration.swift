@@ -321,10 +321,3 @@ public class ZLPhotoConfiguration: NSObject {
     case camera
     case microphone
 }
-
-/// Language deploy
-enum ZLCustomLanguageDeploy {
-    static var language: ZLLanguageType = .system
-    
-    static var deploy: [ZLLocalLanguageKey: String] = [:]
-}

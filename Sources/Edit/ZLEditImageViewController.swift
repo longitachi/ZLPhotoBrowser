@@ -285,7 +285,14 @@ open class ZLEditImageViewController: UIViewController {
         return btn
     }()
     
-    @objc public lazy var ashbinView = UIView()
+    @objc public lazy var ashbinView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .zl.trashCanBackgroundNormalColor
+        view.layer.cornerRadius = 15
+        view.layer.masksToBounds = true
+        view.isHidden = true
+        return view
+    }()
     
     @objc public lazy var ashbinImgView = UIImageView(image: .zl.getImage("zl_ashbin"), highlightedImage: .zl.getImage("zl_ashbin_open"))
     
@@ -645,10 +652,6 @@ open class ZLEditImageViewController: UIViewController {
             width: ashbinSize.width,
             height: ashbinSize.height
         )
-        ashbinView.backgroundColor = .zl.trashCanBackgroundNormalColor
-        ashbinView.layer.cornerRadius = 15
-        ashbinView.layer.masksToBounds = true
-        ashbinView.isHidden = true
         view.addSubview(ashbinView)
         
         ashbinImgView.frame = CGRect(x: (ashbinSize.width - 25) / 2, y: 15, width: 25, height: 25)

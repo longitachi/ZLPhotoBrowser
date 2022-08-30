@@ -26,126 +26,107 @@
 
 import UIKit
 import Accelerate
+import MobileCoreServices
 
 // MARK: data 转 gif image
 
 public extension ZLPhotoBrowserWrapper where Base: UIImage {
-    /// https://github.com/kiritmodi2702/GIF-Swift
     static func animateGifImage(data: Data) -> UIImage? {
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
-            return nil
+        // Kingfisher
+        let info: [String: Any] = [
+            kCGImageSourceShouldCache as String: true,
+            kCGImageSourceTypeIdentifierHint as String: kUTTypeGIF
+        ]
+        
+        guard let imageSource = CGImageSourceCreateWithData(data as CFData, info as CFDictionary) else {
+            return UIImage(data: data)
         }
         
-        let count = CGImageSourceGetCount(source)
-        
-        let animateImage: UIImage?
-        if count <= 1 {
-            animateImage = UIImage(data: data)
-        } else {
-            var images = [CGImage]()
-            var delays = [Int]()
-
-            for i in 0..<count {
-                if let image = CGImageSourceCreateImageAtIndex(source, i, nil) {
-                    images.append(image)
-                }
-
-                let delaySeconds = delayForImageAtIndex(
-                    Int(i),
-                    source: source
-                )
-                delays.append(Int(delaySeconds * 1000.0)) // Seconds to ms
-            }
-
-            let duration: Int = {
-                var sum = 0
-
-                for val: Int in delays {
-                    sum += val
-                }
-
-                return sum
-            }()
-
-            let gcd = gcdForArray(delays)
-            var frames = [UIImage]()
-
-            var frame: UIImage
-            var frameCount: Int
-            for i in 0..<count {
-                frame = UIImage(cgImage: images[Int(i)])
-                frameCount = Int(delays[Int(i)] / gcd)
-
-                for _ in 0..<frameCount {
-                    frames.append(frame)
-                }
-            }
-
-            animateImage = UIImage.animatedImage(
-                with: frames,
-                duration: Double(duration) / 1000.0
-            )
+        let frameCount = CGImageSourceGetCount(imageSource)
+        guard frameCount > 1 else {
+            return UIImage(data: data)
         }
         
-        return animateImage
+        var images = [UIImage]()
+        var frameDuration = [Int]()
+        
+        for i in 0..<frameCount {
+            guard let imageRef = CGImageSourceCreateImageAtIndex(imageSource, i, info as CFDictionary) else {
+                return nil
+            }
+            
+            // Get current animated GIF frame duration
+            let currFrameDuration = getFrameDuration(from: imageSource, at: i)
+            // Second to ms
+            frameDuration.append(Int(currFrameDuration * 1000))
+            
+            images.append(UIImage(cgImage: imageRef, scale: 1, orientation: .up))
+        }
+        
+        // https://github.com/kiritmodi2702/GIF-Swift
+        let duration: Int = {
+            var sum = 0
+            for val in frameDuration {
+                sum += val
+            }
+            return sum
+        }()
+        
+        // 求出每一帧的最大公约数
+        let gcd = gcdForArray(frameDuration)
+        var frames = [UIImage]()
+
+        for i in 0..<frameCount {
+            let frameImage = images[i]
+            // 每张图片的时长除以最大公约数，得出需要展示的张数
+            let count = Int(frameDuration[i] / gcd)
+
+            for _ in 0..<count {
+                frames.append(frameImage)
+            }
+        }
+        
+        return .animatedImage(with: frames, duration: TimeInterval(duration) / 1000)
     }
     
-    private static func delayForImageAtIndex(_ index: Int, source: CGImageSource!) -> Double {
-        var delay = 0.1
+    /// Calculates frame duration at a specific index for a gif from an `imageSource`.
+    static func getFrameDuration(from imageSource: CGImageSource, at index: Int) -> TimeInterval {
+        guard let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil)
+            as? [String: Any] else { return 0.0 }
+
+        let gifInfo = properties[kCGImagePropertyGIFDictionary as String] as? [String: Any]
+        return getFrameDuration(from: gifInfo)
+    }
+    
+    /// Calculates frame duration for a gif frame out of the kCGImagePropertyGIFDictionary dictionary.
+    static func getFrameDuration(from gifInfo: [String: Any]?) -> TimeInterval {
+        let defaultFrameDuration = 0.1
+        guard let gifInfo = gifInfo else { return defaultFrameDuration }
         
-        let cfProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil)
-        let gifProperties: CFDictionary? = unsafeBitCast(
-            CFDictionaryGetValue(
-                cfProperties,
-                Unmanaged.passUnretained(kCGImagePropertyGIFDictionary).toOpaque()
-            ),
-            to: CFDictionary.self
-        )
+        let unclampedDelayTime = gifInfo[kCGImagePropertyGIFUnclampedDelayTime as String] as? NSNumber
+        let delayTime = gifInfo[kCGImagePropertyGIFDelayTime as String] as? NSNumber
+        let duration = unclampedDelayTime ?? delayTime
         
-        guard let gifProperties = gifProperties else {
-            return 0.1
+        guard let frameDuration = duration else {
+            return defaultFrameDuration
         }
-        
-        var delayObject: AnyObject = unsafeBitCast(
-            CFDictionaryGetValue(
-                gifProperties,
-                Unmanaged.passUnretained(kCGImagePropertyGIFUnclampedDelayTime).toOpaque()
-            ),
-            to: AnyObject.self
-        )
-        if delayObject.doubleValue == 0 {
-            delayObject = unsafeBitCast(
-                CFDictionaryGetValue(
-                    gifProperties,
-                    Unmanaged.passUnretained(kCGImagePropertyGIFDelayTime).toOpaque()
-                ),
-                to: AnyObject.self
-            )
-        }
-        
-        delay = delayObject as! Double
-        
-        if delay < 0.011 {
-            delay = 0.1
-        }
-        
-        return delay
+        return frameDuration.doubleValue > 0.011 ? frameDuration.doubleValue : defaultFrameDuration
     }
     
     private static func gcdForArray(_ array: [Int]) -> Int {
         if array.isEmpty {
             return 1
         }
-        
+
         var gcd = array[0]
-        
+
         for val in array {
             gcd = gcdForPair(val, gcd)
         }
-        
+
         return gcd
     }
-    
+
     private static func gcdForPair(_ a1: Int?, _ b1: Int?) -> Int {
         var a = a1
         var b = b1
@@ -158,17 +139,17 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
                 return 0
             }
         }
-        
+
         if a! < b! {
             let c = a
             a = b
             b = c
         }
-        
+
         var rest: Int
         while true {
             rest = a! % b!
-            
+
             if rest == 0 {
                 return b!
             } else {
