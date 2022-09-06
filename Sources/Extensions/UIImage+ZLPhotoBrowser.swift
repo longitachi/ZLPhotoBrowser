@@ -127,34 +127,24 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         return gcd
     }
 
-    private static func gcdForPair(_ a1: Int?, _ b1: Int?) -> Int {
-        var a = a1
-        var b = b1
-        if b == nil || a == nil {
-            if b != nil {
-                return b!
-            } else if a != nil {
-                return a!
-            } else {
-                return 0
-            }
+    private static func gcdForPair(_ num1: Int?, _ num2: Int?) -> Int {
+        guard var num1 = num1, var num2 = num2 else {
+            return num1 ?? (num2 ?? 0)
         }
-
-        if a! < b! {
-            let c = a
-            a = b
-            b = c
+        
+        if num1 < num2 {
+            swap(&num1, &num2)
         }
 
         var rest: Int
         while true {
-            rest = a! % b!
+            rest = num1 % num2
 
             if rest == 0 {
-                return b!
+                return num2
             } else {
-                a = b
-                b = rest
+                num1 = num2
+                num2 = rest
             }
         }
     }

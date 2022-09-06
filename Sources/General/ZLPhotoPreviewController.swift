@@ -370,6 +370,11 @@ class ZLPhotoPreviewController: UIViewController {
             if !self.hideNavView, self.navView.frame.contains(point) || self.bottomView.frame.contains(point) {
                 return false
             }
+            
+            guard self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) != nil else {
+                return false
+            }
+            
             return true
         }
         popInteractiveTransition?.startTransition = { [weak self] in

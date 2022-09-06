@@ -86,14 +86,12 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             let p = pan.translation(in: viewController?.view)
             let percent: CGFloat = max(0.0, p.y / (viewController?.view.bounds.height ?? UIScreen.main.bounds.height))
             
-            let dismiss = vel.y > 300 || (percent > 0.2 && vel.y > -300)
+            let dismiss = vel.y > 300 || (percent > 0.1 && vel.y > -300)
             
             if dismiss {
                 finish()
-                finishAnimate()
             } else {
                 cancel()
-                cancelAnimate()
             }
             imageViewOriginalFrame = .zero
             startPanPoint = .zero
@@ -130,21 +128,25 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
     }
     
     func startAnimate() {
-        guard let context = transitionContext else {
+        guard let transitionContext = transitionContext else {
             return
         }
-        guard let fromVC = context.viewController(forKey: .from) as? ZLPhotoPreviewController, let toVC = context.viewController(forKey: .to) as? ZLThumbnailViewController else {
-            return
-        }
-        let containerView = context.containerView
         
+        guard let fromVC = transitionContext.viewController(forKey: .from) as? ZLPhotoPreviewController,
+              let toVC = transitionContext.viewController(forKey: .to) as? ZLThumbnailViewController else {
+            return
+        }
+        
+        let containerView = transitionContext.containerView
         containerView.addSubview(toVC.view)
         
-        shadowView = UIView(frame: containerView.bounds)
-        shadowView?.backgroundColor = UIColor.black
-        containerView.addSubview(shadowView!)
+        guard let cell = fromVC.collectionView.cellForItem(at: IndexPath(row: fromVC.currentIndex, section: 0)) as? ZLPreviewBaseCell else {
+            return
+        }
         
-        let cell = fromVC.collectionView.cellForItem(at: IndexPath(row: fromVC.currentIndex, section: 0)) as! ZLPreviewBaseCell
+        shadowView = UIView(frame: containerView.bounds)
+        shadowView?.backgroundColor = ZLPhotoUIConfiguration.default().previewVCBgColor
+        containerView.addSubview(shadowView!)
         
         let fromImageViewFrame = cell.animateImageFrame(convertTo: containerView)
         
@@ -157,11 +159,17 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         imageViewOriginalFrame = imageView!.frame
     }
     
+    override func finish() {
+        super.finish()
+        finishAnimate()
+    }
+    
     func finishAnimate() {
-        guard let context = transitionContext else {
+        guard let transitionContext = transitionContext else {
             return
         }
-        guard let fromVC = context.viewController(forKey: .from) as? ZLPhotoPreviewController, let toVC = context.viewController(forKey: .to) as? ZLThumbnailViewController else {
+        guard let fromVC = transitionContext.viewController(forKey: .from) as? ZLPhotoPreviewController,
+              let toVC = transitionContext.viewController(forKey: .to) as? ZLThumbnailViewController else {
             return
         }
         
@@ -192,13 +200,13 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         
         var toFrame: CGRect?
         
-        if let toIdx = toIndex, let toCell = toVC.collectionView.cellForItem(at: IndexPath(row: toIdx, section: 0)) {
-            toFrame = toVC.collectionView.convert(toCell.frame, to: context.containerView)
+        if let toIndex = toIndex, let toCell = toVC.collectionView.cellForItem(at: IndexPath(row: toIndex, section: 0)) {
+            toFrame = toVC.collectionView.convert(toCell.frame, to: transitionContext.containerView)
         }
         
         UIView.animate(withDuration: 0.25, animations: {
-            if let to = toFrame {
-                self.imageView?.frame = to
+            if let toFrame = toFrame {
+                self.imageView?.frame = toFrame
             } else {
                 self.imageView?.alpha = 0
             }
@@ -209,12 +217,18 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             self.imageView = nil
             self.shadowView = nil
             self.finishTransition?()
-            context.completeTransition(!context.transitionWasCancelled)
+            transitionContext.finishInteractiveTransition()
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }
     
+    override func cancel() {
+        super.cancel()
+        cancelAnimate()
+    }
+    
     func cancelAnimate() {
-        guard let context = transitionContext else {
+        guard let transitionContext = transitionContext else {
             return
         }
         
@@ -225,7 +239,8 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             self.imageView?.removeFromSuperview()
             self.shadowView?.removeFromSuperview()
             self.cancelTransition?()
-            context.completeTransition(!context.transitionWasCancelled)
+            transitionContext.cancelInteractiveTransition()
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }
 }
