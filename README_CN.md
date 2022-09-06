@@ -102,6 +102,12 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.6
+  Add:
+    提供一个保存PHAsset到本地的方法;
+    更新解析GIF的方法;
+  Fix:
+    修复下拉返回手势动画中的一个crash;
 ● 4.3.5
   Add:
     支持自定义Alert样式;
@@ -109,11 +115,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ● 4.3.4
   Fix:
     修复图片编辑器的一个bug;
-● 4.3.3
-  Add:
-    优化加载等待框样式;
-    添加ZLPhotoBrowserWrapper，避免与其他extension命名冲突;
-    当'allowSelectOriginal = false'时候，支持请求原图;
 ...
 ```
 

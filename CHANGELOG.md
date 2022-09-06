@@ -2,6 +2,17 @@
 
 -----
 
+## [4.3.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.6) (2022-09-06)
+
+## Add:
+* Provide a method to save the PHAsset to local.
+* Updated the method of parsing GIF.[#752](https://github.com/longitachi/ZLPhotoBrowser/issues/752)
+
+## Fix:
+* Fixed crash in pop interactive transition.[#753](https://github.com/longitachi/ZLPhotoBrowser/issues/753)
+
+---
+
 ## [4.3.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.5) (2022-07-07)
 
 ## Add:
