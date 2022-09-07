@@ -278,7 +278,7 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    private var pri_maxRecordDuration: Second = 10
+    private var pri_maxRecordDuration: Second = 20
     /// Maximum recording duration. Defaults to 10, minimum is 1.
     @objc public var maxRecordDuration: Second {
         get {

@@ -214,6 +214,9 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     /// 是否正在调整焦距
     private var isAdjustingFocusPoint = false
     
+    /// 是否正在拍照
+    private var isTakingPicture = false
+    
     // 仅支持竖屏
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -745,9 +748,10 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     // 点击拍照
     @objc private func takePicture() {
-        guard ZLPhotoManager.hasCameraAuthority() else {
+        guard ZLPhotoManager.hasCameraAuthority(), !isTakingPicture else {
             return
         }
+        isTakingPicture = true
         
         let connection = imageOutput.connection(with: .video)
         connection?.videoOrientation = orientation
@@ -848,9 +852,9 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             return 1
         }
         if #available(iOS 11.0, *) {
-            return device.maxAvailableVideoZoomFactor / 2
+            return min(15, device.maxAvailableVideoZoomFactor)
         } else {
-            return device.activeFormat.videoMaxZoomFactor / 2
+            return min(15, device.activeFormat.videoMaxZoomFactor)
         }
     }
     
@@ -995,6 +999,10 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         ZLMainAsync {
+            defer {
+                self.isTakingPicture = false
+            }
+            
             if photoSampleBuffer == nil || error != nil {
                 zl_debugPrint("拍照失败 \(error?.localizedDescription ?? "")")
                 return
@@ -1041,6 +1049,8 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
                 self.startRecord()
                 return
             }
+            self.stopRecordAnimation()
+            
             self.recordUrls.append(outputFileURL)
             
             var duration: Double = 0
