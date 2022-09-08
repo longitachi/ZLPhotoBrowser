@@ -72,7 +72,9 @@ class WeChatMomentDemoViewController: UIViewController {
         // Like this 'let photoPicker = ZLPhotoPreviewSheet(selectedAssets: assets)'
         let photoPicker = ZLPhotoPreviewSheet()
         
-        photoPicker.selectImageBlock = { [weak self] (images, assets, _) in
+        photoPicker.selectImageBlock = { [weak self] (results, _) in
+            let images = results.map { $0.image }
+            let assets = results.map { $0.asset }
             self?.hasSelectVideo = assets.first?.mediaType == .video
             self?.images.append(contentsOf: images)
             self?.assets.append(contentsOf: assets)

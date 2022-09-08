@@ -120,7 +120,7 @@ public class ZLPhotoConfiguration: NSObject {
     var pri_allowEditImage = true
     @objc public var allowEditImage: Bool {
         get {
-            return pri_allowEditImage && shouldAnialysisAsset
+            return pri_allowEditImage
         }
         set {
             pri_allowEditImage = newValue
@@ -131,7 +131,7 @@ public class ZLPhotoConfiguration: NSObject {
     var pri_allowEditVideo = false
     @objc public var allowEditVideo: Bool {
         get {
-            return pri_allowEditVideo && shouldAnialysisAsset
+            return pri_allowEditVideo
         }
         set {
             pri_allowEditVideo = newValue
@@ -235,9 +235,6 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// Display the selected photos at the bottom of the preview large photos interface. Defaults to true.
     @objc public var showSelectedPhotoPreview = true
-    
-    /// Allow framework fetch photos when callback. Defaults to true.
-    @objc public var shouldAnialysisAsset = true
     
     /// Timeout for image parsing. Defaults to 20.
     @objc public var timeout: TimeInterval = 20

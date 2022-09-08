@@ -276,12 +276,6 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    func shouldAnialysisAsset(_ value: Bool) -> ZLPhotoConfiguration {
-        shouldAnialysisAsset = value
-        return self
-    }
-    
-    @discardableResult
     func timeout(_ timeout: TimeInterval) -> ZLPhotoConfiguration {
         self.timeout = timeout
         return self
