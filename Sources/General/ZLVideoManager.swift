@@ -30,8 +30,8 @@ import Photos
 
 public class ZLVideoManager: NSObject {
     
-    class func getVideoExportFilePath() -> String {
-        let format = ZLPhotoConfiguration.default().cameraConfiguration.videoExportType.format
+    class func getVideoExportFilePath(format: String? = nil) -> String {
+        let format = format ?? ZLPhotoConfiguration.default().cameraConfiguration.videoExportType.format
         return NSTemporaryDirectory().appendingFormat("%@.%@", UUID().uuidString, format)
     }
     
@@ -166,7 +166,7 @@ public extension ZLVideoManager {
     }
     
     @objc class func exportVideo(for asset: AVAsset, range: CMTimeRange = CMTimeRange(start: .zero, duration: .positiveInfinity), exportType: ZLVideoManager.ExportType = .mov, presetName: String = AVAssetExportPresetMediumQuality, complete: @escaping ((URL?, Error?) -> Void)) {
-        let outputUrl = URL(fileURLWithPath: getVideoExportFilePath())
+        let outputUrl = URL(fileURLWithPath: getVideoExportFilePath(format: exportType.format))
         guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetName) else {
             complete(nil, NSError.videoExportError)
             return
