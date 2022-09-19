@@ -476,6 +476,11 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
+    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        shouldLayout = true
+    }
+
     private func generateFilterImages() {
         let size: CGSize
         let ratio = (originalImage.size.width / originalImage.size.height)
@@ -512,6 +517,8 @@ open class ZLEditImageViewController: UIViewController {
         let w = ratio * editSize.width * mainScrollView.zoomScale
         let h = ratio * editSize.height * mainScrollView.zoomScale
         containerView.frame = CGRect(x: max(0, (scrollViewSize.width - w) / 2), y: max(0, (scrollViewSize.height - h) / 2), width: w, height: h)
+        mainScrollView.contentSize = containerView.frame.size
+
         if selectRatio?.isCircle == true {
             let mask = CAShapeLayer()
             let path = UIBezierPath(arcCenter: CGPoint(x: w / 2, y: h / 2), radius: w / 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
@@ -1225,7 +1232,7 @@ open class ZLEditImageViewController: UIViewController {
                 drawImage = originalImage
             }
             
-            if tools.contains(.adjust), (brightness != 0 || contrast != 0 || saturation != 0) {
+            if tools.contains(.adjust), brightness != 0 || contrast != 0 || saturation != 0 {
                 drawImage = drawImage?.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation)
             }
             
@@ -1311,6 +1318,8 @@ open class ZLEditImageViewController: UIViewController {
     }
 }
 
+//MARK: UIGestureRecognizerDelegate
+
 extension ZLEditImageViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard imageStickerContainerIsHidden else {
@@ -1379,6 +1388,8 @@ extension ZLEditImageViewController: UIScrollViewDelegate {
         isScrolling = false
     }
 }
+
+// MARK: collection view data source & delegate
 
 extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -1475,7 +1486,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
         } else if collectionView == filterCollectionView {
             currentFilter = ZLPhotoConfiguration.default().editImageConfiguration.filters[indexPath.row]
             func adjustImage(_ image: UIImage) -> UIImage {
-                guard tools.contains(.adjust), (brightness != 0 || contrast != 0 || saturation != 0) else {
+                guard tools.contains(.adjust), brightness != 0 || contrast != 0 || saturation != 0 else {
                     return image
                 }
                 return image.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? image
@@ -1510,6 +1521,8 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
         collectionView.reloadData()
     }
 }
+
+// MARK: ZLTextStickerViewDelegate
 
 extension ZLEditImageViewController: ZLTextStickerViewDelegate {
     func stickerBeginOperation(_ sticker: UIView) {

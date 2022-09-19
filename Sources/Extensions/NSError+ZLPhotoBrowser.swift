@@ -38,7 +38,7 @@ extension NSError {
     
     static let videoExportTypeError = NSError(message: "The mediaType of asset must be video")
     
-    static let videoExportError = NSError(message: "Export failed")
+    static let videoExportError = NSError(message: "Video export failed")
     
     static let assetSaveError = NSError(message: "Asset save failed")
 }

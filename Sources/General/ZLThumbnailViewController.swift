@@ -290,8 +290,10 @@ class ZLThumbnailViewController: UIViewController {
             scrollToBottom()
         } else if isSwitchOrientation {
             isSwitchOrientation = false
-            if let firstVisibleIndexPathBeforeRotation = firstVisibleIndexPathBeforeRotation {
-                collectionView.scrollToItem(at: firstVisibleIndexPathBeforeRotation, at: .top, animated: false)
+            collectionView.performBatchUpdates(nil) { _ in
+                if let firstVisibleIndexPathBeforeRotation = self.firstVisibleIndexPathBeforeRotation {
+                    self.collectionView.scrollToItem(at: firstVisibleIndexPathBeforeRotation, at: .top, animated: false)
+                }
             }
         }
         

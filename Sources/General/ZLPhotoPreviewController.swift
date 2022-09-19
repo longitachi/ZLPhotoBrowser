@@ -230,16 +230,13 @@ class ZLPhotoPreviewController: UIViewController {
         let ori = UIApplication.shared.statusBarOrientation
         if ori != orientation {
             orientation = ori
-            collectionView.setContentOffset(
-                CGPoint(x: (view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(indexBeforOrientationChanged), y: 0),
-                animated: false
-            )
-            collectionView.performBatchUpdates({
+            
+            collectionView.performBatchUpdates(nil) { _ in
                 self.collectionView.setContentOffset(
                     CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0),
                     animated: false
                 )
-            })
+            }
         }
     }
     

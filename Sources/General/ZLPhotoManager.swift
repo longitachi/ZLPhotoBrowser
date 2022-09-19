@@ -396,7 +396,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// Save asset to file url. Support save image and video.
+    /// Save asset original data to file url. Support save image and video.
     @objc public class func saveAsset(_ asset: PHAsset, toFile fileUrl: URL, completion: @escaping ((Error?) -> Void)) {
         guard let resource = asset.zl.resource else {
             completion(NSError.assetSaveError)
