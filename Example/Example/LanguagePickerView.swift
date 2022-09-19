@@ -44,6 +44,8 @@ extension ZLLanguageType {
             return "Español (Spanish)"
         case .turkish:
             return "Türkçe (Turkish)"
+        case .arabic:
+            return "عربي (Arabic)"
         }
     }
     
@@ -61,7 +63,7 @@ class LanguagePickerView: UIView {
     
     var selectedIndex = 0
     
-    let languages: [ZLLanguageType] = [.system, .english, .chineseSimplified, .chineseTraditional, .japanese, .french, .german, .russian, .vietnamese, .korean, .malay, .italian, .indonesian, .portuguese, .spanish, .turkish]
+    let languages: [ZLLanguageType] = [.system, .english, .chineseSimplified, .chineseTraditional, .japanese, .french, .german, .russian, .vietnamese, .korean, .malay, .italian, .indonesian, .portuguese, .spanish, .turkish , .arabic]
     
     init(selectedLanguage: ZLLanguageType) {
         super.init(frame: .zero)
