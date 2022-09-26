@@ -627,7 +627,7 @@ public class ZLPhotoPreviewSheet: UIView {
                         editModel: isEdited ? m.editImageModel : nil,
                         index: i
                     )
-                    results.append(model)
+                    results[i] = model
                     zl_debugPrint("ZLPhotoBrowser: suc request \(i)")
                 } else {
                     errorAssets.append(m.asset)
