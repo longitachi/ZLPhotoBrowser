@@ -1,0 +1,68 @@
+"previewCamera" = "كاميرا";
+"previewCameraRecord" = "تسجيل";
+"previewAlbum" = "البوم";
+"cancel" = "إلغاء";
+
+"originalPhoto" = "الصورة الكاملة";
+"done" = "تم";
+"ok" = "حسنا";
+"editFinish" = "تم";
+
+"back" = "رجوع";
+"edit" = "تعديل";
+"revert" = "أعاد";
+"brightness" = "السطوع";
+"contrast" = "التباين";
+"saturation" = "التشبع";
+
+"photo" = "الصور";
+"preview" = "معاينة";
+
+"noPhotoTips" = "لا توجد صور";
+
+"hudLoading" = "يرجى الانتظار...";
+
+"exceededMaxSelectCount" = "أقصى عدد للاختيار: %ld";
+"longerThanMaxVideoDuration" = "غير قادر على تحديد فيديو مدته أطول من %lds";
+"shorterThanMaxVideoDuration" = "غير قادر على تحديد فيديو بمدة أقصر من %lds";
+"exceededMaxVideoSelectCount" = "أقصى عدد لتحديد الفيديو: %ld";
+"lessThanMinVideoSelectCount" = "الحد الأدنى لتحديد الفيديو: %ld";
+
+"noCameraAuthority" = "يُرجى السماح لـ %@ بالوصول إلى كاميرا جهازك في الإعدادات > الخصوصية > الكاميرا ";
+"noPhotoLibratyAuthority" = "يُرجى السماح لـ %@ بالوصول إلى ألبومك في الإعدادات > الخصوصية > الكاميرا ";
+"noMicrophoneAuthority" = "تعذر تسجيل الصوت. انتقل إلى  الإعدادات >  %@ وقم بتمكين الوصول إلى الميكروفون";
+"cameraUnavailable" = "الكاميرا غير متوفرة";
+"keepRecording" = "استمر في التسجيل";
+"gotoSettings" = "اذهب للاعدادات";
+
+"iCloudVideoLoadFaild" = "غير قادر على المزامنة من iCloud";
+"imageLoadFailed" = "فشل التحميل";
+
+"save" = "حفظ";
+"saveImageError" = "فشل حفظ الصورة";
+"saveVideoError" = "فشل حفظ الفيديو";
+"timeout" = "الطلب منتهي المدة";
+
+"customCameraTips" = "انقر لالتقاط صورة مع الاستمرار لتسجيل الفيديو";
+"customCameraTakePhotoTips" = "انقر لالتقاط صورة";
+"customCameraRecordVideoTips" = "اضغط مع الاستمرار لتسجيل الفيديو";
+"minRecordTimeTips" = "سجل على الأقل %lds";
+
+"cameraRoll" = "حديثا";
+"panoramas" = "بانوراما";
+"videos" = "فيديوات";
+"favorites" = "المفضلة";
+"timelapses" = "الفاصل الزمني";
+"recentlyAdded" = "أضيف مؤخرا";
+"bursts" = "رشقات نارية";
+"slomoVideos" = "حركة بطيئة";
+"selfPortraits" = "سيلفي";
+"screenshots" = "لقطات الشاشة";
+"depthEffect" = "لَوحَة";
+"livePhotos" = "صور حية";
+"animated" = "متحرك";
+"myPhotoStream" = "دفق الصور الخاص بي";
+
+"noTitleAlbumListPlaceholder" = "جميع الصور";
+"unableToAccessAllPhotos" = "يتعذر الوصول إلى جميع الصور في الألبوم ، يرجى السماح بالوصول إلى كل الصور في الصور .";
+"textStickerRemoveTips" = "اسحب هنا للإزالة";
