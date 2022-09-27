@@ -35,7 +35,6 @@ import UIKit
 }
 
 public class ZLEditImageConfiguration: NSObject {
-    
     @objc public enum EditTool: Int, CaseIterable {
         case draw
         case clip
@@ -211,12 +210,13 @@ public class ZLEditImageConfiguration: NSObject {
     /// Impact feedback style. Defaults to .medium
     @objc public var impactFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
     
+    /// Whether to support redo in graffiti and mosaic tools. Defaults to false
+    @objc public var canRedo = false
 }
 
 // MARK: chaining
 
 public extension ZLEditImageConfiguration {
-    
     @discardableResult
     func tools(_ tools: [ZLEditImageConfiguration.EditTool]) -> ZLEditImageConfiguration {
         self.tools = tools
@@ -282,12 +282,16 @@ public extension ZLEditImageConfiguration {
         return self
     }
     
+    @discardableResult
+    func canRedo(_ value: Bool) -> ZLEditImageConfiguration {
+        canRedo = value
+        return self
+    }
 }
 
 // MARK: 裁剪比例
 
 public class ZLImageClipRatio: NSObject {
-    
     @objc public var title: String
     
     @objc public let whRatio: CGFloat
@@ -300,19 +304,15 @@ public class ZLImageClipRatio: NSObject {
         self.isCircle = isCircle
         super.init()
     }
-    
 }
 
 extension ZLImageClipRatio {
-    
     static func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
         return lhs.whRatio == rhs.whRatio && lhs.title == rhs.title
     }
-    
 }
 
 public extension ZLImageClipRatio {
-    
     @objc static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
     
     @objc static let circle = ZLImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
@@ -330,5 +330,4 @@ public extension ZLImageClipRatio {
     @objc static let wh9x16 = ZLImageClipRatio(title: "9 : 16", whRatio: 9.0 / 16.0)
     
     @objc static let wh16x9 = ZLImageClipRatio(title: "16 : 9", whRatio: 16.0 / 9.0)
-    
 }

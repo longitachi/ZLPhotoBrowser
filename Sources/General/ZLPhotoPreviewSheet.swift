@@ -303,7 +303,9 @@ public class ZLPhotoPreviewSheet: UIView {
         vc.autoSelectCurrentIfNotSelectAnyone = false
         let nav = getImageNav(rootViewController: vc)
         vc.backBlock = { [weak self] in
-            self?.hide()
+            self?.hide { [weak self] in
+                self?.cancelBlock?()
+            }
         }
         sender.showDetailViewController(nav, sender: nil)
     }
