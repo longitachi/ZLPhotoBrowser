@@ -235,6 +235,11 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
         ZLPhotoUIConfiguration.default().imageEditorToolTitleTintColor
     }
     
+    /// 图片编辑器中各种工具图标高亮状态下的颜色
+    static var imageEditorToolIconTintColor: UIColor? {
+        ZLPhotoUIConfiguration.default().imageEditorToolIconTintColor
+    }
+    
     /// 编辑器中垃圾箱普通状态下的颜色
     static var trashCanBackgroundNormalColor: UIColor {
         ZLPhotoUIConfiguration.default().trashCanBackgroundNormalColor

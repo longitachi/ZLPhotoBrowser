@@ -113,6 +113,17 @@ class PhotoConfigureViewController: UIViewController {
     
     var customAlertSwitch: UISwitch!
     
+    lazy var doneBtn: UIButton = {
+        let btn = UIButton(type: .custom)
+        btn.backgroundColor = .black
+        btn.layer.cornerRadius = 25
+        btn.layer.masksToBounds = true
+        btn.setTitle("Done", for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 15)
+        btn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
+        return btn
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -149,7 +160,13 @@ class PhotoConfigureViewController: UIViewController {
             let field = UITextField()
             field.font = UIFont.systemFont(ofSize: 14)
             field.textColor = .black
-            field.borderStyle = .roundedRect
+            field.backgroundColor = .white
+            field.layer.cornerRadius = 3
+            field.layer.masksToBounds = true
+            field.layer.borderColor = UIColor.lightGray.cgColor
+            field.layer.borderWidth = 1 / UIScreen.main.scale
+            field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 8, height: 0))
+            field.leftViewMode = .always
             field.delegate = self
             field.keyboardType = keyboardType
             field.text = text
@@ -157,7 +174,7 @@ class PhotoConfigureViewController: UIViewController {
         }
         
         let velSpacing: CGFloat = 20
-        let horSpacing: CGFloat = 20
+        let horSpacing: CGFloat = 15
         let fieldSize = CGSize(width: 100, height: 30)
         
         let tipsLabel = createLabel("For more parameter settings, view in ZLPhotoConfiguration")
@@ -170,36 +187,12 @@ class PhotoConfigureViewController: UIViewController {
             make.right.equalTo(containerView).offset(-20)
         }
         
-        let dismissBtn = UIButton(type: .custom)
-        dismissBtn.setTitle("Done", for: .normal)
-        dismissBtn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
-        dismissBtn.layer.cornerRadius = 5
-        dismissBtn.layer.masksToBounds = true
-        dismissBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        dismissBtn.backgroundColor = .black
-        if #available(iOS 13.0, *) {
-        } else {
-            view.addSubview(dismissBtn)
-            dismissBtn.snp.makeConstraints { make in
-                make.top.equalTo(tipsLabel.snp.bottom).offset(velSpacing)
-                make.left.equalTo(tipsLabel.snp.left)
-                make.width.equalTo(60)
-            }
-        }
-        
         // 预览张数
         let previewCountLabel = createLabel("Max count for preview")
         containerView.addSubview(previewCountLabel)
-        if #available(iOS 13.0, *) {
-            previewCountLabel.snp.makeConstraints { make in
-                make.top.equalTo(tipsLabel.snp.bottom).offset(velSpacing)
-                make.left.equalTo(tipsLabel.snp.left)
-            }
-        } else {
-            previewCountLabel.snp.makeConstraints { make in
-                make.top.equalTo(dismissBtn.snp.bottom).offset(velSpacing)
-                make.left.equalTo(tipsLabel.snp.left)
-            }
+        previewCountLabel.snp.makeConstraints { make in
+            make.top.equalTo(tipsLabel.snp.bottom).offset(velSpacing)
+            make.left.equalTo(tipsLabel.snp.left)
         }
         
         previewCountTextField = createTextField(String(config.maxPreviewCount), .numberPad)
@@ -969,6 +962,13 @@ class PhotoConfigureViewController: UIViewController {
             make.left.equalTo(customAlertLabel.snp.right).offset(horSpacing)
             make.centerY.equalTo(customAlertLabel)
             make.bottom.equalTo(containerView.snp.bottom).offset(-20)
+        }
+        
+        view.addSubview(doneBtn)
+        doneBtn.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-25)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-40)
+            make.size.equalTo(CGSize(width: 50, height: 50))
         }
     }
     

@@ -319,6 +319,10 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 图片编辑器中各种工具下方标题高亮状态下的颜色
     @objc public var imageEditorToolTitleTintColor: UIColor = .white
     
+    /// The tint color of the image editor tool icons.
+    /// 图片编辑器中各种工具图标高亮状态下的颜色
+    @objc public var imageEditorToolIconTintColor: UIColor?
+    
     /// Background color of trash can in image editor.
     /// 编辑器中垃圾箱普通状态下的颜色
     @objc public var trashCanBackgroundNormalColor: UIColor = .zl.rgba(40, 40, 40, 0.8)

@@ -372,6 +372,12 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func imageEditorToolIconTintColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        imageEditorToolIconTintColor = color
+        return self
+    }
+    
+    @discardableResult
     func trashCanBackgroundNormalColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         trashCanBackgroundNormalColor = color
         return self
