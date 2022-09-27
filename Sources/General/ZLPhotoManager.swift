@@ -361,7 +361,6 @@ public class ZLPhotoManager: NSObject {
     
     @objc public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping (AVAsset?, [AnyHashable: Any]?) -> Void) -> PHImageRequestID {
         let options = PHVideoRequestOptions()
-        options.version = .original
         options.deliveryMode = .automatic
         options.isNetworkAccessAllowed = true
         
