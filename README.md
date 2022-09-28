@@ -91,6 +91,15 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.7
+  Add:
+    Modify the parameter type of selectImageBlock and use ZLResultModel for callback. Delete shouldAnialysisAsset property.
+    Photo editor adapts to iPad.
+    Arabic supported.
+    Support redo in graffiti and mosaic tools.
+    Support for modifying the tint color of the image editor icon.
+  Fix:
+    Fix the bug of getting the wrong version of the video when editing the video.
 ● 4.3.6
   Add:
     Provide a method to save the PHAsset to local.
@@ -101,14 +110,11 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Add:
     Support custom alert style.
     Improve the experience of image editor.
-● 4.3.4
-  Fix:
-    Fixed a bug of the image editor.
 ...
 ```
 
 ### <a id="Languages"></a>Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish, 🇸🇦 Arabic.
 
 ### <a id="Installation"></a>Installation
 There are four ways to use ZLPhotoBrowser in your project:

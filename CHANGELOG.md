@@ -2,6 +2,20 @@
 
 -----
 
+## [4.3.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.7) (2022-09-28)
+
+## Add:
+* Modify the parameter type of selectImageBlock and use ZLResultModel for callback. Delete shouldAnialysisAsset property.
+* Photo editor adapts to iPad.
+* Arabic supported.
+* Support redo in graffiti and mosaic tools.
+* Support for modifying the tint color of the image editor icon.
+
+## Fix:
+* Fix the bug of getting the wrong version of the video when editing the video.
+
+---
+
 ## [4.3.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.6) (2022-09-06)
 
 ## Add:
