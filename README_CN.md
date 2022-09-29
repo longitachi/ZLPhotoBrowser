@@ -68,7 +68,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
  - 快速选择
  ```
  let ps = ZLPhotoPreviewSheet()
- ps.selectImageBlock = { [weak self] (images, assets, isOriginal) in
+ ps.selectImageBlock = { [weak self] results, isOriginal in
      // your code
  }
  ps.showPreview(animate: true, sender: self)
