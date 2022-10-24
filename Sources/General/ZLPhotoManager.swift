@@ -298,7 +298,9 @@ public class ZLPhotoManager: NSObject {
             }
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
             if downloadFinished {
-                completion(image, isDegraded)
+                ZLMainAsync {
+                    completion(image, isDegraded)
+                }
             }
         }
     }
@@ -388,7 +390,9 @@ public class ZLPhotoManager: NSObject {
     @objc public class func fetchAssetFilePath(asset: PHAsset, completion: @escaping (String?) -> Void) {
         asset.requestContentEditingInput(with: nil) { input, _ in
             var path = input?.fullSizeImageURL?.absoluteString
-            if path == nil, let dir = asset.value(forKey: "directory") as? String, let name = asset.value(forKey: "filename") as? String {
+            if path == nil,
+               let dir = asset.value(forKey: "directory") as? String,
+               let name = asset.value(forKey: "filename") as? String {
                 path = String(format: "file:///var/mobile/Media/%@/%@", dir, name)
             }
             completion(path)

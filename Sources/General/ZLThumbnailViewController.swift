@@ -1008,6 +1008,9 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                     nav?.arrSelectedModels.append(model)
                     cell?.btnSelect.isSelected = true
                     self?.refreshCellIndexAndMaskView()
+                    if config.maxSelectCount == 1, !config.allowPreviewPhotos {
+                        self?.doneBtnClick()
+                    }
                 }
             } else {
                 cell?.btnSelect.isSelected = false
@@ -1064,15 +1067,17 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             return
         }
         
-        if !ZLPhotoConfiguration.default().allowPreviewPhotos {
+        let config = ZLPhotoConfiguration.default()
+        
+        if !config.allowPreviewPhotos {
             cell.btnSelectClick()
             return
         }
         
-        if !cell.enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
+        // 不允许选择，且上面有蒙层时，不准点击
+        if !cell.enableSelect, config.showInvalidMask {
             return
         }
-        let config = ZLPhotoConfiguration.default()
         
         var index = indexPath.row
         if !config.sortAscending {
