@@ -28,7 +28,6 @@ import UIKit
 import Photos
 
 class ZLFetchImageOperation: Operation {
-    
     private let model: ZLPhotoModel
     
     private let isOriginal: Bool
@@ -137,7 +136,7 @@ class ZLFetchImageOperation: Operation {
         } else {
             requestImageID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
-                    zl_debugPrint("---- 加载完成 \(String(describing: self?.isCancelled))")
+                    zl_debugPrint("---- 加载完成 isCancelled: \(String(describing: self?.isCancelled))")
                     self?.completion(self?.scaleImage(image?.zl.fixOrientation()), nil)
                     self?.fetchFinish()
                 }
@@ -179,5 +178,4 @@ class ZLFetchImageOperation: Operation {
         pri_isExecuting = false
         pri_isFinished = true
     }
-    
 }

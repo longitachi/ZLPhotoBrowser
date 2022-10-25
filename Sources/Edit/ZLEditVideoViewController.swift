@@ -128,9 +128,9 @@ public class ZLEditVideoViewController: UIViewController {
         return queue
     }()
     
-    private var avAssetRequestID = PHInvalidImageRequestID
+    private lazy var avAssetRequestID = PHInvalidImageRequestID
     
-    private var videoRequestID = PHInvalidImageRequestID
+    private lazy var videoRequestID = PHInvalidImageRequestID
     
     private var frameImageCache: [Int: UIImage] = [:]
     
@@ -160,13 +160,13 @@ public class ZLEditVideoViewController: UIViewController {
     
     deinit {
         zl_debugPrint("ZLEditVideoViewController deinit")
-        self.cleanTimer()
-        self.requestFrameImageQueue.cancelAllOperations()
-        if self.avAssetRequestID > PHInvalidImageRequestID {
-            PHImageManager.default().cancelImageRequest(self.avAssetRequestID)
+        cleanTimer()
+        requestFrameImageQueue.cancelAllOperations()
+        if avAssetRequestID > PHInvalidImageRequestID {
+            PHImageManager.default().cancelImageRequest(avAssetRequestID)
         }
-        if self.videoRequestID > PHInvalidImageRequestID {
-            PHImageManager.default().cancelImageRequest(self.videoRequestID)
+        if videoRequestID > PHInvalidImageRequestID {
+            PHImageManager.default().cancelImageRequest(videoRequestID)
         }
     }
     

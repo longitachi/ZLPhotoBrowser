@@ -86,7 +86,7 @@ public class ZLProgressHUD: UIView {
     
     deinit {
         zl_debugPrint("ZLProgressHUD deinit")
-        self.cleanTimer()
+        cleanTimer()
     }
     
     @objc public init(style: ZLProgressHUD.HUDStyle) {

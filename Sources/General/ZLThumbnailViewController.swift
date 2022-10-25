@@ -268,7 +268,7 @@ class ZLThumbnailViewController: UIViewController {
         
         embedAlbumListView?.frame = CGRect(x: 0, y: navViewFrame.maxY, width: view.bounds.width, height: view.bounds.height - navViewFrame.maxY)
         
-        let showBottomToolBtns = showBottomToolBar()
+        let showBottomToolBtns = shouldShowBottomToolBar()
         
         let bottomViewH: CGFloat
         if showLimitAuthTipsView, showBottomToolBtns {
@@ -457,13 +457,14 @@ class ZLThumbnailViewController: UIViewController {
         }
     }
     
-    private func showBottomToolBar() -> Bool {
+    private func shouldShowBottomToolBar() -> Bool {
         let config = ZLPhotoConfiguration.default()
         let condition1 = config.editAfterSelectThumbnailImage &&
             config.maxSelectCount == 1 &&
             (config.allowEditImage || config.allowEditVideo)
         let condition2 = config.allowPreviewPhotos && config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
-        if condition1 || condition2 {
+        let condition3 = !config.allowPreviewPhotos && config.maxSelectCount == 1
+        if condition1 || condition2 || condition3 {
             return false
         }
         return true
@@ -701,7 +702,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     private func resetBottomToolBtnStatus() {
-        guard showBottomToolBar() else { return }
+        guard shouldShowBottomToolBar() else { return }
         guard let nav = navigationController as? ZLImageNavController else {
             zlLoggerInDebug("Navigation controller is null")
             return
