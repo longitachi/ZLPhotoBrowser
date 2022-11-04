@@ -108,7 +108,7 @@ public class ZLPhotoManager: NSObject {
             if count == limitCount {
                 stop.pointee = true
             }
-            if m.type == .video, Int(asset.duration) < ZLPhotoConfiguration.default().minSelectVideoDuration || Int(asset.duration) > ZLPhotoConfiguration.default().maxSelectCount {
+            if m.type == .video, Int(asset.duration) < ZLPhotoConfiguration.default().minSelectVideoDuration || Int(asset.duration) > ZLPhotoConfiguration.default().maxSelectVideoDuration {
                 return
             }
             
