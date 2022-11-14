@@ -29,7 +29,7 @@ class ZLProgressSliderView: UIView {
         currentSlider.isContinuous = true
         currentSlider.minimumTrackTintColor = UIColor.green
         currentSlider.maximumTrackTintColor = UIColor.white
-        currentSlider.setThumbImage(UIImage.init(named: "slider_icon"), for: UIControl.State.normal)
+        currentSlider.setThumbImage(.zl.getImage("zl_slider_icon"), for: UIControl.State.normal)
         
         return currentSlider
     }()

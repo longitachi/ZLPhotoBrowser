@@ -623,6 +623,8 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         if videoRequestID > PHInvalidImageRequestID {
             PHImageManager.default().cancelImageRequest(videoRequestID)
         }
+    
+        sliderView?.totalSeconds = Float(model.asset.duration)
         
         // 视频预览图尺寸
         var size = model.previewSize
@@ -665,6 +667,12 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.frame = bounds
         layer.insertSublayer(playerLayer!, at: 0)
+        let interval = CMTime(seconds: model.asset.duration > 30 ? 1.0 : (model.asset.duration > 10 ? 0.3 : 0.05),
+                                  preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        player?.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] (time) in
+            self?.sliderView?.updateSlider(Float(CMTimeGetSeconds(time)))
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
     }
     
