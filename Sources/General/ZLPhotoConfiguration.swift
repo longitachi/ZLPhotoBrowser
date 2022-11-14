@@ -187,6 +187,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// Whether to display the selected count on the button. Defaults to true.
     @objc public var showSelectCountOnDoneBtn = true
     
+    /// Whether to display the progress slider in video preview. Default to false
+    @objc public var allowVideoPreviewSlider = false
+    
     private var pri_columnCount: Int = 4
     /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Defaults to 4.
     /// ```
