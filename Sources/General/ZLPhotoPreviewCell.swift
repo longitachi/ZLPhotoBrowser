@@ -488,6 +488,9 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     
     private var playerLayer: AVPlayerLayer?
     
+    // 视频播放进度条，目前仅支持无bottomView时显示进度条
+    private var sliderView: ZLProgressSliderView?
+    
     private lazy var progressView = ZLProgressView()
     
     private lazy var imageView: UIImageView = {
@@ -568,6 +571,8 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         playBtn.frame = CGRect(x: 0, y: insets.top, width: bounds.width, height: bounds.height - insets.top - insets.bottom)
         syncErrorLabel.frame = CGRect(x: 10, y: insets.top + 60, width: bounds.width - 20, height: 35)
         progressView.frame = CGRect(x: bounds.width / 2 - 30, y: bounds.height / 2 - 30, width: 60, height: 60)
+        sliderView?.frame = CGRect(x: 0, y: bounds.height - 30 - insets.bottom, width:bounds.width , height: 20)
+
     }
     
     override func previewVCScroll() {
@@ -590,6 +595,15 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         contentView.addSubview(syncErrorLabel)
         contentView.addSubview(progressView)
         contentView.addSubview(playBtn)
+        if ZLPhotoConfiguration.default().allowVideoPreviewSlider {
+            let insets = deviceSafeAreaInsets()
+            sliderView = ZLProgressSliderView(frame: CGRect(x: 0, y: bounds.height - 30 - insets.bottom, width:bounds.width , height: 20))
+            contentView.addSubview(sliderView!)
+            sliderView?.valueChangedCallback = { [weak self] (currentTime) in
+                guard let self = self else { return }
+                self.player?.seek(to: CMTime.init(value: CMTimeValue(currentTime), timescale: CMTimeScale(1.0)))
+            }
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
     }
