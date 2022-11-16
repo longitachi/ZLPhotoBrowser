@@ -18,7 +18,7 @@ class ZLSlider: UISlider {
     }
 }
 
-class ZLProgressSliderView: UIView {
+public class ZLProgressSliderView: UIView {
     lazy var currentSlider: ZLSlider = {
         let currentSlider = ZLSlider.init()
         currentSlider.frame = CGRect.init(x: 60, y: (bounds.height - 20) / 2, width: bounds.size.width - 120, height: 20)
