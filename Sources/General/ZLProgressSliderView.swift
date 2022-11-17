@@ -19,6 +19,36 @@ class ZLSlider: UISlider {
 }
 
 public class ZLProgressSliderView: UIView {
+    /// Public
+    public var totalSeconds: Float = 0.0 {
+        didSet {
+            currentSlider.isUserInteractionEnabled = totalSeconds > 0
+            self.totleTimeLabel.text = caculateTime(seconds: Double(totalSeconds))
+        }
+    }
+    
+    public var thumbImage: UIImage = .zl.getImage("zl_slider_icon") ?? UIImage() {
+        didSet {
+            currentSlider.setThumbImage(thumbImage, for: UIControl.State.normal)
+        }
+    }
+
+    public var minimumTrackTintColor: UIColor = UIColor.green {
+        didSet {
+            currentSlider.minimumTrackTintColor = minimumTrackTintColor
+        }
+    }
+    
+    public var maximumTrackTintColor: UIColor = UIColor.white {
+        didSet {
+            currentSlider.maximumTrackTintColor = maximumTrackTintColor
+        }
+    }
+    
+    var currentTime: Float = 0.0
+    var valueChangedCallback: ((Float) -> Void)?
+    var touchDownCallback: (() -> Void)?
+    
     lazy var currentSlider: ZLSlider = {
         let currentSlider = ZLSlider.init()
         currentSlider.frame = CGRect.init(x: 60, y: (bounds.height - 20) / 2, width: bounds.size.width - 120, height: 20)
@@ -26,11 +56,11 @@ public class ZLProgressSliderView: UIView {
         currentSlider.maximumValue = 1
         currentSlider.minimumValue = 0
         currentSlider.value = 0
-        currentSlider.isContinuous = true
-        currentSlider.minimumTrackTintColor = UIColor.green
-        currentSlider.maximumTrackTintColor = UIColor.white
-        currentSlider.setThumbImage(.zl.getImage("zl_slider_icon"), for: UIControl.State.normal)
-        
+        currentSlider.isContinuous = false
+        currentSlider.minimumTrackTintColor = minimumTrackTintColor
+        currentSlider.maximumTrackTintColor = maximumTrackTintColor
+        currentSlider.setThumbImage(thumbImage, for: UIControl.State.normal)
+        currentSlider.isUserInteractionEnabled = false
         return currentSlider
     }()
     
@@ -56,19 +86,16 @@ public class ZLProgressSliderView: UIView {
         super.init(frame: frame)
         setupUI()
     }
-    
-    var totalSeconds: Float = 0.0 {
-        didSet {
-            currentSlider.isUserInteractionEnabled = totalSeconds > 0
-            self.totleTimeLabel.text = caculateTime(seconds: Double(totalSeconds))
-        }
-    }
-    var currentTime: Float = 0.0
-    var valueChangedCallback: ((Float) -> Void)?
-    var touchDownCallback: (() -> Void)?
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        currentSlider.frame = CGRect.init(x: 60, y: (bounds.height - 20) / 2, width: bounds.size.width - 120, height: 20)
+        totleTimeLabel.frame = CGRect(x: frame.size.width - 60, y: (bounds.height - 20) / 2, width: 40, height: 20)
+        currentTimeLabel.frame = CGRect(x: 10, y: (bounds.height - 20) / 2, width: 40, height: 20)
     }
     
     func setupUI() {
@@ -78,8 +105,6 @@ public class ZLProgressSliderView: UIView {
         addSubview(currentTimeLabel)
         addSubview(currentSlider)
 
-        currentSlider.isUserInteractionEnabled = false
-        currentSlider.isContinuous = false
         currentSlider.addTarget(self, action: #selector(valueChanged(_:)), for: UIControl.Event.valueChanged)
         currentSlider.addTarget(self, action: #selector(touchDown(_:)), for: UIControl.Event.touchDown)
     }
@@ -117,9 +142,7 @@ public class ZLProgressSliderView: UIView {
     
     // 滑动终止
     @objc func valueChanged(_ slider: UISlider) -> Void {
-        guard totalSeconds > 0 else {
-            return
-        }
+        guard totalSeconds > 0 else { return }
         currentTime = currentSlider.value * totalSeconds
         updateSlider(currentTime)
         
@@ -128,9 +151,7 @@ public class ZLProgressSliderView: UIView {
     
     // 一开始拖动
     @objc func touchDown(_ slider: UISlider) -> Void {
-        guard totalSeconds > 0 else {
-            return
-        }
+        guard totalSeconds > 0 else { return }
         touchDownCallback?()
     }
 
