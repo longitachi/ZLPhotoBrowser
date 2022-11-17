@@ -23,7 +23,7 @@ public class ZLProgressSliderView: UIView {
     public var totalSeconds: Float = 0.0 {
         didSet {
             currentSlider.isUserInteractionEnabled = totalSeconds > 0
-            self.totleTimeLabel.text = caculateTime(seconds: Double(totalSeconds))
+            self.totalTimeLabel.text = caculateTime(seconds: Double(totalSeconds))
         }
     }
     
@@ -45,9 +45,16 @@ public class ZLProgressSliderView: UIView {
         }
     }
     
+    public var timeLabelTextColor = UIColor.white {
+        didSet {
+            totalTimeLabel.textColor = timeLabelTextColor
+            currentTimeLabel.textColor = timeLabelTextColor
+        }
+    }
+    
+    public var valueChangedCallback: ((Float) -> Void)?
+    public var touchDownCallback: (() -> Void)?
     var currentTime: Float = 0.0
-    var valueChangedCallback: ((Float) -> Void)?
-    var touchDownCallback: (() -> Void)?
     
     lazy var currentSlider: ZLSlider = {
         let currentSlider = ZLSlider.init()
@@ -64,13 +71,13 @@ public class ZLProgressSliderView: UIView {
         return currentSlider
     }()
     
-    lazy var totleTimeLabel:UILabel = {
-        let totleTimeLabel = UILabel.init()
-        totleTimeLabel.frame = CGRect.init(x:self.frame.size.width - 60, y: (bounds.height - 20) / 2, width: 40, height: 20)
-        totleTimeLabel.textAlignment = NSTextAlignment.center
-        totleTimeLabel.textColor = UIColor.white
-        totleTimeLabel.font = UIFont.systemFont(ofSize: 12)
-        return totleTimeLabel
+    lazy var totalTimeLabel:UILabel = {
+        let totalTimeLabel = UILabel.init()
+        totalTimeLabel.frame = CGRect.init(x:self.frame.size.width - 60, y: (bounds.height - 20) / 2, width: 40, height: 20)
+        totalTimeLabel.textAlignment = NSTextAlignment.center
+        totalTimeLabel.textColor = UIColor.white
+        totalTimeLabel.font = UIFont.systemFont(ofSize: 12)
+        return totalTimeLabel
     }()
     
     lazy var currentTimeLabel:UILabel = {
@@ -94,14 +101,14 @@ public class ZLProgressSliderView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         currentSlider.frame = CGRect.init(x: 60, y: (bounds.height - 20) / 2, width: bounds.size.width - 120, height: 20)
-        totleTimeLabel.frame = CGRect(x: frame.size.width - 60, y: (bounds.height - 20) / 2, width: 40, height: 20)
+        totalTimeLabel.frame = CGRect(x: frame.size.width - 60, y: (bounds.height - 20) / 2, width: 40, height: 20)
         currentTimeLabel.frame = CGRect(x: 10, y: (bounds.height - 20) / 2, width: 40, height: 20)
     }
     
     func setupUI() {
-        totleTimeLabel.text = "00:00"
+        totalTimeLabel.text = "00:00"
         currentTimeLabel.text = "00:00"
-        addSubview(totleTimeLabel)
+        addSubview(totalTimeLabel)
         addSubview(currentTimeLabel)
         addSubview(currentSlider)
 
@@ -128,7 +135,7 @@ public class ZLProgressSliderView: UIView {
         return timeString
     }
     
-    func updateSlider(_ currentTime: Float) {
+    public func updateSlider(_ currentTime: Float) {
         guard totalSeconds > 0 else {
             return
         }
