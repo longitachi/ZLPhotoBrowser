@@ -532,6 +532,8 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     
     private var fetchVideoDone = false
     
+    private let operationQueue = DispatchQueue(label: "com.ZLPhotoBrowser.ZLVideoPreviewCell")
+    
     var isPlaying: Bool {
         if player != nil, player?.rate != 0 {
             return true
@@ -687,6 +689,10 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         }
         playBtn.setImage(.zl.getImage("zl_playVideo"), for: .normal)
         singleTapBlock?()
+        
+        operationQueue.async {
+            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        }
     }
     
     func pauseWhileTransition() {
@@ -717,6 +723,8 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         }
         return false
     }
+    
+    private let operationQueue = DispatchQueue(label: "com.ZLPhotoBrowser.ZLNetVideoPreviewCell")
     
     deinit {
         zl_debugPrint("v deinit")
@@ -787,6 +795,10 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         }
         playBtn.setImage(.zl.getImage("zl_playVideo"), for: .normal)
         singleTapBlock?()
+        
+        operationQueue.async {
+            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        }
     }
     
     func configureCell(videoUrl: URL, httpHeader: [String: Any]?) {
