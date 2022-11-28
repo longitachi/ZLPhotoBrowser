@@ -61,6 +61,7 @@
 		FD21E4E1272FFE8E00D1D168 /* ZLPhotoConfiguration+Chaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD21E4E0272FFE8E00D1D168 /* ZLPhotoConfiguration+Chaining.swift */; };
 		FD24655828E2A96200C15B20 /* UIView+ZLPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD24655728E2A96200C15B20 /* UIView+ZLPhotoBrowser.swift */; };
 		FD5230B5281562DD0034B782 /* ZLEnlargeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5230B4281562DD0034B782 /* ZLEnlargeButton.swift */; };
+		FD74F6DD29345E4100B7916A /* ZLBaseStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74F6DC29345E4100B7916A /* ZLBaseStickerView.swift */; };
 		FD8FEA6728C8B9B60041374B /* ZLResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8FEA6628C8B9B60041374B /* ZLResultModel.swift */; };
 		FDA54B8B2876D8CA0077F4FA /* UIFont+ZLPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA54B8A2876D8CA0077F4FA /* UIFont+ZLPhotoBrowser.swift */; };
 		FDB34114280D0D70008F20B3 /* ZLPhotoUIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB34113280D0D70008F20B3 /* ZLPhotoUIConfiguration.swift */; };
@@ -126,6 +127,7 @@
 		FD21E4E0272FFE8E00D1D168 /* ZLPhotoConfiguration+Chaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZLPhotoConfiguration+Chaining.swift"; sourceTree = "<group>"; };
 		FD24655728E2A96200C15B20 /* UIView+ZLPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ZLPhotoBrowser.swift"; sourceTree = "<group>"; };
 		FD5230B4281562DD0034B782 /* ZLEnlargeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEnlargeButton.swift; sourceTree = "<group>"; };
+		FD74F6DC29345E4100B7916A /* ZLBaseStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLBaseStickerView.swift; sourceTree = "<group>"; };
 		FD8FEA6628C8B9B60041374B /* ZLResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLResultModel.swift; sourceTree = "<group>"; };
 		FDA54B8A2876D8CA0077F4FA /* UIFont+ZLPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+ZLPhotoBrowser.swift"; sourceTree = "<group>"; };
 		FDB34113280D0D70008F20B3 /* ZLPhotoUIConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoUIConfiguration.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				E46EA7D724F79F1C00033853 /* ZLClipImageViewController.swift */,
 				E466804624FB76C50011E332 /* ZLEditVideoViewController.swift */,
 				E4D06912254C06EB002278C4 /* ZLInputTextViewController.swift */,
+				FD74F6DC29345E4100B7916A /* ZLBaseStickerView.swift */,
 				E44A20FA2567B11400FE6CAE /* ZLImageStickerView.swift */,
 				E4D06915254C0F7F002278C4 /* ZLTextStickerView.swift */,
 				FD047621276B6C8500A93FA3 /* ZLEditToolCells.swift */,
@@ -399,6 +402,7 @@
 				E4C911DE24E2AA950061DA40 /* ZLAlbumListModel.swift in Sources */,
 				FDA54B8B2876D8CA0077F4FA /* UIFont+ZLPhotoBrowser.swift in Sources */,
 				E49BD1F724E3CD9E005D7DFB /* ZLThumbnailPhotoCell.swift in Sources */,
+				FD74F6DD29345E4100B7916A /* ZLBaseStickerView.swift in Sources */,
 				E4D06913254C06EB002278C4 /* ZLInputTextViewController.swift in Sources */,
 				E492ABED24E5454E005E1BD5 /* ZLProgressView.swift in Sources */,
 				E462466A24ED06C700EF6C57 /* ZLThumbnailViewController.swift in Sources */,

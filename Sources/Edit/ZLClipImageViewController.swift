@@ -234,11 +234,12 @@ class ZLClipImageViewController: UIViewController {
         clipRatios = ZLPhotoConfiguration.default().editImageConfiguration.clipRatios
         self.editRect = editRect ?? .zero
         self.angle = angle
+        let angle = ((Int(angle) % 360) - 360) % 360
         if angle == -90 {
             editImage = image.zl.rotate(orientation: .left)
-        } else if self.angle == -180 {
+        } else if angle == -180 {
             editImage = image.zl.rotate(orientation: .down)
-        } else if self.angle == -270 {
+        } else if angle == -270 {
             editImage = image.zl.rotate(orientation: .right)
         } else {
             editImage = image
@@ -577,6 +578,8 @@ class ZLClipImageViewController: UIViewController {
             editImage = editImage.zl.rotate(orientation: .left)
             // 将rect进行旋转，转换到相对于旋转后的edit image的rect
             editRect = CGRect(x: rect.minY, y: editImage.size.height - rect.minX - rect.width, width: rect.height, height: rect.width)
+            // 向右旋转可用下面这行代码
+//            editRect = CGRect(x: editImage.size.width - rect.maxY, y: rect.minX, width: rect.height, height: rect.width)
         } else {
             // 其他比例的裁剪框，旋转后都重置edit rect
             

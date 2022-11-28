@@ -216,14 +216,20 @@ open class ZLEditImageViewController: UIViewController {
     
     private var toolViewStateTimer: Timer?
     
+    /// 是否允许交换图片宽高
+    private var shouldSwapSize: Bool {
+        angle.zl.toPi.truncatingRemainder(dividingBy: .pi) != 0
+    }
+    
     // 第一次进入界面时，布局后frame，裁剪dimiss动画使用
     var originalFrame: CGRect = .zero
     
     var imageSize: CGSize {
-        if angle == -90 || angle == -270 {
+        if shouldSwapSize {
             return CGSize(width: originalImage.size.height, height: originalImage.size.width)
+        } else {
+            return originalImage.size
         }
-        return originalImage.size
     }
     
     @objc public var drawColViewH: CGFloat = 50
@@ -1004,7 +1010,7 @@ open class ZLEditImageViewController: UIViewController {
                 var size = drawingImageView.frame.size
                 size.width /= scale
                 size.height /= scale
-                if angle == -90 || angle == -270 {
+                if shouldSwapSize {
                     swap(&size.width, &size.height)
                 }
                 
@@ -1031,7 +1037,7 @@ open class ZLEditImageViewController: UIViewController {
                 setToolView(show: false)
                 
                 var actualSize = editRect.size
-                if angle == -90 || angle == -270 {
+                if shouldSwapSize {
                     swap(&actualSize.width, &actualSize.height)
                 }
                 let ratio = min(mainScrollView.frame.width / editRect.width, mainScrollView.frame.height / editRect.height)
@@ -1227,7 +1233,7 @@ open class ZLEditImageViewController: UIViewController {
     private func reCalculateStickersFrame(_ oldSize: CGSize, _ oldAngle: CGFloat, _ newAngle: CGFloat) {
         let currSize = stickersContainer.frame.size
         let scale: CGFloat
-        if Int(newAngle - oldAngle) % 180 == 0 {
+        if (newAngle - oldAngle).zl.toPi.truncatingRemainder(dividingBy: .pi) == 0 {
             scale = currSize.width / oldSize.width
         } else {
             scale = currSize.height / oldSize.width
@@ -1246,7 +1252,7 @@ open class ZLEditImageViewController: UIViewController {
         var size = drawingImageView.frame.size
         size.width /= scale
         size.height /= scale
-        if angle == -90 || angle == -270 {
+        if shouldSwapSize {
             swap(&size.width, &size.height)
         }
         var toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.width
@@ -1589,7 +1595,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
 
 // MARK: ZLTextStickerViewDelegate
 
-extension ZLEditImageViewController: ZLTextStickerViewDelegate {
+extension ZLEditImageViewController: ZLStickerViewDelegate {
     func stickerBeginOperation(_ sticker: UIView) {
         setToolView(show: false)
         ashbinView.layer.removeAllAnimations()

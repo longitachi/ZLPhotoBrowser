@@ -1,7 +1,7 @@
 "previewCamera" = "Kamera";
 "previewCameraRecord" = "Aufzeichnung";
 "previewAlbum" = "Album";
-"cancel" = "Stornieren";
+"cancel" = "Abbrechen";
 
 "originalPhoto" = "Vollbild";
 "done" = "Erledigt";
@@ -20,7 +20,7 @@
 
 "noPhotoTips" = "Keine Fotos";
 
-"hudLoading" = "warten...";
+"hudLoading" = "Bitte warten...";
 
 "exceededMaxSelectCount" = "Maximale Auswahlanzahl: %ld";
 "longerThanMaxVideoDuration" = "Video mit einer Dauer von mehr als %lds kann nicht ausgewählt werden";
