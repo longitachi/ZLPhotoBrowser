@@ -324,8 +324,10 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     override open func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if session.isRunning {
-            session.stopRunning()
+        guard session.isRunning else { return }
+        
+        sessionQueue.async {
+            self.session.stopRunning()
         }
     }
     
@@ -671,8 +673,10 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     @objc private func retakeBtnClick() {
-        session.startRunning()
-        resetSubViewStatus()
+        sessionQueue.async {
+            self.session.startRunning()
+            self.resetSubViewStatus()
+        }
         takedImage = nil
         stopRecordAnimation()
         if let videoUrl = videoUrl {
@@ -751,6 +755,12 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         guard ZLPhotoManager.hasCameraAuthority(), !isTakingPicture else {
             return
         }
+        
+        guard session.outputs.contains(imageOutput) else {
+            showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable), type: .camera)
+            return
+        }
+        
         isTakingPicture = true
         
         let connection = imageOutput.connection(with: .video)
@@ -956,22 +966,24 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     private func resetSubViewStatus() {
-        if session.isRunning {
-            showTipsLabel(animate: true)
-            bottomView.isHidden = false
-            dismissBtn.isHidden = false
-            switchCameraBtn.isHidden = false
-            retakeBtn.isHidden = true
-            doneBtn.isHidden = true
-            takedImageView.isHidden = true
-            takedImage = nil
-        } else {
-            hideTipsLabel(animate: false)
-            bottomView.isHidden = true
-            dismissBtn.isHidden = true
-            switchCameraBtn.isHidden = true
-            retakeBtn.isHidden = false
-            doneBtn.isHidden = false
+        ZLMainAsync {
+            if self.session.isRunning {
+                self.showTipsLabel(animate: true)
+                self.bottomView.isHidden = false
+                self.dismissBtn.isHidden = false
+                self.switchCameraBtn.isHidden = false
+                self.retakeBtn.isHidden = true
+                self.doneBtn.isHidden = true
+                self.takedImageView.isHidden = true
+                self.takedImage = nil
+            } else {
+                self.hideTipsLabel(animate: false)
+                self.bottomView.isHidden = true
+                self.dismissBtn.isHidden = true
+                self.switchCameraBtn.isHidden = true
+                self.retakeBtn.isHidden = false
+                self.doneBtn.isHidden = false
+            }
         }
     }
     
@@ -1009,11 +1021,13 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
             }
             
             if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
-                self.session.stopRunning()
+                self.sessionQueue.async {
+                    self.session.stopRunning()
+                    self.resetSubViewStatus()
+                }
                 self.takedImage = UIImage(data: data)?.zl.fixOrientation()
                 self.takedImageView.image = self.takedImage
                 self.takedImageView.isHidden = false
-                self.resetSubViewStatus()
                 self.editImage()
             } else {
                 zl_debugPrint("拍照失败，data为空")
@@ -1074,8 +1088,10 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
             }
             
             // 拼接视频
-            self.session.stopRunning()
-            self.resetSubViewStatus()
+            self.sessionQueue.async {
+                self.session.stopRunning()
+                self.resetSubViewStatus()
+            }
             if self.recordUrls.count > 1 {
                 ZLVideoManager.mergeVideos(fileUrls: self.recordUrls) { [weak self] url, error in
                     if let url = url, error == nil {
