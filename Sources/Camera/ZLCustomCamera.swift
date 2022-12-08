@@ -912,6 +912,12 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         guard !movieFileOutput.isRecording else {
             return
         }
+        
+        guard session.outputs.contains(movieFileOutput) else {
+            showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable), type: .camera)
+            return
+        }
+        
         dismissBtn.isHidden = true
         let connection = movieFileOutput.connection(with: .video)
         connection?.videoScaleAndCropFactor = 1

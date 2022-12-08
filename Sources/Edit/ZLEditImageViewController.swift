@@ -864,6 +864,7 @@ open class ZLEditImageViewController: UIViewController {
         
         drawColorCollectionView?.isHidden = true
         revokeBtn.isHidden = true
+        redoBtn?.isHidden = true
         filterCollectionView?.isHidden = !isSelected
         adjustCollectionView?.isHidden = true
         adjustSlider?.isHidden = true
@@ -879,6 +880,7 @@ open class ZLEditImageViewController: UIViewController {
         
         drawColorCollectionView?.isHidden = true
         revokeBtn.isHidden = true
+        redoBtn?.isHidden = true
         filterCollectionView?.isHidden = true
         adjustCollectionView?.isHidden = !isSelected
         adjustSlider?.isHidden = !isSelected
