@@ -60,6 +60,12 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func adjustSliderType(_ type: ZLAdjustSliderType) -> ZLPhotoUIConfiguration {
+        adjustSliderType = type
+        return self
+    }
+    
+    @discardableResult
     func customAlertClass(_ alertClass: ZLCustomAlertProtocol.Type?) -> ZLPhotoUIConfiguration {
         customAlertClass = alertClass
         return self

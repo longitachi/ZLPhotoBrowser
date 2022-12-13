@@ -183,6 +183,8 @@ open class ZLEditImageViewController: UIViewController {
     
     private let canRedo = ZLPhotoConfiguration.default().editImageConfiguration.canRedo
     
+    private var hasAdjustedImage = false
+    
     // collectionview 中的添加滤镜的小图
     private var thumbnailFilterImages: [UIImage] = []
     
@@ -475,7 +477,18 @@ open class ZLEditImageViewController: UIViewController {
         drawColorCollectionView?.frame = CGRect(x: 20, y: 20, width: revokeBtn.zl.left - 20 - 10, height: drawColViewH)
         
         adjustCollectionView?.frame = CGRect(x: 20, y: 10, width: view.zl.width - 40, height: adjustColViewH)
-        adjustSlider?.frame = CGRect(x: view.zl.width - 60, y: view.zl.height / 2 - 100, width: 60, height: 200)
+        if ZLPhotoUIConfiguration.default().adjustSliderType == .vertical {
+            adjustSlider?.frame = CGRect(x: view.zl.width - 60, y: view.zl.height / 2 - 100, width: 60, height: 200)
+        } else {
+            let sliderHeight: CGFloat = 60
+            let sliderWidth = UIDevice.current.userInterfaceIdiom == .phone ? view.zl.width - 100 : view.zl.width / 2
+            adjustSlider?.frame = CGRect(
+                x: (view.zl.width - sliderWidth) / 2,
+                y: bottomShadowView.zl.top - sliderHeight,
+                width: sliderWidth,
+                height: sliderHeight
+            )
+        }
         
         filterCollectionView?.frame = CGRect(x: 20, y: 0, width: view.zl.width - 40, height: filterColViewH)
         
@@ -681,7 +694,7 @@ open class ZLEditImageViewController: UIViewController {
                 self?.adjustValueChanged(value)
             }
             adjustSlider?.endAdjust = { [weak self] in
-                self?.endAdjust()
+                self?.hasAdjustedImage = true
             }
             adjustSlider?.isHidden = true
             view.addSubview(adjustSlider!)
@@ -843,6 +856,8 @@ open class ZLEditImageViewController: UIViewController {
         } else {
             selectedTool = nil
         }
+        
+        generateNewMosaicLayerAfterAdjust()
         
         drawColorCollectionView?.isHidden = true
         filterCollectionView?.isHidden = true
@@ -1103,13 +1118,17 @@ open class ZLEditImageViewController: UIViewController {
         imageView.image = editImage
     }
     
-    private func endAdjust() {
-        if tools.contains(.mosaic) {
-            generateNewMosaicImageLayer()
-            
-            if !mosaicPaths.isEmpty {
-                generateNewMosaicImage()
-            }
+    private func generateNewMosaicLayerAfterAdjust() {
+        defer {
+            hasAdjustedImage = false
+        }
+        
+        guard tools.contains(.mosaic) else { return }
+        
+        generateNewMosaicImageLayer()
+        
+        if !mosaicPaths.isEmpty {
+            generateNewMosaicImage()
         }
     }
     

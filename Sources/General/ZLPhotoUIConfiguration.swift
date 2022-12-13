@@ -58,6 +58,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// HUD style. Defaults to dark.
     @objc public var hudStyle: ZLProgressHUD.HUDStyle = .dark
     
+    /// Adjust Slider Type
+    @objc public var adjustSliderType: ZLAdjustSliderType = .vertical
+    
     /// Custom alert class. Defaults to nil.
     public var customAlertClass: ZLCustomAlertProtocol.Type?
     
@@ -311,6 +314,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景高亮色
     @objc public var adjustSliderTintColor: UIColor = .zl.rgba(80, 169, 56)
     
+    
     /// The normal color of the title below the various tools in the image editor.
     /// 图片编辑器中各种工具下方标题普通状态下的颜色
     @objc public var imageEditorToolTitleNormalColor: UIColor = .zl.rgba(160, 160, 160)
@@ -357,4 +361,10 @@ enum ZLCustomLanguageDeploy {
     static var language: ZLLanguageType = .system
     
     static var deploy: [ZLLocalLanguageKey: String] = [:]
+}
+
+/// Adjust slider type
+@objc public enum ZLAdjustSliderType: Int {
+    case vertical
+    case horizontal
 }
