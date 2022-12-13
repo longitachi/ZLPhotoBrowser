@@ -2,6 +2,18 @@
 
 -----
 
+## [4.3.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.8) (2022-12-13)
+
+## Add:
+* Support direct callback after selecting thumbnail.
+* Add horizontal adjust slider.
+  
+## Fix:
+* Fix the bug of wrong size when merging videos. [#788](https://github.com/longitachi/ZLPhotoBrowser/issues/788)
+* Hide redo button when filtering or color adjusting.
+
+---
+
 ## [4.3.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.7) (2022-09-28)
 
 ## Add:

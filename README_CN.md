@@ -102,6 +102,13 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.8
+  Add:
+    支持当最大选择数为1时，点击小图后直接选择完成.
+    调整图片滑动条添加横滑样式.
+  Fix:
+    修复合并视频时尺寸错误的bug.
+    修复滤镜和调整图片时，redo按钮没有隐藏的bug.
 ● 4.3.7
   Add:
     修改selectImageBlock回调参数为ZLResultModel, 删除shouldAnialysisAsset参数;
@@ -117,10 +124,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     更新解析GIF的方法;
   Fix:
     修复下拉返回手势动画中的一个crash;
-● 4.3.5
-  Add:
-    支持自定义Alert样式;
-    优化图片编辑体验;
 ...
 ```
 

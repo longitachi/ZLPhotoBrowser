@@ -91,6 +91,13 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.3.8
+  Add:
+    Support direct callback after selecting thumbnail.
+    Add horizontal adjust slider.
+  Fix:
+    Fix the bug of wrong size when merging videos.
+    Hide redo button when filtering or color adjusting.
 ● 4.3.7
   Add:
     Modify the parameter type of selectImageBlock and use ZLResultModel for callback. Delete shouldAnialysisAsset property.
@@ -106,10 +113,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Updated the method of parsing GIF.
   Fix:
     Fixed crash in pop interactive transition.
-● 4.3.5
-  Add:
-    Support custom alert style.
-    Improve the experience of image editor.
 ...
 ```
 
