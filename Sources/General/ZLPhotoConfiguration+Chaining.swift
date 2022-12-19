@@ -204,12 +204,6 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    func columnCount(_ count: Int) -> ZLPhotoConfiguration {
-        columnCount = count
-        return self
-    }
-    
-    @discardableResult
     func maxEditVideoTime(_ second: Second) -> ZLPhotoConfiguration {
         maxEditVideoTime = second
         return self

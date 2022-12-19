@@ -40,10 +40,6 @@ enum ZLLayout {
     static let bottomToolTitleFont: UIFont = .zl.font(ofSize: 17)
     
     static let bottomToolBtnCornerRadius: CGFloat = 5
-    
-    static let thumbCollectionViewItemSpacing: CGFloat = 2
-    
-    static let thumbCollectionViewLineSpacing: CGFloat = 2
 }
 
 func markSelected(source: inout [ZLPhotoModel], selected: inout [ZLPhotoModel]) {

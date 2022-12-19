@@ -71,6 +71,32 @@ public extension ZLPhotoUIConfiguration {
         return self
     }
     
+    
+    /// - Note: This property is ignored when using columnCountBlock.
+    @discardableResult
+    func columnCount(_ count: Int) -> ZLPhotoUIConfiguration {
+        columnCount = count
+        return self
+    }
+    
+    @discardableResult
+    func columnCountBlock(_ block: ((_ collectionViewWidth: CGFloat) -> Int)?) -> ZLPhotoUIConfiguration {
+        columnCountBlock = block
+        return self
+    }
+    
+    @discardableResult
+    func minimumInteritemSpacing(_ value: CGFloat) -> ZLPhotoUIConfiguration {
+        minimumInteritemSpacing = value
+        return self
+    }
+    
+    @discardableResult
+    func minimumLineSpacing(_ value: CGFloat) -> ZLPhotoUIConfiguration {
+        minimumLineSpacing = value
+        return self
+    }
+    
     @discardableResult
     func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfAlbumList = effect

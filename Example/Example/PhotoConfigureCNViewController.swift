@@ -346,7 +346,7 @@ class PhotoConfigureCNViewController: UIViewController {
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
-        columnCountLabel = createLabel(String(config.columnCount))
+        columnCountLabel = createLabel(String(uiConfig.columnCount))
         containerView.addSubview(columnCountLabel)
         columnCountLabel.snp.makeConstraints { make in
             make.left.equalTo(columnCountTitleLabel.snp.right).offset(10)
@@ -357,7 +357,7 @@ class PhotoConfigureCNViewController: UIViewController {
         columnStepper.minimumValue = 2
         columnStepper.maximumValue = 6
         columnStepper.stepValue = 1
-        columnStepper.value = Double(config.columnCount)
+        columnStepper.value = Double(uiConfig.columnCount)
         columnStepper.addTarget(self, action: #selector(columnStepperValueChanged), for: .valueChanged)
         containerView.addSubview(columnStepper)
         columnStepper.snp.makeConstraints { make in
@@ -994,7 +994,7 @@ class PhotoConfigureCNViewController: UIViewController {
     
     @objc func columnStepperValueChanged() {
         columnCountLabel.text = String(Int(columnStepper.value))
-        config.columnCount = Int(columnStepper.value)
+        uiConfig.columnCount = Int(columnStepper.value)
     }
     
     @objc func sortAscendingChanged() {

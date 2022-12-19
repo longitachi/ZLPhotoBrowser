@@ -151,13 +151,20 @@ class ViewController: UIViewController {
     }
     
     func showImagePicker(_ preview: Bool) {
+        
         /**
-          // Custom UI
-         ZLPhotoUIConfiguration.default()
-             .navBarColor(.white)
-             .navViewBlurEffectOfAlbumList(nil)
-             .indexLabelBgColor(.black)
-             .indexLabelTextColor(.white)
+        let minItemSpacing: CGFloat = 2
+        let minLineSpacing: CGFloat = 2
+        
+        // Custom UI
+        ZLPhotoUIConfiguration.default()
+            .navBarColor(.white)
+            .navViewBlurEffectOfAlbumList(nil)
+            .indexLabelBgColor(.black)
+            .indexLabelTextColor(.white)
+            .minimumInteritemSpacing(minItemSpacing)
+            .minimumLineSpacing(minLineSpacing)
+            .columnCountBlock { Int(ceil($0 / (428.0 / 4))) }
          */
         
         // Custom image editor

@@ -331,6 +331,11 @@ class ZLThumbnailViewController: UIViewController {
         }
     }
     
+    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     private func setupUI() {
         automaticallyAdjustsScrollViewInsets = true
         edgesForExtendedLayout = .all
@@ -945,21 +950,29 @@ extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
 extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return ZLLayout.thumbCollectionViewItemSpacing
+        return ZLPhotoUIConfiguration.default().minimumInteritemSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return ZLLayout.thumbCollectionViewLineSpacing
+        return ZLPhotoUIConfiguration.default().minimumLineSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let defaultCount = CGFloat(ZLPhotoConfiguration.default().columnCount)
-        var columnCount: CGFloat = deviceIsiPad() ? (defaultCount + 2) : defaultCount
-        if UIApplication.shared.statusBarOrientation.isLandscape {
-            columnCount += 2
+        let uiConfig = ZLPhotoUIConfiguration.default()
+        var columnCount: Int
+        
+        if let columnCountBlock = uiConfig.columnCountBlock {
+            columnCount = columnCountBlock(collectionView.zl.width)
+        } else {
+            let defaultCount = uiConfig.columnCount
+            columnCount = deviceIsiPad() ? (defaultCount + 2) : defaultCount
+            if UIApplication.shared.statusBarOrientation.isLandscape {
+                columnCount += 2
+            }
         }
-        let totalW = collectionView.bounds.width - (columnCount - 1) * ZLLayout.thumbCollectionViewItemSpacing
-        let singleW = totalW / columnCount
+        
+        let totalW = collectionView.bounds.width - CGFloat(columnCount - 1) * uiConfig.minimumInteritemSpacing
+        let singleW = totalW / CGFloat(columnCount)
         return CGSize(width: singleW, height: singleW)
     }
     

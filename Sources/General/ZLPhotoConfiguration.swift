@@ -187,22 +187,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Whether to display the selected count on the button. Defaults to true.
     @objc public var showSelectCountOnDoneBtn = true
     
-    private var pri_columnCount: Int = 4
-    /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Defaults to 4.
-    /// ```
-    /// iPhone landscape mode: columnCount += 2.
-    /// iPad portait mode: columnCount += 2.
-    /// iPad landscape mode: columnCount += 4.
-    /// ```
-    @objc public var columnCount: Int {
-        get {
-            return pri_columnCount
-        }
-        set {
-            pri_columnCount = min(6, max(newValue, 2))
-        }
-    }
-    
     /// Maximum cropping time when editing video, unit: second. Defaults to 10.
     @objc public var maxEditVideoTime: Second = 10
     

@@ -64,6 +64,34 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Custom alert class. Defaults to nil.
     public var customAlertClass: ZLCustomAlertProtocol.Type?
     
+    private var pri_columnCount: Int = 4
+    /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Defaults to 4.
+    /// ```
+    /// iPhone landscape mode: columnCount += 2.
+    /// iPad portait mode: columnCount += 2.
+    /// iPad landscape mode: columnCount += 4.
+    /// ```
+    ///
+    /// - Note: This property is ignored when using columnCountBlock.
+    @objc public var columnCount: Int {
+        get {
+            return pri_columnCount
+        }
+        set {
+            pri_columnCount = min(6, max(newValue, 2))
+        }
+    }
+    
+    /// Use this property to customize the column count for `ZLThumbnailViewController`.
+    /// This property is recommended.
+    @objc public var columnCountBlock: ((_ collectionViewWidth: CGFloat) -> Int)?
+    
+    /// The minimum spacing to use between items in the same row for `ZLThumbnailViewController`.
+    @objc public var minimumInteritemSpacing: CGFloat = 2
+    
+    /// The minimum spacing to use between lines of items in the grid for `ZLThumbnailViewController`.
+    @objc public var minimumLineSpacing: CGFloat = 2
+    
     // MARK: Navigation and bottom tool bar
     
     /// The blur effect of the navigation bar in the album list
