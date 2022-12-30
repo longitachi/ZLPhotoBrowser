@@ -176,9 +176,9 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     
     private var videoInput: AVCaptureDeviceInput?
     
-    private var imageOutput: AVCapturePhotoOutput!
+    private var imageOutput: AVCapturePhotoOutput?
     
-    private var movieFileOutput: AVCaptureMovieFileOutput!
+    private var movieFileOutput: AVCaptureMovieFileOutput?
     
     private var previewLayer: AVCaptureVideoPreviewLayer?
     
@@ -287,9 +287,6 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
         
         setupCamera()
-        sessionQueue.async {
-            self.session.startRunning()
-        }
     }
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -481,9 +478,10 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             session.sessionPreset = .hd1280x720
         }
         
-        movieFileOutput = AVCaptureMovieFileOutput()
+        let movieFileOutput = AVCaptureMovieFileOutput()
         // 解决视频录制超过10s没有声音的bug
         movieFileOutput.movieFragmentInterval = .invalid
+        self.movieFileOutput = movieFileOutput
         
         // 添加视频输入
         if let videoInput = videoInput, session.canAddInput(videoInput) {
@@ -492,6 +490,8 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         // 添加音频输入
         addAudioInput()
         
+        let imageOutput = AVCapturePhotoOutput()
+        self.imageOutput = imageOutput
         // 将输出流添加到session
         if session.canAddOutput(imageOutput) {
             session.addOutput(imageOutput)
@@ -509,6 +509,10 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         view.layer.insertSublayer(previewLayer!, at: 0)
         
         cameraConfigureFinish = true
+        
+        sessionQueue.async {
+            self.session.startRunning()
+        }
     }
     
     private func getCamera(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
@@ -694,7 +698,8 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
                 return
             }
             
-            guard let currInput = videoInput else {
+            guard let currInput = videoInput,
+                  let movieFileOutput = movieFileOutput else {
                 return
             }
             var newVideoInput: AVCaptureDeviceInput?
@@ -755,7 +760,9 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         guard ZLPhotoManager.hasCameraAuthority(), !isTakingPicture else {
             return
         }
-        
+        guard let imageOutput = imageOutput else {
+            return
+        }
         guard session.outputs.contains(imageOutput) else {
             showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable), type: .camera)
             return
@@ -909,6 +916,10 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     private func startRecord() {
+        guard let movieFileOutput = movieFileOutput else {
+            return
+        }
+        
         guard !movieFileOutput.isRecording else {
             return
         }
@@ -937,6 +948,10 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     private func finishRecord() {
+        guard let movieFileOutput = movieFileOutput else {
+            return
+        }
+
         guard movieFileOutput.isRecording else {
             return
         }
