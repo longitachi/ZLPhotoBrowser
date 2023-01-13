@@ -84,7 +84,8 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         let label = UILabel()
         label.layer.cornerRadius = 23.0 / 2
         label.layer.masksToBounds = true
-        label.textColor = .white
+        label.textColor = .zl.indexLabelTextColor
+        label.backgroundColor = .zl.indexLabelBgColor
         label.font = .zl.font(ofSize: 14)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
@@ -224,8 +225,6 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         btnSelect.isHidden = !showSelBtn
         btnSelect.isUserInteractionEnabled = showSelBtn
         btnSelect.isSelected = model.isSelected
-        
-        indexLabel.backgroundColor = .zl.indexLabelBgColor
         
         if model.isSelected {
             fetchBigImage()
