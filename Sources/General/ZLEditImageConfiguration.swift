@@ -107,7 +107,7 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
-    private static let defaultDrawColors: [UIColor] = [.white, .black, .zl.rgba(241, 79, 79), .zl.rgba(243, 170, 78), .zl.rgba(80, 169, 56), .zl.rgba(30, 183, 243), .zl.rgba(139, 105, 234)]
+    private static let defaultDrawColors: [UIColor] = [.white, .black, .zl.rgba(241, 79, 79), .zl.rgba(243, 170, 78), .zl.rgba(38, 191, 76), .zl.rgba(30, 183, 243), .zl.rgba(139, 105, 234)]
     
     private var pri_drawColors: [UIColor] = ZLEditImageConfiguration.defaultDrawColors
     /// Draw colors for image editor.
@@ -142,7 +142,7 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
-    private static let defaultTextStickerTextColors: [UIColor] = [.white, .black, .zl.rgba(241, 79, 79), .zl.rgba(243, 170, 78), .zl.rgba(80, 169, 56), .zl.rgba(30, 183, 243), .zl.rgba(139, 105, 234)]
+    private static let defaultTextStickerTextColors: [UIColor] = [.white, .black, .zl.rgba(241, 79, 79), .zl.rgba(243, 170, 78), .zl.rgba(38, 191, 76), .zl.rgba(30, 183, 243), .zl.rgba(139, 105, 234)]
     
     private var pri_textStickerTextColors: [UIColor] = ZLEditImageConfiguration.defaultTextStickerTextColors
     /// Text sticker colors for image editor.

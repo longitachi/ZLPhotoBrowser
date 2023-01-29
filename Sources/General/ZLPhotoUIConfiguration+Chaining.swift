@@ -152,6 +152,12 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func themeColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        themeColor = color
+        return self
+    }
+    
+    @discardableResult
     func sheetTranslucentColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         sheetTranslucentColor = color
         return self

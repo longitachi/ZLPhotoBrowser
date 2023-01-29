@@ -182,6 +182,10 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     // MARK: Color properties
     
+    /// The theme color of framework.
+    /// 框架主题色
+    @objc public var themeColor: UIColor = .zl.rgba(38, 191, 76)
+    
     /// Preview selection mode, translucent background color above.
     /// 预览快速选择模式下，上方透明区域背景色
     @objc public var sheetTranslucentColor: UIColor = .black.withAlphaComponent(0.1)
@@ -194,9 +198,17 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览快速选择模式下，按钮标题颜色
     @objc public var sheetBtnTitleColor: UIColor = .black
     
+    private var pri_sheetBtnTitleTintColor: UIColor?
     /// Preview selection mode, cancel button title color when the selection amount is superior than 0.
     /// 预览快速选择模式下，按钮标题高亮颜色
-    @objc public var sheetBtnTitleTintColor: UIColor = .zl.rgba(80, 169, 56)
+    @objc public var sheetBtnTitleTintColor: UIColor {
+        get {
+            return pri_sheetBtnTitleTintColor ?? themeColor
+        }
+        set {
+            pri_sheetBtnTitleTintColor = newValue
+        }
+    }
     
     /// A color for navigation bar.
     /// 相册列表及小图界面导航条背景色
@@ -286,13 +298,29 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览大图界面底部 `完成` 按钮不可交互状态下标题颜色
     @objc public var bottomToolViewDoneBtnDisableTitleColorOfPreviewVC: UIColor = .zl.rgba(168, 168, 168)
     
+    private var pri_bottomToolViewBtnNormalBgColor: UIColor?
     /// The normal state background color of bottom tool view buttons.
     /// 相册小图界面底部按钮可交互状态下背景色
-    @objc public var bottomToolViewBtnNormalBgColor: UIColor = .zl.rgba(80, 169, 56)
+    @objc public var bottomToolViewBtnNormalBgColor: UIColor {
+        get {
+            return pri_bottomToolViewBtnNormalBgColor ?? themeColor
+        }
+        set {
+            pri_bottomToolViewBtnNormalBgColor = newValue
+        }
+    }
     
+    private var pri_bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor?
     /// The normal state background color of bottom tool view buttons in preview interface.
     /// 预览大图界面底部按钮可交互状态下背景色
-    @objc public var bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor = .zl.rgba(80, 169, 56)
+    @objc public var bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor {
+        get {
+            return pri_bottomToolViewBtnNormalBgColorOfPreviewVC ?? themeColor
+        }
+        set {
+            pri_bottomToolViewBtnNormalBgColorOfPreviewVC = newValue
+        }
+    }
     
     /// The disable state background color of bottom tool view buttons.
     /// 相册小图界面底部按钮不可交互状态下背景色
@@ -306,17 +334,33 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// iOS14 limited权限下，下方提示选择更多图片信息文字的颜色
     @objc public var limitedAuthorityTipsColor: UIColor = .white
     
+    private var pri_cameraRecodeProgressColor: UIColor?
     /// The record progress color of custom camera.
     /// 自定义相机录制视频时进度条颜色
-    @objc public var cameraRecodeProgressColor: UIColor = .zl.rgba(80, 169, 56)
+    @objc public var cameraRecodeProgressColor: UIColor {
+        get {
+            return pri_cameraRecodeProgressColor ?? themeColor
+        }
+        set {
+            pri_cameraRecodeProgressColor = newValue
+        }
+    }
     
     /// Mask layer color of selected cell.
     /// 已选择照片上方遮罩阴影颜色
     @objc public var selectedMaskColor: UIColor = .black.withAlphaComponent(0.2)
     
+    private var pri_selectedBorderColor: UIColor?
     /// Border color of selected cell.
     /// 已选择照片border颜色
-    @objc public var selectedBorderColor: UIColor = .zl.rgba(80, 169, 56)
+    @objc public var selectedBorderColor: UIColor {
+        get {
+            return pri_selectedBorderColor ?? themeColor
+        }
+        set {
+            pri_selectedBorderColor = newValue
+        }
+    }
     
     /// Mask layer color of the cell that cannot be selected.
     /// 不可选的照片上方遮罩阴影颜色
@@ -326,9 +370,17 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 已选照片右上角序号label背景色
     @objc public var indexLabelTextColor: UIColor = .white
     
+    private var pri_indexLabelBgColor: UIColor?
     /// The background color of selected cell index label.
     /// 已选照片右上角序号label背景色
-    @objc public var indexLabelBgColor: UIColor = .zl.rgba(80, 169, 56)
+    @objc public var indexLabelBgColor: UIColor {
+        get {
+            return pri_indexLabelBgColor ?? themeColor
+        }
+        set {
+            pri_indexLabelBgColor = newValue
+        }
+    }
     
     /// The background color of camera cell inside album.
     /// 相册小图界面拍照按钮背景色
@@ -338,10 +390,17 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景色
     @objc public var adjustSliderNormalColor: UIColor = .white
     
+    private var pri_adjustSliderTintColor: UIColor?
     /// The tint color of adjust slider.
     /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景高亮色
-    @objc public var adjustSliderTintColor: UIColor = .zl.rgba(80, 169, 56)
-    
+    @objc public var adjustSliderTintColor: UIColor {
+        get {
+            return pri_adjustSliderTintColor ?? themeColor
+        }
+        set {
+            pri_adjustSliderTintColor = newValue
+        }
+    }
     
     /// The normal color of the title below the various tools in the image editor.
     /// 图片编辑器中各种工具下方标题普通状态下的颜色

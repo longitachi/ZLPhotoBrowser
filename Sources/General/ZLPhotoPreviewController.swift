@@ -502,7 +502,7 @@ class ZLPhotoPreviewController: UIViewController {
             selPhotoPreview?.removeSelModel(model: currentModel)
         } else {
             if ZLPhotoConfiguration.default().animateSelectBtnWhenSelect {
-                selectBtn.layer.add(getSpringAnimation(), forKey: nil)
+                selectBtn.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
             }
             if !canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
                 return

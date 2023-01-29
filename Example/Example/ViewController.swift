@@ -151,21 +151,18 @@ class ViewController: UIViewController {
     }
     
     func showImagePicker(_ preview: Bool) {
-        
-        /**
         let minItemSpacing: CGFloat = 2
         let minLineSpacing: CGFloat = 2
         
         // Custom UI
         ZLPhotoUIConfiguration.default()
-            .navBarColor(.white)
-            .navViewBlurEffectOfAlbumList(nil)
-            .indexLabelBgColor(.black)
-            .indexLabelTextColor(.white)
+//            .navBarColor(.white)
+//            .navViewBlurEffectOfAlbumList(nil)
+//            .indexLabelBgColor(.black)
+//            .indexLabelTextColor(.white)
             .minimumInteritemSpacing(minItemSpacing)
             .minimumLineSpacing(minLineSpacing)
             .columnCountBlock { Int(ceil($0 / (428.0 / 4))) }
-         */
         
         // Custom image editor
         let editImageConfiguration = ZLPhotoConfiguration.default().editImageConfiguration
@@ -410,6 +407,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
         
         ac.selectImageBlock = { [weak self] results, isOriginal in
             guard let `self` = self else { return }
+            self.selectedResults = results
             self.selectedImages = results.map { $0.image }
             self.selectedAssets = results.map { $0.asset }
             self.isOriginal = isOriginal

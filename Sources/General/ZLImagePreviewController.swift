@@ -345,7 +345,7 @@ public class ZLImagePreviewController: UIViewController {
             isSelected = false
         } else {
             if ZLPhotoConfiguration.default().animateSelectBtnWhenSelect {
-                selectBtn.layer.add(getSpringAnimation(), forKey: nil)
+                selectBtn.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
             }
             isSelected = true
         }

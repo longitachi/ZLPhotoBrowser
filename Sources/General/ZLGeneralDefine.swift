@@ -102,27 +102,12 @@ func deviceSafeAreaInsets() -> UIEdgeInsets {
     return insets
 }
 
-func getSpringAnimation() -> CAKeyframeAnimation {
-    let animate = CAKeyframeAnimation(keyPath: "transform")
-    animate.duration = ZLPhotoConfiguration.default().selectBtnAnimationDuration
-    animate.isRemovedOnCompletion = true
-    animate.fillMode = .forwards
-    
-    animate.values = [CATransform3DMakeScale(0.7, 0.7, 1),
-                      CATransform3DMakeScale(1.2, 1.2, 1),
-                      CATransform3DMakeScale(0.8, 0.8, 1),
-                      CATransform3DMakeScale(1, 1, 1)]
-    return animate
+func deviceIsFringeScreen() -> Bool {
+    return deviceSafeAreaInsets().top > 0
 }
 
-func getFadeAnimation(fromValue: CGFloat, toValue: CGFloat, duration: TimeInterval) -> CAAnimation {
-    let animation = CABasicAnimation(keyPath: "opacity")
-    animation.fromValue = fromValue
-    animation.toValue = toValue
-    animation.duration = duration
-    animation.fillMode = .forwards
-    animation.isRemovedOnCompletion = false
-    return animation
+func isSmallScreen() -> Bool {
+    return UIScreen.main.bounds.height <= 812
 }
 
 func showAlertView(_ message: String, _ sender: UIViewController?) {
@@ -190,8 +175,12 @@ func ZLMainAsync(after: TimeInterval = 0, handler: @escaping (() -> Void)) {
             handler()
         }
     } else {
-        DispatchQueue.main.async {
+        if Thread.isMainThread {
             handler()
+        } else {
+            DispatchQueue.main.async {
+                handler()
+            }
         }
     }
 }
