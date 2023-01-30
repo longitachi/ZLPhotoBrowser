@@ -548,7 +548,7 @@ open class ZLCustomCamera: UIViewController {
         session.commitConfiguration()
         // 预览layer
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer?.videoGravity = .resizeAspect
+        previewLayer?.videoGravity = .resizeAspectFill
         previewLayer?.backgroundColor = UIColor.brown.cgColor
         previewLayer?.opacity = 0
         view.layer.masksToBounds = true
