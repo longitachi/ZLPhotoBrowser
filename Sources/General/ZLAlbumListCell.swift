@@ -32,9 +32,9 @@ class ZLAlbumListCell: UITableViewCell {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        if ZLPhotoConfiguration.default().cellCornerRadio > 0 {
+        if ZLPhotoUIConfiguration.default().cellCornerRadio > 0 {
             view.layer.masksToBounds = true
-            view.layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
+            view.layer.cornerRadius = ZLPhotoUIConfiguration.default().cellCornerRadio
         }
         return view
     }()

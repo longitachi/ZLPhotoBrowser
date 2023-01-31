@@ -58,8 +58,10 @@ class ZLAddPhotoCell: UICollectionViewCell {
     }
     
     func setupUI() {
-        layer.masksToBounds = true
-        layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
+        if ZLPhotoUIConfiguration.default().cellCornerRadio > 0 {
+            layer.masksToBounds = true
+            layer.cornerRadius = ZLPhotoUIConfiguration.default().cellCornerRadio
+        }
         
         backgroundColor = .zl.cameraCellBgColor
         contentView.addSubview(imageView)

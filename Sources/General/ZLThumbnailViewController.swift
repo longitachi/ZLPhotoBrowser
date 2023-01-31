@@ -776,14 +776,14 @@ class ZLThumbnailViewController: UIViewController {
                     picker.cameraFlashMode = .off
                 }
                 var mediaTypes: [String] = []
-                if config.allowTakePhoto {
+                if config.cameraConfiguration.allowTakePhoto {
                     mediaTypes.append("public.image")
                 }
-                if config.allowRecordVideo {
+                if config.cameraConfiguration.allowRecordVideo {
                     mediaTypes.append("public.movie")
                 }
                 picker.mediaTypes = mediaTypes
-                picker.videoMaximumDuration = TimeInterval(config.maxRecordDuration)
+                picker.videoMaximumDuration = TimeInterval(config.cameraConfiguration.maxRecordDuration)
                 showDetailViewController(picker, sender: nil)
             } else {
                 showAlertView(String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), self)

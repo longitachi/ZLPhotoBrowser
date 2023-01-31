@@ -66,11 +66,16 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func cellCornerRadio(_ cornerRadio: CGFloat) -> ZLPhotoUIConfiguration {
+        cellCornerRadio = cornerRadio
+        return self
+    }
+    
+    @discardableResult
     func customAlertClass(_ alertClass: ZLCustomAlertProtocol.Type?) -> ZLPhotoUIConfiguration {
         customAlertClass = alertClass
         return self
     }
-    
     
     /// - Note: This property is ignored when using columnCountBlock.
     @discardableResult

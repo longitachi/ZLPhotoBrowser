@@ -176,8 +176,8 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     }
     
     private func configureCell() {
-        if ZLPhotoConfiguration.default().cellCornerRadio > 0 {
-            layer.cornerRadius = ZLPhotoConfiguration.default().cellCornerRadio
+        if ZLPhotoUIConfiguration.default().cellCornerRadio > 0 {
+            layer.cornerRadius = ZLPhotoUIConfiguration.default().cellCornerRadio
             layer.masksToBounds = true
         }
         

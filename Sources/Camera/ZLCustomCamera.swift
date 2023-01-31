@@ -148,7 +148,7 @@ open class ZLCustomCamera: UIViewController {
         btn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
-        btn.isHidden = !ZLPhotoConfiguration.default().cameraConfiguration.allowSwitchCamera || cameraCount <= 1
+        btn.isHidden = !cameraConfig.allowSwitchCamera || cameraCount <= 1
         return btn
     }()
     
@@ -234,6 +234,8 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
+    private lazy var cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
+    
     // 仅支持竖屏
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -274,7 +276,8 @@ open class ZLCustomCamera: UIViewController {
                 }
                 return
             }
-            guard ZLPhotoConfiguration.default().allowRecordVideo else {
+            
+            guard self.cameraConfig.allowRecordVideo else {
                 self.addNotification()
                 return
             }
@@ -289,15 +292,14 @@ open class ZLCustomCamera: UIViewController {
             }
         }
         
-        if ZLPhotoConfiguration.default().allowRecordVideo {
+        if cameraConfig.allowRecordVideo {
             do {
                 try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoRecording, options: .mixWithOthers)
                 try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
             } catch {
                 let err = error as NSError
                 if err.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue ||
-                    err.code == AVAudioSession.ErrorCode.isBusy.rawValue
-                {
+                    err.code == AVAudioSession.ErrorCode.isBusy.rawValue {
                     microPhontIsAvailable = false
                 }
             }
@@ -315,7 +317,7 @@ open class ZLCustomCamera: UIViewController {
         super.viewDidAppear(animated)
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable), type: .camera)
-        } else if !ZLPhotoConfiguration.default().allowTakePhoto, !ZLPhotoConfiguration.default().allowRecordVideo {
+        } else if !cameraConfig.allowTakePhoto, !cameraConfig.allowRecordVideo {
             #if DEBUG
                 fatalError("Error configuration of camera")
             #else
@@ -425,11 +427,11 @@ open class ZLCustomCamera: UIViewController {
         bottomView.addSubview(switchCameraBtn)
         
         var takePictureTap: UITapGestureRecognizer?
-        if ZLPhotoConfiguration.default().allowTakePhoto {
+        if cameraConfig.allowTakePhoto {
             takePictureTap = UITapGestureRecognizer(target: self, action: #selector(takePicture))
             largeCircleView.addGestureRecognizer(takePictureTap!)
         }
-        if ZLPhotoConfiguration.default().allowRecordVideo {
+        if cameraConfig.allowRecordVideo {
             let longGes = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
             longGes.minimumPressDuration = 0.3
             longGes.delegate = self
@@ -576,7 +578,7 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func addAudioInput() {
-        guard ZLPhotoConfiguration.default().allowRecordVideo else { return }
+        guard cameraConfig.allowRecordVideo else { return }
         // 音频输入流
         var audioInput: AVCaptureDeviceInput?
         if let microphone = getMicrophone() {
@@ -617,7 +619,7 @@ open class ZLCustomCamera: UIViewController {
     private func addNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         
-        if ZLPhotoConfiguration.default().allowRecordVideo {
+        if cameraConfig.allowRecordVideo {
             NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(handleAudioSessionInterruption), name: AVAudioSession.interruptionNotification, object: nil)
         }
@@ -648,11 +650,11 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func cameraUsageTipsText() -> String {
-        if ZLPhotoConfiguration.default().allowTakePhoto, ZLPhotoConfiguration.default().allowRecordVideo {
+        if cameraConfig.allowTakePhoto, cameraConfig.allowRecordVideo {
             return localLanguageTextValue(.customCameraTips)
-        } else if ZLPhotoConfiguration.default().allowTakePhoto {
+        } else if cameraConfig.allowTakePhoto {
             return localLanguageTextValue(.customCameraTakePhotoTips)
-        } else if ZLPhotoConfiguration.default().allowRecordVideo {
+        } else if cameraConfig.allowRecordVideo {
             return localLanguageTextValue(.customCameraRecordVideoTips)
         } else {
             return ""
@@ -1089,7 +1091,7 @@ open class ZLCustomCamera: UIViewController {
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.fromValue = 0
             animation.toValue = 1
-            animation.duration = Double(ZLPhotoConfiguration.default().maxRecordDuration)
+            animation.duration = Double(self.cameraConfig.maxRecordDuration)
             animation.delegate = self
             self.animateLayer.add(animation, forKey: nil)
         }
@@ -1113,7 +1115,6 @@ open class ZLCustomCamera: UIViewController {
                 self.bottomView.isHidden = false
                 self.dismissBtn.isHidden = false
                 self.flashBtn.isHidden = !self.showFlashBtn
-                self.switchCameraBtn.isHidden = false
                 self.retakeBtn.isHidden = true
                 self.doneBtn.isHidden = true
                 self.takedImageView.isHidden = true
@@ -1122,8 +1123,6 @@ open class ZLCustomCamera: UIViewController {
                 self.hideTipsLabel()
                 self.bottomView.isHidden = true
                 self.dismissBtn.isHidden = true
-                self.flashBtn.isHidden = !self.showFlashBtn
-                self.switchCameraBtn.isHidden = true
                 if self.takedImage != nil {
                     self.retakeBtn.isHidden = ZLPhotoConfiguration.default().allowEditImage
                 } else {
@@ -1227,8 +1226,8 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
             
             // 重置焦距
             self.setVideoZoomFactor(1)
-            if duration < Double(ZLPhotoConfiguration.default().minRecordDuration) {
-                showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), ZLPhotoConfiguration.default().minRecordDuration), self)
+            if duration < Double(self.cameraConfig.minRecordDuration) {
+                showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), self.cameraConfig.minRecordDuration), self)
                 self.resetSubViewStatus()
                 self.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
                 self.recordUrls.removeAll()

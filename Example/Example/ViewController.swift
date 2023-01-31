@@ -165,8 +165,8 @@ class ViewController: UIViewController {
             .columnCountBlock { Int(ceil($0 / (428.0 / 4))) }
         
         // Custom image editor
-        let editImageConfiguration = ZLPhotoConfiguration.default().editImageConfiguration
-        editImageConfiguration
+        ZLPhotoConfiguration.default()
+            .editImageConfiguration
             .imageStickerContainerView(ImageStickerContainerView())
             .canRedo(true)
 //            .tools([.draw, .clip, .mosaic, .filter])
@@ -175,8 +175,15 @@ class ViewController: UIViewController {
 //            .imageStickerContainerView(ImageStickerContainerView())
 //            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
         
+        /*
         ZLPhotoConfiguration.default()
-            .editImageConfiguration(editImageConfiguration)
+            .cameraConfiguration
+            .allowRecordVideo(false)
+            .allowSwitchCamera(false)
+            .showFlashSwitch(true)
+         */
+        
+        ZLPhotoConfiguration.default()
             // You can first determine whether the asset is allowed to be selected.
             .canSelectAsset { _ in
                 true

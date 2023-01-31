@@ -66,12 +66,6 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    func cellCornerRadio(_ cornerRadio: CGFloat) -> ZLPhotoConfiguration {
-        cellCornerRadio = cornerRadio
-        return self
-    }
-    
-    @discardableResult
     func allowSelectImage(_ value: Bool) -> ZLPhotoConfiguration {
         allowSelectImage = value
         return self
@@ -278,30 +272,6 @@ public extension ZLPhotoConfiguration {
     @discardableResult
     func useCustomCamera(_ value: Bool) -> ZLPhotoConfiguration {
         useCustomCamera = value
-        return self
-    }
-    
-    @discardableResult
-    func allowTakePhoto(_ value: Bool) -> ZLPhotoConfiguration {
-        allowTakePhoto = value
-        return self
-    }
-    
-    @discardableResult
-    func allowRecordVideo(_ value: Bool) -> ZLPhotoConfiguration {
-        allowRecordVideo = value
-        return self
-    }
-    
-    @discardableResult
-    func minRecordDuration(_ duration: Second) -> ZLPhotoConfiguration {
-        minRecordDuration = duration
-        return self
-    }
-    
-    @discardableResult
-    func maxRecordDuration(_ duration: Second) -> ZLPhotoConfiguration {
-        maxRecordDuration = duration
         return self
     }
     

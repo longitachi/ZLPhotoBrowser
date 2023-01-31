@@ -103,6 +103,50 @@ public class ZLCameraConfiguration: NSObject {
         case mp4
     }
     
+    private var pri_allowTakePhoto = true
+    /// Allow taking photos in the camera (Need allowSelectImage to be true). Defaults to true.
+    @objc public var allowTakePhoto: Bool {
+        get {
+            return pri_allowTakePhoto && ZLPhotoConfiguration.default().allowSelectImage
+        }
+        set {
+            pri_allowTakePhoto = newValue
+        }
+    }
+    
+    private var pri_allowRecordVideo = true
+    /// Allow recording in the camera (Need allowSelectVideo to be true). Defaults to true.
+    @objc public var allowRecordVideo: Bool {
+        get {
+            return pri_allowRecordVideo && ZLPhotoConfiguration.default().allowSelectVideo
+        }
+        set {
+            pri_allowRecordVideo = newValue
+        }
+    }
+    
+    private var pri_minRecordDuration: Second = 0
+    /// Minimum recording duration. Defaults to 0.
+    @objc public var minRecordDuration: Second {
+        get {
+            return pri_minRecordDuration
+        }
+        set {
+            pri_minRecordDuration = max(0, newValue)
+        }
+    }
+    
+    private var pri_maxRecordDuration: Second = 20
+    /// Maximum recording duration. Defaults to 10, minimum is 1.
+    @objc public var maxRecordDuration: Second {
+        get {
+            return pri_maxRecordDuration
+        }
+        set {
+            pri_maxRecordDuration = max(1, newValue)
+        }
+    }
+    
     /// Video resolution. Defaults to hd1920x1080.
     @objc public var sessionPreset: ZLCameraConfiguration.CaptureSessionPreset = .hd1920x1080
     
@@ -125,6 +169,30 @@ public class ZLCameraConfiguration: NSObject {
 // MARK: chaining
 
 public extension ZLCameraConfiguration {
+    @discardableResult
+    func allowTakePhoto(_ value: Bool) -> ZLCameraConfiguration {
+        allowTakePhoto = value
+        return self
+    }
+    
+    @discardableResult
+    func allowRecordVideo(_ value: Bool) -> ZLCameraConfiguration {
+        allowRecordVideo = value
+        return self
+    }
+    
+    @discardableResult
+    func minRecordDuration(_ duration: Second) -> ZLCameraConfiguration {
+        minRecordDuration = duration
+        return self
+    }
+    
+    @discardableResult
+    func maxRecordDuration(_ duration: Second) -> ZLCameraConfiguration {
+        maxRecordDuration = duration
+        return self
+    }
+    
     @discardableResult
     func sessionPreset(_ sessionPreset: ZLCameraConfiguration.CaptureSessionPreset) -> ZLCameraConfiguration {
         self.sessionPreset = sessionPreset

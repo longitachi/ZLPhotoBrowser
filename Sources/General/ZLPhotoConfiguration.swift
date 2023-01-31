@@ -90,8 +90,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Preview selection max preview count, if the value is zero, only show `Camera`, `Album`, `Cancel` buttons. Defaults to 20.
     @objc public var maxPreviewCount = 20
     
-    @objc public var cellCornerRadio: CGFloat = 0
-    
     /// If set to false, gif and livephoto cannot be selected either. Defaults to true.
     @objc public var allowSelectImage = true
     
@@ -110,7 +108,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// - warning: If allowTakePhoto and allowRecordVideo are both false, it will not be displayed.
     @objc public var allowTakePhotoInLibrary: Bool {
         get {
-            return pri_allowTakePhotoInLibrary && (allowTakePhoto || allowRecordVideo)
+            return pri_allowTakePhotoInLibrary && (cameraConfiguration.allowTakePhoto || cameraConfiguration.allowRecordVideo)
         }
         set {
             pri_allowTakePhotoInLibrary = newValue
@@ -225,50 +223,6 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// Whether to use custom camera. Defaults to true.
     @objc public var useCustomCamera = true
-    
-    private var pri_allowTakePhoto = true
-    /// Allow taking photos in the camera (Need allowSelectImage to be true). Defaults to true.
-    @objc public var allowTakePhoto: Bool {
-        get {
-            return pri_allowTakePhoto && allowSelectImage
-        }
-        set {
-            pri_allowTakePhoto = newValue
-        }
-    }
-    
-    private var pri_allowRecordVideo = true
-    /// Allow recording in the camera (Need allowSelectVideo to be true). Defaults to true.
-    @objc public var allowRecordVideo: Bool {
-        get {
-            return pri_allowRecordVideo && allowSelectVideo
-        }
-        set {
-            pri_allowRecordVideo = newValue
-        }
-    }
-    
-    private var pri_minRecordDuration: Second = 0
-    /// Minimum recording duration. Defaults to 0.
-    @objc public var minRecordDuration: Second {
-        get {
-            return pri_minRecordDuration
-        }
-        set {
-            pri_minRecordDuration = max(0, newValue)
-        }
-    }
-    
-    private var pri_maxRecordDuration: Second = 20
-    /// Maximum recording duration. Defaults to 10, minimum is 1.
-    @objc public var maxRecordDuration: Second {
-        get {
-            return pri_maxRecordDuration
-        }
-        set {
-            pri_maxRecordDuration = max(1, newValue)
-        }
-    }
     
     /// The configuration for camera.
     @objc public var cameraConfiguration = ZLCameraConfiguration()

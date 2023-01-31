@@ -291,7 +291,7 @@ class PhotoConfigureViewController: UIViewController {
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
-        cellRadiusTextField = createTextField(String(format: "%.2f", config.cellCornerRadio), .decimalPad)
+        cellRadiusTextField = createTextField(String(format: "%.2f", uiConfig.cellCornerRadio), .decimalPad)
         containerView.addSubview(cellRadiusTextField)
         cellRadiusTextField.snp.makeConstraints { make in
             make.left.equalTo(cellRadiusLabel.snp.right).offset(horSpacing)
@@ -1236,7 +1236,7 @@ extension PhotoConfigureViewController: UITextFieldDelegate {
         } else if textField == maxVideoDurationTextField {
             config.maxSelectVideoDuration = Int(textField.text ?? "") ?? 120
         } else if textField == cellRadiusTextField {
-            config.cellCornerRadio = CGFloat(Double(textField.text ?? "") ?? 0)
+            uiConfig.cellCornerRadio = CGFloat(Double(textField.text ?? "") ?? 0)
         } else if textField == autoScrollMaxSpeedTextField {
             config.autoScrollMaxSpeed = CGFloat(Double(textField.text ?? "") ?? 0)
         }

@@ -63,7 +63,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private lazy var cameraBtn: UIButton = {
         let cameraTitle: String
-        if !ZLPhotoConfiguration.default().allowTakePhoto, ZLPhotoConfiguration.default().allowRecordVideo {
+        if !ZLPhotoConfiguration.default().cameraConfiguration.allowTakePhoto, ZLPhotoConfiguration.default().cameraConfiguration.allowRecordVideo {
             cameraTitle = localLanguageTextValue(.previewCameraRecord)
         } else {
             cameraTitle = localLanguageTextValue(.previewCamera)
@@ -265,7 +265,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func canShowCameraBtn() -> Bool {
-        if !ZLPhotoConfiguration.default().allowTakePhoto, !ZLPhotoConfiguration.default().allowRecordVideo {
+        if !ZLPhotoConfiguration.default().cameraConfiguration.allowTakePhoto, !ZLPhotoConfiguration.default().cameraConfiguration.allowRecordVideo {
             return false
         }
         return true
@@ -450,14 +450,14 @@ public class ZLPhotoPreviewSheet: UIView {
                     picker.cameraFlashMode = .off
                 }
                 var mediaTypes: [String] = []
-                if config.allowTakePhoto {
+                if config.cameraConfiguration.allowTakePhoto {
                     mediaTypes.append("public.image")
                 }
-                if config.allowRecordVideo {
+                if config.cameraConfiguration.allowRecordVideo {
                     mediaTypes.append("public.movie")
                 }
                 picker.mediaTypes = mediaTypes
-                picker.videoMaximumDuration = TimeInterval(config.maxRecordDuration)
+                picker.videoMaximumDuration = TimeInterval(config.cameraConfiguration.maxRecordDuration)
                 sender?.showDetailViewController(picker, sender: nil)
             } else {
                 showAlertView(String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), sender)
