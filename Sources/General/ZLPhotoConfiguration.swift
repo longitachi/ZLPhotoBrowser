@@ -115,6 +115,9 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
+    /// Whether to callback directly after taking a photo. Defaults to false.
+    @objc public var callbackDirectlyAfterTakingPhoto = false
+    
     var pri_allowEditImage = true
     @objc public var allowEditImage: Bool {
         get {

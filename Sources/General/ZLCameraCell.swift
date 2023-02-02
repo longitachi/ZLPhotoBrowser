@@ -44,6 +44,12 @@ class ZLCameraCell: UICollectionViewCell {
     
     private var previewLayer: AVCaptureVideoPreviewLayer?
     
+    var isEnable: Bool = true {
+        didSet {
+            contentView.alpha = isEnable ? 1 : 0.3
+        }
+    }
+    
     deinit {
         session?.stopRunning()
         session = nil

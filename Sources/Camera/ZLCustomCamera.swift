@@ -35,7 +35,7 @@ open class ZLCustomCamera: UIViewController {
         static let smallCircleRadius: CGFloat = 65
         static let largeCircleRecordScale: CGFloat = 1.2
         static let smallCircleRecordScale: CGFloat = 0.5
-        static let borderLayerWidth: CGFloat = 2
+        static let borderLayerWidth: CGFloat = 1.8
         static let animateLayerWidth: CGFloat = 5
         static let cameraBtnNormalColor: UIColor = .white
         static let cameraBtnRecodingBorderColor: UIColor = .white.withAlphaComponent(0.8)//.zl.rgba(250, 250, 230).withAlphaComponent(0.8)
@@ -798,11 +798,21 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
+    private func canEditImage() -> Bool {
+        let config = ZLPhotoConfiguration.default()
+        // 如果满足如下条件，则会在拍照完成后，返回相册界面直接进入编辑界面，这里就不在编辑
+        let editAfterSelect = config.editAfterSelectThumbnailImage &&
+            config.allowEditImage &&
+            config.maxSelectCount == 1
+        return !editAfterSelect
+    }
+    
     @objc private func editImage() {
-        guard ZLPhotoConfiguration.default().allowEditImage, let image = takedImage else {
+        guard let takedImage = takedImage, canEditImage() else {
             return
         }
-        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image) { [weak self] in
+        
+        ZLEditImageViewController.showEditImageVC(parentVC: self, image: takedImage) { [weak self] in
             self?.retakeBtnClick()
         } completion: { [weak self] editImage, _ in
             self?.takedImage = editImage
@@ -1124,11 +1134,13 @@ open class ZLCustomCamera: UIViewController {
                 self.bottomView.isHidden = true
                 self.dismissBtn.isHidden = true
                 if self.takedImage != nil {
-                    self.retakeBtn.isHidden = ZLPhotoConfiguration.default().allowEditImage
+                    let canEdit = self.canEditImage()
+                    self.retakeBtn.isHidden = canEdit
+                    self.doneBtn.isHidden = canEdit
                 } else {
                     self.retakeBtn.isHidden = false
+                    self.doneBtn.isHidden = false
                 }
-                self.doneBtn.isHidden = false
             }
         }
     }

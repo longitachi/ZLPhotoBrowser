@@ -786,24 +786,24 @@ public class ZLPhotoPreviewSheet: UIView {
         if let image = image {
             hud.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
+                hud.hide()
                 if suc, let at = asset {
                     let model = ZLPhotoModel(asset: at)
                     self?.handleDataArray(newModel: model)
                 } else {
                     showAlertView(localLanguageTextValue(.saveImageError), self?.sender)
                 }
-                hud.hide()
             }
         } else if let videoUrl = videoUrl {
             hud.show()
             ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
+                hud.hide()
                 if suc, let at = asset {
                     let model = ZLPhotoModel(asset: at)
                     self?.handleDataArray(newModel: model)
                 } else {
                     showAlertView(localLanguageTextValue(.saveVideoError), self?.sender)
                 }
-                hud.hide()
             }
         }
     }
@@ -820,6 +820,10 @@ public class ZLPhotoPreviewSheet: UIView {
             if !shouldDirectEdit(newModel) {
                 newModel.isSelected = true
                 arrSelectedModels.append(newModel)
+                
+                if ZLPhotoConfiguration.default().callbackDirectlyAfterTakingPhoto {
+                    requestSelectPhoto()
+                }
             }
         }
         
@@ -993,8 +997,13 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     private func refreshCellIndex() {
-        let showIndex = ZLPhotoConfiguration.default().showSelectedIndex
-        let showMask = ZLPhotoConfiguration.default().showSelectedMask || ZLPhotoConfiguration.default().showInvalidMask
+        let config = ZLPhotoConfiguration.default()
+        let cameraIsEnable = arrSelectedModels.count < config.maxSelectCount
+        cameraBtn.alpha = cameraIsEnable ? 1 : 0.3
+        cameraBtn.isEnabled = cameraIsEnable
+        
+        let showIndex = config.showSelectedIndex
+        let showMask = config.showSelectedMask || config.showInvalidMask
         
         guard showIndex || showMask else {
             return

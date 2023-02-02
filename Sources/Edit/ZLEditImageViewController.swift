@@ -199,6 +199,8 @@ open class ZLEditImageViewController: UIViewController {
     
     private var shouldLayout = true
     
+    private var isFirstSetContainerFrame = true
+    
     private var imageStickerContainerIsHidden = true
     
     private var angle: CGFloat
@@ -463,7 +465,7 @@ open class ZLEditImageViewController: UIViewController {
         
         topShadowView.frame = CGRect(x: 0, y: 0, width: view.zl.width, height: 150)
         topShadowLayer.frame = topShadowView.bounds
-        cancelBtn.frame = CGRect(x: 30, y: insets.top + 10, width: 28, height: 28)
+        cancelBtn.frame = CGRect(x: 20, y: 60, width: 28, height: 28)
         
         bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 140 - insets.bottom, width: view.zl.width, height: 140 + insets.bottom)
         bottomShadowLayer.frame = bottomShadowView.bounds
@@ -566,7 +568,24 @@ open class ZLEditImageViewController: UIViewController {
         let ratio = min(scrollViewSize.width / editSize.width, scrollViewSize.height / editSize.height)
         let w = ratio * editSize.width * mainScrollView.zoomScale
         let h = ratio * editSize.height * mainScrollView.zoomScale
-        containerView.frame = CGRect(x: max(0, (scrollViewSize.width - w) / 2), y: max(0, (scrollViewSize.height - h) / 2), width: w, height: h)
+        
+        let y: CGFloat
+        if isFirstSetContainerFrame, presentingViewController is ZLCustomCamera {
+            let cameraRatio: CGFloat = 16 / 9
+            let layerH = min(view.zl.width * cameraRatio, view.zl.height)
+            
+            if isSmallScreen() {
+                y = deviceIsFringeScreen() ? min(94, view.zl.height - layerH) : 0
+            } else {
+                y = 0
+            }
+        } else {
+            y = max(0, (scrollViewSize.height - h) / 2)
+        }
+        
+        isFirstSetContainerFrame = false
+        
+        containerView.frame = CGRect(x: max(0, (scrollViewSize.width - w) / 2), y: y, width: w, height: h)
         mainScrollView.contentSize = containerView.frame.size
 
         if selectRatio?.isCircle == true {

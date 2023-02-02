@@ -96,6 +96,12 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func callbackDirectlyAfterTakingPhoto(_ value: Bool) -> ZLPhotoConfiguration {
+        callbackDirectlyAfterTakingPhoto = value
+        return self
+    }
+    
+    @discardableResult
     func allowEditImage(_ value: Bool) -> ZLPhotoConfiguration {
         allowEditImage = value
         return self
