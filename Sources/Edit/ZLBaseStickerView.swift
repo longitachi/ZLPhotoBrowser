@@ -33,7 +33,7 @@ protocol ZLStickerViewAdditional: NSObject {
     func addScale(_ scale: CGFloat)
 }
 
-struct ZLStickerLayout {
+enum ZLStickerLayout {
     static let borderWidth = 1 / UIScreen.main.scale
     static let edgeInset: CGFloat = 20
 }
@@ -64,13 +64,15 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
     
     var gesScale: CGFloat = 1
     
+    var maxGesScale: CGFloat = 4
+    
     var onOperation = false
     
     var gesIsEnabled = true
     
     var originFrame: CGRect
     
-    lazy var tapGes: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
+    lazy var tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
     
     lazy var pinchGes: UIPinchGestureRecognizer = {
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
@@ -133,6 +135,7 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
         tapGes.require(toFail: panGes)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -175,7 +178,7 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
         setupUIFrameWhenFirstLayout()
     }
     
-    func setupUIFrameWhenFirstLayout() { }
+    func setupUIFrameWhenFirstLayout() {}
     
     private func direction(for angle: CGFloat) -> ZLBaseStickerView.Direction {
         // 将角度转换为0~360，并对360取余
@@ -194,8 +197,14 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
     @objc func pinchAction(_ ges: UIPinchGestureRecognizer) {
         guard gesIsEnabled else { return }
         
-        gesScale *= ges.scale
+        let scale = min(maxGesScale, gesScale * ges.scale)
         ges.scale = 1
+        
+        guard scale != gesScale else {
+            return
+        }
+        
+        gesScale = scale
         
         if ges.state == .began {
             setOperation(true)
@@ -302,6 +311,7 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
     }
     
     // MARK: UIGestureRecognizerDelegate
+
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
@@ -362,5 +372,6 @@ extension ZLBaseStickerView: ZLStickerViewAdditional {
         transform = transform.rotated(by: gesRotation)
         
         gesScale *= scale
+        maxGesScale *= scale
     }
 }

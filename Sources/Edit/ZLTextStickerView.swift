@@ -68,12 +68,12 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
             label.backgroundColor = bgColor
         }
     }
+
     // Convert all states to model.
     override var state: ZLTextStickerState {
         return ZLTextStickerState(
             text: text,
-            textColor:
-                textColor,
+            textColor: textColor,
             bgColor: bgColor,
             originScale: originScale,
             originAngle: originAngle,
@@ -136,7 +136,7 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
     
     override func tapAction(_ ges: UITapGestureRecognizer) {
         guard gesIsEnabled else { return }
-
+        
         if let timer = timer, timer.isValid {
             delegate?.sticker(self, editText: text)
         } else {
