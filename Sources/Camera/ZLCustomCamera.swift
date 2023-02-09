@@ -551,7 +551,6 @@ open class ZLCustomCamera: UIViewController {
         // 预览layer
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer?.videoGravity = .resizeAspectFill
-        previewLayer?.backgroundColor = UIColor.brown.cgColor
         previewLayer?.opacity = 0
         view.layer.masksToBounds = true
         view.layer.insertSublayer(previewLayer!, at: 0)
@@ -800,10 +799,13 @@ open class ZLCustomCamera: UIViewController {
     
     private func canEditImage() -> Bool {
         let config = ZLPhotoConfiguration.default()
+        
+        guard config.allowEditImage else {
+            return false
+        }
+        
         // 如果满足如下条件，则会在拍照完成后，返回相册界面直接进入编辑界面，这里就不在编辑
-        let editAfterSelect = config.editAfterSelectThumbnailImage &&
-            config.allowEditImage &&
-            config.maxSelectCount == 1
+        let editAfterSelect = config.editAfterSelectThumbnailImage && config.maxSelectCount == 1
         return !editAfterSelect
     }
     

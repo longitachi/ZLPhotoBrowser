@@ -28,6 +28,7 @@ import UIKit
 import Photos
 
 class ZLThumbnailPhotoCell: UICollectionViewCell {
+    private lazy var containerView = UIView()
     
     private lazy var bottomShadowView = UIImageView(image: .zl.getImage("zl_shadow"))
     
@@ -125,15 +126,16 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     func setupUI() {
         contentView.addSubview(imageView)
-        contentView.addSubview(coverView)
-        contentView.addSubview(btnSelect)
+        contentView.addSubview(containerView)
+        containerView.addSubview(coverView)
+        containerView.addSubview(btnSelect)
         btnSelect.addSubview(indexLabel)
-        contentView.addSubview(bottomShadowView)
+        containerView.addSubview(bottomShadowView)
         bottomShadowView.addSubview(videoTag)
         bottomShadowView.addSubview(livePhotoTag)
         bottomShadowView.addSubview(editImageTag)
         bottomShadowView.addSubview(descLabel)
-        contentView.addSubview(progressView)
+        containerView.addSubview(progressView)
         
         if ZLPhotoConfiguration.default().showSelectedBorder {
             layer.borderColor = UIColor.zl.selectedBorderColor.cgColor
@@ -142,6 +144,8 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         imageView.frame = bounds
+        
+        containerView.frame = bounds
         coverView.frame = bounds
         btnSelect.frame = CGRect(x: bounds.width - 30, y: 8, width: 23, height: 23)
         indexLabel.frame = btnSelect.bounds

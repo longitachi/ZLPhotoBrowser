@@ -69,7 +69,6 @@ class ZLCameraCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        imageView.frame = CGRect(x: 0, y: 0, width: bounds.width / 3, height: bounds.width / 3)
         imageView.center = CGPoint(x: bounds.midX, y: bounds.midY)
         
         previewLayer?.frame = contentView.layer.bounds

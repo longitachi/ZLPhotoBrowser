@@ -346,13 +346,14 @@ extension ZLBaseStickerView: ZLStickerViewAdditional {
         let diffX: CGFloat = (origin.x - newOrigin.x)
         let diffY: CGFloat = (origin.y - newOrigin.y)
         
-        if originAngle == 90 || originAngle == -270 {
+        let direction = direction(for: originScale)
+        if direction == .right {
             transform = transform.translatedBy(x: diffY, y: -diffX)
             originTransform = originTransform.translatedBy(x: diffY / originScale, y: -diffX / originScale)
-        } else if originAngle == 180 || originAngle == -180 {
+        } else if direction == .bottom {
             transform = transform.translatedBy(x: -diffX, y: -diffY)
             originTransform = originTransform.translatedBy(x: -diffX / originScale, y: -diffY / originScale)
-        } else if originAngle == 270 || originAngle == -90 {
+        } else if direction == .left {
             transform = transform.translatedBy(x: -diffY, y: diffX)
             originTransform = originTransform.translatedBy(x: -diffY / originScale, y: diffX / originScale)
         } else {
