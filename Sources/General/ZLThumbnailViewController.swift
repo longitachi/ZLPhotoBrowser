@@ -356,7 +356,7 @@ class ZLThumbnailViewController: UIViewController {
         self.originalBtn.isSelected = (navigationController as? ZLImageNavController)?.isSelectedOriginal ?? false
         self.bottomView.addSubview(self.originalBtn)
         
-        self.doneBtn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick), true)
+        self.doneBtn = createBtn(localLanguageTextValue(.send), #selector(doneBtnClick), true)
         self.doneBtn.layer.masksToBounds = true
         self.doneBtn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         self.bottomView.addSubview(self.doneBtn)
