@@ -287,11 +287,18 @@ public class ZLPhotoPreviewSheet: UIView {
         isOriginal: Bool,
         showBottomViewAndSelectBtn: Bool = true
     ) {
+        assert(!assets.isEmpty, "Assets cannot be empty")
+        
         let models = assets.zl.removeDuplicate().map { asset -> ZLPhotoModel in
             let m = ZLPhotoModel(asset: asset)
             m.isSelected = true
             return m
         }
+        
+        guard !models.isEmpty else {
+            return
+        }
+        
         arrSelectedModels.removeAll()
         arrSelectedModels.append(contentsOf: models)
         self.sender = sender
@@ -307,6 +314,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 self?.cancelBlock?()
             }
         }
+        
         sender.showDetailViewController(nav, sender: nil)
     }
     

@@ -167,8 +167,8 @@ class ZLPhotoPreviewController: UIViewController {
     init(photos: [ZLPhotoModel], index: Int, showBottomViewAndSelectBtn: Bool = true) {
         arrDataSources = photos
         self.showBottomViewAndSelectBtn = showBottomViewAndSelectBtn
-        currentIndex = index
-        indexBeforOrientationChanged = index
+        currentIndex = min(index, photos.count - 1)
+        indexBeforOrientationChanged = currentIndex
         super.init(nibName: nil, bundle: nil)
     }
     
