@@ -695,13 +695,13 @@ class ZLThumbnailViewController: UIViewController {
         if nav.arrSelectedModels.count > 0 {
             previewBtn.isEnabled = true
             doneBtn.isEnabled = true
-            let doneTitle = localLanguageTextValue(.done) + "(" + String(nav.arrSelectedModels.count) + ")"
+            let doneTitle = localLanguageTextValue(.send) + "(" + String(nav.arrSelectedModels.count) + ")"
             doneBtn.setTitle(doneTitle, for: .normal)
             doneBtn.backgroundColor = .bottomToolViewBtnNormalBgColor
         } else {
             previewBtn.isEnabled = false
             doneBtn.isEnabled = false
-            doneBtn.setTitle(localLanguageTextValue(.done), for: .normal)
+            doneBtn.setTitle(localLanguageTextValue(.send), for: .normal)
             doneBtn.backgroundColor = .bottomToolViewBtnDisableBgColor
         }
         originalBtn.isSelected = nav.isSelectedOriginal
@@ -710,7 +710,7 @@ class ZLThumbnailViewController: UIViewController {
     
     func refreshDoneBtnFrame() {
         let selCount = (navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
-        var doneTitle = localLanguageTextValue(.done)
+        var doneTitle = localLanguageTextValue(.send)
         if selCount > 0 {
             doneTitle += "(" + String(selCount) + ")"
         }
