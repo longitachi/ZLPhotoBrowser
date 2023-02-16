@@ -32,8 +32,9 @@ import Photos
     case video
 }
 
+public typealias ZLImageLoaderBlock = (_ url: URL, _ imageView: UIImageView, _ progress: @escaping (CGFloat) -> Void, _ complete: @escaping () -> Void) -> Void
+
 public class ZLImagePreviewController: UIViewController {
-    
     static let colItemSpacing: CGFloat = 40
     
     static let selPhotoPreviewH: CGFloat = 100
@@ -44,7 +45,7 @@ public class ZLImagePreviewController: UIViewController {
     
     private let urlType: ((URL) -> ZLURLType)?
     
-    private let urlImageLoader: ((URL, UIImageView, @escaping (CGFloat) -> Void, @escaping () -> Void) -> Void)?
+    private let urlImageLoader: ZLImageLoaderBlock?
     
     private let showSelectBtn: Bool
     
@@ -166,14 +167,12 @@ public class ZLImagePreviewController: UIViewController {
         showSelectBtn: Bool = true,
         showBottomView: Bool = true,
         urlType: ((URL) -> ZLURLType)? = nil,
-        urlImageLoader: ((URL, UIImageView, @escaping (CGFloat) -> Void, @escaping () -> Void) -> Void)? = nil
+        urlImageLoader: ZLImageLoaderBlock? = nil
     ) {
-        let filterDatas = datas.filter { obj -> Bool in
-            obj is PHAsset || obj is UIImage || obj is URL
-        }
+        let filterDatas = datas.filter { $0 is PHAsset || $0 is UIImage || $0 is URL }
         self.datas = filterDatas
         selectStatus = Array(repeating: true, count: filterDatas.count)
-        currentIndex = index >= filterDatas.count ? 0 : index
+        currentIndex = min(index, filterDatas.count - 1)
         indexBeforOrientationChanged = currentIndex
         self.showSelectBtn = showSelectBtn
         self.showBottomView = showSelectBtn ? true : showBottomView
@@ -240,12 +239,18 @@ public class ZLImagePreviewController: UIViewController {
         if ori != orientation {
             orientation = ori
             collectionView.setContentOffset(
-                CGPoint(x: (view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(indexBeforOrientationChanged), y: 0),
+                CGPoint(
+                    x: (view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(indexBeforOrientationChanged),
+                    y: 0
+                ),
                 animated: false
             )
             collectionView.performBatchUpdates({
                 self.collectionView.setContentOffset(
-                    CGPoint(x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged), y: 0),
+                    CGPoint(
+                        x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged),
+                        y: 0
+                    ),
                     animated: false
                 )
             })
@@ -256,6 +261,7 @@ public class ZLImagePreviewController: UIViewController {
         guard let cell = collectionView.cellForItem(at: IndexPath(row: currentIndex, section: 0)) else {
             return
         }
+        
         if let cell = cell as? ZLGifPreviewCell {
             cell.loadGifWhenCellDisplaying()
         } else if let cell = cell as? ZLLivePhotoPreviewCell {
@@ -307,7 +313,7 @@ public class ZLImagePreviewController: UIViewController {
             return
         }
         
-        let btnY: CGFloat = ZLLayout.bottomToolBtnY
+        let btnY = ZLLayout.bottomToolBtnY
         
         var doneTitle = localLanguageTextValue(.done)
         let selCount = selectStatus.filter { $0 }.count
@@ -356,11 +362,10 @@ public class ZLImagePreviewController: UIViewController {
     
     @objc private func doneBtnClick() {
         if showSelectBtn {
-            let res = datas.enumerated().filter { index, _ -> Bool in
-                self.selectStatus[index]
-            }.map { _, v -> Any in
-                v
-            }
+            let res = datas.enumerated()
+                .filter { self.selectStatus[$0.offset] }
+                .map { $0.element }
+            
             doneBlock?(res)
         } else {
             doneBlock?(datas)
@@ -372,27 +377,24 @@ public class ZLImagePreviewController: UIViewController {
     private func tapPreviewCell() {
         hideNavView.toggle()
         
-        let currentCell = collectionView.cellForItem(at: IndexPath(row: currentIndex, section: 0))
-        if let cell = currentCell as? ZLVideoPreviewCell {
-            if cell.isPlaying {
-                hideNavView = true
-            }
+        let cell = collectionView.cellForItem(at: IndexPath(row: currentIndex, section: 0))
+        if let cell = cell as? ZLVideoPreviewCell, cell.isPlaying {
+            hideNavView = true
         }
         navView.isHidden = hideNavView
         if showBottomView {
             bottomView.isHidden = hideNavView
         }
     }
-    
 }
 
 // scroll view delegate
 public extension ZLImagePreviewController {
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView == collectionView else {
             return
         }
+        
         NotificationCenter.default.post(name: ZLPhotoPreviewController.previewVCScrollNotification, object: nil)
         let offset = scrollView.contentOffset
         var page = Int(round(offset.x / (view.bounds.width + ZLPhotoPreviewController.colItemSpacing)))
@@ -400,6 +402,7 @@ public extension ZLImagePreviewController {
         if page == currentIndex {
             return
         }
+        
         currentIndex = page
         resetSubViewStatus()
     }
@@ -413,11 +416,9 @@ public extension ZLImagePreviewController {
             cell.loadLivePhotoData()
         }
     }
-    
 }
 
 extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return ZLImagePreviewController.colItemSpacing
     }
@@ -431,7 +432,7 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.bounds.width, height: view.bounds.height)
+        return CGSize(width: view.zl.width, height: view.zl.height)
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -488,7 +489,7 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
             
             baseCell = cell
         } else if let url = obj as? URL {
-            let type = urlType?(url) ?? ZLURLType.image
+            let type: ZLURLType = urlType?(url) ?? .image
             if type == .image {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLNetImagePreviewCell.zl.identifier, for: indexPath) as! ZLNetImagePreviewCell
                 cell.image = nil
@@ -535,8 +536,8 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
     }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let c = cell as? ZLPreviewBaseCell {
-            c.resetSubViewStatusWhenCellEndDisplay()
+        if let cell = cell as? ZLPreviewBaseCell {
+            cell.resetSubViewStatusWhenCellEndDisplay()
         }
     }
     
@@ -545,6 +546,7 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
             guard let cell = collectionView.cellForItem(at: IndexPath(row: currentIndex, section: 0)) as? ZLLocalImagePreviewCell, let image = cell.currentImage else {
                 return
             }
+            
             let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
             hud.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, _ in
@@ -561,5 +563,4 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
         let cancelAction = ZLCustomAlertAction(title: localLanguageTextValue(.cancel), style: .cancel, handler: nil)
         showAlertController(title: nil, message: "", style: .actionSheet, actions: [saveAction, cancelAction], sender: self)
     }
-    
 }
