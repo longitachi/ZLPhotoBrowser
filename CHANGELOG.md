@@ -2,13 +2,24 @@
 
 -----
 
+## [4.3.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.9) (2023-02-17)
+
+### Add:
+* Support for customizing the item spacing, row spacing, and column count of the thumbnail view controller.
+* Moves the camera configuration-related properties from ZLPhotoConfiguration to ZLCameraConfiguration.
+* Update the UI style of camera interface.
+* Support callback directly after taking picture.
+* Increase the maximum zoom ratio of stickers.
+
+---
+
 ## [4.3.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.8) (2022-12-13)
 
-## Add:
+### Add:
 * Support direct callback after selecting thumbnail.
 * Add horizontal adjust slider.
   
-## Fix:
+### Fix:
 * Fix the bug of wrong size when merging videos. [#788](https://github.com/longitachi/ZLPhotoBrowser/issues/788)
 * Hide redo button when filtering or color adjusting.
 
@@ -16,32 +27,32 @@
 
 ## [4.3.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.7) (2022-09-28)
 
-## Add:
+### Add:
 * Modify the parameter type of `selectImageBlock` and use `ZLResultModel` for callback. Delete `shouldAnialysisAsset` property.
 * Photo editor adapts to iPad.
 * Arabic supported. @LastSoul
 * Support redo in graffiti and mosaic tools.
 * Support for modifying the tint color of the image editor icon.
 
-## Fix:
+### Fix:
 * Fix the bug of getting the wrong version of the video when editing the video.
 
 ---
 
 ## [4.3.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.6) (2022-09-06)
 
-## Add:
+### Add:
 * Provide a method to save the PHAsset to local.
 * Updated the method of parsing GIF.[#752](https://github.com/longitachi/ZLPhotoBrowser/issues/752)
 
-## Fix:
+### Fix:
 * Fixed crash in pop interactive transition.[#753](https://github.com/longitachi/ZLPhotoBrowser/issues/753)
 
 ---
 
 ## [4.3.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.5) (2022-07-07)
 
-## Add:
+### Add:
 * Support custom alert style.
 * Improve the experience of image editor.
 
@@ -49,7 +60,7 @@
 
 ## [4.3.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.4) (2022-06-27)
 
-## Fix:
+### Fix:
 * Fix a bug of the image editor.
 
 ---
