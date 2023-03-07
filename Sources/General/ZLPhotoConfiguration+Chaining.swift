@@ -306,6 +306,30 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func maxFrameCountForGIF(_ frameCount: Int) -> ZLPhotoConfiguration {
+        maxFrameCountForGIF = frameCount
+        return self
+    }
+    
+    @discardableResult
+    func gifPlayBlock(_ block: ((UIImageView, Data, [AnyHashable: Any]?) -> Void)?) -> ZLPhotoConfiguration {
+        gifPlayBlock = block
+        return self
+    }
+    
+    @discardableResult
+    func pauseGIFBlock(_ block: ((UIImageView) -> Void)?) -> ZLPhotoConfiguration {
+        pauseGIFBlock = block
+        return self
+    }
+    
+    @discardableResult
+    func resumeGIFBlock(_ block: ((UIImageView) -> Void)?) -> ZLPhotoConfiguration {
+        resumeGIFBlock = block
+        return self
+    }
+    
+    @discardableResult
     func noAuthorityCallback(_ callback: ((ZLNoAuthorityType) -> Void)?) -> ZLPhotoConfiguration {
         noAuthorityCallback = callback
         return self

@@ -984,6 +984,10 @@ class ZLPreviewView: UIView {
         onFetchingGif = false
         fetchGifDone = false
         
+        if ZLPhotoConfiguration.default().gifPlayBlock != nil {
+            imageView.subviews.forEach { $0.removeFromSuperview() }
+        }
+        
         imageRequestID = ZLPhotoManager.fetchImage(for: model.asset, size: requestPhotoSize(gif: true), completion: { [weak self] image, _ in
             guard self?.imageIdentifier == self?.model.ident else {
                 return
@@ -1014,14 +1018,21 @@ class ZLPreviewView: UIView {
             } else {
                 self?.progressView.isHidden = false
             }
-        }, completion: { [weak self] data, _, isDegraded in
-            guard self?.imageIdentifier == self?.model.ident else {
+        }, completion: { [weak self] data, info, isDegraded in
+            guard let `self` = self else { return }
+            guard self.imageIdentifier == self.model.ident else {
                 return
             }
+            
             if !isDegraded {
-                self?.fetchGifDone = true
-                self?.imageView.image = UIImage.zl.animateGifImage(data: data)
-                self?.resetSubViewSize()
+                self.fetchGifDone = true
+                if let gifPlayBlock = ZLPhotoConfiguration.default().gifPlayBlock {
+                    gifPlayBlock(self.imageView, data, info)
+                } else {
+                    self.imageView.image = UIImage.zl.animateGifImage(data: data)
+                }
+                
+                self.resetSubViewSize()
             }
         })
     }
@@ -1121,6 +1132,14 @@ class ZLPreviewView: UIView {
     func resumeGif() {
         guard let m = model else { return }
         guard ZLPhotoConfiguration.default().allowSelectGif, m.type == .gif else { return }
+        
+        let config = ZLPhotoConfiguration.default()
+        
+        if config.gifPlayBlock != nil, let resumeGIFBlock = config.resumeGIFBlock {
+            resumeGIFBlock(imageView)
+            return
+        }
+        
         guard imageView.layer.speed != 1 else { return }
         
         let pauseTime = imageView.layer.timeOffset
@@ -1134,6 +1153,14 @@ class ZLPreviewView: UIView {
     func pauseGif() {
         guard let m = model else { return }
         guard ZLPhotoConfiguration.default().allowSelectGif, m.type == .gif else { return }
+        
+        let config = ZLPhotoConfiguration.default()
+        
+        if config.gifPlayBlock != nil, let pauseGIFBlock = config.pauseGIFBlock {
+            pauseGIFBlock(imageView)
+            return
+        }
+        
         guard imageView.layer.speed != 0 else { return }
         
         let pauseTime = imageView.layer.convertTime(CACurrentMediaTime(), from: nil)

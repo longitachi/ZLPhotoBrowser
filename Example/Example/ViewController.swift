@@ -198,6 +198,28 @@ class ViewController: UIViewController {
                     debugPrint("No microphone authority")
                 }
             }
+            .gifPlayBlock { imageView, data, _ in
+                let animatedImage = FLAnimatedImage(gifData: data)
+                
+                var animatedImageView: FLAnimatedImageView?
+                for subView in imageView.subviews {
+                    if let subView = subView as? FLAnimatedImageView {
+                        animatedImageView = subView
+                        break
+                    }
+                }
+                
+                if animatedImageView == nil {
+                    animatedImageView = FLAnimatedImageView()
+                    imageView.addSubview(animatedImageView!)
+                }
+                
+                animatedImageView?.frame = imageView.bounds
+                animatedImageView?.animatedImage = animatedImage
+                animatedImageView?.runLoopMode = .default
+            }
+            .pauseGIFBlock { $0.subviews.forEach { ($0 as? FLAnimatedImageView)?.stopAnimating() } }
+            .resumeGIFBlock { $0.subviews.forEach { ($0 as? FLAnimatedImageView)?.startAnimating() } }
 //            .operateBeforeDoneAction { currVC, block in
 //                // Do something before select photo result callback, and then call block to continue done action.
 //                block()

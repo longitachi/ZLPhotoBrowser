@@ -30,7 +30,6 @@ import Photos
 public typealias Second = Int
 
 public class ZLPhotoConfiguration: NSObject {
-    
     private static var single = ZLPhotoConfiguration()
     
     @objc public class func `default`() -> ZLPhotoConfiguration {
@@ -243,6 +242,18 @@ public class ZLPhotoConfiguration: NSObject {
     /// Will go to system setting if clicked. Defaults to true.
     @objc public var showEnterSettingTips = true
     
+    /// The maximum number of frames for GIF images. To avoid crashes due to memory spikes caused by loading GIF images with too many frames, it is recommended that this value is not too large. Defaults to 50.
+    @objc public var maxFrameCountForGIF = 50
+    
+    /// You can use this block to customize the playback of GIF images to achieve better results. For example, use FLAnimatedImage to play GIFs. Defaults to nil.
+    @objc public var gifPlayBlock: ((UIImageView, Data, [AnyHashable: Any]?) -> Void)?
+    
+    /// Pause GIF image playback, used together with gifPlayBlock. Defaults to nil.
+    @objc public var pauseGIFBlock: ((UIImageView) -> Void)?
+    
+    /// Resume GIF image playback, used together with gifPlayBlock. Defaults to nil.
+    @objc public var resumeGIFBlock: ((UIImageView) -> Void)?
+    
     /// Callback after the no authority alert dismiss.
     @objc public var noAuthorityCallback: ((ZLNoAuthorityType) -> Void)?
     
@@ -251,7 +262,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// The first parameter is the current controller.
     /// The second parameter is the block that needs to be called after the user completes the operation.
     @objc public var operateBeforeDoneAction: ((UIViewController, @escaping () -> Void) -> Void)?
-    
 }
 
 @objc public enum ZLNoAuthorityType: Int {

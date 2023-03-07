@@ -42,21 +42,28 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
             return UIImage(data: data)
         }
         
-        let frameCount = CGImageSourceGetCount(imageSource)
+        var frameCount = CGImageSourceGetCount(imageSource)
         guard frameCount > 1 else {
             return UIImage(data: data)
         }
+        
+        let maxFrameCount = ZLPhotoConfiguration.default().maxFrameCountForGIF
+        
+        let ratio = CGFloat(max(frameCount, maxFrameCount)) / CGFloat(maxFrameCount)
+        frameCount = min(frameCount, maxFrameCount)
         
         var images = [UIImage]()
         var frameDuration = [Int]()
         
         for i in 0..<frameCount {
-            guard let imageRef = CGImageSourceCreateImageAtIndex(imageSource, i, info as CFDictionary) else {
+            let index = Int(floor(CGFloat(i) * ratio))
+            
+            guard let imageRef = CGImageSourceCreateImageAtIndex(imageSource, index, info as CFDictionary) else {
                 return nil
             }
             
             // Get current animated GIF frame duration
-            let currFrameDuration = getFrameDuration(from: imageSource, at: i)
+            let currFrameDuration = getFrameDuration(from: imageSource, at: index) * min(ratio, 3)
             // Second to ms
             frameDuration.append(Int(currFrameDuration * 1000))
             
