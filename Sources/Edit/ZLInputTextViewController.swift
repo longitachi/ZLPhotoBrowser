@@ -45,7 +45,11 @@ class ZLInputTextViewController: UIViewController {
         let btn = UIButton(type: .custom)
         btn.setTitle(localLanguageTextValue(.done), for: .normal)
         btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
+        btn.setTitleColor(.zl.bottomToolViewDoneBtnNormalTitleColor, for: .normal)
+        btn.backgroundColor = .zl.bottomToolViewBtnNormalBgColor
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
+        btn.layer.masksToBounds = true
+        btn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
         return btn
     }()
     
@@ -132,6 +136,7 @@ class ZLInputTextViewController: UIViewController {
         setupUI()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIApplication.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIApplication.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -197,8 +202,21 @@ class ZLInputTextViewController: UIViewController {
         UIView.animate(withDuration: max(duration, 0.25)) {
             self.collectionView.frame = CGRect(
                 x: 0,
-                y: self.view.frame.height - keyboardH - ZLInputTextViewController.collectionViewHeight,
-                width: self.view.frame.width,
+                y: self.view.zl.height - keyboardH - ZLInputTextViewController.collectionViewHeight,
+                width: self.view.zl.width,
+                height: ZLInputTextViewController.collectionViewHeight
+            )
+        }
+    }
+    
+    @objc private func keyboardWillHide(_ notify: Notification) {
+        let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+        
+        UIView.animate(withDuration: max(duration, 0.25)) {
+            self.collectionView.frame = CGRect(
+                x: 0,
+                y: self.view.zl.height,
+                width: self.view.zl.width,
                 height: ZLInputTextViewController.collectionViewHeight
             )
         }

@@ -176,12 +176,12 @@ class ViewController: UIViewController {
 //            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
         
         /*
-        ZLPhotoConfiguration.default()
-            .cameraConfiguration
-            .allowRecordVideo(false)
-            .allowSwitchCamera(false)
-            .showFlashSwitch(true)
-         */
+         ZLPhotoConfiguration.default()
+             .cameraConfiguration
+             .allowRecordVideo(false)
+             .allowSwitchCamera(false)
+             .showFlashSwitch(true)
+          */
         
         ZLPhotoConfiguration.default()
             // You can first determine whether the asset is allowed to be selected.
