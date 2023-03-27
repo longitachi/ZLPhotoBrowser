@@ -54,7 +54,8 @@ class ZLInputTextViewController: UIViewController {
     }()
     
     private lazy var textView: UITextView = {
-        let textView = UITextView(frame: .zero)
+        let y = max(deviceSafeAreaInsets().top, 20) + 20 + ZLLayout.bottomToolBtnH + 20
+        let textView = UITextView(frame: CGRect(x: 20, y: y, width: view.zl.width - 40, height: 200))
         textView.keyboardAppearance = .dark
         textView.returnKeyType = .done
         textView.delegate = self
@@ -147,19 +148,12 @@ class ZLInputTextViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
-            insets = self.view.safeAreaInsets
-        }
-        
-        let btnY = insets.top + 20
+        let btnY = max(deviceSafeAreaInsets().top, 20) + 20
         let cancelBtnW = localLanguageTextValue(.cancel).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
         cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLLayout.bottomToolBtnH)
         
         let doneBtnW = localLanguageTextValue(.done).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
-        doneBtn.frame = CGRect(x: view.bounds.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
-        
-        textView.frame = CGRect(x: 20, y: cancelBtn.frame.maxY + 20, width: view.bounds.width - 40, height: 150)
+        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
         
         if let index = ZLPhotoConfiguration.default().editImageConfiguration.textStickerTextColors.firstIndex(where: { $0 == self.currentTextColor }) {
             collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
@@ -199,26 +193,38 @@ class ZLInputTextViewController: UIViewController {
         let keyboardH = rect?.height ?? 366
         let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
         
+        let collectionViewFrame = CGRect(
+            x: 0,
+            y: view.zl.height - keyboardH - Self.collectionViewHeight,
+            width: view.zl.width,
+            height: Self.collectionViewHeight
+        )
+        
+        var textViewFrame = textView.frame
+        textViewFrame.size.height = collectionViewFrame.minY - textViewFrame.minY - 20
+        
         UIView.animate(withDuration: max(duration, 0.25)) {
-            self.collectionView.frame = CGRect(
-                x: 0,
-                y: self.view.zl.height - keyboardH - ZLInputTextViewController.collectionViewHeight,
-                width: self.view.zl.width,
-                height: ZLInputTextViewController.collectionViewHeight
-            )
+            self.collectionView.frame = collectionViewFrame
+            self.textView.frame = textViewFrame
         }
     }
     
     @objc private func keyboardWillHide(_ notify: Notification) {
         let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
         
+        let collectionViewFrame = CGRect(
+            x: 0,
+            y: view.zl.height - deviceSafeAreaInsets().bottom - Self.collectionViewHeight,
+            width: view.zl.width,
+            height: Self.collectionViewHeight
+        )
+        
+        var textViewFrame = textView.frame
+        textViewFrame.size.height = collectionViewFrame.minY - textViewFrame.minY - 20
+        
         UIView.animate(withDuration: max(duration, 0.25)) {
-            self.collectionView.frame = CGRect(
-                x: 0,
-                y: self.view.zl.height,
-                width: self.view.zl.width,
-                height: ZLInputTextViewController.collectionViewHeight
-            )
+            self.collectionView.frame = collectionViewFrame
+            self.textView.frame = textViewFrame
         }
     }
 }
