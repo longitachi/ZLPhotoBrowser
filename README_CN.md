@@ -102,6 +102,10 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### <a id="更新日志"></a>更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.0
+  Add:
+    限制GIF图片最大帧数，避免帧数过多造成的crash。同时提供一系列block来支持自定义播放GIF图片;
+    优化图片编辑器中添加文字界面的UI效果;
 ● 4.3.9
   Add:
     支持自定义小图界面的行间距、列间距及列的数量;
@@ -116,15 +120,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   Fix:
     修复合并视频时尺寸错误的bug.
     修复滤镜和调整图片时，redo按钮没有隐藏的bug.
-● 4.3.7
-  Add:
-    修改selectImageBlock回调参数为ZLResultModel, 删除shouldAnialysisAsset参数;
-    图片编辑器界面适配iPad;
-    支持阿拉伯语;
-    涂鸦和马赛克支持反撤销;
-    支持修改图片编辑器中icon的tint color;
-  Fix:
-    修复编辑视频时获取视频版本错误的bug.
 ...
 ```
 

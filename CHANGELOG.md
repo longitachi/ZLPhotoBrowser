@@ -2,6 +2,14 @@
 
 -----
 
+## [4.4.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.0) (2023-03-28)
+
+### Add:
+* Limit the maximum number of frames of GIF images to avoid crashes caused by loading too many frames of GIFs, and provide a series of blocks to support custom implementation of GIF image playback.
+* Modify the UI effect of text input in the image editor.
+
+---
+    
 ## [4.3.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.3.9) (2023-02-17)
 
 ### Add:

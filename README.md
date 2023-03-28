@@ -91,6 +91,10 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### <a id="ChangeLog"></a>Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.0
+  Add:
+    Limit the maximum number of frames of GIF images to avoid crashes caused by loading too many frames of GIFs, and provide a series of blocks to support custom implementation of GIF image playback.
+    Modify the UI effect of text input in the image editor.
 ● 4.3.9
   Add:
     Support for customizing the item spacing, row spacing, and column count of the thumbnail view controller.
@@ -105,15 +109,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Fix:
     Fix the bug of wrong size when merging videos.
     Hide redo button when filtering or color adjusting.
-● 4.3.7
-  Add:
-    Modify the parameter type of selectImageBlock and use ZLResultModel for callback. Delete shouldAnialysisAsset property.
-    Photo editor adapts to iPad.
-    Arabic supported.
-    Support redo in graffiti and mosaic tools.
-    Support for modifying the tint color of the image editor icon.
-  Fix:
-    Fix the bug of getting the wrong version of the video when editing the video.
 ...
 ```
 
