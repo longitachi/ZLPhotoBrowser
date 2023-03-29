@@ -95,6 +95,7 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Add:
     Limit the maximum number of frames of GIF images to avoid crashes caused by loading too many frames of GIFs, and provide a series of blocks to support custom implementation of GIF image playback.
     Modify the UI effect of text input in the image editor.
+    Support set the default camera position.
 ● 4.3.9
   Add:
     Support for customizing the item spacing, row spacing, and column count of the thumbnail view controller.
