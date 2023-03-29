@@ -28,7 +28,6 @@ import UIKit
 import AVFoundation
 
 public class ZLCameraConfiguration: NSObject {
-    
     @objc public enum CaptureSessionPreset: Int {
         var avSessionPreset: AVCaptureSession.Preset {
             switch self {
@@ -103,6 +102,31 @@ public class ZLCameraConfiguration: NSObject {
         case mp4
     }
     
+    @objc public enum DevicePosition: Int {
+        case back
+        case front
+        
+        /// For custom camera
+        var avDevicePosition: AVCaptureDevice.Position {
+            switch self {
+            case .back:
+                return .back
+            case .front:
+                return .front
+            }
+        }
+        
+        /// For system camera
+        var cameraDevice: UIImagePickerController.CameraDevice {
+            switch self {
+            case .back:
+                return .rear
+            case .front:
+                return .front
+            }
+        }
+    }
+    
     private var pri_allowTakePhoto = true
     /// Allow taking photos in the camera (Need allowSelectImage to be true). Defaults to true.
     @objc public var allowTakePhoto: Bool {
@@ -164,6 +188,9 @@ public class ZLCameraConfiguration: NSObject {
     
     /// Video export format for recording video and editing video. Defaults to mov.
     @objc public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
+    
+    /// The default camera position after entering the camera. Defaults to back.
+    @objc public var devicePosition: ZLCameraConfiguration.DevicePosition = .back
 }
 
 // MARK: chaining
@@ -226,6 +253,12 @@ public extension ZLCameraConfiguration {
     @discardableResult
     func videoExportType(_ type: ZLCameraConfiguration.VideoExportType) -> ZLCameraConfiguration {
         videoExportType = type
+        return self
+    }
+    
+    @discardableResult
+    func devicePosition(_ position: ZLCameraConfiguration.DevicePosition) -> ZLCameraConfiguration {
+        devicePosition = position
         return self
     }
 }

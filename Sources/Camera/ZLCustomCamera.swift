@@ -504,15 +504,17 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func setupCamera() {
-        guard let backCamera = getCamera(position: .back) else { return }
-        guard let input = try? AVCaptureDeviceInput(device: backCamera) else { return }
+        let cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
+        
+        guard let camera = getCamera(position: cameraConfig.devicePosition.avDevicePosition) else { return }
+        guard let input = try? AVCaptureDeviceInput(device: camera) else { return }
         
         session.beginConfiguration()
         
         // 相机画面输入流
         videoInput = input
         
-        let preset = ZLPhotoConfiguration.default().cameraConfiguration.sessionPreset.avSessionPreset
+        let preset = cameraConfig.sessionPreset.avSessionPreset
         if session.canSetSessionPreset(preset) {
             session.sessionPreset = preset
         } else {
@@ -543,7 +545,7 @@ open class ZLCustomCamera: UIViewController {
         }
         
         // imageOutPut添加到session之后才能判断supportedFlashModes
-        if !ZLPhotoConfiguration.default().cameraConfiguration.showFlashSwitch || !imageOutput.supportedFlashModes.contains(.on) {
+        if !cameraConfig.showFlashSwitch || !imageOutput.supportedFlashModes.contains(.on) {
             showFlashBtn = false
         }
         

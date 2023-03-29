@@ -178,6 +178,7 @@ class ViewController: UIViewController {
         /*
          ZLPhotoConfiguration.default()
              .cameraConfiguration
+             .devicePosition(.front)
              .allowRecordVideo(false)
              .allowSwitchCamera(false)
              .showFlashSwitch(true)

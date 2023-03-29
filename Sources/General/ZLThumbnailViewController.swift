@@ -770,6 +770,7 @@ class ZLThumbnailViewController: UIViewController {
                 picker.allowsEditing = false
                 picker.videoQuality = .typeHigh
                 picker.sourceType = .camera
+                picker.cameraDevice = config.cameraConfiguration.devicePosition.cameraDevice
                 if config.cameraConfiguration.showFlashSwitch {
                     picker.cameraFlashMode = .auto
                 } else {
