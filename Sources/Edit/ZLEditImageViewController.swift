@@ -383,6 +383,15 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
+        var image = image
+        if image.scale != 1,
+           let cgImage = image.cgImage {
+            image = image.zl.resize_vI(
+                CGSize(width: cgImage.width, height: cgImage.height),
+                scale: 1
+            ) ?? image
+        }
+        
         let editConfig = ZLPhotoConfiguration.default().editImageConfiguration
         
         originalImage = image.zl.fixOrientation()
