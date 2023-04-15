@@ -1003,6 +1003,11 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
             endSortBlock?(arrSelectedModels)
         }
     }
+
+    @available(iOS 11.0, *)
+    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+        isDraging = false
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return arrSelectedModels.count
