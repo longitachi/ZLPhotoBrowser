@@ -1003,6 +1003,11 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
             endSortBlock?(arrSelectedModels)
         }
     }
+
+    @available(iOS 11.0, *)
+    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+        isDraging = false
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return arrSelectedModels.count
@@ -1013,12 +1018,6 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
         
         let m = arrSelectedModels[indexPath.row]
         cell.model = m
-        
-        if m == currentShowModel {
-            cell.layer.borderWidth = 4
-        } else {
-            cell.layer.borderWidth = 0
-        }
         
         return cell
     }
@@ -1035,6 +1034,15 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
             self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
         }
         selectBlock?(m)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let m = arrSelectedModels[indexPath.row]
+        if m == currentShowModel {
+            cell.layer.borderWidth = 4
+        } else {
+            cell.layer.borderWidth = 0
+        }
     }
 }
 
