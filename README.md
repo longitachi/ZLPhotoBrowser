@@ -14,21 +14,20 @@ English | [简体中文](https://github.com/longitachi/ZLPhotoBrowser/blob/maste
 ZLPhotoBrowser is a Wechat-like image picker. Support select normal photos, videos, gif and livePhoto. Support edit image and crop video.
 
 ### Directory
-* [Features](#Features)
-* [Requirements](#Requirements)
-* [Usage](#Usage)
-* [Change Log](#ChangeLog)
-* [Languages](#Languages)
-* [Installation(Support Cocoapods/Carthage/SPM)](#Installation)
-* [Support](#Support)
-* [Demo Effect](#DemoEffect)
+* [Features](#features)
+* [Requirements](#requirements)
+* [Usage](#usage)
+* [Change Log](#change-log)
+* [Languages](#languages)
+* [Installation(Support Cocoapods/Carthage/SPM)](#installation)
+* [Support](#support)
+* [Demo Effect](#demo-effect)
 
 Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/longitachi/ZLPhotoBrowser/wiki).
 
 If you only want to use the image edit feature, please move to [ZLImageEditor](https://github.com/longitachi/ZLImageEditor).
 
-### <a id="Features"></a>Features
-- [x] iOS14 supported.
+### Features
 - [x] Portrait and landscape.
 - [x] Two framework style.
 - [x] Preview selection (Support drag and drop).
@@ -50,12 +49,12 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 
 > If you have good needs and suggestions in use, or encounter any bugs, please create an issue and I will reply in time.
  
-### <a id="Requirements"></a>Requirements
+### Requirements
  * iOS 10.0
  * Swift 5.x
  * Xcode 12.x
  
-### <a id="Usage"></a>Usage
+### Usage
  - Preview selection
  ```swift
  let ps = ZLPhotoPreviewSheet()
@@ -88,7 +87,7 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
  ```
  
  
-### <a id="ChangeLog"></a>Change Log
+### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
 ● 4.4.0
@@ -113,10 +112,10 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ...
 ```
 
-### <a id="Languages"></a>Languages
+### Languages
 🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish, 🇸🇦 Arabic.
 
-### <a id="Installation"></a>Installation
+### Installation
 There are four ways to use ZLPhotoBrowser in your project:
 
   - using CocoaPods
@@ -168,11 +167,11 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.0.9" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
-### <a id="Support"></a> Support
+### Support
 * [**★ Star**](#) this repo.
 * Support with <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/ap.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/wp.png" width = "100" height = "125" /> or <img src="https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/pp.png" width = "150" height = "125" />
 
-### <a id="DemoEffect"></a> Demo Effect
+### Demo Effect
 - Selection
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9.gif)
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/%E7%9B%B8%E5%86%8C%E5%86%85%E9%83%A8%E9%80%89%E6%8B%A9.gif)
