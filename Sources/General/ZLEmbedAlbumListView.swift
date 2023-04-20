@@ -28,7 +28,6 @@ import UIKit
 import Photos
 
 class ZLEmbedAlbumListView: UIView {
-    
     static let rowH: CGFloat = 60
     
     private var selectedAlbum: ZLAlbumListModel
@@ -140,40 +139,17 @@ class ZLEmbedAlbumListView: UIView {
     
     /// 这里不采用监听相册发生变化的方式，是因为每次变化，系统都会回调多次，造成重复获取相册列表
     func show(reloadAlbumList: Bool) {
-        func animateShow() {
-            let toFrame = calculateBgViewBounds()
-            
-            isHidden = false
-            alpha = 0
-            var newFrame = toFrame
-            newFrame.origin.y -= newFrame.height
-            
-            if newFrame != tableBgView.frame {
-                let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: newFrame.width, height: newFrame.height), byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 8, height: 8))
-                tableBgView.layer.mask = nil
-                let maskLayer = CAShapeLayer()
-                maskLayer.path = path.cgPath
-                tableBgView.layer.mask = maskLayer
-            }
-            
-            tableBgView.frame = newFrame
-            tableView.frame = tableBgView.bounds
-            UIView.animate(withDuration: 0.25) {
-                self.alpha = 1
-                self.tableBgView.frame = toFrame
-            }
+        guard reloadAlbumList else {
+            animateShow()
+            return
         }
         
-        if reloadAlbumList {
-            if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
-                self.loadAlbumList {
-                    animateShow()
-                }
-            } else {
-                loadAlbumList()
-                animateShow()
+        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
+            loadAlbumList { [weak self] in
+                self?.animateShow()
             }
         } else {
+            loadAlbumList()
             animateShow()
         }
     }
@@ -191,19 +167,43 @@ class ZLEmbedAlbumListView: UIView {
         }
     }
     
+    private func animateShow() {
+        let toFrame = calculateBgViewBounds()
+        
+        isHidden = false
+        alpha = 0
+        var newFrame = toFrame
+        newFrame.origin.y -= newFrame.height
+        
+        if newFrame != tableBgView.frame {
+            let path = UIBezierPath(
+                roundedRect: CGRect(x: 0, y: 0, width: newFrame.width, height: newFrame.height),
+                byRoundingCorners: [.bottomLeft, .bottomRight],
+                cornerRadii: CGSize(width: 8, height: 8)
+            )
+            tableBgView.layer.mask = nil
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = path.cgPath
+            tableBgView.layer.mask = maskLayer
+        }
+        
+        tableBgView.frame = newFrame
+        tableView.frame = tableBgView.bounds
+        UIView.animate(withDuration: 0.25) {
+            self.alpha = 1
+            self.tableBgView.frame = toFrame
+        }
+    }
 }
 
 extension ZLEmbedAlbumListView: UIGestureRecognizerDelegate {
-    
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let point = gestureRecognizer.location(in: self)
         return !tableBgView.frame.contains(point)
     }
-    
 }
 
 extension ZLEmbedAlbumListView: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrDataSource.count
     }
@@ -225,9 +225,8 @@ extension ZLEmbedAlbumListView: UITableViewDataSource, UITableViewDelegate {
         selectedAlbum = m
         selectAlbumBlock?(m)
         hide()
-        if let inx = tableView.indexPathsForVisibleRows {
-            tableView.reloadRows(at: inx, with: .none)
+        if let indexPaths = tableView.indexPathsForVisibleRows {
+            tableView.reloadRows(at: indexPaths, with: .none)
         }
     }
-    
 }

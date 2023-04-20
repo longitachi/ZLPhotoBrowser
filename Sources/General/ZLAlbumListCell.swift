@@ -43,7 +43,6 @@ class ZLAlbumListCell: UITableViewCell {
         let label = UILabel()
         label.font = .zl.font(ofSize: 17)
         label.textColor = .zl.albumListTitleColor
-        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -59,6 +58,17 @@ class ZLAlbumListCell: UITableViewCell {
     private var model: ZLAlbumListModel!
     
     private var style: ZLPhotoBrowserStyle = .embedAlbumList
+    
+    private var indicator: UIImageView = {
+        var image = UIImage.zl.getImage("zl_ablumList_arrow")
+        if isRTL() {
+            image = image?.imageFlippedForRightToLeftLayoutDirection()
+        }
+        
+        let view = UIImageView(image: image)
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
     
     lazy var selectBtn: UIButton = {
         let btn = UIButton(type: .custom)
@@ -86,6 +96,58 @@ class ZLAlbumListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        let width = contentView.zl.width
+        let height = contentView.zl.height
+        
+        let coverImageW = height - 4
+        let maxTitleW = width - coverImageW - 80
+        
+        var titleW: CGFloat = 0
+        var countW: CGFloat = 0
+        if let model = model {
+            titleW = min(
+                bounds.width / 3 * 2,
+                model.title.zl.boundingRect(
+                    font: .zl.font(ofSize: 17),
+                    limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
+                ).width
+            )
+            titleW = min(titleW, maxTitleW)
+            
+            countW = ("(" + String(model.count) + ")").zl
+                .boundingRect(
+                    font: .zl.font(ofSize: 16),
+                    limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
+                ).width
+        }
+        
+        if isRTL() {
+            let imageViewX: CGFloat
+            if style == .embedAlbumList {
+                imageViewX = width - coverImageW
+            } else {
+                imageViewX = width - coverImageW - 12
+            }
+            
+            coverImageView.frame = CGRect(x: imageViewX, y: 2, width: coverImageW, height: coverImageW)
+            titleLabel.frame = CGRect(
+                x: coverImageView.zl.left - titleW - 10,
+                y: (height - 30) / 2,
+                width: titleW,
+                height: 30
+            )
+            
+            countLabel.frame = CGRect(
+                x: titleLabel.zl.left - countW - 10,
+                y: (height - 30) / 2,
+                width: countW,
+                height: 30
+            )
+            selectBtn.frame = CGRect(x: 20, y: (height - 20) / 2, width: 20, height: 20)
+            indicator.frame = CGRect(x: 20, y: (bounds.height - 15) / 2, width: 15, height: 15)
+            return
+        }
+        
         let imageViewX: CGFloat
         if style == .embedAlbumList {
             imageViewX = 0
@@ -93,35 +155,28 @@ class ZLAlbumListCell: UITableViewCell {
             imageViewX = 12
         }
         
-        coverImageView.frame = CGRect(x: imageViewX, y: 2, width: bounds.height - 4, height: bounds.height - 4)
-        if let m = model {
-            let titleW = min(
-                bounds.width / 3 * 2,
-                m.title.zl.boundingRect(
-                    font: .zl.font(ofSize: 17),
-                    limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
-                ).width
-            )
-            titleLabel.frame = CGRect(x: coverImageView.frame.maxX + 10, y: (bounds.height - 30) / 2, width: titleW, height: 30)
-            
-            let countSize = ("(" + String(model.count) + ")").zl
-                .boundingRect(
-                    font: .zl.font(ofSize: 16),
-                    limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
-                )
-            countLabel.frame = CGRect(x: titleLabel.frame.maxX + 10, y: (bounds.height - 30) / 2, width: countSize.width, height: 30)
-        }
-        selectBtn.frame = CGRect(x: bounds.width - 20 - 20, y: (bounds.height - 20) / 2, width: 20, height: 20)
+        coverImageView.frame = CGRect(x: imageViewX, y: 2, width: coverImageW, height: coverImageW)
+        titleLabel.frame = CGRect(
+            x: coverImageView.zl.right + 10,
+            y: (bounds.height - 30) / 2,
+            width: titleW,
+            height: 30
+        )
+        countLabel.frame = CGRect(x: titleLabel.zl.right + 10, y: (height - 30) / 2, width: countW, height: 30)
+        selectBtn.frame = CGRect(x: width - 20 - 20, y: (height - 20) / 2, width: 20, height: 20)
+        indicator.frame = CGRect(x: width - 20 - 15, y: (height - 15) / 2, width: 15, height: 15)
     }
     
     func setupUI() {
         backgroundColor = .zl.albumListBgColor
         selectionStyle = .none
+        accessoryType = .none
         
         contentView.addSubview(coverImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(countLabel)
         contentView.addSubview(selectBtn)
+        contentView.addSubview(indicator)
     }
     
     func configureCell(model: ZLAlbumListModel, style: ZLPhotoBrowserStyle) {
@@ -132,10 +187,10 @@ class ZLAlbumListCell: UITableViewCell {
         countLabel.text = "(" + String(self.model.count) + ")"
         
         if style == .embedAlbumList {
-            accessoryType = .none
             selectBtn.isHidden = false
+            indicator.isHidden = true
         } else {
-            accessoryType = .disclosureIndicator
+            indicator.isHidden = false
             selectBtn.isHidden = true
         }
         

@@ -68,7 +68,7 @@ class ZLInputTextViewController: UIViewController {
     }()
     
     private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ZLCollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 30, height: 30)
         layout.minimumLineSpacing = 15
         layout.minimumInteritemSpacing = 15

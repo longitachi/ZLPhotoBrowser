@@ -164,6 +164,12 @@ class ViewController: UIViewController {
             .minimumLineSpacing(minLineSpacing)
             .columnCountBlock { Int(ceil($0 / (428.0 / 4))) }
         
+        if ZLPhotoUIConfiguration.default().languageType == .arabic {
+            UIView.appearance().semanticContentAttribute = .forceRightToLeft
+        } else {
+            UIView.appearance().semanticContentAttribute = .unspecified
+        }
+        
         // Custom image editor
         ZLPhotoConfiguration.default()
             .editImageConfiguration

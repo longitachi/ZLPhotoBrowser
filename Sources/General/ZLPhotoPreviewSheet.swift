@@ -44,7 +44,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }()
     
     private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ZLCollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 3
         layout.minimumLineSpacing = 3

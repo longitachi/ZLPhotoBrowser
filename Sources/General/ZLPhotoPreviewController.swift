@@ -39,7 +39,7 @@ class ZLPhotoPreviewController: UIViewController {
     var currentIndex: Int
     
     lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ZLCollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -71,8 +71,14 @@ class ZLPhotoPreviewController: UIViewController {
     
     private lazy var backBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_navBack"), for: .normal)
-        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        var image = UIImage.zl.getImage("zl_navBack")
+        if isRTL() {
+            image = image?.imageFlippedForRightToLeftLayoutDirection()
+            btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -10)
+        } else {
+            btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        }
+        btn.setImage(image, for: .normal)
         btn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
         return btn
     }()
@@ -123,7 +129,11 @@ class ZLPhotoPreviewController: UIViewController {
         btn.setImage(.zl.getImage("zl_btn_original_selected"), for: .selected)
         btn.setImage(.zl.getImage("zl_btn_original_selected"), for: [.selected, .highlighted])
         btn.adjustsImageWhenHighlighted = false
-        btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
+        if isRTL() {
+            btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 5)
+        } else {
+            btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
+        }
         return btn
     }()
     
@@ -212,16 +222,22 @@ class ZLPhotoPreviewController: UIViewController {
         collectionView.frame = CGRect(
             x: -ZLPhotoPreviewController.colItemSpacing / 2,
             y: 0,
-            width: view.frame.width + ZLPhotoPreviewController.colItemSpacing,
-            height: view.frame.height
+            width: view.zl.width + ZLPhotoPreviewController.colItemSpacing,
+            height: view.zl.height
         )
         
         let navH = insets.top + 44
-        navView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: navH)
+        navView.frame = CGRect(x: 0, y: 0, width: view.zl.width, height: navH)
         navBlurView?.frame = navView.bounds
         
-        backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
-        selectBtn.frame = CGRect(x: view.frame.width - 40 - insets.right, y: insets.top + (44 - 25) / 2, width: 25, height: 25)
+        if isRTL() {
+            backBtn.frame = CGRect(x: view.zl.width - insets.right - 60, y: insets.top, width: 60, height: 44)
+            selectBtn.frame = CGRect(x: insets.left + 15, y: insets.top + (44 - 25) / 2, width: 25, height: 25)
+        } else {
+            backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
+            selectBtn.frame = CGRect(x: view.zl.width - 40 - insets.right, y: insets.top + (44 - 25) / 2, width: 25, height: 25)
+        }
+        
         indexLabel.frame = selectBtn.bounds
         
         refreshBottomViewFrame()
@@ -233,7 +249,7 @@ class ZLPhotoPreviewController: UIViewController {
             collectionView.performBatchUpdates(nil) { _ in
                 self.collectionView.setContentOffset(
                     CGPoint(
-                        x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged),
+                        x: (self.view.zl.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged),
                         y: 0
                     ),
                     animated: false
@@ -260,14 +276,16 @@ class ZLPhotoPreviewController: UIViewController {
             insets = view.safeAreaInsets
         }
         var bottomViewH = ZLLayout.bottomToolViewH
+        
         var showSelPhotoPreview = false
-        if ZLPhotoConfiguration.default().showSelectedPhotoPreview, let nav = navigationController as? ZLImageNavController {
-            if !nav.arrSelectedModels.isEmpty {
-                showSelPhotoPreview = true
-                bottomViewH += ZLPhotoPreviewController.selPhotoPreviewH
-                selPhotoPreview?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: ZLPhotoPreviewController.selPhotoPreviewH)
-            }
+        if ZLPhotoConfiguration.default().showSelectedPhotoPreview,
+           let nav = navigationController as? ZLImageNavController,
+           !nav.arrSelectedModels.isEmpty {
+            showSelPhotoPreview = true
+            bottomViewH += ZLPhotoPreviewController.selPhotoPreviewH
+            selPhotoPreview?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: ZLPhotoPreviewController.selPhotoPreviewH)
         }
+        
         let btnH = ZLLayout.bottomToolBtnH
         
         bottomView.frame = CGRect(x: 0, y: view.frame.height - insets.bottom - bottomViewH, width: view.frame.width, height: bottomViewH + insets.bottom)
@@ -733,7 +751,7 @@ extension ZLPhotoPreviewController {
         selPhotoPreview?.currentShowModelChanged(model: arrDataSources[currentIndex])
     }
     
-    func scrollViewDidEndDecelerating(_: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         indexBeforOrientationChanged = currentIndex
         let cell = collectionView.cellForItem(at: IndexPath(row: currentIndex, section: 0))
         if let cell = cell as? ZLGifPreviewCell {
@@ -821,7 +839,7 @@ extension ZLPhotoPreviewController: UICollectionViewDataSource, UICollectionView
 
 class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ZLCollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 60, height: 60)
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10

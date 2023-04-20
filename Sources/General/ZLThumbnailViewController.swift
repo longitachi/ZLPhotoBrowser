@@ -81,7 +81,11 @@ class ZLThumbnailViewController: UIViewController {
         btn.setImage(.zl.getImage("zl_btn_original_selected"), for: .selected)
         btn.setImage(.zl.getImage("zl_btn_original_selected"), for: [.selected, .highlighted])
         btn.adjustsImageWhenHighlighted = false
-        btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
+        if isRTL() {
+            btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 5)
+        } else {
+            btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
+        }
         btn.isHidden = !(ZLPhotoConfiguration.default().allowSelectOriginal && ZLPhotoConfiguration.default().allowSelectImage)
         btn.isSelected = (navigationController as? ZLImageNavController)?.isSelectedOriginal ?? false
         return btn
@@ -161,7 +165,7 @@ class ZLThumbnailViewController: UIViewController {
     }()
     
     lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ZLCollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 3, left: 0, bottom: 3, right: 0)
         
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -1504,8 +1508,17 @@ class ZLExternalAlbumListNavView: UIView {
     
     lazy var backBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_navBack"), for: .normal)
-        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        
+        var image = UIImage.zl.getImage("zl_navBack")
+        if isRTL() {
+            image = image?.imageFlippedForRightToLeftLayoutDirection()
+            btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -10)
+        } else {
+            btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+        }
+        
+        btn.setImage(image, for: .normal)
+        
         btn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
         return btn
     }()
@@ -1535,15 +1548,24 @@ class ZLExternalAlbumListNavView: UIView {
         
         navBlurView?.frame = bounds
         
-        backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
         let albumTitleW = min(bounds.width / 2, title.zl.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width)
         albumTitleLabel.frame = CGRect(x: (bounds.width - albumTitleW) / 2, y: insets.top, width: albumTitleW, height: 44)
         
+        var cancelBtnW: CGFloat = 44
         if ZLPhotoUIConfiguration.default().navCancelButtonStyle == .text {
-            let cancelBtnW = localLanguageTextValue(.cancel).zl.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width + 40
-            cancelBtn.frame = CGRect(x: bounds.width - insets.right - cancelBtnW, y: insets.top, width: cancelBtnW, height: 44)
+            cancelBtnW = localLanguageTextValue(.cancel)
+                .zl.boundingRect(
+                    font: ZLLayout.navTitleFont,
+                    limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)
+                ).width + 20
+        }
+        
+        if isRTL() {
+            backBtn.frame = CGRect(x: bounds.width - insets.right - 60, y: insets.top, width: 60, height: 44)
+            cancelBtn.frame = CGRect(x: insets.left + 10, y: insets.top, width: cancelBtnW, height: 44)
         } else {
-            cancelBtn.frame = CGRect(x: bounds.width - insets.right - 44 - 10, y: insets.top, width: 44, height: 44)
+            backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
+            cancelBtn.frame = CGRect(x: bounds.width - insets.right - cancelBtnW - 10, y: insets.top, width: cancelBtnW, height: 44)
         }
     }
     

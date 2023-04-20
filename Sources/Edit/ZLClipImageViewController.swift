@@ -158,7 +158,7 @@ class ZLClipImageViewController: UIViewController {
     }()
     
     private lazy var clipRatioColView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ZLCollectionViewFlowLayout()
         layout.itemSize = ZLClipImageViewController.clipRatioItemSize
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)

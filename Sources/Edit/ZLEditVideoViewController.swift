@@ -64,7 +64,7 @@ public class ZLEditVideoViewController: UIViewController {
     }()
     
     private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ZLCollectionViewFlowLayout()
         layout.itemSize = ZLEditVideoViewController.frameImageSize
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -402,11 +402,27 @@ public class ZLEditVideoViewController: UIViewController {
         RunLoop.main.add(timer!, forMode: .common)
         
         indicator.isHidden = false
-        indicator.frame = CGRect(x: leftSideView.frame.minX, y: leftSideView.frame.minY, width: 2, height: leftSideView.frame.height)
-        indicator.layer.removeAllAnimations()
         
+        
+        let indicatorW: CGFloat = 2
+        let indicatorH = leftSideView.zl.height
+        let indicatorY = leftSideView.zl.top
+        var indicatorFromX = leftSideView.zl.left
+        var indicatorToX = rightSideView.zl.right - indicatorW
+        
+        if isRTL() {
+            swap(&indicatorFromX, &indicatorToX)
+        }
+        
+        let fromFrame = CGRect(x: indicatorFromX, y: indicatorY, width: indicatorW, height: indicatorH)
+        indicator.frame = fromFrame
+        
+        var toFrame = fromFrame
+        toFrame.origin.x = indicatorToX
+        
+        indicator.layer.removeAllAnimations()
         UIView.animate(withDuration: duration, delay: 0, options: [.allowUserInteraction, .curveLinear, .repeat], animations: {
-            self.indicator.frame = CGRect(x: self.rightSideView.frame.maxX - 2, y: self.rightSideView.frame.minY, width: 2, height: self.rightSideView.frame.height)
+            self.indicator.frame = toFrame
         }, completion: nil)
     }
     

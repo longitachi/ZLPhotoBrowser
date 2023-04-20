@@ -145,7 +145,7 @@ open class ZLEditImageViewController: UIViewController {
     private var selectedAdjustTool: ZLEditImageConfiguration.AdjustTool?
     
     private lazy var editToolCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ZLCollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 30, height: 30)
         layout.minimumLineSpacing = 20
         layout.minimumInteritemSpacing = 20
@@ -244,7 +244,11 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public lazy var cancelBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_retake"), for: .normal)
+        var image = UIImage.zl.getImage("zl_retake")
+        if isRTL() {
+            image = image?.imageFlippedForRightToLeftLayoutDirection()
+        }
+        btn.setImage(image, for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
@@ -474,7 +478,11 @@ open class ZLEditImageViewController: UIViewController {
         
         topShadowView.frame = CGRect(x: 0, y: 0, width: view.zl.width, height: 150)
         topShadowLayer.frame = topShadowView.bounds
-        cancelBtn.frame = CGRect(x: 20, y: 60, width: 28, height: 28)
+        if isRTL() {
+            cancelBtn.frame = CGRect(x: view.zl.width - 20 - 28, y: 60, width: 28, height: 28)
+        } else {
+            cancelBtn.frame = CGRect(x: 20, y: 60, width: 28, height: 28)
+        }
         
         bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 140 - insets.bottom, width: view.zl.width, height: 140 + insets.bottom)
         bottomShadowLayer.frame = bottomShadowView.bounds
@@ -646,7 +654,7 @@ open class ZLEditImageViewController: UIViewController {
         bottomShadowView.addSubview(doneBtn)
         
         if tools.contains(.draw) {
-            let drawColorLayout = UICollectionViewFlowLayout()
+            let drawColorLayout = ZLCollectionViewFlowLayout()
             let drawColorItemWidth: CGFloat = 30
             drawColorLayout.itemSize = CGSize(width: drawColorItemWidth, height: drawColorItemWidth)
             drawColorLayout.minimumLineSpacing = 15
@@ -675,7 +683,7 @@ open class ZLEditImageViewController: UIViewController {
                 filterImages[currentFilter.name] = image
             }
             
-            let filterLayout = UICollectionViewFlowLayout()
+            let filterLayout = ZLCollectionViewFlowLayout()
             filterLayout.itemSize = CGSize(width: filterColViewH - 20, height: filterColViewH)
             filterLayout.minimumLineSpacing = 15
             filterLayout.minimumInteritemSpacing = 15
@@ -696,7 +704,7 @@ open class ZLEditImageViewController: UIViewController {
         if tools.contains(.adjust) {
             editImage = editImage.zl.adjust(brightness: brightness, contrast: contrast, saturation: saturation) ?? editImage
             
-            let adjustLayout = UICollectionViewFlowLayout()
+            let adjustLayout = ZLCollectionViewFlowLayout()
             adjustLayout.itemSize = CGSize(width: adjustColViewH, height: adjustColViewH)
             adjustLayout.minimumLineSpacing = 10
             adjustLayout.minimumInteritemSpacing = 10
