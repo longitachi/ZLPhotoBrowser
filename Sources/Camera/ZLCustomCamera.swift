@@ -399,7 +399,7 @@ open class ZLCustomCamera: UIViewController {
                 font: .zl.font(ofSize: 14),
                 limitSize: CGSize(width: view.bounds.width - 20, height: .greatestFiniteMagnitude)
             )
-            .height + 20
+            .height + 30
         tipsLabel.frame = CGRect(x: 10, y: bottomView.frame.minY - tipsTextHeight, width: view.bounds.width - 20, height: tipsTextHeight)
         
         let doneBtnW = localLanguageTextValue(.done).zl
@@ -457,6 +457,13 @@ open class ZLCustomCamera: UIViewController {
         view.addSubview(retakeBtn)
         view.addSubview(doneBtn)
         
+        // 预览layer
+        previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        previewLayer?.videoGravity = .resizeAspectFill
+        previewLayer?.opacity = 0
+        view.layer.masksToBounds = true
+        view.layer.insertSublayer(previewLayer!, at: 0)
+        
         view.addGestureRecognizer(focusCursorTapGes)
         
         let pinchGes = UIPinchGestureRecognizer(target: self, action: #selector(pinchToAdjustCameraFocus(_:)))
@@ -504,62 +511,56 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func setupCamera() {
-        let cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
-        
-        guard let camera = getCamera(position: cameraConfig.devicePosition.avDevicePosition) else { return }
-        guard let input = try? AVCaptureDeviceInput(device: camera) else { return }
-        
-        session.beginConfiguration()
-        
-        // 相机画面输入流
-        videoInput = input
-        
-        let preset = cameraConfig.sessionPreset.avSessionPreset
-        if session.canSetSessionPreset(preset) {
-            session.sessionPreset = preset
-        } else {
-            session.sessionPreset = .photo
-        }
-        
-        let movieFileOutput = AVCaptureMovieFileOutput()
-        // 解决视频录制超过10s没有声音的bug
-        movieFileOutput.movieFragmentInterval = .invalid
-        self.movieFileOutput = movieFileOutput
-        
-        // 添加视频输入
-        if let videoInput = videoInput, session.canAddInput(videoInput) {
-            session.addInput(videoInput)
-        }
-        // 添加音频输入
-        addAudioInput()
-        
-        // 照片输出流
-        let imageOutput = AVCapturePhotoOutput()
-        self.imageOutput = imageOutput
-        // 将输出流添加到session
-        if session.canAddOutput(imageOutput) {
-            session.addOutput(imageOutput)
-        }
-        if session.canAddOutput(movieFileOutput) {
-            session.addOutput(movieFileOutput)
-        }
-        
-        // imageOutPut添加到session之后才能判断supportedFlashModes
-        if !cameraConfig.showFlashSwitch || !imageOutput.supportedFlashModes.contains(.on) {
-            showFlashBtn = false
-        }
-        
-        session.commitConfiguration()
-        // 预览layer
-        previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer?.videoGravity = .resizeAspectFill
-        previewLayer?.opacity = 0
-        view.layer.masksToBounds = true
-        view.layer.insertSublayer(previewLayer!, at: 0)
-        
-        cameraConfigureFinish = true
-        
         sessionQueue.async {
+            let cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
+            
+            guard let camera = self.getCamera(position: cameraConfig.devicePosition.avDevicePosition) else { return }
+            guard let input = try? AVCaptureDeviceInput(device: camera) else { return }
+            
+            self.session.beginConfiguration()
+            
+            // 相机画面输入流
+            self.videoInput = input
+            
+            let preset = cameraConfig.sessionPreset.avSessionPreset
+            if self.session.canSetSessionPreset(preset) {
+                self.session.sessionPreset = preset
+            } else {
+                self.session.sessionPreset = .photo
+            }
+            
+            let movieFileOutput = AVCaptureMovieFileOutput()
+            // 解决视频录制超过10s没有声音的bug
+            movieFileOutput.movieFragmentInterval = .invalid
+            self.movieFileOutput = movieFileOutput
+            
+            // 添加视频输入
+            if let videoInput = self.videoInput, self.session.canAddInput(videoInput) {
+                self.session.addInput(videoInput)
+            }
+            // 添加音频输入
+            self.addAudioInput()
+            
+            // 照片输出流
+            let imageOutput = AVCapturePhotoOutput()
+            self.imageOutput = imageOutput
+            // 将输出流添加到session
+            if self.session.canAddOutput(imageOutput) {
+                self.session.addOutput(imageOutput)
+            }
+            if self.session.canAddOutput(movieFileOutput) {
+                self.session.addOutput(movieFileOutput)
+            }
+            
+            // imageOutPut添加到session之后才能判断supportedFlashModes
+            if !cameraConfig.showFlashSwitch || !imageOutput.supportedFlashModes.contains(.on) {
+                self.showFlashBtn = false
+            }
+            
+            self.session.commitConfiguration()
+            
+            self.cameraConfigureFinish = true
+            
             self.session.startRunning()
         }
     }
@@ -867,7 +868,7 @@ open class ZLCustomCamera: UIViewController {
     // 长按录像
     @objc private func longPressAction(_ longGes: UILongPressGestureRecognizer) {
         if longGes.state == .began {
-            guard ZLPhotoManager.hasCameraAuthority(), ZLPhotoManager.hasMicrophoneAuthority() else {
+            guard ZLPhotoManager.hasCameraAuthority() else {
                 return
             }
             startRecord()

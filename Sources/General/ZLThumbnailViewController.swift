@@ -1116,6 +1116,11 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         if !config.sortAscending {
             index -= offset
         }
+        
+        guard arrDataSources.indices ~= index else {
+            return
+        }
+        
         let m = arrDataSources[index]
         if shouldDirectEdit(m) {
             return

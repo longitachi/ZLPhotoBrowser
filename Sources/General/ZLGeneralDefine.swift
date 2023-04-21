@@ -111,21 +111,7 @@ func isSmallScreen() -> Bool {
 }
 
 func isRTL() -> Bool {
-    let type = ZLCustomLanguageDeploy.language
-    
-    if type == .system {
-        return type.key == ZLLanguageType.arabic.key
-    }
-    
-    guard type == .arabic else {
-        return false
-    }
-    
-    if UIView.appearance().semanticContentAttribute == .forceRightToLeft {
-        return true
-    }
-    
-    return false
+    return UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
 }
 
 func showAlertView(_ message: String, _ sender: UIViewController?) {
