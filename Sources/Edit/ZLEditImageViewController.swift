@@ -333,7 +333,7 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
+        deviceIsiPhone() ? .portrait : .all
     }
     
     deinit {
