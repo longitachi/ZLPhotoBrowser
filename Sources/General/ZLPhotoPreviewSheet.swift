@@ -580,7 +580,7 @@ public class ZLPhotoPreviewSheet: UIView {
             }
         }
         
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD.show(timeout: ZLPhotoConfiguration.default().timeout)
         
         var timeout = false
         hud.timeoutBlock = { [weak self] in
@@ -588,8 +588,6 @@ public class ZLPhotoPreviewSheet: UIView {
             showAlertView(localLanguageTextValue(.timeout), viewController ?? self?.sender)
             self?.fetchImageQueue.cancelAllOperations()
         }
-        
-        hud.show(timeout: ZLPhotoConfiguration.default().timeout)
         
         let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
         
@@ -698,8 +696,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func showEditImageVC(model: ZLPhotoModel) {
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
-        hud.show()
+        let hud = ZLProgressHUD.show()
         
         ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
             if !isDegraded {
@@ -720,11 +717,9 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func showEditVideoVC(model: ZLPhotoModel) {
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
-        
         var requestAvAssetID: PHImageRequestID?
         
-        hud.show(timeout: ZLPhotoConfiguration.default().timeout)
+        let hud = ZLProgressHUD.show(timeout: ZLPhotoConfiguration.default().timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self?.sender)
             if let requestAvAssetID = requestAvAssetID {
@@ -791,9 +786,8 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func save(image: UIImage?, videoUrl: URL?) {
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         if let image = image {
-            hud.show()
+            let hud = ZLProgressHUD.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 hud.hide()
                 if suc, let at = asset {
@@ -804,7 +798,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 }
             }
         } else if let videoUrl = videoUrl {
-            hud.show()
+            let hud = ZLProgressHUD.show()
             ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
                 hud.hide()
                 if suc, let at = asset {
@@ -944,14 +938,17 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             return
         }
         let config = ZLPhotoConfiguration.default()
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
-        hud.show()
+        let hud = ZLProgressHUD.show()
         
         ZLPhotoManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { [weak self] cameraRoll in
-            guard let `self` = self else {
+            defer {
                 hud.hide()
+            }
+            
+            guard let `self` = self else {
                 return
             }
+            
             var totalPhotos = ZLPhotoManager.fetchPhoto(in: cameraRoll.result, ascending: config.sortAscending, allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo)
             markSelected(source: &totalPhotos, selected: &self.arrSelectedModels)
             let defaultIndex = config.sortAscending ? totalPhotos.count - 1 : 0
@@ -962,7 +959,6 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             } else {
                 index = totalPhotos.firstIndex { $0 == model }
             }
-            hud.hide()
             
             self.showPreviewController(totalPhotos, index: index ?? defaultIndex)
         }

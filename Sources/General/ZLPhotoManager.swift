@@ -28,7 +28,6 @@ import UIKit
 import Photos
 
 public class ZLPhotoManager: NSObject {
-    
     /// Save image to album.
     @objc public class func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()
@@ -165,21 +164,26 @@ public class ZLPhotoManager: NSObject {
     
     /// Fetch camera roll album.
     @objc public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, completion: @escaping (ZLAlbumListModel) -> Void) {
-        let option = PHFetchOptions()
-        if !allowSelectImage {
-            option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
-        }
-        if !allowSelectVideo {
-            option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
-        }
-        
-        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
-        smartAlbums.enumerateObjects { collection, _, stop in
-            if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
-                let result = PHAsset.fetchAssets(in: collection, options: option)
-                let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
-                completion(albumModel)
-                stop.pointee = true
+        DispatchQueue.global().async {
+            let option = PHFetchOptions()
+            if !allowSelectImage {
+                option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
+            }
+            if !allowSelectVideo {
+                option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+            }
+            
+            let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+            smartAlbums.enumerateObjects { collection, _, stop in
+                if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
+                    stop.pointee = true
+                    
+                    let result = PHAsset.fetchAssets(in: collection, options: option)
+                    let albumModel = ZLAlbumListModel(title: self.getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
+                    ZLMainAsync {
+                        completion(albumModel)
+                    }
+                }
             }
         }
     }
@@ -435,5 +439,4 @@ public extension ZLPhotoManager {
         }
         return true
     }
-    
 }

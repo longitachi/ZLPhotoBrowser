@@ -245,7 +245,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     private func fetchSmallImage() {
         let size: CGSize
-        let maxSideLength = bounds.width * 1.2
+        let maxSideLength = bounds.width * 2
         if model.whRatio > 1 {
             let w = maxSideLength * model.whRatio
             size = CGSize(width: w, height: maxSideLength)

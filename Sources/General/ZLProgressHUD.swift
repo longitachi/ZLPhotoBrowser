@@ -169,3 +169,11 @@ public class ZLProgressHUD: UIView {
         timer = nil
     }
 }
+
+extension ZLProgressHUD {
+    class func show(timeout: TimeInterval = 100) -> ZLProgressHUD {
+        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
+        hud.show(timeout: timeout)
+        return hud
+    }
+}

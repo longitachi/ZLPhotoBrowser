@@ -28,7 +28,6 @@ import UIKit
 import Photos
 
 extension ZLThumbnailViewController {
-    
     private enum SlideSelectType {
         case none
         case select
@@ -40,11 +39,9 @@ extension ZLThumbnailViewController {
         case top
         case bottom
     }
-    
 }
 
 class ZLThumbnailViewController: UIViewController {
-    
     private var albumList: ZLAlbumListModel
     
     private var externalNavView: ZLExternalAlbumListNavView?
@@ -186,7 +183,7 @@ class ZLThumbnailViewController: UIViewController {
     var arrDataSources: [ZLPhotoModel] = []
     
     var showCameraCell: Bool {
-        if ZLPhotoConfiguration.default().allowTakePhotoInLibrary, self.albumList.isCameraRoll {
+        if ZLPhotoConfiguration.default().allowTakePhotoInLibrary, albumList.isCameraRoll {
             return true
         }
         return false
@@ -444,8 +441,7 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         if albumList.models.isEmpty {
-            let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
-            hud.show()
+            let hud = ZLProgressHUD.show()
             DispatchQueue.global().async {
                 self.albumList.refetchPhotos()
                 ZLMainAsync {
@@ -636,7 +632,7 @@ class ZLThumbnailViewController: UIViewController {
                 }
             }
         } else if pan.state == .ended || pan.state == .cancelled {
-            cleanTimer()
+            stopAutoScroll()
             panSelectType = .none
             arrSlideIndexPaths.removeAll()
             dicOriSelectStatus.removeAll()
@@ -651,7 +647,7 @@ class ZLThumbnailViewController: UIViewController {
         let arrSel = (navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
         guard arrSel.count < ZLPhotoConfiguration.default().maxSelectCount else {
             // Stop auto scroll when reach the max select count.
-            cleanTimer()
+            stopAutoScroll()
             return
         }
         
@@ -669,8 +665,7 @@ class ZLThumbnailViewController: UIViewController {
             diff = point.y - bottom
             direction = .bottom
         } else {
-            autoScrollInfo = (.none, 0)
-            cleanTimer()
+            stopAutoScroll()
             return
         }
         
@@ -693,8 +688,16 @@ class ZLThumbnailViewController: UIViewController {
         autoScrollTimer = nil
     }
     
+    private func stopAutoScroll() {
+        autoScrollInfo = (.none, 0)
+        cleanTimer()
+    }
+    
     @objc private func autoScrollAction() {
-        guard autoScrollInfo.direction != .none else { return }
+        guard autoScrollInfo.direction != .none, panGes.state != .possible else {
+            stopAutoScroll()
+            return
+        }
         let duration = CGFloat(autoScrollTimer?.duration ?? 1 / 60)
         if CACurrentMediaTime() - lastPanUpdateTime > 0.2 {
             // Finger may be not moved in slide selection mode
@@ -718,11 +721,10 @@ class ZLThumbnailViewController: UIViewController {
         }
         var doneTitle = localLanguageTextValue(.done)
         if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn,
-           nav.arrSelectedModels.count > 0
-        {
+           !nav.arrSelectedModels.isEmpty {
             doneTitle += "(" + String(nav.arrSelectedModels.count) + ")"
         }
-        if nav.arrSelectedModels.count > 0 {
+        if !nav.arrSelectedModels.isEmpty {
             previewBtn.isEnabled = true
             doneBtn.isEnabled = true
             doneBtn.setTitle(doneTitle, for: .normal)
@@ -750,7 +752,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     private func scrollToBottom() {
-        guard ZLPhotoConfiguration.default().sortAscending, arrDataSources.count > 0 else {
+        guard ZLPhotoConfiguration.default().sortAscending, !arrDataSources.isEmpty else {
             return
         }
         let index = arrDataSources.count - 1 + offset
@@ -797,9 +799,8 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     private func save(image: UIImage?, videoUrl: URL?) {
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         if let image = image {
-            hud.show()
+            let hud = ZLProgressHUD.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 hud.hide()
                 if suc, let at = asset {
@@ -810,7 +811,7 @@ class ZLThumbnailViewController: UIViewController {
                 }
             }
         } else if let videoUrl = videoUrl {
-            hud.show()
+            let hud = ZLProgressHUD.show()
             ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
                 hud.hide()
                 if suc, let at = asset {
@@ -873,35 +874,34 @@ class ZLThumbnailViewController: UIViewController {
             return
         }
         
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
-        hud.show()
+        let hud = ZLProgressHUD.show()
         
-        hud.show()
         ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self, weak nav] image, isDegraded in
-            if !isDegraded {
-                if let image = image {
-                    ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: model.editImageModel) { [weak nav] ei, editImageModel in
-                        model.isSelected = true
-                        model.editImage = ei
-                        model.editImageModel = editImageModel
-                        nav?.arrSelectedModels.append(model)
-                        self?.doneBtnClick()
-                    }
-                } else {
-                    showAlertView(localLanguageTextValue(.imageLoadFailed), self)
-                }
-                hud.hide()
+            guard !isDegraded else {
+                return
             }
+            
+            if let image = image {
+                ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: model.editImageModel) { [weak nav] ei, editImageModel in
+                    model.isSelected = true
+                    model.editImage = ei
+                    model.editImageModel = editImageModel
+                    nav?.arrSelectedModels.append(model)
+                    self?.doneBtnClick()
+                }
+            } else {
+                showAlertView(localLanguageTextValue(.imageLoadFailed), self)
+            }
+            
+            hud.hide()
         }
     }
     
     private func showEditVideoVC(model: ZLPhotoModel) {
         let nav = navigationController as? ZLImageNavController
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         
         var requestAvAssetID: PHImageRequestID?
-        
-        hud.show(timeout: ZLPhotoConfiguration.default().timeout)
+        let hud = ZLProgressHUD.show(timeout: ZLPhotoConfiguration.default().timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self)
             if let requestAvAssetID = requestAvAssetID {
@@ -947,21 +947,26 @@ class ZLThumbnailViewController: UIViewController {
 // MARK: Gesture delegate
 
 extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
-    
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let config = ZLPhotoConfiguration.default()
         if (config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect) || embedAlbumListView?.isHidden == false {
             return false
         }
+        
+        let point = gestureRecognizer.location(in: view)
+        let navFrame = (embedNavView ?? externalNavView)?.frame ?? .zero
+        if navFrame.contains(point) ||
+           bottomView.frame.contains(point) {
+            return false
+        }
+        
         return true
     }
-    
 }
 
 // MARK: CollectionView Delegate & DataSource
 
 extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return ZLPhotoUIConfiguration.default().minimumInteritemSpacing
     }
@@ -1267,7 +1272,6 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
 }
 
 extension ZLThumbnailViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         picker.dismiss(animated: true) {
             let image = info[.originalImage] as? UIImage
@@ -1275,11 +1279,9 @@ extension ZLThumbnailViewController: UIImagePickerControllerDelegate, UINavigati
             self.save(image: image, videoUrl: url)
         }
     }
-    
 }
 
 extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
-    
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let changes = changeInstance.changeDetails(for: albumList.result) else {
             return
@@ -1318,13 +1320,11 @@ extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
             self.resetBottomToolBtnStatus()
         }
     }
-    
 }
 
 // MARK: embed album list nav view
 
 class ZLEmbedAlbumListNavView: UIView {
-    
     private static let titleViewH: CGFloat = 32
     
     private static let arrowH: CGFloat = 20
@@ -1478,13 +1478,11 @@ class ZLEmbedAlbumListNavView: UIView {
             self.arrow.transform = .identity
         }
     }
-    
 }
 
 // MARK: external album list nav view
 
 class ZLExternalAlbumListNavView: UIView {
-    
     private let title: String
     
     private var navBlurView: UIVisualEffectView?
@@ -1594,11 +1592,9 @@ class ZLExternalAlbumListNavView: UIView {
     @objc private func cancelBtnClick() {
         cancelBlock?()
     }
-    
 }
 
 class ZLLimitedAuthorityTipsView: UIView {
-    
     static let height: CGFloat = 70
     
     private lazy var icon = UIImageView(image: .zl.getImage("zl_warning"))
@@ -1649,5 +1645,4 @@ class ZLLimitedAuthorityTipsView: UIView {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
-    
 }

@@ -564,8 +564,7 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
                 return
             }
             
-            let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
-            hud.show()
+            let hud = ZLProgressHUD.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, _ in
                 hud.hide()
                 if !suc {
