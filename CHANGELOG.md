@@ -2,6 +2,18 @@
 
 -----
 
+## [4.4.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.1) (2023-04-25)
+
+### Add:
+* Adapt to RTL.
+
+### Fix:
+* Fix the problem that the image editor does not work properly when the scale of the picture is not 1.
+* Fixed some UI display issue in the image preview interface. [#812](https://github.com/longitachi/ZLPhotoBrowser/pull/812)
+
+---
+
+    
 ## [4.4.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.0) (2023-03-28)
 
 ### Add:

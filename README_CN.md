@@ -1,9 +1,10 @@
-[![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](https://cocoapods.org/pods/ZLPhotoBrowser)
+[![Version](https://img.shields.io/github/v/tag/longitachi/ZLPhotoBrowser.svg?color=blue&include_prereleases=&sort=semver)](https://cocoapods.org/pods/ZLPhotoBrowser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![SPM supported](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
-[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki)
+[![License](https://img.shields.io/badge/license-MIT-black)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
+[![Platform](https://img.shields.io/badge/Platforms-iOS-blue?style=flat)](https://img.shields.io/badge/Platforms-iOS-blue?style=flat)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
+[![Usage](https://img.shields.io/badge/Usage-Doc-yarn?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki/How-to-use-(Swift))
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
@@ -101,6 +102,12 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.1
+  Add:
+    支持从阿拉伯语言下的RTL布局.
+  Fix:
+    修复图片编辑器中传入scale不为1的图片时，UI显示错误的问题.
+    修复图片预览界面的一些UI显示问题.
 ● 4.4.0
   Add:
     限制GIF图片最大帧数，避免帧数过多造成的crash。同时提供一系列block来支持自定义播放GIF图片;
@@ -113,13 +120,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     更新相机界面UI样式;
     支持拍照后直接回调;
     贴纸增加最大放大比例;
-● 4.3.8
-  Add:
-    支持当最大选择数为1时，点击小图后直接选择完成.
-    调整图片滑动条添加横滑样式.
-  Fix:
-    修复合并视频时尺寸错误的bug.
-    修复滤镜和调整图片时，redo按钮没有隐藏的bug.
 ...
 ```
 

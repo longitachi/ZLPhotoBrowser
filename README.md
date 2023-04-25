@@ -1,9 +1,10 @@
-[![Version](https://img.shields.io/cocoapods/v/ZLPhotoBrowser.svg?style=flat)](https://cocoapods.org/pods/ZLPhotoBrowser)
+[![Version](https://img.shields.io/github/v/tag/longitachi/ZLPhotoBrowser.svg?color=blue&include_prereleases=&sort=semver)](https://cocoapods.org/pods/ZLPhotoBrowser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![SPM supported](https://img.shields.io/badge/SwiftPM-supported-E57141.svg)](https://swift.org/package-manager/)
-[![License](https://img.shields.io/cocoapods/l/ZLPhotoBrowser.svg?style=flat)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
-[![Platform](https://img.shields.io/cocoapods/p/ZLPhotoBrowser.svg?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki)
+[![License](https://img.shields.io/badge/license-MIT-black)](https://raw.githubusercontent.com/longitachi/ZLPhotoBrowser/master/LICENSE)
+[![Platform](https://img.shields.io/badge/Platforms-iOS-blue?style=flat)](https://img.shields.io/badge/Platforms-iOS-blue?style=flat)
 ![Language](https://img.shields.io/badge/Language-%20Swift%20-E57141.svg)
+[![Usage](https://img.shields.io/badge/Usage-Doc-yarn?style=flat)](https://github.com/longitachi/ZLPhotoBrowser/wiki/How-to-use-(Swift))
 
 ![image](https://github.com/longitachi/ImageFolder/blob/master/ZLPhotoBrowser/preview_with_title.png)
 
@@ -90,6 +91,12 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.1
+  Add:
+    Adapt to RTL.
+  Fix:
+    Fix the problem that the image editor does not work properly when the scale of the picture is not 1.
+    Fixed some UI display issue in the image preview interface.
 ● 4.4.0
   Add:
     Limit the maximum number of frames of GIF images to avoid crashes caused by loading too many frames of GIFs, and provide a series of blocks to support custom implementation of GIF image playback.
@@ -102,13 +109,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Update the UI style of camera interface.
     Support callback directly after taking picture.
     Increase the maximum zoom ratio of stickers.
-● 4.3.8
-  Add:
-    Support direct callback after selecting thumbnail.
-    Add horizontal adjust slider.
-  Fix:
-    Fix the bug of wrong size when merging videos.
-    Hide redo button when filtering or color adjusting.
 ...
 ```
 
