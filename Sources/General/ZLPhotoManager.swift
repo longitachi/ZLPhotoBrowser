@@ -287,6 +287,9 @@ public class ZLPhotoManager: NSObject {
     /// Fetch image for asset.
     private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
+        if ZLPhotoConfiguration.default().alwaysRequestOriginal {
+            option.version = .original // original得到的image才会有alpha channel
+        }
         option.resizeMode = resizeMode
         option.isNetworkAccessAllowed = true
         option.progressHandler = { pro, error, stop, info in
