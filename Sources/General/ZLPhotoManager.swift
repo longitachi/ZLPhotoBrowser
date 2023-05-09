@@ -36,12 +36,8 @@ public class ZLPhotoManager: NSObject {
             completion?(false, nil)
             return
         }
-        
         var placeholderAsset: PHObjectPlaceholder?
-        PHPhotoLibrary.shared().performChanges({
-            let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-            placeholderAsset = newAssetRequest.placeholderForCreatedAsset
-        }) { suc, _ in
+        let completionHandler: ((Bool, Error?) -> Void) = { suc, _ in
             ZLMainAsync {
                 if suc {
                     let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
@@ -51,6 +47,21 @@ public class ZLPhotoManager: NSObject {
                 }
             }
         }
+
+        if let data = image.pngData() {
+            PHPhotoLibrary.shared().performChanges({
+                let newAssetRequest = PHAssetCreationRequest.forAsset()
+                newAssetRequest.addResource(with: .photo, data: data, options: nil)
+                placeholderAsset = newAssetRequest.placeholderForCreatedAsset
+            }, completionHandler: completionHandler)
+        } else {
+            PHPhotoLibrary.shared().performChanges({
+                let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+                placeholderAsset = newAssetRequest.placeholderForCreatedAsset
+            }, completionHandler: completionHandler)
+        }
+        
+
     }
     
     /// Save video to album.
