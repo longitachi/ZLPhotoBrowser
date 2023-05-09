@@ -44,7 +44,7 @@ public class ZLPhotoModel: NSObject {
     public let ident: String
     
     public let asset: PHAsset
-    
+
     public var type: ZLPhotoModel.MediaType = .unknown
     
     public var duration: String = ""
@@ -109,13 +109,12 @@ public class ZLPhotoModel: NSObject {
         case .video:
             return .video
         case .image:
-            if (asset.value(forKey: "filename") as? String)?.hasSuffix("GIF") == true {
+            if asset.zl.isGif {
                 return .gif
             }
-            if #available(iOS 9.1, *) {
-                if asset.mediaSubtypes.contains(.photoLive) {
-                    return .livePhoto
-                }
+
+            if asset.mediaSubtypes.contains(.photoLive) {
+                return .livePhoto
             }
             return .image
         default:

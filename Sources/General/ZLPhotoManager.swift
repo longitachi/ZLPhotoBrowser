@@ -263,7 +263,7 @@ public class ZLPhotoManager: NSObject {
     @discardableResult
     @objc public class func fetchOriginalImageData(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
-        if (asset.value(forKey: "filename") as? String)?.hasSuffix("GIF") == true {
+        if asset.zl.isGif {
             option.version = .original
         }
         option.isNetworkAccessAllowed = true
