@@ -453,6 +453,14 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         }
         return UIImage(cgImage: cgImage)
     }
+    
+    func hasAlphaChannel() -> Bool {
+        guard let info = base.cgImage?.alphaInfo else {
+            return false
+        }
+        
+        return info == .first || info == .last || info == .premultipliedFirst || info == .premultipliedLast
+    }
 }
 
 public extension ZLPhotoBrowserWrapper where Base: UIImage {

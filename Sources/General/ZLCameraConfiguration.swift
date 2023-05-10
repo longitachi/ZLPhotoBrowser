@@ -27,6 +27,7 @@
 import UIKit
 import AVFoundation
 
+@objcMembers
 public class ZLCameraConfiguration: NSObject {
     @objc public enum CaptureSessionPreset: Int {
         var avSessionPreset: AVCaptureSession.Preset {
@@ -129,7 +130,7 @@ public class ZLCameraConfiguration: NSObject {
     
     private var pri_allowTakePhoto = true
     /// Allow taking photos in the camera (Need allowSelectImage to be true). Defaults to true.
-    @objc public var allowTakePhoto: Bool {
+    public var allowTakePhoto: Bool {
         get {
             return pri_allowTakePhoto && ZLPhotoConfiguration.default().allowSelectImage
         }
@@ -140,7 +141,7 @@ public class ZLCameraConfiguration: NSObject {
     
     private var pri_allowRecordVideo = true
     /// Allow recording in the camera (Need allowSelectVideo to be true). Defaults to true.
-    @objc public var allowRecordVideo: Bool {
+    public var allowRecordVideo: Bool {
         get {
             return pri_allowRecordVideo && ZLPhotoConfiguration.default().allowSelectVideo
         }
@@ -151,7 +152,7 @@ public class ZLCameraConfiguration: NSObject {
     
     private var pri_minRecordDuration: Second = 0
     /// Minimum recording duration. Defaults to 0.
-    @objc public var minRecordDuration: Second {
+    public var minRecordDuration: Second {
         get {
             return pri_minRecordDuration
         }
@@ -162,7 +163,7 @@ public class ZLCameraConfiguration: NSObject {
     
     private var pri_maxRecordDuration: Second = 20
     /// Maximum recording duration. Defaults to 20, minimum is 1.
-    @objc public var maxRecordDuration: Second {
+    public var maxRecordDuration: Second {
         get {
             return pri_maxRecordDuration
         }
@@ -172,25 +173,25 @@ public class ZLCameraConfiguration: NSObject {
     }
     
     /// Video resolution. Defaults to hd1920x1080.
-    @objc public var sessionPreset: ZLCameraConfiguration.CaptureSessionPreset = .hd1920x1080
+    public var sessionPreset: ZLCameraConfiguration.CaptureSessionPreset = .hd1920x1080
     
     /// Camera focus mode. Defaults to continuousAutoFocus
-    @objc public var focusMode: ZLCameraConfiguration.FocusMode = .continuousAutoFocus
+    public var focusMode: ZLCameraConfiguration.FocusMode = .continuousAutoFocus
     
     /// Camera exposure mode. Defaults to continuousAutoExposure
-    @objc public var exposureMode: ZLCameraConfiguration.ExposureMode = .continuousAutoExposure
+    public var exposureMode: ZLCameraConfiguration.ExposureMode = .continuousAutoExposure
     
     /// Camera flahs switch. Defaults to true.
-    @objc public var showFlashSwitch = true
+    public var showFlashSwitch = true
     
     /// Whether to support switch camera. Defaults to true.
-    @objc public var allowSwitchCamera = true
+    public var allowSwitchCamera = true
     
     /// Video export format for recording video and editing video. Defaults to mov.
-    @objc public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
+    public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
     
     /// The default camera position after entering the camera. Defaults to back.
-    @objc public var devicePosition: ZLCameraConfiguration.DevicePosition = .back
+    public var devicePosition: ZLCameraConfiguration.DevicePosition = .back
 }
 
 // MARK: chaining

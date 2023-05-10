@@ -48,7 +48,7 @@ public class ZLPhotoManager: NSObject {
             }
         }
 
-        if let data = image.pngData() {
+        if image.zl.hasAlphaChannel(), let data = image.pngData() {
             PHPhotoLibrary.shared().performChanges({
                 let newAssetRequest = PHAssetCreationRequest.forAsset()
                 newAssetRequest.addResource(with: .photo, data: data, options: nil)
@@ -60,8 +60,6 @@ public class ZLPhotoManager: NSObject {
                 placeholderAsset = newAssetRequest.placeholderForCreatedAsset
             }, completionHandler: completionHandler)
         }
-        
-
     }
     
     /// Save video to album.
@@ -298,7 +296,7 @@ public class ZLPhotoManager: NSObject {
     /// Fetch image for asset.
     private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
-        if ZLPhotoConfiguration.default().alwaysRequestOriginal && asset.mediaType == .image {
+        if ZLPhotoConfiguration.default().alwaysRequestOriginal, asset.mediaType == .image {
             option.version = .original // original得到的image才会有alpha channel
         }
         option.resizeMode = resizeMode

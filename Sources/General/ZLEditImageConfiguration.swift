@@ -34,6 +34,7 @@ import UIKit
     @objc func show(in view: UIView)
 }
 
+@objcMembers
 public class ZLEditImageConfiguration: NSObject {
     @objc public enum EditTool: Int, CaseIterable {
         case draw
@@ -101,7 +102,7 @@ public class ZLEditImageConfiguration: NSObject {
     
     /// Edit image tools.  (This property is only for objc).
     /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
-    @objc public var tools_objc: [Int] = [] {
+    public var tools_objc: [Int] = [] {
         didSet {
             tools = tools_objc.compactMap { ZLEditImageConfiguration.EditTool(rawValue: $0) }
         }
@@ -111,7 +112,7 @@ public class ZLEditImageConfiguration: NSObject {
     
     private var pri_drawColors: [UIColor] = ZLEditImageConfiguration.defaultDrawColors
     /// Draw colors for image editor.
-    @objc public var drawColors: [UIColor] {
+    public var drawColors: [UIColor] {
         get {
             if pri_drawColors.isEmpty {
                 return ZLEditImageConfiguration.defaultDrawColors
@@ -125,11 +126,11 @@ public class ZLEditImageConfiguration: NSObject {
     }
     
     /// The default draw color. If this color not in editImageDrawColors, will pick the first color in editImageDrawColors as the default.
-    @objc public var defaultDrawColor: UIColor = .zl.rgba(241, 79, 79)
+    public var defaultDrawColor: UIColor = .zl.rgba(241, 79, 79)
     
     private var pri_clipRatios: [ZLImageClipRatio] = [.custom]
     /// Edit ratios for image editor.
-    @objc public var clipRatios: [ZLImageClipRatio] {
+    public var clipRatios: [ZLImageClipRatio] {
         get {
             if pri_clipRatios.isEmpty {
                 return [.custom]
@@ -146,7 +147,7 @@ public class ZLEditImageConfiguration: NSObject {
     
     private var pri_textStickerTextColors: [UIColor] = ZLEditImageConfiguration.defaultTextStickerTextColors
     /// Text sticker colors for image editor.
-    @objc public var textStickerTextColors: [UIColor] {
+    public var textStickerTextColors: [UIColor] {
         get {
             if pri_textStickerTextColors.isEmpty {
                 return ZLEditImageConfiguration.defaultTextStickerTextColors
@@ -160,11 +161,11 @@ public class ZLEditImageConfiguration: NSObject {
     }
     
     /// The default text sticker color. If this color not in textStickerTextColors, will pick the first color in textStickerTextColors as the default.
-    @objc public var textStickerDefaultTextColor = UIColor.white
+    public var textStickerDefaultTextColor = UIColor.white
     
     private var pri_filters: [ZLFilter] = ZLFilter.all
     /// Filters for image editor.
-    @objc public var filters: [ZLFilter] {
+    public var filters: [ZLFilter] {
         get {
             if pri_filters.isEmpty {
                 return ZLFilter.all
@@ -177,7 +178,7 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
-    @objc public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)?
+    public var imageStickerContainerView: (UIView & ZLImageStickerContainerDelegate)?
     
     private var pri_adjustTools: [ZLEditImageConfiguration.AdjustTool] = ZLEditImageConfiguration.AdjustTool.allCases
     /// Adjust image tools. (Default order is brightness, contrast, saturation)
@@ -198,20 +199,20 @@ public class ZLEditImageConfiguration: NSObject {
     
     /// Adjust image tools.  (This property is only for objc).
     /// Valid when the tools contain EditTool.adjust
-    @objc public var adjustTools_objc: [Int] = [] {
+    public var adjustTools_objc: [Int] = [] {
         didSet {
             adjustTools = adjustTools_objc.compactMap { ZLEditImageConfiguration.AdjustTool(rawValue: $0) }
         }
     }
     
     /// Give an impact feedback when the adjust slider value is zero. Defaults to true.
-    @objc public var impactFeedbackWhenAdjustSliderValueIsZero = true
+    public var impactFeedbackWhenAdjustSliderValueIsZero = true
     
     /// Impact feedback style. Defaults to .medium
-    @objc public var impactFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
+    public var impactFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
     
     /// Whether to support redo in graffiti and mosaic tools. Defaults to false
-    @objc public var canRedo = false
+    public var canRedo = false
 }
 
 // MARK: chaining

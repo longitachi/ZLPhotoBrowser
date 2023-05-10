@@ -28,7 +28,6 @@ import UIKit
 import Photos
 
 public extension ZLPhotoConfiguration {
-    
     @discardableResult
     func sortAscending(_ ascending: Bool) -> ZLPhotoConfiguration {
         sortAscending = ascending
@@ -340,5 +339,4 @@ public extension ZLPhotoConfiguration {
         operateBeforeDoneAction = block
         return self
     }
-    
 }

@@ -99,15 +99,15 @@ class ZLFetchImageOperation: Operation {
         pri_isExecuting = true
         
         // 存在编辑的图片
-        if let ei = model.editImage {
+        if let editImage = model.editImage {
             if ZLPhotoConfiguration.default().saveNewImageAfterEdit {
-                ZLPhotoManager.saveImageToAlbum(image: ei) { [weak self] _, asset in
-                    self?.completion(ei, asset)
+                ZLPhotoManager.saveImageToAlbum(image: editImage) { [weak self] _, asset in
+                    self?.completion(editImage, asset)
                     self?.fetchFinish()
                 }
             } else {
                 ZLMainAsync {
-                    self.completion(ei, nil)
+                    self.completion(editImage, nil)
                     self.fetchFinish()
                 }
             }
