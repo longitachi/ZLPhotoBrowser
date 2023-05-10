@@ -25,6 +25,7 @@
 //  THE SOFTWARE.
 
 import Photos
+import MobileCoreServices
 
 extension ZLPhotoBrowserWrapper where Base: PHAsset {
     var isInCloud: Bool {
@@ -32,6 +33,16 @@ extension ZLPhotoBrowserWrapper where Base: PHAsset {
             return false
         }
         return !(resource.value(forKey: "locallyAvailable") as? Bool ?? true)
+    }
+
+    var isGif: Bool {
+        if (base.value(forKey: "filename") as? String)?.hasSuffix("GIF") == true {
+            return true
+        }
+        guard let resource = resource else {
+            return false
+        }
+        return UTTypeConformsTo(resource.uniformTypeIdentifier as CFString, kUTTypeGIF)
     }
     
     var resource: PHAssetResource? {
