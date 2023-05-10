@@ -112,7 +112,6 @@ public class ZLPhotoModel: NSObject {
             if asset.zl.isGif {
                 return .gif
             }
-
             if asset.mediaSubtypes.contains(.photoLive) {
                 return .livePhoto
             }
