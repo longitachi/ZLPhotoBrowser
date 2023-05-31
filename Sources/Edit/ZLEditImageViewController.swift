@@ -586,8 +586,12 @@ open class ZLEditImageViewController: UIViewController {
         let w = ratio * editSize.width * mainScrollView.zoomScale
         let h = ratio * editSize.height * mainScrollView.zoomScale
         
+        let imageRatio = originalImage.size.width / originalImage.size.height
         let y: CGFloat
-        if isFirstSetContainerFrame, presentingViewController is ZLCustomCamera {
+        // 从相机进入，且竖屏拍照，才做适配
+        if isFirstSetContainerFrame,
+           presentingViewController is ZLCustomCamera,
+           imageRatio < 1 {
             let cameraRatio: CGFloat = 16 / 9
             let layerH = min(view.zl.width * cameraRatio, view.zl.height)
             
