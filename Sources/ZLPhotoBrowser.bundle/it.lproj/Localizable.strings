@@ -30,6 +30,7 @@
 "exceededMaxVideoSelectCount" = "Conteggio massimo per la selezione dei video: %ld";
 "lessThanMinVideoSelectCount" = "Conteggio minimo per la selezione del video: %ld";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "";
 "noCameraAuthority" = "Consenti a %@ di accedere alla fotocamera del tuo dispositivo in \"Impostazioni\" > \"Privacy\" > \"Fotocamera\"";
 "noPhotoLibratyAuthority" = "Consenti a %@ di accedere al tuo album in \"Impostazioni\" > \"Privacy\" > \"Foto\"";
 "noMicrophoneAuthority" = "Impossibile registrare I'audio. Vai a \"Impostazioni\" > \"%@\" e attiva I'accesso al microfono";

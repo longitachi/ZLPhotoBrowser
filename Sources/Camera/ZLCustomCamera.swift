@@ -153,7 +153,8 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         AVCaptureDevice.requestAccess(for: .video) { (videoGranted) in
             guard videoGranted else {
                 ZLMainAsync(after: 1) {
-                    self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), type: .camera)
+                    self.showAlertAndDismissAfterDoneAction(title:localLanguageTextValue(.noCameraAuthorityTitle), message: String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), type: .camera)
+//                    self.showAlertAndDismissAfterDoneAction(message: <#T##String#>, type: <#T##ZLNoAuthorityType?#>)
                 }
                 return
             }
@@ -194,12 +195,12 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-            showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable), type: .camera)
+            showAlertAndDismissAfterDoneAction(title:localLanguageTextValue(.noCameraAuthorityTitle) ,message: localLanguageTextValue(.cameraUnavailable), type: .camera)
         } else if !ZLPhotoConfiguration.default().allowTakePhoto, !ZLPhotoConfiguration.default().allowRecordVideo {
             #if DEBUG
             fatalError("Error configuration of camera")
             #else
-            showAlertAndDismissAfterDoneAction(message: "Error configuration of camera", type: nil)
+            showAlertAndDismissAfterDoneAction(title:"",message: "Error configuration of camera", type: nil)
             #endif
         } else if self.cameraConfigureFinish, self.viewDidAppearCount == 0 {
             self.showTipsLabel(animate: true)
@@ -541,15 +542,22 @@ open class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         showAlertController(alert)
     }
     
-    func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: localLanguageTextValue(.done), style: .default) { (_) in
+    func showAlertAndDismissAfterDoneAction(title: String, message: String, type: ZLNoAuthorityType?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: localLanguageTextValue(.cancel), style: .default) { (_) in
             self.dismiss(animated: true) {
                 if let t = type {
                     ZLPhotoConfiguration.default().noAuthorityCallback?(t)
                 }
             }
         }
+        
+        let action = UIAlertAction(title: localLanguageTextValue(.gotoSettings), style: .default) { (_) in
+            self.dismiss(animated: true) {
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+            }
+        }
+        alert.addAction(cancelAction)
         alert.addAction(action)
         showAlertController(alert)
     }

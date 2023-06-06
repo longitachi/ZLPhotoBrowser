@@ -31,12 +31,13 @@
 "exceededMaxVideoSelectCount" = "Max count for video selection: %ld";
 "lessThanMinVideoSelectCount" = "Min count for video selection: %ld";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "Permission Required";
 "noCameraAuthority" = "Please allow %@ to access your device's camera in \"Settings\" > \"Privacy\" > \"Camera\"";
 "noPhotoLibratyAuthority" = "Please allow %@ to access your album in \"Settings\" > \"Privacy\" > \"Photos\"";
 "noMicrophoneAuthority" = "Unable to record audio. Go to \"Settings\" > \"%@\" and enable microphone access.";
 "cameraUnavailable" = "Camera is unavailable";
 "keepRecording" = "Keep Recording";
-"gotoSettings" = "Go to Settings";
+"gotoSettings" = "Settings";
 
 "iCloudVideoLoadFaild" = "Unable to sync from iCloud";
 "imageLoadFailed" = "loading failed";

@@ -30,6 +30,7 @@
 "exceededMaxVideoSelectCount" = "Số lượng lựa chọn tối đa của video: %ld";
 "lessThanMinVideoSelectCount" = "Số phút chọn tối thiểu của video: %ld";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "";
 "noCameraAuthority" = "Vui lòng cho phép %@ truy cập máy ảnh trên thiết bị của bạn trong \"Cài đặt\" > \"Quyền riêng tư\" > \"Máy ảnh\"";
 "noPhotoLibratyAuthority" = "Vui lòng cho phép %@ truy cập anbom của bạn trong \"Cài đặt\" > \"Bảo mật\" > \"Ảnh\"";
 "noMicrophoneAuthority" = "Không thểghi hình. Đi tới \"Cài đặt\" > \"%@\" và bật quyên truy cập mic.";

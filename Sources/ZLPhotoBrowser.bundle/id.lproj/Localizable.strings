@@ -30,6 +30,7 @@
 "exceededMaxVideoSelectCount" = "Jumlah maksimum untuk pemilihan video: %ld";
 "lessThanMinVideoSelectCount" = "Jumlah minimum untuk pemilihan video: %ld";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "";
 "noCameraAuthority" = "Izinkan akses kamera di \"Pengaturan\" > \"%@\" iPhone Anda.";
 "noPhotoLibratyAuthority" = "Izinkan %@ mengakses album Anda di \"Setelan\" > \"Privasi\" > \"Foto\"";
 "noMicrophoneAuthority" = "Tidak dapat merekam audio. Buka \"Setelan\" > \"%@\" dan aktifkan akses mikrofon.";

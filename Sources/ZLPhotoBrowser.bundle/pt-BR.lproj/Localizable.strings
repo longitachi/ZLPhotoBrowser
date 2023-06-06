@@ -30,6 +30,7 @@
 "exceededMaxVideoSelectCount" = "Contagem máxima para seleção de vídeo: %ld";
 "lessThanMinVideoSelectCount" = "Contagem mínima para seleção de vídeo: %ld";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "";
 "noCameraAuthority" = "Por favor, permita a %@ aceder à câmara do seu dispositivo em \"Definições\" > \"Privacidade\" > \"Câmara\".";
 "noPhotoLibratyAuthority" = "Por favor, permita que %@ acesse seu álbum em \"Configurações\" > \"Privacidade\" > \"Fotos\".";
 "noMicrophoneAuthority" = "Incapaz de gravar áudio. Vá para \"Configurações\" > \"%@\" e habilite o acesso ao microfone.";

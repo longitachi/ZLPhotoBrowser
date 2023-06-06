@@ -30,6 +30,7 @@
 "exceededMaxVideoSelectCount" = "Nombre maximal de sélections vidéo: %ld";
 "lessThanMinVideoSelectCount" = "Nombre minimal de sélection de vidéo: %ld";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "";
 "noCameraAuthority" = "Veuillez autoriser %@ à accéder à la caméra de votre appareil dans \"Paramètres\" > \"Confidentialité\" > \"Caméra\"";
 "noPhotoLibratyAuthority" = "Veuillez autoriser %@ à accéder à votre album dans \"Paramètres\" > \"Confidentialité\" > \"Photos\"";
 "noMicrophoneAuthority" = "Impossible d'enregistrer le son. Rendez-vous dans « Paramètres >> > << %@ » et activez l'accès au microphone.";

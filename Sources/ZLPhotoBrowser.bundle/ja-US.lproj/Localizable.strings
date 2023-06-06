@@ -30,6 +30,7 @@
 "exceededMaxVideoSelectCount" = "動画の最大選択数: %ld";
 "lessThanMinVideoSelectCount" = "動画の最小選択数: %ld";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "";
 "noCameraAuthority" = "「設定」>「プライパシー」>「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
 "noPhotoLibratyAuthority" = "%@があなたのアルバムにアクセスするには「設定」>「プライバシー」>「写真」";
 "noMicrophoneAuthority" = "音声を録音できません。「設定」 >「%@」に移動し、マイクへのアクセスを有効にしてください。";

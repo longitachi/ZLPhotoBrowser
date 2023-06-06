@@ -30,6 +30,7 @@
 "exceededMaxVideoSelectCount" = "Jumlah maksimum untuk pemilihan video: %ld";
 "lessThanMinVideoSelectCount" = "Kiraan minimum untuk pemilihan video: %ld";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "";
 "noCameraAuthority" = "Izinkan %@ mengakses kamera peranti anda di \"Tetapan\" > \"Privasi\" > \"Kamera\"";
 "noPhotoLibratyAuthority" = "Izinkan %@ mengakses album anda di \"Tetapan\" > \"Privasi\" > \"Foto\"";
 "noMicrophoneAuthority" = "Tidak dapat merakam audio. Pergi Ke \"Tetapan\" > \"%@\" dan dayakan akses mikrofon.";

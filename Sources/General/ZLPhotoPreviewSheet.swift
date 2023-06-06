@@ -372,11 +372,17 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     func showNoAuthorityAlert() {
-        let alert = UIAlertController(title: nil, message: String(format: localLanguageTextValue(.noPhotoLibratyAuthority), getAppName()), preferredStyle: .alert)
-        let action = UIAlertAction(title: localLanguageTextValue(.ok), style: .default) { (_) in
+        let alert = UIAlertController(title: localLanguageTextValue(.noCameraAuthorityTitle), message: String(format: localLanguageTextValue(.noPhotoLibratyAuthority), getAppName()), preferredStyle: .alert)
+        let action = UIAlertAction(title: localLanguageTextValue(.cancel), style: .default) { (_) in
             ZLPhotoConfiguration.default().noAuthorityCallback?(.library)
         }
+        let goSettingAction = UIAlertAction(title: localLanguageTextValue(.gotoSettings), style: .default) { (_) in
+            alert.dismiss(animated: true) {
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+            }
+        }
         alert.addAction(action)
+        alert.addAction(goSettingAction)
         sender?.showAlertController(alert)
     }
     

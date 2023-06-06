@@ -93,6 +93,8 @@ public struct ZLLocalLanguageKey: Hashable {
     /// (请在iPhone的\"设置-隐私-相机\"选项中，允许%@访问你的相机)
     public static let noCameraAuthority = ZLLocalLanguageKey(rawValue: "noCameraAuthority")
     
+    public static let noCameraAuthorityTitle = ZLLocalLanguageKey(rawValue: "NO_CAMERA_AUTHORITY_TITLE")
+    
     /// Unable to record audio. Go to \"Settings\" > \"%@\" and enable microphone access.
     /// (无法录制声音，前往\"设置 > %@\"中打开麦克风权限)
     public static let noMicrophoneAuthority = ZLLocalLanguageKey(rawValue: "noMicrophoneAuthority")

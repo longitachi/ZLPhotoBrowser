@@ -31,12 +31,13 @@
 "exceededMaxVideoSelectCount" = "最多只能選擇%ld個視頻";
 "lessThanMinVideoSelectCount" = "最少選擇%ld個視頻";
 
+"NO_CAMERA_AUTHORITY_TITLE" = "需要权限";
 "noCameraAuthority" = "請在iPhone的\"設置 > 隱私 > 相機\"選項中，允許%@訪問你的相機";
 "noPhotoLibratyAuthority" = "請在iPhone的\"設置 > 隱私 > 相冊\"選項中，允許%@訪問你的照片";
 "noMicrophoneAuthority" = "無法錄製聲音，前往\"設置 > %@\"中打開麥克風權限";
 "cameraUnavailable" = "相機不可用";
 "keepRecording" = "繼續拍攝";
-"gotoSettings" = "前往設置";
+"gotoSettings" = "設置";
 
 "iCloudVideoLoadFaild" = "iCloud無法同步";
 "imageLoadFailed" = "圖片加載失敗";
