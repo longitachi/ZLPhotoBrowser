@@ -556,7 +556,9 @@ open class ZLCustomCamera: UIViewController {
             
             // imageOutPut添加到session之后才能判断supportedFlashModes
             if !cameraConfig.showFlashSwitch || !imageOutput.supportedFlashModes.contains(.on) {
-                self.showFlashBtn = false
+                ZLMainAsync {
+                    self.showFlashBtn = false
+                }
             }
             
             self.session.commitConfiguration()
