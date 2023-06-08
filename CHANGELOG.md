@@ -2,6 +2,16 @@
 
 -----
 
+## [4.4.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.2) (2023-06-08)
+
+### Add:
+* Preserve the alpha channel of the edited image. [#818](https://github.com/longitachi/ZLPhotoBrowser/pull/818)
+
+### Fix:
+* Fix a crash caused by UI modification in a sub-thread. [#821](https://github.com/longitachi/ZLPhotoBrowser/pull/821)
+
+---
+
 ## [4.4.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.1) (2023-04-25)
 
 ### Add:
