@@ -52,6 +52,8 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
     
     let originAngle: CGFloat
     
+    var maxGesScale: CGFloat
+    
     var originTransform: CGAffineTransform = .identity
     
     var timer: Timer?
@@ -63,8 +65,6 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
     var gesRotation: CGFloat = 0
     
     var gesScale: CGFloat = 1
-    
-    var maxGesScale: CGFloat = 4
     
     var onOperation = false
     
@@ -112,6 +112,7 @@ class ZLBaseStickerView<T>: UIView, UIGestureRecognizerDelegate {
         self.originScale = originScale
         self.originAngle = originAngle
         self.originFrame = originFrame
+        self.maxGesScale = 4 / originScale
         super.init(frame: .zero)
         
         self.gesScale = gesScale
