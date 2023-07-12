@@ -23,8 +23,10 @@
 "hudLoading" = "à espera...";
 
 "exceededMaxSelectCount" = "Contagem máxima para seleção: %ld";
-"longerThanMaxVideoDuration" = "Incapaz de selecionar vídeos com duração superior a %lds";
-"shorterThanMaxVideoDuration" = "Incapaz de selecionar vídeos com duração inferior a %lds";
+"longerThanMaxVideoDuration" = "Não é possível selecionar vídeos com mais de %ld segundos";
+"shorterThanMinVideoDuration" = "Não é possível selecionar vídeos com menos de %ld segundos";
+"largerThanMaxVideoDataSize" = "Não é possível selecionar vídeos com mais de %@MB";
+"smallerThanMinVideoDataSize" = "Não é possível selecionar vídeos com menos de %@MB";
 "exceededMaxVideoSelectCount" = "Contagem máxima para seleção de vídeo: %ld";
 "lessThanMinVideoSelectCount" = "Contagem mínima para seleção de vídeo: %ld";
 

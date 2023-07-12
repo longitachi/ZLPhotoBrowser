@@ -27,10 +27,12 @@
 import UIKit
 import Photos
 
-public typealias Second = Int
-
 @objcMembers
 public class ZLPhotoConfiguration: NSObject {
+    public typealias Second = Int
+    
+    public typealias KBUnit = CGFloat
+    
     private static var single = ZLPhotoConfiguration()
     
     public class func `default`() -> ZLPhotoConfiguration {
@@ -189,13 +191,19 @@ public class ZLPhotoConfiguration: NSObject {
     public var showSelectCountOnDoneBtn = true
     
     /// Maximum cropping time when editing video, unit: second. Defaults to 10.
-    public var maxEditVideoTime: Second = 10
+    public var maxEditVideoTime: ZLPhotoConfiguration.Second = 10
     
     /// Allow to choose the maximum duration of the video. Defaults to 120.
-    public var maxSelectVideoDuration: Second = 120
+    public var maxSelectVideoDuration: ZLPhotoConfiguration.Second = 120
     
     /// Allow to choose the minimum duration of the video. Defaults to 0.
-    public var minSelectVideoDuration: Second = 0
+    public var minSelectVideoDuration: ZLPhotoConfiguration.Second = 0
+    
+    /// Allow to choose the maximum data size of the video. Defaults to infinite.
+    public var maxSelectVideoDataSize: ZLPhotoConfiguration.KBUnit = .greatestFiniteMagnitude
+    
+    /// Allow to choose the minimum data size of the video. Defaults to 0 KB.
+    public var minSelectVideoDataSize: ZLPhotoConfiguration.KBUnit = 0
     
     /// Image editor configuration.
     public var editImageConfiguration = ZLEditImageConfiguration()

@@ -24,7 +24,9 @@
 
 "exceededMaxSelectCount" = "Número máximo para la selección: %ld";
 "longerThanMaxVideoDuration" = "No se puede seleccionar un vídeo con una duración superior a %lds";
-"shorterThanMaxVideoDuration" = "No se puede seleccionar un vídeo con una duración inferior a %lds";
+"shorterThanMinVideoDuration" = "No se puede seleccionar un vídeo con una duración inferior a %lds";
+"largerThanMaxVideoDataSize" = "No se pueden seleccionar vídeos de más de %@MB";
+"smallerThanMinVideoDataSize" = "No se pueden seleccionar vídeos de menos de %@MB";
 "exceededMaxVideoSelectCount" = "Número máximo para la selección de vídeos: %ld";
 "lessThanMinVideoSelectCount" = "Número mínimo para la selección de vídeos: %ld";
 

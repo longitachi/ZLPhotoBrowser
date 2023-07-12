@@ -150,9 +150,9 @@ public class ZLCameraConfiguration: NSObject {
         }
     }
     
-    private var pri_minRecordDuration: Second = 0
+    private var pri_minRecordDuration: ZLPhotoConfiguration.Second = 0
     /// Minimum recording duration. Defaults to 0.
-    public var minRecordDuration: Second {
+    public var minRecordDuration: ZLPhotoConfiguration.Second {
         get {
             return pri_minRecordDuration
         }
@@ -161,9 +161,9 @@ public class ZLCameraConfiguration: NSObject {
         }
     }
     
-    private var pri_maxRecordDuration: Second = 20
+    private var pri_maxRecordDuration: ZLPhotoConfiguration.Second = 20
     /// Maximum recording duration. Defaults to 20, minimum is 1.
-    public var maxRecordDuration: Second {
+    public var maxRecordDuration: ZLPhotoConfiguration.Second {
         get {
             return pri_maxRecordDuration
         }
@@ -210,13 +210,13 @@ public extension ZLCameraConfiguration {
     }
     
     @discardableResult
-    func minRecordDuration(_ duration: Second) -> ZLCameraConfiguration {
+    func minRecordDuration(_ duration: ZLPhotoConfiguration.Second) -> ZLCameraConfiguration {
         minRecordDuration = duration
         return self
     }
     
     @discardableResult
-    func maxRecordDuration(_ duration: Second) -> ZLCameraConfiguration {
+    func maxRecordDuration(_ duration: ZLPhotoConfiguration.Second) -> ZLCameraConfiguration {
         maxRecordDuration = duration
         return self
     }

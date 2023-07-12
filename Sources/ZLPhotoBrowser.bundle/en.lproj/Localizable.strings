@@ -23,8 +23,10 @@
 "hudLoading" = "waiting...";
 
 "exceededMaxSelectCount" = "Max count for selection: %ld";
-"longerThanMaxVideoDuration" = "Unable to select video with a duration longer than %lds";
-"shorterThanMaxVideoDuration" = "Unable to select video with a duration shorter than %lds";
+"longerThanMaxVideoDuration" = "Can't select videos longer than %lds";
+"shorterThanMinVideoDuration" = "Can't select videos shorter than %lds";
+"largerThanMaxVideoDataSize" = "Can't select videos larger than %@MB";
+"smallerThanMinVideoDataSize" = "Can't select videos smaller than %@MB";
 "exceededMaxVideoSelectCount" = "Max count for video selection: %ld";
 "lessThanMinVideoSelectCount" = "Min count for video selection: %ld";
 

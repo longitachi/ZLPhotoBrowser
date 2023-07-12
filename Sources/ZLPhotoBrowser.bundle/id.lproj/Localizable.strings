@@ -24,7 +24,9 @@
 
 "exceededMaxSelectCount" = "Jumlah maksimum untuk seleksi: %ld";
 "longerThanMaxVideoDuration" = "Tidak dapat memilih video dengan durasi lebih dari %ld detik";
-"shorterThanMaxVideoDuration" = "Tidak dapat memilih video dengan durasi lebih pendek dari %ld detik";
+"shorterThanMinVideoDuration" = "Tidak dapat memilih video dengan durasi lebih pendek dari %ld detik";
+"largerThanMaxVideoDataSize" = "Tidak dapat memilih video yang lebih besar dari %@MB";
+"smallerThanMinVideoDataSize" = "Tidak dapat memilih video yang lebih kecil dari %@MB";
 "exceededMaxVideoSelectCount" = "Jumlah maksimum untuk pemilihan video: %ld";
 "lessThanMinVideoSelectCount" = "Jumlah minimum untuk pemilihan video: %ld";
 

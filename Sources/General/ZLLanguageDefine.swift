@@ -228,13 +228,21 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Min count for video selection: %ld (最少选择%ld个视频)
     public static let lessThanMinVideoSelectCount = ZLLocalLanguageKey(rawValue: "lessThanMinVideoSelectCount")
     
-    /// Unable to select video with a duration longer than %lds
+    /// Can't select videos longer than %lds
     /// (不能选择超过%ld秒的视频)
     public static let longerThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "longerThanMaxVideoDuration")
     
-    /// Unable to select video with a duration shorter than %lds
+    /// Can't select videos shorter than %lds
     /// (不能选择低于%ld秒的视频)
-    public static let shorterThanMaxVideoDuration = ZLLocalLanguageKey(rawValue: "shorterThanMaxVideoDuration")
+    public static let shorterThanMinVideoDuration = ZLLocalLanguageKey(rawValue: "shorterThanMinVideoDuration")
+    
+    /// Can't select videos larger than %@MB
+    /// (不能选择大于%@MB的视频)
+    public static let largerThanMaxVideoDataSize = ZLLocalLanguageKey(rawValue: "largerThanMaxVideoDataSize")
+    
+    /// Can't select videos smaller than %@MB
+    /// (不能选择小于%@MB的视频)
+    public static let smallerThanMinVideoDataSize = ZLLocalLanguageKey(rawValue: "smallerThanMinVideoDataSize")
     
     /// Unable to sync from iCloud (iCloud无法同步)
     public static let iCloudVideoLoadFaild = ZLLocalLanguageKey(rawValue: "iCloudVideoLoadFaild")

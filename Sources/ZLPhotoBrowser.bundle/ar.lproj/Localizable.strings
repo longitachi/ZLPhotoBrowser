@@ -23,8 +23,10 @@
 "hudLoading" = "يرجى الانتظار...";
 
 "exceededMaxSelectCount" = "أقصى عدد للاختيار: %ld";
-"longerThanMaxVideoDuration" = "غير قادر على تحديد فيديو مدته أطول من %lds";
-"shorterThanMaxVideoDuration" = "غير قادر على تحديد فيديو بمدة أقصر من %lds";
+"longerThanMaxVideoDuration" = "لا يمكن تحديد مقاطع فيديو أطول من %lds";
+"shorterThanMinVideoDuration" = "لا يمكن تحديد مقاطع فيديو أقصر من %lds";
+"largerThanMaxVideoDataSize" = "لا يمكن تحديد مقاطع فيديو أكبر من %@ ميغا بايت";
+"smallerThanMinVideoDataSize" = "لا يمكن تحديد مقاطع فيديو أصغر من %@ ميغا بايت";
 "exceededMaxVideoSelectCount" = "أقصى عدد لتحديد الفيديو: %ld";
 "lessThanMinVideoSelectCount" = "الحد الأدنى لتحديد الفيديو: %ld";
 

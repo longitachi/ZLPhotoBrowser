@@ -441,7 +441,7 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         if albumList.models.isEmpty {
-            let hud = ZLProgressHUD.show()
+            let hud = ZLProgressHUD.show(in: view)
             DispatchQueue.global().async {
                 self.albumList.refetchPhotos()
                 ZLMainAsync {
@@ -520,7 +520,7 @@ class ZLThumbnailViewController: UIViewController {
         let asc = config.sortAscending
         
         if pan.state == .began {
-            beginPanSelect = (cell != nil)
+            beginPanSelect = cell != nil
             
             if beginPanSelect {
                 let index = asc ? indexPath.row : indexPath.row - offset
@@ -529,7 +529,17 @@ class ZLThumbnailViewController: UIViewController {
                 panSelectType = m.isSelected ? .cancel : .select
                 beginSlideIndexPath = indexPath
                 
-                if !m.isSelected, nav.arrSelectedModels.count < config.maxSelectCount, canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
+                if !m.isSelected {
+                    if nav.arrSelectedModels.count >= config.maxSelectCount {
+                        panSelectType = .none
+                        return
+                    }
+                    
+                    if !(cell?.enableSelect ?? true) || !canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
+                        panSelectType = .none
+                        return
+                    }
+                    
                     if shouldDirectEdit(m) {
                         panSelectType = .none
                         return
@@ -548,11 +558,12 @@ class ZLThumbnailViewController: UIViewController {
                 lastSlideIndex = indexPath.row
             }
         } else if pan.state == .changed {
-            autoScrollWhenSlideSelect(pan)
-            
             if !beginPanSelect || indexPath.row == lastSlideIndex || panSelectType == .none || cell == nil {
                 return
             }
+            
+            autoScrollWhenSlideSelect(pan)
+            
             guard let beginIndexPath = beginSlideIndexPath else {
                 return
             }
@@ -633,6 +644,7 @@ class ZLThumbnailViewController: UIViewController {
             }
         } else if pan.state == .ended || pan.state == .cancelled {
             stopAutoScroll()
+            beginPanSelect = false
             panSelectType = .none
             arrSlideIndexPaths.removeAll()
             dicOriSelectStatus.removeAll()
@@ -1222,6 +1234,13 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         cell.enableSelect = true
         let arrSel = (navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
         let config = ZLPhotoConfiguration.default()
+        
+        if model.type == .video, !videoIsMeetRequirements(model: model) {
+            cell.coverView.backgroundColor = .zl.invalidMaskColor
+            cell.coverView.isHidden = !config.showInvalidMask
+            cell.enableSelect = false
+            return
+        }
         
         if isSelected {
             cell.coverView.backgroundColor = .zl.selectedMaskColor

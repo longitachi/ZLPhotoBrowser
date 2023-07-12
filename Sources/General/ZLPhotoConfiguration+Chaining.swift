@@ -221,6 +221,18 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func maxSelectVideoDataSize(_ size: ZLPhotoConfiguration.KBUnit) -> ZLPhotoConfiguration {
+        maxSelectVideoDataSize = size
+        return self
+    }
+    
+    @discardableResult
+    func minSelectVideoDataSize(_ size: ZLPhotoConfiguration.KBUnit) -> ZLPhotoConfiguration {
+        minSelectVideoDataSize = size
+        return self
+    }
+    
+    @discardableResult
     func editImageConfiguration(_ configuration: ZLEditImageConfiguration) -> ZLPhotoConfiguration {
         editImageConfiguration = configuration
         return self

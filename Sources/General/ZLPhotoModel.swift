@@ -51,6 +51,19 @@ public class ZLPhotoModel: NSObject {
     
     public var isSelected: Bool = false
     
+    private var pri_dataSize: ZLPhotoConfiguration.KBUnit?
+    
+    public var dataSize: ZLPhotoConfiguration.KBUnit? {
+        if let pri_dataSize = pri_dataSize {
+            return pri_dataSize
+        }
+        
+        let size = ZLPhotoManager.fetchAssetSize(for: asset)
+        pri_dataSize = size
+        
+        return size
+    }
+    
     private var pri_editImage: UIImage?
     
     public var editImage: UIImage? {
@@ -66,7 +79,7 @@ public class ZLPhotoModel: NSObject {
         }
     }
     
-    public var second: Second {
+    public var second: ZLPhotoConfiguration.Second {
         guard type == .video else {
             return 0
         }

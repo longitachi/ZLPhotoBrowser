@@ -94,7 +94,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         return label
     }()
     
-    var enableSelect: Bool = true
+    var enableSelect = true
     
     var selectedBlock: ((Bool) -> Void)?
     

@@ -24,7 +24,9 @@
 
 "exceededMaxSelectCount" = "최대 선택 수: %ld";
 "longerThanMaxVideoDuration" = "길이가 %ld 초 보다 긴 동영상을 선택할 수 없습니다";
-"shorterThanMaxVideoDuration" = "기간이 %ld 초 보다 짧은 비디오를 선택할 수 없습니다";
+"shorterThanMinVideoDuration" = "기간이 %ld 초 보다 짧은 비디오를 선택할 수 없습니다";
+"largerThanMaxVideoDataSize" = "%@MB보다 큰 동영상은 선택할 수 없습니다";
+"smallerThanMinVideoDataSize" = "%@MB 미만의 동영상은 선택할 수 없습니다";
 "exceededMaxVideoSelectCount" = "동영상 최대 선택 수: %ld";
 "lessThanMinVideoSelectCount" = "동영상 최소 선택 횟수: %ld";
 

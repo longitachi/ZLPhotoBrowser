@@ -266,12 +266,12 @@ public class ZLEditVideoViewController: UIViewController {
         cleanTimer()
         
         let d = CGFloat(interval) * clipRect().width / ZLEditVideoViewController.frameImageSize.width
-        if Second(round(d)) < ZLPhotoConfiguration.default().minSelectVideoDuration {
-            let message = String(format: localLanguageTextValue(.shorterThanMaxVideoDuration), ZLPhotoConfiguration.default().minSelectVideoDuration)
+        if ZLPhotoConfiguration.Second(round(d)) < ZLPhotoConfiguration.default().minSelectVideoDuration {
+            let message = String(format: localLanguageTextValue(.shorterThanMinVideoDuration), ZLPhotoConfiguration.default().minSelectVideoDuration)
             showAlertView(message, self)
             return
         }
-        if Second(round(d)) > ZLPhotoConfiguration.default().maxSelectVideoDuration {
+        if ZLPhotoConfiguration.Second(round(d)) > ZLPhotoConfiguration.default().maxSelectVideoDuration {
             let message = String(format: localLanguageTextValue(.longerThanMaxVideoDuration), ZLPhotoConfiguration.default().maxSelectVideoDuration)
             showAlertView(message, self)
             return

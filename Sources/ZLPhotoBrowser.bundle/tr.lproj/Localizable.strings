@@ -24,7 +24,9 @@
 
 "exceededMaxSelectCount" = "Maksimum seçim adeti: %ld";
 "longerThanMaxVideoDuration" = "%lds'dan uzun süreli videolar seçilemiyor.";
-"shorterThanMaxVideoDuration" = "%lds'dan kıza süreli videolar seçilemiyor.";
+"shorterThanMinVideoDuration" = "%lds'dan kıza süreli videolar seçilemiyor.";
+"largerThanMaxVideoDataSize" = "%@MB'tan büyük videolar seçilemiyor";
+"smallerThanMinVideoDataSize" = "%@MB'tan küçük videolar seçilemez";
 "exceededMaxVideoSelectCount" = "Maksimum video seçim adeti: %ld";
 "lessThanMinVideoSelectCount" = "Minimum video seçim adeti: %ld";
 

@@ -26,6 +26,7 @@
 
 import UIKit
 
+@objcMembers
 public class ZLProgressHUD: UIView {
     @objc public enum HUDStyle: Int {
         case light
@@ -82,14 +83,14 @@ public class ZLProgressHUD: UIView {
     
     private var timer: Timer?
     
-    var timeoutBlock: (() -> Void)?
+    public var timeoutBlock: (() -> Void)?
     
     deinit {
         zl_debugPrint("ZLProgressHUD deinit")
         cleanTimer()
     }
     
-    @objc public init(style: ZLProgressHUD.HUDStyle) {
+    public init(style: ZLProgressHUD.HUDStyle) {
         self.style = style
         super.init(frame: UIScreen.main.bounds)
         setupUI()
@@ -139,10 +140,13 @@ public class ZLProgressHUD: UIView {
         loadingView.layer.add(animation, forKey: nil)
     }
     
-    @objc public func show(timeout: TimeInterval = 100) {
+    public func show(
+        in view: UIView? = UIApplication.shared.keyWindow,
+        timeout: TimeInterval = 100
+    ) {
         ZLMainAsync {
             self.startAnimation()
-            UIApplication.shared.keyWindow?.addSubview(self)
+            view?.addSubview(self)
         }
         if timeout > 0 {
             cleanTimer()
@@ -151,7 +155,7 @@ public class ZLProgressHUD: UIView {
         }
     }
     
-    @objc public func hide() {
+    public func hide() {
         cleanTimer()
         ZLMainAsync {
             self.loadingView.layer.removeAllAnimations()
@@ -159,7 +163,7 @@ public class ZLProgressHUD: UIView {
         }
     }
     
-    @objc func timeout(_ timer: Timer) {
+    func timeout(_ timer: Timer) {
         timeoutBlock?()
         hide()
     }
@@ -170,10 +174,13 @@ public class ZLProgressHUD: UIView {
     }
 }
 
-extension ZLProgressHUD {
-    class func show(timeout: TimeInterval = 100) -> ZLProgressHUD {
+public extension ZLProgressHUD {
+    class func show(
+        in view: UIView? = UIApplication.shared.keyWindow,
+        timeout: TimeInterval = 100
+    ) -> ZLProgressHUD {
         let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
-        hud.show(timeout: timeout)
+        hud.show(in: view, timeout: timeout)
         return hud
     }
 }
