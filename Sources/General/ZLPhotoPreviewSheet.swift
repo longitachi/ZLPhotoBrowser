@@ -1047,13 +1047,6 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         cell.enableSelect = true
         let config = ZLPhotoConfiguration.default()
         
-        if model.type == .video, !videoIsMeetRequirements(model: model) {
-            cell.coverView.backgroundColor = .zl.invalidMaskColor
-            cell.coverView.isHidden = !config.showInvalidMask
-            cell.enableSelect = false
-            return
-        }
-        
         if isSelected {
             cell.coverView.backgroundColor = .zl.selectedMaskColor
             cell.coverView.isHidden = !config.showSelectedMask
