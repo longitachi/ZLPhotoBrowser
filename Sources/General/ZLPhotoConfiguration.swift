@@ -243,6 +243,12 @@ public class ZLPhotoConfiguration: NSObject {
     /// - Tips: If the choice is not allowed, the developer can toast prompt the user for relevant information.
     public var canSelectAsset: ((PHAsset) -> Bool)?
     
+    /// This block will be called when selecting an asset.
+    public var didSelectAsset: ((PHAsset) -> Void)?
+    
+    /// This block will be called when cancel selecting an asset.
+    public var didDeselectAsset: ((PHAsset) -> Void)?
+    
     /// If user choose limited Photo mode, a button with '+' will be added to the ZLThumbnailViewController. It will call PHPhotoLibrary.shared().presentLimitedLibraryPicker(from:) to add photo. Defaults to true.
     /// E.g., Sina Weibo's ImagePicker
     public var showAddPhotoButton = true

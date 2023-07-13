@@ -412,12 +412,13 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch asset local file path.
+    /// - Note: Asynchronously to fetch the file path. calls completionHandler block on the main queue.
     public class func fetchAssetFilePath(for asset: PHAsset, completion: @escaping (String?) -> Void) {
         asset.requestContentEditingInput(with: nil) { input, _ in
             var path = input?.fullSizeImageURL?.absoluteString
             if path == nil,
                let dir = asset.value(forKey: "directory") as? String,
-               let name = asset.value(forKey: "filename") as? String {
+               let name = asset.zl.filename {
                 path = String(format: "file:///var/mobile/Media/%@/%@", dir, name)
             }
             completion(path)
@@ -425,6 +426,7 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Save asset original data to file url. Support save image and video.
+    /// - Note: Asynchronously write to a local file. Calls completionHandler block on the main queue.
     public class func saveAsset(_ asset: PHAsset, toFile fileUrl: URL, completion: @escaping ((Error?) -> Void)) {
         guard let resource = asset.zl.resource else {
             completion(NSError.assetSaveError)

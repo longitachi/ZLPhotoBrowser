@@ -706,6 +706,8 @@ public class ZLPhotoPreviewSheet: UIView {
                         model.editImage = ei
                         model.editImageModel = editImageModel
                         self?.arrSelectedModels.append(model)
+                        ZLPhotoConfiguration.default().didSelectAsset?(model.asset)
+                        
                         self?.requestSelectPhoto()
                     }
                 } else {
@@ -717,9 +719,10 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func showEditVideoVC(model: ZLPhotoModel) {
+        let config = ZLPhotoConfiguration.default()
         var requestAvAssetID: PHImageRequestID?
         
-        let hud = ZLProgressHUD.show(timeout: ZLPhotoConfiguration.default().timeout)
+        let hud = ZLProgressHUD.show(timeout: config.timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self?.sender)
             if let requestAvAssetID = requestAvAssetID {
@@ -737,6 +740,8 @@ public class ZLPhotoPreviewSheet: UIView {
                             m.isSelected = true
                             self?.arrSelectedModels.removeAll()
                             self?.arrSelectedModels.append(m)
+                            config.didSelectAsset?(asset)
+                            
                             self?.requestSelectPhoto()
                         } else {
                             showAlertView(localLanguageTextValue(.saveVideoError), self?.sender)
@@ -744,7 +749,10 @@ public class ZLPhotoPreviewSheet: UIView {
                     }
                 } else {
                     self?.arrSelectedModels.removeAll()
+                    model.isSelected = true
                     self?.arrSelectedModels.append(model)
+                    config.didSelectAsset?(model.asset)
+                    
                     self?.requestSelectPhoto()
                 }
             }
@@ -790,8 +798,8 @@ public class ZLPhotoPreviewSheet: UIView {
             let hud = ZLProgressHUD.show()
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 hud.hide()
-                if suc, let at = asset {
-                    let model = ZLPhotoModel(asset: at)
+                if suc, let asset = asset {
+                    let model = ZLPhotoModel(asset: asset)
                     self?.handleDataArray(newModel: model)
                 } else {
                     showAlertView(localLanguageTextValue(.saveImageError), self?.sender)
@@ -823,6 +831,7 @@ public class ZLPhotoPreviewSheet: UIView {
             if !shouldDirectEdit(newModel) {
                 newModel.isSelected = true
                 arrSelectedModels.append(newModel)
+                ZLPhotoConfiguration.default().didSelectAsset?(newModel.asset)
                 
                 if ZLPhotoConfiguration.default().callbackDirectlyAfterTakingPhoto {
                     requestSelectPhoto()
@@ -870,6 +879,8 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLThumbnailPhotoCell.zl.identifier, for: indexPath) as! ZLThumbnailPhotoCell
         
+        let config = ZLPhotoConfiguration.default()
+        
         let model = arrDataSources[indexPath.row]
         
         cell.selectedBlock = { [weak self, weak cell] isSelected in
@@ -881,6 +892,8 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 if !self.shouldDirectEdit(model) {
                     model.isSelected = true
                     self.arrSelectedModels.append(model)
+                    config.didSelectAsset?(model.asset)
+                    
                     cell?.btnSelect.isSelected = true
                     self.refreshCellIndex()
                 }
@@ -888,6 +901,8 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 cell?.btnSelect.isSelected = false
                 model.isSelected = false
                 self.arrSelectedModels.removeAll { $0 == model }
+                
+                config.didDeselectAsset?(model.asset)
                 self.refreshCellIndex()
             }
             
@@ -895,7 +910,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         }
         
         cell.indexLabel.isHidden = true
-        if ZLPhotoConfiguration.default().showSelectedIndex {
+        if config.showSelectedIndex {
             for (index, selM) in arrSelectedModels.enumerated() {
                 if model == selM {
                     setCellIndex(cell, showIndexLabel: true, index: index + 1)

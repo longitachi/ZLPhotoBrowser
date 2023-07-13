@@ -27,7 +27,7 @@
 import Photos
 import MobileCoreServices
 
-extension ZLPhotoBrowserWrapper where Base: PHAsset {
+public extension ZLPhotoBrowserWrapper where Base: PHAsset {
     var isInCloud: Bool {
         guard let resource = resource else {
             return false
@@ -36,14 +36,18 @@ extension ZLPhotoBrowserWrapper where Base: PHAsset {
     }
 
     var isGif: Bool {
-        guard let fileName = base.value(forKey: "filename") as? String else {
+        guard let filename = filename else {
             return false
         }
         
-        return fileName.hasSuffix("GIF")
+        return filename.hasSuffix("GIF")
+    }
+    
+    var filename: String? {
+        base.value(forKey: "filename") as? String
     }
     
     var resource: PHAssetResource? {
-        return PHAssetResource.assetResources(for: base).first
+        PHAssetResource.assetResources(for: base).first
     }
 }

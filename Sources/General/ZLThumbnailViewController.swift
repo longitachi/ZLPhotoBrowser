@@ -546,10 +546,12 @@ class ZLThumbnailViewController: UIViewController {
                     } else {
                         m.isSelected = true
                         nav.arrSelectedModels.append(m)
+                        config.didSelectAsset?(m.asset)
                     }
                 } else if m.isSelected {
                     m.isSelected = false
                     nav.arrSelectedModels.removeAll { $0 == m }
+                    config.didDeselectAsset?(m.asset)
                 }
                 
                 cell?.btnSelect.isSelected = m.isSelected
@@ -601,31 +603,38 @@ class ZLThumbnailViewController: UIViewController {
                     let inSection = path.row >= minIndex && path.row <= maxIndex
                     let m = self.arrDataSources[index]
                     
-                    if self.panSelectType == .select {
-                        if inSection,
-                           !m.isSelected,
-                           canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self, showAlert: false) {
-                            m.isSelected = true
-                        }
-                    } else if self.panSelectType == .cancel {
-                        if inSection {
+                    if inSection {
+                        if self.panSelectType == .select {
+                            if !m.isSelected,
+                               canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self, showAlert: false) {
+                                m.isSelected = true
+                            }
+                        } else if self.panSelectType == .cancel {
                             m.isSelected = false
                         }
-                    }
-                    
-                    if !inSection {
+                    } else {
                         // 未在区间内的model还原为初始选择状态
                         m.isSelected = self.dicOriSelectStatus[path] ?? false
                     }
+                    
                     if !m.isSelected {
                         if let index = nav.arrSelectedModels.firstIndex(where: { $0 == m }) {
                             nav.arrSelectedModels.remove(at: index)
                             selectedArrHasChange = true
+                            
+                            ZLMainAsync {
+                                config.didDeselectAsset?(m.asset)
+                            }
                         }
                     } else {
                         if !nav.arrSelectedModels.contains(where: { $0 == m }) {
                             nav.arrSelectedModels.append(m)
                             selectedArrHasChange = true
+                            
+                            ZLMainAsync {
+                                config.didSelectAsset?(m.asset)
+                                
+                            }
                         }
                     }
                     
@@ -862,6 +871,7 @@ class ZLThumbnailViewController: UIViewController {
             if !shouldDirectEdit(newModel) {
                 newModel.isSelected = true
                 nav?.arrSelectedModels.append(newModel)
+                config.didSelectAsset?(newModel.asset)
                 
                 if config.callbackDirectlyAfterTakingPhoto {
                     doneBtnClick()
@@ -899,6 +909,7 @@ class ZLThumbnailViewController: UIViewController {
                     model.editImage = ei
                     model.editImageModel = editImageModel
                     nav?.arrSelectedModels.append(model)
+                    ZLPhotoConfiguration.default().didSelectAsset?(model.asset)
                     self?.doneBtnClick()
                 }
             } else {
@@ -911,9 +922,10 @@ class ZLThumbnailViewController: UIViewController {
     
     private func showEditVideoVC(model: ZLPhotoModel) {
         let nav = navigationController as? ZLImageNavController
+        let config = ZLPhotoConfiguration.default()
         
         var requestAvAssetID: PHImageRequestID?
-        let hud = ZLProgressHUD.show(timeout: ZLPhotoConfiguration.default().timeout)
+        let hud = ZLProgressHUD.show(timeout: config.timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self)
             if let requestAvAssetID = requestAvAssetID {
@@ -930,13 +942,18 @@ class ZLThumbnailViewController: UIViewController {
                             let m = ZLPhotoModel(asset: asset)
                             m.isSelected = true
                             nav?.arrSelectedModels.append(m)
+                            config.didSelectAsset?(m.asset)
+                            
                             self?.doneBtnClick()
                         } else {
                             showAlertView(localLanguageTextValue(.saveVideoError), self)
                         }
                     }
                 } else {
+                    model.isSelected = true
                     nav?.arrSelectedModels.append(model)
+                    config.didSelectAsset?(model.asset)
+                    
                     self?.doneBtnClick()
                 }
             }
@@ -1053,6 +1070,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 if self?.shouldDirectEdit(model) == false {
                     model.isSelected = true
                     nav?.arrSelectedModels.append(model)
+                    config.didSelectAsset?(model.asset)
+                    
                     cell?.btnSelect.isSelected = true
                     self?.refreshCellIndexAndMaskView()
                     if config.maxSelectCount == 1, !config.allowPreviewPhotos {
@@ -1063,6 +1082,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 cell?.btnSelect.isSelected = false
                 model.isSelected = false
                 nav?.arrSelectedModels.removeAll { $0 == model }
+                config.didDeselectAsset?(model.asset)
+                
                 self?.refreshCellIndexAndMaskView()
             }
             self?.resetBottomToolBtnStatus()

@@ -305,6 +305,18 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func didSelectAsset(_ block: ((PHAsset) -> Void)?) -> ZLPhotoConfiguration {
+        didSelectAsset = block
+        return self
+    }
+    
+    @discardableResult
+    func didDeselectAsset(_ block: ((PHAsset) -> Void)?) -> ZLPhotoConfiguration {
+        didDeselectAsset = block
+        return self
+    }
+    
+    @discardableResult
     func showAddPhotoButton(_ value: Bool) -> ZLPhotoConfiguration {
         showAddPhotoButton = value
         return self

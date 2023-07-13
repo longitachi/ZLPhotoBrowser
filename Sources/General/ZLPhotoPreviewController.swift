@@ -521,14 +521,19 @@ class ZLPhotoPreviewController: UIViewController {
             zlLoggerInDebug("Navigation controller is null")
             return
         }
+        
+        let config = ZLPhotoConfiguration.default()
+        
         let currentModel = arrDataSources[currentIndex]
         selectBtn.layer.removeAllAnimations()
         if currentModel.isSelected {
             currentModel.isSelected = false
             nav.arrSelectedModels.removeAll { $0 == currentModel }
             selPhotoPreview?.removeSelModel(model: currentModel)
+            
+            config.didDeselectAsset?(currentModel.asset)
         } else {
-            if ZLPhotoConfiguration.default().animateSelectBtnWhenSelect {
+            if config.animateSelectBtnWhenSelect {
                 selectBtn.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
             }
             if !canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
@@ -537,6 +542,8 @@ class ZLPhotoPreviewController: UIViewController {
             currentModel.isSelected = true
             nav.arrSelectedModels.append(currentModel)
             selPhotoPreview?.addSelModel(model: currentModel)
+            
+            config.didSelectAsset?(currentModel.asset)
         }
         resetSubViewStatus()
     }
@@ -627,6 +634,8 @@ class ZLPhotoPreviewController: UIViewController {
         if autoSelectCurrentIfNotSelectAnyone {
             if nav.arrSelectedModels.isEmpty, canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
                 nav.arrSelectedModels.append(currentModel)
+                
+                ZLPhotoConfiguration.default().didSelectAsset?(currentModel.asset)
             }
             
             if !nav.arrSelectedModels.isEmpty {
