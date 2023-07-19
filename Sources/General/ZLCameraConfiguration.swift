@@ -52,6 +52,63 @@ public class ZLCameraConfiguration: NSObject {
         case photo
     }
     
+    @available(iOS 11.0, *)
+    @objc public enum VideoCodecType: Int {
+        var videoCodecType: AVVideoCodecType {
+            switch self {
+            case .hevc:
+                return .hevc
+            case .h264:
+                return .h264
+            case .jpeg:
+                return .jpeg
+            case .proRes4444:
+                return .proRes4444
+            case .proRes422:
+                if #available(iOS 13.0, *) {
+                    return .proRes422
+                } else {
+                    return .h264
+                }
+            case .proRes422HQ:
+                if #available(iOS 13.0, *) {
+                    return .proRes422HQ
+                } else {
+                    return .h264
+                }
+            case .proRes422LT:
+                if #available(iOS 13.0, *) {
+                    return .proRes422LT
+                } else {
+                    return .h264
+                }
+            case .proRes422Proxy:
+                if #available(iOS 13.0, *) {
+                    return .proRes422Proxy
+                } else {
+                    return .h264
+                }
+            case .hevcWithAlpha:
+                if #available(iOS 13.0, *) {
+                    return .hevcWithAlpha
+                } else {
+                    return .h264
+                }
+            }
+        }
+        
+        case hevc
+        case h264
+        case jpeg
+        case proRes4444
+        case proRes422
+        case proRes422HQ
+        case proRes422LT
+        case proRes422Proxy
+        case hevcWithAlpha
+        
+    }
+    
     @objc public enum FocusMode: Int {
         var avFocusMode: AVCaptureDevice.FocusMode {
             switch self {
@@ -192,6 +249,23 @@ public class ZLCameraConfiguration: NSObject {
     
     /// The default camera position after entering the camera. Defaults to back.
     public var devicePosition: ZLCameraConfiguration.DevicePosition = .back
+    
+    /// The type of the strings used to specify a video codec type (for instance, as values for the AVVideoCodecKey key in a video settings dictionary).
+    /// default is H.264
+    /// - warning: Only works on above iOS11. proRes422, proRes422HQ, proRes422LT, proRes422Proxy, hevcWithAlpha in iOS11 ~ iOS12 is .h24
+    private lazy var pri_videoCodeType: Any? = nil
+    @available(iOS 11.0, *)
+    public var videoCodeType: ZLCameraConfiguration.VideoCodecType {
+        get {
+            if let pri_videoCodeType = pri_videoCodeType as? ZLCameraConfiguration.VideoCodecType {
+                return pri_videoCodeType
+            }
+            return .h264
+        }
+        set {
+            pri_videoCodeType = newValue
+        }
+    }
 }
 
 // MARK: chaining
@@ -260,6 +334,13 @@ public extension ZLCameraConfiguration {
     @discardableResult
     func devicePosition(_ position: ZLCameraConfiguration.DevicePosition) -> ZLCameraConfiguration {
         devicePosition = position
+        return self
+    }
+    
+    @available(iOS 11.0, *)
+    @discardableResult
+    func videoCodeType(_ codeType: ZLCameraConfiguration.VideoCodecType) -> ZLCameraConfiguration {
+        videoCodeType = codeType
         return self
     }
 }

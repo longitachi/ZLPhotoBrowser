@@ -1083,6 +1083,14 @@ open class ZLCustomCamera: UIViewController {
         } else {
             connection?.videoOrientation = cacheVideoOrientation
         }
+        
+        // 解决不同系统版本,因为录制视频编码导致安卓端无法播放的问题
+        if #available(iOS 11.0, *) {
+            let outputSettings = [AVVideoCodecKey: cameraConfig.videoCodeType]
+            if let connection = movieFileOutput.connection(with: .video) {
+                movieFileOutput.setOutputSettings(outputSettings, for: connection)
+            }
+        }
         // 解决前置摄像头录制视频时候左右颠倒的问题
         if videoInput?.device.position == .front {
             // 镜像设置
