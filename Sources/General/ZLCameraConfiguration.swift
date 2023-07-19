@@ -52,9 +52,8 @@ public class ZLCameraConfiguration: NSObject {
         case photo
     }
     
+    @available(iOS 11.0, *)
     @objc public enum VideoCodecType: Int {
-        
-        @available(iOS 11.0, *)
         var videoCodecType: AVVideoCodecType {
             switch self {
             case .hevc:
@@ -253,9 +252,20 @@ public class ZLCameraConfiguration: NSObject {
     
     /// The type of the strings used to specify a video codec type (for instance, as values for the AVVideoCodecKey key in a video settings dictionary).
     /// default is H.264
-    /// - warning: Only works on above iOS11. proRes422, proRes422HQ, proRes422LT,
-    /// proRes422Proxy, hevcWithAlpha in iOS11 ~ iOS12 is .h246
-    public var videoCodeType: ZLCameraConfiguration.VideoCodecType = .h264
+    /// - warning: Only works on above iOS11. proRes422, proRes422HQ, proRes422LT, proRes422Proxy, hevcWithAlpha in iOS11 ~ iOS12 is .h24
+    private lazy var pri_videoCodeType: Any? = nil
+    @available(iOS 11.0, *)
+    public var videoCodeType: ZLCameraConfiguration.VideoCodecType {
+        get {
+            if let pri_videoCodeType = pri_videoCodeType as? ZLCameraConfiguration.VideoCodecType {
+                return pri_videoCodeType
+            }
+            return .h264
+        }
+        set {
+            pri_videoCodeType = newValue
+        }
+    }
 }
 
 // MARK: chaining
