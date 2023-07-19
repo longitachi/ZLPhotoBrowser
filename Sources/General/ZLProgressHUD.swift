@@ -26,7 +26,6 @@
 
 import UIKit
 
-@objcMembers
 public class ZLProgressHUD: UIView {
     @objc public enum HUDStyle: Int {
         case light
@@ -163,7 +162,7 @@ public class ZLProgressHUD: UIView {
         }
     }
     
-    func timeout(_ timer: Timer) {
+    @objc func timeout(_ timer: Timer) {
         timeoutBlock?()
         hide()
     }

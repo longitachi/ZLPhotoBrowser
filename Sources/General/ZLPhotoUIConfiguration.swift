@@ -78,7 +78,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// - Note: This property is ignored when using columnCountBlock.
     public var columnCount: Int {
         get {
-            return pri_columnCount
+            pri_columnCount
         }
         set {
             pri_columnCount = min(6, max(newValue, 2))
@@ -206,7 +206,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览快速选择模式下，按钮标题高亮颜色
     public var sheetBtnTitleTintColor: UIColor {
         get {
-            return pri_sheetBtnTitleTintColor ?? themeColor
+            pri_sheetBtnTitleTintColor ?? themeColor
         }
         set {
             pri_sheetBtnTitleTintColor = newValue
@@ -306,7 +306,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 相册小图界面底部按钮可交互状态下背景色
     public var bottomToolViewBtnNormalBgColor: UIColor {
         get {
-            return pri_bottomToolViewBtnNormalBgColor ?? themeColor
+            pri_bottomToolViewBtnNormalBgColor ?? themeColor
         }
         set {
             pri_bottomToolViewBtnNormalBgColor = newValue
@@ -318,7 +318,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览大图界面底部按钮可交互状态下背景色
     public var bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor {
         get {
-            return pri_bottomToolViewBtnNormalBgColorOfPreviewVC ?? themeColor
+            pri_bottomToolViewBtnNormalBgColorOfPreviewVC ?? themeColor
         }
         set {
             pri_bottomToolViewBtnNormalBgColorOfPreviewVC = newValue
@@ -342,7 +342,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 自定义相机录制视频时进度条颜色
     public var cameraRecodeProgressColor: UIColor {
         get {
-            return pri_cameraRecodeProgressColor ?? themeColor
+            pri_cameraRecodeProgressColor ?? themeColor
         }
         set {
             pri_cameraRecodeProgressColor = newValue
@@ -358,7 +358,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 已选择照片border颜色
     public var selectedBorderColor: UIColor {
         get {
-            return pri_selectedBorderColor ?? themeColor
+            pri_selectedBorderColor ?? themeColor
         }
         set {
             pri_selectedBorderColor = newValue
@@ -378,7 +378,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 已选照片右上角序号label背景色
     public var indexLabelBgColor: UIColor {
         get {
-            return pri_indexLabelBgColor ?? themeColor
+            pri_indexLabelBgColor ?? themeColor
         }
         set {
             pri_indexLabelBgColor = newValue
@@ -398,7 +398,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景高亮色
     public var adjustSliderTintColor: UIColor {
         get {
-            return pri_adjustSliderTintColor ?? themeColor
+            pri_adjustSliderTintColor ?? themeColor
         }
         set {
             pri_adjustSliderTintColor = newValue
