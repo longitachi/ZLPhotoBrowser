@@ -336,4 +336,11 @@ public extension ZLCameraConfiguration {
         devicePosition = position
         return self
     }
+    
+    @available(iOS 11.0, *)
+    @discardableResult
+    func videoCodeType(_ codeType: ZLCameraConfiguration.VideoCodecType) -> ZLCameraConfiguration {
+        videoCodeType = codeType
+        return self
+    }
 }
