@@ -36,53 +36,6 @@ import UIKit
 
 @objcMembers
 public class ZLEditImageConfiguration: NSObject {
-    @objc public enum EditTool: Int, CaseIterable {
-        case draw
-        case clip
-        case imageSticker
-        case textSticker
-        case mosaic
-        case filter
-        case adjust
-    }
-    
-    @objc public enum AdjustTool: Int, CaseIterable {
-        case brightness
-        case contrast
-        case saturation
-        
-        var key: String {
-            switch self {
-            case .brightness:
-                return kCIInputBrightnessKey
-            case .contrast:
-                return kCIInputContrastKey
-            case .saturation:
-                return kCIInputSaturationKey
-            }
-        }
-        
-        func filterValue(_ value: Float) -> Float {
-            switch self {
-            case .brightness:
-                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
-                return value / 3
-            case .contrast:
-                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
-                let v: Float
-                if value < 0 {
-                    v = 1 + value * (1 / 2)
-                } else {
-                    v = 1 + value * (3 / 2)
-                }
-                return v
-            case .saturation:
-                // 饱和度范围0---2，默认1
-                return value + 1
-            }
-        }
-    }
-    
     private var pri_tools: [ZLEditImageConfiguration.EditTool] = ZLEditImageConfiguration.EditTool.allCases
     /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker, mosaic, filtter)
     /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
@@ -108,9 +61,21 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
-    private static let defaultDrawColors: [UIColor] = [.white, .black, .zl.rgba(241, 79, 79), .zl.rgba(243, 170, 78), .zl.rgba(38, 191, 76), .zl.rgba(30, 183, 243), .zl.rgba(139, 105, 234)]
+    private static let defaultDrawColors: [UIColor] = [
+        .white,
+        .black,
+        .zl.rgba(249, 80, 81),
+        .zl.rgba(248, 156, 59),
+        .zl.rgba(255, 195, 0),
+        .zl.rgba(145, 211, 0),
+        .zl.rgba(0, 193, 94),
+        .zl.rgba(16, 173, 254),
+        .zl.rgba(16, 132, 236),
+        .zl.rgba(99, 103, 240),
+        .zl.rgba(127, 127, 127)
+    ]
     
-    private var pri_drawColors: [UIColor] = ZLEditImageConfiguration.defaultDrawColors
+    private var pri_drawColors = ZLEditImageConfiguration.defaultDrawColors
     /// Draw colors for image editor.
     public var drawColors: [UIColor] {
         get {
@@ -126,7 +91,7 @@ public class ZLEditImageConfiguration: NSObject {
     }
     
     /// The default draw color. If this color not in editImageDrawColors, will pick the first color in editImageDrawColors as the default.
-    public var defaultDrawColor: UIColor = .zl.rgba(241, 79, 79)
+    public var defaultDrawColor: UIColor = .zl.rgba(249, 80, 81)
     
     private var pri_clipRatios: [ZLImageClipRatio] = [.custom]
     /// Edit ratios for image editor.
@@ -143,7 +108,19 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
-    private static let defaultTextStickerTextColors: [UIColor] = [.white, .black, .zl.rgba(241, 79, 79), .zl.rgba(243, 170, 78), .zl.rgba(38, 191, 76), .zl.rgba(30, 183, 243), .zl.rgba(139, 105, 234)]
+    private static let defaultTextStickerTextColors: [UIColor] = [
+        .white,
+        .black,
+        .zl.rgba(249, 80, 81),
+        .zl.rgba(248, 156, 59),
+        .zl.rgba(255, 195, 0),
+        .zl.rgba(145, 211, 0),
+        .zl.rgba(0, 193, 94),
+        .zl.rgba(16, 173, 254),
+        .zl.rgba(16, 132, 236),
+        .zl.rgba(99, 103, 240),
+        .zl.rgba(127, 127, 127)
+    ]
     
     private var pri_textStickerTextColors: [UIColor] = ZLEditImageConfiguration.defaultTextStickerTextColors
     /// Text sticker colors for image editor.
@@ -213,6 +190,55 @@ public class ZLEditImageConfiguration: NSObject {
     
     /// Whether to support redo in graffiti and mosaic tools. Defaults to false
     public var canRedo = false
+}
+
+public extension ZLEditImageConfiguration {
+    @objc enum EditTool: Int, CaseIterable {
+        case draw
+        case clip
+        case imageSticker
+        case textSticker
+        case mosaic
+        case filter
+        case adjust
+    }
+    
+    @objc enum AdjustTool: Int, CaseIterable {
+        case brightness
+        case contrast
+        case saturation
+        
+        var key: String {
+            switch self {
+            case .brightness:
+                return kCIInputBrightnessKey
+            case .contrast:
+                return kCIInputContrastKey
+            case .saturation:
+                return kCIInputSaturationKey
+            }
+        }
+        
+        func filterValue(_ value: Float) -> Float {
+            switch self {
+            case .brightness:
+                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
+                return value / 3
+            case .contrast:
+                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
+                let v: Float
+                if value < 0 {
+                    v = 1 + value * (1 / 2)
+                } else {
+                    v = 1 + value * (3 / 2)
+                }
+                return v
+            case .saturation:
+                // 饱和度范围0---2，默认1
+                return value + 1
+            }
+        }
+    }
 }
 
 // MARK: chaining
@@ -308,7 +334,7 @@ public class ZLImageClipRatio: NSObject {
 }
 
 extension ZLImageClipRatio {
-    static func ==(lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
+    static func == (lhs: ZLImageClipRatio, rhs: ZLImageClipRatio) -> Bool {
         return lhs.whRatio == rhs.whRatio && lhs.title == rhs.title
     }
 }

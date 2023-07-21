@@ -78,22 +78,20 @@ class ZLEditToolCell: UICollectionViewCell {
 // MARK: draw color cell
 
 class ZLDrawColorCell: UICollectionViewCell {
-    private lazy var colorView: UIView = {
+    lazy var colorView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = 10
         view.layer.masksToBounds = true
-        view.frame = CGRect(x: 0, y: 0, width: 16, height: 16)
-        view.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        view.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
         return view
     }()
     
     lazy var bgWhiteView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
-        view.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-        view.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        view.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
         return view
     }()
     
@@ -113,6 +111,13 @@ class ZLDrawColorCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        colorView.center = contentView.center
+        bgWhiteView.center = contentView.center
     }
 }
 

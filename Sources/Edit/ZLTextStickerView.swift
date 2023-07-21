@@ -27,45 +27,26 @@
 import UIKit
 
 class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
-    static let fontSize: CGFloat = 30
+    static let fontSize: CGFloat = 32
     
-    override var borderView: UIView {
-        return priBorderView
-    }
+    private static let edgeInset: CGFloat = 10
     
-    private lazy var priBorderView: UIView = {
-        let view = UIView()
-        view.layer.borderWidth = ZLStickerLayout.borderWidth
+    private lazy var imageView: UIImageView = {
+        let view = UIImageView(image: image)
+        view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
         return view
     }()
     
-    lazy var label: UILabel = {
-        let label = UILabel()
-        label.text = text
-        label.font = UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
-        label.textColor = textColor
-        label.backgroundColor = bgColor
-        label.numberOfLines = 0
-        label.lineBreakMode = .byCharWrapping
-        return label
-    }()
+    var text: String
     
-    var text: String {
-        didSet {
-            label.text = text
-        }
-    }
+    var textColor: UIColor
     
-    var textColor: UIColor {
-        didSet {
-            label.textColor = textColor
-        }
-    }
+    var style: ZLInputTextStyle
     
-    // TODO: add text background color
-    var bgColor: UIColor {
+    var image: UIImage {
         didSet {
-            label.backgroundColor = bgColor
+            imageView.image = image
         }
     }
 
@@ -74,7 +55,8 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
         return ZLTextStickerState(
             text: text,
             textColor: textColor,
-            bgColor: bgColor,
+            style: style,
+            image: image,
             originScale: originScale,
             originAngle: originAngle,
             originFrame: originFrame,
@@ -88,11 +70,12 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
         zl_debugPrint("ZLTextStickerView deinit")
     }
     
-    convenience init(from state: ZLTextStickerState) {
+    convenience init(state: ZLTextStickerState) {
         self.init(
             text: state.text,
             textColor: state.textColor,
-            bgColor: state.bgColor,
+            style: state.style,
+            image: state.image,
             originScale: state.originScale,
             originAngle: state.originAngle,
             originFrame: state.originFrame,
@@ -106,7 +89,8 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
     init(
         text: String,
         textColor: UIColor,
-        bgColor: UIColor,
+        style: ZLInputTextStyle,
+        image: UIImage,
         originScale: CGFloat,
         originAngle: CGFloat,
         originFrame: CGRect,
@@ -117,11 +101,11 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
     ) {
         self.text = text
         self.textColor = textColor
-        self.bgColor = bgColor
+        self.style = style
+        self.image = image
         super.init(originScale: originScale, originAngle: originAngle, originFrame: originFrame, gesScale: gesScale, gesRotation: gesRotation, totalTranslationPoint: totalTranslationPoint, showBorder: showBorder)
         
-        addSubview(borderView)
-        borderView.addSubview(label)
+        borderView.addSubview(imageView)
     }
     
     @available(*, unavailable)
@@ -130,8 +114,7 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
     }
     
     override func setupUIFrameWhenFirstLayout() {
-        borderView.frame = bounds.insetBy(dx: ZLStickerLayout.edgeInset, dy: ZLStickerLayout.edgeInset)
-        label.frame = borderView.bounds.insetBy(dx: ZLStickerLayout.edgeInset, dy: ZLStickerLayout.edgeInset)
+        imageView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
     }
     
     override func tapAction(_ ges: UITapGestureRecognizer) {
@@ -168,8 +151,7 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
         of.size = newSize
         originFrame = of
         
-        borderView.frame = bounds.insetBy(dx: ZLStickerLayout.edgeInset, dy: ZLStickerLayout.edgeInset)
-        label.frame = borderView.bounds.insetBy(dx: ZLStickerLayout.edgeInset, dy: ZLStickerLayout.edgeInset)
+        imageView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
         
         // Readd zoom scale.
         transform = transform.scaledBy(x: originScale, y: originScale)
@@ -180,20 +162,19 @@ class ZLTextStickerView: ZLBaseStickerView<ZLTextStickerState> {
         transform = transform.rotated(by: originAngle.zl.toPi)
     }
     
-    class func calculateSize(text: String, width: CGFloat) -> CGSize {
-        let diff = ZLStickerLayout.edgeInset * 2
-        let size = text.zl.boundingRect(
-            font: UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize),
-            limitSize: CGSize(width: width - diff, height: CGFloat.greatestFiniteMagnitude)
-        )
-        return CGSize(width: size.width + diff * 2, height: size.height + diff * 2)
+    class func calculateSize(image: UIImage) -> CGSize {
+        var size = image.size
+        size.width += Self.edgeInset * 2
+        size.height += Self.edgeInset * 2
+        return size
     }
 }
 
 public class ZLTextStickerState: NSObject {
     let text: String
     let textColor: UIColor
-    let bgColor: UIColor
+    let style: ZLInputTextStyle
+    let image: UIImage
     let originScale: CGFloat
     let originAngle: CGFloat
     let originFrame: CGRect
@@ -204,7 +185,8 @@ public class ZLTextStickerState: NSObject {
     init(
         text: String,
         textColor: UIColor,
-        bgColor: UIColor,
+        style: ZLInputTextStyle,
+        image: UIImage,
         originScale: CGFloat,
         originAngle: CGFloat,
         originFrame: CGRect,
@@ -214,7 +196,8 @@ public class ZLTextStickerState: NSObject {
     ) {
         self.text = text
         self.textColor = textColor
-        self.bgColor = bgColor
+        self.style = style
+        self.image = image
         self.originScale = originScale
         self.originAngle = originAngle
         self.originFrame = originFrame
