@@ -91,6 +91,12 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.3
+  Add:
+    Support to limit the data size of the video.
+    Add two blocks, called when asset is selected and deselected.
+    Support setting video codec type in custom camera.
+    Text stickers support display background color.
 ● 4.4.2
   Add:
     Preserve the alpha channel of the edited image.
@@ -102,11 +108,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Fix:
     Fix the problem that the image editor does not work properly when the scale of the picture is not 1.
     Fixed some UI display issue in the image preview interface.
-● 4.4.0
-  Add:
-    Limit the maximum number of frames of GIF images to avoid crashes caused by loading too many frames of GIFs, and provide a series of blocks to support custom implementation of GIF image playback.
-    Modify the UI effect of text input in the image editor.
-    Support set the default camera position.
 ...
 ```
 

@@ -2,6 +2,16 @@
 
 -----
 
+## [4.4.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.3) (2023-07-24)
+
+### Add:
+* Support to limit the data size of the video.
+* Add two blocks, called when asset is selected and deselected.
+* Support setting video codec type in custom camera. [#831](https://github.com/longitachi/ZLPhotoBrowser/pull/831)
+* Text stickers support display background color.
+
+---
+    
 ## [4.4.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.2) (2023-06-08)
 
 ### Add:

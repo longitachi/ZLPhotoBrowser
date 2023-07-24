@@ -189,12 +189,11 @@ class ViewController: UIViewController {
              .allowSwitchCamera(false)
              .showFlashSwitch(true)
           */
-        
         ZLPhotoConfiguration.default()
             // You can first determine whether the asset is allowed to be selected.
-            .canSelectAsset { _ in
-                true
-            }
+            .canSelectAsset { _ in true }
+            .didSelectAsset { _ in }
+            .didDeselectAsset { _ in }
             .noAuthorityCallback { type in
                 switch type {
                 case .library:
@@ -250,7 +249,7 @@ class ViewController: UIViewController {
             debugPrint("isOriginal: \(isOriginal)")
             
 //            guard !self.selectedAssets.isEmpty else { return }
-//            self?.saveAsset(self.selectedAssets[0])
+//            self.saveAsset(self.selectedAssets[0])
         }
         ac.cancelBlock = {
             debugPrint("cancel select")
@@ -276,8 +275,13 @@ class ViewController: UIViewController {
         
         debugPrint("---- \(filePath)")
         let url = URL(fileURLWithPath: filePath)
-        ZLPhotoManager.saveAsset(asset, toFile: url) { _ in
+        ZLPhotoManager.saveAsset(asset, toFile: url) { error in
             do {
+                if let error = error {
+                    debugPrint("save error: \(error)")
+                    return
+                }
+                
                 if asset.mediaType == .video {
                     _ = AVURLAsset(url: url)
                 } else {
