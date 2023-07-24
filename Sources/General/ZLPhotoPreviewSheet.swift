@@ -821,19 +821,24 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private func handleDataArray(newModel: ZLPhotoModel) {
         arrDataSources.insert(newModel, at: 0)
+        let config = ZLPhotoConfiguration.default()
         
         var canSelect = true
         // If mixed selection is not allowed, and the newModel type is video, it will not be selected.
-        if !ZLPhotoConfiguration.default().allowMixSelect, newModel.type == .video {
+        if !config.allowMixSelect, newModel.type == .video {
+            canSelect = false
+        }
+        // 单选模式，且不显示选择按钮时，不允许选择
+        if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
             canSelect = false
         }
         if canSelect, canAddModel(newModel, currentSelectCount: arrSelectedModels.count, sender: sender, showAlert: false) {
             if !shouldDirectEdit(newModel) {
                 newModel.isSelected = true
                 arrSelectedModels.append(newModel)
-                ZLPhotoConfiguration.default().didSelectAsset?(newModel.asset)
+                config.didSelectAsset?(newModel.asset)
                 
-                if ZLPhotoConfiguration.default().callbackDirectlyAfterTakingPhoto {
+                if config.callbackDirectlyAfterTakingPhoto {
                     requestSelectPhoto()
                 }
             }

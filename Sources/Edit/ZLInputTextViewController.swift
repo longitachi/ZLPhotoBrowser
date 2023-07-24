@@ -404,14 +404,15 @@ extension ZLInputTextViewController {
     private func calculateTextRects() -> [CGRect] {
         let layoutManager = textView.layoutManager
         
-        let range = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, textView.text.count), actualCharacterRange: nil)
+        // 这里必须用utf16.count 或者 (text as NSString).length，因为用count的话不准，一个emoji表情的count为2
+        let range = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, textView.text.utf16.count), actualCharacterRange: nil)
         let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
         
         var rects: [CGRect] = []
         
         let insetLeft = textView.textContainerInset.left
         let insetTop = textView.textContainerInset.top
-        layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { _, usedRect, _, range, _ in
+        layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { _, usedRect, _, _, _ in
             rects.append(CGRect(x: usedRect.minX - 10 + insetLeft, y: usedRect.minY - 8 + insetTop, width: usedRect.width + 20, height: usedRect.height + 16))
         }
         

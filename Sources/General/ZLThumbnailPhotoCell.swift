@@ -159,11 +159,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         super.layoutSubviews()
     }
     
-    @objc func btnSelectClick() {
-        if !enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
-            return
-        }
-        
+    @objc func btnSelectClick() {        
         btnSelect.layer.removeAllAnimations()
         if !btnSelect.isSelected, ZLPhotoConfiguration.default().animateSelectBtnWhenSelect {
             btnSelect.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)

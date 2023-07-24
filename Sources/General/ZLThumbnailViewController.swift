@@ -867,6 +867,10 @@ class ZLThumbnailViewController: UIViewController {
         if !config.allowMixSelect, newModel.type == .video {
             canSelect = false
         }
+        // 单选模式，且不显示选择按钮时，不允许选择
+        if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
+            canSelect = false
+        }
         if canSelect, canAddModel(newModel, currentSelectCount: nav?.arrSelectedModels.count ?? 0, sender: self, showAlert: false) {
             if !shouldDirectEdit(newModel) {
                 newModel.isSelected = true
