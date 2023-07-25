@@ -256,7 +256,8 @@ class ZLInputTextViewController: UIViewController {
     
     @objc private func doneBtnClick() {
         textView.tintColor = .clear
-        
+        textView.endEditing(true)
+
         var image: UIImage?
         
         if !textView.text.isEmpty {
