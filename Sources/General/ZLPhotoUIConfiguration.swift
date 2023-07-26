@@ -187,7 +187,11 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// The theme color of framework.
     /// 框架主题色
-    public var themeColor: UIColor = .zl.rgba(7, 213, 101)
+    public var themeColor: UIColor = .zl.rgba(7, 213, 101) {
+        didSet {
+            configureUIViewTintColor()
+        }
+    }
     
     /// Preview selection mode, translucent background color above.
     /// 预览快速选择模式下，上方透明区域背景色
@@ -424,6 +428,27 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Background tint color of trash can in image editor.
     /// 编辑器中垃圾箱高亮状态下的颜色
     public var trashCanBackgroundTintColor: UIColor = .zl.rgba(241, 79, 79, 0.98)
+    
+    private override init() {
+        super.init()
+        configureUIViewTintColor()
+    }
+    
+    private func configureUIViewTintColor() {
+        [
+            ZLImageNavController.self,
+            ZLAlbumListController.self,
+            ZLImagePreviewController.self,
+            ZLPhotoPreviewController.self,
+            ZLThumbnailViewController.self,
+            ZLClipImageViewController.self,
+            ZLEditImageViewController.self
+        ].forEach {
+            UIView.appearance(whenContainedInInstancesOf: [
+                $0
+            ]).tintColor = themeColor
+        }
+    }
 }
 
 /// Font deploy

@@ -521,14 +521,20 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
 }
 
 extension ZLPhotoBrowserWrapper where Base: UIImage {
-    static func getImage(_ named: String) -> UIImage? {
+    static func getImage(_ named: String, asTemplate: Bool = false) -> UIImage? {
+        let finalImage: UIImage?
         if ZLCustomImageDeploy.imageNames.contains(named), let image = UIImage(named: named) {
-            return image
+            finalImage = image
+        } else if let image = ZLCustomImageDeploy.imageForKey[named] {
+            finalImage = image
+        } else {
+            finalImage = UIImage(named: named, in: Bundle.zlPhotoBrowserBundle, compatibleWith: nil)
         }
-        if let image = ZLCustomImageDeploy.imageForKey[named] {
-            return image
+        if asTemplate {
+            return finalImage?.withRenderingMode(.alwaysTemplate)
+        } else {
+            return finalImage
         }
-        return UIImage(named: named, in: Bundle.zlPhotoBrowserBundle, compatibleWith: nil)
     }
 }
 

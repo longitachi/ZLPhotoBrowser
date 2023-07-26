@@ -74,7 +74,7 @@ class ZLAlbumListCell: UITableViewCell {
         let btn = UIButton(type: .custom)
         btn.isUserInteractionEnabled = false
         btn.isHidden = true
-        btn.setImage(.zl.getImage("zl_albumSelect"), for: .selected)
+        btn.setImage(.zl.getImage("zl_albumSelect", asTemplate: true), for: .selected)
         return btn
     }()
     

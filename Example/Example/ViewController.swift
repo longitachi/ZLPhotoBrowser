@@ -29,6 +29,8 @@ class ViewController: UIViewController {
         
         ZLPhotoUIConfiguration.default()
             .customAlertClass(CustomAlertController.self)
+        
+        ZLPhotoUIConfiguration.default().themeColor = .red
     }
     
     func setupUI() {
