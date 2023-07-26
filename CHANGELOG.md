@@ -2,6 +2,13 @@
 
 -----
 
+## [4.4.3.2 - 4.4.3 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.3.2) (2023-07-26)
+
+### Fix:
+* Disable TextView when user ends editing.
+
+---
+
 ## [4.4.3.1 - 4.4.3 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.3.1) (2023-07-26)
 
 ### Fix:

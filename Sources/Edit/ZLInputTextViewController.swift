@@ -266,7 +266,10 @@ class ZLInputTextViewController: UIViewController {
                     let size = textView.sizeThatFits(subview.frame.size)
                     UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
                     if let context = UIGraphicsGetCurrentContext() {
-                        textLayer.render(in: context)
+                        if textStyle == .bg {
+                            textLayer.render(in: context)
+                        }
+                        
                         subview.layer.render(in: context)
                         image = UIGraphicsGetImageFromCurrentImageContext()
                         UIGraphicsEndImageContext()
