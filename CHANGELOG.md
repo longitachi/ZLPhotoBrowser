@@ -2,6 +2,13 @@
 
 -----
 
+## [4.4.3.1 - 4.4.3 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.3.1) (2023-07-26)
+
+### Fix:
+* Delete some time-consuming codes to improve the image loading speed of the thumbnail interface.
+
+---
+
 ## [4.4.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.3) (2023-07-24)
 
 ### Add:

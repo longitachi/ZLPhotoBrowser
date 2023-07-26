@@ -91,6 +91,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.3.1 - 4.4.3 Patch
+  Fix:
+    Delete some time-consuming codes to improve the image loading speed of the thumbnail interface.
 ● 4.4.3
   Add:
     Support to limit the data size of the video.

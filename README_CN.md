@@ -102,6 +102,9 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.3.1 - 4.4.3 Patch
+  Fix:
+    删除部分耗时代码，优化小图界面的图片加载速度。
 ● 4.4.3
   Add:
     支持限制视频可选尺寸的最大值和最小值。
