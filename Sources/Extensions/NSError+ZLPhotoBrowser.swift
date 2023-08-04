@@ -41,4 +41,6 @@ extension NSError {
     static let videoExportError = NSError(message: "Video export failed")
     
     static let assetSaveError = NSError(message: "Asset save failed")
+    
+    static let timeoutError = NSError(message: "timeout")
 }

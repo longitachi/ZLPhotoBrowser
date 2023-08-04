@@ -273,15 +273,16 @@ class ViewController: UIViewController {
             filePath = NSTemporaryDirectory().appendingFormat("%@.%@", UUID().uuidString, "jpg")
         }
         
-        debugPrint("---- \(filePath)")
+        debugPrint("---- start saving \(filePath)")
         let url = URL(fileURLWithPath: filePath)
         ZLPhotoManager.saveAsset(asset, toFile: url) { error in
             do {
                 if let error = error {
-                    debugPrint("save error: \(error)")
+                     debugPrint("save error: \(error)")
                     return
                 }
                 
+                debugPrint("save suc: \(url)")
                 if asset.mediaType == .video {
                     _ = AVURLAsset(url: url)
                 } else {

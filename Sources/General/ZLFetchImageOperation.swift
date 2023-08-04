@@ -71,7 +71,7 @@ class ZLFetchImageOperation: Operation {
         }
     }
     
-    private var requestImageID: PHImageRequestID = PHInvalidImageRequestID
+    private var requestImageID = PHInvalidImageRequestID
     
     override var isCancelled: Bool {
         return pri_isCancelled

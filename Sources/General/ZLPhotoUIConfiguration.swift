@@ -187,7 +187,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// The theme color of framework.
     /// 框架主题色
-    public var themeColor: UIColor = .zl.rgba(7, 213, 101)
+    public var themeColor: UIColor = .zl.rgba(0, 193, 94)
     
     /// Preview selection mode, translucent background color above.
     /// 预览快速选择模式下，上方透明区域背景色

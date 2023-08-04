@@ -364,10 +364,10 @@ public class ZLPhotoManager: NSObject {
     }
     
     class func isFetchImageError(_ error: Error?) -> Bool {
-        guard let e = error as NSError? else {
+        guard let error = error as NSError? else {
             return false
         }
-        if e.domain == "CKErrorDomain" || e.domain == "CloudPhotoLibraryErrorDomain" {
+        if error.domain == "CKErrorDomain" || error.domain == "CloudPhotoLibraryErrorDomain" {
             return true
         }
         return false
@@ -423,17 +423,67 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Save asset original data to file url. Support save image and video.
-    /// - Note: Asynchronously write to a local file. Calls completionHandler block on the main queue.
+    /// - Note: Asynchronously write to a local file. Calls completionHandler block on the main queue. If the asset object is in iCloud, it will be downloaded first and then written in the method. The timeout time is `ZLPhotoConfiguration.default().timeout`.
     public class func saveAsset(_ asset: PHAsset, toFile fileUrl: URL, completion: @escaping ((Error?) -> Void)) {
         guard let resource = asset.zl.resource else {
             completion(NSError.assetSaveError)
             return
         }
         
-        PHAssetResourceManager.default().writeData(for: resource, toFile: fileUrl, options: nil) { error in
-            ZLMainAsync {
+        let pointer = UnsafeMutablePointer<PHImageRequestID>.allocate(capacity: MemoryLayout<Int32>.stride)
+        pointer.pointee = PHInvalidImageRequestID
+        var canceled = false
+        
+        var timer: Timer? = .scheduledTimer(
+            withTimeInterval: ZLPhotoConfiguration.default().timeout,
+            repeats: false
+        ) { timer in
+            timer.invalidate()
+            canceled = true
+            PHImageManager.default().cancelImageRequest(pointer.pointee)
+            
+            completion(NSError.timeoutError)
+        }
+        
+        func cleanTimer() {
+            timer?.invalidate()
+            timer = nil
+        }
+        
+        func write(_ isDegraded: Bool, _ error: Error?) {
+            if error != nil {
+                cleanTimer()
                 completion(error)
+            } else if !isDegraded {
+                cleanTimer()
+                PHAssetResourceManager.default().writeData(for: resource, toFile: fileUrl, options: nil) { error in
+                    ZLMainAsync {
+                        completion(error)
+                    }
+                }
             }
+        }
+        
+        if asset.mediaType == .video {
+            pointer.pointee = fetchVideo(for: asset) { _, error, _, _ in
+                write(true, error)
+            } completion: { _, info, isDegraded in
+                guard !canceled else { return }
+                
+                let error = info?[PHImageErrorKey] as? Error
+                write(isDegraded, error)
+            }
+        } else if asset.zl.isInCloud {
+            pointer.pointee = fetchOriginalImageData(for: asset) { progress, error, _, _ in
+                write(true, error)
+            } completion: { _, info, isDegraded in
+                guard !canceled else { return }
+                
+                let error = info?[PHImageErrorKey] as? Error
+                write(isDegraded, error)
+            }
+        } else {
+            write(false, nil)
         }
     }
 }
