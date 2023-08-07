@@ -977,7 +977,7 @@ open class ZLEditImageViewController: UIViewController {
         var resImage = originalImage
         var editModel: ZLEditImageModel?
         if hasEdit {
-            let hud = ZLProgressHUD.show()
+            let hud = ZLProgressHUD.show(toast: .processing)
             
             resImage = buildImage()
             resImage = resImage.zl.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false) ?? resImage

@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "Нет фотографии";
 
-"hudLoading" = "ожидание...";
+"hudLoading" = "Загрузка";
+"hudProcessing" = "Обработка";
 
 "exceededMaxSelectCount" = "Максимальное количество выбранных: %ld";
 "longerThanMaxVideoDuration" = "Невозможно выбрать видео продолжительностью более %ld сек";

@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "لا توجد صور";
 
-"hudLoading" = "يرجى الانتظار...";
+"hudLoading" = "جار التحميل";
+"hudProcessing" = "جار المعالجة";
 
 "exceededMaxSelectCount" = "أقصى عدد للاختيار: %ld";
 "longerThanMaxVideoDuration" = "لا يمكن تحديد مقاطع فيديو أطول من %lds";

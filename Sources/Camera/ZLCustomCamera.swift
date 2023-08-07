@@ -1294,7 +1294,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
             
             // 拼接视频
             if self.recordUrls.count > 1 {
-                let hud = ZLProgressHUD.show()
+                let hud = ZLProgressHUD.show(toast: .processing)
                 ZLVideoManager.mergeVideos(fileUrls: self.recordUrls) { [weak self] url, error in
                     hud.hide()
                     

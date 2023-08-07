@@ -147,8 +147,11 @@ public struct ZLLocalLanguageKey: Hashable {
     /// No Photo (无照片)
     public static let noPhotoTips = ZLLocalLanguageKey(rawValue: "noPhotoTips")
     
-    /// waiting... (正在处理...)
+    /// Loading (正在加载)
     public static let hudLoading = ZLLocalLanguageKey(rawValue: "hudLoading")
+    
+    /// Processing (正在处理)
+    public static let hudProcessing = ZLLocalLanguageKey(rawValue: "hudProcessing")
     
     /// Done (确定)
     public static let done = ZLLocalLanguageKey(rawValue: "done")

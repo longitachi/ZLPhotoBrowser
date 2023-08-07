@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "无照片";
 
-"hudLoading" = "正在处理...";
+"hudLoading" = "正在加载";
+"hudProcessing" = "正在处理";
 
 "exceededMaxSelectCount" = "最多只能选择%ld张图片";
 "longerThanMaxVideoDuration" = "不能选择超过%ld秒的视频";

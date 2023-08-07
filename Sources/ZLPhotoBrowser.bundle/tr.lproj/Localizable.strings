@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "Fotoğraf yok";
 
-"hudLoading" = "bekleyin...";
+"hudLoading" = "Yükleniyor";
+"hudProcessing" = "işleniyor";
 
 "exceededMaxSelectCount" = "Maksimum seçim adeti: %ld";
 "longerThanMaxVideoDuration" = "%lds'dan uzun süreli videolar seçilemiyor.";

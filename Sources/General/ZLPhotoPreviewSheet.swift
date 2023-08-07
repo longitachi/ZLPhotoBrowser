@@ -580,7 +580,7 @@ public class ZLPhotoPreviewSheet: UIView {
             }
         }
         
-        let hud = ZLProgressHUD.show(timeout: ZLPhotoConfiguration.default().timeout)
+        let hud = ZLProgressHUD.show(toast: .processing, timeout: ZLPhotoConfiguration.default().timeout)
         
         var timeout = false
         hud.timeoutBlock = { [weak self] in
@@ -696,9 +696,17 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func showEditImageVC(model: ZLPhotoModel) {
-        let hud = ZLProgressHUD.show()
+        var requestAssetID: PHImageRequestID?
         
-        ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
+        let hud = ZLProgressHUD.show(timeout: ZLPhotoConfiguration.default().timeout)
+        hud.timeoutBlock = { [weak self] in
+            showAlertView(localLanguageTextValue(.timeout), self?.sender)
+            if let requestAssetID = requestAssetID {
+                PHImageManager.default().cancelImageRequest(requestAssetID)
+            }
+        }
+        
+        requestAssetID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
             if !isDegraded {
                 if let image = image {
                     ZLEditImageViewController.showEditImageVC(parentVC: self?.sender, image: image, editModel: model.editImageModel) { [weak self] ei, editImageModel in
@@ -720,13 +728,13 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private func showEditVideoVC(model: ZLPhotoModel) {
         let config = ZLPhotoConfiguration.default()
-        var requestAvAssetID: PHImageRequestID?
+        var requestAssetID: PHImageRequestID?
         
         let hud = ZLProgressHUD.show(timeout: config.timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self?.sender)
-            if let requestAvAssetID = requestAvAssetID {
-                PHImageManager.default().cancelImageRequest(requestAvAssetID)
+            if let requestAssetID = requestAssetID {
+                PHImageManager.default().cancelImageRequest(requestAssetID)
             }
         }
         
@@ -761,7 +769,7 @@ public class ZLPhotoPreviewSheet: UIView {
         }
         
         // 提前fetch一下 avasset
-        requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
+        requestAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
             hud.hide()
             if let avAsset = avAsset {
                 inner_showEditVideoVC(avAsset)
@@ -795,7 +803,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private func save(image: UIImage?, videoUrl: URL?) {
         if let image = image {
-            let hud = ZLProgressHUD.show()
+            let hud = ZLProgressHUD.show(toast: .processing)
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 hud.hide()
                 if suc, let asset = asset {
@@ -806,7 +814,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 }
             }
         } else if let videoUrl = videoUrl {
-            let hud = ZLProgressHUD.show()
+            let hud = ZLProgressHUD.show(toast: .processing)
             ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
                 hud.hide()
                 if suc, let at = asset {

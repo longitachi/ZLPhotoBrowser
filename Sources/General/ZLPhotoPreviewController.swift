@@ -552,18 +552,18 @@ class ZLPhotoPreviewController: UIViewController {
         let config = ZLPhotoConfiguration.default()
         let model = arrDataSources[currentIndex]
         
-        var requestAvAssetID: PHImageRequestID?
+        var requestAssetID: PHImageRequestID?
         let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self)
-            if let requestAvAssetID = requestAvAssetID {
-                PHImageManager.default().cancelImageRequest(requestAvAssetID)
+            if let requestAssetID = requestAssetID {
+                PHImageManager.default().cancelImageRequest(requestAssetID)
             }
         }
         
         if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
             hud.show(timeout: ZLPhotoConfiguration.default().timeout)
-            requestAvAssetID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
+            requestAssetID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
                 if !isDegraded {
                     if let image = image {
                         self?.showEditImageVC(image: image)
@@ -576,7 +576,7 @@ class ZLPhotoPreviewController: UIViewController {
         } else if model.type == .video || config.allowEditVideo {
             hud.show(timeout: ZLPhotoConfiguration.default().timeout)
             // fetch avasset
-            requestAvAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
+            requestAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
                 hud.hide()
                 if let avAsset = avAsset {
                     self?.showEditVideoVC(model: model, avAsset: avAsset)

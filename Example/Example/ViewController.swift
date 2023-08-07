@@ -357,9 +357,8 @@ class ViewController: UIViewController {
     }
     
     func save(image: UIImage?, videoUrl: URL?) {
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
         if let image = image {
-            hud.show()
+            let hud = ZLProgressHUD.show(toast: .processing)
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 if suc, let asset = asset {
                     let resultModel = ZLResultModel(asset: asset, image: image, isEdited: false, index: 0)
@@ -373,7 +372,7 @@ class ViewController: UIViewController {
                 hud.hide()
             }
         } else if let videoUrl = videoUrl {
-            hud.show()
+            let hud = ZLProgressHUD.show(toast: .processing)
             ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
                 if suc, let asset = asset {
                     self?.fetchImage(for: asset)

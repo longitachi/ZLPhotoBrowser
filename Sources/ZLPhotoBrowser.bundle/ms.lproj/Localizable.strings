@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "Tiada Foto";
 
-"hudLoading" = "menunggu...";
+"hudLoading" = "Memuatkan";
+"hudProcessing" = "Sedang diproses";
 
 "exceededMaxSelectCount" = "Kiraan maksimum untuk pemilihan: %ld";
 "longerThanMaxVideoDuration" = "Tidak dapat memilih video dengan jangka masa lebih lama daripada %lds";

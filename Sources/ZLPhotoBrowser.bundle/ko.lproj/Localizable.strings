@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "사진 없음";
 
-"hudLoading" = "기다리는 중...";
+"hudLoading" = "불러오는 중";
+"hudProcessing" = "처리 중";
 
 "exceededMaxSelectCount" = "최대 선택 수: %ld";
 "longerThanMaxVideoDuration" = "길이가 %ld 초 보다 긴 동영상을 선택할 수 없습니다";

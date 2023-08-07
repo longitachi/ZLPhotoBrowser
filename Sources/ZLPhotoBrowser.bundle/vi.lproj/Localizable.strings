@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "Không có ảnh";
 
-"hudLoading" = "đang chờ đợi...";
+"hudLoading" = "Đang tải";
+"hudProcessing" = "Đang xử lý";
 
 "exceededMaxSelectCount" = "Số lượng lựa chọn tối đa: %ld";
 "longerThanMaxVideoDuration" = "Không thể chọn video có thời lượng dài hơn %ld giây";

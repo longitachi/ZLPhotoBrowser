@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "No hay fotos";
 
-"hudLoading" = "cargando...";
+"hudLoading" = "Cargando";
+"hudProcessing" = "Procesando";
 
 "exceededMaxSelectCount" = "Número máximo para la selección: %ld";
 "longerThanMaxVideoDuration" = "No se puede seleccionar un vídeo con una duración superior a %lds";

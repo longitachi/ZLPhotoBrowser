@@ -20,7 +20,8 @@
 
 "noPhotoTips" = "写真がありません";
 
-"hudLoading" = "お待ち下さい";
+"hudLoading" = "読み込み中";
+"hudProcessing" = "処理中";
 
 "exceededMaxSelectCount" = "最大選択数: %ld";
 "longerThanMaxVideoDuration" = "%ld秒より長い動画は選択できません";
