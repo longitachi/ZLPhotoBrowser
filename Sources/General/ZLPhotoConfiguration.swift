@@ -97,6 +97,10 @@ public class ZLPhotoConfiguration: NSObject {
     
     public var allowSelectVideo = true
     
+    /// If set to true, videos on iCloud will be downloaded before selection. Defaults to false.
+    /// - Note: The download timeout time is `ZLPhotoConfiguration.default().timeout`.
+    public var downloadVideoBeforeSelecting = false
+    
     /// Allow select Gif, it only controls whether it is displayed in Gif form.
     /// If value is false, the Gif logo is not displayed. Defaults to true.
     public var allowSelectGif = true
@@ -145,7 +149,7 @@ public class ZLPhotoConfiguration: NSObject {
     public var animateSelectBtnWhenSelect = true
     
     /// Animation duration for select button
-    public var selectBtnAnimationDuration: CFTimeInterval = 0.4
+    public var selectBtnAnimationDuration: CFTimeInterval = 0.5
     
     /// After selecting a image/video in the thumbnail interface, enter the editing interface directly. Defaults to false.
     /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.

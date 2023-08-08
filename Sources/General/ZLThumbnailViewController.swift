@@ -633,7 +633,6 @@ class ZLThumbnailViewController: UIViewController {
                             
                             ZLMainAsync {
                                 config.didSelectAsset?(m.asset)
-                                
                             }
                         }
                     }
@@ -1073,29 +1072,33 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             model = arrDataSources[indexPath.row]
         }
         
-        cell.selectedBlock = { [weak self, weak nav, weak cell] isSelected in
-            if !isSelected {
+        cell.selectedBlock = { [weak self, weak nav] block in
+            if !model.isSelected {
                 let currentSelectCount = nav?.arrSelectedModels.count ?? 0
                 guard canAddModel(model, currentSelectCount: currentSelectCount, sender: self) else {
                     return
                 }
-                if self?.shouldDirectEdit(model) == false {
-                    model.isSelected = true
-                    nav?.arrSelectedModels.append(model)
-                    config.didSelectAsset?(model.asset)
-                    
-                    cell?.btnSelect.isSelected = true
-                    self?.refreshCellIndexAndMaskView()
-                    if config.maxSelectCount == 1, !config.allowPreviewPhotos {
-                        self?.doneBtnClick()
+                
+                downloadAssetIfNeed(model: model, sender: self) {
+                    if self?.shouldDirectEdit(model) == false {
+                        model.isSelected = true
+                        nav?.arrSelectedModels.append(model)
+                        block(true)
+                        
+                        config.didSelectAsset?(model.asset)
+                        self?.refreshCellIndexAndMaskView()
+                        
+                        if config.maxSelectCount == 1, !config.allowPreviewPhotos {
+                            self?.doneBtnClick()
+                        }
                     }
                 }
             } else {
-                cell?.btnSelect.isSelected = false
                 model.isSelected = false
                 nav?.arrSelectedModels.removeAll { $0 == model }
-                config.didDeselectAsset?(model.asset)
+                block(false)
                 
+                config.didDeselectAsset?(model.asset)
                 self?.refreshCellIndexAndMaskView()
             }
             self?.resetBottomToolBtnStatus()

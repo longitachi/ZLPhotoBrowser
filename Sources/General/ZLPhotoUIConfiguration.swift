@@ -57,7 +57,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     public var showStatusBarInPreviewInterface = false
     
     /// HUD style. Defaults to dark.
-    public var hudStyle: ZLProgressHUD.HUDStyle = .dark
+    public var hudStyle: ZLProgressHUD.Style = .dark
     
     /// Adjust Slider Type
     public var adjustSliderType: ZLAdjustSliderType = .vertical
@@ -351,7 +351,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// Mask layer color of selected cell.
     /// 已选择照片上方遮罩阴影颜色
-    public var selectedMaskColor: UIColor = .black.withAlphaComponent(0.2)
+    public var selectedMaskColor: UIColor = .black.withAlphaComponent(0.4)
     
     private var pri_selectedBorderColor: UIColor?
     /// Border color of selected cell.
@@ -367,7 +367,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// Mask layer color of the cell that cannot be selected.
     /// 不可选的照片上方遮罩阴影颜色
-    public var invalidMaskColor: UIColor = .white.withAlphaComponent(0.5)
+    public var invalidMaskColor: UIColor = .zl.rgba(32, 32, 32, 0.85)
     
     /// The text color of selected cell index label.
     /// 已选照片右上角序号label背景色

@@ -54,7 +54,7 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
-    func hudStyle(_ style: ZLProgressHUD.HUDStyle) -> ZLPhotoUIConfiguration {
+    func hudStyle(_ style: ZLProgressHUD.Style) -> ZLPhotoUIConfiguration {
         hudStyle = style
         return self
     }

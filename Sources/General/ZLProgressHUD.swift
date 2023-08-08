@@ -27,7 +27,7 @@
 import UIKit
 
 public class ZLProgressHUD: UIView {
-    private let style: ZLProgressHUD.HUDStyle
+    private let style: ZLProgressHUD.Style
     
     private lazy var loadingView = UIImageView(image: style.icon)
     
@@ -53,7 +53,7 @@ public class ZLProgressHUD: UIView {
         cleanTimer()
     }
     
-    public init(style: ZLProgressHUD.HUDStyle) {
+    public init(style: ZLProgressHUD.Style) {
         self.style = style
         super.init(frame: UIScreen.main.bounds)
         setupUI()
@@ -117,7 +117,7 @@ public class ZLProgressHUD: UIView {
         }
     }
     
-    public func hide() {
+    @objc public func hide() {
         cleanTimer()
         ZLMainAsync {
             self.loadingView.layer.removeAllAnimations()
@@ -149,7 +149,8 @@ public extension ZLProgressHUD {
 }
 
 public extension ZLProgressHUD {
-    @objc enum HUDStyle: Int {
+    @objc(ZLProgressHUDStyle)
+    enum Style: Int {
         case light
         case lightBlur
         case dark

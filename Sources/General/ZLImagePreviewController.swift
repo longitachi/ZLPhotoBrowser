@@ -109,7 +109,7 @@ public class ZLImagePreviewController: UIViewController {
     
     private lazy var selectBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_btn_circle"), for: .normal)
+        btn.setImage(.zl.getImage("zl_btn_unselected_with_check"), for: .normal)
         btn.setImage(.zl.getImage("zl_btn_selected"), for: .selected)
         btn.enlargeInset = 10
         btn.addTarget(self, action: #selector(selectBtnClick), for: .touchUpInside)
@@ -554,7 +554,7 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? ZLPreviewBaseCell {
-            cell.resetSubViewStatusWhenCellEndDisplay()
+            cell.didEndDisplaying()
         }
     }
     

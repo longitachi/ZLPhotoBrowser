@@ -85,7 +85,7 @@ class ZLPhotoPreviewController: UIViewController {
     
     private lazy var selectBtn: ZLEnlargeButton = {
         let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_btn_circle"), for: .normal)
+        btn.setImage(.zl.getImage("zl_btn_unselected_with_check"), for: .normal)
         btn.setImage(.zl.getImage("zl_btn_selected"), for: .selected)
         btn.enlargeInset = 10
         btn.addTarget(self, action: #selector(selectBtnClick), for: .touchUpInside)
@@ -532,20 +532,27 @@ class ZLPhotoPreviewController: UIViewController {
             selPhotoPreview?.removeSelModel(model: currentModel)
             
             config.didDeselectAsset?(currentModel.asset)
+            
+            resetSubViewStatus()
         } else {
-            if config.animateSelectBtnWhenSelect {
-                selectBtn.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
-            }
             if !canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
                 return
             }
-            currentModel.isSelected = true
-            nav.arrSelectedModels.append(currentModel)
-            selPhotoPreview?.addSelModel(model: currentModel)
             
-            config.didSelectAsset?(currentModel.asset)
+            downloadAssetIfNeed(model: currentModel, sender: self) { [weak self] in
+                if config.animateSelectBtnWhenSelect {
+                    self?.selectBtn.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
+                }
+                
+                currentModel.isSelected = true
+                nav.arrSelectedModels.append(currentModel)
+                self?.selPhotoPreview?.addSelModel(model: currentModel)
+                
+                config.didSelectAsset?(currentModel.asset)
+                
+                self?.resetSubViewStatus()
+            }
         }
-        resetSubViewStatus()
     }
     
     @objc private func editBtnClick() {
@@ -631,17 +638,20 @@ class ZLPhotoPreviewController: UIViewController {
         }
         
         let currentModel = arrDataSources[currentIndex]
-        if autoSelectCurrentIfNotSelectAnyone {
-            if nav.arrSelectedModels.isEmpty, canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
-                nav.arrSelectedModels.append(currentModel)
-                
-                ZLPhotoConfiguration.default().didSelectAsset?(currentModel.asset)
-            }
+        
+        guard autoSelectCurrentIfNotSelectAnyone, nav.arrSelectedModels.isEmpty else {
+            callBackBeforeDone()
+            return
+        }
+        
+        guard canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) else {
+            return
+        }
+        
+        downloadAssetIfNeed(model: currentModel, sender: self) { [weak nav] in
+            nav?.arrSelectedModels.append(currentModel)
+            ZLPhotoConfiguration.default().didSelectAsset?(currentModel.asset)
             
-            if !nav.arrSelectedModels.isEmpty {
-                callBackBeforeDone()
-            }
-        } else {
             callBackBeforeDone()
         }
     }
@@ -839,8 +849,12 @@ extension ZLPhotoPreviewController: UICollectionViewDataSource, UICollectionView
         return baseCell
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        (cell as? ZLPreviewBaseCell)?.willDisplay()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        (cell as? ZLPreviewBaseCell)?.resetSubViewStatusWhenCellEndDisplay()
+        (cell as? ZLPreviewBaseCell)?.didEndDisplaying()
     }
 }
 

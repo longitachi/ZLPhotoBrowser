@@ -896,24 +896,28 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         
         let model = arrDataSources[indexPath.row]
         
-        cell.selectedBlock = { [weak self, weak cell] isSelected in
+        cell.selectedBlock = { [weak self] block in
             guard let `self` = self else { return }
-            if !isSelected {
+            
+            if !model.isSelected {
                 guard canAddModel(model, currentSelectCount: self.arrSelectedModels.count, sender: self.sender) else {
                     return
                 }
-                if !self.shouldDirectEdit(model) {
-                    model.isSelected = true
-                    self.arrSelectedModels.append(model)
-                    config.didSelectAsset?(model.asset)
-                    
-                    cell?.btnSelect.isSelected = true
-                    self.refreshCellIndex()
+                
+                downloadAssetIfNeed(model: model, sender: self.sender) {
+                    if !self.shouldDirectEdit(model) {
+                        model.isSelected = true
+                        self.arrSelectedModels.append(model)
+                        block(true)
+                        
+                        config.didSelectAsset?(model.asset)
+                        self.refreshCellIndex()
+                    }
                 }
             } else {
-                cell?.btnSelect.isSelected = false
                 model.isSelected = false
                 self.arrSelectedModels.removeAll { $0 == model }
+                block(false)
                 
                 config.didDeselectAsset?(model.asset)
                 self.refreshCellIndex()

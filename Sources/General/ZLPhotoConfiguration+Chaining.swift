@@ -77,6 +77,12 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    @objc func downloadVideoBeforeSelecting(_ value: Bool) -> ZLPhotoConfiguration {
+        downloadVideoBeforeSelecting = value
+        return self
+    }
+    
+    @discardableResult
     func allowSelectGif(_ value: Bool) -> ZLPhotoConfiguration {
         allowSelectGif = value
         return self

@@ -25,6 +25,7 @@
 //  THE SOFTWARE.
 
 import UIKit
+import Photos
 
 let ZLMaxImageWidth: CGFloat = 500
 
@@ -133,10 +134,14 @@ func showAlertController(title: String?, message: String?, style: ZLCustomAlertS
     actions
         .map { $0.toSystemAlertAction() }
         .forEach { alert.addAction($0) }
+    
+    let presentedVC = sender ?? UIApplication.shared.keyWindow?.rootViewController
+    
     if deviceIsiPad() {
-        alert.popoverPresentationController?.sourceView = sender?.view
+        alert.popoverPresentationController?.sourceView = presentedVC?.view
     }
-    (sender ?? UIApplication.shared.keyWindow?.rootViewController)?.zl.showAlertController(alert)
+    
+    presentedVC?.zl.showAlertController(alert)
 }
 
 func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
@@ -204,6 +209,33 @@ func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewC
     }
     
     return true
+}
+
+func downloadAssetIfNeed(model: ZLPhotoModel, sender: UIViewController?, completion: @escaping (() -> Void)) {
+    let config = ZLPhotoConfiguration.default()
+    guard model.type == .video,
+          model.asset.zl.isInCloud,
+          config.downloadVideoBeforeSelecting else {
+        completion()
+        return
+    }
+
+    var requestAssetID: PHImageRequestID?
+    let hud = ZLProgressHUD.show(timeout: config.timeout)
+    hud.timeoutBlock = { [weak sender] in
+        showAlertView(localLanguageTextValue(.timeout), sender)
+        if let requestAssetID = requestAssetID {
+            PHImageManager.default().cancelImageRequest(requestAssetID)
+        }
+    }
+
+    requestAssetID = ZLPhotoManager.fetchVideo(for: model.asset, completion: { _, _, isDegraded in
+        hud.hide()
+        
+        if !isDegraded {
+            completion()
+        }
+    })
 }
 
 /// Check if the video duration and size meet the requirements
