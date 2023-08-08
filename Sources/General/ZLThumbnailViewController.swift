@@ -1091,6 +1091,8 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                         if config.maxSelectCount == 1, !config.allowPreviewPhotos {
                             self?.doneBtnClick()
                         }
+                        
+                        self?.resetBottomToolBtnStatus()
                     }
                 }
             } else {
@@ -1100,8 +1102,9 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 
                 config.didDeselectAsset?(model.asset)
                 self?.refreshCellIndexAndMaskView()
+                
+                self?.resetBottomToolBtnStatus()
             }
-            self?.resetBottomToolBtnStatus()
         }
         
         cell.indexLabel.isHidden = true
