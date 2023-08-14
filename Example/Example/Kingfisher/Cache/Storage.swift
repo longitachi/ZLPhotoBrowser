@@ -28,9 +28,6 @@ import Foundation
 
 /// Constants for some time intervals
 struct TimeConstants {
-    static let secondsInOneMinute = 60
-    static let minutesInOneHour = 60
-    static let hoursInOneDay = 24
     static let secondsInOneDay = 86_400
 }
 
@@ -58,7 +55,7 @@ public enum StorageExpiration {
         case .seconds(let seconds):
             return date.addingTimeInterval(seconds)
         case .days(let days):
-            let duration = TimeInterval(TimeConstants.secondsInOneDay) * TimeInterval(days)
+            let duration: TimeInterval = TimeInterval(TimeConstants.secondsInOneDay) * TimeInterval(days)
             return date.addingTimeInterval(duration)
         case .date(let ref):
             return ref

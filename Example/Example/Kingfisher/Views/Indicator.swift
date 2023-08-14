@@ -85,7 +85,6 @@ extension Indicator {
     /// no offset for the indicator view.
     public var centerOffset: CGPoint { return .zero }
 
-
     /// Default implementation of `centerOffset` of `Indicator`. The default value is `.full`, means that the indicator
     /// will pin to the same height and width as the image view.
     public func sizeStrategy(in imageView: KFCrossPlatformImageView) -> IndicatorSizeStrategy {
@@ -149,6 +148,8 @@ final class ActivityIndicator: Indicator {
             } else {
                 indicatorStyle = UIActivityIndicatorView.Style.white
             }
+            #elseif os(xrOS)
+            indicatorStyle = UIActivityIndicatorView.Style.medium
             #else
             if #available(iOS 13.0, * ) {
                 indicatorStyle = UIActivityIndicatorView.Style.medium
@@ -157,11 +158,7 @@ final class ActivityIndicator: Indicator {
             }
             #endif
 
-            #if swift(>=4.2)
             activityIndicatorView = UIActivityIndicatorView(style: indicatorStyle)
-            #else
-            activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: indicatorStyle)
-            #endif
         #endif
     }
 }

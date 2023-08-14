@@ -34,15 +34,9 @@ extension KingfisherWrapper where Base == String {
             return base
         }
 
-        #if swift(>=5.0)
         let message = data.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
             return [UInt8](bytes)
         }
-        #else
-        let message = data.withUnsafeBytes { bytes in
-            return [UInt8](UnsafeBufferPointer(start: bytes, count: data.count))
-        }
-        #endif
 
         let MD5Calculator = MD5(message)
         let MD5Data = MD5Calculator.calculate()
@@ -52,6 +46,18 @@ extension KingfisherWrapper where Base == String {
             MD5String += String(format: "%02x", c)
         }
         return MD5String
+    }
+
+    var ext: String? {
+        var ext = ""
+        if let index = base.lastIndex(of: ".") {
+            let extRange = base.index(index, offsetBy: 1)..<base.endIndex
+            ext = String(base[extRange])
+        }
+        guard let firstSeg = ext.split(separator: "@").first else {
+            return nil
+        }
+        return firstSeg.count > 0 ? String(firstSeg) : nil
     }
 }
 
@@ -69,14 +75,9 @@ func arrayOfBytes<T>(_ value: T, length: Int? = nil) -> [UInt8] {
         }
         return bytes
     }
-
-    #if swift(>=4.1)
+    
     valuePointer.deinitialize(count: 1)
     valuePointer.deallocate()
-    #else
-    valuePointer.deinitialize()
-    valuePointer.deallocate(capacity: 1)
-    #endif
 
     return bytes
 }
@@ -85,15 +86,6 @@ extension Int {
     // Array of bytes with optional padding (little-endian)
     func bytes(_ totalBytes: Int = MemoryLayout<Int>.size) -> [UInt8] {
         return arrayOfBytes(self, length: totalBytes)
-    }
-
-}
-
-extension NSMutableData {
-
-    // Convenient way to append bytes
-    func appendBytes(_ arrayOfBytes: [UInt8]) {
-        append(arrayOfBytes, length: arrayOfBytes.count)
     }
 
 }
@@ -177,7 +169,6 @@ func rotateLeft(_ value: UInt32, bits: UInt32) -> UInt32 {
 
 class MD5: HashProtocol {
 
-    static let size = 16 // 128 / 8
     let message: [UInt8]
 
     init (_ message: [UInt8]) {
@@ -247,19 +238,15 @@ class MD5: HashProtocol {
                 case 0...15:
                     F = (B & C) | ((~B) & D)
                     g = j
-                    break
                 case 16...31:
                     F = (D & B) | (~D & C)
                     g = (5 * j + 1) % 16
-                    break
                 case 32...47:
                     F = B ^ C ^ D
                     g = (3 * j + 5) % 16
-                    break
                 case 48...63:
                     F = C ^ (B | (~D))
                     g = (7 * j) % 16
-                    break
                 default:
                     break
                 }

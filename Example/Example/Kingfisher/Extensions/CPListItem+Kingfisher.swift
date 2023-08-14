@@ -1,8 +1,9 @@
+
 //
-//  NSTextAttachment+Kingfisher.swift
+//  CPListItem+Kingfisher.swift
 //  Kingfisher
 //
-//  Created by Benjamin Briggs on 22/07/2019.
+//  Created by Wayne Hartman on 2021-08-29.
 //
 //  Copyright (c) 2019 Wei Wang <onevcat@gmail.com>
 //
@@ -24,23 +25,18 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#if !os(watchOS)
+#if canImport(CarPlay) && !targetEnvironment(macCatalyst)
+import CarPlay
 
-#if os(macOS)
-import AppKit
-#else
-import UIKit
-#endif
-
-extension KingfisherWrapper where Base: NSTextAttachment {
-
+@available(iOS 14.0, *)
+extension KingfisherWrapper where Base: CPListItem {
+    
     // MARK: Setting Image
-
-    /// Sets an image to the text attachment with a source.
+    
+    /// Sets an image to the image view with a source.
     ///
     /// - Parameters:
-    ///   - source: The `Source` object defines data information from network or a data provider.
-    ///   - attributedView: The owner of the attributed string which this `NSTextAttachment` is added.
+    ///   - source: The `Source` object contains information about the image.
     ///   - placeholder: A placeholder to show while retrieving the image from the given `resource`.
     ///   - options: An options set to define image setting behaviors. See `KingfisherOptionsInfo` for more.
     ///   - progressBlock: Called when the image downloading progress gets updated. If the response does not contain an
@@ -52,58 +48,30 @@ extension KingfisherWrapper where Base: NSTextAttachment {
     ///
     /// Internally, this method will use `KingfisherManager` to get the requested source
     /// Since this method will perform UI changes, you must call it from the main thread.
-    ///
-    /// The retrieved image will be set to `NSTextAttachment.image` property. Because it is not an image view based
-    /// rendering, options related to view, such as `.transition`, are not supported.
-    ///
-    /// Kingfisher will call `setNeedsDisplay` on the `attributedView` when the image task done. It gives the view a
-    /// chance to render the attributed string again for displaying the downloaded image. For example, if you set an
-    /// attributed with this `NSTextAttachment` to a `UILabel` object, pass it as the `attributedView` parameter.
-    ///
-    /// Here is a typical use case:
-    ///
-    /// ```swift
-    /// let attributedText = NSMutableAttributedString(string: "Hello World")
-    /// let textAttachment = NSTextAttachment()
-    ///
-    /// textAttachment.kf.setImage(
-    ///     with: URL(string: "https://onevcat.com/assets/images/avatar.jpg")!,
-    ///     attributedView: label,
-    ///     options: [
-    ///        .processor(
-    ///            ResizingImageProcessor(referenceSize: .init(width: 30, height: 30))
-    ///            |> RoundCornerImageProcessor(cornerRadius: 15))
-    ///     ]
-    /// )
-    /// attributedText.replaceCharacters(in: NSRange(), with: NSAttributedString(attachment: textAttachment))
-    /// label.attributedText = attributedText
-    /// ```
+    /// Both `progressBlock` and `completionHandler` will be also executed in the main thread.
     ///
     @discardableResult
     public func setImage(
         with source: Source?,
-        attributedView: @autoclosure @escaping () -> KFCrossPlatformView,
         placeholder: KFCrossPlatformImage? = nil,
         options: KingfisherOptionsInfo? = nil,
         progressBlock: DownloadProgressBlock? = nil,
         completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) -> DownloadTask?
     {
-        let options = KingfisherParsedOptionsInfo(KingfisherManager.shared.defaultOptions + (options ?? .empty))
+        let options = KingfisherParsedOptionsInfo(KingfisherManager.shared.defaultOptions + (options ?? []))
         return setImage(
             with: source,
-            attributedView: attributedView,
             placeholder: placeholder,
             parsedOptions: options,
             progressBlock: progressBlock,
             completionHandler: completionHandler
         )
     }
-
-    /// Sets an image to the text attachment with a source.
+    
+    /// Sets an image to the image view with a requested resource.
     ///
     /// - Parameters:
-    ///   - resource: The `Resource` object contains information about the resource.
-    ///   - attributedView: The owner of the attributed string which this `NSTextAttachment` is added.
+    ///   - resource: The `Resource` object contains information about the image.
     ///   - placeholder: A placeholder to show while retrieving the image from the given `resource`.
     ///   - options: An options set to define image setting behaviors. See `KingfisherOptionsInfo` for more.
     ///   - progressBlock: Called when the image downloading progress gets updated. If the response does not contain an
@@ -113,58 +81,28 @@ extension KingfisherWrapper where Base: NSTextAttachment {
     ///
     /// - Note:
     ///
-    /// Internally, this method will use `KingfisherManager` to get the requested source
-    /// Since this method will perform UI changes, you must call it from the main thread.
-    ///
-    /// The retrieved image will be set to `NSTextAttachment.image` property. Because it is not an image view based
-    /// rendering, options related to view, such as `.transition`, are not supported.
-    ///
-    /// Kingfisher will call `setNeedsDisplay` on the `attributedView` when the image task done. It gives the view a
-    /// chance to render the attributed string again for displaying the downloaded image. For example, if you set an
-    /// attributed with this `NSTextAttachment` to a `UILabel` object, pass it as the `attributedView` parameter.
-    ///
-    /// Here is a typical use case:
-    ///
-    /// ```swift
-    /// let attributedText = NSMutableAttributedString(string: "Hello World")
-    /// let textAttachment = NSTextAttachment()
-    ///
-    /// textAttachment.kf.setImage(
-    ///     with: URL(string: "https://onevcat.com/assets/images/avatar.jpg")!,
-    ///     attributedView: label,
-    ///     options: [
-    ///        .processor(
-    ///            ResizingImageProcessor(referenceSize: .init(width: 30, height: 30))
-    ///            |> RoundCornerImageProcessor(cornerRadius: 15))
-    ///     ]
-    /// )
-    /// attributedText.replaceCharacters(in: NSRange(), with: NSAttributedString(attachment: textAttachment))
-    /// label.attributedText = attributedText
-    /// ```
+    /// Internally, this method will use `KingfisherManager` to get the requested resource, from either cache
+    /// or network. Since this method will perform UI changes, you must call it from the main thread.
+    /// Both `progressBlock` and `completionHandler` will be also executed in the main thread.
     ///
     @discardableResult
     public func setImage(
         with resource: Resource?,
-        attributedView: @autoclosure @escaping () -> KFCrossPlatformView,
         placeholder: KFCrossPlatformImage? = nil,
         options: KingfisherOptionsInfo? = nil,
         progressBlock: DownloadProgressBlock? = nil,
         completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil) -> DownloadTask?
     {
-        let options = KingfisherParsedOptionsInfo(KingfisherManager.shared.defaultOptions + (options ?? .empty))
         return setImage(
-            with: resource.map { .network($0) },
-            attributedView: attributedView,
+            with: resource?.convertToSource(),
             placeholder: placeholder,
-            parsedOptions: options,
+            options: options,
             progressBlock: progressBlock,
-            completionHandler: completionHandler
-        )
+            completionHandler: completionHandler)
     }
 
     func setImage(
         with source: Source?,
-        attributedView: @escaping () -> KFCrossPlatformView,
         placeholder: KFCrossPlatformImage? = nil,
         parsedOptions: KingfisherParsedOptionsInfo,
         progressBlock: DownloadProgressBlock? = nil,
@@ -172,28 +110,56 @@ extension KingfisherWrapper where Base: NSTextAttachment {
     {
         var mutatingSelf = self
         guard let source = source else {
-            base.image = placeholder
+            /**
+             * In iOS SDK 14.0-14.4 the image param was non-`nil`. The SDK changed in 14.5
+             * to allow `nil`. The compiler version 5.4 was introduced in this same SDK,
+             * which allows >=14.5 SDK to set a `nil` image. This compile check allows
+             * newer SDK users to set the image to `nil`, while still allowing older SDK
+             * users to compile the framework.
+             */
+            #if compiler(>=5.4)
+            self.base.setImage(placeholder)
+            #else
+            if let placeholder = placeholder {
+                self.base.setImage(placeholder)
+            }
+            #endif
+
             mutatingSelf.taskIdentifier = nil
             completionHandler?(.failure(KingfisherError.imageSettingError(reason: .emptySource)))
             return nil
         }
-
+        
         var options = parsedOptions
         if !options.keepCurrentImageWhileLoading {
-            base.image = placeholder
+            /**
+             * In iOS SDK 14.0-14.4 the image param was non-`nil`. The SDK changed in 14.5
+             * to allow `nil`. The compiler version 5.4 was introduced in this same SDK,
+             * which allows >=14.5 SDK to set a `nil` image. This compile check allows
+             * newer SDK users to set the image to `nil`, while still allowing older SDK
+             * users to compile the framework.
+             */
+            #if compiler(>=5.4)
+            self.base.setImage(placeholder)
+            #else // Let older SDK users deal with the older behavior.
+            if let placeholder = placeholder {
+                self.base.setImage(placeholder)
+            }
+            #endif
         }
-
+        
         let issuedIdentifier = Source.Identifier.next()
         mutatingSelf.taskIdentifier = issuedIdentifier
-
+        
         if let block = progressBlock {
             options.onDataReceived = (options.onDataReceived ?? []) + [ImageLoadingProgressSideEffect(block)]
         }
-
+        
         let task = KingfisherManager.shared.retrieveImage(
             with: source,
             options: options,
-            progressiveImageSetter: { self.base.image = $0 },
+            downloadTaskUpdated: { mutatingSelf.imageTask = $0 },
+            progressiveImageSetter: { self.base.setImage($0) },
             referenceTaskIdentifierChecker: { issuedIdentifier == self.taskIdentifier },
             completionHandler: { result in
                 CallbackQueue.mainCurrentOrAsync.execute {
@@ -209,36 +175,45 @@ extension KingfisherWrapper where Base: NSTextAttachment {
                         completionHandler?(.failure(error))
                         return
                     }
-
+                    
                     mutatingSelf.imageTask = nil
                     mutatingSelf.taskIdentifier = nil
-
+                    
                     switch result {
-                    case .success(let value):
-                        self.base.image = value.image
-                        let view = attributedView()
-                        #if canImport(UIKit)
-                        view.setNeedsDisplay()
-                        #else
-                        view.setNeedsDisplay(view.bounds)
-                        #endif
-                    case .failure:
-                        if let image = options.onFailureImage {
-                            self.base.image = image
-                        }
+                        case .success(let value):
+                            self.base.setImage(value.image)
+                            completionHandler?(result)
+                            
+                        case .failure:
+                            if let image = options.onFailureImage {
+                                /**
+                                 * In iOS SDK 14.0-14.4 the image param was non-`nil`. The SDK changed in 14.5
+                                 * to allow `nil`. The compiler version 5.4 was introduced in this same SDK,
+                                 * which allows >=14.5 SDK to set a `nil` image. This compile check allows
+                                 * newer SDK users to set the image to `nil`, while still allowing older SDK
+                                 * users to compile the framework.
+                                 */
+                                #if compiler(>=5.4)
+                                self.base.setImage(image)
+                                #else // Let older SDK users deal with the older behavior.
+                                if let unwrapped = image {
+                                    self.base.setImage(unwrapped)
+                                }
+                                #endif   
+                            }
+                            completionHandler?(result)
                     }
-                    completionHandler?(result)
                 }
-        }
+            }
         )
-
+        
         mutatingSelf.imageTask = task
         return task
     }
-
+    
     // MARK: Cancelling Image
-
-    /// Cancel the image download task bounded to the text attachment if it is running.
+    
+    /// Cancel the image download task bounded to the image view if it is running.
     /// Nothing will happen if the downloading has already finished.
     public func cancelDownloadTask() {
         imageTask?.cancel()
@@ -249,7 +224,7 @@ private var taskIdentifierKey: Void?
 private var imageTaskKey: Void?
 
 // MARK: Properties
-extension KingfisherWrapper where Base: NSTextAttachment {
+extension KingfisherWrapper where Base: CPListItem {
 
     public private(set) var taskIdentifier: Source.Identifier.Value? {
         get {
@@ -267,5 +242,4 @@ extension KingfisherWrapper where Base: NSTextAttachment {
         set { setRetainedAssociatedObject(base, &imageTaskKey, newValue)}
     }
 }
-
 #endif

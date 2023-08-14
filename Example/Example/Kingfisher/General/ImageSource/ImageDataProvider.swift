@@ -55,6 +55,9 @@ public protocol ImageDataProvider {
 
 public extension ImageDataProvider {
     var contentURL: URL? { return nil }
+    func convertToSource() -> Source {
+        .provider(self)
+    }
 }
 
 /// Represents an image data provider for loading from a local file URL on disk.
@@ -67,6 +70,7 @@ public struct LocalFileImageDataProvider: ImageDataProvider {
 
     /// The file URL from which the image be loaded.
     public let fileURL: URL
+    private let loadingQueue: ExecutionQueue
 
     // MARK: Initializers
 
@@ -76,9 +80,16 @@ public struct LocalFileImageDataProvider: ImageDataProvider {
     ///   - fileURL: The file URL from which the image be loaded.
     ///   - cacheKey: The key is used for caching the image data. By default,
     ///               the `absoluteString` of `fileURL` is used.
-    public init(fileURL: URL, cacheKey: String? = nil) {
+    ///   - loadingQueue: The queue where the file loading should happen. By default, the dispatch queue of
+    ///                   `.global(qos: .userInitiated)` will be used.
+    public init(
+        fileURL: URL,
+        cacheKey: String? = nil,
+        loadingQueue: ExecutionQueue = .dispatch(DispatchQueue.global(qos: .userInitiated))
+    ) {
         self.fileURL = fileURL
-        self.cacheKey = cacheKey ?? fileURL.absoluteString
+        self.cacheKey = cacheKey ?? fileURL.localFileCacheKey
+        self.loadingQueue = loadingQueue
     }
 
     // MARK: Protocol Conforming
@@ -86,9 +97,31 @@ public struct LocalFileImageDataProvider: ImageDataProvider {
     /// The key used in cache.
     public var cacheKey: String
 
-    public func data(handler: (Result<Data, Error>) -> Void) {
-        handler(Result(catching: { try Data(contentsOf: fileURL) }))
+    public func data(handler:@escaping (Result<Data, Error>) -> Void) {
+        loadingQueue.execute {
+            handler(Result(catching: { try Data(contentsOf: fileURL) }))
+        }
     }
+    
+    #if swift(>=5.5)
+    #if canImport(_Concurrency)
+    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+    public var data: Data {
+        get async throws {
+            try await withCheckedThrowingContinuation { continuation in
+                loadingQueue.execute {
+                    do {
+                        let data = try Data(contentsOf: fileURL)
+                        continuation.resume(returning: data)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        }
+    }
+    #endif
+    #endif
 
     /// The URL of the local file on the disk.
     public var contentURL: URL? {

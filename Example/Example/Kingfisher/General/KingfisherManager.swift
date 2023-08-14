@@ -35,7 +35,6 @@ public typealias DownloadProgressBlock = ((_ receivedSize: Int64, _ totalSize: I
 
 /// Represents the result of a Kingfisher retrieving image task.
 public struct RetrieveImageResult {
-
     /// Gets the image object of this result.
     public let image: KFCrossPlatformImage
 
@@ -50,6 +49,17 @@ public struct RetrieveImageResult {
     /// When an alternative source loading happened, the `source` will be the replacing loading target, while the
     /// `originalSource` will be kept as the initial `source` which issued the image loading process.
     public let originalSource: Source
+    
+    /// Gets the data behind the result.
+    ///
+    /// If this result is from a network downloading (when `cacheType == .none`), calling this returns the downloaded
+    /// data. If the reuslt is from cache, it serializes the image with the given cache serializer in the loading option
+    /// and returns the result.
+    ///
+    /// - Note:
+    /// This can be a time-consuming action, so if you need to use the data for multiple times, it is suggested to hold
+    /// it and prevent keeping calling this too frequently.
+    public let data: () -> Data?
 }
 
 /// A struct that stores some related information of an `KingfisherError`. It provides some context information for
@@ -181,6 +191,7 @@ public class KingfisherManager {
     ///    it returns `nil` and invoke the `completionHandler` after the cached image retrieved. Otherwise, it
     ///    will try to load the `source`, store it in cache, then call `completionHandler`.
     ///
+    @discardableResult
     public func retrieveImage(
         with source: Source,
         options: KingfisherOptionsInfo? = nil,
@@ -189,13 +200,11 @@ public class KingfisherManager {
         completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)?) -> DownloadTask?
     {
         let options = currentDefaultOptions + (options ?? .empty)
-        var info = KingfisherParsedOptionsInfo(options)
-        if let block = progressBlock {
-            info.onDataReceived = (info.onDataReceived ?? []) + [ImageLoadingProgressSideEffect(block)]
-        }
+        let info = KingfisherParsedOptionsInfo(options)
         return retrieveImage(
             with: source,
             options: info,
+            progressBlock: progressBlock,
             downloadTaskUpdated: downloadTaskUpdated,
             completionHandler: completionHandler)
     }
@@ -203,9 +212,53 @@ public class KingfisherManager {
     func retrieveImage(
         with source: Source,
         options: KingfisherParsedOptionsInfo,
+        progressBlock: DownloadProgressBlock? = nil,
         downloadTaskUpdated: DownloadTaskUpdatedBlock? = nil,
         completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)?) -> DownloadTask?
     {
+        var info = options
+        if let block = progressBlock {
+            info.onDataReceived = (info.onDataReceived ?? []) + [ImageLoadingProgressSideEffect(block)]
+        }
+        return retrieveImage(
+            with: source,
+            options: info,
+            downloadTaskUpdated: downloadTaskUpdated,
+            progressiveImageSetter: nil,
+            completionHandler: completionHandler)
+    }
+
+    func retrieveImage(
+        with source: Source,
+        options: KingfisherParsedOptionsInfo,
+        downloadTaskUpdated: DownloadTaskUpdatedBlock? = nil,
+        progressiveImageSetter: ((KFCrossPlatformImage?) -> Void)? = nil,
+        referenceTaskIdentifierChecker: (() -> Bool)? = nil,
+        completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)?) -> DownloadTask?
+    {
+        var options = options
+        if let provider = ImageProgressiveProvider(options, refresh: { image in
+            guard let setter = progressiveImageSetter else {
+                return
+            }
+            guard let strategy = options.progressiveJPEG?.onImageUpdated(image) else {
+                setter(image)
+                return
+            }
+            switch strategy {
+            case .default: setter(image)
+            case .keepCurrent: break
+            case .replace(let newImage): setter(newImage)
+            }
+        }) {
+            options.onDataReceived = (options.onDataReceived ?? []) + [provider]
+        }
+        if let checker = referenceTaskIdentifierChecker {
+            options.onDataReceived?.forEach {
+                $0.onShouldApply = checker
+            }
+        }
+        
         let retrievingContext = RetrievingContext(options: options, originalSource: source)
         var retryContext: RetryContext?
 
@@ -225,7 +278,19 @@ public class KingfisherManager {
                 completionHandler?(.failure(error))
                 return
             }
+            // When low data mode constrained error, retry with the low data mode source instead of use alternative on fly.
+            guard !error.isLowDataModeConstrained else {
+                if let source = retrievingContext.options.lowDataModeSource {
+                    retrievingContext.options.lowDataModeSource = nil
+                    startNewRetrieveTask(with: source, downloadTaskUpdated: downloadTaskUpdated)
+                } else {
+                    // This should not happen.
+                    completionHandler?(.failure(error))
+                }
+                return
+            }
             if let nextSource = retrievingContext.popAlternativeSource() {
+                retrievingContext.appendError(error, to: source)
                 startNewRetrieveTask(with: nextSource, downloadTaskUpdated: downloadTaskUpdated)
             } else {
                 // No other alternative source. Finish with error.
@@ -260,27 +325,7 @@ public class KingfisherManager {
                         }
                     }
                 } else {
-
-                    // Skip alternative sources if the user cancelled it.
-                    guard !error.isTaskCancelled else {
-                        completionHandler?(.failure(error))
-                        return
-                    }
-                    if let nextSource = retrievingContext.popAlternativeSource() {
-                        retrievingContext.appendError(error, to: currentSource)
-                        startNewRetrieveTask(with: nextSource, downloadTaskUpdated: downloadTaskUpdated)
-                    } else {
-                        // No other alternative source. Finish with error.
-                        if retrievingContext.propagationErrors.isEmpty {
-                            completionHandler?(.failure(error))
-                        } else {
-                            retrievingContext.appendError(error, to: currentSource)
-                            let finalError = KingfisherError.imageSettingError(
-                                reason: .alternativeSourcesExhausted(retrievingContext.propagationErrors)
-                            )
-                            completionHandler?(.failure(finalError))
-                        }
-                    }
+                    failCurrentSource(currentSource, with: error)
                 }
             }
         }
@@ -351,9 +396,8 @@ public class KingfisherManager {
                         return
                     }
 
-                    let finalImage = options.imageModifier?.modify(image) ?? image
                     options.callbackQueue.execute {
-                        let result = ImageLoadingResult(image: finalImage, url: nil, originalData: data)
+                        let result = ImageLoadingResult(image: image, url: nil, originalData: data)
                         completionHandler(.success(result))
                     }
                 }
@@ -382,6 +426,13 @@ public class KingfisherManager {
                                            options.processor != DefaultImageProcessor.default
             let coordinator = CacheCallbackCoordinator(
                 shouldWaitForCache: options.waitForCache, shouldCacheOriginal: needToCacheOriginalImage)
+            let result = RetrieveImageResult(
+                image: options.imageModifier?.modify(value.image) ?? value.image,
+                cacheType: .none,
+                source: source,
+                originalSource: context.originalSource,
+                data: {  value.originalData }
+            )
             // Add image to cache.
             let targetCache = options.targetCache ?? self.cache
             targetCache.store(
@@ -393,12 +444,6 @@ public class KingfisherManager {
             {
                 _ in
                 coordinator.apply(.cachingImage) {
-                    let result = RetrieveImageResult(
-                        image: value.image,
-                        cacheType: .none,
-                        source: source,
-                        originalSource: context.originalSource
-                    )
                     completionHandler?(.success(result))
                 }
             }
@@ -415,24 +460,12 @@ public class KingfisherManager {
                 {
                     _ in
                     coordinator.apply(.cachingOriginalImage) {
-                        let result = RetrieveImageResult(
-                            image: value.image,
-                            cacheType: .none,
-                            source: source,
-                            originalSource: context.originalSource
-                        )
                         completionHandler?(.success(result))
                     }
                 }
             }
 
             coordinator.apply(.cacheInitiated) {
-                let result = RetrieveImageResult(
-                    image: value.image,
-                    cacheType: .none,
-                    source: source,
-                    originalSource: context.originalSource
-                )
                 completionHandler?(.success(result))
             }
 
@@ -522,28 +555,59 @@ public class KingfisherManager {
         if validCache {
             targetCache.retrieveImage(forKey: key, options: options) { result in
                 guard let completionHandler = completionHandler else { return }
-                options.callbackQueue.execute {
-                    result.match(
-                        onSuccess: { cacheResult in
-                            let value: Result<RetrieveImageResult, KingfisherError>
-                            if let image = cacheResult.image {
-                                value = result.map {
-                                    RetrieveImageResult(
-                                        image: image,
-                                        cacheType: $0.cacheType,
-                                        source: source,
-                                        originalSource: context.originalSource
-                                    )
-                                }
-                            } else {
-                                value = .failure(KingfisherError.cacheError(reason: .imageNotExisting(key: key)))
-                            }
-                            completionHandler(value)
-                        },
-                        onFailure: { _ in
+                
+                // TODO: Optimize it when we can use async across all the project.
+                func checkResultImageAndCallback(_ inputImage: KFCrossPlatformImage) {
+                    var image = inputImage
+                    if image.kf.imageFrameCount != nil && image.kf.imageFrameCount != 1, let data = image.kf.animatedImageData {
+                        // Always recreate animated image representation since it is possible to be loaded in different options.
+                        // https://github.com/onevcat/Kingfisher/issues/1923
+                        image = options.processor.process(item: .data(data), options: options) ?? .init()
+                    }
+                    if let modifier = options.imageModifier {
+                        image = modifier.modify(image)
+                    }
+                    let value = result.map {
+                        RetrieveImageResult(
+                            image: image,
+                            cacheType: $0.cacheType,
+                            source: source,
+                            originalSource: context.originalSource,
+                            data: { options.cacheSerializer.data(with: image, original: nil) }
+                        )
+                    }
+                    completionHandler(value)
+                }
+                
+                result.match { cacheResult in
+                    options.callbackQueue.execute {
+                        guard let image = cacheResult.image else {
                             completionHandler(.failure(KingfisherError.cacheError(reason: .imageNotExisting(key: key))))
+                            return
                         }
-                    )
+                        
+                        if options.cacheSerializer.originalDataUsed {
+                            let processor = options.processor
+                            (options.processingQueue ?? self.processingQueue).execute {
+                                let item = ImageProcessItem.image(image)
+                                guard let processedImage = processor.process(item: item, options: options) else {
+                                    let error = KingfisherError.processorError(
+                                        reason: .processingFailed(processor: processor, item: item))
+                                    options.callbackQueue.execute { completionHandler(.failure(error)) }
+                                    return
+                                }
+                                options.callbackQueue.execute {
+                                    checkResultImageAndCallback(processedImage)
+                                }
+                            }
+                        } else {
+                            checkResultImageAndCallback(image)
+                        }
+                    }
+                } onFailure: { error in
+                    options.callbackQueue.execute {
+                        completionHandler(.failure(KingfisherError.cacheError(reason: .imageNotExisting(key: key))))
+                    }
                 }
             }
             return true
@@ -595,6 +659,15 @@ public class KingfisherManager {
                             let coordinator = CacheCallbackCoordinator(
                                 shouldWaitForCache: options.waitForCache, shouldCacheOriginal: false)
 
+                            let image = options.imageModifier?.modify(processedImage) ?? processedImage
+                            let result = RetrieveImageResult(
+                                image: image,
+                                cacheType: .none,
+                                source: source,
+                                originalSource: context.originalSource,
+                                data: { options.cacheSerializer.data(with: processedImage, original: nil) }
+                            )
+
                             targetCache.store(
                                 processedImage,
                                 forKey: key,
@@ -603,24 +676,12 @@ public class KingfisherManager {
                             {
                                 _ in
                                 coordinator.apply(.cachingImage) {
-                                    let value = RetrieveImageResult(
-                                        image: processedImage,
-                                        cacheType: .none,
-                                        source: source,
-                                        originalSource: context.originalSource
-                                    )
-                                    options.callbackQueue.execute { completionHandler?(.success(value)) }
+                                    options.callbackQueue.execute { completionHandler?(.success(result)) }
                                 }
                             }
 
                             coordinator.apply(.cacheInitiated) {
-                                let value = RetrieveImageResult(
-                                    image: processedImage,
-                                    cacheType: .none,
-                                    source: source,
-                                    originalSource: context.originalSource
-                                )
-                                options.callbackQueue.execute { completionHandler?(.success(value)) }
+                                options.callbackQueue.execute { completionHandler?(.success(result)) }
                             }
                         }
                     },

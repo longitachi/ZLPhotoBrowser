@@ -79,7 +79,8 @@ public enum MemoryStorage {
             }
         }
 
-        func removeExpired() {
+        /// Removes the expired values from the storage.
+        public func removeExpired() {
             lock.lock()
             defer { lock.unlock() }
             for key in keys {
@@ -91,19 +92,23 @@ public enum MemoryStorage {
                     keys.remove(key)
                     continue
                 }
-                if object.estimatedExpiration.isPast {
+                if object.isExpired {
                     storage.removeObject(forKey: nsKey)
                     keys.remove(key)
                 }
             }
         }
 
-        // Storing in memory will not throw. It is just for meeting protocol requirement and
-        // forwarding to no throwing method.
-        func store(
+        /// Stores a value to the storage under the specified key and expiration policy.
+        /// - Parameters:
+        ///   - value: The value to be stored.
+        ///   - key: The key to which the `value` will be stored.
+        ///   - expiration: The expiration policy used by this store action.
+        /// - Throws: No error will
+        public func store(
             value: T,
             forKey key: String,
-            expiration: StorageExpiration? = nil) throws
+            expiration: StorageExpiration? = nil)
         {
             storeNoThrow(value: value, forKey: key, expiration: expiration)
         }
@@ -121,47 +126,54 @@ public enum MemoryStorage {
             // The expiration indicates that already expired, no need to store.
             guard !expiration.isExpired else { return }
             
-            let object = StorageObject(value, key: key, expiration: expiration)
+            let object: StorageObject<T>
+            if config.keepWhenEnteringBackground {
+                object = BackgroundKeepingStorageObject(value, expiration: expiration)
+            } else {
+                object = StorageObject(value, expiration: expiration)
+            }
             storage.setObject(object, forKey: key as NSString, cost: value.cacheCost)
             keys.insert(key)
         }
         
-        /// Use this when you actually access the memory cached item.
-        /// By default, this will extend the expired data for the accessed item.
+        /// Gets a value from the storage.
         ///
         /// - Parameters:
-        ///   - key: Cache Key
-        ///   - extendingExpiration: expiration value to extend item expiration time:
-        ///     * .none: The item expires after the original time, without extending after access.
-        ///     * .cacheTime: The item expiration extends by the original cache time after each access.
-        ///     * .expirationTime: The item expiration extends by the provided time after each access.
-        /// - Returns: cached object or nil
-        func value(forKey key: String, extendingExpiration: ExpirationExtending = .cacheTime) -> T? {
+        ///   - key: The cache key of value.
+        ///   - extendingExpiration: The expiration policy used by this getting action.
+        /// - Returns: The value under `key` if it is valid and found in the storage. Otherwise, `nil`.
+        public func value(forKey key: String, extendingExpiration: ExpirationExtending = .cacheTime) -> T? {
             guard let object = storage.object(forKey: key as NSString) else {
                 return nil
             }
-            if object.expired {
+            if object.isExpired {
                 return nil
             }
             object.extendExpiration(extendingExpiration)
             return object.value
         }
 
-        func isCached(forKey key: String) -> Bool {
+        /// Whether there is valid cached data under a given key.
+        /// - Parameter key: The cache key of value.
+        /// - Returns: If there is valid data under the key, `true`. Otherwise, `false`.
+        public func isCached(forKey key: String) -> Bool {
             guard let _ = value(forKey: key, extendingExpiration: .none) else {
                 return false
             }
             return true
         }
 
-        func remove(forKey key: String) throws {
+        /// Removes a value from a specified key.
+        /// - Parameter key: The cache key of value.
+        public func remove(forKey key: String) {
             lock.lock()
             defer { lock.unlock() }
             storage.removeObject(forKey: key as NSString)
             keys.remove(key)
         }
 
-        func removeAll() throws {
+        /// Removes all values in this storage.
+        public func removeAll() {
             lock.lock()
             defer { lock.unlock() }
             storage.removeAllObjects()
@@ -185,7 +197,18 @@ extension MemoryStorage {
         public var expiration: StorageExpiration = .seconds(300)
 
         /// The time interval between the storage do clean work for swiping expired items.
-        public let cleanInterval: TimeInterval
+        public var cleanInterval: TimeInterval
+        
+        /// Whether the newly added items to memory cache should be purged when the app goes to background.
+        ///
+        /// By default, the cached items in memory will be purged as soon as the app goes to background to ensure
+        /// least memory footprint. Enabling this would prevent this behavior and keep the items alive in cache even
+        /// when your app is not in foreground anymore.
+        ///
+        /// Default is `false`. After setting `true`, only the newly added cache objects are affected. Existing
+        /// objects which are already in the cache while this value was `false` will be still be purged when entering
+        /// background.
+        public var keepWhenEnteringBackground: Bool = false
 
         /// Creates a config from a given `totalCostLimit` value.
         ///
@@ -204,16 +227,39 @@ extension MemoryStorage {
 }
 
 extension MemoryStorage {
+    
+    class BackgroundKeepingStorageObject<T>: StorageObject<T>, NSDiscardableContent {
+        var accessing = true
+        func beginContentAccess() -> Bool {
+            if value != nil {
+                accessing = true
+            } else {
+                accessing = false
+            }
+            return accessing
+        }
+        
+        func endContentAccess() {
+            accessing = false
+        }
+        
+        func discardContentIfPossible() {
+            value = nil
+        }
+        
+        func isContentDiscarded() -> Bool {
+            return value == nil
+        }
+    }
+    
     class StorageObject<T> {
-        let value: T
+        var value: T?
         let expiration: StorageExpiration
-        let key: String
         
         private(set) var estimatedExpiration: Date
         
-        init(_ value: T, key: String, expiration: StorageExpiration) {
+        init(_ value: T, expiration: StorageExpiration) {
             self.value = value
-            self.key = key
             self.expiration = expiration
             
             self.estimatedExpiration = expiration.estimatedExpirationSinceNow
@@ -230,7 +276,7 @@ extension MemoryStorage {
             }
         }
         
-        var expired: Bool {
+        var isExpired: Bool {
             return estimatedExpiration.isPast
         }
     }

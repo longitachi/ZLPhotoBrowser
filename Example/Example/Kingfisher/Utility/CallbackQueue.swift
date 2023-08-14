@@ -26,6 +26,8 @@
 
 import Foundation
 
+public typealias ExecutionQueue = CallbackQueue
+
 /// Represents callback queue behaviors when an calling of closure be dispatched.
 ///
 /// - asyncMain: Dispatch the calling to `DispatchQueue.main` with an `async` behavior.
@@ -71,7 +73,7 @@ extension DispatchQueue {
     // This method will dispatch the `block` to self.
     // If `self` is the main queue, and current thread is main thread, the block
     // will be invoked immediately instead of being dispatched.
-    func safeAsync(_ block: @escaping ()->()) {
+    func safeAsync(_ block: @escaping () -> Void) {
         if self === DispatchQueue.main && Thread.isMainThread {
             block()
         } else {

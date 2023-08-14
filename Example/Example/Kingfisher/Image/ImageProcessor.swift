@@ -29,6 +29,8 @@ import CoreGraphics
 
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
+#else
+import UIKit
 #endif
 
 /// Represents an item which could be processed by an `ImageProcessor`.
@@ -36,7 +38,7 @@ import AppKit
 /// - image: Input image. The processor should provide a way to apply
 ///          processing on this `image` and return the result image.
 /// - data:  Input data. The processor should provide a way to apply
-///          processing on this `image` and return the result image.
+///          processing on this `data` and return the result image.
 public enum ImageProcessItem {
     
     /// Input image. The processor should provide a way to apply
@@ -44,7 +46,7 @@ public enum ImageProcessItem {
     case image(KFCrossPlatformImage)
     
     /// Input data. The processor should provide a way to apply
-    /// processing on this `image` and return the result image.
+    /// processing on this `data` and return the result image.
     case data(Data)
 }
 
@@ -59,27 +61,6 @@ public protocol ImageProcessor {
     /// the `DefaultImageProcessor`. It is recommended to use a reverse domain name notation string of
     /// your own for the identifier.
     var identifier: String { get }
-    
-    /// Processes the input `ImageProcessItem` with this processor.
-    ///
-    /// - Parameters:
-    ///   - item: Input item which will be processed by `self`.
-    ///   - options: Options when processing the item.
-    /// - Returns: The processed image.
-    ///
-    /// - Note: The return value should be `nil` if processing failed while converting an input item to image.
-    ///         If `nil` received by the processing caller, an error will be reported and the process flow stops.
-    ///         If the processing flow is not critical for your flow, then when the input item is already an image
-    ///         (`.image` case) and there is any errors in the processing, you could return the input image itself
-    ///         to keep the processing pipeline continuing.
-    /// - Note: Most processor only supports CG-based images. watchOS is not supported for processors containing
-    ///         a filter, the input image will be returned directly on watchOS.
-    /// - Note:
-    /// This method is deprecated. Please implement the version with
-    /// `KingfisherParsedOptionsInfo` as parameter instead.
-    @available(*, deprecated,
-    message: "Deprecated. Implement the method with same name but with `KingfisherParsedOptionsInfo` instead.")
-    func process(item: ImageProcessItem, options: KingfisherOptionsInfo) -> KFCrossPlatformImage?
 
     /// Processes the input `ImageProcessItem` with this processor.
     ///
@@ -96,12 +77,6 @@ public protocol ImageProcessor {
     /// - Note: Most processor only supports CG-based images. watchOS is not supported for processors containing
     ///         a filter, the input image will be returned directly on watchOS.
     func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage?
-}
-
-extension ImageProcessor {
-    public func process(item: ImageProcessItem, options: KingfisherOptionsInfo) -> KFCrossPlatformImage? {
-        return process(item: item, options: KingfisherParsedOptionsInfo(options))
-    }
 }
 
 extension ImageProcessor {
@@ -243,7 +218,7 @@ public struct BlendImageProcessor: ImageProcessor {
         self.backgroundColor = backgroundColor
         var identifier = "com.onevcat.Kingfisher.BlendImageProcessor(\(blendMode.rawValue),\(alpha))"
         if let color = backgroundColor {
-            identifier.append("_\(color.hex)")
+            identifier.append("_\(color.rgbaDescription)")
         }
         self.identifier = identifier
     }
@@ -302,7 +277,7 @@ public struct CompositingImageProcessor: ImageProcessor {
         self.backgroundColor = backgroundColor
         var identifier = "com.onevcat.Kingfisher.CompositingImageProcessor(\(compositingOperation.rawValue),\(alpha))"
         if let color = backgroundColor {
-            identifier.append("_\(color.hex)")
+            identifier.append("_\(color.rgbaDescription)")
         }
         self.identifier = identifier
     }
@@ -330,6 +305,42 @@ public struct CompositingImageProcessor: ImageProcessor {
 }
 #endif
 
+/// Represents a radius specified in a `RoundCornerImageProcessor`.
+public enum Radius {
+    /// The radius should be calculated as a fraction of the image width. Typically the associated value should be
+    /// between 0 and 0.5, where 0 represents no radius and 0.5 represents using half of the image width.
+    case widthFraction(CGFloat)
+    /// The radius should be calculated as a fraction of the image height. Typically the associated value should be
+    /// between 0 and 0.5, where 0 represents no radius and 0.5 represents using half of the image height.
+    case heightFraction(CGFloat)
+    /// Use a fixed point value as the round corner radius.
+    case point(CGFloat)
+
+    var radiusIdentifier: String {
+        switch self {
+        case .widthFraction(let f):
+            return "w_frac_\(f)"
+        case .heightFraction(let f):
+            return "h_frac_\(f)"
+        case .point(let p):
+            return p.description
+        }
+    }
+    
+    public func compute(with size: CGSize) -> CGFloat {
+        let cornerRadius: CGFloat
+        switch self {
+        case .point(let point):
+            cornerRadius = point
+        case .widthFraction(let widthFraction):
+            cornerRadius = size.width * widthFraction
+        case .heightFraction(let heightFraction):
+            cornerRadius = size.height * heightFraction
+        }
+        return cornerRadius
+    }
+}
+
 /// Processor for making round corner images. Only CG-based images are supported in macOS, 
 /// if a non-CG image passed in, the processor will do nothing.
 ///
@@ -344,47 +355,13 @@ public struct CompositingImageProcessor: ImageProcessor {
 ///
 public struct RoundCornerImageProcessor: ImageProcessor {
 
-    /// Represents a radius specified in a `RoundCornerImageProcessor`.
-    public enum Radius {
-        /// The radius should be calculated as a fraction of the image width. Typically the associated value should be
-        /// between 0 and 0.5, where 0 represents no radius and 0.5 represents using half of the image width.
-        case widthFraction(CGFloat)
-        /// The radius should be calculated as a fraction of the image height. Typically the associated value should be
-        /// between 0 and 0.5, where 0 represents no radius and 0.5 represents using half of the image height.
-        case heightFraction(CGFloat)
-        /// Use a fixed point value as the round corner radius.
-        case point(CGFloat)
-
-        var radiusIdentifier: String {
-            switch self {
-            case .widthFraction(let f):
-                return "w_frac_\(f)"
-            case .heightFraction(let f):
-                return "h_frac_\(f)"
-            case .point(let p):
-                return p.description
-            }
-        }
-    }
-
     /// Identifier of the processor.
     /// - Note: See documentation of `ImageProcessor` protocol for more.
     public let identifier: String
 
-    /// Corner radius will be applied in processing. To provide backward compatibility, this property returns `0` unless
-    /// `Radius.point` is specified.
-    @available(*, deprecated, message: "Use `radius` property instead.")
-    public var cornerRadius: CGFloat {
-        switch radius {
-        case .widthFraction, .heightFraction:
-            return 0.0
-        case .point(let value):
-            return value
-        }
-    }
-
     /// The radius will be applied in processing. Specify a certain point value with `.point`, or a fraction of the
-    /// target image with `.fraction`. `.fraction(0.5)` means use half of the
+    /// target image with `.widthFraction`. or `.heightFraction`. For example, given a square image with width and
+    /// height equals,  `.widthFraction(0.5)` means use half of the length of size and makes the final image a round one.
     public let radius: Radius
     
     /// The target corners which will be applied rounding.
@@ -474,20 +451,9 @@ public struct RoundCornerImageProcessor: ImageProcessor {
         switch item {
         case .image(let image):
             let size = targetSize ?? image.kf.size
-
-            let cornerRadius: CGFloat
-            switch radius {
-            case .point(let point):
-                cornerRadius = point
-            case .widthFraction(let widthFraction):
-                cornerRadius = size.width * widthFraction
-            case .heightFraction(let heightFraction):
-                cornerRadius = size.height * heightFraction
-            }
-
             return image.kf.scaled(to: options.scaleFactor)
                         .kf.image(
-                            withRoundRadius: cornerRadius,
+                            withRadius: radius,
                             fit: size,
                             roundingCorners: roundingCorners,
                             backgroundColor: backgroundColor)
@@ -497,6 +463,52 @@ public struct RoundCornerImageProcessor: ImageProcessor {
     }
 }
 
+public struct Border {
+    public var color: KFCrossPlatformColor
+    public var lineWidth: CGFloat
+    
+    /// The radius will be applied in processing. Specify a certain point value with `.point`, or a fraction of the
+    /// target image with `.widthFraction`. or `.heightFraction`. For example, given a square image with width and
+    /// height equals,  `.widthFraction(0.5)` means use half of the length of size and makes the final image a round one.
+    public var radius: Radius
+    
+    /// The target corners which will be applied rounding.
+    public var roundingCorners: RectCorner
+    
+    public init(
+        color: KFCrossPlatformColor = .black,
+        lineWidth: CGFloat = 4,
+        radius: Radius = .point(0),
+        roundingCorners: RectCorner = .all
+    ) {
+        self.color = color
+        self.lineWidth = lineWidth
+        self.radius = radius
+        self.roundingCorners = roundingCorners
+    }
+    
+    var identifier: String {
+        "\(color.rgbaDescription)_\(lineWidth)_\(radius.radiusIdentifier)_\(roundingCorners.cornerIdentifier)"
+    }
+}
+
+public struct BorderImageProcessor: ImageProcessor {
+    public var identifier: String { "com.onevcat.Kingfisher.RoundCornerImageProcessor(\(border)" }
+    public let border: Border
+    
+    public init(border: Border) {
+        self.border = border
+    }
+    
+    public func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage? {
+        switch item {
+        case .image(let image):
+            return image.kf.addingBorder(border)
+        case .data:
+            return (DefaultImageProcessor.default |> self).process(item: item, options: options)
+        }
+    }
+}
 
 /// Represents how a size adjusts itself to fit a target size.
 ///
@@ -514,7 +526,7 @@ public enum ContentMode {
 
 /// Processor for resizing images.
 /// If you need to resize a data represented image to a smaller size, use `DownsamplingImageProcessor`
-/// instead, which is more efficient and takes less memory.
+/// instead, which is more efficient and uses less memory.
 public struct ResizingImageProcessor: ImageProcessor {
     
     /// Identifier of the processor.
@@ -637,7 +649,7 @@ public struct OverlayImageProcessor: ImageProcessor {
     public init(overlay: KFCrossPlatformColor, fraction: CGFloat = 0.5) {
         self.overlay = overlay
         self.fraction = fraction
-        self.identifier = "com.onevcat.Kingfisher.OverlayImageProcessor(\(overlay.hex)_\(fraction))"
+        self.identifier = "com.onevcat.Kingfisher.OverlayImageProcessor(\(overlay.rgbaDescription)_\(fraction))"
     }
     
     /// Processes the input `ImageProcessItem` with this processor.
@@ -674,7 +686,7 @@ public struct TintImageProcessor: ImageProcessor {
     /// - parameter tint: Tint color will be used to tint the input image.
     public init(tint: KFCrossPlatformColor) {
         self.tint = tint
-        self.identifier = "com.onevcat.Kingfisher.TintImageProcessor(\(tint.hex))"
+        self.identifier = "com.onevcat.Kingfisher.TintImageProcessor(\(tint.rgbaDescription))"
     }
     
     /// Processes the input `ImageProcessItem` with this processor.
@@ -836,8 +848,9 @@ public struct CroppingImageProcessor: ImageProcessor {
 }
 
 /// Processor for downsampling an image. Compared to `ResizingImageProcessor`, this processor
-/// does not render the images to resize. Instead, it downsample the input data directly to an
-/// image. It is a more efficient than `ResizingImageProcessor`.
+/// does not render the images to resize. Instead, it downsamples the input data directly to an
+/// image. It is a more efficient than `ResizingImageProcessor`. Prefer to use `DownsamplingImageProcessor` as possible
+/// as you can than the `ResizingImageProcessor`.
 ///
 /// Only CG-based images are supported. Animated images (like GIF) is not supported.
 public struct DownsamplingImageProcessor: ImageProcessor {
@@ -880,44 +893,30 @@ public struct DownsamplingImageProcessor: ImageProcessor {
     }
 }
 
-/// Concatenates two `ImageProcessor`s. `ImageProcessor.append(another:)` is used internally.
-///
-/// - Parameters:
-///   - left: The first processor.
-///   - right: The second processor.
-/// - Returns: The concatenated processor.
-@available(*, deprecated,
-message: "Will be removed soon. Use `|>` instead.",
-renamed: "|>")
-public func >>(left: ImageProcessor, right: ImageProcessor) -> ImageProcessor {
-    return left.append(another: right)
-}
-
 infix operator |>: AdditionPrecedence
 public func |>(left: ImageProcessor, right: ImageProcessor) -> ImageProcessor {
     return left.append(another: right)
 }
 
 extension KFCrossPlatformColor {
-    var hex: String {
+    
+    var rgba: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0
         var a: CGFloat = 0
 
         #if os(macOS)
-        (usingColorSpace(.sRGB) ?? self).getRed(&r, green: &g, blue: &b, alpha: &a)
+        (usingColorSpace(.extendedSRGB) ?? self).getRed(&r, green: &g, blue: &b, alpha: &a)
         #else
         getRed(&r, green: &g, blue: &b, alpha: &a)
         #endif
-
-        let rInt = Int(r * 255) << 24
-        let gInt = Int(g * 255) << 16
-        let bInt = Int(b * 255) << 8
-        let aInt = Int(a * 255)
         
-        let rgba = rInt | gInt | bInt | aInt
-        
-        return String(format:"#%08x", rgba)
+        return (r, g, b, a)
+    }
+    
+    var rgbaDescription: String {
+        let components = self.rgba
+        return String(format: "(%.2f,%.2f,%.2f,%.2f)", components.r, components.g, components.b, components.a)
     }
 }

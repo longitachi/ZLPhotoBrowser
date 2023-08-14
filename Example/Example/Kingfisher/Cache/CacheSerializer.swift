@@ -53,25 +53,16 @@ public protocol CacheSerializer {
     ///            could be deserialized.
     func image(with data: Data, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage?
     
-    /// Gets an image deserialized from provided data.
+    /// Whether this serializer prefers to cache the original data in its implementation.
+    /// If `true`, after creating the image from the disk data, Kingfisher will continue to apply the processor to get
+    /// the final image.
     ///
-    /// - Parameters:
-    ///   - data: The data from which an image should be deserialized.
-    ///   - options: Options for deserialization.
-    /// - Returns: An image deserialized or `nil` when no valid image
-    ///            could be deserialized.
-    /// - Note:
-    /// This method is deprecated. Please implement the version with
-    /// `KingfisherParsedOptionsInfo` as parameter instead.
-    @available(*, deprecated,
-    message: "Deprecated. Implement the method with same name but with `KingfisherParsedOptionsInfo` instead.")
-    func image(with data: Data, options: KingfisherOptionsInfo?) -> KFCrossPlatformImage?
+    /// By default, it is `false` and the actual processed image is assumed to be serialized to the disk.
+    var originalDataUsed: Bool { get }
 }
 
-extension CacheSerializer {
-    public func image(with data: Data, options: KingfisherOptionsInfo?) -> KFCrossPlatformImage? {
-        return image(with: data, options: KingfisherParsedOptionsInfo(options))
-    }
+public extension CacheSerializer {
+    var originalDataUsed: Bool { false }
 }
 
 /// Represents a basic and default `CacheSerializer` used in Kingfisher disk cache system.
@@ -90,6 +81,10 @@ public struct DefaultCacheSerializer: CacheSerializer {
     /// In that case, the serialization will fall back to creating data from image.
     public var preferCacheOriginalData: Bool = false
 
+    /// Returnes the `preferCacheOriginalData` value. When the original data is used, Kingfisher needs to re-apply the
+    /// processors to get the desired final image.
+    public var originalDataUsed: Bool { preferCacheOriginalData }
+    
     /// Creates a cache serializer that serialize and deserialize images in PNG, JPEG and GIF format.
     ///
     /// - Note:
