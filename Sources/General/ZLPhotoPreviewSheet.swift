@@ -602,16 +602,14 @@ public class ZLPhotoPreviewSheet: UIView {
             }
             
             if let vc = viewController {
-                self?.isHidden = true
-                self?.animate = false
                 vc.dismiss(animated: true) {
                     call()
                     self?.hide()
                 }
             } else {
-                self?.hide(completion: {
+                self?.hide {
                     call()
-                })
+                }
             }
             
             self?.arrSelectedModels.removeAll()
@@ -672,10 +670,9 @@ public class ZLPhotoPreviewSheet: UIView {
                 let tvc = ZLThumbnailViewController(albumList: cameraRoll)
                 nav.pushViewController(tvc, animated: true)
             }
-            if deviceIsiPad() {
-                self.sender?.present(nav, animated: true, completion: nil)
-            } else {
-                self.sender?.showDetailViewController(nav, sender: nil)
+            
+            self.sender?.present(nav, animated: true) {
+                self.isHidden = true
             }
         }
     }
@@ -912,6 +909,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                         
                         config.didSelectAsset?(model.asset)
                         self.refreshCellIndex()
+                        self.changeCancelBtnTitle()
                     }
                 }
             } else {
@@ -921,19 +919,16 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 
                 config.didDeselectAsset?(model.asset)
                 self.refreshCellIndex()
+                
+                self.changeCancelBtnTitle()
             }
-            
-            self.changeCancelBtnTitle()
         }
         
-        cell.indexLabel.isHidden = true
-        if config.showSelectedIndex {
-            for (index, selM) in arrSelectedModels.enumerated() {
-                if model == selM {
-                    setCellIndex(cell, showIndexLabel: true, index: index + 1)
-                    break
-                }
-            }
+        if config.showSelectedIndex,
+           let index = arrSelectedModels.firstIndex(where: { $0 == model }){
+            setCellIndex(cell, showIndexLabel: true, index: index + 1)
+        } else {
+            cell.indexLabel.isHidden = true
         }
         
         setCellMaskView(cell, isSelected: model.isSelected, model: model)
@@ -1029,6 +1024,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         guard ZLPhotoConfiguration.default().showSelectedIndex else {
             return
         }
+        
         cell?.index = index
         cell?.indexLabel.isHidden = !showIndexLabel
     }

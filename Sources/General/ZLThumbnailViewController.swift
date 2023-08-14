@@ -1107,14 +1107,11 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             }
         }
         
-        cell.indexLabel.isHidden = true
-        if ZLPhotoConfiguration.default().showSelectedIndex {
-            for (index, selM) in (nav?.arrSelectedModels ?? []).enumerated() {
-                if model == selM {
-                    setCellIndex(cell, showIndexLabel: true, index: index + 1)
-                    break
-                }
-            }
+        if config.showSelectedIndex,
+           let index = nav?.arrSelectedModels.firstIndex(where: { $0 == model }){
+            setCellIndex(cell, showIndexLabel: true, index: index + 1)
+        } else {
+            cell.indexLabel.isHidden = true
         }
         
         setCellMaskView(cell, isSelected: model.isSelected, model: model)

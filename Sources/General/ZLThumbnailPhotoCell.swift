@@ -147,6 +147,8 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     }
     
     override func layoutSubviews() {
+        super.layoutSubviews()
+        
         imageView.frame = bounds
         
         containerView.frame = bounds
@@ -159,8 +161,6 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         editImageTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
         descLabel.frame = CGRect(x: 30, y: 1, width: bounds.width - 35, height: 17)
         progressView.frame = CGRect(x: (bounds.width - 20) / 2, y: (bounds.height - 20) / 2, width: 20, height: 20)
-        
-        super.layoutSubviews()
     }
     
     @objc func btnSelectClick() {
@@ -240,8 +240,8 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             cancelFetchBigImage()
         }
         
-        if let ei = model.editImage {
-            imageView.image = ei
+        if let editImage = model.editImage {
+            imageView.image = editImage
         } else {
             fetchSmallImage()
         }

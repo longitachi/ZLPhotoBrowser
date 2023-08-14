@@ -320,7 +320,7 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public lazy var ashbinImgView = UIImageView(image: .zl.getImage("zl_ashbin"), highlightedImage: .zl.getImage("zl_ashbin_open"))
     
-    @objc public var drawLineWidth: CGFloat = 5
+    @objc public var drawLineWidth: CGFloat = 6
     
     @objc public var mosaicLineWidth: CGFloat = 25
     
@@ -1749,11 +1749,13 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
 public class ZLDrawPath: NSObject {
     private let pathColor: UIColor
     
-    private let path: UIBezierPath
+    private var path: UIBezierPath
     
     private let ratio: CGFloat
     
     private let shapeLayer: CAShapeLayer
+    
+    private var points: [CGPoint] = []
     
     init(pathColor: UIColor, pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.pathColor = pathColor
@@ -1762,6 +1764,7 @@ public class ZLDrawPath: NSObject {
         path.lineCapStyle = .round
         path.lineJoinStyle = .round
         path.move(to: CGPoint(x: startPoint.x / ratio, y: startPoint.y / ratio))
+        points.append(startPoint)
         
         shapeLayer = CAShapeLayer()
         shapeLayer.lineCap = .round
@@ -1777,8 +1780,57 @@ public class ZLDrawPath: NSObject {
     }
     
     func addLine(to point: CGPoint) {
-        path.addLine(to: CGPoint(x: point.x / ratio, y: point.y / ratio))
-        shapeLayer.path = path.cgPath
+        points.append(point)
+        
+        func divRatio(_ point: CGPoint) -> CGPoint {
+            return CGPoint(x: point.x / ratio, y: point.y / ratio)
+        }
+        
+        defer {
+            shapeLayer.path = path.cgPath
+        }
+        
+        guard points.count >= 4 else {
+            path.addLine(to: divRatio(point))
+            return
+        }
+        
+        path.removeAllPoints()
+        
+        // https://blog.csdn.net/ChasingDreamsCoder/article/details/53015694
+        path.move(to: divRatio(points[0]))
+        path.addLine(to: divRatio(points[1]))
+        
+        let granularity = 4
+        for i in 3..<points.count {
+            let p0 = points[i - 3]
+            let p1 = points[i - 2]
+            let p2 = points[i - 1]
+            let p3 = points[i]
+            
+            for i in 1..<granularity {
+                let t = CGFloat(i) * (1 / CGFloat(granularity))
+                let tt = t * t
+                let ttt = tt * t
+
+                var point = CGPoint.zero
+                point.x = 0.5 * (
+                    2 * p1.x + (p2.x - p0.x) * t +
+                    (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * tt +
+                    (3 * p1.x - p0.x - 3 * p2.x + p3.x) * ttt
+                )
+                point.y = 0.5 * (
+                    2 * p1.y + (p2.y - p0.y) * t +
+                    (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * tt +
+                    (3 * p1.y - p0.y - 3 * p2.y + p3.y) * ttt
+                )
+                path.addLine(to: divRatio(point))
+            }
+            
+            path.addLine(to: divRatio(p2))
+        }
+        
+        path.addLine(to: divRatio(points[points.count - 1]))
     }
     
     func drawPath() {
