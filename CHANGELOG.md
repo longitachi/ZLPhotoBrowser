@@ -2,6 +2,17 @@
 
 -----
 
+## [4.4.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.4) (2023-08-25)
+
+### Add:
+* Support downloading video data from iCloud before selecting a video.
+* Makes the drawn curves smoother when editing images.
+
+### Fix:
+* Fix a bug that may fail to save videos stored on iCloud.
+
+---
+
 ## [4.4.3.2 - 4.4.3 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.3.2) (2023-07-26)
 
 ### Fix:
