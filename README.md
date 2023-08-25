@@ -53,7 +53,7 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Requirements
  * iOS 10.0
  * Swift 5.x
- * Xcode 12.x
+ * Xcode 13.x
  
 ### Usage
  - Preview selection

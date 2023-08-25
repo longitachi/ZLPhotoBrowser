@@ -878,6 +878,7 @@ class ZLThumbnailViewController: UIViewController {
                 
                 if config.callbackDirectlyAfterTakingPhoto {
                     doneBtnClick()
+                    return
                 }
             }
         }

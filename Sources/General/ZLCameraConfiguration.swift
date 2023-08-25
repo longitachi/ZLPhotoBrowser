@@ -119,6 +119,8 @@ public extension ZLCameraConfiguration {
                 return .hd1280x720
             case .hd1920x1080:
                 return .hd1920x1080
+            case .hd4K3840x2160:
+                return .hd4K3840x2160
             case .photo:
                 return .photo
             }
@@ -128,6 +130,7 @@ public extension ZLCameraConfiguration {
         case vga640x480
         case hd1280x720
         case hd1920x1080
+        case hd4K3840x2160
         case photo
     }
     

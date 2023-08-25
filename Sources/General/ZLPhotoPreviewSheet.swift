@@ -845,6 +845,7 @@ public class ZLPhotoPreviewSheet: UIView {
                 
                 if config.callbackDirectlyAfterTakingPhoto {
                     requestSelectPhoto()
+                    return
                 }
             }
         }

@@ -1322,7 +1322,7 @@ open class ZLEditImageViewController: UIViewController {
         size.width *= toImageScale
         size.height *= toImageScale
         
-        UIGraphicsBeginImageContextWithOptions(size, false, editImage.scale)
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()
         // 去掉锯齿
         context?.setAllowsAntialiasing(true)
