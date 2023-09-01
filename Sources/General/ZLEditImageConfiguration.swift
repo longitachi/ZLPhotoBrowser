@@ -190,6 +190,10 @@ public class ZLEditImageConfiguration: NSObject {
     
     /// Whether to support redo in graffiti and mosaic tools. Defaults to false
     public var canRedo = false
+    
+    /// Whether to keep clipped area dimmed during adjustments. Defaults to false
+    public var dimClippedAreaDuringAdjustments = false
+
 }
 
 public extension ZLEditImageConfiguration {
@@ -312,6 +316,12 @@ public extension ZLEditImageConfiguration {
     @discardableResult
     func canRedo(_ value: Bool) -> ZLEditImageConfiguration {
         canRedo = value
+        return self
+    }
+    
+    @discardableResult
+    func dimClippedAreaDuringAdjustments(_ value: Bool) -> ZLEditImageConfiguration {
+        dimClippedAreaDuringAdjustments = value
         return self
     }
 }
