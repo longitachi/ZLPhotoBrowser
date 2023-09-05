@@ -344,7 +344,7 @@ extension ZLBaseStickerView: ZLStickerViewAdditional {
         let diffX: CGFloat = (origin.x - newOrigin.x)
         let diffY: CGFloat = (origin.y - newOrigin.y)
         
-        let direction = direction(for: originScale)
+        let direction = direction(for: originAngle)
         if direction == .right {
             transform = transform.translatedBy(x: diffY, y: -diffX)
             originTransform = originTransform.translatedBy(x: diffY / originScale, y: -diffX / originScale)
