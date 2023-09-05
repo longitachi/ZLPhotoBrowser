@@ -95,6 +95,7 @@ class ZLClipImageViewController: UIViewController {
     private lazy var overlayView: ZLClipOverlayView = {
         let view = ZLClipOverlayView()
         view.isUserInteractionEnabled = false
+        view.isCircle = selectedRatio.isCircle
         return view
     }()
     
@@ -191,6 +192,7 @@ class ZLClipImageViewController: UIViewController {
     
     private var selectedRatio: ZLImageClipRatio {
         didSet {
+            overlayView.isCircle = selectedRatio.isCircle
             shadowView.isCircle = selectedRatio.isCircle
         }
     }
@@ -1175,7 +1177,23 @@ class ZLClipOverlayView: UIView {
     
     private var horLines: [UIView] = []
     
-    var isEditing = false
+    var isCircle = false {
+        didSet {
+            guard oldValue != isCircle else {
+                return
+            }
+            setNeedsDisplay()
+        }
+    }
+    
+    var isEditing = false {
+        didSet {
+            guard isCircle else {
+                return
+            }
+            setNeedsDisplay()
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -1285,7 +1303,7 @@ class ZLClipOverlayView: UIView {
         
         var dw: CGFloat = 3
         for i in 0..<4 {
-            let isInnerLine = 1...2 ~= i
+            let isInnerLine = isCircle && 1...2 ~= i
             context?.move(to: CGPoint(x: rect.origin.x + dw, y: ZLClipOverlayView.cornerLineWidth + (isInnerLine ? circleDiff : 0)))
             context?.addLine(to: CGPoint(x: rect.origin.x + dw, y: rect.height - ZLClipOverlayView.cornerLineWidth - (isInnerLine ? circleDiff : 0)))
             dw += (rect.size.width - 6) / 3
@@ -1293,7 +1311,7 @@ class ZLClipOverlayView: UIView {
 
         var dh: CGFloat = 3
         for i in 0..<4 {
-            let isInnerLine = 1...2 ~= i
+            let isInnerLine = isCircle && 1...2 ~= i
             context?.move(to: CGPoint(x: ZLClipOverlayView.cornerLineWidth + (isInnerLine ? circleDiff : 0), y: rect.origin.y + dh))
             context?.addLine(to: CGPoint(x: rect.width - ZLClipOverlayView.cornerLineWidth - (isInnerLine ? circleDiff : 0), y: rect.origin.y + dh))
             dh += (rect.size.height - 6) / 3
