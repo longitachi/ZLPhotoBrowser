@@ -194,6 +194,8 @@ public class ZLEditImageConfiguration: NSObject {
     /// Whether to keep clipped area dimmed during adjustments. Defaults to false
     public var dimClippedAreaDuringAdjustments = false
 
+    /// Minimum zoom scale, allowing the user to make the edited photo smaller, so it does not overlap top and bottom tools menu. Defaults to 1.0
+    public var minimumZoomScale = 1.0
 }
 
 public extension ZLEditImageConfiguration {
@@ -322,6 +324,12 @@ public extension ZLEditImageConfiguration {
     @discardableResult
     func dimClippedAreaDuringAdjustments(_ value: Bool) -> ZLEditImageConfiguration {
         dimClippedAreaDuringAdjustments = value
+        return self
+    }
+    
+    @discardableResult
+    func minimumZoomScale(_ value: CGFloat) -> ZLEditImageConfiguration {
+        minimumZoomScale = value
         return self
     }
 }

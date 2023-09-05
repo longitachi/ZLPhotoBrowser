@@ -183,6 +183,8 @@ open class ZLEditImageViewController: UIViewController {
     
     private let canRedo = ZLPhotoConfiguration.default().editImageConfiguration.canRedo
     
+    private let minimumZoomScale = ZLPhotoConfiguration.default().editImageConfiguration.minimumZoomScale
+    
     private var hasAdjustedImage = false
     
     // collectionview 中的添加滤镜的小图
@@ -258,7 +260,7 @@ open class ZLEditImageViewController: UIViewController {
     @objc public lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .black
-        view.minimumZoomScale = 1
+        view.minimumZoomScale = minimumZoomScale
         view.maximumZoomScale = 3
         view.delegate = self
         return view
@@ -542,6 +544,12 @@ open class ZLEditImageViewController: UIViewController {
         
         if let index = drawColors.firstIndex(where: { $0 == self.currentDrawColor }) {
             drawColorCollectionView?.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
+        }
+        
+        let contentRatio = mainScrollView.contentSize.width / mainScrollView.contentSize.height
+        let screenRatio = mainScrollView.bounds.size.width / mainScrollView.bounds.size.height
+        if abs(contentRatio - screenRatio) < 0.01 {
+            mainScrollView.setZoomScale(mainScrollView.minimumZoomScale, animated: true)
         }
     }
     
