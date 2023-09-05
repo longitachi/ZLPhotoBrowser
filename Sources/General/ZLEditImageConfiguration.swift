@@ -326,6 +326,12 @@ public extension ZLEditImageConfiguration {
         dimClippedAreaDuringAdjustments = value
         return self
     }
+    
+    @discardableResult
+    func minimumZoomScale(_ value: CGFloat) -> ZLEditImageConfiguration {
+        minimumZoomScale = value
+        return self
+    }
 }
 
 // MARK: 裁剪比例
