@@ -984,9 +984,20 @@ open class ZLEditImageViewController: UIViewController {
         
         var resImage = originalImage
         var editModel: ZLEditImageModel?
-        if hasEdit {
-            let hud = ZLProgressHUD.show(toast: .processing)
-            
+        
+        func callback() {
+            dismiss(animated: animate) {
+                self.editFinishBlock?(resImage, editModel)
+            }
+        }
+        
+        guard hasEdit else {
+            callback()
+            return
+        }
+        
+        let hud = ZLProgressHUD.show(toast: .processing)
+        DispatchQueue.main.async { [self] in
             resImage = buildImage()
             resImage = resImage.zl.clipImage(angle: angle, editRect: editRect, isCircle: selectRatio?.isCircle ?? false) ?? resImage
             editModel = ZLEditImageModel(
@@ -1002,12 +1013,9 @@ open class ZLEditImageViewController: UIViewController {
                 textStickers: textStickers,
                 imageStickers: imageStickers
             )
-            
+
             hud.hide()
-        }
-        
-        dismiss(animated: animate) {
-            self.editFinishBlock?(resImage, editModel)
+            callback()
         }
     }
     
