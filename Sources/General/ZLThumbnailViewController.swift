@@ -442,16 +442,15 @@ class ZLThumbnailViewController: UIViewController {
         
         if albumList.models.isEmpty {
             let hud = ZLProgressHUD.show(in: view)
-            DispatchQueue.global().async {
+            DispatchQueue.main.async {
                 self.albumList.refetchPhotos()
-                ZLMainAsync {
-                    self.arrDataSources.removeAll()
-                    self.arrDataSources.append(contentsOf: self.albumList.models)
-                    markSelected(source: &self.arrDataSources, selected: &nav.arrSelectedModels)
-                    hud.hide()
-                    self.collectionView.reloadData()
-                    self.scrollToBottom()
-                }
+                
+                self.arrDataSources.removeAll()
+                self.arrDataSources.append(contentsOf: self.albumList.models)
+                markSelected(source: &self.arrDataSources, selected: &nav.arrSelectedModels)
+                hud.hide()
+                self.collectionView.reloadData()
+                self.scrollToBottom()
             }
         } else {
             arrDataSources.removeAll()
