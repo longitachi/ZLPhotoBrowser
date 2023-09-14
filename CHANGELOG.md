@@ -2,6 +2,17 @@
 
 -----
 
+## [4.4.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.5) (2023-09-14)
+### Add:
+* Can set whether maintain shadow background during photo clipping. [#851](https://github.com/longitachi/ZLPhotoBrowser/pull/851)
+
+### Fix:
+* When there are too many photos, the album may crash when opened. [#684](https://github.com/longitachi/ZLPhotoBrowser/issues/684)
+* Crash on simulator version 14.0.1. [#849](https://github.com/longitachi/ZLPhotoBrowser/pull/849)
+* In the image editor where the sticker position was incorrect after the image was rotated.
+    
+--- 
+
 ## [4.4.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.4) (2023-08-25)
 
 ### Add:

@@ -91,6 +91,13 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.5
+  Add:
+    Can set whether the shadow is always displayed when cropping the picture
+  Fix:
+    When there are too many photos, the album may crash when opened.
+    Crash on simulator version 14.0.1.
+    In the image editor where the sticker position was incorrect after the image was rotated.
 ● 4.4.4
   Add:
     Support downloading video data from iCloud before selecting a video.
@@ -101,12 +108,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Fix:
     Delete some time-consuming codes to improve the image loading speed of the thumbnail interface.
     Disable TextView when user ends editing.
-● 4.4.3
-  Add:
-    Support to limit the data size of the video.
-    Add two blocks, called when asset is selected and deselected.
-    Support setting video codec type in custom camera.
-    Text stickers support display background color.
 ...
 ```
 
