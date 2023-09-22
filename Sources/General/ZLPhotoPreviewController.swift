@@ -61,9 +61,12 @@ class ZLPhotoPreviewController: UIViewController {
     
     private var indexBeforOrientationChanged: Int
     
+    private let navViewAlpha = 0.95
+    
     private lazy var navView: UIView = {
         let view = UIView()
         view.backgroundColor = .zl.navBarColorOfPreviewVC
+        view.alpha = navViewAlpha
         return view
     }()
     
@@ -92,17 +95,17 @@ class ZLPhotoPreviewController: UIViewController {
         return btn
     }()
     
-    private lazy var indexLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .zl.indexLabelBgColor
-        label.font = .zl.font(ofSize: 14)
-        label.textColor = .white
-        label.textAlignment = .center
-        label.layer.cornerRadius = 25.0 / 2
-        label.layer.masksToBounds = true
-        label.isHidden = true
-        return label
-    }()
+//    private lazy var indexLabel: UILabel = {
+//        let label = UILabel()
+//        label.backgroundColor = .zl.indexLabelBgColor
+//        label.font = .zl.font(ofSize: 14)
+//        label.textColor = .white
+//        label.textAlignment = .center
+//        label.layer.cornerRadius = 25.0 / 2
+//        label.layer.masksToBounds = true
+//        label.isHidden = true
+//        return label
+//    }()
     
     private lazy var bottomView: UIView = {
         let view = UIView()
@@ -232,13 +235,13 @@ class ZLPhotoPreviewController: UIViewController {
         
         if isRTL() {
             backBtn.frame = CGRect(x: view.zl.width - insets.right - 60, y: insets.top, width: 60, height: 44)
-            selectBtn.frame = CGRect(x: insets.left + 15, y: insets.top + (44 - 25) / 2, width: 25, height: 25)
+            selectBtn.frame = CGRect(x: insets.left + 15, y: insets.top + (44 - 24) / 2, width: 24, height: 24)
         } else {
             backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
-            selectBtn.frame = CGRect(x: view.zl.width - 40 - insets.right, y: insets.top + (44 - 25) / 2, width: 25, height: 25)
+            selectBtn.frame = CGRect(x: view.zl.width - 40 - insets.right, y: insets.top + (44 - 24) / 2, width: 24, height: 24)
         }
         
-        indexLabel.frame = selectBtn.bounds
+//        indexLabel.frame = selectBtn.bounds
         
         refreshBottomViewFrame()
         
@@ -334,7 +337,7 @@ class ZLPhotoPreviewController: UIViewController {
         
         navView.addSubview(backBtn)
         navView.addSubview(selectBtn)
-        selectBtn.addSubview(indexLabel)
+//        selectBtn.addSubview(indexLabel)
         view.addSubview(collectionView)
         view.addSubview(bottomView)
         
@@ -428,7 +431,7 @@ class ZLPhotoPreviewController: UIViewController {
             self.navView.isHidden = false
             self.bottomView.isHidden = false
             UIView.animate(withDuration: 0.5) {
-                self.navView.alpha = 1
+                self.navView.alpha = self.navViewAlpha
                 self.bottomView.alpha = 1
             }
             
@@ -455,7 +458,7 @@ class ZLPhotoPreviewController: UIViewController {
             selectBtn.isHidden = false
         }
         selectBtn.isSelected = arrDataSources[currentIndex].isSelected
-        resetIndexLabelStatus()
+//        resetIndexLabelStatus()
         
         guard showBottomViewAndSelectBtn else {
             selectBtn.isHidden = true
@@ -492,22 +495,22 @@ class ZLPhotoPreviewController: UIViewController {
         }
     }
     
-    private func resetIndexLabelStatus() {
-        guard ZLPhotoConfiguration.default().showSelectedIndex else {
-            indexLabel.isHidden = true
-            return
-        }
-        guard let nav = navigationController as? ZLImageNavController else {
-            zlLoggerInDebug("Navigation controller is null")
-            return
-        }
-        if let index = nav.arrSelectedModels.firstIndex(where: { $0 == self.arrDataSources[self.currentIndex] }) {
-            indexLabel.isHidden = false
-            indexLabel.text = String(index + 1)
-        } else {
-            indexLabel.isHidden = true
-        }
-    }
+//    private func resetIndexLabelStatus() {
+//        guard ZLPhotoConfiguration.default().showSelectedIndex else {
+//            indexLabel.isHidden = true
+//            return
+//        }
+//        guard let nav = navigationController as? ZLImageNavController else {
+//            zlLoggerInDebug("Navigation controller is null")
+//            return
+//        }
+//        if let index = nav.arrSelectedModels.firstIndex(where: { $0 == self.arrDataSources[self.currentIndex] }) {
+//            indexLabel.isHidden = false
+//            indexLabel.text = String(index + 1)
+//        } else {
+//            indexLabel.isHidden = true
+//        }
+//    }
     
     // MARK: btn actions
     
@@ -543,7 +546,7 @@ class ZLPhotoPreviewController: UIViewController {
             }
             
             downloadAssetIfNeed(model: currentModel, sender: self) { [weak self] in
-                if config.animateSelectBtnWhenSelect {
+                if ZLPhotoUIConfiguration.default().animateSelectBtnWhenSelectInPreviewVC {
                     self?.selectBtn.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
                 }
                 
@@ -678,7 +681,7 @@ class ZLPhotoPreviewController: UIViewController {
         guard ZLPhotoConfiguration.default().showSelectedIndex else {
             return
         }
-        resetIndexLabelStatus()
+//        resetIndexLabelStatus()
     }
     
     private func tapPreviewCell() {

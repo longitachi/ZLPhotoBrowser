@@ -50,7 +50,7 @@ class ZLAnimationUtils: NSObject {
     
     class func springAnimation() -> CAKeyframeAnimation {
         let animate = CAKeyframeAnimation(keyPath: "transform")
-        animate.duration = ZLPhotoConfiguration.default().selectBtnAnimationDuration
+        animate.duration = ZLPhotoUIConfiguration.default().selectBtnAnimationDuration
         animate.isRemovedOnCompletion = true
         animate.fillMode = .forwards
         

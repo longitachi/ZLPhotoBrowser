@@ -145,12 +145,6 @@ public class ZLPhotoConfiguration: NSObject {
         }
     }
     
-    /// Control whether to display the selection button animation when selecting. Defaults to true.
-    public var animateSelectBtnWhenSelect = true
-    
-    /// Animation duration for select button
-    public var selectBtnAnimationDuration: CFTimeInterval = 0.5
-    
     /// After selecting a image/video in the thumbnail interface, enter the editing interface directly. Defaults to false.
     /// - discussion: Editing image is only valid when allowEditImage is true and maxSelectCount is 1.
     /// Editing video is only valid when allowEditVideo is true and maxSelectCount is 1.

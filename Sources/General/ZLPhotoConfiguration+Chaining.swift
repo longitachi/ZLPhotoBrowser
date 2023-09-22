@@ -119,18 +119,6 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    func animateSelectBtnWhenSelect(_ animate: Bool) -> ZLPhotoConfiguration {
-        animateSelectBtnWhenSelect = animate
-        return self
-    }
-    
-    @discardableResult
-    func selectBtnAnimationDuration(_ duration: CFTimeInterval) -> ZLPhotoConfiguration {
-        selectBtnAnimationDuration = duration
-        return self
-    }
-    
-    @discardableResult
     func editAfterSelectThumbnailImage(_ value: Bool) -> ZLPhotoConfiguration {
         editAfterSelectThumbnailImage = value
         return self

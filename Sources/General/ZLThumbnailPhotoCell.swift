@@ -87,10 +87,15 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         label.layer.masksToBounds = true
         label.textColor = .zl.indexLabelTextColor
         label.backgroundColor = .zl.indexLabelBgColor
-        label.font = .zl.font(ofSize: 14)
+        if ZLPhotoUIConfiguration.default().showIndexOnSelectBtn {
+            label.font = .zl.font(ofSize: 14)
+            label.textAlignment = .center
+        } else {
+            label.font = .zl.font(ofSize: 14, bold: true)
+            label.textAlignment = .left
+        }
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-        label.textAlignment = .center
         return label
     }()
     
@@ -108,7 +113,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         }
     }
     
-    var index: Int = 0 {
+    var index = 0 {
         didSet {
             indexLabel.text = String(index)
         }
@@ -133,7 +138,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         contentView.addSubview(coverView)
         contentView.addSubview(containerView)
         containerView.addSubview(btnSelect)
-        btnSelect.addSubview(indexLabel)
+        containerView.addSubview(indexLabel)
         containerView.addSubview(bottomShadowView)
         bottomShadowView.addSubview(videoTag)
         bottomShadowView.addSubview(livePhotoTag)
@@ -153,8 +158,13 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         
         containerView.frame = bounds
         coverView.frame = bounds
-        btnSelect.frame = CGRect(x: bounds.width - 30, y: 8, width: 25, height: 25)
-        indexLabel.frame = btnSelect.bounds
+        btnSelect.frame = CGRect(x: bounds.width - 32, y: 8, width: 24, height: 24)
+        if ZLPhotoUIConfiguration.default().showIndexOnSelectBtn {
+            indexLabel.frame = btnSelect.frame
+        } else {
+            indexLabel.frame = CGRect(x: 8, y: 5, width: 50, height: 24)
+        }
+        
         bottomShadowView.frame = CGRect(x: 0, y: bounds.height - 25, width: bounds.width, height: 25)
         videoTag.frame = CGRect(x: 5, y: 1, width: 20, height: 15)
         livePhotoTag.frame = CGRect(x: 5, y: -1, width: 20, height: 20)
@@ -165,12 +175,11 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     @objc func btnSelectClick() {
         selectedBlock?({ [weak self] isSelected in
-            let config = ZLPhotoConfiguration.default()
-            
             self?.btnSelect.isSelected = isSelected
             self?.btnSelect.layer.removeAllAnimations()
             
-            if isSelected, config.animateSelectBtnWhenSelect {
+            if isSelected,
+               ZLPhotoUIConfiguration.default().animateSelectBtnWhenSelectInThumbVC {
                 self?.btnSelect.layer.add(ZLAnimationUtils.springAnimation(), forKey: nil)
             }
             

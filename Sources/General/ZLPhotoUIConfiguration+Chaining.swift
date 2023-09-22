@@ -103,6 +103,30 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func animateSelectBtnWhenSelectInThumbVC(_ animate: Bool) -> ZLPhotoUIConfiguration {
+        animateSelectBtnWhenSelectInThumbVC = animate
+        return self
+    }
+    
+    @discardableResult
+    func animateSelectBtnWhenSelectInPreviewVC(_ animate: Bool) -> ZLPhotoUIConfiguration {
+        animateSelectBtnWhenSelectInPreviewVC = animate
+        return self
+    }
+    
+    @discardableResult
+    func selectBtnAnimationDuration(_ duration: CFTimeInterval) -> ZLPhotoUIConfiguration {
+        selectBtnAnimationDuration = duration
+        return self
+    }
+    
+    @discardableResult
+    func showIndexOnSelectBtn(_ value: Bool) -> ZLPhotoUIConfiguration {
+        showIndexOnSelectBtn = value
+        return self
+    }
+    
+    @discardableResult
     func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfAlbumList = effect
         return self
