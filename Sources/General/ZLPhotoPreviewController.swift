@@ -158,7 +158,7 @@ class ZLPhotoPreviewController: UIViewController {
     /// 是否在点击确定时候，当未选择任何照片时候，自动选择当前index的照片
     var autoSelectCurrentIfNotSelectAnyone = true
     
-    /// 界面消失时，通知上个界面刷新（针对预览视图）
+    /// 界面消失时，通知上个界面刷新
     var backBlock: (() -> Void)?
     
     override var prefersStatusBarHidden: Bool {
@@ -405,8 +405,10 @@ class ZLPhotoPreviewController: UIViewController {
         popInteractiveTransition?.startTransition = { [weak self] in
             guard let `self` = self else { return }
             
-            self.navView.alpha = 0
-            self.bottomView.alpha = 0
+            UIView.animate(withDuration: 0.25) {
+                self.navView.alpha = 0
+                self.bottomView.alpha = 0
+            }
             
             guard let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) else {
                 return

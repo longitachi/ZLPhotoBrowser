@@ -61,6 +61,10 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
     
     var finishTransition: (() -> Void)?
     
+    deinit {
+        zl_debugPrint("ZLPhotoPreviewPopInteractiveTransition deinit")
+    }
+    
     init(viewController: ZLPhotoPreviewController) {
         self.viewController = viewController
         super.init()
@@ -144,7 +148,6 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             return
         }
         
-        debugPrint("\(#function)")
         startPanPoint = pan.location(in: viewController?.view)
         interactive = true
         startTransition?()
@@ -209,9 +212,10 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         imageView?.clipsToBounds = true
         imageView?.image = cell.currentImage
         containerView.addSubview(imageView!)
+        containerView.addSubview(fromVC.view)
         
         imageViewOriginalFrame = imageView!.frame
-        resetCellScrollViewState(enabled: false)
+        resetViewStatus(isStart: true)
     }
     
     override func finish() {
@@ -259,6 +263,8 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             toFrame = toVC.collectionView.convert(toCell.frame, to: transitionContext.containerView)
         }
         
+        toVC.endPopTransition()
+        
         UIView.animate(withDuration: 0.25, animations: {
             if let toFrame = toFrame {
                 self.imageView?.frame = toFrame
@@ -284,11 +290,9 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
     
     func cancelAnimate() {
         guard let transitionContext = transitionContext else {
-            debugPrint("\(#function) 1")
             return
         }
         
-        debugPrint("\(#function) 2")
         var toFrame = imageViewOriginalFrame
         if needCorrectYToZeroWhenCancel {
             toFrame.origin.y = 0
@@ -298,7 +302,7 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             self.imageView?.frame = toFrame
             self.shadowView?.alpha = 1
         }) { _ in
-            self.resetCellScrollViewState(enabled: true)
+            self.resetViewStatus(isStart: false)
             self.currentCell = nil
             self.imageView?.removeFromSuperview()
             self.shadowView?.removeFromSuperview()
@@ -308,9 +312,17 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         }
     }
     
-    func resetCellScrollViewState(enabled: Bool) {
-        currentCell?.scrollView?.isScrollEnabled = enabled
-        currentCell?.scrollView?.pinchGestureRecognizer?.isEnabled = enabled
+    func resetViewStatus(isStart: Bool) {
+        currentCell?.scrollView?.isScrollEnabled = !isStart
+        currentCell?.scrollView?.pinchGestureRecognizer?.isEnabled = !isStart
+        
+        guard let transitionContext = transitionContext,
+              let fromVC = transitionContext.viewController(forKey: .from) as? ZLPhotoPreviewController else {
+            return
+        }
+        
+        fromVC.view.backgroundColor = isStart ? .clear : ZLPhotoUIConfiguration.default().previewVCBgColor
+        fromVC.collectionView.isHidden = isStart
     }
 }
 
