@@ -29,12 +29,11 @@ import Photos
 import PhotosUI
 
 class ZLPreviewBaseCell: UICollectionViewCell {
-    
     var singleTapBlock: (() -> Void)?
     
-    var currentImage: UIImage? {
-        return nil
-    }
+    var currentImage: UIImage? { nil }
+    
+    var scrollView: UIScrollView? { nil }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -118,16 +117,14 @@ class ZLPreviewBaseCell: UICollectionViewCell {
     func animateImageFrame(convertTo view: UIView) -> CGRect {
         return .zero
     }
-    
 }
 
 // MARK: local image preview cell
 
 class ZLLocalImagePreviewCell: ZLPreviewBaseCell {
+    override var currentImage: UIImage? { preview.image }
     
-    override var currentImage: UIImage? {
-        return preview.image
-    }
+    override var scrollView: UIScrollView? { preview.scrollView }
     
     lazy var preview: ZLPreviewView = {
         let view = ZLPreviewView()
@@ -186,13 +183,11 @@ class ZLLocalImagePreviewCell: ZLPreviewBaseCell {
             longPressBlock?()
         }
     }
-    
 }
 
 // MARK: net image preview cell
 
 class ZLNetImagePreviewCell: ZLLocalImagePreviewCell {
-    
     private lazy var progressView: ZLProgressView = {
         let view = ZLProgressView()
         view.isHidden = true
@@ -228,16 +223,14 @@ class ZLNetImagePreviewCell: ZLLocalImagePreviewCell {
         progressView.isHidden = true
         preview.scrollView.zoomScale = 1
     }
-    
 }
 
 // MARK: static image preview cell
 
 class ZLPhotoPreviewCell: ZLPreviewBaseCell {
+    override var currentImage: UIImage? { preview.image }
     
-    override var currentImage: UIImage? {
-        return preview.image
-    }
+    override var scrollView: UIScrollView? { preview.scrollView }
     
     private lazy var preview: ZLPreviewView = {
         let view = ZLPreviewView()
@@ -284,16 +277,14 @@ class ZLPhotoPreviewCell: ZLPreviewBaseCell {
         let rect = preview.scrollView.convert(preview.containerView.frame, to: self)
         return convert(rect, to: view)
     }
-    
 }
 
 // MARK: gif preview cell
 
 class ZLGifPreviewCell: ZLPreviewBaseCell {
+    override var currentImage: UIImage? { preview.image }
     
-    override var currentImage: UIImage? {
-        return preview.image
-    }
+    override var scrollView: UIScrollView? { preview.scrollView }
     
     private lazy var preview: ZLPreviewView = {
         let view = ZLPreviewView()
@@ -357,13 +348,11 @@ class ZLGifPreviewCell: ZLPreviewBaseCell {
         let rect = preview.scrollView.convert(preview.containerView.frame, to: self)
         return convert(rect, to: view)
     }
-    
 }
 
 // MARK: live photo preview cell
 
 class ZLLivePhotoPreviewCell: ZLPreviewBaseCell {
-    
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
@@ -475,7 +464,6 @@ class ZLLivePhotoPreviewCell: ZLPreviewBaseCell {
             }
         })
     }
-    
 }
 
 // MARK: video preview cell
@@ -719,7 +707,6 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
 // MARK: net video preview cell
 
 class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
-    
     private var player: AVPlayer?
     
     private var playerLayer: AVPlayerLayer?
@@ -830,13 +817,11 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         layer.insertSublayer(playerLayer!, at: 0)
         NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
     }
-    
 }
 
 // MARK: class ZLPreviewView
 
 class ZLPreviewView: UIView {
-    
     private static let defaultMaxZoomScale: CGFloat = 3
     
     private lazy var progressView = ZLProgressView()
@@ -916,11 +901,11 @@ class ZLPreviewView: UIView {
         addSubview(progressView)
         
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(singleTapAction(_:)))
-        addGestureRecognizer(singleTap)
+        scrollView.addGestureRecognizer(singleTap)
         
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(doubleTapAction(_:)))
         doubleTap.numberOfTapsRequired = 2
-        addGestureRecognizer(doubleTap)
+        scrollView.addGestureRecognizer(doubleTap)
         
         singleTap.require(toFail: doubleTap)
     }
@@ -930,8 +915,8 @@ class ZLPreviewView: UIView {
     }
     
     @objc private func doubleTapAction(_ tap: UITapGestureRecognizer) {
-        let scale: CGFloat = scrollView.zoomScale != scrollView.maximumZoomScale ? scrollView.maximumZoomScale : 1
-        let tapPoint = tap.location(in: self)
+        let scale = scrollView.zoomScale != scrollView.minimumZoomScale ? 1 : scrollView.maximumZoomScale
+        let tapPoint = tap.location(in: scrollView)
         var rect = CGRect.zero
         rect.size.width = scrollView.frame.width / scale
         rect.size.height = scrollView.frame.height / scale
@@ -1181,11 +1166,9 @@ class ZLPreviewView: UIView {
         imageView.layer.speed = 0
         imageView.layer.timeOffset = pauseTime
     }
-    
 }
 
 extension ZLPreviewView: UIScrollViewDelegate {
-    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return containerView
     }
@@ -1199,5 +1182,4 @@ extension ZLPreviewView: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         resumeGif()
     }
-    
 }

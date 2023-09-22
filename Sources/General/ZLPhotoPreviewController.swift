@@ -391,6 +391,7 @@ class ZLPhotoPreviewController: UIViewController {
         popInteractiveTransition = ZLPhotoPreviewPopInteractiveTransition(viewController: self)
         popInteractiveTransition?.shouldStartTransition = { [weak self] point -> Bool in
             guard let `self` = self else { return false }
+            
             if !self.hideNavView, self.navView.frame.contains(point) || self.bottomView.frame.contains(point) {
                 return false
             }
