@@ -95,6 +95,17 @@ class ZLThumbnailViewController: UIViewController {
         return btn
     }()
     
+    private lazy var scrollToBottomBtn: UIButton = {
+        let btn = UIButton(type: .custom)
+        btn.setImage(.zl.getImage("zl_arrow_down"), for: .normal)
+        btn.addTarget(self, action: #selector(scrollToBottomBtnClick), for: .touchUpInside)
+        btn.layer.shadowColor = UIColor.zl.bottomToolViewBgColor.cgColor
+        btn.layer.shadowRadius = 5.0
+        btn.layer.shadowOpacity = 1.0
+        btn.layer.shadowOffset = CGSize(width: 0, height: 5)
+        return btn
+    }()
+    
     /// 所有滑动经过的indexPath
     private lazy var arrSlideIndexPaths: [IndexPath] = []
     
@@ -247,6 +258,7 @@ class ZLThumbnailViewController: UIViewController {
         super.viewDidAppear(animated)
         isLayoutOK = true
         isPreviewPush = false
+        updateScrollToBottomVisibility()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -296,7 +308,13 @@ class ZLThumbnailViewController: UIViewController {
         collectionView.frame = CGRect(x: insets.left, y: 0, width: totalWidth, height: view.frame.height)
         collectionView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 0, bottom: bottomViewH, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: insets.top, left: 0, bottom: bottomViewH, right: 0)
-        
+
+        let scrollToBottomSize = 48.0
+        let scrollToBottomX = totalWidth - scrollToBottomSize - 15.0
+        let scrollToBottomY = view.frame.height - insets.bottom - bottomViewH - scrollToBottomSize - 5.0
+        scrollToBottomBtn.frame = CGRect(origin: CGPoint(x: scrollToBottomX, y: scrollToBottomY),
+                                         size: CGSize(width: scrollToBottomSize, height: scrollToBottomSize))
+
         if !isLayoutOK {
             scrollToBottom()
         } else if isSwitchOrientation {
@@ -354,6 +372,7 @@ class ZLThumbnailViewController: UIViewController {
         
         view.addSubview(collectionView)
         view.addSubview(bottomView)
+        view.addSubview(scrollToBottomBtn)
         
         if let effect = ZLPhotoUIConfiguration.default().bottomViewBlurEffectOfAlbumList {
             bottomBlurView = UIVisualEffectView(effect: effect)
@@ -484,6 +503,16 @@ class ZLThumbnailViewController: UIViewController {
         return true
     }
     
+    private func updateScrollToBottomVisibility() {
+        let isAtBottom = isAtBottom()
+        let config = ZLPhotoUIConfiguration.default()
+        let shouldShow = config.showScrollToBottomBtn && !isAtBottom
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.beginFromCurrentState]) { [weak self] in
+            self?.scrollToBottomBtn.alpha = shouldShow ? 1 : 0
+            self?.scrollToBottomBtn.transform = shouldShow ? .identity : .init(scaleX: 0.5, y: 0.5)
+        }
+    }
+    
     // MARK: btn actions
     
     @objc private func previewBtnClick() {
@@ -509,6 +538,11 @@ class ZLThumbnailViewController: UIViewController {
         } else {
             nav?.selectImageBlock?()
         }
+    }
+    
+    @objc private func scrollToBottomBtnClick() {
+        let maxY = collectionView.contentSize.height
+        collectionView.scrollRectToVisible(CGRect(x: 0, y: maxY, width: view.bounds.size.width, height: 1), animated: true)
     }
     
     @objc private func deviceOrientationChanged(_ notify: Notification) {
@@ -1337,6 +1371,27 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
                 break
             }
         }
+    }
+}
+
+// MARK: ScrollView Delegate
+
+extension ZLThumbnailViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updateScrollToBottomVisibility()
+    }
+    
+    private func isAtBottom() -> Bool {
+        let viewHeight = collectionView.frame.size.height
+        let contentHeight = collectionView.contentSize.height
+        let offset = collectionView.contentOffset.y
+        let bottomInset: CGFloat
+        if #available(iOS 11.0, *) {
+            bottomInset = collectionView.adjustedContentInset.bottom
+        } else {
+            bottomInset = collectionView.contentInset.bottom
+        }
+        return offset + viewHeight - bottomInset >= contentHeight
     }
 }
 

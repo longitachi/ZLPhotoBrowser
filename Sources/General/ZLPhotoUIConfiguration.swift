@@ -107,6 +107,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Whether to display the serial number above the selected button. Defaults to false.
     public var showIndexOnSelectBtn = false
     
+    /// Whether to display scroll to bottom button
+    public var showScrollToBottomBtn = false
+
     // MARK: Navigation and bottom tool bar
     
     /// The blur effect of the navigation bar in the album list

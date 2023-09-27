@@ -127,6 +127,12 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func showScrollToBottomBtn(_ value: Bool) -> ZLPhotoUIConfiguration {
+        showScrollToBottomBtn = value
+        return self
+    }
+    
+    @discardableResult
     func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfAlbumList = effect
         return self
