@@ -26,7 +26,7 @@
 
 import UIKit
 
-class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
+class ZLImageStickerView: ZLBaseStickerView {
     private let image: UIImage
     
     private static let edgeInset: CGFloat = 20
@@ -41,6 +41,7 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
     // Convert all states to model.
     override var state: ZLImageStickerState {
         return ZLImageStickerState(
+            id: id,
             image: image,
             originScale: originScale,
             originAngle: originAngle,
@@ -57,6 +58,7 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
     
     convenience init(state: ZLImageStickerState) {
         self.init(
+            id: state.id,
             image: state.image,
             originScale: state.originScale,
             originAngle: state.originAngle,
@@ -69,6 +71,7 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
     }
     
     init(
+        id: String = UUID().uuidString,
         image: UIImage,
         originScale: CGFloat,
         originAngle: CGFloat,
@@ -79,7 +82,16 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
         showBorder: Bool = true
     ) {
         self.image = image
-        super.init(originScale: originScale, originAngle: originAngle, originFrame: originFrame, gesScale: gesScale, gesRotation: gesRotation, totalTranslationPoint: totalTranslationPoint, showBorder: showBorder)
+        super.init(
+            id: id,
+            originScale: originScale,
+            originAngle: originAngle,
+            originFrame: originFrame,
+            gesScale: gesScale,
+            gesRotation: gesRotation,
+            totalTranslationPoint: totalTranslationPoint,
+            showBorder: showBorder
+        )
         
         borderView.addSubview(imageView)
     }
@@ -110,34 +122,5 @@ class ZLImageStickerView: ZLBaseStickerView<ZLImageStickerState> {
         size.width += Self.edgeInset * 2
         size.height += Self.edgeInset * 2
         return size
-    }
-}
-
-public class ZLImageStickerState: NSObject {
-    let image: UIImage
-    let originScale: CGFloat
-    let originAngle: CGFloat
-    let originFrame: CGRect
-    let gesScale: CGFloat
-    let gesRotation: CGFloat
-    let totalTranslationPoint: CGPoint
-    
-    init(
-        image: UIImage,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat,
-        gesRotation: CGFloat,
-        totalTranslationPoint: CGPoint
-    ) {
-        self.image = image
-        self.originScale = originScale
-        self.originAngle = originAngle
-        self.originFrame = originFrame
-        self.gesScale = gesScale
-        self.gesRotation = gesRotation
-        self.totalTranslationPoint = totalTranslationPoint
-        super.init()
     }
 }
