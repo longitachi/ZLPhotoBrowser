@@ -233,13 +233,13 @@ class ZLClipImageViewController: UIViewController {
         cleanTimer()
     }
     
-    init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0, selectRatio: ZLImageClipRatio?) {
+    init(image: UIImage, status: ZLClipStatus) {
         originalImage = image
         let configuration = ZLPhotoConfiguration.default().editImageConfiguration
         clipRatios = configuration.clipRatios
         dimClippedAreaDuringAdjustments = configuration.dimClippedAreaDuringAdjustments
-        self.editRect = editRect ?? .zero
-        self.angle = angle
+        editRect = status.editRect
+        angle = status.angle
         let angle = ((Int(angle) % 360) - 360) % 360
         if angle == -90 {
             editImage = image.zl.rotate(orientation: .left)
@@ -251,8 +251,8 @@ class ZLClipImageViewController: UIViewController {
             editImage = image
         }
         var firstEnter = false
-        if let selectRatio = selectRatio {
-            selectedRatio = selectRatio
+        if let ratio = status.ratio {
+            selectedRatio = ratio
         } else {
             firstEnter = true
             selectedRatio = ZLPhotoConfiguration.default().editImageConfiguration.clipRatios.first!
