@@ -538,6 +538,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     
     deinit {
         cancelDownloadVideo()
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         zl_debugPrint("ZLVideoPreviewCell deinit")
     }
     
@@ -663,6 +664,8 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
             }
             imageView.isHidden = true
             player?.play()
+            try? AVAudioSession.sharedInstance().setCategory(.playback)
+            try? AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
             playBtn.setImage(nil, for: .normal)
             singleTapBlock?()
         } else {
@@ -728,6 +731,7 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
     private let operationQueue = DispatchQueue(label: "com.ZLPhotoBrowser.ZLNetVideoPreviewCell")
     
     deinit {
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         zl_debugPrint("ZLNetVideoPreviewCell deinit")
     }
     
@@ -766,6 +770,8 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
                 player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
             }
             player?.play()
+            try? AVAudioSession.sharedInstance().setCategory(.playback)
+            try? AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
             playBtn.setImage(nil, for: .normal)
             singleTapBlock?()
         } else {
