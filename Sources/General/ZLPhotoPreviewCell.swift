@@ -575,7 +575,8 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     override func didEndDisplaying() {
         imageView.isHidden = false
         player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
-        
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+
         cancelDownloadVideo()
     }
     
@@ -598,7 +599,9 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         syncErrorLabel.isHidden = true
         playBtn.isEnabled = false
         player = nil
-        playerLayer?.removeFromSuperlayer()
+        if playerLayer?.superlayer != nil {
+            playerLayer?.removeFromSuperlayer()
+        }
         playerLayer = nil
         
         if imageRequestID > PHInvalidImageRequestID {
@@ -648,6 +651,10 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         playBtn.isEnabled = true
         
         player = AVPlayer(playerItem: item)
+        if playerLayer?.superlayer != nil {
+            playerLayer?.removeFromSuperlayer()
+            playerLayer = nil
+        }
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.frame = bounds
         layer.insertSublayer(playerLayer!, at: 0)
