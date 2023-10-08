@@ -68,6 +68,7 @@ extension CIImage: ZLPhotoBrowserCompatible { }
 extension PHAsset: ZLPhotoBrowserCompatible { }
 extension UIFont: ZLPhotoBrowserCompatible { }
 extension UIView: ZLPhotoBrowserCompatible { }
+extension UIScrollView: ZLPhotoBrowserCompatible { }
 
 extension Array: ZLPhotoBrowserCompatibleValue { }
 extension String: ZLPhotoBrowserCompatibleValue { }

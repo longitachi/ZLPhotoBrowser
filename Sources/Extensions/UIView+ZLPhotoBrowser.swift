@@ -72,5 +72,12 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
         base.layer.borderColor = color.cgColor
         base.layer.borderWidth = width
     }
+    
+    func addShadow(color: UIColor, radius: CGFloat, opacity: Float = 1, offset: CGSize = .zero) {
+        base.layer.shadowColor = color.cgColor
+        base.layer.shadowRadius = radius
+        base.layer.shadowOpacity = opacity
+        base.layer.shadowOffset = offset
+    }
 }
 

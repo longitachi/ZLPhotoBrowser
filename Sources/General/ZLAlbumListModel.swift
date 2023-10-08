@@ -72,7 +72,7 @@ public class ZLAlbumListModel: NSObject {
     public func refetchPhotos() {
         let models = ZLPhotoManager.fetchPhoto(
             in: result,
-            ascending: ZLPhotoConfiguration.default().sortAscending,
+            ascending: ZLPhotoUIConfiguration.default().sortAscending,
             allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage,
             allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo
         )

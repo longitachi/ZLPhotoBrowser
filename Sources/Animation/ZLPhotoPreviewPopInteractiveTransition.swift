@@ -236,7 +236,7 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         let toVCVisiableIndexPaths = toVC.collectionView.indexPathsForVisibleItems
         
         var diff = 0
-        if !ZLPhotoConfiguration.default().sortAscending {
+        if !ZLPhotoUIConfiguration.default().sortAscending {
             if toVC.showCameraCell {
                 diff = -1
             }

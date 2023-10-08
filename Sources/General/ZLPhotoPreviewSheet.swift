@@ -580,7 +580,7 @@ public class ZLPhotoPreviewSheet: UIView {
             }
         }
         
-        let hud = ZLProgressHUD.show(toast: .processing, timeout: ZLPhotoConfiguration.default().timeout)
+        let hud = ZLProgressHUD.show(toast: .processing, timeout: ZLPhotoUIConfiguration.default().timeout)
         
         var timeout = false
         hud.timeoutBlock = { [weak self] in
@@ -695,7 +695,7 @@ public class ZLPhotoPreviewSheet: UIView {
     private func showEditImageVC(model: ZLPhotoModel) {
         var requestAssetID: PHImageRequestID?
         
-        let hud = ZLProgressHUD.show(timeout: ZLPhotoConfiguration.default().timeout)
+        let hud = ZLProgressHUD.show(timeout: ZLPhotoUIConfiguration.default().timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self?.sender)
             if let requestAssetID = requestAssetID {
@@ -727,7 +727,7 @@ public class ZLPhotoPreviewSheet: UIView {
         let config = ZLPhotoConfiguration.default()
         var requestAssetID: PHImageRequestID?
         
-        let hud = ZLProgressHUD.show(timeout: config.timeout)
+        let hud = ZLProgressHUD.show(timeout: ZLPhotoUIConfiguration.default().timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self?.sender)
             if let requestAssetID = requestAssetID {
@@ -827,6 +827,7 @@ public class ZLPhotoPreviewSheet: UIView {
     private func handleDataArray(newModel: ZLPhotoModel) {
         arrDataSources.insert(newModel, at: 0)
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
         
         var canSelect = true
         // If mixed selection is not allowed, and the newModel type is video, it will not be selected.
@@ -834,7 +835,7 @@ public class ZLPhotoPreviewSheet: UIView {
             canSelect = false
         }
         // 单选模式，且不显示选择按钮时，不允许选择
-        if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
+        if config.maxSelectCount == 1, !uiConfig.showSelectBtnWhenSingleSelect {
             canSelect = false
         }
         if canSelect, canAddModel(newModel, currentSelectCount: arrSelectedModels.count, sender: sender, showAlert: false) {
@@ -891,6 +892,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLThumbnailPhotoCell.zl.identifier, for: indexPath) as! ZLThumbnailPhotoCell
         
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
         
         let model = arrDataSources[indexPath.row]
         
@@ -925,7 +927,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             }
         }
         
-        if config.showSelectedIndex,
+        if uiConfig.showSelectedIndex,
            let index = arrSelectedModels.firstIndex(where: { $0 == model }){
             setCellIndex(cell, showIndexLabel: true, index: index + 1)
         } else {
@@ -957,7 +959,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             return
         }
         
-        if !cell.enableSelect, ZLPhotoConfiguration.default().showInvalidMask {
+        if !cell.enableSelect, ZLPhotoUIConfiguration.default().showInvalidMask {
             return
         }
         let model = arrDataSources[indexPath.row]
@@ -965,7 +967,9 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         if shouldDirectEdit(model) {
             return
         }
+        
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
         let hud = ZLProgressHUD.show()
         
         ZLPhotoManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { [weak self] cameraRoll in
@@ -977,12 +981,17 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 return
             }
             
-            var totalPhotos = ZLPhotoManager.fetchPhoto(in: cameraRoll.result, ascending: config.sortAscending, allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo)
+            var totalPhotos = ZLPhotoManager.fetchPhoto(
+                in: cameraRoll.result,
+                ascending: uiConfig.sortAscending,
+                allowSelectImage: config.allowSelectImage,
+                allowSelectVideo: config.allowSelectVideo
+            )
             markSelected(source: &totalPhotos, selected: &self.arrSelectedModels)
-            let defaultIndex = config.sortAscending ? totalPhotos.count - 1 : 0
+            let defaultIndex = uiConfig.sortAscending ? totalPhotos.count - 1 : 0
             var index: Int?
             // last和first效果一样，只是排序方式不同时候分别从前后开始查找可以更快命中
-            if config.sortAscending {
+            if uiConfig.sortAscending {
                 index = totalPhotos.lastIndex { $0 == model }
             } else {
                 index = totalPhotos.firstIndex { $0 == model }
@@ -1022,7 +1031,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     private func setCellIndex(_ cell: ZLThumbnailPhotoCell?, showIndexLabel: Bool, index: Int) {
-        guard ZLPhotoConfiguration.default().showSelectedIndex else {
+        guard ZLPhotoUIConfiguration.default().showSelectedIndex else {
             return
         }
         
@@ -1032,12 +1041,14 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     
     private func refreshCellIndex() {
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
+        
         let cameraIsEnable = arrSelectedModels.count < config.maxSelectCount
         cameraBtn.alpha = cameraIsEnable ? 1 : 0.3
         cameraBtn.isEnabled = cameraIsEnable
         
-        let showIndex = config.showSelectedIndex
-        let showMask = config.showSelectedMask || config.showInvalidMask
+        let showIndex = uiConfig.showSelectedIndex
+        let showMask = uiConfig.showSelectedMask || uiConfig.showInvalidMask
         
         guard showIndex || showMask else {
             return
@@ -1075,11 +1086,12 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         cell.coverView.isHidden = true
         cell.enableSelect = true
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
         
         if isSelected {
             cell.coverView.backgroundColor = .zl.selectedMaskColor
-            cell.coverView.isHidden = !config.showSelectedMask
-            if config.showSelectedBorder {
+            cell.coverView.isHidden = !uiConfig.showSelectedMask
+            if uiConfig.showSelectedBorder {
                 cell.layer.borderWidth = 4
             }
         } else {
@@ -1089,24 +1101,24 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                     let videoCount = arrSelectedModels.filter { $0.type == .video }.count
                     if videoCount >= config.maxVideoSelectCount, model.type == .video {
                         cell.coverView.backgroundColor = .zl.invalidMaskColor
-                        cell.coverView.isHidden = !config.showInvalidMask
+                        cell.coverView.isHidden = !uiConfig.showInvalidMask
                         cell.enableSelect = false
                     } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
                         cell.coverView.backgroundColor = .zl.invalidMaskColor
-                        cell.coverView.isHidden = !config.showInvalidMask
+                        cell.coverView.isHidden = !uiConfig.showInvalidMask
                         cell.enableSelect = false
                     }
                 } else if selCount > 0 {
                     cell.coverView.backgroundColor = .zl.invalidMaskColor
-                    cell.coverView.isHidden = (!config.showInvalidMask || model.type != .video)
+                    cell.coverView.isHidden = (!uiConfig.showInvalidMask || model.type != .video)
                     cell.enableSelect = model.type != .video
                 }
             } else if selCount >= config.maxSelectCount {
                 cell.coverView.backgroundColor = .zl.invalidMaskColor
-                cell.coverView.isHidden = !config.showInvalidMask
+                cell.coverView.isHidden = !uiConfig.showInvalidMask
                 cell.enableSelect = false
             }
-            if config.showSelectedBorder {
+            if uiConfig.showSelectedBorder {
                 cell.layer.borderWidth = 0
             }
         }

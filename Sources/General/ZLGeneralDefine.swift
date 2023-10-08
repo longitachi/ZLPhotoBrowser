@@ -221,7 +221,7 @@ func downloadAssetIfNeed(model: ZLPhotoModel, sender: UIViewController?, complet
     }
 
     var requestAssetID: PHImageRequestID?
-    let hud = ZLProgressHUD.show(timeout: config.timeout)
+    let hud = ZLProgressHUD.show(timeout: ZLPhotoUIConfiguration.default().timeout)
     hud.timeoutBlock = { [weak sender] in
         showAlertView(localLanguageTextValue(.timeout), sender)
         if let requestAssetID = requestAssetID {

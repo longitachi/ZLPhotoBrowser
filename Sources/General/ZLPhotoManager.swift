@@ -435,7 +435,7 @@ public class ZLPhotoManager: NSObject {
         var canceled = false
         
         var timer: Timer? = .scheduledTimer(
-            withTimeInterval: ZLPhotoConfiguration.default().timeout,
+            withTimeInterval: ZLPhotoUIConfiguration.default().timeout,
             repeats: false
         ) { timer in
             timer.invalidate()

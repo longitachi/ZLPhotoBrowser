@@ -375,7 +375,7 @@ class PhotoConfigureCNViewController: UIViewController {
         }
         
         sortAscendingSegment = UISegmentedControl(items: ["升序", "降序"])
-        sortAscendingSegment.selectedSegmentIndex = config.sortAscending ? 0 : 1
+        sortAscendingSegment.selectedSegmentIndex = uiConfig.sortAscending ? 0 : 1
         sortAscendingSegment.addTarget(self, action: #selector(sortAscendingChanged), for: .valueChanged)
         containerView.addSubview(sortAscendingSegment)
         sortAscendingSegment.snp.makeConstraints { make in
@@ -834,7 +834,7 @@ class PhotoConfigureCNViewController: UIViewController {
         }
         
         showCaptureInCameraCellSwitch = UISwitch()
-        showCaptureInCameraCellSwitch.isOn = config.showCaptureImageOnTakePhotoBtn
+        showCaptureInCameraCellSwitch.isOn = uiConfig.showCaptureImageOnTakePhotoBtn
         showCaptureInCameraCellSwitch.addTarget(self, action: #selector(showCaptureInCameraCellChanged), for: .valueChanged)
         containerView.addSubview(showCaptureInCameraCellSwitch)
         showCaptureInCameraCellSwitch.snp.makeConstraints { make in
@@ -851,7 +851,7 @@ class PhotoConfigureCNViewController: UIViewController {
         }
         
         showSelectIndexSwitch = UISwitch()
-        showSelectIndexSwitch.isOn = config.showSelectedIndex
+        showSelectIndexSwitch.isOn = uiConfig.showSelectedIndex
         showSelectIndexSwitch.addTarget(self, action: #selector(showSelectIndexChanged), for: .valueChanged)
         containerView.addSubview(showSelectIndexSwitch)
         showSelectIndexSwitch.snp.makeConstraints { make in
@@ -868,7 +868,7 @@ class PhotoConfigureCNViewController: UIViewController {
         }
         
         showSelectMaskSwitch = UISwitch()
-        showSelectMaskSwitch.isOn = config.showSelectedMask
+        showSelectMaskSwitch.isOn = uiConfig.showSelectedMask
         showSelectMaskSwitch.addTarget(self, action: #selector(showSelectMaskChanged), for: .valueChanged)
         containerView.addSubview(showSelectMaskSwitch)
         showSelectMaskSwitch.snp.makeConstraints { make in
@@ -885,7 +885,7 @@ class PhotoConfigureCNViewController: UIViewController {
         }
         
         showSelectBorderSwitch = UISwitch()
-        showSelectBorderSwitch.isOn = config.showSelectedBorder
+        showSelectBorderSwitch.isOn = uiConfig.showSelectedBorder
         showSelectBorderSwitch.addTarget(self, action: #selector(showSelectBorderChanged), for: .valueChanged)
         containerView.addSubview(showSelectBorderSwitch)
         showSelectBorderSwitch.snp.makeConstraints { make in
@@ -902,7 +902,7 @@ class PhotoConfigureCNViewController: UIViewController {
         }
         
         showInvalidSelectMaskSwitch = UISwitch()
-        showInvalidSelectMaskSwitch.isOn = config.showInvalidMask
+        showInvalidSelectMaskSwitch.isOn = uiConfig.showInvalidMask
         showInvalidSelectMaskSwitch.addTarget(self, action: #selector(showInvalidSelectMaskChanged), for: .valueChanged)
         containerView.addSubview(showInvalidSelectMaskSwitch)
         showInvalidSelectMaskSwitch.snp.makeConstraints { make in
@@ -999,7 +999,7 @@ class PhotoConfigureCNViewController: UIViewController {
     
     @objc func sortAscendingChanged() {
         let index = sortAscendingSegment.selectedSegmentIndex
-        config.sortAscending = index == 0
+        uiConfig.sortAscending = index == 0
     }
     
     @objc func allowSelectImageChanged() {
@@ -1178,23 +1178,23 @@ class PhotoConfigureCNViewController: UIViewController {
     }
     
     @objc func showCaptureInCameraCellChanged() {
-        config.showCaptureImageOnTakePhotoBtn = showCaptureInCameraCellSwitch.isOn
+        uiConfig.showCaptureImageOnTakePhotoBtn = showCaptureInCameraCellSwitch.isOn
     }
     
     @objc func showSelectIndexChanged() {
-        config.showSelectedIndex = showSelectIndexSwitch.isOn
+        uiConfig.showSelectedIndex = showSelectIndexSwitch.isOn
     }
     
     @objc func showSelectMaskChanged() {
-        config.showSelectedMask = showSelectMaskSwitch.isOn
+        uiConfig.showSelectedMask = showSelectMaskSwitch.isOn
     }
     
     @objc func showSelectBorderChanged() {
-        config.showSelectedBorder = showSelectBorderSwitch.isOn
+        uiConfig.showSelectedBorder = showSelectBorderSwitch.isOn
     }
     
     @objc func showInvalidSelectMaskChanged() {
-        config.showInvalidMask = showInvalidSelectMaskSwitch.isOn
+        uiConfig.showInvalidMask = showInvalidSelectMaskSwitch.isOn
     }
     
     @objc func customCameraChanged() {

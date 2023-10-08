@@ -46,6 +46,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     // MARK: Framework style.
     
+    /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
+    public var sortAscending = true
+    
     public var style: ZLPhotoBrowserStyle = .embedAlbumList
     
     public var statusBarStyle: UIStatusBarStyle = .lightContent
@@ -101,15 +104,39 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// In preview interface, control whether to display the selection button animation when selecting. Defaults to true.
     public var animateSelectBtnWhenSelectInPreviewVC = true
     
-    /// Animation duration for select button
+    /// Animation duration for select button. Defaults to 0.5.
     public var selectBtnAnimationDuration: CFTimeInterval = 0.5
     
     /// Whether to display the serial number above the selected button. Defaults to false.
     public var showIndexOnSelectBtn = false
     
-    /// Whether to display scroll to bottom button
+    /// Whether to display scroll to bottom button. Defaults to false.
     public var showScrollToBottomBtn = false
-
+    
+    /// Show the image captured by the camera is displayed on the camera button inside the album. Defaults to false.
+    public var showCaptureImageOnTakePhotoBtn = false
+    
+    /// In single selection mode, whether to display the selection button. Defaults to false.
+    public var showSelectBtnWhenSingleSelect = false
+    
+    /// Overlay a mask layer on top of the selected photos. Defaults to true.
+    public var showSelectedMask = true
+    
+    /// Display a border on the selected photos cell. Defaults to false.
+    public var showSelectedBorder = false
+    
+    /// Overlay a mask layer above the cells that cannot be selected. Defaults to true.
+    public var showInvalidMask = true
+    
+    /// Display the index of the selected photos. Defaults to true.
+    public var showSelectedIndex = true
+    
+    /// Display the selected photos at the bottom of the preview large photos interface. Defaults to true.
+    public var showSelectedPhotoPreview = true
+    
+    /// Timeout for image parsing. Defaults to 20.
+    public var timeout: TimeInterval = 20
+    
     // MARK: Navigation and bottom tool bar
     
     /// The blur effect of the navigation bar in the album list
@@ -270,7 +297,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// A color for background in thumbnail interface.
     /// 相册小图界面背景色
-    public var thumbnailBgColor: UIColor = .zl.rgba(50, 50, 50)
+    public var thumbnailBgColor: UIColor = .zl.rgba(25, 25, 25)
     
     /// A color for background in preview interface..
     /// 预览大图界面背景色

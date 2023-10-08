@@ -281,7 +281,7 @@ class ZLPhotoPreviewController: UIViewController {
         var bottomViewH = ZLLayout.bottomToolViewH
         
         var showSelPhotoPreview = false
-        if ZLPhotoConfiguration.default().showSelectedPhotoPreview,
+        if ZLPhotoUIConfiguration.default().showSelectedPhotoPreview,
            let nav = navigationController as? ZLImageNavController,
            !nav.arrSelectedModels.isEmpty {
             showSelPhotoPreview = true
@@ -327,6 +327,7 @@ class ZLPhotoPreviewController: UIViewController {
         automaticallyAdjustsScrollViewInsets = false
         
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
         
         view.addSubview(navView)
         
@@ -346,7 +347,7 @@ class ZLPhotoPreviewController: UIViewController {
             bottomView.addSubview(bottomBlurView!)
         }
         
-        if config.showSelectedPhotoPreview {
+        if uiConfig.showSelectedPhotoPreview {
             let selModels = (navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
             selPhotoPreview = ZLPhotoPreviewSelectedView(selModels: selModels, currentShowModel: arrDataSources[currentIndex])
             selPhotoPreview?.selectBlock = { [weak self] model in
@@ -449,10 +450,13 @@ class ZLPhotoPreviewController: UIViewController {
             zlLoggerInDebug("Navigation controller is null")
             return
         }
+        
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
         let currentModel = arrDataSources[currentIndex]
         
-        if (!config.allowMixSelect && currentModel.type == .video) || (!config.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
+        if (!config.allowMixSelect && currentModel.type == .video) ||
+           (!uiConfig.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
             selectBtn.isHidden = true
         } else {
             selectBtn.isHidden = false
@@ -563,10 +567,12 @@ class ZLPhotoPreviewController: UIViewController {
     
     @objc private func editBtnClick() {
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
+        
         let model = arrDataSources[currentIndex]
         
         var requestAssetID: PHImageRequestID?
-        let hud = ZLProgressHUD(style: ZLPhotoUIConfiguration.default().hudStyle)
+        let hud = ZLProgressHUD(style: uiConfig.hudStyle)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self)
             if let requestAssetID = requestAssetID {
@@ -575,7 +581,7 @@ class ZLPhotoPreviewController: UIViewController {
         }
         
         if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
-            hud.show(timeout: ZLPhotoConfiguration.default().timeout)
+            hud.show(timeout: ZLPhotoUIConfiguration.default().timeout)
             requestAssetID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
                 if !isDegraded {
                     if let image = image {
@@ -587,7 +593,7 @@ class ZLPhotoPreviewController: UIViewController {
                 }
             }
         } else if model.type == .video || config.allowEditVideo {
-            hud.show(timeout: ZLPhotoConfiguration.default().timeout)
+            hud.show(timeout: uiConfig.timeout)
             // fetch avasset
             requestAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
                 hud.hide()
@@ -604,13 +610,14 @@ class ZLPhotoPreviewController: UIViewController {
         originalBtn.isSelected.toggle()
         
         let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
         
         let nav = (navigationController as? ZLImageNavController)
         nav?.isSelectedOriginal = originalBtn.isSelected
         if nav?.arrSelectedModels.isEmpty == true {
             selectBtnClick()
         } else if config.maxSelectCount == 1,
-                  !config.showSelectBtnWhenSingleSelect,
+                  !uiConfig.showSelectBtnWhenSingleSelect,
                   !originalBtn.isSelected,
                   nav?.arrSelectedModels.count == 1,
                   let currentModel = nav?.arrSelectedModels.first {
@@ -620,7 +627,7 @@ class ZLPhotoPreviewController: UIViewController {
             nav?.arrSelectedModels.removeAll { $0 == currentModel }
             selPhotoPreview?.removeSelModel(model: currentModel)
             resetSubViewStatus()
-            let index = config.sortAscending ? arrDataSources.lastIndex { $0 == currentModel } : arrDataSources.firstIndex { $0 == currentModel }
+            let index = uiConfig.sortAscending ? arrDataSources.lastIndex { $0 == currentModel } : arrDataSources.firstIndex { $0 == currentModel }
             if let index = index {
                 collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
             }
@@ -678,7 +685,7 @@ class ZLPhotoPreviewController: UIViewController {
         let nav = navigationController as? ZLImageNavController
         nav?.arrSelectedModels.removeAll()
         nav?.arrSelectedModels.append(contentsOf: models)
-        guard ZLPhotoConfiguration.default().showSelectedIndex else {
+        guard ZLPhotoUIConfiguration.default().showSelectedIndex else {
             return
         }
 //        resetIndexLabelStatus()

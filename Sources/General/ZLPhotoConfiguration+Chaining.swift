@@ -29,12 +29,6 @@ import Photos
 
 public extension ZLPhotoConfiguration {
     @discardableResult
-    func sortAscending(_ ascending: Bool) -> ZLPhotoConfiguration {
-        sortAscending = ascending
-        return self
-    }
-    
-    @discardableResult
     func maxSelectCount(_ count: Int) -> ZLPhotoConfiguration {
         maxSelectCount = count
         return self
@@ -229,54 +223,6 @@ public extension ZLPhotoConfiguration {
     @discardableResult
     func editImageConfiguration(_ configuration: ZLEditImageConfiguration) -> ZLPhotoConfiguration {
         editImageConfiguration = configuration
-        return self
-    }
-    
-    @discardableResult
-    func showCaptureImageOnTakePhotoBtn(_ value: Bool) -> ZLPhotoConfiguration {
-        showCaptureImageOnTakePhotoBtn = value
-        return self
-    }
-    
-    @discardableResult
-    func showSelectBtnWhenSingleSelect(_ value: Bool) -> ZLPhotoConfiguration {
-        showSelectBtnWhenSingleSelect = value
-        return self
-    }
-    
-    @discardableResult
-    func showSelectedMask(_ value: Bool) -> ZLPhotoConfiguration {
-        showSelectedMask = value
-        return self
-    }
-    
-    @discardableResult
-    func showSelectedBorder(_ value: Bool) -> ZLPhotoConfiguration {
-        showSelectedBorder = value
-        return self
-    }
-    
-    @discardableResult
-    func showInvalidMask(_ value: Bool) -> ZLPhotoConfiguration {
-        showInvalidMask = value
-        return self
-    }
-    
-    @discardableResult
-    func showSelectedIndex(_ value: Bool) -> ZLPhotoConfiguration {
-        showSelectedIndex = value
-        return self
-    }
-    
-    @discardableResult
-    func showSelectedPhotoPreview(_ value: Bool) -> ZLPhotoConfiguration {
-        showSelectedPhotoPreview = value
-        return self
-    }
-    
-    @discardableResult
-    func timeout(_ timeout: TimeInterval) -> ZLPhotoConfiguration {
-        self.timeout = timeout
         return self
     }
     

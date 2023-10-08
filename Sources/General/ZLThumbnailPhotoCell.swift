@@ -146,7 +146,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         bottomShadowView.addSubview(descLabel)
         containerView.addSubview(progressView)
         
-        if ZLPhotoConfiguration.default().showSelectedBorder {
+        if ZLPhotoUIConfiguration.default().showSelectedBorder {
             layer.borderColor = UIColor.zl.selectedBorderColor.cgColor
         }
     }
@@ -236,7 +236,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
                 showSelBtn = true
             }
         } else {
-            showSelBtn = ZLPhotoConfiguration.default().showSelectBtnWhenSingleSelect
+            showSelBtn = ZLPhotoUIConfiguration.default().showSelectBtnWhenSingleSelect
         }
         
         btnSelect.isHidden = !showSelBtn

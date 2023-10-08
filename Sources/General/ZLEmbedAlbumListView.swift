@@ -107,7 +107,11 @@ class ZLEmbedAlbumListView: UIView {
     
     private func loadAlbumList(completion: (() -> Void)? = nil) {
         DispatchQueue.global().async {
-            ZLPhotoManager.getPhotoAlbumList(ascending: ZLPhotoConfiguration.default().sortAscending, allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] albumList in
+            ZLPhotoManager.getPhotoAlbumList(
+                ascending: ZLPhotoUIConfiguration.default().sortAscending,
+                allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage,
+                allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo
+            ) { [weak self] albumList in
                 self?.arrDataSource.removeAll()
                 self?.arrDataSource.append(contentsOf: albumList)
                 
