@@ -296,7 +296,7 @@ open class ZLCustomCamera: UIViewController {
         
         if cameraConfig.allowRecordVideo {
             do {
-                try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoRecording, options: .mixWithOthers)
+                try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoRecording, options: .duckOthers)
                 try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
             } catch {
                 let err = error as NSError
@@ -1133,7 +1133,7 @@ open class ZLCustomCamera: UIViewController {
         guard movieFileOutput.isRecording else {
             return
         }
-        try? AVAudioSession.sharedInstance().setCategory(.playback)
+        
         movieFileOutput.stopRecording()
     }
     
