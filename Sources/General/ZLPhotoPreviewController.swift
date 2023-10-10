@@ -417,9 +417,8 @@ class ZLPhotoPreviewController: UIViewController {
             guard let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) else {
                 return
             }
-            if cell is ZLVideoPreviewCell {
-                (cell as! ZLVideoPreviewCell).pauseWhileTransition()
-            } else if cell is ZLLivePhotoPreviewCell {
+            
+            if cell is ZLLivePhotoPreviewCell {
                 (cell as! ZLLivePhotoPreviewCell).livePhotoView.stopPlayback()
             } else if cell is ZLGifPreviewCell {
                 (cell as! ZLGifPreviewCell).pauseGif()

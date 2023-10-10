@@ -25,6 +25,7 @@
 //  THE SOFTWARE.
 
 import UIKit
+import AVFoundation
 
 class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransition {
     weak var transitionContext: UIViewControllerContextTransitioning?
@@ -40,6 +41,8 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
     var shadowView: UIView?
     
     var imageView: UIImageView?
+    
+    var playerLayer: AVPlayerLayer?
     
     var imageViewOriginalFrame: CGRect = .zero
     
@@ -87,7 +90,10 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             }
             
             let result = panResult(pan)
-            imageView?.frame = result.frame
+            imageView?.transform = CGAffineTransform(scaleX: result.scale, y: result.scale)
+            imageView?.center = CGPoint(x: result.frame.midX, y: result.frame.midY)
+//            imageView?.frame = result.frame
+            
             shadowView?.alpha = pow(result.scale, 2)
             
             update(result.scale)
@@ -210,7 +216,15 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         imageView = UIImageView(frame: fromImageViewFrame)
         imageView?.contentMode = .scaleAspectFill
         imageView?.clipsToBounds = true
-        imageView?.image = cell.currentImage
+        
+        if let videoCell = cell as? ZLVideoPreviewCell, let playerLayer = videoCell.playerLayer, videoCell.imageView.isHidden {
+            playerLayer.removeFromSuperlayer()
+            self.playerLayer = playerLayer
+            imageView?.layer.insertSublayer(playerLayer, at: 0)
+        } else {
+            imageView?.image = cell.currentImage
+        }
+        
         containerView.addSubview(imageView!)
         containerView.addSubview(fromVC.view)
         
@@ -265,8 +279,9 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         
         toVC.endPopTransition()
         
-        UIView.animate(withDuration: 0.25, animations: {
-            if let toFrame = toFrame {
+        UIView.animate(withDuration: 0.3, animations: {
+            if let toFrame = toFrame, self.playerLayer == nil {
+                self.imageView?.transform = .identity
                 self.imageView?.frame = toFrame
             } else {
                 self.imageView?.alpha = 0
@@ -299,11 +314,17 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         }
         
         UIView.animate(withDuration: 0.25, animations: {
+            self.imageView?.transform = .identity
             self.imageView?.frame = toFrame
             self.shadowView?.alpha = 1
         }) { _ in
             self.resetViewStatus(isStart: false)
+            if let playerLayer = self.playerLayer {
+                playerLayer.removeFromSuperlayer()
+                (self.currentCell as? ZLVideoPreviewCell)?.playerView.layer.insertSublayer(playerLayer, at: 0)
+            }
             self.currentCell = nil
+            self.playerLayer = nil
             self.imageView?.removeFromSuperview()
             self.shadowView?.removeFromSuperview()
             self.cancelTransition?()
@@ -315,6 +336,7 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
     func resetViewStatus(isStart: Bool) {
         currentCell?.scrollView?.isScrollEnabled = !isStart
         currentCell?.scrollView?.pinchGestureRecognizer?.isEnabled = !isStart
+        (currentCell as? ZLVideoPreviewCell)?.singleTapGes.isEnabled = !isStart
         
         guard let transitionContext = transitionContext,
               let fromVC = transitionContext.viewController(forKey: .from) as? ZLPhotoPreviewController else {

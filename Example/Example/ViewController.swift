@@ -27,6 +27,10 @@ class ViewController: UIViewController {
         
         setupUI()
         
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            FLEXManager.shared.showExplorer()
+//        }
+        
         ZLPhotoUIConfiguration.default()
             .customAlertClass(CustomAlertController.self)
     }
