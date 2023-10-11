@@ -670,7 +670,6 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         }
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.frame = playerView.bounds
-        playerLayer?.backgroundColor = UIColor.blue.cgColor
         playerView.layer.insertSublayer(playerLayer!, at: 0)
         
         NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)

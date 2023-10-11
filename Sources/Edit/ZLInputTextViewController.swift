@@ -217,6 +217,9 @@ class ZLInputTextViewController: UIViewController {
         toolView.addSubview(textStyleBtn)
         toolView.addSubview(collectionView)
         
+        // 这个要放到这里，不能放到懒加载里，因为放到懒加载里会触发layoutManager(_:, didCompleteLayoutFor:,atEnd)，导致循环调用
+        textView.textAlignment = .left
+        
         refreshTextViewUI()
     }
     
@@ -408,7 +411,7 @@ extension ZLInputTextViewController {
     private func calculateTextRects() -> [CGRect] {
         let layoutManager = textView.layoutManager
         
-        // 这里必须用utf16.count 或者 (text as NSString).length，因为用count的话不准，一个emoji表情的count为2
+        // 这里必须用utf16.count 或者 (text as NSString).length，因为用count的话不准，一个emoji表情的count为2或更大
         let range = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, textView.text.utf16.count), actualCharacterRange: nil)
         let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
         
