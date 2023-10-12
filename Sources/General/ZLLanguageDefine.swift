@@ -26,7 +26,7 @@
 
 import Foundation
 
-@objc public enum ZLLanguageType: Int {
+@objc public enum ZLLanguageType: Int, CaseIterable {
     case system
     case chineseSimplified
     case chineseTraditional
@@ -44,6 +44,7 @@ import Foundation
     case spanish
     case turkish
     case arabic
+    case dutch
     
     var key: String {
         var key = "en"
@@ -84,6 +85,8 @@ import Foundation
                 key = "tr"
             } else if key.hasPrefix("ar") {
                 key = "ar"
+            } else if key.hasPrefix("nl") {
+                key = "nl"
             } else {
                 key = "en"
             }
@@ -119,6 +122,8 @@ import Foundation
             key = "tr"
         case .arabic:
             key = "ar"
+        case .dutch:
+            key = "nl"
         }
         
         return key

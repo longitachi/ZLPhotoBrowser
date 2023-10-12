@@ -199,6 +199,8 @@
 		FD0FF0DB29B726F600660EE9 /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
 		FD1E545429EEC95200D7B1B6 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Main.strings; sourceTree = "<group>"; };
 		FD1E545529EEC95300D7B1B6 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		FD3072472AD7A17900CFB618 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Main.strings; sourceTree = "<group>"; };
+		FD3072482AD7A17900CFB618 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		FD53DB342769D6B00093E815 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
 		FD53DB352769D6B00093E815 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		FD53DB362769D6B90093E815 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
@@ -603,6 +605,7 @@
 				"pt-BR",
 				tr,
 				ar,
+				nl,
 			);
 			mainGroup = E4C9119624E283D80061DA40;
 			productRefGroup = E4C911A024E283D80061DA40 /* Products */;
@@ -763,6 +766,7 @@
 				BAFFA54A2773B65B007C3811 /* pt-BR */,
 				FDB34115280D8565008F20B3 /* tr */,
 				FD1E545429EEC95200D7B1B6 /* ar */,
+				FD3072472AD7A17900CFB618 /* nl */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -786,6 +790,7 @@
 				BAFFA54B2773B65C007C3811 /* pt-BR */,
 				FDB34116280D8565008F20B3 /* tr */,
 				FD1E545529EEC95300D7B1B6 /* ar */,
+				FD3072482AD7A17900CFB618 /* nl */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
