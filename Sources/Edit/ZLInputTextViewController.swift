@@ -33,6 +33,8 @@ class ZLInputTextViewController: UIViewController {
     
     private var text: String
     
+    private var font: UIFont = .boldSystemFont(ofSize: ZLTextStickerView.fontSize)
+    
     private var currentColor: UIColor {
         didSet {
             refreshTextViewUI()
@@ -71,7 +73,7 @@ class ZLInputTextViewController: UIViewController {
         textView.tintColor = .zl.bottomToolViewBtnNormalBgColor
         textView.textColor = currentColor
         textView.text = text
-        textView.font = .boldSystemFont(ofSize: ZLTextStickerView.fontSize)
+        textView.font = font
         textView.textContainerInset = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
         textView.textContainer.lineFragmentPadding = 0
         textView.layoutManager.delegate = self
@@ -119,7 +121,7 @@ class ZLInputTextViewController: UIViewController {
     private let maxTextCount = 100
     
     /// text, textColor, image, style
-    var endInput: ((String, UIColor, UIImage?, ZLInputTextStyle) -> Void)?
+    var endInput: ((String, UIColor, UIFont, UIImage?, ZLInputTextStyle) -> Void)?
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -133,9 +135,12 @@ class ZLInputTextViewController: UIViewController {
         zl_debugPrint("ZLInputTextViewController deinit")
     }
     
-    init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, style: ZLInputTextStyle = .normal) {
+    init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal) {
         self.image = image
         self.text = text ?? ""
+        if let font = font {
+            self.font = font.withSize(ZLTextStickerView.fontSize)
+        }
         if let textColor = textColor {
             currentColor = textColor
         } else {
@@ -281,7 +286,7 @@ class ZLInputTextViewController: UIViewController {
             }
         }
         
-        endInput?(textView.text, currentColor, image, textStyle)
+        endInput?(textView.text, currentColor, font, image, textStyle)
         dismiss(animated: true, completion: nil)
     }
     

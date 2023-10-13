@@ -42,6 +42,8 @@ class ZLTextStickerView: ZLBaseStickerView {
     
     var textColor: UIColor
     
+    var font: UIFont?
+    
     var style: ZLInputTextStyle
     
     var image: UIImage {
@@ -56,6 +58,7 @@ class ZLTextStickerView: ZLBaseStickerView {
             id: id,
             text: text,
             textColor: textColor,
+            font: font,
             style: style,
             image: image,
             originScale: originScale,
@@ -76,6 +79,7 @@ class ZLTextStickerView: ZLBaseStickerView {
             id: state.id,
             text: state.text,
             textColor: state.textColor,
+            font: state.font,
             style: state.style,
             image: state.image,
             originScale: state.originScale,
@@ -92,6 +96,7 @@ class ZLTextStickerView: ZLBaseStickerView {
         id: String = UUID().uuidString,
         text: String,
         textColor: UIColor,
+        font: UIFont?,
         style: ZLInputTextStyle,
         image: UIImage,
         originScale: CGFloat,
@@ -104,6 +109,7 @@ class ZLTextStickerView: ZLBaseStickerView {
     ) {
         self.text = text
         self.textColor = textColor
+        self.font = font
         self.style = style
         self.image = image
         super.init(
