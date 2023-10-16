@@ -111,8 +111,8 @@ class ZLThumbnailViewController: UIViewController {
     
     private var isLayoutOK = false
     
-    /// 设备旋转前第一个可视indexPath
-    private var firstVisibleIndexPathBeforeRotation: IndexPath?
+    /// 设备旋转前最后一个可视indexPath
+    private var lastVisibleIndexPathBeforeRotation: IndexPath?
     
     /// 是否触发了横竖屏切换
     private var isSwitchOrientation = false
@@ -234,8 +234,6 @@ class ZLThumbnailViewController: UIViewController {
             view.addGestureRecognizer(panGes)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationChanged(_:)), name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
-        
         loadPhotos()
         
         // Register for the album change notification when the status is limited, because the photoLibraryDidChange method will be repeated multiple times each time the album changes, causing the interface to refresh multiple times. So the album changes are not monitored in other authority.
@@ -301,14 +299,14 @@ class ZLThumbnailViewController: UIViewController {
             bottomViewH = 0
         }
         
-        let totalWidth = view.frame.width - insets.left - insets.right
+        let totalWidth = view.zl.width - insets.left - insets.right
         collectionView.frame = CGRect(x: insets.left, y: 0, width: totalWidth, height: view.frame.height)
         collectionView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 0, bottom: bottomViewH, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: insets.top, left: 0, bottom: bottomViewH, right: 0)
 
         let scrollToBottomSize = 35.0
-        let scrollToBottomX = totalWidth - scrollToBottomSize - 22
-        let scrollToBottomY = view.frame.height - insets.bottom - bottomViewH - scrollToBottomSize - 30
+        let scrollToBottomX = view.zl.width - insets.right - scrollToBottomSize - 22
+        let scrollToBottomY = view.zl.height - insets.bottom - bottomViewH - scrollToBottomSize - 30
         scrollToBottomBtn.frame = CGRect(
             origin: CGPoint(x: scrollToBottomX, y: scrollToBottomY),
             size: CGSize(width: scrollToBottomSize, height: scrollToBottomSize)
@@ -318,10 +316,9 @@ class ZLThumbnailViewController: UIViewController {
             scrollToBottom()
         } else if isSwitchOrientation {
             isSwitchOrientation = false
-            collectionView.performBatchUpdates(nil) { _ in
-                if let firstVisibleIndexPathBeforeRotation = self.firstVisibleIndexPathBeforeRotation {
-                    self.collectionView.scrollToItem(at: firstVisibleIndexPathBeforeRotation, at: .top, animated: false)
-                }
+            
+            if let lastVisibleIndexPathBeforeRotation {
+                collectionView.scrollToItem(at: lastVisibleIndexPathBeforeRotation, at: .bottom, animated: false)
             }
         }
         
@@ -359,8 +356,12 @@ class ZLThumbnailViewController: UIViewController {
         }
     }
     
-    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        
+        lastVisibleIndexPathBeforeRotation = collectionView.indexPathsForVisibleItems
+            .max { $0.row < $1.row }
+        isSwitchOrientation = true
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
@@ -524,7 +525,7 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         if (shouldShow && scrollToBottomBtn.alpha == 1) ||
-           (!shouldShow && scrollToBottomBtn.alpha == 0) {
+            (!shouldShow && scrollToBottomBtn.alpha == 0) {
             return
         }
         
@@ -567,12 +568,6 @@ class ZLThumbnailViewController: UIViewController {
         } else {
             collectionView.zl.scrollToTop()
         }
-    }
-    
-    @objc private func deviceOrientationChanged(_ notify: Notification) {
-        let pInView = collectionView.convert(CGPoint(x: 100, y: 100), from: view)
-        firstVisibleIndexPathBeforeRotation = collectionView.indexPathForItem(at: pInView)
-        isSwitchOrientation = true
     }
     
     @objc private func slideSelectAction(_ pan: UIPanGestureRecognizer) {
@@ -1072,7 +1067,7 @@ extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
         let point = gestureRecognizer.location(in: view)
         let navFrame = (embedNavView ?? externalNavView)?.frame ?? .zero
         if navFrame.contains(point) ||
-           bottomView.frame.contains(point) {
+            bottomView.frame.contains(point) {
             return false
         }
         

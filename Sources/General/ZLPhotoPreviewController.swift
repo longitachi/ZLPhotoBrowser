@@ -248,17 +248,20 @@ class ZLPhotoPreviewController: UIViewController {
         let ori = UIApplication.shared.statusBarOrientation
         if ori != orientation {
             orientation = ori
-            
-            collectionView.performBatchUpdates(nil) { _ in
-                self.collectionView.setContentOffset(
-                    CGPoint(
-                        x: (self.view.zl.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged),
-                        y: 0
-                    ),
-                    animated: false
-                )
-            }
+
+            collectionView.setContentOffset(
+                CGPoint(
+                    x: (view.zl.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(indexBeforOrientationChanged),
+                    y: 0
+                ),
+                animated: false
+            )
         }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func reloadCurrentCell() {
@@ -455,7 +458,7 @@ class ZLPhotoPreviewController: UIViewController {
         let currentModel = arrDataSources[currentIndex]
         
         if (!config.allowMixSelect && currentModel.type == .video) ||
-           (!uiConfig.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
+            (!uiConfig.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
             selectBtn.isHidden = true
         } else {
             selectBtn.isHidden = false

@@ -262,16 +262,12 @@ public class ZLImagePreviewController: UIViewController {
                 ),
                 animated: false
             )
-            collectionView.performBatchUpdates({
-                self.collectionView.setContentOffset(
-                    CGPoint(
-                        x: (self.view.frame.width + ZLPhotoPreviewController.colItemSpacing) * CGFloat(self.indexBeforOrientationChanged),
-                        y: 0
-                    ),
-                    animated: false
-                )
-            })
         }
+    }
+    
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func reloadCurrentCell() {
