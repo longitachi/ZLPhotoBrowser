@@ -2,6 +2,21 @@
 
 -----
 
+## [4.4.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.6) (2023-10-20)
+### Add:
+* Supports setting whether the serial number is displayed on the selection button or not.
+* Add scroll to bottom button on Gallery picker. [#860](https://github.com/longitachi/ZLPhotoBrowser/pull/860) @patryk-sredzinski
+* In the image editor, all operations support undo and redo. [#861](https://github.com/longitachi/ZLPhotoBrowser/pull/860)
+* Dutch support added.
+* Supports setting the default font for text stickers.
+* Optimize the drop-down return effect of the preview interface.
+* Optimize screen rotation experience.
+
+### Fix:
+* Fix the bug that text stickers are not displayed when typing in Arabic. [ZLImageEditor #48](https://github.com/longitachi/ZLImageEditor/issues/48)
+    
+--- 
+
 ## [4.4.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.5) (2023-09-14)
 ### Add:
 * Can set whether maintain shadow background during photo clipping. [#851](https://github.com/longitachi/ZLPhotoBrowser/pull/851)

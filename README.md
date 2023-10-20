@@ -91,9 +91,20 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.6
+  Add:
+    Supports setting whether the serial number is displayed on the selection button or not.
+    Add scroll to bottom button on Gallery picker.
+    In the image editor, all operations support undo and redo.
+    Dutch support added.
+    Supports setting the default font for text stickers.
+    Optimize the drop-down return effect of the preview interface.
+    Optimize screen rotation experience.
+  Fix:
+    Fix the bug that text stickers are not displayed when typing in Arabic.
 ● 4.4.5
   Add:
-    Can set whether the shadow is always displayed when cropping the picture
+    Can set whether the shadow is always displayed when cropping the picture.
   Fix:
     When there are too many photos, the album may crash when opened.
     Crash on simulator version 14.0.1.
@@ -104,10 +115,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Makes the drawn curves smoother when editing images.
   Fix:
     Fix a bug that may fail to save videos stored on iCloud.
-● 4.4.3.1, 4.4.3.2 - 4.4.3 Patch
-  Fix:
-    Delete some time-consuming codes to improve the image loading speed of the thumbnail interface.
-    Disable TextView when user ends editing.
 ...
 ```
 
