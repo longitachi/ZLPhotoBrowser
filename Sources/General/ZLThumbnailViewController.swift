@@ -1051,6 +1051,9 @@ class ZLThumbnailViewController: UIViewController {
     func endPopTransition() {
         hiddenStatusBar = false
         setNeedsStatusBarAppearanceUpdate()
+        if deviceIsiPad() {
+            view.setNeedsLayout()
+        }
     }
 }
 
@@ -1068,6 +1071,11 @@ extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
         let navFrame = (embedNavView ?? externalNavView)?.frame ?? .zero
         if navFrame.contains(point) ||
             bottomView.frame.contains(point) {
+            return false
+        }
+        
+        let pointInCollectionView = gestureRecognizer.location(in: collectionView)
+        if collectionView.indexPathForItem(at: pointInCollectionView) == nil {
             return false
         }
         
