@@ -28,6 +28,7 @@ import Foundation
 
 public enum ZLEditorAction {
     case draw(ZLDrawPath)
+    case eraser([ZLDrawPath])
     case clip(oldStatus: ZLClipStatus, newStatus: ZLClipStatus)
     case sticker(oldState: ZLBaseStickertState?, newState: ZLBaseStickertState?)
     case mosaic(ZLMosaicPath)

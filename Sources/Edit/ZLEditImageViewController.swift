@@ -220,6 +220,12 @@ open class ZLEditImageViewController: UIViewController {
         currentClipStatus.angle.zl.toPi.truncatingRemainder(dividingBy: .pi) != 0
     }
     
+    private lazy var deleteDrawPaths: [ZLDrawPath] = []
+    
+    private var defaultDrawPathWidth: CGFloat = 0
+    
+    private var impactFeedback: UIImpactFeedbackGenerator?
+    
     // 第一次进入界面时，布局后frame，裁剪dimiss动画使用
     var originalFrame: CGRect = .zero
     
@@ -335,6 +341,29 @@ open class ZLEditImageViewController: UIViewController {
         return btn
     }()
     
+    @objc public lazy var eraserBtn: ZLEnlargeButton = {
+        let btn = ZLEnlargeButton(type: .custom)
+        btn.setImage(.zl.getImage("zl_eraser"), for: .normal)
+        btn.addTarget(self, action: #selector(eraserBtnClick), for: .touchUpInside)
+        btn.isHidden = true
+        btn.zl.setCornerRadius(18)
+        return btn
+    }()
+    
+    @objc public lazy var eraserLineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .zl.rgba(89, 95, 107, 0.8)
+        view.isHidden = true
+        return view
+    }()
+    
+    @objc public lazy var eraserCircleView: UIImageView = {
+        let imageView = UIImageView(image: .zl.getImage("zl_eraser_circle"))
+        imageView.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     @objc public lazy var ashbinView: UIView = {
         let view = UIView()
         view.backgroundColor = .zl.trashCanBackgroundNormalColor
@@ -354,9 +383,9 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc public var cancelEditBlock: (() -> Void)?
     
-    override public var prefersStatusBarHidden: Bool {
-        return true
-    }
+    override public var prefersStatusBarHidden: Bool { true }
+    
+    override public var prefersHomeIndicatorAutoHidden: Bool { true }
     
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
@@ -473,6 +502,25 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
+    override open func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard tools.contains(.draw) else { return }
+        
+        var size = drawingImageView.frame.size
+        if shouldSwapSize {
+            swap(&size.width, &size.height)
+        }
+        
+        var toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.width
+        if editImage.size.width / editImage.size.height > 1 {
+            toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.height
+        }
+        
+        let width = drawLineWidth / mainScrollView.zoomScale * toImageScale
+        defaultDrawPathWidth = width
+    }
+    
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard shouldLayout else {
@@ -509,7 +557,9 @@ open class ZLEditImageViewController: UIViewController {
         bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 150 - insets.bottom, width: view.zl.width, height: 150 + insets.bottom)
         bottomShadowLayer.frame = bottomShadowView.bounds
         
-        drawColorCollectionView?.frame = CGRect(x: 20, y: 30, width: view.zl.width - 40, height: drawColViewH)
+        eraserBtn.frame = CGRect(x: 20, y: 30 + (drawColViewH - 36) / 2, width: 36, height: 36)
+        eraserLineView.frame = CGRect(x: eraserBtn.zl.right + 11, y: eraserBtn.frame.midY - 10, width: 1, height: 20)
+        drawColorCollectionView?.frame = CGRect(x: eraserLineView.zl.right + 11, y: 30, width: view.zl.width - eraserLineView.zl.right - 31, height: drawColViewH)
         
         adjustCollectionView?.frame = CGRect(x: 20, y: 20, width: view.zl.width - 40, height: adjustColViewH)
         if ZLPhotoUIConfiguration.default().adjustSliderType == .vertical {
@@ -683,6 +733,12 @@ open class ZLEditImageViewController: UIViewController {
         bottomShadowView.addSubview(doneBtn)
         
         if tools.contains(.draw) {
+            bottomShadowView.addSubview(eraserBtn)
+            bottomShadowView.addSubview(eraserLineView)
+            containerView.addSubview(eraserCircleView)
+            
+            impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            
             let drawColorLayout = ZLCollectionViewFlowLayout()
             let drawColorItemWidth: CGFloat = 36
             drawColorLayout.itemSize = CGSize(width: drawColorItemWidth, height: drawColorItemWidth)
@@ -846,10 +902,22 @@ open class ZLEditImageViewController: UIViewController {
         } else {
             selectedTool = nil
         }
-        drawColorCollectionView?.isHidden = !isSelected
-        filterCollectionView?.isHidden = true
-        adjustCollectionView?.isHidden = true
-        adjustSlider?.isHidden = true
+        
+        setDrawViews(hidden: !isSelected)
+        setFilterViews(hidden: true)
+        setAdjustViews(hidden: true)
+    }
+    
+    @objc private func eraserBtnClick() {
+        switchEraserBtnStatus(!eraserBtn.isSelected)
+    }
+    
+    private func switchEraserBtnStatus(_ isSelected: Bool) {
+        guard eraserBtn.isSelected != isSelected else { return }
+        
+        eraserBtn.isSelected = isSelected
+        drawColorCollectionView?.reloadData()
+        eraserBtn.backgroundColor = isSelected ? .zl.rgba(89, 95, 107) : .clear
     }
     
     private func clipBtnClick() {
@@ -884,6 +952,11 @@ open class ZLEditImageViewController: UIViewController {
             self.bottomShadowView.alpha = 0
             self.adjustSlider?.alpha = 0
         }
+        
+        selectedTool = nil
+        setDrawViews(hidden: true)
+        setFilterViews(hidden: true)
+        setAdjustViews(hidden: true)
     }
     
     private func clipImage(status: ZLClipStatus) {
@@ -898,12 +971,21 @@ open class ZLEditImageViewController: UIViewController {
         currentClipStatus.ratio = status.ratio
         resetContainerViewFrame()
         recalculateStickersFrame(oldContainerSize, oldAngle, status.angle)
+        
+        setDrawViews(hidden: true)
+        setFilterViews(hidden: true)
+        setAdjustViews(hidden: true)
     }
     
     private func imageStickerBtnClick() {
         ZLPhotoConfiguration.default().editImageConfiguration.imageStickerContainerView?.show(in: view)
         setToolView(show: false)
         imageStickerContainerIsHidden = false
+        
+        selectedTool = nil
+        setDrawViews(hidden: true)
+        setFilterViews(hidden: true)
+        setAdjustViews(hidden: true)
     }
     
     private func textStickerBtnClick() {
@@ -913,6 +995,11 @@ open class ZLEditImageViewController: UIViewController {
             guard !text.isEmpty, let image = image else { return }
             self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
         }
+        
+        selectedTool = nil
+        setDrawViews(hidden: true)
+        setFilterViews(hidden: true)
+        setAdjustViews(hidden: true)
     }
     
     private func mosaicBtnClick() {
@@ -923,12 +1010,11 @@ open class ZLEditImageViewController: UIViewController {
             selectedTool = nil
         }
         
-        generateNewMosaicLayerAfterAdjust()
+        setDrawViews(hidden: true)
+        setFilterViews(hidden: true)
+        setAdjustViews(hidden: true)
         
-        drawColorCollectionView?.isHidden = true
-        filterCollectionView?.isHidden = true
-        adjustCollectionView?.isHidden = true
-        adjustSlider?.isHidden = true
+        generateNewMosaicLayerAfterAdjust()
     }
     
     private func filterBtnClick() {
@@ -939,10 +1025,9 @@ open class ZLEditImageViewController: UIViewController {
             selectedTool = nil
         }
         
-        drawColorCollectionView?.isHidden = true
-        filterCollectionView?.isHidden = !isSelected
-        adjustCollectionView?.isHidden = true
-        adjustSlider?.isHidden = true
+        setDrawViews(hidden: true)
+        setFilterViews(hidden: !isSelected)
+        setAdjustViews(hidden: true)
     }
     
     private func adjustBtnClick() {
@@ -953,12 +1038,26 @@ open class ZLEditImageViewController: UIViewController {
             selectedTool = nil
         }
         
-        drawColorCollectionView?.isHidden = true
-        filterCollectionView?.isHidden = true
-        adjustCollectionView?.isHidden = !isSelected
-        adjustSlider?.isHidden = !isSelected
+        setDrawViews(hidden: true)
+        setFilterViews(hidden: true)
+        setAdjustViews(hidden: !isSelected)
         
         generateAdjustImageRef()
+    }
+    
+    private func setDrawViews(hidden: Bool) {
+        eraserBtn.isHidden = hidden
+        eraserLineView.isHidden = hidden
+        drawColorCollectionView?.isHidden = hidden
+    }
+    
+    private func setFilterViews(hidden: Bool) {
+        filterCollectionView?.isHidden = hidden
+    }
+    
+    private func setAdjustViews(hidden: Bool) {
+        adjustCollectionView?.isHidden = hidden
+        adjustSlider?.isHidden = hidden
     }
     
     private func changeAdjustTool(_ tool: ZLEditImageConfiguration.AdjustTool) {
@@ -1047,6 +1146,12 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     @objc private func drawAction(_ pan: UIPanGestureRecognizer) {
+        // 橡皮擦
+        if selectedTool == .draw, eraserBtn.isSelected {
+            eraserAction(pan)
+            return
+        }
+        
         if selectedTool == .draw {
             let point = pan.location(in: drawingImageView)
             if pan.state == .began {
@@ -1071,7 +1176,13 @@ open class ZLEditImageViewController: UIViewController {
                     toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.height
                 }
                 
-                let path = ZLDrawPath(pathColor: currentDrawColor, pathWidth: drawLineWidth / mainScrollView.zoomScale, ratio: ratio / originalRatio / toImageScale, startPoint: point)
+                let path = ZLDrawPath(
+                    pathColor: currentDrawColor,
+                    pathWidth: drawLineWidth / mainScrollView.zoomScale,
+                    defaultLinePath: defaultDrawPathWidth,
+                    ratio: ratio / originalRatio / toImageScale,
+                    startPoint: point
+                )
                 drawPaths.append(path)
             } else if pan.state == .changed {
                 let path = drawPaths.last
@@ -1115,6 +1226,74 @@ open class ZLEditImageViewController: UIViewController {
                 }
                 
                 generateNewMosaicImage()
+            }
+        }
+    }
+    
+    private func eraserAction(_ pan: UIPanGestureRecognizer) {
+        // 相对于drawingImageView的point
+        let point = pan.location(in: drawingImageView)
+        let originalRatio = min(mainScrollView.frame.width / originalImage.size.width, mainScrollView.frame.height / originalImage.size.height)
+        let ratio = min(
+            mainScrollView.frame.width / currentClipStatus.editRect.width,
+            mainScrollView.frame.height / currentClipStatus.editRect.height
+        )
+        let scale = ratio / originalRatio
+        // 缩放到最初的size
+        var size = drawingImageView.frame.size
+        size.width /= scale
+        size.height /= scale
+        if shouldSwapSize {
+            swap(&size.width, &size.height)
+        }
+        
+        var toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.width
+        if editImage.size.width / editImage.size.height > 1 {
+            toImageScale = ZLEditImageViewController.maxDrawLineImageWidth / size.height
+        }
+        
+        let pointScale = ratio / originalRatio / toImageScale
+        // 转换为drawPath的point
+        let drawPoint = CGPoint(x: point.x / pointScale, y: point.y / pointScale)
+        if pan.state == .began {
+            eraserCircleView.isHidden = false
+            impactFeedback?.prepare()
+        }
+        
+        if pan.state == .began || pan.state == .changed {
+            var transform: CGAffineTransform = .identity
+            
+            let angle = ((Int(currentClipStatus.angle) % 360) + 360) % 360
+            let drawingImageViewSize = drawingImageView.frame.size
+            if angle == 90 {
+                transform = transform.translatedBy(x: 0, y: -drawingImageViewSize.width)
+            } else if angle == 180 {
+                transform = transform.translatedBy(x: -drawingImageViewSize.width, y: -drawingImageViewSize.height)
+            } else if angle == 270 {
+                transform = transform.translatedBy(x: -drawingImageViewSize.height, y: 0)
+            }
+            transform = transform.concatenating(drawingImageView.transform)
+            eraserCircleView.center = point.applying(transform)
+            
+            var needDraw = false
+            for path in drawPaths {
+                if path.path.contains(drawPoint), !deleteDrawPaths.contains(path) {
+                    path.willDelete = true
+                    deleteDrawPaths.append(path)
+                    needDraw = true
+                    impactFeedback?.impactOccurred()
+                }
+            }
+            if needDraw {
+                drawLine()
+            }
+        } else {
+            eraserCircleView.isHidden = true
+            if !deleteDrawPaths.isEmpty {
+                editorManager.storeAction(.eraser(deleteDrawPaths))
+                drawPaths.removeAll { deleteDrawPaths.contains($0) }
+                deleteDrawPaths.removeAll()
+                drawLine()
             }
         }
     }
@@ -1625,7 +1804,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             
             let c = drawColors[indexPath.row]
             cell.color = c
-            if c == currentDrawColor {
+            if c == currentDrawColor, !eraserBtn.isSelected {
                 cell.bgWhiteView.layer.transform = CATransform3DMakeScale(1.2, 1.2, 1)
             } else {
                 cell.bgWhiteView.layer.transform = CATransform3DIdentity
@@ -1689,6 +1868,8 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             }
         } else if collectionView == drawColorCollectionView {
             currentDrawColor = drawColors[indexPath.row]
+            eraserBtn.isSelected = false
+            eraserBtn.backgroundColor = nil
         } else if collectionView == filterCollectionView {
             let filter = ZLPhotoConfiguration.default().editImageConfiguration.filters[indexPath.row]
             editorManager.storeAction(.filter(oldFilter: currentFilter, newFilter: filter))
@@ -1816,6 +1997,8 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         switch action {
         case let .draw(path):
             undoDraw(path)
+        case let .eraser(paths):
+            undoEraser(paths)
         case let .clip(oldStatus, _):
             undoOrRedoClip(oldStatus)
         case let .sticker(oldState, newState):
@@ -1833,6 +2016,8 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         switch action {
         case let .draw(path):
             redoDraw(path)
+        case let .eraser(paths):
+            redoEraser(paths)
         case let .clip(_, newStatus):
             undoOrRedoClip(newStatus)
         case let .sticker(oldState, newState):
@@ -1854,6 +2039,23 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
     private func redoDraw(_ path: ZLDrawPath) {
         drawPaths.append(path)
         drawLine()
+    }
+    
+    private func undoEraser(_ paths: [ZLDrawPath]) {
+        paths.forEach { $0.willDelete = false }
+        drawPaths.append(contentsOf: paths)
+        drawPaths = drawPaths.sorted { $0.index < $1.index }
+        drawLine()
+    }
+    
+    private func redoEraser(_ paths: [ZLDrawPath]) {
+        drawPaths.removeAll { paths.contains($0) }
+        drawLine()
+    }
+    
+    private func undoOrRedoClip(_ status: ZLClipStatus) {
+        clipImage(status: status)
+        preClipStatus = status
     }
     
     private func undoMosaic(_ path: ZLMosaicPath) {
@@ -1935,10 +2137,5 @@ extension ZLEditImageViewController: ZLEditorManagerDelegate {
         adjustCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         adjustCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         adjustCollectionView.reloadData()
-    }
-    
-    private func undoOrRedoClip(_ status: ZLClipStatus) {
-        clipImage(status: status)
-        preClipStatus = status
     }
 }

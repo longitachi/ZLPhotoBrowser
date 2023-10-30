@@ -150,11 +150,13 @@ public class ZLImagePreviewController: UIViewController {
     @objc public var videoHttpHeader: [String: Any]?
     
     override public var prefersStatusBarHidden: Bool {
-        return !ZLPhotoUIConfiguration.default().showStatusBarInPreviewInterface
+        !ZLPhotoUIConfiguration.default().showStatusBarInPreviewInterface
     }
     
+    override public var prefersHomeIndicatorAutoHidden: Bool { true }
+    
     override public var preferredStatusBarStyle: UIStatusBarStyle {
-        return ZLPhotoUIConfiguration.default().statusBarStyle
+        ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
     deinit {

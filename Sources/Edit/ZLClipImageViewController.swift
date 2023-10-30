@@ -220,13 +220,11 @@ class ZLClipImageViewController: UIViewController {
     
     var cancelClipBlock: (() -> Void)?
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
+    override var prefersStatusBarHidden: Bool { true }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
+    override var prefersHomeIndicatorAutoHidden: Bool { true }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
     
     deinit {
         zl_debugPrint("ZLClipImageViewController deinit")

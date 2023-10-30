@@ -165,11 +165,13 @@ class ZLPhotoPreviewController: UIViewController {
     var backBlock: (() -> Void)?
     
     override var prefersStatusBarHidden: Bool {
-        return !ZLPhotoUIConfiguration.default().showStatusBarInPreviewInterface
+        !ZLPhotoUIConfiguration.default().showStatusBarInPreviewInterface
     }
     
+    override var prefersHomeIndicatorAutoHidden: Bool { true }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return ZLPhotoUIConfiguration.default().statusBarStyle
+        ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
     deinit {
