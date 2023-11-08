@@ -350,6 +350,13 @@ open class ZLEditImageViewController: UIViewController {
         return btn
     }()
     
+    @objc public lazy var eraserBtnBgBlurView: UIVisualEffectView = {
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        view.isHidden = true
+        view.zl.setCornerRadius(18)
+        return view
+    }()
+    
     @objc public lazy var eraserLineView: UIView = {
         let view = UIView()
         view.backgroundColor = .zl.rgba(89, 95, 107, 0.8)
@@ -558,6 +565,7 @@ open class ZLEditImageViewController: UIViewController {
         bottomShadowLayer.frame = bottomShadowView.bounds
         
         eraserBtn.frame = CGRect(x: 20, y: 30 + (drawColViewH - 36) / 2, width: 36, height: 36)
+        eraserBtnBgBlurView.frame = eraserBtn.frame
         eraserLineView.frame = CGRect(x: eraserBtn.zl.right + 11, y: eraserBtn.frame.midY - 10, width: 1, height: 20)
         drawColorCollectionView?.frame = CGRect(x: eraserLineView.zl.right + 11, y: 30, width: view.zl.width - eraserLineView.zl.right - 31, height: drawColViewH)
         
@@ -733,6 +741,7 @@ open class ZLEditImageViewController: UIViewController {
         bottomShadowView.addSubview(doneBtn)
         
         if tools.contains(.draw) {
+            bottomShadowView.addSubview(eraserBtnBgBlurView)
             bottomShadowView.addSubview(eraserBtn)
             bottomShadowView.addSubview(eraserLineView)
             containerView.addSubview(eraserCircleView)
@@ -912,12 +921,15 @@ open class ZLEditImageViewController: UIViewController {
         switchEraserBtnStatus(!eraserBtn.isSelected)
     }
     
-    private func switchEraserBtnStatus(_ isSelected: Bool) {
+    private func switchEraserBtnStatus(_ isSelected: Bool, reloadData: Bool = true) {
         guard eraserBtn.isSelected != isSelected else { return }
         
         eraserBtn.isSelected = isSelected
-        drawColorCollectionView?.reloadData()
-        eraserBtn.backgroundColor = isSelected ? .zl.rgba(89, 95, 107) : .clear
+        eraserBtnBgBlurView.isHidden = !isSelected
+        
+        if reloadData {
+            drawColorCollectionView?.reloadData()
+        }
     }
     
     private func clipBtnClick() {
@@ -971,10 +983,6 @@ open class ZLEditImageViewController: UIViewController {
         currentClipStatus.ratio = status.ratio
         resetContainerViewFrame()
         recalculateStickersFrame(oldContainerSize, oldAngle, status.angle)
-        
-        setDrawViews(hidden: true)
-        setFilterViews(hidden: true)
-        setAdjustViews(hidden: true)
     }
     
     private func imageStickerBtnClick() {
@@ -1010,11 +1018,10 @@ open class ZLEditImageViewController: UIViewController {
             selectedTool = nil
         }
         
+        generateNewMosaicLayerIfAdjust()
         setDrawViews(hidden: true)
         setFilterViews(hidden: true)
         setAdjustViews(hidden: true)
-        
-        generateNewMosaicLayerAfterAdjust()
     }
     
     private func filterBtnClick() {
@@ -1038,11 +1045,10 @@ open class ZLEditImageViewController: UIViewController {
             selectedTool = nil
         }
         
+        generateAdjustImageRef()
         setDrawViews(hidden: true)
         setFilterViews(hidden: true)
         setAdjustViews(hidden: !isSelected)
-        
-        generateAdjustImageRef()
     }
     
     private func setDrawViews(hidden: Bool) {
@@ -1345,12 +1351,12 @@ open class ZLEditImageViewController: UIViewController {
         imageView.image = editImage
     }
     
-    private func generateNewMosaicLayerAfterAdjust() {
+    private func generateNewMosaicLayerIfAdjust() {
         defer {
             hasAdjustedImage = false
         }
         
-        guard tools.contains(.mosaic) else { return }
+        guard tools.contains(.mosaic), hasAdjustedImage else { return }
         
         generateNewMosaicImageLayer()
         
@@ -1868,8 +1874,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             }
         } else if collectionView == drawColorCollectionView {
             currentDrawColor = drawColors[indexPath.row]
-            eraserBtn.isSelected = false
-            eraserBtn.backgroundColor = nil
+            switchEraserBtnStatus(false, reloadData: false)
         } else if collectionView == filterCollectionView {
             let filter = ZLPhotoConfiguration.default().editImageConfiguration.filters[indexPath.row]
             editorManager.storeAction(.filter(oldFilter: currentFilter, newFilter: filter))
