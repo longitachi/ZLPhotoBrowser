@@ -51,10 +51,6 @@ extension Resource {
     }
 }
 
-@available(*, deprecated, message: "This type conflicts with `GeneratedAssetSymbols.ImageResource` in Swift 5.9. Renamed to avoid issues in the future.", renamed: "KF.ImageResource")
-public typealias ImageResource = KF.ImageResource
-
-
 extension KF {
     /// ImageResource is a simple combination of `downloadURL` and `cacheKey`.
     /// When passed to image view set methods, Kingfisher will try to download the target

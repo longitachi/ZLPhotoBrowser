@@ -53,7 +53,10 @@ public struct AVAssetImageDataProvider: ImageDataProvider {
     public let time: CMTime
 
     private var internalKey: String {
-        return (assetImageGenerator.asset as? AVURLAsset)?.url.absoluteString ?? UUID().uuidString
+        guard let url = (assetImageGenerator.asset as? AVURLAsset)?.url else {
+            return UUID().uuidString
+        }
+        return url.cacheKey
     }
 
     /// The cache key used by `self`.
@@ -127,7 +130,7 @@ extension CGImage {
         guard let mutableData = CFDataCreateMutable(nil, 0) else {
             return nil
         }
-#if os(xrOS)
+#if os(visionOS)
         guard let destination = CGImageDestinationCreateWithData(
             mutableData, UTType.jpeg.identifier as CFString , 1, nil
         ) else {

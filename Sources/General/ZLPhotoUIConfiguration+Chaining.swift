@@ -181,6 +181,18 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func showAddPhotoButton(_ value: Bool) -> ZLPhotoUIConfiguration {
+        showAddPhotoButton = value
+        return self
+    }
+    
+    @discardableResult
+    func showEnterSettingTips(_ value: Bool) -> ZLPhotoUIConfiguration {
+        showEnterSettingTips = value
+        return self
+    }
+    
+    @discardableResult
     func timeout(_ timeout: TimeInterval) -> ZLPhotoUIConfiguration {
         self.timeout = timeout
         return self

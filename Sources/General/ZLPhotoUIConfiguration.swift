@@ -134,6 +134,13 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Display the selected photos at the bottom of the preview large photos interface. Defaults to true.
     public var showSelectedPhotoPreview = true
     
+    /// If user choose limited Photo mode, a button with '+' will be added to the ZLThumbnailViewController. It will call PHPhotoLibrary.shared().presentLimitedLibraryPicker(from:) to add photo. Defaults to true.
+    public var showAddPhotoButton = true
+    
+    /// iOS14 limited Photo mode, will show collection footer view in ZLThumbnailViewController.
+    /// Will go to system setting if clicked. Defaults to true.
+    public var showEnterSettingTips = true
+    
     /// Timeout for image parsing. Defaults to 20.
     public var timeout: TimeInterval = 20
     
