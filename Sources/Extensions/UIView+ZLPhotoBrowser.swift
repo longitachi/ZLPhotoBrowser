@@ -51,6 +51,10 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
         base.frame.height
     }
     
+    var size: CGSize {
+        base.frame.size
+    }
+    
     var snapshotImage: UIImage? {
         UIGraphicsBeginImageContextWithOptions(base.bounds.size, base.isOpaque, UIScreen.main.scale)
         guard let context = UIGraphicsGetCurrentContext() else {

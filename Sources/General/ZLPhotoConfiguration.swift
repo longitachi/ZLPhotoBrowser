@@ -176,6 +176,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// - warning: Only valid when `allowSelectOriginal = false`, Defaults to false.
     public var alwaysRequestOriginal = false
     
+    /// Whether to show the total size of selected photos when selecting the original image. Defaults to true.
+    public var showOriginalSizeWhenSelectOriginal = true
+    
     /// Allow access to the preview large image interface (That is, whether to allow access to the large image interface after clicking the thumbnail image). Defaults to true.
     public var allowPreviewPhotos = true
     

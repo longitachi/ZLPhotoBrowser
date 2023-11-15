@@ -115,6 +115,16 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
         ZLPhotoUIConfiguration.default().bottomToolViewBgColorOfPreviewVC
     }
     
+    /// 小图界面原图大小label字体颜色
+    static var originalSizeLabelTextColor: UIColor {
+        ZLPhotoUIConfiguration.default().originalSizeLabelTextColor
+    }
+    
+    /// 预览大图界面原图大小label字体颜色
+    static var originalSizeLabelTextColorOfPreviewVC: UIColor {
+        ZLPhotoUIConfiguration.default().originalSizeLabelTextColorOfPreviewVC
+    }
+    
     /// 相册列表界面底部工具栏按钮 可交互 状态标题颜色
     static var bottomToolViewBtnNormalTitleColor: UIColor {
         ZLPhotoUIConfiguration.default().bottomToolViewBtnNormalTitleColor

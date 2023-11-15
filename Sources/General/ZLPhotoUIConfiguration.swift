@@ -318,6 +318,14 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览大图界面底部工具条背景色
     public var bottomToolViewBgColorOfPreviewVC: UIColor = .zl.rgba(35, 35, 35, 0.3)
     
+    /// Title color of the original image size label in the album thumbnail interface.
+    /// 相册小图界面原图大小label的text颜色
+    public var originalSizeLabelTextColor: UIColor = .zl.rgba(130, 130, 130)
+    
+    /// Title color of the original image size label in the preview interface.
+    /// 预览大图界面原图大小label的text颜色
+    public var originalSizeLabelTextColorOfPreviewVC: UIColor = .zl.rgba(130, 130, 130)
+    
     /// The normal state title color of bottom tool view buttons. Without done button.
     /// 相册小图界面底部按钮可交互状态下标题颜色，不包括 `完成` 按钮
     public var bottomToolViewBtnNormalTitleColor: UIColor = .white

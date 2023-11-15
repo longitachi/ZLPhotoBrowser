@@ -140,6 +140,17 @@ class ZLPhotoPreviewController: UIViewController {
         return btn
     }()
     
+    private lazy var originalLabel: UILabel = {
+        let label = UILabel()
+        label.font = .zl.font(ofSize: 12)
+        label.textColor = .zl.originalSizeLabelTextColorOfPreviewVC
+        label.textAlignment = .center
+        label.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = true
+        label.isHidden = true
+        return label
+    }()
+    
     private lazy var doneBtn: UIButton = {
         let btn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick), true)
         btn.backgroundColor = .zl.bottomToolViewBtnNormalBgColorOfPreviewVC
@@ -316,7 +327,13 @@ class ZLPhotoPreviewController: UIViewController {
             )
         ).width + (originalBtn.currentImage?.size.width ?? 19) + 12
         let originBtnMaxW = min(btnMaxWidth, originBtnW)
-        originalBtn.frame = CGRect(x: (bottomView.bounds.width - originBtnMaxW) / 2 - 5, y: btnY, width: originBtnMaxW, height: btnH)
+        originalBtn.frame = CGRect(x: (bottomView.zl.width - originBtnMaxW) / 2 - 5, y: btnY, width: originBtnMaxW, height: btnH)
+        originalLabel.frame = CGRect(
+            x: (bottomView.zl.width - btnMaxWidth) / 2 - 5,
+            y: originalBtn.zl.bottom,
+            width: btnMaxWidth,
+            height: originalLabel.font.lineHeight
+        )
         
         let selCount = (navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
         var doneTitle = localLanguageTextValue(.done)
@@ -374,7 +391,7 @@ class ZLPhotoPreviewController: UIViewController {
         originalBtn.isHidden = !(config.allowSelectOriginal && config.allowSelectImage)
         originalBtn.isSelected = (navigationController as? ZLImageNavController)?.isSelectedOriginal ?? false
         bottomView.addSubview(originalBtn)
-        
+        bottomView.addSubview(originalLabel)
         bottomView.addSubview(doneBtn)
         
         view.bringSubviewToFront(navView)
@@ -495,6 +512,7 @@ class ZLPhotoPreviewController: UIViewController {
         doneBtn.setTitle(doneTitle, for: .normal)
         
         selPhotoPreview?.isHidden = selCount == 0
+        refreshOriginalLabelText()
         refreshBottomViewFrame()
         
         var hideEditBtn = true
@@ -514,6 +532,27 @@ class ZLPhotoPreviewController: UIViewController {
         if ZLPhotoConfiguration.default().allowSelectOriginal,
            ZLPhotoConfiguration.default().allowSelectImage {
             originalBtn.isHidden = !((currentModel.type == .image) || (currentModel.type == .livePhoto && !config.allowSelectLivePhoto) || (currentModel.type == .gif && !config.allowSelectGif))
+        }
+    }
+    
+    private func refreshOriginalLabelText() {
+        guard ZLPhotoConfiguration.default().showOriginalSizeWhenSelectOriginal else {
+            return
+        }
+        
+        guard originalBtn.isSelected else {
+            originalLabel.isHidden = true
+            return
+        }
+        
+        let selectModels = (navigationController as? ZLImageNavController)?.arrSelectedModels ?? []
+        if selectModels.isEmpty {
+            originalLabel.isHidden = true
+        } else {
+            originalLabel.isHidden = false
+            let totalSize = selectModels.reduce(into: 0) { $0 += ($1.dataSize ?? 0) * 1024 }
+            let str = ByteCountFormatter.string(fromByteCount: Int64(totalSize), countStyle: .binary).replacingOccurrences(of: " ", with: "")
+            originalLabel.text = localLanguageTextValue(.originalTotalSize) + " \(str)"
         }
     }
     
@@ -632,13 +671,17 @@ class ZLPhotoPreviewController: UIViewController {
         
         let nav = (navigationController as? ZLImageNavController)
         nav?.isSelectedOriginal = originalBtn.isSelected
-        if nav?.arrSelectedModels.isEmpty == true {
+        if nav?.arrSelectedModels.isEmpty == true, originalBtn.isSelected {
             selectBtnClick()
-        } else if config.maxSelectCount == 1,
-                  !uiConfig.showSelectBtnWhenSingleSelect,
-                  !originalBtn.isSelected,
-                  nav?.arrSelectedModels.count == 1,
-                  let currentModel = nav?.arrSelectedModels.first {
+        } else if nav?.arrSelectedModels.isEmpty == false {
+            refreshOriginalLabelText()
+        }
+        
+        if config.maxSelectCount == 1,
+           !uiConfig.showSelectBtnWhenSingleSelect,
+           !originalBtn.isSelected,
+           nav?.arrSelectedModels.count == 1,
+           let currentModel = nav?.arrSelectedModels.first {
             currentModel.isSelected = false
             currentModel.editImage = nil
             currentModel.editImageModel = nil
@@ -1034,6 +1077,7 @@ class ZLPhotoPreviewSelectedView: UIView, UICollectionViewDataSource, UICollecti
     }
     
     // MARK: iOS11 拖动
+
     // iOS11 拖动cell后，部分cell无法点击，先不用这种方式
 //    @available(iOS 11.0, *)
 //    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {

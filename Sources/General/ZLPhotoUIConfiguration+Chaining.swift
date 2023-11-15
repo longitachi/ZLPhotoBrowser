@@ -367,6 +367,18 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func originalSizeLabelTextColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        originalSizeLabelTextColor = color
+        return self
+    }
+    
+    @discardableResult
+    func originalSizeLabelTextColorOfPreviewVC(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        originalSizeLabelTextColorOfPreviewVC = color
+        return self
+    }
+    
+    @discardableResult
     func bottomToolViewBtnNormalTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBtnNormalTitleColor = color
         return self

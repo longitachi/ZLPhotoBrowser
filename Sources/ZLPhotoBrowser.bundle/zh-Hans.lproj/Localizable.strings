@@ -4,6 +4,7 @@
 "cancel" = "取消";
 
 "originalPhoto" = "原图";
+"originalTotalSize" = "共";
 "done" = "确定";
 "ok" = "确定";
 "editFinish" = "完成";
