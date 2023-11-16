@@ -592,6 +592,16 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     @objc private func slideSelectAction(_ pan: UIPanGestureRecognizer) {
+        if pan.state == .ended || pan.state == .cancelled {
+            stopAutoScroll()
+            beginPanSelect = false
+            panSelectType = .none
+            arrSlideIndexPaths.removeAll()
+            dicOriSelectStatus.removeAll()
+            resetBottomToolBtnStatus()
+            return
+        }
+        
         let point = pan.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: point) else {
             return
@@ -733,13 +743,6 @@ class ZLThumbnailViewController: UIViewController {
                     }
                 }
             }
-        } else if pan.state == .ended || pan.state == .cancelled {
-            stopAutoScroll()
-            beginPanSelect = false
-            panSelectType = .none
-            arrSlideIndexPaths.removeAll()
-            dicOriSelectStatus.removeAll()
-            resetBottomToolBtnStatus()
         }
     }
     
