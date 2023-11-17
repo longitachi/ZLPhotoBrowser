@@ -91,6 +91,12 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.7
+  Add:
+    Enhancing the drawing tool with an eraser function.
+    Display the total size of selected photos when the full image button is selected.
+  Fix:
+    Fix a bug where the video's start time is incorrect when cropping the video.
 ● 4.4.6
   Add:
     Supports setting whether the serial number is displayed on the selection button or not.
@@ -109,17 +115,11 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     When there are too many photos, the album may crash when opened.
     Crash on simulator version 14.0.1.
     In the image editor where the sticker position was incorrect after the image was rotated.
-● 4.4.4
-  Add:
-    Support downloading video data from iCloud before selecting a video.
-    Makes the drawn curves smoother when editing images.
-  Fix:
-    Fix a bug that may fail to save videos stored on iCloud.
 ...
 ```
 
 ### Languages
-🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish, 🇸🇦 Arabic.
+🇨🇳 Chinese, 🇺🇸 English, 🇯🇵 Japanese, 🇫🇷 French, 🇩🇪 German, 🇷🇺 Russian, 🇻🇳 Vietnamese, 🇰🇷 Korean, 🇲🇾 Malay, 🇮🇹 Italian, 🇮🇩 Indonesian, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇹🇷 Turkish, 🇸🇦 Arabic, 🇳🇱 Dutch.
 
 ### Installation
 There are four ways to use ZLPhotoBrowser in your project:
@@ -170,7 +170,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.4.6" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.4.7" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support

@@ -102,6 +102,12 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.7
+  Add:
+    涂鸦工具添加橡皮擦功能。
+    勾选原图按钮时，添加显示已选择图片总大小功能。
+  Fix:
+    修复裁剪视频时，起始时间不对的bug。
 ● 4.4.6
   Add:
     支持设置序号label是否显示在选择按钮上。

@@ -2,6 +2,16 @@
 
 -----
 
+## [4.4.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.7) (2023-11-17)
+### Add:
+* Enhancing the drawing tool with an eraser function.
+* Display the total size of selected photos when the full image button is selected.
+
+### Fix:
+* Fix a bug where the video's start time is incorrect when cropping the video. [#793](https://github.com/longitachi/ZLPhotoBrowser/issues/793)
+    
+--- 
+
 ## [4.4.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.6) (2023-10-20)
 ### Add:
 * Supports setting whether the serial number is displayed on the selection button or not.
