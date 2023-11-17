@@ -474,7 +474,7 @@ public class ZLPhotoManager: NSObject {
                 write(isDegraded, error)
             }
         } else if asset.zl.isInCloud {
-            pointer.pointee = fetchOriginalImageData(for: asset) { progress, error, _, _ in
+            pointer.pointee = fetchOriginalImageData(for: asset) { _, error, _, _ in
                 write(true, error)
             } completion: { _, info, isDegraded in
                 guard !canceled else { return }

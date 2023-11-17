@@ -115,12 +115,12 @@ extension ZLFilter {
         
         let backgroundImage = getColorImage(red: 127, green: 187, blue: 227, alpha: Int(255 * 0.2), rect: ciImage.extent)
         let outputCIImage = ciImage.applyingFilter("CIOverlayBlendMode", parameters: [
-            "inputBackgroundImage": backgroundImage,
+            "inputBackgroundImage": backgroundImage
         ])
         .applyingFilter("CIColorControls", parameters: [
             "inputSaturation": 1.35,
             "inputBrightness": 0.05,
-            "inputContrast": 1.1,
+            "inputContrast": 1.1
         ])
         guard let outputImage = outputCIImage.zl.toUIImage() else {
             return image
@@ -137,18 +137,18 @@ extension ZLFilter {
         let backgroundImage2 = getColorImage(red: 0, green: 70, blue: 150, alpha: Int(255 * 0.4), rect: ciImage.extent)
         let outputCIImage = ciImage
             .applyingFilter("CIDarkenBlendMode", parameters: [
-                "inputBackgroundImage": backgroundImage,
+                "inputBackgroundImage": backgroundImage
             ])
             .applyingFilter("CISepiaTone", parameters: [
-                "inputIntensity": 0.2,
+                "inputIntensity": 0.2
             ])
             .applyingFilter("CIColorControls", parameters: [
                 "inputSaturation": 1.2,
                 "inputBrightness": 0.05,
-                "inputContrast": 1.1,
+                "inputContrast": 1.1
             ])
             .applyingFilter("CILightenBlendMode", parameters: [
-                "inputBackgroundImage": backgroundImage2,
+                "inputBackgroundImage": backgroundImage2
             ])
         
         guard let outputImage = outputCIImage.zl.toUIImage() else {
@@ -167,22 +167,22 @@ extension ZLFilter {
             .applyingFilter("CIColorControls", parameters: [
                 "inputSaturation": 1.3,
                 "inputBrightness": 0.1,
-                "inputContrast": 1.05,
+                "inputContrast": 1.05
             ])
             .applyingFilter("CIHueAdjust", parameters: [
-                "inputAngle": 0.3,
+                "inputAngle": 0.3
             ])
         
         let outputCIImage = filterImage
             .applyingFilter("CIScreenBlendMode", parameters: [
-                "inputBackgroundImage": backgroundImage,
+                "inputBackgroundImage": backgroundImage
             ])
             .applyingFilter("CIToneCurve", parameters: [
                 "inputPoint0": CIVector(x: 0, y: 0),
                 "inputPoint1": CIVector(x: 0.25, y: 0.20),
                 "inputPoint2": CIVector(x: 0.5, y: 0.5),
                 "inputPoint3": CIVector(x: 0.75, y: 0.80),
-                "inputPoint4": CIVector(x: 1, y: 1),
+                "inputPoint4": CIVector(x: 1, y: 1)
             ])
         
         guard let outputImage = outputCIImage.zl.toUIImage() else {
@@ -210,17 +210,17 @@ extension ZLFilter {
             "inputRadius0": radius0,
             "inputRadius1": radius1,
             "inputColor0": color0,
-            "inputColor1": color1,
+            "inputColor1": color1
         ])?.outputImage?.cropped(to: ciImage.extent)
         
         let outputCIImage = ciImage
             .applyingFilter("CIColorControls", parameters: [
                 "inputSaturation": 1.0,
                 "inputBrightness": 0.01,
-                "inputContrast": 1.1,
+                "inputContrast": 1.1
             ])
             .applyingFilter("CIScreenBlendMode", parameters: [
-                "inputBackgroundImage": circle!,
+                "inputBackgroundImage": circle!
             ])
         
         guard let outputImage = outputCIImage.zl.toUIImage() else {

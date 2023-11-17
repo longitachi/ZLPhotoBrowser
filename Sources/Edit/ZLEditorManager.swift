@@ -52,7 +52,7 @@ class ZLEditorManager {
     
     init(actions: [ZLEditorAction] = []) {
         self.actions = actions
-        self.redoActions = actions
+        redoActions = actions
     }
     
     func storeAction(_ action: ZLEditorAction) {

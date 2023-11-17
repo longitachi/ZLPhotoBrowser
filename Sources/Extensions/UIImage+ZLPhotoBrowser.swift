@@ -506,7 +506,6 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return tintedImage
-
     }
 }
 

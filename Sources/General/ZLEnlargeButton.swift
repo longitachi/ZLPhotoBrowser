@@ -27,7 +27,6 @@
 import UIKit
 
 public class ZLEnlargeButton: UIButton {
-    
     /// 扩大点击区域
     public var enlargeInsets: UIEdgeInsets = .zero
     
@@ -64,5 +63,4 @@ public class ZLEnlargeButton: UIButton {
         )
         return rect
     }
-    
 }

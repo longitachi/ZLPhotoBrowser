@@ -151,7 +151,7 @@ class ZLInputTextViewController: UIViewController {
                 currentColor = editConfig.textStickerDefaultTextColor
             }
         }
-        self.textStyle = style
+        textStyle = style
         super.init(nibName: nil, bundle: nil)
     }
     

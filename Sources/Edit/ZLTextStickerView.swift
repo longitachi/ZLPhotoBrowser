@@ -117,7 +117,7 @@ class ZLTextStickerView: ZLBaseStickerView {
             originScale: originScale,
             originAngle: originAngle,
             originFrame: originFrame,
-            gesScale: gesScale, 
+            gesScale: gesScale,
             gesRotation: gesRotation,
             totalTranslationPoint: totalTranslationPoint,
             showBorder: showBorder

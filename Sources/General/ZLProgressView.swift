@@ -27,7 +27,6 @@
 import UIKit
 
 class ZLProgressView: UIView {
-    
     private lazy var progressLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.fillColor = UIColor.clear.cgColor
@@ -63,5 +62,4 @@ class ZLProgressView: UIView {
         let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: -(.pi / 2), endAngle: end, clockwise: true)
         progressLayer.path = path.cgPath
     }
-    
 }

@@ -58,7 +58,7 @@ class ZLAnimationUtils: NSObject {
             CATransform3DMakeScale(0.7, 0.7, 1),
             CATransform3DMakeScale(1.15, 1.15, 1),
             CATransform3DMakeScale(0.9, 0.9, 1),
-            CATransform3DMakeScale(1, 1, 1),
+            CATransform3DMakeScale(1, 1, 1)
         ]
         return animate
     }

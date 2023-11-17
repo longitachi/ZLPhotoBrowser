@@ -27,7 +27,6 @@
 import UIKit
 
 class ZLWeakProxy: NSObject {
-    
     private weak var target: NSObjectProtocol?
     
     init(target: NSObjectProtocol) {
@@ -46,5 +45,4 @@ class ZLWeakProxy: NSObject {
     override func responds(to aSelector: Selector!) -> Bool {
         return target?.responds(to: aSelector) ?? false
     }
-    
 }

@@ -1253,7 +1253,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
         
         if restartRecordAfterSwitchCamera {
             restartRecordAfterSwitchCamera = false
-            ZLMainAsync() {
+            ZLMainAsync {
                 let pauseTime = self.animateLayer.timeOffset
                 self.animateLayer.speed = 1
                 self.animateLayer.timeOffset = 0

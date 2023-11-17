@@ -177,6 +177,7 @@ public class ZLPhotoConfiguration: NSObject {
     public var alwaysRequestOriginal = false
     
     /// Whether to show the total size of selected photos when selecting the original image. Defaults to true.
+    /// - Note: The framework uses a conversion ratio of 1KB=1024Byte, while the system album uses 1KB=1000Byte, so the displayed photo size within the framework will be smaller than the size in the system album.
     public var showOriginalSizeWhenSelectOriginal = true
     
     /// Allow access to the preview large image interface (That is, whether to allow access to the large image interface after clicking the thumbnail image). Defaults to true.

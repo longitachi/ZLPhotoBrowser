@@ -142,7 +142,7 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         self.originScale = originScale
         self.originAngle = originAngle
         self.originFrame = originFrame
-        self.maxGesScale = 4 / originScale
+        maxGesScale = 4 / originScale
         super.init(frame: .zero)
         
         self.gesScale = gesScale

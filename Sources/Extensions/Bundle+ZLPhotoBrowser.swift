@@ -42,7 +42,7 @@ extension Bundle {
             Bundle(for: ZLPhotoPreviewSheet.self).resourceURL,
             
             // For command-line tools.
-            Bundle.main.bundleURL,
+            Bundle.main.bundleURL
         ]
         
         #if SWIFT_PACKAGE
@@ -71,7 +71,7 @@ extension Bundle {
             Bundle(for: BundleFinder.self).resourceURL,
             
             // For command-line tools.
-            Bundle.main.bundleURL,
+            Bundle.main.bundleURL
         ]
 
         for candidate in candidates {
