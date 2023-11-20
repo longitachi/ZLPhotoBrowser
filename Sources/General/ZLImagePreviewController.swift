@@ -550,10 +550,12 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
         return baseCell
     }
     
+    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        (cell as? ZLPreviewBaseCell)?.willDisplay()
+    }
+    
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = cell as? ZLPreviewBaseCell {
-            cell.didEndDisplaying()
-        }
+        (cell as? ZLPreviewBaseCell)?.didEndDisplaying()
     }
     
     private func showSaveImageAlert() {
