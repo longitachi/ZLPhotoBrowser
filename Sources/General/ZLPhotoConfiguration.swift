@@ -189,6 +189,12 @@ public class ZLPhotoConfiguration: NSObject {
     /// Whether to display the selected count on the button. Defaults to true.
     public var showSelectCountOnDoneBtn = true
     
+    /// In single selection mode, whether to display the selection button. Defaults to false.
+    public var showSelectBtnWhenSingleSelect = false
+
+    /// Display the index of the selected photos. Defaults to true.
+    public var showSelectedIndex = true
+    
     /// Maximum cropping time when editing video, unit: second. Defaults to 10.
     public var maxEditVideoTime: ZLPhotoConfiguration.Second = 10
     

@@ -491,7 +491,7 @@ class ZLPhotoPreviewController: UIViewController {
         let currentModel = arrDataSources[currentIndex]
         
         if (!config.allowMixSelect && currentModel.type == .video) ||
-            (!uiConfig.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
+            (!config.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
             selectBtn.isHidden = true
         } else {
             selectBtn.isHidden = false
@@ -678,7 +678,7 @@ class ZLPhotoPreviewController: UIViewController {
         }
         
         if config.maxSelectCount == 1,
-           !uiConfig.showSelectBtnWhenSingleSelect,
+           !config.showSelectBtnWhenSingleSelect,
            !originalBtn.isSelected,
            nav?.arrSelectedModels.count == 1,
            let currentModel = nav?.arrSelectedModels.first {
@@ -746,7 +746,7 @@ class ZLPhotoPreviewController: UIViewController {
         let nav = navigationController as? ZLImageNavController
         nav?.arrSelectedModels.removeAll()
         nav?.arrSelectedModels.append(contentsOf: models)
-        guard ZLPhotoUIConfiguration.default().showSelectedIndex else {
+        guard ZLPhotoConfiguration.default().showSelectedIndex else {
             return
         }
 //        resetIndexLabelStatus()

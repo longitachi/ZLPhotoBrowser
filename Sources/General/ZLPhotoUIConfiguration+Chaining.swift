@@ -145,12 +145,6 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
-    func showSelectBtnWhenSingleSelect(_ value: Bool) -> ZLPhotoUIConfiguration {
-        showSelectBtnWhenSingleSelect = value
-        return self
-    }
-    
-    @discardableResult
     func showSelectedMask(_ value: Bool) -> ZLPhotoUIConfiguration {
         showSelectedMask = value
         return self
@@ -165,12 +159,6 @@ public extension ZLPhotoUIConfiguration {
     @discardableResult
     func showInvalidMask(_ value: Bool) -> ZLPhotoUIConfiguration {
         showInvalidMask = value
-        return self
-    }
-    
-    @discardableResult
-    func showSelectedIndex(_ value: Bool) -> ZLPhotoUIConfiguration {
-        showSelectedIndex = value
         return self
     }
     

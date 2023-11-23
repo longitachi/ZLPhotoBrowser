@@ -168,7 +168,7 @@ class ViewController: UIViewController {
             .minimumLineSpacing(minLineSpacing)
             .columnCountBlock { Int(ceil($0 / (428.0 / 4))) }
             .showScrollToBottomBtn(true)
-        
+            
         if ZLPhotoUIConfiguration.default().languageType == .arabic {
             UIView.appearance().semanticContentAttribute = .forceRightToLeft
         } else {

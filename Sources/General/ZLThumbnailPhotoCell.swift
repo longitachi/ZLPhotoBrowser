@@ -28,6 +28,8 @@ import UIKit
 import Photos
 
 class ZLThumbnailPhotoCell: UICollectionViewCell {
+    private let selectBtnWH: CGFloat = 24
+    
     private lazy var containerView = UIView()
     
     private lazy var bottomShadowView = UIImageView(image: .zl.getImage("zl_shadow"))
@@ -83,13 +85,13 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     
     lazy var indexLabel: UILabel = {
         let label = UILabel()
-        label.layer.cornerRadius = 25.0 / 2
-        label.layer.masksToBounds = true
         label.textColor = .zl.indexLabelTextColor
         label.backgroundColor = .zl.indexLabelBgColor
         if ZLPhotoUIConfiguration.default().showIndexOnSelectBtn {
             label.font = .zl.font(ofSize: 14)
             label.textAlignment = .center
+            label.layer.cornerRadius = selectBtnWH / 2
+            label.layer.masksToBounds = true
         } else {
             label.font = .zl.font(ofSize: 14, bold: true)
             label.textAlignment = .left
@@ -158,11 +160,11 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         
         containerView.frame = bounds
         coverView.frame = bounds
-        btnSelect.frame = CGRect(x: bounds.width - 32, y: 8, width: 24, height: 24)
+        btnSelect.frame = CGRect(x: bounds.width - 32, y: 8, width: selectBtnWH, height: selectBtnWH)
         if ZLPhotoUIConfiguration.default().showIndexOnSelectBtn {
             indexLabel.frame = btnSelect.frame
         } else {
-            indexLabel.frame = CGRect(x: 8, y: 5, width: 50, height: 24)
+            indexLabel.frame = CGRect(x: 8, y: 5, width: 50, height: selectBtnWH)
         }
         
         bottomShadowView.frame = CGRect(x: 0, y: bounds.height - 25, width: bounds.width, height: 25)
@@ -193,7 +195,10 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     }
     
     private func configureCell() {
-        if ZLPhotoUIConfiguration.default().cellCornerRadio > 0 {
+        let config = ZLPhotoConfiguration.default()
+        let uiConfig = ZLPhotoUIConfiguration.default()
+        
+        if uiConfig.cellCornerRadio > 0 {
             layer.cornerRadius = ZLPhotoUIConfiguration.default().cellCornerRadio
             layer.masksToBounds = true
         }
@@ -205,13 +210,13 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             editImageTag.isHidden = true
             descLabel.text = model.duration
         } else if model.type == .gif {
-            bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectGif
+            bottomShadowView.isHidden = !config.allowSelectGif
             videoTag.isHidden = true
             livePhotoTag.isHidden = true
             editImageTag.isHidden = true
             descLabel.text = "GIF"
         } else if model.type == .livePhoto {
-            bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectLivePhoto
+            bottomShadowView.isHidden = !config.allowSelectLivePhoto
             videoTag.isHidden = true
             livePhotoTag.isHidden = false
             editImageTag.isHidden = true
@@ -229,14 +234,14 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
         }
         
         let showSelBtn: Bool
-        if ZLPhotoConfiguration.default().maxSelectCount > 1 {
-            if !ZLPhotoConfiguration.default().allowMixSelect {
+        if config.maxSelectCount > 1 {
+            if !config.allowMixSelect {
                 showSelBtn = model.type.rawValue < ZLPhotoModel.MediaType.video.rawValue
             } else {
                 showSelBtn = true
             }
         } else {
-            showSelBtn = ZLPhotoUIConfiguration.default().showSelectBtnWhenSingleSelect
+            showSelBtn = config.showSelectBtnWhenSingleSelect
         }
         
         btnSelect.isHidden = !showSelBtn

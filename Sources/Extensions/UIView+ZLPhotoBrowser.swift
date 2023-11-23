@@ -55,6 +55,18 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
         base.frame.size
     }
     
+    var center: CGPoint {
+        base.center
+    }
+    
+    var centerX: CGFloat {
+        base.center.x
+    }
+    
+    var centerY: CGFloat {
+        base.center.y
+    }
+    
     var snapshotImage: UIImage? {
         UIGraphicsBeginImageContextWithOptions(base.bounds.size, base.isOpaque, UIScreen.main.scale)
         guard let context = UIGraphicsGetCurrentContext() else {

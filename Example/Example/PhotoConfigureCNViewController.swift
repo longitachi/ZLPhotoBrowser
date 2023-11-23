@@ -851,7 +851,7 @@ class PhotoConfigureCNViewController: UIViewController {
         }
         
         showSelectIndexSwitch = UISwitch()
-        showSelectIndexSwitch.isOn = uiConfig.showSelectedIndex
+        showSelectIndexSwitch.isOn = config.showSelectedIndex
         showSelectIndexSwitch.addTarget(self, action: #selector(showSelectIndexChanged), for: .valueChanged)
         containerView.addSubview(showSelectIndexSwitch)
         showSelectIndexSwitch.snp.makeConstraints { make in
@@ -1182,7 +1182,7 @@ class PhotoConfigureCNViewController: UIViewController {
     }
     
     @objc func showSelectIndexChanged() {
-        uiConfig.showSelectedIndex = showSelectIndexSwitch.isOn
+        config.showSelectedIndex = showSelectIndexSwitch.isOn
     }
     
     @objc func showSelectMaskChanged() {

@@ -26,6 +26,7 @@
 
 import UIKit
 
+/// In an application, most of the UI configurations related to the album are uniform. Therefore, this class attempts to extract properties that are not affected by different album selection scenarios, avoiding redundant configurations for each different selection scenario.
 /// Custom UI configuration (include colors, images, text, font)
 @objcMembers
 public class ZLPhotoUIConfiguration: NSObject {
@@ -116,9 +117,6 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Show the image captured by the camera is displayed on the camera button inside the album. Defaults to false.
     public var showCaptureImageOnTakePhotoBtn = false
     
-    /// In single selection mode, whether to display the selection button. Defaults to false.
-    public var showSelectBtnWhenSingleSelect = false
-    
     /// Overlay a mask layer on top of the selected photos. Defaults to true.
     public var showSelectedMask = true
     
@@ -127,9 +125,6 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// Overlay a mask layer above the cells that cannot be selected. Defaults to true.
     public var showInvalidMask = true
-    
-    /// Display the index of the selected photos. Defaults to true.
-    public var showSelectedIndex = true
     
     /// Display the selected photos at the bottom of the preview large photos interface. Defaults to true.
     public var showSelectedPhotoPreview = true

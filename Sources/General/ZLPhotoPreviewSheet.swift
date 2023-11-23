@@ -826,7 +826,6 @@ public class ZLPhotoPreviewSheet: UIView {
     private func handleDataArray(newModel: ZLPhotoModel) {
         arrDataSources.insert(newModel, at: 0)
         let config = ZLPhotoConfiguration.default()
-        let uiConfig = ZLPhotoUIConfiguration.default()
         
         var canSelect = true
         // If mixed selection is not allowed, and the newModel type is video, it will not be selected.
@@ -834,7 +833,7 @@ public class ZLPhotoPreviewSheet: UIView {
             canSelect = false
         }
         // 单选模式，且不显示选择按钮时，不允许选择
-        if config.maxSelectCount == 1, !uiConfig.showSelectBtnWhenSingleSelect {
+        if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
             canSelect = false
         }
         if canSelect, canAddModel(newModel, currentSelectCount: arrSelectedModels.count, sender: sender, showAlert: false) {
@@ -887,7 +886,6 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLThumbnailPhotoCell.zl.identifier, for: indexPath) as! ZLThumbnailPhotoCell
         
         let config = ZLPhotoConfiguration.default()
-        let uiConfig = ZLPhotoUIConfiguration.default()
         
         let model = arrDataSources[indexPath.row]
         
@@ -922,7 +920,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             }
         }
         
-        if uiConfig.showSelectedIndex,
+        if config.showSelectedIndex,
            let index = arrSelectedModels.firstIndex(where: { $0 == model }) {
             setCellIndex(cell, showIndexLabel: true, index: index + 1)
         } else {
@@ -1026,7 +1024,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     private func setCellIndex(_ cell: ZLThumbnailPhotoCell?, showIndexLabel: Bool, index: Int) {
-        guard ZLPhotoUIConfiguration.default().showSelectedIndex else {
+        guard ZLPhotoConfiguration.default().showSelectedIndex else {
             return
         }
         
@@ -1042,7 +1040,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         cameraBtn.alpha = cameraIsEnable ? 1 : 0.3
         cameraBtn.isEnabled = cameraIsEnable
         
-        let showIndex = uiConfig.showSelectedIndex
+        let showIndex = config.showSelectedIndex
         let showMask = uiConfig.showSelectedMask || uiConfig.showInvalidMask
         
         guard showIndex || showMask else {

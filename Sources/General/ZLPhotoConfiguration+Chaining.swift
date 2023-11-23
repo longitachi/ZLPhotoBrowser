@@ -191,6 +191,18 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func showSelectBtnWhenSingleSelect(_ value: Bool) -> ZLPhotoConfiguration {
+        showSelectBtnWhenSingleSelect = value
+        return self
+    }
+    
+    @discardableResult
+    func showSelectedIndex(_ value: Bool) -> ZLPhotoConfiguration {
+        showSelectedIndex = value
+        return self
+    }
+    
+    @discardableResult
     func maxEditVideoTime(_ second: Second) -> ZLPhotoConfiguration {
         maxEditVideoTime = second
         return self
