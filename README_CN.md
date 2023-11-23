@@ -102,6 +102,11 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.8
+  Add:
+    适配iOS 17，使用UIGraphicsImageRenderer替换UIGraphicsBeginImageContextWithOptions。
+  Fix:
+    修复ZLImagePreviewController界面视频无法播放的bug。
 ● 4.4.7
   Add:
     涂鸦工具添加橡皮擦功能。
@@ -119,19 +124,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
     优化屏幕旋转体验，
   Fix:
     修复阿拉伯语言环境下，文字贴纸不显示的bug。
-● 4.4.5
-  Add:
-    可以设置裁剪图片时是否保留阴影的显示效果。
-  Fix:
-    修复图片过多时，打开相册可能crash得问题。
-    修复14.0.1版本的模拟器上crash得问题。
-    修复图片编辑器中图片旋转后贴纸位置不正确的问题。
-● 4.4.4
-  Add:
-    支持在选中视频前先下载视频源数据。
-    优化编辑图片时涂鸦功能，使曲线更平滑。
-  Fix:
-    修复保存iCloud上的视频可能失败的bug。
 ...
 ```
 

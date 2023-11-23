@@ -91,6 +91,11 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.8
+  Add:
+    Adapt to iOS 17, replace UIGraphicsBeginImageContextWithOptions with UIGraphicsImageRenderer.
+  Fix:
+    Fix the bug in ZLImagePreviewController where videos cannot be played.
 ● 4.4.7
   Add:
     Enhancing the drawing tool with an eraser function.
@@ -108,13 +113,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Optimize screen rotation experience.
   Fix:
     Fix the bug that text stickers are not displayed when typing in Arabic.
-● 4.4.5
-  Add:
-    Can set whether the shadow is always displayed when cropping the picture.
-  Fix:
-    When there are too many photos, the album may crash when opened.
-    Crash on simulator version 14.0.1.
-    In the image editor where the sticker position was incorrect after the image was rotated.
 ...
 ```
 
@@ -170,7 +168,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.4.7" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.4.8" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support

@@ -2,6 +2,15 @@
 
 -----
 
+## [4.4.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.8) (2023-11-23)
+### Add:
+* Adapt to iOS 17, replace `UIGraphicsBeginImageContextWithOptions` with `UIGraphicsImageRenderer`.
+
+### Fix:
+* Fix the bug in `ZLImagePreviewController` where videos cannot be played. [#875](https://github.com/longitachi/ZLPhotoBrowser/issues/875)
+    
+--- 
+
 ## [4.4.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.7) (2023-11-17)
 ### Add:
 * Enhancing the drawing tool with an eraser function.
