@@ -903,7 +903,7 @@ class ZLClipImageViewController: UIViewController {
     
     private func clipImage() -> (clipImage: UIImage, editRect: CGRect) {
         let frame = convertClipRectToEditImageRect()
-        let clipImage = editImage.zl.clipImage(angle: 0, editRect: frame, isCircle: selectedRatio.isCircle) ?? editImage
+        let clipImage = editImage.zl.clipImage(angle: 0, editRect: frame, isCircle: selectedRatio.isCircle)
         return (clipImage, frame)
     }
     

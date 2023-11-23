@@ -420,7 +420,7 @@ open class ZLEditImageViewController: UIViewController {
                 status: editModel?.clipStatus ?? ZLClipStatus(editRect: CGRect(origin: .zero, size: image.size))
             )
             vc.clipDoneBlock = { angle, editRect, ratio in
-                let m = ZLEditImageModel(
+                let model = ZLEditImageModel(
                     drawPaths: [],
                     mosaicPaths: [],
                     clipStatus: ZLClipStatus(angle: angle, editRect: editRect, ratio: ratio),
@@ -429,7 +429,7 @@ open class ZLEditImageViewController: UIViewController {
                     stickers: [],
                     actions: []
                 )
-                completion?(image.zl.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle) ?? image, m)
+                completion?(image.zl.clipImage(angle: angle, editRect: editRect, isCircle: ratio.isCircle), model)
             }
             vc.cancelClipBlock = cancel
             vc.animate = animate
@@ -1417,7 +1417,7 @@ open class ZLEditImageViewController: UIViewController {
         r.size.height *= scale
         let isCircle = currentClipStatus.ratio?.isCircle ?? false
         let bgImage = buildImage()
-            .zl.clipImage(angle: currentClipStatus.angle, editRect: currentClipStatus.editRect, isCircle: isCircle)?
+            .zl.clipImage(angle: currentClipStatus.angle, editRect: currentClipStatus.editRect, isCircle: isCircle)
             .zl.clipImage(angle: 0, editRect: r, isCircle: isCircle)
         let vc = ZLInputTextViewController(image: bgImage, text: text, textColor: textColor, font: font, style: style)
         
@@ -1541,16 +1541,18 @@ open class ZLEditImageViewController: UIViewController {
         size.width *= toImageScale
         size.height *= toImageScale
         
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-        let context = UIGraphicsGetCurrentContext()
-        // 去掉锯齿
-        context?.setAllowsAntialiasing(true)
-        context?.setShouldAntialias(true)
-        for path in drawPaths {
-            path.drawPath()
+        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
+        format.scale = UIScreen.main.scale
+        
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        drawingImageView.image = renderer.image { rendererContext in
+            let context = rendererContext.cgContext
+            context.setAllowsAntialiasing(true)
+            context.setShouldAntialias(true)
+            for path in drawPaths {
+                path.drawPath()
+            }
         }
-        drawingImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
     }
     
     private func changeFilter(_ filter: ZLFilter) {
@@ -1608,59 +1610,59 @@ open class ZLEditImageViewController: UIViewController {
     private func generateNewMosaicImage(inputImage: UIImage? = nil, inputMosaicImage: UIImage? = nil) -> UIImage? {
         let renderRect = CGRect(origin: .zero, size: originalImage.size)
         
-        UIGraphicsBeginImageContextWithOptions(originalImage.size, false, originalImage.scale)
-        if inputImage != nil {
-            inputImage?.draw(in: renderRect)
-        } else {
-            var drawImage: UIImage?
-            if tools.contains(.filter), let image = filterImages[currentFilter.name] {
-                drawImage = image
+        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
+        format.scale = originalImage.scale
+        
+        let midRenderer = UIGraphicsImageRenderer(size: originalImage.size, format: format)
+        var midImage = midRenderer.image { rendererContext in
+            let context = rendererContext.cgContext
+            
+            if inputImage != nil {
+                inputImage?.draw(in: renderRect)
             } else {
-                drawImage = originalImage
+                var drawImage: UIImage?
+                if tools.contains(.filter), let image = filterImages[currentFilter.name] {
+                    drawImage = image
+                } else {
+                    drawImage = originalImage
+                }
+                
+                if tools.contains(.adjust), !currentAdjustStatus.allValueIsZero {
+                    drawImage = drawImage?.zl.adjust(
+                        brightness: currentAdjustStatus.brightness,
+                        contrast: currentAdjustStatus.contrast,
+                        saturation: currentAdjustStatus.saturation
+                    )
+                }
+                
+                drawImage?.draw(in: renderRect)
             }
             
-            if tools.contains(.adjust), !currentAdjustStatus.allValueIsZero {
-                drawImage = drawImage?.zl.adjust(
-                    brightness: currentAdjustStatus.brightness,
-                    contrast: currentAdjustStatus.contrast,
-                    saturation: currentAdjustStatus.saturation
-                )
+            mosaicPaths.forEach { path in
+                context.move(to: path.startPoint)
+                path.linePoints.forEach { point in
+                    context.addLine(to: point)
+                }
+                context.setLineWidth(path.path.lineWidth / path.ratio)
+                context.setLineCap(.round)
+                context.setLineJoin(.round)
+                context.setBlendMode(.clear)
+                context.strokePath()
             }
-            
-            drawImage?.draw(in: renderRect)
         }
         
-        let context = UIGraphicsGetCurrentContext()
-        
-        mosaicPaths.forEach { path in
-            context?.move(to: path.startPoint)
-            path.linePoints.forEach { point in
-                context?.addLine(to: point)
-            }
-            context?.setLineWidth(path.path.lineWidth / path.ratio)
-            context?.setLineCap(.round)
-            context?.setLineJoin(.round)
-            context?.setBlendMode(.clear)
-            context?.strokePath()
-        }
-        
-        var midImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        guard let midCgImage = midImage?.cgImage else {
-            return nil
-        }
-        
+        guard let midCgImage = midImage.cgImage else { return nil }
         midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
         
-        UIGraphicsBeginImageContextWithOptions(originalImage.size, false, originalImage.scale)
-        // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
-        originalImage.draw(in: renderRect)
-        (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
-        midImage?.draw(in: renderRect)
+        let lastRenderer = UIGraphicsImageRenderer(size: originalImage.size, format: format)
+        let temp = lastRenderer.image { rendererContext in
+            // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
+            originalImage.draw(in: renderRect)
+            (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
+            midImage.draw(in: renderRect)
+        }
         
-        let temp = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        guard let cgi = temp?.cgImage else {
+        guard let cgi = temp.cgImage else {
             return nil
         }
         let image = UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
@@ -1676,24 +1678,28 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     private func buildImage() -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(editImage.size, false, editImage.scale)
-        editImage.draw(at: .zero)
+        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
+        format.scale = editImage.scale
         
-        drawingImageView.image?.draw(in: CGRect(origin: .zero, size: originalImage.size))
-        
-        if !stickersContainer.subviews.isEmpty, let context = UIGraphicsGetCurrentContext() {
-            let scale = imageSize.width / stickersContainer.frame.width
-            stickersContainer.subviews.forEach { view in
-                (view as? ZLStickerViewAdditional)?.resetState()
+        let renderer = UIGraphicsImageRenderer(size: editImage.size, format: format)
+        let image = renderer.image { rendererContext in
+            let context = rendererContext.cgContext
+            
+            editImage.draw(at: .zero)
+            drawingImageView.image?.draw(in: CGRect(origin: .zero, size: originalImage.size))
+            
+            if !stickersContainer.subviews.isEmpty {
+                let scale = imageSize.width / stickersContainer.frame.width
+                stickersContainer.subviews.forEach { view in
+                    (view as? ZLStickerViewAdditional)?.resetState()
+                }
+                context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
+                stickersContainer.layer.render(in: context)
+                context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
             }
-            context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
-            stickersContainer.layer.render(in: context)
-            context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
         }
         
-        let temp = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        guard let cgi = temp?.cgImage else {
+        guard let cgi = image.cgImage else {
             return editImage
         }
         return UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)

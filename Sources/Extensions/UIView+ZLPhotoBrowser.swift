@@ -67,16 +67,15 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
         base.center.y
     }
     
-    var snapshotImage: UIImage? {
-        UIGraphicsBeginImageContextWithOptions(base.bounds.size, base.isOpaque, UIScreen.main.scale)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return nil
-        }
+    var snapshotImage: UIImage {
+        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
+        format.scale = UIScreen.main.scale
+        format.opaque = base.isOpaque
         
-        base.layer.render(in: context)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
+        let renderer = UIGraphicsImageRenderer(size: base.zl.size, format: format)
+        return renderer.image { rendererContext in
+            base.layer.render(in: rendererContext.cgContext)
+        }
     }
     
     func setCornerRadius(_ radius: CGFloat) {
