@@ -1053,6 +1053,7 @@ open class ZLEditImageViewController: UIViewController {
     
     private func setDrawViews(hidden: Bool) {
         eraserBtn.isHidden = hidden
+        eraserBtnBgBlurView.isHidden = hidden || !eraserBtn.isSelected
         eraserLineView.isHidden = hidden
         drawColorCollectionView?.isHidden = hidden
     }
@@ -1541,12 +1542,8 @@ open class ZLEditImageViewController: UIViewController {
         size.width *= toImageScale
         size.height *= toImageScale
         
-        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
-        format.scale = UIScreen.main.scale
         
-        let renderer = UIGraphicsImageRenderer(size: size, format: format)
-        drawingImageView.image = renderer.image { rendererContext in
-            let context = rendererContext.cgContext
+        drawingImageView.image = UIGraphicsImageRenderer.zl.renderImage(size: size) { context in
             context.setAllowsAntialiasing(true)
             context.setShouldAntialias(true)
             for path in drawPaths {
@@ -1610,13 +1607,9 @@ open class ZLEditImageViewController: UIViewController {
     private func generateNewMosaicImage(inputImage: UIImage? = nil, inputMosaicImage: UIImage? = nil) -> UIImage? {
         let renderRect = CGRect(origin: .zero, size: originalImage.size)
         
-        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
-        format.scale = originalImage.scale
-        
-        let midRenderer = UIGraphicsImageRenderer(size: originalImage.size, format: format)
-        var midImage = midRenderer.image { rendererContext in
-            let context = rendererContext.cgContext
-            
+        var midImage = UIGraphicsImageRenderer.zl.renderImage(size: originalImage.size) { format in
+            format.scale = self.originalImage.scale
+        } imageActions: { context in
             if inputImage != nil {
                 inputImage?.draw(in: renderRect)
             } else {
@@ -1654,22 +1647,22 @@ open class ZLEditImageViewController: UIViewController {
         guard let midCgImage = midImage.cgImage else { return nil }
         midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
         
-        let lastRenderer = UIGraphicsImageRenderer(size: originalImage.size, format: format)
-        let temp = lastRenderer.image { rendererContext in
+        let temp = UIGraphicsImageRenderer.zl.renderImage(size: originalImage.size) { format in
+            format.scale = self.originalImage.scale
+        } imageActions: { _ in
             // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
             originalImage.draw(in: renderRect)
             (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
             midImage.draw(in: renderRect)
         }
         
-        guard let cgi = temp.cgImage else {
-            return nil
-        }
+        guard let cgi = temp.cgImage else { return nil }
         let image = UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
         
         if inputImage != nil {
             return image
         }
+        
         editImage = image
         imageView.image = image
         mosaicImageLayerMaskLayer?.path = nil
@@ -1678,13 +1671,9 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     private func buildImage() -> UIImage {
-        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
-        format.scale = editImage.scale
-        
-        let renderer = UIGraphicsImageRenderer(size: editImage.size, format: format)
-        let image = renderer.image { rendererContext in
-            let context = rendererContext.cgContext
-            
+        let image = UIGraphicsImageRenderer.zl.renderImage(size: editImage.size) { format in
+            format.scale = self.editImage.scale
+        } imageActions: { context in
             editImage.draw(at: .zero)
             drawingImageView.image?.draw(in: CGRect(origin: .zero, size: originalImage.size))
             

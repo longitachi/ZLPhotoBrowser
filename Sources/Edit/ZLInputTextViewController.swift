@@ -272,12 +272,7 @@ class ZLInputTextViewController: UIViewController {
             for subview in textView.subviews {
                 if NSStringFromClass(subview.classForCoder) == "_UITextContainerView" {
                     let size = textView.sizeThatFits(subview.frame.size)
-                    let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
-                    format.scale = UIScreen.main.scale
-                    
-                    let renderer = UIGraphicsImageRenderer(size: size, format: format)
-                    image = renderer.image { rendererContext in
-                        let context = rendererContext.cgContext
+                    image = UIGraphicsImageRenderer.zl.renderImage(size: size) { context in
                         if textStyle == .bg {
                             textLayer.render(in: context)
                         }

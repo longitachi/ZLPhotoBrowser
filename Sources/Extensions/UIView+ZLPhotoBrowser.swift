@@ -68,13 +68,10 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
     }
     
     var snapshotImage: UIImage {
-        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
-        format.scale = UIScreen.main.scale
-        format.opaque = base.isOpaque
-        
-        let renderer = UIGraphicsImageRenderer(size: base.zl.size, format: format)
-        return renderer.image { rendererContext in
-            base.layer.render(in: rendererContext.cgContext)
+        return UIGraphicsImageRenderer.zl.renderImage(size: base.zl.size) { format in
+            format.opaque = base.isOpaque
+        } imageActions: { context in
+            base.layer.render(in: context)
         }
     }
     

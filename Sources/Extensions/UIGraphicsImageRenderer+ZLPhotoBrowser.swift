@@ -1,5 +1,5 @@
 //
-//  UIGraphicsImageRendererFormat+ZLPhotoBrowser.swift
+//  UIGraphicsImageRenderer+ZLPhotoBrowser.swift
 //  ZLPhotoBrowser
 //
 //  Created by long on 2023/11/23.
@@ -26,12 +26,23 @@
 
 import UIKit
 
-extension ZLPhotoBrowserWrapper where Base: UIGraphicsImageRendererFormat {
-    static var defaultFormat: Base {
+extension ZLPhotoBrowserWrapper where Base: UIGraphicsImageRenderer {
+    static func renderImage(
+        size: CGSize,
+        formatConfig: ((UIGraphicsImageRendererFormat) -> Void)? = nil,
+        imageActions: ((CGContext) -> Void)
+    ) -> UIImage {
+        let format: UIGraphicsImageRendererFormat
         if #available(iOS 11.0, *) {
-            return .preferred()
+            format = .preferred()
         } else {
-            return .default()
+            format = .default()
+        }
+        formatConfig?(format)
+        
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        return renderer.image { context in
+            imageActions(context.cgContext)
         }
     }
 }

@@ -339,11 +339,9 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
             return nil
         }
         
-        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
-        format.scale = scale ?? base.scale
-        
-        let renderer = UIGraphicsImageRenderer(size: size, format: format)
-        return renderer.image { _ in
+        return UIGraphicsImageRenderer.zl.renderImage(size: size) { format in
+            format.scale = scale ?? base.scale
+        } imageActions: { _ in
             base.draw(in: CGRect(origin: .zero, size: size))
         }
     }
@@ -423,12 +421,10 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         }
         
         let origin = CGPoint(x: -editRect.minX, y: -editRect.minY)
-        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
-        format.scale = newImage.scale
         
-        let renderer = UIGraphicsImageRenderer(size: editRect.size, format: format)
-        let temp = renderer.image { rendererContext in
-            let context = rendererContext.cgContext
+        let temp = UIGraphicsImageRenderer.zl.renderImage(size: editRect.size) { format in
+            format.scale = newImage.scale
+        } imageActions: { context in
             if isCircle {
                 context.addEllipse(in: CGRect(origin: .zero, size: editRect.size))
                 context.clip()
@@ -436,9 +432,8 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
             newImage.draw(at: origin)
         }
         
-        guard let cgi = temp.cgImage else {
-            return temp
-        }
+        guard let cgi = temp.cgImage else { return temp }
+        
         let clipImage = UIImage(cgImage: cgi, scale: newImage.scale, orientation: .up)
         return clipImage
     }
@@ -504,16 +499,15 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
     }
     
     func fillColor(_ color: UIColor) -> UIImage {
-        let format: UIGraphicsImageRendererFormat = .zl.defaultFormat
-        format.scale = base.scale
-        
-        let renderer = UIGraphicsImageRenderer(size: base.size, format: format)
-        return renderer.image { rendererContext in
-            let drawRect = CGRect(x: 0, y: 0, width: base.zl.width, height: base.zl.height)
+        return UIGraphicsImageRenderer.zl.renderImage(size: base.size) { format in
+            format.scale = base.scale
+        } imageActions: { _ in
+            let drawRect = CGRect(origin: .zero, size: base.size)
             color.setFill()
             UIRectFill(drawRect)
             base.draw(in: drawRect, blendMode: .destinationIn, alpha: 1)
         }
+
     }
 }
 

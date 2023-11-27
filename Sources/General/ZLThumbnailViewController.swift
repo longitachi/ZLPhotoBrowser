@@ -110,7 +110,7 @@ class ZLThumbnailViewController: UIViewController {
         let btn = UIButton(type: .custom)
         btn.setImage(.zl.getImage("zl_arrow_down"), for: .normal)
         btn.addTarget(self, action: #selector(scrollToBottomBtnClick), for: .touchUpInside)
-        btn.zl.addShadow(color: .zl.bottomToolViewBgColor, radius: 5, opacity: 1, offset: CGSize(width: 0, height: 5))
+        btn.zl.addShadow(color: .zl.rgba(35, 35, 35), radius: 5, opacity: 1, offset: CGSize(width: 0, height: 3))
         return btn
     }()
     
