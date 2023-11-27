@@ -102,6 +102,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.8.1 (4.4.8 Patch)
 ● 4.4.8
   Add:
     适配iOS 17，使用UIGraphicsImageRenderer替换UIGraphicsBeginImageContextWithOptions。

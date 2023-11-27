@@ -2,6 +2,10 @@
 
 -----
 
+## [4.4.8.1 - 4.4.8 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.8.1) (2023-11-27)
+
+---
+
 ## [4.4.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.8) (2023-11-23)
 ### Add:
 * Adapt to iOS 17, replace `UIGraphicsBeginImageContextWithOptions` with `UIGraphicsImageRenderer`.
