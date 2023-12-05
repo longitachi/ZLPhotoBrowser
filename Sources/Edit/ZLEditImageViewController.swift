@@ -1120,7 +1120,7 @@ open class ZLEditImageViewController: UIViewController {
                     angle: currentClipStatus.angle,
                     editRect: currentClipStatus.editRect,
                     isCircle: currentClipStatus.ratio?.isCircle ?? false
-                ) ?? resImage
+                )
             editModel = ZLEditImageModel(
                 drawPaths: drawPaths,
                 mosaicPaths: mosaicPaths,

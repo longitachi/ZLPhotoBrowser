@@ -1,8 +1,8 @@
 //
-//  ZLPhotoBrowser.h
+//  ZLWeakProxy.h
 //  ZLPhotoBrowser
 //
-//  Created by long on 2020/8/11.
+//  Created by long on 2023/12/5.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -25,12 +25,16 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import <ZLPhotoBrowser/ZLWeakProxy.h>
 
-//! Project version number for ZLPhotoBrowser.
-FOUNDATION_EXPORT double ZLPhotoBrowserVersionNumber;
+NS_ASSUME_NONNULL_BEGIN
 
-//! Project version string for ZLPhotoBrowser.
-FOUNDATION_EXPORT const unsigned char ZLPhotoBrowserVersionString[];
+@interface ZLWeakProxy : NSObject
 
-// In this header, you should import all the public headers of your framework using statements like #import <ZLPhotoBrowser/PublicHeader.h>
+@property (nonatomic, weak, readonly, nullable) id target;
+
+- (nonnull instancetype)initWithTarget:(nonnull id)target NS_SWIFT_NAME(init(target:));
++ (nonnull instancetype)proxyWithTarget:(nonnull id)target NS_SWIFT_NAME(proxy(target:));
+
+@end
+
+NS_ASSUME_NONNULL_END

@@ -487,7 +487,6 @@ class ZLPhotoPreviewController: UIViewController {
         }
         
         let config = ZLPhotoConfiguration.default()
-        let uiConfig = ZLPhotoUIConfiguration.default()
         let currentModel = arrDataSources[currentIndex]
         
         if (!config.allowMixSelect && currentModel.type == .video) ||

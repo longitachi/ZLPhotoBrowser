@@ -1,8 +1,8 @@
 //
-//  ZLWeakProxy.swift
+//  ZLWeakProxy.m
 //  ZLPhotoBrowser
 //
-//  Created by long on 2021/3/10.
+//  Created by long on 2023/12/5.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -24,25 +24,30 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import UIKit
+#import "ZLWeakProxy.h"
 
-class ZLWeakProxy: NSObject {
-    private weak var target: NSObjectProtocol?
-    
-    init(target: NSObjectProtocol) {
-        self.target = target
-        super.init()
-    }
-    
-    class func proxy(withTarget target: NSObjectProtocol) -> ZLWeakProxy {
-        return ZLWeakProxy(target: target)
-    }
-    
-    override func forwardingTarget(for aSelector: Selector!) -> Any? {
-        return target
-    }
-    
-    override func responds(to aSelector: Selector!) -> Bool {
-        return target?.responds(to: aSelector) ?? false
-    }
+@implementation ZLWeakProxy
+
+- (instancetype)initWithTarget:(id)target {
+    _target = target;
+    return self;
 }
+
++ (instancetype)proxyWithTarget:(id)target {
+    return [[ZLWeakProxy alloc] initWithTarget:target];
+}
+
+- (id)forwardingTargetForSelector:(SEL)selector {
+    return _target;
+}
+
+- (void)forwardInvocation:(NSInvocation *)invocation {
+    void *null = NULL;
+    [invocation setReturnValue:&null];
+}
+
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector {
+    return [NSObject instanceMethodSignatureForSelector:@selector(init)];
+}
+
+@end
