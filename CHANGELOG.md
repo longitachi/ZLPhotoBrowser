@@ -2,6 +2,13 @@
 
 -----
 
+## [4.4.8.2 - 4.4.8 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.8.2) (2023-12-05)
+### Fix:
+* Fix:
+    Fix the bug where the camera does not disappear when clicking cancel in the system camera. [#879](https://github.com/longitachi/ZLPhotoBrowser/issues/879)
+
+---
+
 ## [4.4.8.1 - 4.4.8 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.8.1) (2023-11-27)
 
 ---
