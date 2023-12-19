@@ -1233,7 +1233,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         
         if config.showSelectedIndex,
            let index = nav?.arrSelectedModels.firstIndex(where: { $0 == model }) {
-            setCellIndex(cell, showIndexLabel: true, index: index + 1)
+            setCellIndex(cell, showIndexLabel: true, index: index + config.initialIndex)
         } else {
             cell.indexLabel.isHidden = true
         }
@@ -1382,7 +1382,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             for (index, selM) in arrSel.enumerated() {
                 if m == selM {
                     show = true
-                    idx = index + 1
+                    idx = index + config.initialIndex
                     isSelected = true
                     break
                 }

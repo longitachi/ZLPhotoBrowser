@@ -89,6 +89,17 @@ public class ZLPhotoConfiguration: NSObject {
     /// Preview selection max preview count, if the value is zero, only show `Camera`, `Album`, `Cancel` buttons. Defaults to 20.
     public var maxPreviewCount = 20
     
+    private var pri_initialIndex = 1
+    /// The index of the first selected image, and the indices of subsequently selected images are incremented based on this value. Defaults to 1.
+    public var initialIndex: Int {
+        get {
+            max(pri_initialIndex, 1)
+        }
+        set {
+            pri_initialIndex = newValue
+        }
+    }
+    
     /// If set to false, gif and livephoto cannot be selected either. Defaults to true.
     public var allowSelectImage = true
     

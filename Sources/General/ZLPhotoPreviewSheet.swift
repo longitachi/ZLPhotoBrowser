@@ -922,7 +922,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         
         if config.showSelectedIndex,
            let index = arrSelectedModels.firstIndex(where: { $0 == model }) {
-            setCellIndex(cell, showIndexLabel: true, index: index + 1)
+            setCellIndex(cell, showIndexLabel: true, index: index + config.initialIndex)
         } else {
             cell.indexLabel.isHidden = true
         }
@@ -1061,7 +1061,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             for (index, selM) in arrSelectedModels.enumerated() {
                 if m == selM {
                     show = true
-                    idx = index + 1
+                    idx = index + config.initialIndex
                     isSelected = true
                     break
                 }

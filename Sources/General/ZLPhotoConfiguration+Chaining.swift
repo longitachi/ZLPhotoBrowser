@@ -59,6 +59,12 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func initialIndex(_ index: Int) -> ZLPhotoConfiguration {
+        initialIndex = index
+        return self
+    }
+    
+    @discardableResult
     func allowSelectImage(_ value: Bool) -> ZLPhotoConfiguration {
         allowSelectImage = value
         return self
