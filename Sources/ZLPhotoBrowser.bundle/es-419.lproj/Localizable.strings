@@ -8,6 +8,8 @@
 "done" = "Hecho";
 "ok" = "OK";
 "editFinish" = "Hecho";
+"cameraDone" = "Hecho";
+"inputDone" = "Hecho";
 
 "back" = "Volver";
 "edit" = "Editar";

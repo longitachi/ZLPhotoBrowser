@@ -111,7 +111,7 @@ open class ZLCustomCamera: UIViewController {
     public lazy var doneBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.titleLabel?.font = ZLLayout.bottomToolTitleFont
-        btn.setTitle(localLanguageTextValue(.done), for: .normal)
+        btn.setTitle(localLanguageTextValue(.cameraDone), for: .normal)
         btn.setTitleColor(.zl.bottomToolViewDoneBtnNormalTitleColor, for: .normal)
         btn.backgroundColor = .zl.bottomToolViewBtnNormalBgColor
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
@@ -404,8 +404,8 @@ open class ZLCustomCamera: UIViewController {
             .height + 30
         tipsLabel.frame = CGRect(x: 10, y: bottomView.frame.minY - tipsTextHeight, width: view.bounds.width - 20, height: tipsTextHeight)
         
-        let doneBtnW = localLanguageTextValue(.done).zl
-            .boundingRect(
+        let doneBtnW = (doneBtn.currentTitle ?? "")
+            .zl.boundingRect(
                 font: ZLLayout.bottomToolTitleFont,
                 limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 40)
             )

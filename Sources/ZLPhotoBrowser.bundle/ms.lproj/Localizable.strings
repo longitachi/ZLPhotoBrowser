@@ -8,6 +8,8 @@
 "done" = "Selesai";
 "ok" = "Okey";
 "editFinish" = "Selesai";
+"cameraDone" = "Selesai";
+"inputDone" = "Selesai";
 
 "back" = "Belakang";
 "edit" = "Edit";

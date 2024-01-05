@@ -161,6 +161,12 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Done (确定)
     public static let done = ZLLocalLanguageKey(rawValue: "done")
     
+    /// Done (确定)
+    public static let cameraDone = ZLLocalLanguageKey(rawValue: "cameraDone")
+    
+    /// Done (确定)
+    public static let inputDone = ZLLocalLanguageKey(rawValue: "inputDone")
+    
     /// OK (确定)
     public static let ok = ZLLocalLanguageKey(rawValue: "ok")
     

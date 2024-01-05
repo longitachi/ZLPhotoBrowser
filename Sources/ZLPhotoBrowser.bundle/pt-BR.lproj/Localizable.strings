@@ -8,6 +8,8 @@
 "done" = "Feito";
 "ok" = "OK";
 "editFinish" = "Feito";
+"cameraDone" = "Feito";
+"inputDone" = "Feito";
 
 "back" = "Voltar";
 "edit" = "Editar";

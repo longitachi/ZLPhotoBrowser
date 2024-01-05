@@ -552,13 +552,13 @@ open class ZLEditImageViewController: UIViewController {
                 limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 28)
             ).width
         if isRTL() {
-            cancelBtn.frame = CGRect(x: view.zl.width - 20 - 28, y: 60, width: cancelBtnW, height: 30)
-            redoBtn.frame = CGRect(x: 15, y: 60, width: 30, height: 30)
-            undoBtn.frame = CGRect(x: redoBtn.zl.right + 15, y: 60, width: 30, height: 30)
+            cancelBtn.frame = CGRect(x: view.zl.width - 20 - 28, y: insets.top, width: cancelBtnW, height: 30)
+            redoBtn.frame = CGRect(x: 15, y: insets.top, width: 30, height: 30)
+            undoBtn.frame = CGRect(x: redoBtn.zl.right + 15, y: insets.top, width: 30, height: 30)
         } else {
-            cancelBtn.frame = CGRect(x: 20, y: 60, width: cancelBtnW, height: 30)
-            redoBtn.frame = CGRect(x: view.zl.width - 15 - 30, y: 60, width: 30, height: 30)
-            undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: 60, width: 30, height: 30)
+            cancelBtn.frame = CGRect(x: 20, y: insets.top, width: cancelBtnW, height: 30)
+            redoBtn.frame = CGRect(x: view.zl.width - 15 - 30, y: insets.top, width: 30, height: 30)
+            undoBtn.frame = CGRect(x: redoBtn.zl.left - 15 - 30, y: insets.top, width: 30, height: 30)
         }
         
         bottomShadowView.frame = CGRect(x: 0, y: view.zl.height - 150 - insets.bottom, width: view.zl.width, height: 150 + insets.bottom)

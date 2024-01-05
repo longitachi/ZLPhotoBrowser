@@ -8,6 +8,8 @@
 "done" = "확인";
 "ok" = "확인";
 "editFinish" = "완료";
+"cameraDone" = "확인";
+"inputDone" = "확인";
 
 "back" = "뒤";
 "edit" = "편집";
