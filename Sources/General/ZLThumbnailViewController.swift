@@ -602,12 +602,12 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         let point = pan.location(in: collectionView)
-        guard let indexPath = collectionView.indexPathForItem(at: point) else {
+        guard let indexPath = collectionView.indexPathForItem(at: point),
+              let nav = navigationController as? ZLImageNavController else {
             return
         }
-        let config = ZLPhotoConfiguration.default()
-        let nav = navigationController as! ZLImageNavController
         
+        let config = ZLPhotoConfiguration.default()
         let cell = collectionView.cellForItem(at: indexPath) as? ZLThumbnailPhotoCell
         let asc = ZLPhotoUIConfiguration.default().sortAscending
         

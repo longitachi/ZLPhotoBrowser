@@ -453,10 +453,10 @@ class ZLPhotoPreviewController: UIViewController {
                 return
             }
             
-            if cell is ZLLivePhotoPreviewCell {
-                (cell as! ZLLivePhotoPreviewCell).livePhotoView.stopPlayback()
-            } else if cell is ZLGifPreviewCell {
-                (cell as! ZLGifPreviewCell).pauseGif()
+            if let cell = cell as? ZLLivePhotoPreviewCell {
+                cell.livePhotoView.stopPlayback()
+            } else if let cell = cell as? ZLGifPreviewCell {
+                cell.pauseGif()
             }
         }
         popInteractiveTransition?.cancelTransition = { [weak self] in
@@ -473,8 +473,9 @@ class ZLPhotoPreviewController: UIViewController {
             guard let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) else {
                 return
             }
-            if cell is ZLGifPreviewCell {
-                (cell as! ZLGifPreviewCell).resumeGif()
+            
+            if let cell = cell as? ZLGifPreviewCell {
+                cell.resumeGif()
             }
         }
     }
