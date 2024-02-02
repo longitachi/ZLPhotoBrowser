@@ -43,6 +43,19 @@ class ZLInputTextViewController: UIViewController {
     
     private var textStyle: ZLInputTextStyle
     
+    private lazy var bgImageView: UIImageView = {
+        let view = UIImageView(image: image?.zl.blurImage(level: 4))
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+    
+    private lazy var coverView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.alpha = 0.4
+        return view
+    }()
+    
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setTitle(localLanguageTextValue(.cancel), for: .normal)
@@ -177,6 +190,9 @@ class ZLInputTextViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        bgImageView.frame = view.bounds
+        coverView.frame = bgImageView.bounds
+        
         let btnY = max(deviceSafeAreaInsets().top, 20)
         let cancelBtnW = localLanguageTextValue(.cancel).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)).width + 20
         cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLLayout.bottomToolBtnH)
@@ -209,16 +225,8 @@ class ZLInputTextViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .black
         
-        let bgImageView = UIImageView(image: image?.zl.blurImage(level: 4))
-        bgImageView.frame = view.bounds
-        bgImageView.contentMode = .scaleAspectFit
         view.addSubview(bgImageView)
-        
-        let coverView = UIView(frame: bgImageView.bounds)
-        coverView.backgroundColor = .black
-        coverView.alpha = 0.4
         bgImageView.addSubview(coverView)
-        
         view.addSubview(cancelBtn)
         view.addSubview(doneBtn)
         view.addSubview(textView)

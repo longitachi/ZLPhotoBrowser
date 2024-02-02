@@ -319,9 +319,7 @@ class ZLClipImageViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        guard shouldLayout else {
-            return
-        }
+        guard shouldLayout else { return }
         shouldLayout = false
         
         mainScrollView.frame = view.bounds
