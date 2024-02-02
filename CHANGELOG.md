@@ -2,10 +2,16 @@
 
 -----
 
+## [4.4.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.9) (2024-02-02)
+### Add:
+* Support for setting the initial index of the first image.
+* Define the text for the "Done" button on different screens with different keys to facilitate customizing the text.
+
+---
+    
 ## [4.4.8.2 - 4.4.8 Patch](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.8.2) (2023-12-05)
 ### Fix:
-* Fix:
-    Fix the bug where the camera does not disappear when clicking cancel in the system camera. [#879](https://github.com/longitachi/ZLPhotoBrowser/issues/879)
+* Fix the bug where the camera does not disappear when clicking cancel in the system camera. [#879](https://github.com/longitachi/ZLPhotoBrowser/issues/879)
 
 ---
 

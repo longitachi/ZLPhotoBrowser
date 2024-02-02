@@ -91,6 +91,10 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.4.9
+  Add:
+    Support for setting the initial index of the first image.
+    Define the text for the "Done" button on different screens with different keys to facilitate customizing the text.
 ● 4.4.8.1 - 4.4.8.2 (4.4.8 Patch)
   Fix:
     Fix the bug where the camera does not disappear when clicking cancel in the system camera.
@@ -105,17 +109,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Display the total size of selected photos when the full image button is selected.
   Fix:
     Fix a bug where the video's start time is incorrect when cropping the video.
-● 4.4.6
-  Add:
-    Supports setting whether the serial number is displayed on the selection button or not.
-    Add scroll to bottom button on Gallery picker.
-    In the image editor, all operations support undo and redo.
-    Dutch support added.
-    Supports setting the default font for text stickers.
-    Optimize the drop-down return effect of the preview interface.
-    Optimize screen rotation experience.
-  Fix:
-    Fix the bug that text stickers are not displayed when typing in Arabic.
 ...
 ```
 
@@ -171,7 +164,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.4.8.2" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.4.9" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support
