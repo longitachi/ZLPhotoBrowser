@@ -416,7 +416,7 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         } else if a == -270 {
             newImage = rotate(orientation: .right)
         }
-        guard editRect.size != newImage.size else {
+        guard isCircle || editRect.size != newImage.size else {
             return newImage
         }
         
