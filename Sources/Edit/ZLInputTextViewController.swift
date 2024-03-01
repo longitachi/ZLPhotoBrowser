@@ -77,8 +77,7 @@ class ZLInputTextViewController: UIViewController {
     }()
     
     private lazy var textView: UITextView = {
-        let y = max(deviceSafeAreaInsets().top, 20) + 20 + ZLLayout.bottomToolBtnH + 12
-        let textView = UITextView(frame: CGRect(x: 10, y: y, width: view.zl.width - 20, height: 200))
+        let textView = UITextView()
         textView.keyboardAppearance = .dark
         textView.returnKeyType = .done
         textView.delegate = self
@@ -126,6 +125,8 @@ class ZLInputTextViewController: UIViewController {
         
         return collectionView
     }()
+    
+    private var shouldLayout = true
     
     private lazy var textLayer = CAShapeLayer()
     
@@ -190,7 +191,20 @@ class ZLInputTextViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        guard shouldLayout else { return }
+        
+        shouldLayout = false
         bgImageView.frame = view.bounds
+        
+        // iPad图片由竖屏切换到横屏时候填充方式会有点异常，这里重置下
+        if deviceIsiPad() {
+            if UIApplication.shared.statusBarOrientation.isLandscape {
+                bgImageView.contentMode = .scaleAspectFill
+            } else {
+                bgImageView.contentMode = .scaleAspectFit
+            }
+        }
+        
         coverView.frame = bgImageView.bounds
         
         let btnY = max(deviceSafeAreaInsets().top, 20)
@@ -203,6 +217,8 @@ class ZLInputTextViewController: UIViewController {
                 limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)
             ).width + 20
         doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        
+        textView.frame = CGRect(x: 10, y: doneBtn.zl.bottom + 30, width: view.zl.width - 20, height: 200)
         
         textStyleBtn.frame = CGRect(
             x: 12,
@@ -220,6 +236,11 @@ class ZLInputTextViewController: UIViewController {
         if let index = ZLPhotoConfiguration.default().editImageConfiguration.textStickerTextColors.firstIndex(where: { $0 == self.currentColor }) {
             collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
         }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        shouldLayout = true
     }
     
     private func setupUI() {
