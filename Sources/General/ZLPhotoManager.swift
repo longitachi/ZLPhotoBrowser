@@ -39,11 +39,13 @@ public class ZLPhotoManager: NSObject {
         }
         var placeholderAsset: PHObjectPlaceholder?
         let completionHandler: ((Bool, Error?) -> Void) = { suc, _ in
-            ZLMainAsync {
-                if suc {
-                    let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
+            if suc {
+                let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
+                ZLMainAsync {
                     completion?(suc, asset)
-                } else {
+                }
+            } else {
+                ZLMainAsync {
                     completion?(false, nil)
                 }
             }
