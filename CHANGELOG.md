@@ -2,6 +2,16 @@
 
 -----
 
+## [4.5.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.0) (2024-03-21)
+### Add:
+* Adapt the text sticker input interface for iPad landscape mode.
+
+### Fix:
+* Resolve the issue causing errors during SPM installation. [#892](https://github.com/longitachi/ZLPhotoBrowser/issues/892)
+* Fix the bug where cropping square images to circular shape fails. [#893](https://github.com/longitachi/ZLPhotoBrowser/pull/893) @patryk-sredzinski
+
+---
+
 ## [4.4.9](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.4.9) (2024-02-02)
 ### Add:
 * Support for setting the initial index of the first image.

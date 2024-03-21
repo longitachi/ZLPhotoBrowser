@@ -1,14 +1,10 @@
 Pod::Spec.new do |s|
   s.name                  = 'ZLPhotoBrowser'
-  s.version               = '4.4.9'
+  s.version               = '4.5.0'
   s.summary               = 'A lightweight and pure Swift implemented library for select photos from album'
 
   s.description           = <<-DESC
-                              ZLPhotoBrowser 是一款纯swift实现的框架
-                              * 支持图片、视频、GIF、LivePhoto选择
-                              * 支持图片、视频编辑
-                              * 支持自定义相机拍照及录像
-                              更多自定义功能请查看 ZLPhotoConfiguration 定义
+                              Wechat-like image picker. Support select photos, videos, gif and livePhoto. Support edit image and crop video.
                               DESC
 
   s.homepage              = 'https://github.com/longitachi/ZLPhotoBrowser'
@@ -30,6 +26,7 @@ Pod::Spec.new do |s|
 
   s.subspec "Core" do |sp|
     sp.source_files       = ["Sources/**/*.{swift,h,m}", "Sources/ZLPhotoBrowser.h"]
+    sp.exclude_files      = ["Sources/General/ZLWeakProxy.swift"]
   end
 
 end
