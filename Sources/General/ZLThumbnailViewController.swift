@@ -215,12 +215,16 @@ class ZLThumbnailViewController: UIViewController {
         PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited && ZLPhotoUIConfiguration.default().showAddPhotoButton && albumList.isCameraRoll
     }
     
-    private var hiddenStatusBar = false
+    private var hiddenStatusBar = false {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
     
     override var prefersStatusBarHidden: Bool { hiddenStatusBar }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return ZLPhotoUIConfiguration.default().statusBarStyle
+        ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
     deinit {
@@ -267,6 +271,10 @@ class ZLThumbnailViewController: UIViewController {
         isLayoutOK = true
         isPreviewPush = false
         updateScrollToBottomVisibility()
+        
+        if hiddenStatusBar {
+            hiddenStatusBar = false
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -275,7 +283,6 @@ class ZLThumbnailViewController: UIViewController {
         // 如果预览界面不显示状态栏，这里隐藏下状态栏，使下拉返回动画期间状态栏不至于闪烁
         if !ZLPhotoUIConfiguration.default().showStatusBarInPreviewInterface {
             hiddenStatusBar = true
-            setNeedsStatusBarAppearanceUpdate()
         }
     }
     
@@ -1094,7 +1101,6 @@ class ZLThumbnailViewController: UIViewController {
     /// 预判界面执行pop动画时，该界面需要执行的内容
     func endPopTransition() {
         hiddenStatusBar = false
-        setNeedsStatusBarAppearanceUpdate()
         if deviceIsiPad() {
             view.setNeedsLayout()
         }
@@ -1307,7 +1313,6 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         vc.backBlock = { [weak self] in
             guard let `self` = self, self.hiddenStatusBar else { return }
             self.hiddenStatusBar = false
-            self.setNeedsStatusBarAppearanceUpdate()
         }
         show(vc, sender: nil)
     }
