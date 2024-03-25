@@ -79,11 +79,13 @@ public class ZLPhotoManager: NSObject {
             let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
             placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
         }) { suc, _ in
-            ZLMainAsync {
-                if suc {
-                    let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
+            if suc {
+                let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
+                ZLMainAsync {
                     completion?(suc, asset)
-                } else {
+                }
+            } else {
+                ZLMainAsync {
                     completion?(false, nil)
                 }
             }
@@ -285,11 +287,21 @@ public class ZLPhotoManager: NSObject {
             }
         }
         
-        return PHImageManager.default().requestImageData(for: asset, options: option) { data, _, _, info in
+        let resultHandler: (Data?, [AnyHashable: Any]?) -> Void = { data, info in
             let cancel = info?[PHImageCancelledKey] as? Bool ?? false
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
             if !cancel, let data = data {
                 completion(data, info, isDegraded)
+            }
+        }
+        
+        if #available(iOS 13.0, *) {
+            return PHImageManager.default().requestImageDataAndOrientation(for: asset, options: option) { data, _, _, info in
+                resultHandler(data, info)
+            }
+        } else {
+            return PHImageManager.default().requestImageData(for: asset, options: option) { data, _, _, info in
+                resultHandler(data, info)
             }
         }
     }

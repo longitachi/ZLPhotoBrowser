@@ -205,6 +205,8 @@ open class ZLCustomCamera: UIViewController {
     
     private var restartRecordAfterSwitchCamera = false
     
+    private var isSwitchingCamera = false
+    
     private var cacheVideoOrientation: AVCaptureVideoOrientation = .portrait
     
     private var recordURLs: [URL] = []
@@ -779,12 +781,11 @@ open class ZLCustomCamera: UIViewController {
     }
     
     @objc private func switchCameraBtnClick() {
-        guard !restartRecordAfterSwitchCamera else {
+        guard !restartRecordAfterSwitchCamera, !isSwitchingCamera else {
             return
         }
         
-        guard let currInput = videoInput,
-              let movieFileOutput = movieFileOutput else {
+        guard let videoInput, let movieFileOutput else {
             return
         }
         
@@ -795,8 +796,15 @@ open class ZLCustomCamera: UIViewController {
             restartRecordAfterSwitchCamera = true
         }
         
+        isSwitchingCamera = true
         sessionQueue.async {
             do {
+                defer {
+                    self.isSwitchingCamera = false
+                }
+                
+                let currInput = videoInput
+                
                 var newVideoInput: AVCaptureDeviceInput?
                 if currInput.device.position == .back, let front = self.getCamera(position: .front) {
                     newVideoInput = try AVCaptureDeviceInput(device: front)
@@ -806,7 +814,7 @@ open class ZLCustomCamera: UIViewController {
                     return
                 }
                 
-                if let newVideoInput = newVideoInput {
+                if let newVideoInput {
                     self.session.beginConfiguration()
                     
                     self.refreshSessionPreset(device: newVideoInput.device)
