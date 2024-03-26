@@ -24,7 +24,8 @@ let package = Package(
                 "General/ZLWeakProxy.m"
             ],
             resources: [
-                .process("ZLPhotoBrowser.bundle")
+                .process("ZLPhotoBrowser.bundle"),
+                .copy("PrivacyInfo.xcprivacy")
             ]
         )
     ]
