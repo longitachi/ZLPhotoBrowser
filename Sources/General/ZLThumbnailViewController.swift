@@ -120,8 +120,6 @@ class ZLThumbnailViewController: UIViewController {
     /// 所有滑动经过的indexPath的初始选择状态
     private lazy var dicOriSelectStatus: [IndexPath: Bool] = [:]
     
-    private var isLayoutOK = false
-    
     /// 设备旋转前最后一个可视indexPath
     private var lastVisibleIndexPathBeforeRotation: IndexPath?
     
@@ -141,9 +139,6 @@ class ZLThumbnailViewController: UIViewController {
     /// 最后滑动经过的index，开始的indexPath不计入
     /// 优化拖动手势计算，避免单个cell中冗余计算多次
     private var lastSlideIndex: Int?
-    
-    /// 预览所选择图片，手势返回时候不调用scrollToIndex
-    private var isPreviewPush = false
     
     /// 拍照后置为true，需要刷新相册列表
     private var hasTakeANewAsset = false
@@ -268,8 +263,7 @@ class ZLThumbnailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        isLayoutOK = true
-        isPreviewPush = false
+        
         updateScrollToBottomVisibility()
         
         if hiddenStatusBar {
@@ -332,9 +326,7 @@ class ZLThumbnailViewController: UIViewController {
             size: CGSize(width: scrollToBottomSize, height: scrollToBottomSize)
         )
 
-        if !isLayoutOK {
-            scrollToBottom()
-        } else if isSwitchOrientation {
+        if isSwitchOrientation {
             isSwitchOrientation = false
             
             if let lastVisibleIndexPathBeforeRotation {
@@ -496,24 +488,33 @@ class ZLThumbnailViewController: UIViewController {
             return
         }
         
-        if albumList.models.isEmpty {
-            let hud = ZLProgressHUD.show(in: view)
-            DispatchQueue.main.async {
+        let hud = ZLProgressHUD.show(in: view)
+        
+        DispatchQueue.global().async {
+            if self.albumList.models.isEmpty {
                 self.albumList.refetchPhotos()
                 
                 self.arrDataSources.removeAll()
                 self.arrDataSources.append(contentsOf: self.albumList.models)
                 markSelected(source: &self.arrDataSources, selected: &nav.arrSelectedModels)
+            } else {
+                self.arrDataSources.removeAll()
+                self.arrDataSources.append(contentsOf: self.albumList.models)
+                markSelected(source: &self.arrDataSources, selected: &nav.arrSelectedModels)
+            }
+            
+            ZLMainAsync {
                 hud.hide()
                 self.collectionView.reloadData()
-                self.scrollToBottom()
+                self.scrollToTopOrBottom()
+                
+                self.scrollToBottomBtn.alpha = 0
+                var transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+                if !ZLPhotoUIConfiguration.default().sortAscending {
+                    transform = transform.rotated(by: .pi)
+                }
+                self.scrollToBottomBtn.transform = transform
             }
-        } else {
-            arrDataSources.removeAll()
-            arrDataSources.append(contentsOf: albumList.models)
-            markSelected(source: &arrDataSources, selected: &nav.arrSelectedModels)
-            collectionView.reloadData()
-            scrollToBottom()
         }
     }
     
@@ -884,12 +885,17 @@ class ZLThumbnailViewController: UIViewController {
         doneBtn.frame = CGRect(x: bottomView.bounds.width - doneBtnW - 15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
     }
     
-    private func scrollToBottom() {
-        guard ZLPhotoUIConfiguration.default().sortAscending, !arrDataSources.isEmpty else {
+    private func scrollToTopOrBottom() {
+        guard !arrDataSources.isEmpty else {
             return
         }
-        let index = arrDataSources.count - 1 + offset
-        collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredVertically, animated: false)
+        
+        if ZLPhotoUIConfiguration.default().sortAscending {
+            let index = arrDataSources.count - 1 + offset
+            collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredVertically, animated: false)
+        } else {
+            collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredVertically, animated: false)
+        }
     }
     
     private func showCamera() {
