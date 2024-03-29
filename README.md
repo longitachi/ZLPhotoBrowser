@@ -91,6 +91,12 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.5.1
+  Add:
+    Add xcprivacy file to the project.
+  Fix:
+    Fix the bug causing a crash when continuously switching between front and rear cameras.
+    Fix the bug where the status bar in the album thumbnail interface sometimes does not display.
 ● 4.5.0
   Add:
     Adapt the text sticker input interface for iPad landscape mode.
@@ -101,14 +107,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Add:
     Support for setting the initial index of the first image.
     Define the text for the "Done" button on different screens with different keys to facilitate customizing the text.
-● 4.4.8.1 - 4.4.8.2 (4.4.8 Patch)
-  Fix:
-    Fix the bug where the camera does not disappear when clicking cancel in the system camera.
-● 4.4.8
-  Add:
-    Adapt to iOS 17, replace UIGraphicsBeginImageContextWithOptions with UIGraphicsImageRenderer.
-  Fix:
-    Fix the bug in ZLImagePreviewController where videos cannot be played.
 ...
 ```
 
@@ -164,7 +162,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.5.0" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.5.1" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support

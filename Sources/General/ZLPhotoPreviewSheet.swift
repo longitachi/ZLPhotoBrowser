@@ -123,7 +123,11 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private weak var sender: UIViewController?
     
-    private lazy var fetchImageQueue = OperationQueue()
+    private lazy var fetchImageQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 3
+        return queue
+    }()
     
     /// Success callback
     /// block params
@@ -192,7 +196,6 @@ public class ZLPhotoPreviewSheet: UIView {
             config.allowSelectImage = true
         }
         
-        fetchImageQueue.maxConcurrentOperationCount = 3
         setupUI()
     }
     

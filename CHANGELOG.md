@@ -2,6 +2,16 @@
 
 -----
 
+## [4.5.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.1) (2024-03-29)
+### Add:
+* Add xcprivacy file to the project.
+
+### Fix:
+* Fix the bug causing a crash when continuously switching between front and rear cameras. [#894](https://github.com/longitachi/ZLPhotoBrowser/issues/894)
+* Fix the bug where the status bar in the album thumbnail interface sometimes does not display.
+
+---
+
 ## [4.5.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.0) (2024-03-21)
 ### Add:
 * Adapt the text sticker input interface for iPad landscape mode.
