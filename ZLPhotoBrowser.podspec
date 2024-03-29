@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.frameworks            = 'UIKit','Photos','PhotosUI','AVFoundation','CoreMotion', 'Accelerate'
 
   s.resources             = 'Sources/*.{png,bundle}'
-  s.resource_bundles      = {'ZLPhotoBrowser' => ['Sources/PrivacyInfo.xcprivacy']}
+  s.resource_bundles      = {'ZLPhotoBrowser_Privacy' => ['Sources/PrivacyInfo.xcprivacy']}
 
   s.subspec "Core" do |sp|
     sp.source_files       = ['Sources/**/*.{swift,h,m}', 'Sources/ZLPhotoBrowser.h']
