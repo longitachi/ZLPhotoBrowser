@@ -491,20 +491,23 @@ class ZLThumbnailViewController: UIViewController {
         let hud = ZLProgressHUD.show(in: view)
         
         DispatchQueue.global().async {
+            var datas: [ZLPhotoModel] = []
+            
             if self.albumList.models.isEmpty {
                 self.albumList.refetchPhotos()
                 
-                self.arrDataSources.removeAll()
-                self.arrDataSources.append(contentsOf: self.albumList.models)
-                markSelected(source: &self.arrDataSources, selected: &nav.arrSelectedModels)
+                datas.append(contentsOf: self.albumList.models)
+                markSelected(source: &datas, selected: &nav.arrSelectedModels)
             } else {
-                self.arrDataSources.removeAll()
-                self.arrDataSources.append(contentsOf: self.albumList.models)
-                markSelected(source: &self.arrDataSources, selected: &nav.arrSelectedModels)
+                datas.append(contentsOf: self.albumList.models)
+                markSelected(source: &datas, selected: &nav.arrSelectedModels)
             }
             
             ZLMainAsync {
                 hud.hide()
+                
+                self.arrDataSources.removeAll()
+                self.arrDataSources.append(contentsOf: datas)
                 self.collectionView.reloadData()
                 self.scrollToTopOrBottom()
                 
@@ -938,27 +941,27 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     private func save(image: UIImage?, videoUrl: URL?) {
-        if let image = image {
+        if let image {
             let hud = ZLProgressHUD.show(toast: .processing)
             ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
-                hud.hide()
-                if suc, let at = asset {
-                    let model = ZLPhotoModel(asset: at)
+                if suc, let asset {
+                    let model = ZLPhotoModel(asset: asset)
                     self?.handleDataArray(newModel: model)
                 } else {
                     showAlertView(localLanguageTextValue(.saveImageError), self)
                 }
+                hud.hide()
             }
-        } else if let videoUrl = videoUrl {
+        } else if let videoUrl {
             let hud = ZLProgressHUD.show(toast: .processing)
             ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
-                hud.hide()
-                if suc, let at = asset {
-                    let model = ZLPhotoModel(asset: at)
+                if suc, let asset {
+                    let model = ZLPhotoModel(asset: asset)
                     self?.handleDataArray(newModel: model)
                 } else {
                     showAlertView(localLanguageTextValue(.saveVideoError), self)
                 }
+                hud.hide()
             }
         }
     }
@@ -1004,9 +1007,9 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         let insertIndexPath = IndexPath(row: insertIndex, section: 0)
-        collectionView.performBatchUpdates({
+        collectionView.performBatchUpdates {
             self.collectionView.insertItems(at: [insertIndexPath])
-        }) { _ in
+        } completion: { _ in
             self.collectionView.scrollToItem(at: insertIndexPath, at: .centeredVertically, animated: true)
             self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
         }
