@@ -449,13 +449,8 @@ class ZLClipImageViewController: UIViewController {
         frame.origin.x = maxClipRect.minX + floor((maxClipRect.width - frame.width) / 2)
         frame.origin.y = maxClipRect.minY + floor((maxClipRect.height - frame.height) / 2)
         
-        // 按照edit image进行计算最小缩放比例
-        let originalScale: CGFloat
-        if selectedRatio.whRatio == 0 {
-            originalScale = min(frame.width / editImage.size.width, frame.height / editImage.size.height)
-        } else {
-            originalScale = max(frame.width / editImage.size.width, frame.height / editImage.size.height)
-        }
+        // 按照edit image进行计算缩放比例
+        let originalScale = max(frame.width / editImage.size.width, frame.height / editImage.size.height)
         
         // 将 edit rect 相对 originalScale 进行缩放，缩放到图片未放大时候的clip rect
         let scaleEditSize = CGSize(width: editRect.width * originalScale, height: editRect.height * originalScale)
