@@ -2,6 +2,12 @@
 
 -----
 
+## [4.5.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.2) (2024-04-15)
+### Fix:
+* Fix the bug in the image cropping interface where the image is not displayed correctly when zooming in and the crop ratio is not 0.
+
+---
+    
 ## [4.5.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.1) (2024-03-29)
 ### Add:
 * Add xcprivacy file to the project.
