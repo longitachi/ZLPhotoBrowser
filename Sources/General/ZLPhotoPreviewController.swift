@@ -636,12 +636,23 @@ class ZLPhotoPreviewController: UIViewController {
             }
         }
         
+        let oldClipRatios = config.editImageConfiguration.clipRatios
         if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
             hud.show(timeout: ZLPhotoUIConfiguration.default().timeout)
             requestAssetID = ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
                 if !isDegraded {
                     if let image = image {
+                        if config.editImageConfiguration.showCurrentRatioWhenBatchClip {
+                            let currentIndex = self?.currentIndex ?? 0
+                            var currentClip = ZLImageClipRatio.custom
+                            if oldClipRatios.count > currentIndex {
+                                currentClip = oldClipRatios[currentIndex]
+                                config.editImageConfiguration.clipRatios = [currentClip]
+                            }
+                        }
+                        
                         self?.showEditImageVC(image: image)
+                        config.editImageConfiguration.clipRatios = oldClipRatios
                     } else {
                         showAlertView(localLanguageTextValue(.imageLoadFailed), self)
                     }

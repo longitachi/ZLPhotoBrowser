@@ -108,6 +108,10 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
+    /// When user batch choose images, and in preview page,  click Edit will show editor for that image, default will show all clipRatios for that image
+    /// when this property set true, it show the current image edit ratio only
+    public var showCurrentRatioWhenBatchClip: Bool = false
+    
     private var pri_textStickerTextColors: [UIColor] = ZLEditImageConfiguration.defaultColors
     /// Text sticker colors for image editor.
     public var textStickerTextColors: [UIColor] {
