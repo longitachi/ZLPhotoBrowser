@@ -162,9 +162,6 @@ public class ZLPhotoConfiguration: NSObject {
     /// Just like the Wechat-Timeline selection style. If you want to crop the video after select thumbnail under allowMixSelect = true, please use **editAfterSelectThumbnailImage**.
     public var cropVideoAfterSelectThumbnail = true
     
-    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Defaults to false.
-    public var showClipDirectlyIfOnlyHasClipTool = false
-    
     /// Save the edited image to the album after editing. Defaults to true.
     public var saveNewImageAfterEdit = true
     
