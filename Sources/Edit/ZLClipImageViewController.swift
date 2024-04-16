@@ -170,7 +170,7 @@ class ZLClipImageViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = .clear
-        view.isHidden = clipRatios.count <= 1
+        view.alpha = 0
         view.showsHorizontalScrollIndicator = false
         ZLImageClipRatioCell.zl.register(view)
         return view
@@ -298,6 +298,7 @@ class ZLClipImageViewController: UIViewController {
                 animateImageView.frame = self.clipBoxFrame
                 self.bottomToolView.alpha = 1
                 self.rotateBtn.alpha = 1
+                self.clipRatioColView.alpha = self.clipRatios.count <= 1 ? 0 : 1
             }) { _ in
                 UIView.animate(withDuration: 0.1, animations: {
                     self.mainScrollView.alpha = 1
@@ -313,6 +314,7 @@ class ZLClipImageViewController: UIViewController {
             mainScrollView.alpha = 1
             overlayView.alpha = 1
             shadowView.alpha = 1
+            clipRatioColView.alpha = clipRatios.count <= 1 ? 0 : 1
         }
     }
     

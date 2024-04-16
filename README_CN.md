@@ -102,6 +102,9 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.5.2
+  Fix:
+    修复图片裁剪界面，裁减比例不为0时，缩放图片时候，图片显示不正确的bug。
 ● 4.5.1
   Add:
     添加xcprivacy文件。
@@ -114,10 +117,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   Fix:
     修复SPM安装报错的问题。
     修复裁剪正方形图片至圆形时，裁剪区域为原图大小的时候裁剪无效的bug。
-● 4.4.9
-  Add:
-    支持设置首张照片的索引值。
-    将相机界面确定按钮和文字贴纸输入界面的确定按钮的"localizable"的自定义文案的"key"拆分出来，不同界面不在共用一个"done"。
 ...
 ```
 

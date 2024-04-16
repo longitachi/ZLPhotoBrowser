@@ -412,7 +412,9 @@ open class ZLEditImageViewController: UIViewController {
         completion: ((UIImage, ZLEditImageModel?) -> Void)?
     ) {
         let tools = ZLPhotoConfiguration.default().editImageConfiguration.tools
-        if ZLPhotoConfiguration.default().showClipDirectlyIfOnlyHasClipTool,
+        let editConfig = ZLPhotoConfiguration.default().editImageConfiguration
+        
+        if editConfig.showClipDirectlyIfOnlyHasClipTool,
            tools.count == 1,
            tools.contains(.clip) {
             let vc = ZLClipImageViewController(

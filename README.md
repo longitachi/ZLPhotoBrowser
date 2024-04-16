@@ -91,6 +91,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.5.2
+  Fix:
+    Fix the bug in the image cropping interface where the image is not displayed correctly when zooming in and the crop ratio is not 0.
 ● 4.5.1
   Add:
     Add xcprivacy file to the project.
@@ -103,10 +106,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Fix:
     Resolve the issue causing errors during SPM installation.
     Fix the bug where cropping square images to circular shape fails.
-● 4.4.9
-  Add:
-    Support for setting the initial index of the first image.
-    Define the text for the "Done" button on different screens with different keys to facilitate customizing the text.
 ...
 ```
 
@@ -162,7 +161,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.5.1" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.5.2" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support

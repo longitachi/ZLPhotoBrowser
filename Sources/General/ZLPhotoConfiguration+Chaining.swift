@@ -131,12 +131,6 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    func showClipDirectlyIfOnlyHasClipTool(_ value: Bool) -> ZLPhotoConfiguration {
-        showClipDirectlyIfOnlyHasClipTool = value
-        return self
-    }
-    
-    @discardableResult
     func saveNewImageAfterEdit(_ value: Bool) -> ZLPhotoConfiguration {
         saveNewImageAfterEdit = value
         return self

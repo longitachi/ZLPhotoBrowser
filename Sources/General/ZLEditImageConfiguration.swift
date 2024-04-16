@@ -175,6 +175,9 @@ public class ZLEditImageConfiguration: NSObject {
         }
     }
     
+    /// If image edit tools only has clip and this property is true. When you click edit, the cropping interface (i.e. ZLClipImageViewController) will be displayed. Defaults to false.
+    public var showClipDirectlyIfOnlyHasClipTool = false
+    
     /// Give an impact feedback when the adjust slider value is zero. Defaults to true.
     public var impactFeedbackWhenAdjustSliderValueIsZero = true
     
@@ -296,6 +299,12 @@ public extension ZLEditImageConfiguration {
     @discardableResult
     func adjustTools(_ tools: [ZLEditImageConfiguration.AdjustTool]) -> ZLEditImageConfiguration {
         adjustTools = tools
+        return self
+    }
+    
+    @discardableResult
+    func showClipDirectlyIfOnlyHasClipTool(_ value: Bool) -> ZLEditImageConfiguration {
+        showClipDirectlyIfOnlyHasClipTool = value
         return self
     }
     
