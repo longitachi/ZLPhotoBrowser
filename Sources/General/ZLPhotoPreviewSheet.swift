@@ -425,6 +425,12 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     private func showNoAuthorityAlert() {
+        if let customAlertWhenNoAuthority = ZLPhotoConfiguration.default().customAlertWhenNoAuthority {
+            customAlertWhenNoAuthority()
+            ZLPhotoConfiguration.default().noAuthorityCallback?(.library)
+            return
+        }
+        
         let action = ZLCustomAlertAction(title: localLanguageTextValue(.ok), style: .default) { _ in
             ZLPhotoConfiguration.default().noAuthorityCallback?(.library)
         }

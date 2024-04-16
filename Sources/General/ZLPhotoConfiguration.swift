@@ -256,6 +256,10 @@ public class ZLPhotoConfiguration: NSObject {
     /// Callback after the no authority alert dismiss.
     public var noAuthorityCallback: ((ZLNoAuthorityType) -> Void)?
     
+    /// Allow user to provide a custom alert while presenting ZLPhotoPreviewSheet with the authority is denied.
+    /// This will synchronously call the "noAuthorityCallback" callback
+    public var customAlertWhenNoAuthority: (() -> Void)?
+    
     /// Allow user to do something before select photo result callback.
     /// And you must call the second parameter of this block to continue the photos selection.
     /// The first parameter is the current controller.
