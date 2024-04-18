@@ -1267,6 +1267,11 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         if !ZLPhotoUIConfiguration.default().sortAscending {
             index -= offset
         }
+        
+        guard arrDataSources.indices ~= index else {
+            return
+        }
+        
         let model = arrDataSources[index]
         setCellMaskView(c, isSelected: model.isSelected, model: model)
     }
