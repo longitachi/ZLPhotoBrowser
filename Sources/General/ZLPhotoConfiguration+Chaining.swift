@@ -299,6 +299,12 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func customAlertWhenNoAuthority(_ callback: ((ZLNoAuthorityType) -> Void)?) -> ZLPhotoConfiguration {
+        customAlertWhenNoAuthority = callback
+        return self
+    }
+    
+    @discardableResult
     func operateBeforeDoneAction(_ block: ((UIViewController, @escaping () -> Void) -> Void)?) -> ZLPhotoConfiguration {
         operateBeforeDoneAction = block
         return self
