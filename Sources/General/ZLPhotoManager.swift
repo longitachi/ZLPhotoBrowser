@@ -470,7 +470,9 @@ public class ZLPhotoManager: NSObject {
                 completion(error)
             } else if !isDegraded {
                 cleanTimer()
-                PHAssetResourceManager.default().writeData(for: resource, toFile: fileUrl, options: nil) { error in
+                let option = PHAssetResourceRequestOptions()
+                option.isNetworkAccessAllowed = true
+                PHAssetResourceManager.default().writeData(for: resource, toFile: fileUrl, options: option) { error in
                     ZLMainAsync {
                         completion(error)
                     }
