@@ -607,8 +607,20 @@ open class ZLEditImageViewController: UIViewController {
         let doneBtnW = localLanguageTextValue(.editFinish).zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: doneBtnH)).width + 20
         doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: toolY - 2, width: doneBtnW, height: doneBtnH)
         
-        editToolCollectionView.frame = CGRect(x: 20, y: toolY, width: view.zl.width - 20 - 20 - doneBtnW - 20, height: 30)
-        
+        let editToolWidth = view.zl.width - 20 - 20 - doneBtnW - 20
+        editToolCollectionView.frame = CGRect(x: 20, y: toolY, width: editToolWidth, height: 30)
+       
+        if ZLPhotoUIConfiguration.default().shouldCenterTools {
+            let editToolLayout = editToolCollectionView.collectionViewLayout as? ZLCollectionViewFlowLayout
+            let itemSize = editToolLayout?.itemSize.width ?? 0
+            let itemSpacing = editToolLayout?.minimumInteritemSpacing ?? 0
+            let sideInset = (editToolWidth - CGFloat(tools.count) * (itemSize + itemSpacing) + itemSpacing) / 2.0
+            if sideInset > 0 {
+                editToolCollectionView.contentInset.left = sideInset
+                editToolCollectionView.contentInset.right = sideInset
+            }
+        }
+            
         if !drawPaths.isEmpty {
             drawLine()
         }

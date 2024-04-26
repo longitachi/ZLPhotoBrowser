@@ -135,7 +135,10 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// iOS14 limited Photo mode, will show collection footer view in ZLThumbnailViewController.
     /// Will go to system setting if clicked. Defaults to true.
     public var showEnterSettingTips = true
-    
+
+    /// Center tools in tools bar. Defaults to false.
+    public var shouldCenterTools = false
+
     /// Timeout for image parsing. Defaults to 20.
     public var timeout: TimeInterval = 20
     
