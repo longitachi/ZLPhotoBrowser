@@ -205,6 +205,8 @@ class ZLClipImageViewController: UIViewController {
     
     private var resetTimer: Timer?
     
+    private var showRatioColView: Bool { clipRatios.count > 1 }
+    
     var animate = true
     /// 用作进入裁剪界面首次动画frame
     var presentAnimateFrame: CGRect?
@@ -298,7 +300,7 @@ class ZLClipImageViewController: UIViewController {
                 animateImageView.frame = self.clipBoxFrame
                 self.bottomToolView.alpha = 1
                 self.rotateBtn.alpha = 1
-                self.clipRatioColView.alpha = self.clipRatios.count <= 1 ? 0 : 1
+                self.clipRatioColView.alpha = self.showRatioColView ? 1 : 0
             }) { _ in
                 UIView.animate(withDuration: 0.1, animations: {
                     self.mainScrollView.alpha = 1
@@ -895,7 +897,7 @@ class ZLClipImageViewController: UIViewController {
                 self.mainScrollView.contentOffset = offset
             }
             self.rotateBtn.alpha = 1
-            self.clipRatioColView.alpha = 1
+            self.clipRatioColView.alpha = self.showRatioColView ? 1 : 0
             if !self.dimClippedAreaDuringAdjustments {
                 self.shadowView.alpha = 1
             }
