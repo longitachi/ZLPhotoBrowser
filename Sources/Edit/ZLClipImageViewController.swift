@@ -226,7 +226,9 @@ class ZLClipImageViewController: UIViewController {
     
     override var prefersHomeIndicatorAutoHidden: Bool { true }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        deviceIsiPhone() ? .portrait : .all
+    }
     
     deinit {
         zl_debugPrint("ZLClipImageViewController deinit")
