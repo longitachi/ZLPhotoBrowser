@@ -2,6 +2,17 @@
 
 -----
 
+## [4.5.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.3) (2024-05-23)
+### Add:
+* Support customizing the alert for when there is no permission. [#900](https://github.com/longitachi/ZLPhotoBrowser/pull/900) @xiaoyouPrince
+* Add configuration option to center tools in tools collection view. [#903](https://github.com/longitachi/ZLPhotoBrowser/pull/903) @patryk-sredzinski
+
+### Fix:
+* Fix the bug where the crop ratio view is not hidden when there is only one ratio in the cropping interface.
+* Fix a bug that may cause failure when saving images from iCloud to local storage. [#901](https://github.com/longitachi/ZLPhotoBrowser/pull/901) @ilfocus
+
+---
+    
 ## [4.5.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.2) (2024-04-15)
 ### Fix:
 * Fix the bug in the image cropping interface where the image is not displayed correctly when zooming in and the crop ratio is not 0.

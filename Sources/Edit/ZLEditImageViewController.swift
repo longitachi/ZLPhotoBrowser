@@ -609,7 +609,7 @@ open class ZLEditImageViewController: UIViewController {
         
         let editToolWidth = view.zl.width - 20 - 20 - doneBtnW - 20
         editToolCollectionView.frame = CGRect(x: 20, y: toolY, width: editToolWidth, height: 30)
-       
+        
         if ZLPhotoUIConfiguration.default().shouldCenterTools {
             let editToolLayout = editToolCollectionView.collectionViewLayout as? ZLCollectionViewFlowLayout
             let itemSize = editToolLayout?.itemSize.width ?? 0
@@ -620,7 +620,7 @@ open class ZLEditImageViewController: UIViewController {
                 editToolCollectionView.contentInset.right = sideInset
             }
         }
-            
+        
         if !drawPaths.isEmpty {
             drawLine()
         }
