@@ -36,7 +36,7 @@ public class ZLBaseStickertState: NSObject {
     let gesRotation: CGFloat
     let totalTranslationPoint: CGPoint
     
-    init(
+    public init(
         id: String,
         image: UIImage,
         originScale: CGFloat,
@@ -66,7 +66,7 @@ public class ZLTextStickerState: ZLBaseStickertState {
     let font: UIFont?
     let style: ZLInputTextStyle
     
-    init(
+    public init(
         id: String,
         text: String,
         textColor: UIColor,

@@ -353,6 +353,8 @@ extension ZLImageClipRatio {
 }
 
 public extension ZLImageClipRatio {
+    @objc static let all: [ZLImageClipRatio] = [.custom, .circle, .wh1x1, .wh3x4, .wh4x3, .wh2x3, .wh3x2, .wh9x16, .wh16x9]
+    
     @objc static let custom = ZLImageClipRatio(title: "custom", whRatio: 0)
     
     @objc static let circle = ZLImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
