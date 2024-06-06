@@ -888,7 +888,7 @@ open class ZLEditImageViewController: UIViewController {
             imageView.layer.addSublayer(mosaicImageLayer!)
             
             mosaicImageLayerMaskLayer = CAShapeLayer()
-            mosaicImageLayerMaskLayer?.strokeColor = UIColor.blue.cgColor
+            mosaicImageLayerMaskLayer?.strokeColor = UIColor.clear.cgColor
             mosaicImageLayerMaskLayer?.fillColor = nil
             mosaicImageLayerMaskLayer?.lineCap = .round
             mosaicImageLayerMaskLayer?.lineJoin = .round
@@ -1304,6 +1304,7 @@ open class ZLEditImageViewController: UIViewController {
         // 转换为drawPath的point
         let drawPoint = CGPoint(x: point.x / pointScale, y: point.y / pointScale)
         if pan.state == .began {
+            eraserCircleView.transform = CGAffineTransform(scaleX: 1 / mainScrollView.zoomScale, y: 1 / mainScrollView.zoomScale)
             eraserCircleView.isHidden = false
             impactFeedback?.prepare()
         }
@@ -1336,6 +1337,7 @@ open class ZLEditImageViewController: UIViewController {
                 drawLine()
             }
         } else {
+            eraserCircleView.transform = .identity
             eraserCircleView.isHidden = true
             if !deleteDrawPaths.isEmpty {
                 editorManager.storeAction(.eraser(deleteDrawPaths))

@@ -29,7 +29,7 @@ import AVFoundation
 import CoreMotion
 
 open class ZLCustomCamera: UIViewController {
-    enum Layout {
+    public enum Layout {
         static let bottomViewH: CGFloat = 120
         static let largeCircleRadius: CGFloat = 80
         static let smallCircleRadius: CGFloat = 65

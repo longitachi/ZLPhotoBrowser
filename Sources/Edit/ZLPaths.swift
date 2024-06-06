@@ -129,9 +129,11 @@ public class ZLDrawPath: NSObject {
         if willDelete {
             UIColor.white.set()
             bgPath.stroke()
+            pathColor.withAlphaComponent(0.7).set()
+        } else {
+            pathColor.set()
         }
         
-        pathColor.set()
         path.stroke()
     }
 }
