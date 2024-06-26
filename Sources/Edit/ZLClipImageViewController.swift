@@ -61,6 +61,19 @@ class ZLClipImageViewController: UIViewController {
     /// 初次进入界面时候，裁剪范围
     private var editRect: CGRect
     
+    /// 初次进去界面时的动画占位view
+    private lazy var animateImageView: UIImageView? = {
+        guard let presentAnimateFrame, let presentAnimateImage else {
+            return nil
+        }
+        
+        let view = UIImageView(image: presentAnimateImage)
+        view.frame = presentAnimateFrame
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        return view
+    }()
+    
     private lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
         view.alwaysBounceVertical = true
@@ -289,14 +302,7 @@ class ZLClipImageViewController: UIViewController {
             return
         }
         
-        if let presentAnimateFrame = presentAnimateFrame,
-           let presentAnimateImage = presentAnimateImage {
-            let animateImageView = UIImageView(image: presentAnimateImage)
-            animateImageView.contentMode = .scaleAspectFill
-            animateImageView.clipsToBounds = true
-            animateImageView.frame = presentAnimateFrame
-            view.addSubview(animateImageView)
-            
+        if let animateImageView {
             cancelClipAnimateFrame = clipBoxFrame
             UIView.animate(withDuration: 0.25, animations: {
                 animateImageView.frame = self.clipBoxFrame
@@ -378,6 +384,10 @@ class ZLClipImageViewController: UIViewController {
         
         view.addSubview(rotateBtn)
         view.addSubview(clipRatioColView)
+        
+        if let animateImageView {
+            view.addSubview(animateImageView)
+        }
         
         view.addGestureRecognizer(gridPanGes)
         mainScrollView.panGestureRecognizer.require(toFail: gridPanGes)
