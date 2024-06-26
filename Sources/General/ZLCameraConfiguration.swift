@@ -73,6 +73,9 @@ public class ZLCameraConfiguration: NSObject {
         }
     }
     
+    /// Indicates whether the video flowing through the connection should be mirrored about its vertical axis.
+    public var isVideoMirrored = true
+    
     /// Video resolution. Defaults to hd1920x1080.
     public var sessionPreset: ZLCameraConfiguration.CaptureSessionPreset = .hd1920x1080
     

@@ -894,7 +894,7 @@ open class ZLCustomCamera: UIViewController {
         let connection = imageOutput.connection(with: .video)
         connection?.videoOrientation = orientation
         if videoInput?.device.position == .front, connection?.isVideoMirroringSupported == true {
-            connection?.isVideoMirrored = true
+            connection?.isVideoMirrored = ZLPhotoConfiguration.default().cameraConfiguration.isVideoMirrored
         }
         let setting = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecJPEG])
         if videoInput?.device.hasFlash == true, flashBtn.isSelected {
@@ -1123,7 +1123,7 @@ open class ZLCustomCamera: UIViewController {
         if videoInput?.device.position == .front {
             // 镜像设置
             if connection?.isVideoMirroringSupported == true {
-                connection?.isVideoMirrored = true
+                connection?.isVideoMirrored = ZLPhotoConfiguration.default().cameraConfiguration.isVideoMirrored
             }
             closeTorch()
         } else {
