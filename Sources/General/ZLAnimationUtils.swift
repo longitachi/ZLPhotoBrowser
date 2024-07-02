@@ -31,20 +31,25 @@ class ZLAnimationUtils: NSObject {
         case fade = "opacity"
         case scale = "transform.scale"
         case rotate = "transform.rotation"
+        case path
     }
     
     class func animation(
         type: ZLAnimationUtils.AnimationType,
-        fromValue: CGFloat,
-        toValue: CGFloat,
-        duration: TimeInterval
+        fromValue: Any?,
+        toValue: Any?,
+        duration: TimeInterval,
+        fillMode: CAMediaTimingFillMode = .forwards,
+        isRemovedOnCompletion: Bool = false,
+        timingFunction: CAMediaTimingFunction? = nil
     ) -> CAAnimation {
         let animation = CABasicAnimation(keyPath: type.rawValue)
         animation.fromValue = fromValue
         animation.toValue = toValue
         animation.duration = duration
-        animation.fillMode = .forwards
-        animation.isRemovedOnCompletion = false
+        animation.fillMode = fillMode
+        animation.isRemovedOnCompletion = isRemovedOnCompletion
+        animation.timingFunction = timingFunction
         return animation
     }
     
