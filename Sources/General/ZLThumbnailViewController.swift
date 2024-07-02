@@ -287,7 +287,7 @@ class ZLThumbnailViewController: UIViewController {
         
         var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         var collectionViewInsetTop: CGFloat = 20
-        if #available(iOS 11.0, *) {
+        if #available(iOS 11.0, *), deviceIsFringeScreen() {
             insets = view.safeAreaInsets
             collectionViewInsetTop = navViewNormalH
         } else {
@@ -314,7 +314,14 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         let totalWidth = view.zl.width - insets.left - insets.right
-        collectionView.frame = CGRect(x: insets.left, y: 0, width: totalWidth, height: view.frame.height)
+        // 非刘海屏，在下拉返回动画时候，状态栏的隐藏和显示之间的切换会导致Collectionview的抖动，这里给个Y值，避开状态栏
+        let collectionViewY = deviceIsFringeScreen() ? 0 : insets.top
+        collectionView.frame = CGRect(
+            x: insets.left,
+            y: collectionViewY,
+            width: totalWidth,
+            height: view.frame.height - collectionViewY
+        )
         collectionView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 0, bottom: bottomViewH, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: insets.top, left: 0, bottom: bottomViewH, right: 0)
 
@@ -363,11 +370,14 @@ class ZLThumbnailViewController: UIViewController {
             ).width + (originalBtn.currentImage?.size.width ?? 19) + 12
             let originBtnMaxW = min(btnMaxWidth, originBtnW)
             originalBtn.frame = CGRect(x: (bottomView.zl.width - originBtnMaxW) / 2 - 5, y: btnY, width: originBtnMaxW, height: btnH)
+            
+            let originalLabelH = originalLabel.font.lineHeight
+            let originalLabelY = min(originalBtn.zl.bottom, bottomView.zl.height - originalLabelH)
             originalLabel.frame = CGRect(
                 x: (bottomView.zl.width - btnMaxWidth) / 2 - 5,
-                y: originalBtn.zl.bottom,
+                y: originalLabelY,
                 width: btnMaxWidth,
-                height: originalLabel.font.lineHeight
+                height: originalLabelH
             )
             
             refreshDoneBtnFrame()
@@ -403,8 +413,8 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         bottomView.addSubview(previewBtn)
-        bottomView.addSubview(originalBtn)
         bottomView.addSubview(originalLabel)
+        bottomView.addSubview(originalBtn)
         bottomView.addSubview(doneBtn)
         
         setupNavView()
@@ -573,6 +583,10 @@ class ZLThumbnailViewController: UIViewController {
             return
         }
         let vc = ZLPhotoPreviewController(photos: nav.arrSelectedModels, index: 0)
+        vc.backBlock = { [weak self] in
+            guard let `self` = self, self.hiddenStatusBar else { return }
+            self.hiddenStatusBar = false
+        }
         show(vc, sender: nil)
     }
     
@@ -1609,7 +1623,7 @@ class ZLEmbedAlbumListNavView: UIView {
         super.layoutSubviews()
         
         var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
+        if #available(iOS 11.0, *), deviceIsFringeScreen() {
             insets = safeAreaInsets
         }
         
@@ -1624,7 +1638,7 @@ class ZLEmbedAlbumListNavView: UIView {
     
     private func refreshTitleViewFrame() {
         var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
+        if #available(iOS 11.0, *), deviceIsFringeScreen() {
             insets = safeAreaInsets
         }
         
@@ -1759,7 +1773,7 @@ class ZLExternalAlbumListNavView: UIView {
         super.layoutSubviews()
         
         var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
+        if #available(iOS 11.0, *), deviceIsFringeScreen() {
             insets = safeAreaInsets
         }
         

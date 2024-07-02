@@ -104,7 +104,7 @@ func deviceSafeAreaInsets() -> UIEdgeInsets {
 }
 
 func deviceIsFringeScreen() -> Bool {
-    return deviceSafeAreaInsets().top > 0
+    return deviceSafeAreaInsets().top > 20
 }
 
 func isSmallScreen() -> Bool {
