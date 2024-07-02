@@ -228,6 +228,9 @@ class ZLClipImageViewController: UIViewController {
     
     override var prefersHomeIndicatorAutoHidden: Bool { true }
     
+    /// 延缓屏幕上下方通知栏弹出，避免手势冲突
+    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { [.top, .bottom] }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
     }
