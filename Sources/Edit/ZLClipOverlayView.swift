@@ -214,8 +214,6 @@ class ZLClipOverlayView: UIView {
         
         let duration: TimeInterval = 0.25
         func animateShadowMaskLayer() {
-            guard animate else { return }
-            
             shadowMaskLayer.removeAnimation(forKey: "shadowMaskAnimation")
             let animation = ZLAnimationUtils.animation(
                 type: .path,
@@ -229,8 +227,6 @@ class ZLClipOverlayView: UIView {
         }
         
         func animateFrameBorderLayer() {
-            guard animate else { return }
-            
             frameBorderLayer.removeAnimation(forKey: "frameBorderAnimation")
             let animation = ZLAnimationUtils.animation(
                 type: .path,
@@ -244,8 +240,6 @@ class ZLClipOverlayView: UIView {
         }
         
         func animateCornerLinesLayer() {
-            guard animate else { return }
-            
             cornerLinesLayer.removeAnimation(forKey: "cornerLinesAnimation")
             let animation = ZLAnimationUtils.animation(
                 type: .path,
@@ -259,8 +253,6 @@ class ZLClipOverlayView: UIView {
         }
         
         func animateGridLinesLayer() {
-            guard animate else { return }
-            
             gridLinesLayer.removeAnimation(forKey: "gridLinesAnimation")
             let animation = ZLAnimationUtils.animation(
                 type: .path,
@@ -273,10 +265,12 @@ class ZLClipOverlayView: UIView {
             gridLinesLayer.add(animation, forKey: "gridLinesAnimation")
         }
         
-        animateShadowMaskLayer()
-        animateFrameBorderLayer()
-        animateCornerLinesLayer()
-        animateGridLinesLayer()
+        if animate {
+            animateShadowMaskLayer()
+            animateFrameBorderLayer()
+            animateCornerLinesLayer()
+            animateGridLinesLayer()
+        }
         
         CATransaction.begin()
         CATransaction.setDisableActions(true)

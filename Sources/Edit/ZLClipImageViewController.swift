@@ -189,7 +189,7 @@ class ZLClipImageViewController: UIViewController {
     
     private var clipOriginFrame: CGRect = .zero
     
-    private var isRotating = false
+    private var isAnimate = false
     
     private var angle: CGFloat = 0
     
@@ -463,6 +463,8 @@ class ZLClipImageViewController: UIViewController {
         mainScrollView.zoomScale = zoomScale
         mainScrollView.contentSize = CGSize(width: editImage.size.width * zoomScale, height: editImage.size.height * zoomScale)
         
+        changeClipBoxFrame(newFrame: frame, animate: aniamte, updateInset: animate)
+        
         if (frame.size.width < scaledSize.width - CGFloat.ulpOfOne) || (frame.size.height < scaledSize.height - CGFloat.ulpOfOne) {
             var offset = CGPoint.zero
             offset.x = -floor((mainScrollView.frame.width - scaledSize.width) / 2)
@@ -474,8 +476,6 @@ class ZLClipImageViewController: UIViewController {
         let diffX = editRect.origin.x / editImage.size.width * mainScrollView.contentSize.width
         let diffY = editRect.origin.y / editImage.size.height * mainScrollView.contentSize.height
         mainScrollView.contentOffset = CGPoint(x: -mainScrollView.contentInset.left + diffX, y: -mainScrollView.contentInset.top + diffY)
-        
-        changeClipBoxFrame(newFrame: frame, animate: aniamte, updateInset: animate)
     }
     
     private func changeClipBoxFrame(newFrame: CGRect, animate: Bool, updateInset: Bool, endEditing: Bool = false) {
@@ -544,11 +544,30 @@ class ZLClipImageViewController: UIViewController {
     }
     
     @objc private func revertBtnClick() {
+        guard !isAnimate else { return }
+        
+        configFakeAnimateImageView()
+        let revertAngle: CGFloat
+        // 如果角度最终效果是顺时针旋转了90度，还原时候就逆时针旋转，否则就顺时针旋转
+        if (Int(angle) + 360) % 360 == 90 {
+            revertAngle = CGFloat(-90).zl.toPi
+        } else {
+            revertAngle = -angle.zl.toPi
+        }
+        
+        let transform = CGAffineTransform(rotationAngle: revertAngle)
+        
         angle = 0
         editImage = originalImage
         calculateClipRect()
         imageView.image = editImage
         layoutInitialImage(aniamte: true)
+        
+        let toFrame = view.convert(containerView.frame, from: mainScrollView)
+        animateFakeImageView {
+            self.fakeAnimateImageView.transform = transform
+            self.fakeAnimateImageView.frame = toFrame
+        }
         
         generateThumbnailImage()
         clipRatioColView.reloadData()
@@ -569,22 +588,14 @@ class ZLClipImageViewController: UIViewController {
     }
     
     @objc private func rotateBtnClick() {
-        guard !isRotating else {
-            return
-        }
+        guard !isAnimate else { return }
+        
         angle -= 90
         if angle == -360 {
             angle = 0
         }
         
-        isRotating = true
-        
-        let animateImageView = UIImageView(image: editImage)
-        animateImageView.contentMode = .scaleAspectFit
-        animateImageView.clipsToBounds = true
-        let originFrame = view.convert(containerView.frame, from: mainScrollView)
-        animateImageView.frame = originFrame
-        view.insertSubview(animateImageView, belowSubview: overlayView)
+        configFakeAnimateImageView()
         
         if selectedRatio.whRatio == 0 || selectedRatio.whRatio == 1 {
             // 自由比例和1:1比例，进行edit rect转换
@@ -608,18 +619,42 @@ class ZLClipImageViewController: UIViewController {
         
         let toFrame = view.convert(containerView.frame, from: mainScrollView)
         let transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-        containerView.alpha = 0
-        UIView.animate(withDuration: 0.25, animations: {
-            animateImageView.transform = transform
-            animateImageView.frame = toFrame
-        }) { _ in
-            animateImageView.removeFromSuperview()
-            self.containerView.alpha = 1
-            self.isRotating = false
+        animateFakeImageView {
+            self.fakeAnimateImageView.transform = transform
+            self.fakeAnimateImageView.frame = toFrame
         }
         
         generateThumbnailImage()
         clipRatioColView.reloadData()
+    }
+    
+    /// 图片旋转、还原、切换比例时，用来动画的view
+    private lazy var fakeAnimateImageView: UIImageView = {
+        let animateImageView = UIImageView()
+        animateImageView.contentMode = .scaleAspectFit
+        animateImageView.clipsToBounds = true
+        return animateImageView
+    }()
+    
+    private func configFakeAnimateImageView() {
+        fakeAnimateImageView.transform = .identity
+        fakeAnimateImageView.image = editImage
+        let originFrame = view.convert(containerView.frame, from: mainScrollView)
+        fakeAnimateImageView.frame = originFrame
+        view.insertSubview(fakeAnimateImageView, belowSubview: overlayView)
+    }
+    
+    private func animateFakeImageView(animations: @escaping (() -> Void), completion: (() -> Void)? = nil) {
+        containerView.alpha = 0
+        isAnimate = true
+        UIView.animate(withDuration: 0.25) {
+            animations()
+        } completion: { _ in
+            self.containerView.alpha = 1
+            self.isAnimate = false
+            self.fakeAnimateImageView.removeFromSuperview()
+            completion?()
+        }
     }
     
     @objc private func gridGesPanAction(_ pan: UIPanGestureRecognizer) {
@@ -971,14 +1006,22 @@ extension ZLClipImageViewController: UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let ratio = clipRatios[indexPath.row]
-        guard ratio != selectedRatio else {
+        guard ratio != selectedRatio, !isAnimate else {
             return
         }
+        
         selectedRatio = ratio
         clipRatioColView.reloadData()
         clipRatioColView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         calculateClipRect()
+        
+        configFakeAnimateImageView()
         layoutInitialImage(aniamte: true)
+        
+        let toFrame = view.convert(containerView.frame, from: mainScrollView)
+        animateFakeImageView {
+            self.fakeAnimateImageView.frame = toFrame
+        }
     }
 }
 
