@@ -84,7 +84,6 @@ class ZLClipOverlayView: UIView {
             }
             
             shadowMaskLayer.path = getShadowMaskLayerPath().cgPath
-            gridLinesLayer.path = getGridLinesLayerPath().cgPath
         }
     }
     
@@ -168,22 +167,20 @@ class ZLClipOverlayView: UIView {
     private func getGridLinesLayerPath() -> UIBezierPath {
         let path = UIBezierPath()
         
-        let r = cropRect.width / 2
-        let diff = isCircle ? r - sqrt(pow(r, 2) - pow(r / 3, 2)) : 0
         // 画竖线
         let dw = cropRect.width / 3
         for i in 1...2 {
             let x = CGFloat(i) * dw + cropRect.minX
-            path.move(to: CGPoint(x: x, y: cropRect.minY + diff))
-            path.addLine(to: CGPoint(x: x, y: cropRect.maxY - diff))
+            path.move(to: CGPoint(x: x, y: cropRect.minY))
+            path.addLine(to: CGPoint(x: x, y: cropRect.maxY))
         }
         
         // 画横线
         let dh = cropRect.height / 3
         for i in 1...2 {
             let y = CGFloat(i) * dh + cropRect.minY
-            path.move(to: CGPoint(x: cropRect.minX + diff, y: y))
-            path.addLine(to: CGPoint(x: cropRect.maxX - diff, y: y))
+            path.move(to: CGPoint(x: cropRect.minX, y: y))
+            path.addLine(to: CGPoint(x: cropRect.maxX, y: y))
         }
         
         return path

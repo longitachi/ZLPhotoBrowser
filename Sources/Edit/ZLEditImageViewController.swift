@@ -1143,8 +1143,15 @@ open class ZLEditImageViewController: UIViewController {
         var editModel: ZLEditImageModel?
         
         func callback() {
-            dismiss(animated: animate) {
-                self.editFinishBlock?(resImage, editModel)
+            // 内部自己调用，先回调在退出
+            if let nav = presentingViewController as? ZLImageNavController,
+               nav.topViewController is ZLPhotoPreviewController {
+                editFinishBlock?(resImage, editModel)
+                dismiss(animated: animate)
+            } else {
+                dismiss(animated: animate) {
+                    self.editFinishBlock?(resImage, editModel)
+                }
             }
         }
         
