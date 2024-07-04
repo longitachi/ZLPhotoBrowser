@@ -295,16 +295,16 @@ class ZLClipImageViewController: UIViewController {
         
         if let animateImageView {
             cancelClipAnimateFrame = clipBoxFrame
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: 0.25) {
                 animateImageView.frame = self.clipBoxFrame
                 self.bottomToolView.alpha = 1
                 self.rotateBtn.alpha = 1
                 self.clipRatioColView.alpha = self.showRatioColView ? 1 : 0
-            }) { _ in
-                UIView.animate(withDuration: 0.1, animations: {
+            } completion: { _ in
+                UIView.animate(withDuration: 0.1) {
                     self.mainScrollView.alpha = 1
                     self.overlayView.alpha = 1
-                }) { _ in
+                } completion: { _ in
                     animateImageView.removeFromSuperview()
                 }
             }
@@ -325,7 +325,7 @@ class ZLClipImageViewController: UIViewController {
         
         mainScrollView.frame = view.bounds
         
-        layoutInitialImage(aniamte: false)
+        layoutInitialImage(animate: true)
         
         bottomToolView.frame = CGRect(x: 0, y: view.bounds.height - ZLClipImageViewController.bottomToolViewH, width: view.bounds.width, height: ZLClipImageViewController.bottomToolViewH)
         bottomShadowLayer.frame = bottomToolView.bounds
@@ -343,7 +343,7 @@ class ZLClipImageViewController: UIViewController {
         let ratioColViewX = rotateBtn.frame.maxX + 15
         clipRatioColView.frame = CGRect(x: ratioColViewX, y: ratioColViewY, width: view.bounds.width - ratioColViewX, height: 70)
         
-        if clipRatios.count > 1, let index = clipRatios.firstIndex(where: { $0 == self.selectedRatio }) {
+        if showRatioColView, let index = clipRatios.firstIndex(where: { $0 == self.selectedRatio }) {
             clipRatioColView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
         }
     }
@@ -429,7 +429,7 @@ class ZLClipImageViewController: UIViewController {
         }
     }
     
-    private func layoutInitialImage(aniamte: Bool) {
+    private func layoutInitialImage(animate: Bool) {
         mainScrollView.minimumZoomScale = 1
         mainScrollView.maximumZoomScale = 1
         mainScrollView.zoomScale = 1
@@ -466,7 +466,7 @@ class ZLClipImageViewController: UIViewController {
         mainScrollView.zoomScale = zoomScale
         mainScrollView.contentSize = CGSize(width: editImage.size.width * zoomScale, height: editImage.size.height * zoomScale)
         
-        changeClipBoxFrame(newFrame: frame, animate: aniamte, updateInset: animate)
+        changeClipBoxFrame(newFrame: frame, animate: animate, updateInset: animate)
         
         if (frame.size.width < scaledSize.width - CGFloat.ulpOfOne) || (frame.size.height < scaledSize.height - CGFloat.ulpOfOne) {
             var offset = CGPoint.zero
@@ -564,7 +564,7 @@ class ZLClipImageViewController: UIViewController {
         editImage = originalImage
         calculateClipRect()
         imageView.image = editImage
-        layoutInitialImage(aniamte: true)
+        layoutInitialImage(animate: true)
         
         let toFrame = view.convert(containerView.frame, from: mainScrollView)
         animateFakeImageView {
@@ -618,7 +618,7 @@ class ZLClipImageViewController: UIViewController {
         }
         
         imageView.image = editImage
-        layoutInitialImage(aniamte: true)
+        layoutInitialImage(animate: true)
         
         let toFrame = view.convert(containerView.frame, from: mainScrollView)
         let transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
@@ -922,7 +922,7 @@ class ZLClipImageViewController: UIViewController {
         offset.x = max(-clipRect.minX, offset.x)
         offset.y = max(-clipRect.minY, offset.y)
         
-        self.changeClipBoxFrame(newFrame: clipRect, animate: true, updateInset: false, endEditing: true)
+        changeClipBoxFrame(newFrame: clipRect, animate: true, updateInset: false, endEditing: true)
         UIView.animate(withDuration: 0.25) {
             if scale < 1 - CGFloat.ulpOfOne || scale > 1 + CGFloat.ulpOfOne {
                 self.mainScrollView.zoomScale *= scale
@@ -1019,7 +1019,7 @@ extension ZLClipImageViewController: UICollectionViewDataSource, UICollectionVie
         calculateClipRect()
         
         configFakeAnimateImageView()
-        layoutInitialImage(aniamte: true)
+        layoutInitialImage(animate: true)
         
         let toFrame = view.convert(containerView.frame, from: mainScrollView)
         animateFakeImageView {
