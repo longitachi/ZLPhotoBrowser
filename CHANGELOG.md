@@ -2,6 +2,17 @@
 
 -----
 
+## [4.5.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.4) (2024-07-05)
+### Add:
+* Support iOS18. [#909](https://github.com/longitachi/ZLPhotoBrowser/pull/909) @patryk-sredzinski
+* Enhance the user experience of the image cropping interface and optimize the animation effects.
+* Support for setting `VideoMirrored` in the custom camera. [#912](https://github.com/longitachi/ZLPhotoBrowser/issues/912)
+  
+### Fix:
+* Fix the issue where some UI elements are displayed incorrectly on phones without a notch. [#914](https://github.com/longitachi/ZLPhotoBrowser/issues/914)
+  
+---
+
 ## [4.5.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.3) (2024-05-23)
 ### Add:
 * Support customizing the alert for when there is no permission. [#900](https://github.com/longitachi/ZLPhotoBrowser/pull/900) @xiaoyouPrince

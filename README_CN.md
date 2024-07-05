@@ -102,6 +102,13 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.5.4
+  Add:
+    支持iOS18。
+    提升图片编辑的使用体验，优化动画效果。
+    自定义相机支持设置`VideoMirrored`。
+  Fix:
+    修复在非刘海屏的手机上，部分界面UI展示异常的问题。
 ● 4.5.3
   Add:
     支持自定义无权限弹窗。
@@ -112,12 +119,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ● 4.5.2
   Fix:
     修复图片裁剪界面，裁减比例不为0时，缩放图片时候，图片显示不正确的bug。
-● 4.5.1
-  Add:
-    添加xcprivacy文件。
-  Fix:
-    修复连续切换前后摄像头导致crash的bug。
-    修复相册小图界面状态栏某些情况下不展示的bug。
 ...
 ```
 

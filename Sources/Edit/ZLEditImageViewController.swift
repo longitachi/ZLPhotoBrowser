@@ -414,6 +414,9 @@ open class ZLEditImageViewController: UIViewController {
     
     override public var prefersHomeIndicatorAutoHidden: Bool { true }
     
+    /// 延缓屏幕上下方通知栏弹出，避免手势冲突
+    override public var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { [.top, .bottom] }
+    
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
     }
