@@ -1,8 +1,8 @@
 //
-//  ZLPhotoPreviewPopInteractiveTransition.swift
+//  ZLImagePreviewDismissInteractiveTransition.swift
 //  ZLPhotoBrowser
 //
-//  Created by long on 2020/9/3.
+//  Created by long on 2024/7/12.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -27,10 +27,10 @@
 import UIKit
 import AVFoundation
 
-class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransition {
+class ZLImagePreviewDismissInteractiveTransition: UIPercentDrivenInteractiveTransition {
     weak var transitionContext: UIViewControllerContextTransitioning?
     
-    weak var viewController: ZLPhotoPreviewController?
+    weak var viewController: ZLImagePreviewController?
     
     lazy var dismissPanGes: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(dismissPanAction(_:)))
@@ -68,7 +68,7 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         zl_debugPrint("ZLPhotoPreviewPopInteractiveTransition deinit")
     }
     
-    init(viewController: ZLPhotoPreviewController) {
+    init(viewController: ZLImagePreviewController) {
         self.viewController = viewController
         super.init()
         
@@ -157,7 +157,7 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         startPanPoint = pan.location(in: viewController?.view)
         interactive = true
         startTransition?()
-        viewController?.navigationController?.popViewController(animated: true)
+        viewController?.dismiss(animated: true)
     }
     
     func panResult(_ pan: UIPanGestureRecognizer) -> (frame: CGRect, scale: CGFloat) {
@@ -194,8 +194,8 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             return
         }
         
-        guard let fromVC = transitionContext.viewController(forKey: .from) as? ZLPhotoPreviewController,
-              let toVC = transitionContext.viewController(forKey: .to) as? ZLThumbnailViewController else {
+        guard let fromVC = transitionContext.viewController(forKey: .from) as? ZLImagePreviewController,
+              let toVC = transitionContext.viewController(forKey: .to) else {
             return
         }
         
@@ -217,7 +217,14 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         imageView?.contentMode = .scaleAspectFill
         imageView?.clipsToBounds = true
         
-        if let videoCell = cell as? ZLVideoPreviewCell, let playerLayer = videoCell.playerLayer, videoCell.imageView.isHidden {
+        if let videoCell = cell as? ZLVideoPreviewCell,
+           let playerLayer = videoCell.playerLayer,
+           videoCell.imageView.isHidden {
+            playerLayer.removeFromSuperlayer()
+            self.playerLayer = playerLayer
+            imageView?.layer.insertSublayer(playerLayer, at: 0)
+        } else if let videoCell = cell as? ZLNetVideoPreviewCell,
+                  let playerLayer = videoCell.playerLayer {
             playerLayer.removeFromSuperlayer()
             self.playerLayer = playerLayer
             imageView?.layer.insertSublayer(playerLayer, at: 0)
@@ -241,43 +248,11 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         guard let transitionContext = transitionContext else {
             return
         }
-        guard let fromVC = transitionContext.viewController(forKey: .from) as? ZLPhotoPreviewController,
-              let toVC = transitionContext.viewController(forKey: .to) as? ZLThumbnailViewController else {
+        guard let fromVC = transitionContext.viewController(forKey: .from) as? ZLImagePreviewController else {
             return
         }
         
-        let fromVCModel = fromVC.arrDataSources[fromVC.currentIndex]
-        let toVCVisiableIndexPaths = toVC.collectionView.indexPathsForVisibleItems
-        
-        var diff = 0
-        if !ZLPhotoUIConfiguration.default().sortAscending {
-            if toVC.showCameraCell {
-                diff = -1
-            }
-            if #available(iOS 14.0, *), toVC.showAddPhotoCell {
-                diff -= 1
-            }
-        }
-        var toIndex: Int?
-        for indexPath in toVCVisiableIndexPaths {
-            let idx = indexPath.row + diff
-            if idx >= toVC.arrDataSources.count || idx < 0 {
-                continue
-            }
-            let m = toVC.arrDataSources[idx]
-            if m == fromVCModel {
-                toIndex = indexPath.row
-                break
-            }
-        }
-        
-        var toFrame: CGRect?
-        
-        if let toIndex = toIndex, let toCell = toVC.collectionView.cellForItem(at: IndexPath(row: toIndex, section: 0)) {
-            toFrame = toVC.collectionView.convert(toCell.frame, to: transitionContext.containerView)
-        }
-        
-        toVC.endPopTransition()
+        let toFrame = fromVC.dismissTransitionFrame?(fromVC.currentIndex)
         
         UIView.animate(withDuration: 0.3, animations: {
             if let toFrame, self.playerLayer == nil {
@@ -321,7 +296,11 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             self.resetViewStatus(isStart: false)
             if let playerLayer = self.playerLayer {
                 playerLayer.removeFromSuperlayer()
-                (self.currentCell as? ZLVideoPreviewCell)?.playerView.layer.insertSublayer(playerLayer, at: 0)
+                if let cell = self.currentCell as? ZLVideoPreviewCell {
+                    cell.playerView.layer.insertSublayer(playerLayer, at: 0)
+                } else if let cell = self.currentCell as? ZLNetVideoPreviewCell {
+                    cell.playerView.layer.insertSublayer(playerLayer, at: 0)
+                }
             }
             self.currentCell = nil
             self.playerLayer = nil
@@ -337,9 +316,10 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         currentCell?.scrollView?.isScrollEnabled = !isStart
         currentCell?.scrollView?.pinchGestureRecognizer?.isEnabled = !isStart
         (currentCell as? ZLVideoPreviewCell)?.singleTapGes.isEnabled = !isStart
+        (currentCell as? ZLNetVideoPreviewCell)?.singleTapGes.isEnabled = !isStart
         
         guard let transitionContext = transitionContext,
-              let fromVC = transitionContext.viewController(forKey: .from) as? ZLPhotoPreviewController else {
+              let fromVC = transitionContext.viewController(forKey: .from) as? ZLImagePreviewController else {
             return
         }
         
@@ -348,7 +328,7 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
     }
 }
 
-extension ZLPhotoPreviewPopInteractiveTransition: UIGestureRecognizerDelegate {
+extension ZLImagePreviewDismissInteractiveTransition: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let point = gestureRecognizer.location(in: viewController?.view)
         let shouldBegin = shouldStartTransition?(point) == true

@@ -174,6 +174,11 @@ class ZLLocalImagePreviewCell: ZLPreviewBaseCell {
         preview.scrollView.zoomScale = 1
     }
     
+    override func animateImageFrame(convertTo view: UIView) -> CGRect {
+        let rect = preview.scrollView.convert(preview.containerView.frame, to: self)
+        return convert(rect, to: view)
+    }
+    
     @objc func longPressAction(_ ges: UILongPressGestureRecognizer) {
         guard currentImage != nil else {
             return
@@ -222,6 +227,11 @@ class ZLNetImagePreviewCell: ZLLocalImagePreviewCell {
     override func didEndDisplaying() {
         progressView.isHidden = true
         preview.scrollView.zoomScale = 1
+    }
+    
+    override func animateImageFrame(convertTo view: UIView) -> CGRect {
+        let rect = preview.scrollView.convert(preview.containerView.frame, to: self)
+        return convert(rect, to: view)
     }
 }
 
@@ -529,10 +539,8 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     
     private var fetchVideoDone = false
     
-    private let operationQueue = DispatchQueue(label: "com.ZLPhotoBrowser.ZLVideoPreviewCell")
-    
     var isPlaying: Bool {
-        if player != nil, player?.rate != 0 {
+        if let player, player.rate != 0 {
             return true
         }
         return false
@@ -574,9 +582,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     override func previewVCScroll() {
-        if player != nil, player?.rate != 0 {
-            pausePlayer(seekToZero: false)
-        }
+        pausePlayer(seekToZero: false)
     }
     
     override func willDisplay() {
@@ -679,7 +685,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     @objc private func playBtnClick() {
         let currentTime = player?.currentItem?.currentTime()
         let duration = player?.currentItem?.duration
-        if player?.rate == 0 {
+        if !isPlaying {
             if currentTime?.value == duration?.value {
                 player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
             }
@@ -699,12 +705,12 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     @objc private func appWillResignActive() {
-        if player != nil, player?.rate != 0 {
-            pausePlayer(seekToZero: false)
-        }
+        pausePlayer(seekToZero: false)
     }
     
     private func pausePlayer(seekToZero: Bool) {
+        guard isPlaying else { return }
+        
         player?.pause()
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         if seekToZero {
@@ -726,7 +732,9 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
 class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
     private var player: AVPlayer?
     
-    private var playerLayer: AVPlayerLayer?
+    var playerLayer: AVPlayerLayer?
+    
+    var playerView = UIView()
     
     private lazy var playBtn: UIButton = {
         let btn = UIButton(type: .custom)
@@ -735,17 +743,36 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         return btn
     }()
     
-    private lazy var singleTapGes: UITapGestureRecognizer = {
+    lazy var singleTapGes: UITapGestureRecognizer = {
         let ges = UITapGestureRecognizer()
         ges.addTarget(self, action: #selector(playBtnClick))
         return ges
     }()
     
     var isPlaying: Bool {
-        if player != nil, player?.rate != 0 {
+        if let player, player.rate != 0 {
             return true
         }
         return false
+    }
+    
+    override var currentImage: UIImage? {
+        guard let currentItem = player?.currentItem else { return nil }
+                
+        // 获取当前播放时间
+        let currentTime = currentItem.currentTime()
+        
+        // 使用AVAssetImageGenerator来获取当前帧的图像
+        let imageGenerator = AVAssetImageGenerator(asset: currentItem.asset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        
+        do {
+            let cgImage = try imageGenerator.copyCGImage(at: currentTime, actualTime: nil)
+            let image = UIImage(cgImage: cgImage)
+            return image
+        } catch {
+            return nil
+        }
     }
     
     deinit {
@@ -766,7 +793,7 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        playerLayer?.frame = bounds
+        playerLayer?.frame = playerView.bounds
         playBtn.frame = CGRect(origin: .zero, size: CGSize(width: 50, height: 50))
         playBtn.center = CGPoint(x: bounds.midX, y: bounds.midY)
     }
@@ -775,7 +802,12 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
     }
     
+    override func animateImageFrame(convertTo view: UIView) -> CGRect {
+        return convert(playerView.frame, to: view)
+    }
+    
     private func setupUI() {
+        contentView.addSubview(playerView)
         contentView.addSubview(playBtn)
         contentView.addGestureRecognizer(singleTapGes)
         
@@ -804,18 +836,16 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     @objc private func appWillResignActive() {
-        if player != nil, player?.rate != 0 {
-            pausePlayer(seekToZero: false)
-        }
+        pausePlayer(seekToZero: false)
     }
     
     override func previewVCScroll() {
-        if player != nil, player?.rate != 0 {
-            pausePlayer(seekToZero: false)
-        }
+        pausePlayer(seekToZero: false)
     }
     
-    private func pausePlayer(seekToZero: Bool) {
+    func pausePlayer(seekToZero: Bool) {
+        guard isPlaying else { return }
+        
         player?.pause()
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         if seekToZero {
@@ -837,9 +867,32 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         let item = AVPlayerItem(asset: asset)
         player = AVPlayer(playerItem: item)
         playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.frame = bounds
-        layer.insertSublayer(playerLayer!, at: 0)
+        playerLayer?.videoGravity = .resizeAspect
+        playerView.frame = calculatePlayerFrame(for: item)
+        playerLayer?.frame = playerView.bounds
+        playerView.layer.insertSublayer(playerLayer!, at: 0)
         NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+    }
+    
+    private func calculatePlayerFrame(for item: AVPlayerItem) -> CGRect {
+        if let videoTrack = item.asset.tracks(withMediaType: .video).first {
+            let size = videoTrack.naturalSize.applying(videoTrack.preferredTransform)
+            let videoWHRatio = size.width / size.height
+            let cellWHRatio = zl.width / zl.height
+            
+            let videoRect: CGRect
+            if videoWHRatio > cellWHRatio {
+                let videoH = zl.width / videoWHRatio
+                videoRect = CGRect(x: 0, y: (zl.height - videoH) / 2, width: zl.width, height: videoH)
+            } else {
+                let videoW = zl.height * videoWHRatio
+                videoRect = CGRect(x: (zl.width - videoW) / 2, y: 0, width: videoW, height: zl.height)
+            }
+            
+            return videoRect
+        } else {
+            return bounds
+        }
     }
 }
 
