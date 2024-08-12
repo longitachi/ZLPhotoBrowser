@@ -891,7 +891,7 @@ open class ZLEditImageViewController: UIViewController {
             imageView.layer.addSublayer(mosaicImageLayer!)
             
             mosaicImageLayerMaskLayer = CAShapeLayer()
-            mosaicImageLayerMaskLayer?.strokeColor = UIColor.clear.cgColor
+            mosaicImageLayerMaskLayer?.strokeColor = UIColor.blue.cgColor
             mosaicImageLayerMaskLayer?.fillColor = nil
             mosaicImageLayerMaskLayer?.lineCap = .round
             mosaicImageLayerMaskLayer?.lineJoin = .round
