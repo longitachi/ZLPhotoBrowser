@@ -31,12 +31,12 @@ import Photos
 public class ZLPhotoManager: NSObject {
     /// Save image to album.
     public class func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)?) {
-        let status = PHPhotoLibrary.authorizationStatus()
-        
+        let status = PHPhotoLibrary.zl.authStatus(for: .addOnly)
         if status == .denied || status == .restricted {
             completion?(false, nil)
             return
         }
+        
         var placeholderAsset: PHObjectPlaceholder?
         let completionHandler: ((Bool, Error?) -> Void) = { suc, _ in
             if suc {
@@ -67,8 +67,7 @@ public class ZLPhotoManager: NSObject {
     
     /// Save video to album.
     public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void)?) {
-        let status = PHPhotoLibrary.authorizationStatus()
-        
+        let status = PHPhotoLibrary.zl.authStatus(for: .addOnly)
         if status == .denied || status == .restricted {
             completion?(false, nil)
             return
@@ -506,8 +505,8 @@ public class ZLPhotoManager: NSObject {
 
 /// Authority related.
 public extension ZLPhotoManager {
-    class func hasPhotoLibratyAuthority() -> Bool {
-        return PHPhotoLibrary.authorizationStatus() == .authorized
+    class func hasPhotoLibratyReadWriteAuthority() -> Bool {
+        return PHPhotoLibrary.zl.authStatus(for: .readWrite) == .authorized
     }
     
     class func hasCameraAuthority() -> Bool {

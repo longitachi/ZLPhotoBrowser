@@ -66,6 +66,7 @@ extension UIColor: ZLPhotoBrowserCompatible { }
 extension UIImage: ZLPhotoBrowserCompatible { }
 extension CIImage: ZLPhotoBrowserCompatible { }
 extension PHAsset: ZLPhotoBrowserCompatible { }
+extension PHPhotoLibrary: ZLPhotoBrowserCompatible { }
 extension UIFont: ZLPhotoBrowserCompatible { }
 extension UIView: ZLPhotoBrowserCompatible { }
 extension UIGraphicsImageRenderer: ZLPhotoBrowserCompatible { }

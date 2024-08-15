@@ -325,7 +325,7 @@ public class ZLPhotoPreviewSheet: UIView {
         self.animate = animate
         self.sender = sender
         
-        let status = PHPhotoLibrary.authorizationStatus()
+        let status = PHPhotoLibrary.zl.authStatus(for: .readWrite)
         if status == .restricted || status == .denied {
             showNoAuthorityAlert()
         } else if status == .notDetermined {
@@ -356,7 +356,7 @@ public class ZLPhotoPreviewSheet: UIView {
         }
         
         // Register for the album change notification when the status is limited, because the photoLibraryDidChange method will be repeated multiple times each time the album changes, causing the interface to refresh multiple times. So the album changes are not monitored in other authority.
-        if #available(iOS 14.0, *), preview, PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
+        if #available(iOS 14.0, *), preview, PHPhotoLibrary.zl.authStatus(for: .readWrite) == .limited {
             PHPhotoLibrary.shared().register(self)
         }
     }
