@@ -252,7 +252,9 @@ open class ZLCustomCamera: UIViewController {
     deinit {
         zl_debugPrint("ZLCustomCamera deinit")
         cleanTimer()
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        if cameraConfig.allowRecordVideo {
+            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        }
     }
     
     @objc public init() {
