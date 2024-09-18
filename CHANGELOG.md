@@ -2,6 +2,16 @@
 
 -----
 
+## [4.5.5](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.5) (2024-09-18)
+### Add:
+* The ZLImagePreviewController interface supports gesture-driven pull-down return animations.
+* Update the API for obtaining album permissions.
+  
+### Fix:
+* Fixed the bug that mosaics were not displayed during painting.
+  
+---
+    
 ## [4.5.4](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.4) (2024-07-05)
 ### Add:
 * Support iOS18. [#909](https://github.com/longitachi/ZLPhotoBrowser/pull/909) @patryk-sredzinski

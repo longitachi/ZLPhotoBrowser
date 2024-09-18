@@ -102,6 +102,12 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.5.5
+  Add:
+    ZLImagePreviewController界面支持下拉返回手势。
+    更新获取相册权限的API。
+  Fix:
+    修复马赛克在涂抹过程中不显示的bug。
 ● 4.5.4
   Add:
     支持iOS18。
@@ -116,9 +122,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   Fix:
     修复图片裁剪比例仅有一个时初次不显示的bug.
     修复保存iCloud的资源时，可能报错的bug.
-● 4.5.2
-  Fix:
-    修复图片裁剪界面，裁减比例不为0时，缩放图片时候，图片显示不正确的bug。
 ...
 ```
 
