@@ -30,23 +30,23 @@ import Photos
 @objcMembers
 public class ZLPhotoManager: NSObject {
     /// Save image to album.
-    public class func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)?) {
+    public class func saveImageToAlbum(image: UIImage, completion: ((Error?, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.zl.authStatus(for: .addOnly)
         if status == .denied || status == .restricted {
-            completion?(false, nil)
+            completion?(NSError.noWriteAuthError, nil)
             return
         }
         
         var placeholderAsset: PHObjectPlaceholder?
-        let completionHandler: ((Bool, Error?) -> Void) = { suc, _ in
-            if suc {
+        let completionHandler: ((Bool, Error?) -> Void) = { suc, error in
+            if suc, error == nil {
                 let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
                 ZLMainAsync {
-                    completion?(suc, asset)
+                    completion?(nil, asset)
                 }
             } else {
                 ZLMainAsync {
-                    completion?(false, nil)
+                    completion?(error, nil)
                 }
             }
         }
@@ -66,10 +66,10 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Save video to album.
-    public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void)?) {
+    public class func saveVideoToAlbum(url: URL, completion: ((Error?, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.zl.authStatus(for: .addOnly)
         if status == .denied || status == .restricted {
-            completion?(false, nil)
+            completion?(NSError.noWriteAuthError, nil)
             return
         }
         
@@ -77,15 +77,15 @@ public class ZLPhotoManager: NSObject {
         PHPhotoLibrary.shared().performChanges({
             let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
             placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
-        }) { suc, _ in
-            if suc {
+        }) { suc, error in
+            if suc, error == nil {
                 let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
                 ZLMainAsync {
-                    completion?(suc, asset)
+                    completion?(nil, asset)
                 }
             } else {
                 ZLMainAsync {
-                    completion?(false, nil)
+                    completion?(error, nil)
                 }
             }
         }

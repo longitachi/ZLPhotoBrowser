@@ -792,9 +792,9 @@ class ZLPhotoPreviewController: UIViewController {
         
         vc.editFinishBlock = { [weak self, weak nav] url in
             if let url = url {
-                ZLPhotoManager.saveVideoToAlbum(url: url) { [weak self, weak nav] suc, asset in
-                    if suc, asset != nil {
-                        let m = ZLPhotoModel(asset: asset!)
+                ZLPhotoManager.saveVideoToAlbum(url: url) { [weak self, weak nav] error, asset in
+                    if error == nil, let asset {
+                        let m = ZLPhotoModel(asset: asset)
                         nav?.arrSelectedModels.removeAll()
                         nav?.arrSelectedModels.append(m)
                         nav?.selectImageBlock?()

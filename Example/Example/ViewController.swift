@@ -363,8 +363,8 @@ class ViewController: UIViewController {
     func save(image: UIImage?, videoUrl: URL?) {
         if let image = image {
             let hud = ZLProgressHUD.show(toast: .processing)
-            ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
-                if suc, let asset = asset {
+            ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] error, asset in
+                if error == nil, let asset {
                     let resultModel = ZLResultModel(asset: asset, image: image, isEdited: false, index: 0)
                     self?.selectedResults = [resultModel]
                     self?.selectedImages = [image]
@@ -377,8 +377,8 @@ class ViewController: UIViewController {
             }
         } else if let videoUrl = videoUrl {
             let hud = ZLProgressHUD.show(toast: .processing)
-            ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
-                if suc, let asset = asset {
+            ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] error, asset in
+                if error == nil, let asset {
                     self?.fetchImage(for: asset)
                 } else {
                     debugPrint("保存视频到相册失败")

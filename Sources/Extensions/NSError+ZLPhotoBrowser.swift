@@ -34,6 +34,8 @@ extension NSError {
 }
 
 extension NSError {
+    static let noWriteAuthError = NSError(message: "No permission to write to the album")
+    
     static let videoMergeError = NSError(message: "video merge failed")
     
     static let videoExportTypeError = NSError(message: "The mediaType of asset must be video")

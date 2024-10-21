@@ -645,9 +645,9 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
             }
             
             let hud = ZLProgressHUD.show(toast: .processing)
-            ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, _ in
+            ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] error, _ in
                 hud.hide()
-                if !suc {
+                if error != nil {
                     showAlertView(localLanguageTextValue(.saveImageError), self)
                 }
             }
