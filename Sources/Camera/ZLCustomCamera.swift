@@ -664,14 +664,15 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
+        if let type, let customAlertWhenNoAuthority = ZLPhotoConfiguration.default().customAlertWhenNoAuthority {
+            customAlertWhenNoAuthority(type)
+            return
+        }
+        
         let action = ZLCustomAlertAction(title: localLanguageTextValue(.done), style: .default) { [weak self] _ in
             self?.dismiss(animated: true) {
-                if let type = type {
-                    if let customAlertWhenNoAuthority = ZLPhotoConfiguration.default().customAlertWhenNoAuthority {
-                        customAlertWhenNoAuthority(type)
-                    } else {
-                        ZLPhotoConfiguration.default().noAuthorityCallback?(type)
-                    }
+                if let type {
+                    ZLPhotoConfiguration.default().noAuthorityCallback?(type)
                 }
             }
         }
