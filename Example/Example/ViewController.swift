@@ -354,6 +354,8 @@ class ViewController: UIViewController {
     
     @objc func showCamera() {
         let camera = ZLCustomCamera()
+        // let camera = ZLCustomCamera(tapToRecordVideo: true) // to enable tap-to-record
+        // also with ZLPhotoConfiguration.allowTakePhoto(false) and .allowRecordVideo(true)
         camera.takeDoneBlock = { [weak self] image, videoUrl in
             self?.save(image: image, videoUrl: videoUrl)
         }
