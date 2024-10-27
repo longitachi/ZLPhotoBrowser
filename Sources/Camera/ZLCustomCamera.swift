@@ -45,6 +45,8 @@ open class ZLCustomCamera: UIViewController {
     
     @objc public var cancelBlock: (() -> Void)?
     
+    public let tapToRecordVideo: Bool /// Flag to enable tap-to-record functionality.
+    
     public lazy var tipsLabel: UILabel = {
         let label = UILabel()
         label.font = .zl.font(ofSize: 14)
@@ -238,6 +240,10 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
+    private var shouldUseTapToRecord: Bool {
+        tapToRecordVideo && !cameraConfig.allowTakePhoto
+    }
+    
     private lazy var cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
     
     // 仅支持竖屏
@@ -255,7 +261,8 @@ open class ZLCustomCamera: UIViewController {
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }
     
-    @objc public init() {
+    @objc public init(tapToRecordVideo: Bool = false) {
+        self.tapToRecordVideo = tapToRecordVideo
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .fullScreen
     }
@@ -436,12 +443,17 @@ open class ZLCustomCamera: UIViewController {
             largeCircleView.addGestureRecognizer(takePictureTap!)
         }
         if cameraConfig.allowRecordVideo {
-            let longGes = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
-            longGes.minimumPressDuration = 0.3
-            longGes.delegate = self
-            largeCircleView.addGestureRecognizer(longGes)
-            takePictureTap?.require(toFail: longGes)
-            recordLongGes = longGes
+            if shouldUseTapToRecord {
+                let takeVideoTap = UITapGestureRecognizer(target: self, action: #selector(tapToRecordAction(_:)))
+                largeCircleView.addGestureRecognizer(takeVideoTap)
+            } else {
+                let longGes = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
+                longGes.minimumPressDuration = 0.3
+                longGes.delegate = self
+                largeCircleView.addGestureRecognizer(longGes)
+                takePictureTap?.require(toFail: longGes)
+                recordLongGes = longGes
+            }
             
             let panGes = UIPanGestureRecognizer(target: self, action: #selector(adjustCameraFocus(_:)))
             panGes.delegate = self
@@ -682,6 +694,8 @@ open class ZLCustomCamera: UIViewController {
             return localLanguageTextValue(.customCameraTips)
         } else if cameraConfig.allowTakePhoto {
             return localLanguageTextValue(.customCameraTakePhotoTips)
+        } else if shouldUseTapToRecord {
+            return "" // TODO?: Add "Tap to record video" tip?
         } else if cameraConfig.allowRecordVideo {
             return localLanguageTextValue(.customCameraRecordVideoTips)
         } else {
@@ -919,6 +933,10 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
+    @objc private func tapToRecordAction(_ tap: UITapGestureRecognizer) {
+        movieFileOutput?.isRecording == true ? finishRecord() : startRecord(shouldScheduleStop: true)
+    }
+    
     // 调整焦点
     @objc private func adjustFocusPoint(_ tap: UITapGestureRecognizer) {
         guard session.isRunning, !isAdjustingFocusPoint else {
@@ -1087,7 +1105,7 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
-    private func startRecord() {
+    private func startRecord(shouldScheduleStop: Bool = false) {
         guard let movieFileOutput = movieFileOutput else {
             return
         }
@@ -1133,6 +1151,14 @@ open class ZLCustomCamera: UIViewController {
         
         let url = URL(fileURLWithPath: ZLVideoManager.getVideoExportFilePath())
         movieFileOutput.startRecording(to: url, recordingDelegate: self)
+        
+        if shouldScheduleStop { // Schedule stop recording after max duration
+            ZLMainAsync(after: Double(cameraConfig.maxRecordDuration)) {
+                if self.movieFileOutput?.isRecording == true {
+                    self.finishRecord()
+                }
+            }
+        }
     }
     
     private func finishRecord() {
@@ -1156,6 +1182,9 @@ open class ZLCustomCamera: UIViewController {
             self.smallCircleView.layer.transform = CATransform3DScale(CATransform3DIdentity, ZLCustomCamera.Layout.smallCircleRecordScale, ZLCustomCamera.Layout.smallCircleRecordScale, 1)
             self.borderLayer.strokeColor = ZLCustomCamera.Layout.cameraBtnRecodingBorderColor.cgColor
             self.borderLayer.lineWidth = ZLCustomCamera.Layout.animateLayerWidth
+            if self.shouldUseTapToRecord {
+                self.smallCircleView.backgroundColor = .red
+            }
         }) { _ in
             self.largeCircleView.layer.addSublayer(self.animateLayer)
             let animation = CABasicAnimation(keyPath: "strokeEnd")
@@ -1169,6 +1198,7 @@ open class ZLCustomCamera: UIViewController {
     
     private func stopRecordAnimation() {
         ZLMainAsync {
+            self.smallCircleView.backgroundColor = ZLCustomCamera.Layout.cameraBtnNormalColor
             self.borderLayer.strokeColor = ZLCustomCamera.Layout.cameraBtnNormalColor.cgColor
             self.borderLayer.lineWidth = ZLCustomCamera.Layout.borderLayerWidth
             self.animateLayer.speed = 1
