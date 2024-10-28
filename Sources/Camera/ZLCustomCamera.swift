@@ -45,8 +45,6 @@ open class ZLCustomCamera: UIViewController {
     
     @objc public var cancelBlock: (() -> Void)?
     
-    public let tapToRecordVideo: Bool /// Flag to enable tap-to-record functionality.
-    
     public lazy var tipsLabel: UILabel = {
         let label = UILabel()
         label.font = .zl.font(ofSize: 14)
@@ -241,7 +239,7 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private var shouldUseTapToRecord: Bool {
-        tapToRecordVideo && !cameraConfig.allowTakePhoto
+        cameraConfig.tapToRecordVideo && !cameraConfig.allowTakePhoto
     }
     
     private lazy var cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
@@ -261,8 +259,7 @@ open class ZLCustomCamera: UIViewController {
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }
     
-    @objc public init(tapToRecordVideo: Bool = false) {
-        self.tapToRecordVideo = tapToRecordVideo
+    @objc public init() {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .fullScreen
     }
