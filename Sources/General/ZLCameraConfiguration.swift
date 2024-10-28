@@ -294,4 +294,10 @@ public extension ZLCameraConfiguration {
         videoCodecType = type
         return self
     }
+    
+    @discardableResult
+    func tapToRecordVideo(_ value: Bool) -> ZLCameraConfiguration {
+        tapToRecordVideo = value
+        return self
+    }
 }
