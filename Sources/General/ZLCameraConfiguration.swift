@@ -91,6 +91,11 @@ public class ZLCameraConfiguration: NSObject {
     /// Whether to support switch camera. Defaults to true.
     public var allowSwitchCamera = true
     
+    /// Flag to enable tap-to-record functionality. Default is false.
+    /// Note: This property is prioritized lower than `allowTakePhoto`.
+    /// If `allowTakePhoto` is true, `tapToRecordVideo` will be ignored.
+    public var tapToRecordVideo: Bool = false
+    
     /// Video export format for recording video and editing video. Defaults to mov.
     public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
     
@@ -287,6 +292,12 @@ public extension ZLCameraConfiguration {
     @discardableResult
     func videoCodecType(_ type: AVVideoCodecType) -> ZLCameraConfiguration {
         videoCodecType = type
+        return self
+    }
+    
+    @discardableResult
+    func tapToRecordVideo(_ value: Bool) -> ZLCameraConfiguration {
+        tapToRecordVideo = value
         return self
     }
 }

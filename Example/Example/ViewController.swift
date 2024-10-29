@@ -353,6 +353,10 @@ class ViewController: UIViewController {
     }
     
     @objc func showCamera() {
+        // To enable tap-to-record you can also use tapToRecordVideo flag in camera config, for example:
+        // ZLPhotoConfiguration.default().cameraConfiguration = ZLPhotoConfiguration.default().cameraConfiguration
+        //  .tapToRecordVideo(true)
+        
         let camera = ZLCustomCamera()
         camera.takeDoneBlock = { [weak self] image, videoUrl in
             self?.save(image: image, videoUrl: videoUrl)
