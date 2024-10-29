@@ -52,6 +52,7 @@
 "customCameraTips" = "Maintenez la pression sur pour enregistrer";
 "customCameraTakePhotoTips" = "Appuyez pour prendre une photo";
 "customCameraRecordVideoTips" = "Maintenez enfoncé pour enregistrer une vidéo";
+"customCameraTapToRecordVideoTips" = "Appuyez pour enregistrer une vidéo";
 "minRecordTimeTips" = "Enregistrez au moins %lds";
 
 "cameraRoll" = "Récents";

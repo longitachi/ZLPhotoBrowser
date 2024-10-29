@@ -52,6 +52,7 @@
 "customCameraTips" = "Toque para tirar foto e segure para gravar vídeo";
 "customCameraTakePhotoTips" = "Toque para tirar foto";
 "customCameraRecordVideoTips" = "Segure para gravar vídeo";
+"customCameraTapToRecordVideoTips" = "Toque para gravar vídeo";
 "minRecordTimeTips" = "Registre pelo menos %lds";
 
 "cameraRoll" = "Recentes";

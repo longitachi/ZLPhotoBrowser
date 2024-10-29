@@ -52,6 +52,7 @@
 "customCameraTips" = "Toccare per scattare e tiene premuto per registrare";
 "customCameraTakePhotoTips" = "Tocca per scattare una foto";
 "customCameraRecordVideoTips" = "Tieni premuto per registrare il video";
+"customCameraTapToRecordVideoTips" = "Tocca per registrare un video";
 "minRecordTimeTips" = "Registra almeno %lds";
 
 "cameraRoll" = "Recenti";

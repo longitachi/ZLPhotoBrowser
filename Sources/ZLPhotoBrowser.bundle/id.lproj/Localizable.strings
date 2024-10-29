@@ -52,6 +52,7 @@
 "customCameraTips" = "Ketuk untuk mengambil video dan tahan untuk merekam";
 "customCameraTakePhotoTips" = "Ketuk untuk mengambil foto";
 "customCameraRecordVideoTips" = "Tahan untuk merekam video";
+"customCameraTapToRecordVideoTips" = "Ketuk untuk merekam video";
 "minRecordTimeTips" = "Merekam setidaknya %ld detik";
 
 "cameraRoll" = "Terbaru";

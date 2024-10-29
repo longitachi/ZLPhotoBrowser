@@ -52,6 +52,7 @@
 "customCameraTips" = "Tik om een foto te nemen en druk en houd de camera vast";
 "customCameraTakePhotoTips" = "Tik om foto's te nemen";
 "customCameraRecordVideoTips" = "Pers en vasthouden camera";
+"customCameraTapToRecordVideoTips" = "Tik om video op te nemen";
 "minRecordTimeTips" = "Neem minstens %ld seconden op";
 
 "cameraRoll" = "Recente projecten";

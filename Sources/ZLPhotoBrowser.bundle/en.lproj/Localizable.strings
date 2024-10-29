@@ -52,6 +52,7 @@
 "customCameraTips" = "Tap to take photo and hold to record video";
 "customCameraTakePhotoTips" = "Tap to take photo";
 "customCameraRecordVideoTips" = "Hold to record video";
+"customCameraTapToRecordVideoTips" = "Tap to record video";
 "minRecordTimeTips" = "Record at least %lds";
 
 "cameraRoll" = "Recents";

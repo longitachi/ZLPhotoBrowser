@@ -52,6 +52,7 @@
 "customCameraTips" = "轻触拍照，按住摄像";
 "customCameraTakePhotoTips" = "轻触拍照";
 "customCameraRecordVideoTips" = "按住摄像";
+"customCameraTapToRecordVideoTips" = "轻触摄像";
 "minRecordTimeTips" = "至少录制%ld秒";
 
 "cameraRoll" = "最近项目";

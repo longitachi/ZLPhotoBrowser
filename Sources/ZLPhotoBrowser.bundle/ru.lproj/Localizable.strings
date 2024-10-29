@@ -52,6 +52,7 @@
 "customCameraTips" = "Нажмите для съемки, удерживайте для записи";
 "customCameraTakePhotoTips" = "Нажмите для съeмки";
 "customCameraRecordVideoTips" = "Удерживайте для записи";
+"customCameraTapToRecordVideoTips" = "Нажмите, чтобы записать видео";
 "minRecordTimeTips" = "Запишите не менее 2 с";
 
 "cameraRoll" = "Недавние";

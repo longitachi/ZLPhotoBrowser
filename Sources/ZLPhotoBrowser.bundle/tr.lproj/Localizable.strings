@@ -52,6 +52,7 @@
 "customCameraTips" = "Fotoğraf çekmek için dokunun ve video kaydetmek için basılı tutun";
 "customCameraTakePhotoTips" = "Fotoğraf çekmek için dokunun";
 "customCameraRecordVideoTips" = "Video çekmek için basılı tutun";
+"customCameraTapToRecordVideoTips" = "Videoyu kaydetmek için dokunun";
 "minRecordTimeTips" = "En az %lds kaydedin";
 
 "cameraRoll" = "Son Çekimler";

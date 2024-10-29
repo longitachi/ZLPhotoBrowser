@@ -52,6 +52,7 @@
 "customCameraTips" = "Tippen, um Fotos aufzunehmen und halten, um ein Video aufzunehmen";
 "customCameraTakePhotoTips" = "Tippen, um ein Foto aufzunehmen";
 "customCameraRecordVideoTips" = "Halten Sie gedrückt, um ein Video aufzunehmen";
+"customCameraTapToRecordVideoTips" = "Tippen, um Video aufzunehmen";
 "minRecordTimeTips" = "Nehmen Sie mindestens %lds auf";
 
 "cameraRoll" = "Letzte";

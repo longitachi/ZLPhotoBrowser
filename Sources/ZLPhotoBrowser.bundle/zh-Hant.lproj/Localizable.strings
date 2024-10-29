@@ -52,6 +52,7 @@
 "customCameraTips" = "輕觸拍照，按住攝像";
 "customCameraTakePhotoTips" = "輕觸拍照";
 "customCameraRecordVideoTips" = "按住攝像";
+"customCameraTapToRecordVideoTips" = "輕觸攝像";
 "minRecordTimeTips" = "至少錄制%ld秒";
 
 "cameraRoll" = "最近項目";

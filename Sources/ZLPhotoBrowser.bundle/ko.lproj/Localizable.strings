@@ -52,6 +52,7 @@
 "customCameraTips" = "눌러서 촬영 및 길게 눌러서 기록";
 "customCameraTakePhotoTips" = "눌러서 촬영";
 "customCameraRecordVideoTips" = "길게 눌러서 기록";
+"customCameraTapToRecordVideoTips" = "눌러서 기록";
 "minRecordTimeTips" = "%ld 초 이상 녹화";
 
 "cameraRoll" = "최근 항목";

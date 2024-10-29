@@ -52,6 +52,7 @@
 "customCameraTips" = "Toca para tomar una foto y mantén pulsado para grabar un vídeo";
 "customCameraTakePhotoTips" = "Toca para tomar una foto";
 "customCameraRecordVideoTips" = "Mantén pulsado para grabar vídeo";
+"customCameraTapToRecordVideoTips" = "Toca para grabar el vídeo";
 "minRecordTimeTips" = "Grabar al menos %lds";
 
 "cameraRoll" = "Recientes";

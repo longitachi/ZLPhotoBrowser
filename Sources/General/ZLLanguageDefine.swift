@@ -273,8 +273,11 @@ public struct ZLLocalLanguageKey: Hashable {
     /// Tap to take photo (轻触拍照)
     public static let customCameraTakePhotoTips = ZLLocalLanguageKey(rawValue: "customCameraTakePhotoTips")
     
-    /// hold to record video (按住摄像)
+    /// Hold to record video (按住摄像)
     public static let customCameraRecordVideoTips = ZLLocalLanguageKey(rawValue: "customCameraRecordVideoTips")
+    
+    /// Tap to record video (轻触摄像)
+    public static let customCameraTapToRecordVideoTips = ZLLocalLanguageKey(rawValue: "customCameraTapToRecordVideoTips")
     
     /// Record at least %lds (至少录制%ld秒)
     public static let minRecordTimeTips = ZLLocalLanguageKey(rawValue: "minRecordTimeTips")

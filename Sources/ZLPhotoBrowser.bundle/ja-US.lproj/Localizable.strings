@@ -49,9 +49,10 @@
 "saveVideoError" = "ビデオの保存に失敗しました";
 "timeout" = "タイムアウトしました";
 
-"customCameraTips" = "タップして撮影、長押しして記録できます";
+"customCameraTips" = "タップして撮影、長押しで記録";
 "customCameraTakePhotoTips" = "タップして撮影できます";
 "customCameraRecordVideoTips" = "長押しで記録できます";
+"customCameraTapToRecordVideoTips" = "タップして記録";
 "minRecordTimeTips" = "最低 %ld秒以上記録してください";
 
 "cameraRoll" = "最近の項目";

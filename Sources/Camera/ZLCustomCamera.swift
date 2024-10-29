@@ -691,9 +691,11 @@ open class ZLCustomCamera: UIViewController {
             return localLanguageTextValue(.customCameraTips)
         } else if cameraConfig.allowTakePhoto {
             return localLanguageTextValue(.customCameraTakePhotoTips)
-        } else if shouldUseTapToRecord {
-            return "" // TODO?: Add "Tap to record video" tip?
         } else if cameraConfig.allowRecordVideo {
+            if shouldUseTapToRecord {
+                return localLanguageTextValue(.customCameraTapToRecordVideoTips)
+            }
+            
             return localLanguageTextValue(.customCameraRecordVideoTips)
         } else {
             return ""

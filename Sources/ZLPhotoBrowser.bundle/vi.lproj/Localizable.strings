@@ -52,6 +52,7 @@
 "customCameraTips" = "Nhấn để chụp và giữ để ghi";
 "customCameraTakePhotoTips" = "Nhấn để chụp";
 "customCameraRecordVideoTips" = "Giữ để quay video";
+"customCameraTapToRecordVideoTips" = "Nhấn để quay video";
 "minRecordTimeTips" = "Ghi ít nhất %ld giây";
 
 "cameraRoll" = "Gần đây";

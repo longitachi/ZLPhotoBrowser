@@ -52,6 +52,7 @@
 "customCameraTips" = "انقر لالتقاط صورة مع الاستمرار لتسجيل الفيديو";
 "customCameraTakePhotoTips" = "انقر لالتقاط صورة";
 "customCameraRecordVideoTips" = "اضغط مع الاستمرار لتسجيل الفيديو";
+"customCameraTapToRecordVideoTips" = "اضغط لتسجيل الفيديو";
 "minRecordTimeTips" = "سجل على الأقل %lds";
 
 "cameraRoll" = "حديثا";
