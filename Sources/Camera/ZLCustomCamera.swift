@@ -450,13 +450,13 @@ open class ZLCustomCamera: UIViewController {
                 largeCircleView.addGestureRecognizer(longGes)
                 takePictureTap?.require(toFail: longGes)
                 recordLongGes = longGes
+
+                let panGes = UIPanGestureRecognizer(target: self, action: #selector(adjustCameraFocus(_:)))
+                panGes.delegate = self
+                panGes.maximumNumberOfTouches = 1
+                largeCircleView.addGestureRecognizer(panGes)
+                cameraFocusPanGes = panGes
             }
-            
-            let panGes = UIPanGestureRecognizer(target: self, action: #selector(adjustCameraFocus(_:)))
-            panGes.delegate = self
-            panGes.maximumNumberOfTouches = 1
-            largeCircleView.addGestureRecognizer(panGes)
-            cameraFocusPanGes = panGes
             
             recordVideoPlayerLayer = AVPlayerLayer()
             recordVideoPlayerLayer?.backgroundColor = UIColor.black.cgColor
