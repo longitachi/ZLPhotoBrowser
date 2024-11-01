@@ -571,8 +571,29 @@ open class ZLCustomCamera: UIViewController {
         cameraConfigureFinish = true
         
         sessionQueue.async {
+            self.setInitialZoomFactor(for: camera)
             self.session.startRunning()
         }
+    }
+
+    private func setInitialZoomFactor(for device: AVCaptureDevice) {
+        guard cameraConfig.enableWideCameras else { return }
+        do {
+            try device.lockForConfiguration()
+            device.videoZoomFactor = device.defaultZoomFactor
+            device.unlockForConfiguration()
+        } catch {
+            zl_debugPrint("Failed to set initial zoom factor: \(error.localizedDescription)")
+        }
+    }
+    
+    private func findFirstDevice(ofTypes types: [AVCaptureDevice.DeviceType], in session: AVCaptureDevice.DiscoverySession) -> AVCaptureDevice? {
+        for type in types {
+            if let device = session.devices.first(where: { $0.deviceType == type }) {
+                return device
+            }
+        }
+        return nil
     }
     
     private func refreshSessionPreset(device: AVCaptureDevice) {
@@ -593,8 +614,30 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func getCamera(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        let devices = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: position).devices
-        for device in devices {
+        let deviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera]
+        var extendedDeviceTypes: [AVCaptureDevice.DeviceType] = []
+        let allDeviceTypes: [AVCaptureDevice.DeviceType]
+        
+        if #available(iOS 13.0, *), cameraConfig.enableWideCameras {
+            extendedDeviceTypes = [.builtInTripleCamera, .builtInDualWideCamera, .builtInDualCamera]
+            allDeviceTypes = deviceTypes + extendedDeviceTypes
+        } else {
+            allDeviceTypes = deviceTypes
+        }
+
+        let session = AVCaptureDevice.DiscoverySession(
+            deviceTypes: allDeviceTypes,
+            mediaType: .video,
+            position: position
+        )
+
+        if #available(iOS 13.0, *), cameraConfig.enableWideCameras {
+            if let camera = findFirstDevice(ofTypes: extendedDeviceTypes, in: session) {
+                return camera
+            }
+        }
+
+        for device in session.devices {
             if device.position == position {
                 return device
             }
@@ -847,6 +890,7 @@ open class ZLCustomCamera: UIViewController {
                         self.session.addInput(currInput)
                     }
                     
+                    self.setInitialZoomFactor(for: newVideoInput.device)
                     self.session.commitConfiguration()
                 }
             } catch {
@@ -1020,7 +1064,8 @@ open class ZLCustomCamera: UIViewController {
             return 1
         }
         if #available(iOS 11.0, *) {
-            return min(15, device.maxAvailableVideoZoomFactor)
+            let factor = cameraConfig.enableWideCameras ? device.defaultZoomFactor : 1
+            return min(15 * factor, device.maxAvailableVideoZoomFactor)
         } else {
             return min(15, device.activeFormat.videoMaxZoomFactor)
         }
@@ -1032,7 +1077,13 @@ open class ZLCustomCamera: UIViewController {
         }
         do {
             try device.lockForConfiguration()
-            device.videoZoomFactor = zoomFactor
+            if cameraConfig.enableWideCameras {
+                let minZoomFactor = device.minAvailableVideoZoomFactor
+                let clampedZoomFactor = max(minZoomFactor, min(zoomFactor, getMaxZoomFactor()))
+                device.videoZoomFactor = clampedZoomFactor
+            } else {
+                device.videoZoomFactor = zoomFactor
+            }
             device.unlockForConfiguration()
         } catch {
             zl_debugPrint("调整焦距失败 \(error.localizedDescription)")
