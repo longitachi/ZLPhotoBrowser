@@ -96,6 +96,10 @@ public class ZLCameraConfiguration: NSObject {
     /// If `allowTakePhoto` is true, `tapToRecordVideo` will be ignored.
     public var tapToRecordVideo: Bool = false
     
+    /// Enable the use of wide cameras (e.g., .builtInTripleCamera, .builtInDualWideCamera, .builtInDualCamera).
+    /// Defaults to false.
+    public var enableWideCameras: Bool = false
+    
     /// Video export format for recording video and editing video. Defaults to mov.
     public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
     
@@ -298,6 +302,12 @@ public extension ZLCameraConfiguration {
     @discardableResult
     func tapToRecordVideo(_ value: Bool) -> ZLCameraConfiguration {
         tapToRecordVideo = value
+        return self
+    }
+    
+    @discardableResult
+    func enableWideCameras(_ value: Bool) -> ZLCameraConfiguration {
+        enableWideCameras = value
         return self
     }
 }
