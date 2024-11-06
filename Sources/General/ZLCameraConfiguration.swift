@@ -96,9 +96,19 @@ public class ZLCameraConfiguration: NSObject {
     /// If `allowTakePhoto` is true, `tapToRecordVideo` will be ignored.
     public var tapToRecordVideo: Bool = false
     
+    private var _enableWideCameras: Bool = false
+    
     /// Enable the use of wide cameras (e.g., .builtInTripleCamera, .builtInDualWideCamera, .builtInDualCamera).
-    /// Defaults to false.
-    public var enableWideCameras: Bool = false
+    /// Only available on iOS 13.0 and higher, defaults to false.
+    @available(iOS 13.0, *)
+    public var enableWideCameras: Bool {
+        get {
+            return _enableWideCameras
+        }
+        set {
+            _enableWideCameras = newValue
+        }
+    }
     
     /// Video export format for recording video and editing video. Defaults to mov.
     public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
