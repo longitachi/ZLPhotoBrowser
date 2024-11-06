@@ -110,6 +110,9 @@ public class ZLCameraConfiguration: NSObject {
         }
     }
     
+    /// Overlay image view to be displayed on top of the camera view.
+    public var overlayImageView: UIImageView?
+    
     /// Video export format for recording video and editing video. Defaults to mov.
     public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
     
@@ -316,8 +319,15 @@ public extension ZLCameraConfiguration {
     }
     
     @discardableResult
+    @available(iOS 13.0, *)
     func enableWideCameras(_ value: Bool) -> ZLCameraConfiguration {
         enableWideCameras = value
+        return self
+    }
+    
+    @discardableResult
+    func overlayImageView(_ value: UIImageView) -> ZLCameraConfiguration {
+        overlayImageView = value
         return self
     }
 }
