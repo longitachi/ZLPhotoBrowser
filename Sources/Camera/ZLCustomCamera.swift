@@ -577,7 +577,7 @@ open class ZLCustomCamera: UIViewController {
     }
 
     private func setInitialZoomFactor(for device: AVCaptureDevice) {
-        guard cameraConfig.enableWideCameras else { return }
+        guard isWideCameraEnabled() else { return }
         do {
             try device.lockForConfiguration()
             device.videoZoomFactor = device.defaultZoomFactor
@@ -631,7 +631,7 @@ open class ZLCustomCamera: UIViewController {
             position: position
         )
 
-        if #available(iOS 13.0, *), cameraConfig.enableWideCameras {
+        if isWideCameraEnabled() {
             if let camera = findFirstDevice(ofTypes: extendedDeviceTypes, in: session) {
                 return camera
             }
@@ -1059,12 +1059,20 @@ open class ZLCustomCamera: UIViewController {
         pinch.scale = 1
     }
     
+    private func isWideCameraEnabled() -> Bool {
+        if #available(iOS 13.0, *) {
+            return cameraConfig.enableWideCameras
+        } else {
+            return false
+        }
+    }
+    
     private func getMaxZoomFactor() -> CGFloat {
         guard let device = videoInput?.device else {
             return 1
         }
         if #available(iOS 11.0, *) {
-            let factor = cameraConfig.enableWideCameras ? device.defaultZoomFactor : 1
+            let factor = isWideCameraEnabled() ? device.defaultZoomFactor : 1
             return min(15 * factor, device.maxAvailableVideoZoomFactor)
         } else {
             return min(15, device.activeFormat.videoMaxZoomFactor)
@@ -1077,7 +1085,8 @@ open class ZLCustomCamera: UIViewController {
         }
         do {
             try device.lockForConfiguration()
-            if cameraConfig.enableWideCameras {
+            if isWideCameraEnabled() {
+                // minAvailableVideoZoomFactor needs iOS 11+, wide cameras flag 13+.
                 let minZoomFactor = device.minAvailableVideoZoomFactor
                 let clampedZoomFactor = max(minZoomFactor, min(zoomFactor, getMaxZoomFactor()))
                 device.videoZoomFactor = clampedZoomFactor
