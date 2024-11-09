@@ -318,6 +318,7 @@ public extension ZLCameraConfiguration {
         return self
     }
     
+    @available(iOS 13.0, *)
     @discardableResult
     @available(iOS 13.0, *)
     func enableWideCameras(_ value: Bool) -> ZLCameraConfiguration {

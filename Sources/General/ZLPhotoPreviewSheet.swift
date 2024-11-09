@@ -273,10 +273,12 @@ public class ZLPhotoPreviewSheet: UIView {
         return true
     }
     
+    /// - Warning: When calling this method in OC language, make sure that the `sender` is not zero
     @objc public func showPreview(animate: Bool = true, sender: UIViewController) {
         show(preview: true, animate: animate, sender: sender)
     }
     
+    /// - Warning: When calling this method in OC language, make sure that the `sender` is not zero
     @objc public func showPhotoLibrary(sender: UIViewController) {
         show(preview: false, animate: false, sender: sender)
     }
