@@ -1091,7 +1091,6 @@ open class ZLCustomCamera: UIViewController {
         do {
             try device.lockForConfiguration()
             if #available(iOS 11.0, *), isWideCameraEnabled() {
-                // minAvailableVideoZoomFactor needs iOS 11+, wide cameras flag 13+.
                 let minZoomFactor = device.minAvailableVideoZoomFactor
                 let clampedZoomFactor = max(minZoomFactor, min(zoomFactor, getMaxZoomFactor()))
                 device.videoZoomFactor = clampedZoomFactor
