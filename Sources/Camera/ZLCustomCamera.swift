@@ -384,7 +384,7 @@ open class ZLCustomCamera: UIViewController {
         previewLayer?.frame = previewFrame
         recordVideoPlayerLayer?.frame = previewFrame
         takedImageView.frame = previewFrame
-        cameraConfig.overlayImageView?.frame = previewFrame // Layout custom overlay image view.
+        cameraConfig.overlayView?.frame = previewFrame // Layout custom overlay image view.
         
         dismissBtn.frame = CGRect(x: 20, y: 60, width: 30, height: 30)
         retakeBtn.frame = CGRect(x: 20, y: 60, width: 28, height: 28)
@@ -430,8 +430,8 @@ open class ZLCustomCamera: UIViewController {
         view.addSubview(tipsLabel)
         view.addSubview(bottomView)
         
-        if let overlayImageView = cameraConfig.overlayImageView {
-            view.addSubview(overlayImageView)  // Add custom overlay image view.
+        if let overlayView = cameraConfig.overlayView {
+            view.addSubview(overlayView)  // Add custom overlay view.
         }
         
         bottomView.addSubview(flashBtn)
