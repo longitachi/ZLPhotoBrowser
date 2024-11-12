@@ -110,8 +110,13 @@ public class ZLCameraConfiguration: NSObject {
         }
     }
     
-    /// Overlay image view to be displayed on top of the camera view.
-    public var overlayImageView: UIImageView?
+    /// Overlay view to be displayed on top of the camera view.
+    /// User interaction is disabled for this view.
+    public var overlayView: UIView? {
+        didSet {
+            overlayView?.isUserInteractionEnabled = false
+        }
+    }
     
     /// Video export format for recording video and editing video. Defaults to mov.
     public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
@@ -326,8 +331,8 @@ public extension ZLCameraConfiguration {
     }
     
     @discardableResult
-    func overlayImageView(_ value: UIImageView) -> ZLCameraConfiguration {
-        overlayImageView = value
+    func overlayView(_ value: UIView) -> ZLCameraConfiguration {
+        overlayView = value
         return self
     }
 }
