@@ -384,6 +384,7 @@ open class ZLCustomCamera: UIViewController {
         previewLayer?.frame = previewFrame
         recordVideoPlayerLayer?.frame = previewFrame
         takedImageView.frame = previewFrame
+        cameraConfig.overlayView?.frame = previewFrame // Layout custom overlay view.
         
         dismissBtn.frame = CGRect(x: 20, y: 60, width: 30, height: 30)
         retakeBtn.frame = CGRect(x: 20, y: 60, width: 28, height: 28)
@@ -428,6 +429,10 @@ open class ZLCustomCamera: UIViewController {
         view.addSubview(focusCursorView)
         view.addSubview(tipsLabel)
         view.addSubview(bottomView)
+        
+        if let overlayView = cameraConfig.overlayView {
+            view.addSubview(overlayView)  // Add custom overlay view.
+        }
         
         bottomView.addSubview(flashBtn)
         bottomView.addSubview(largeCircleView)
@@ -1086,7 +1091,6 @@ open class ZLCustomCamera: UIViewController {
         do {
             try device.lockForConfiguration()
             if #available(iOS 11.0, *), isWideCameraEnabled() {
-                // minAvailableVideoZoomFactor needs iOS 11+, wide cameras flag 13+.
                 let minZoomFactor = device.minAvailableVideoZoomFactor
                 let clampedZoomFactor = max(minZoomFactor, min(zoomFactor, getMaxZoomFactor()))
                 device.videoZoomFactor = clampedZoomFactor
