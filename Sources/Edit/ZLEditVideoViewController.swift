@@ -268,7 +268,7 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     @objc private func cancelBtnClick() {
-        dismiss(animated: animateDismiss, completion: nil)
+        dismiss(animated: animateDismiss) { self.editFinishBlock?(nil) }
     }
     
     @objc private func doneBtnClick() {
