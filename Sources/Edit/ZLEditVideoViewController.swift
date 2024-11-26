@@ -151,6 +151,8 @@ public class ZLEditVideoViewController: UIViewController {
     
     @objc public var editFinishBlock: ((URL?) -> Void)?
     
+    @objc public var cancelEditBlock: (() -> Void)?
+    
     override public var prefersStatusBarHidden: Bool {
         return true
     }
@@ -268,7 +270,9 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     @objc private func cancelBtnClick() {
-        dismiss(animated: animateDismiss, completion: nil)
+        dismiss(animated: animateDismiss) {
+            self.cancelEditBlock?()
+        }
     }
     
     @objc private func doneBtnClick() {
