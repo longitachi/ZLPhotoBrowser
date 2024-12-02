@@ -2,6 +2,16 @@
 
 -----
 
+## [4.5.7](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.7) (2024-12-02)
+### Add:
+* Custom camera supports tap-to-record mode. [#944](https://github.com/longitachi/ZLPhotoBrowser/pull/944) @tsinis
+* Custom camera supports wide-angle lenses on iOS 13 and above. [#948](https://github.com/longitachi/ZLPhotoBrowser/pull/948) @tsinis
+* Custom camera allows adding a custom overlay view. [#951](https://github.com/longitachi/ZLPhotoBrowser/pull/951) @tsinis
+* Video editing controller adds a callback block for canceling edits. [#953](https://github.com/longitachi/ZLPhotoBrowser/pull/953) @tsinis
+* Added `ZLImagePreviewControllerDelegate` protocol to receive event callbacks in ZLImagePreviewController.
+
+---
+
 ## [4.5.6](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.6) (2024-10-21)
 ### Add:
 * Support iOS18.

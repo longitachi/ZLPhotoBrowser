@@ -91,6 +91,13 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.5.7
+  Add:
+    Custom camera supports tap-to-record mode.
+    Custom camera supports wide-angle lenses on iOS 13 and above.
+    Custom camera allows adding a custom overlay view.
+    Video editing controller adds a callback block for canceling edits.
+    Added `ZLImagePreviewControllerDelegate` protocol to receive event callbacks in ZLImagePreviewController.
 ● 4.5.6
   Add:
     Support iOS18.
@@ -101,12 +108,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Update the API for obtaining album permissions.
   Fix:
     Fixed the bug that mosaics were not displayed during painting.
-● 4.5.4
-  Add:
-    Enhance the user experience of the image cropping interface and optimize the animation effects.
-    Support for setting `VideoMirrored` in the custom camera.
-  Fix:
-    Fix the issue where some UI elements are displayed incorrectly on phones without a notch.
 ...
 ```
 
@@ -162,7 +163,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.5.6" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.5.7" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support
