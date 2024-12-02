@@ -340,6 +340,8 @@ class ViewController: UIViewController {
             }
         }
         
+        vc.delegate = self
+        
         vc.doneBlock = { datas in
             debugPrint(datas)
         }
@@ -467,5 +469,19 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
         }
         
         ac.previewAssets(sender: self, assets: selectedAssets, index: indexPath.row, isOriginal: isOriginal, showBottomViewAndSelectBtn: true)
+    }
+}
+
+extension ViewController: ZLImagePreviewControllerDelegate {
+    func imagePreviewController(_ controller: ZLImagePreviewController, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        debugPrint("---- willDisplay: \(cell) indexPath: \(indexPath)")
+    }
+    
+    func imagePreviewController(_ controller: ZLImagePreviewController, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        debugPrint("---- didEndDisplaying: \(cell) indexPath: \(indexPath)")
+    }
+    
+    func imagePreviewController(_ controller: ZLImagePreviewController, didScroll collectionView: UICollectionView) {
+//        debugPrint("---- didScroll: \(collectionView)")
     }
 }

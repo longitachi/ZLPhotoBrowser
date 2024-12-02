@@ -34,6 +34,14 @@ import Photos
 
 public typealias ZLImageLoaderBlock = (_ url: URL, _ imageView: UIImageView, _ progress: @escaping (CGFloat) -> Void, _ complete: @escaping () -> Void) -> Void
 
+@objc public protocol ZLImagePreviewControllerDelegate: AnyObject {
+    @objc optional func imagePreviewController(_ controller: ZLImagePreviewController, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath)
+    
+    @objc optional func imagePreviewController(_ controller: ZLImagePreviewController, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath)
+    
+    @objc optional func imagePreviewController(_ controller: ZLImagePreviewController, didScroll collectionView: UICollectionView)
+}
+
 public class ZLImagePreviewController: UIViewController {
     static let colItemSpacing: CGFloat = 40
     
@@ -147,6 +155,8 @@ public class ZLImagePreviewController: UIViewController {
     private var dismissInteractiveTransition: ZLImagePreviewDismissInteractiveTransition?
     
     private var orientation: UIInterfaceOrientation = .unknown
+    
+    @objc public var delegate: ZLImagePreviewControllerDelegate?
     
     @objc public var longPressBlock: ((ZLImagePreviewController?, UIImage?, Int) -> Void)?
     
@@ -490,6 +500,8 @@ public extension ZLImagePreviewController {
             return
         }
         
+        delegate?.imagePreviewController?(self, didScroll: collectionView)
+        
         NotificationCenter.default.post(name: ZLPhotoPreviewController.previewVCScrollNotification, object: nil)
         let offset = scrollView.contentOffset
         var page = Int(round(offset.x / (view.bounds.width + ZLPhotoPreviewController.colItemSpacing)))
@@ -631,10 +643,12 @@ extension ZLImagePreviewController: UICollectionViewDataSource, UICollectionView
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        delegate?.imagePreviewController?(self, willDisplay: cell, forItemAt: indexPath)
         (cell as? ZLPreviewBaseCell)?.willDisplay()
     }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        delegate?.imagePreviewController?(self, didEndDisplaying: cell, forItemAt: indexPath)
         (cell as? ZLPreviewBaseCell)?.didEndDisplaying()
     }
     
