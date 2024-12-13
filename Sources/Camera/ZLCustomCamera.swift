@@ -1193,6 +1193,10 @@ open class ZLCustomCamera: UIViewController {
         } else {
             connection?.videoOrientation = cacheVideoOrientation
         }
+            
+        if let connection = connection, connection.isVideoStabilizationSupported {
+            connection.preferredVideoStabilizationMode = cameraConfig.videoStabilizationMode
+        }
         
         // 解决不同系统版本,因为录制视频编码导致安卓端无法播放的问题
         if #available(iOS 11.0, *),
