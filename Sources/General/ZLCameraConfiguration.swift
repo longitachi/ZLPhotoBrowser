@@ -118,6 +118,9 @@ public class ZLCameraConfiguration: NSObject {
         }
     }
     
+    /// Video stabilization mode. Defaults to .off.
+    public var videoStabilizationMode: AVCaptureVideoStabilizationMode = .off
+    
     /// Video export format for recording video and editing video. Defaults to mov.
     public var videoExportType: ZLCameraConfiguration.VideoExportType = .mov
     
@@ -333,6 +336,12 @@ public extension ZLCameraConfiguration {
     @discardableResult
     func overlayView(_ value: UIView) -> ZLCameraConfiguration {
         overlayView = value
+        return self
+    }
+    
+    @discardableResult
+    func videoStabilizationMode(_ value: AVCaptureVideoStabilizationMode) -> ZLCameraConfiguration {
+        videoStabilizationMode = value
         return self
     }
 }
