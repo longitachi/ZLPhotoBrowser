@@ -638,6 +638,7 @@ open class ZLCustomCamera: UIViewController {
 
         if isWideCameraEnabled() {
             if let camera = findFirstDevice(ofTypes: extendedDeviceTypes, in: session) {
+                torchDevice = camera
                 return camera
             }
         }
