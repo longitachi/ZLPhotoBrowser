@@ -467,7 +467,6 @@ open class ZLCustomCamera: UIViewController {
             recordVideoPlayerLayer?.backgroundColor = UIColor.black.cgColor
             recordVideoPlayerLayer?.videoGravity = .resizeAspect
             recordVideoPlayerLayer?.isHidden = true
-            cameraConfig.overlayView?.isHidden = false
             view.layer.insertSublayer(recordVideoPlayerLayer!, at: 0)
             
             NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
@@ -835,11 +834,11 @@ open class ZLCustomCamera: UIViewController {
         }
         takedImage = nil
         stopRecordAnimation()
+        cameraConfig.overlayView?.isHidden = false
         if let videoURL = videoURL {
             recordVideoPlayerLayer?.player?.pause()
             recordVideoPlayerLayer?.player = nil
             recordVideoPlayerLayer?.isHidden = true
-            cameraConfig.overlayView?.isHidden = false
             self.videoURL = nil
             try? FileManager.default.removeItem(at: videoURL)
         }
@@ -1332,6 +1331,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
     }
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+        cameraConfig.overlayView?.isHidden = true
         ZLMainAsync {
             defer {
                 self.isTakingPicture = false
