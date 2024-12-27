@@ -834,6 +834,7 @@ open class ZLCustomCamera: UIViewController {
         }
         takedImage = nil
         stopRecordAnimation()
+        cameraConfig.overlayView?.isHidden = false
         if let videoURL = videoURL {
             recordVideoPlayerLayer?.player?.pause()
             recordVideoPlayerLayer?.player = nil
@@ -1308,6 +1309,7 @@ open class ZLCustomCamera: UIViewController {
     
     private func playRecordVideo(fileURL: URL) {
         recordVideoPlayerLayer?.isHidden = false
+        cameraConfig.overlayView?.isHidden = true
         let player = AVPlayer(url: fileURL)
         player.automaticallyWaitsToMinimizeStalling = false
         recordVideoPlayerLayer?.player = player
@@ -1329,6 +1331,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
     }
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+        cameraConfig.overlayView?.isHidden = true
         ZLMainAsync {
             defer {
                 self.isTakingPicture = false
