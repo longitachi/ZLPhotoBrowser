@@ -1332,7 +1332,10 @@ open class ZLEditImageViewController: UIViewController {
                 transform = transform.translatedBy(x: -drawingImageViewSize.height, y: 0)
             }
             transform = transform.concatenating(drawingImageView.transform)
-            eraserCircleView.center = point.applying(transform)
+            let transformedPoint = point.applying(transform)
+            // 将变换后的点转换到 containerView 的坐标系
+            let pointInContainerView = drawingImageView.convert(transformedPoint, to: containerView)
+            eraserCircleView.center = pointInContainerView
             
             var needDraw = false
             for path in drawPaths {
