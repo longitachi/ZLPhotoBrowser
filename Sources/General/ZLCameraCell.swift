@@ -119,8 +119,10 @@ class ZLCameraCell: UICollectionViewCell {
         previewLayer?.frame = contentView.layer.bounds
         previewLayer?.videoGravity = .resizeAspectFill
         contentView.layer.insertSublayer(previewLayer!, at: 0)
-        
-        session?.startRunning()
+
+        DispatchQueue.global(qos: .background).async {
+            self.session?.startRunning()
+        }
     }
     
     private func backCamera() -> AVCaptureDevice? {
