@@ -59,7 +59,7 @@ public class ZLImagePreviewController: UIViewController {
     
     private let showBottomView: Bool
 
-    var currentIndex: Int
+    public private(set) var currentIndex: Int
     
     private var indexBeforOrientationChanged: Int
     
