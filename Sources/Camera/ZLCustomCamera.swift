@@ -1431,7 +1431,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
             let duration = self.recordDurations.reduce(0, +)
 
             // 重置焦距
-            self.setVideoZoomFactor(1)
+            self.setVideoZoomFactor(self.isWideCameraEnabled() ? (self.videoInput?.device.defaultZoomFactor ?? 1) : 1)
             if duration < Double(self.cameraConfig.minRecordDuration) {
                 showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), self.cameraConfig.minRecordDuration), self)
                 self.recordURLs.forEach { try? FileManager.default.removeItem(at: $0) }
