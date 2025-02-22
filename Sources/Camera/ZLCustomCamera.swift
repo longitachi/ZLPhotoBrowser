@@ -957,7 +957,7 @@ open class ZLCustomCamera: UIViewController {
         isTakingPicture = true
         
         let connection = imageOutput.connection(with: .video)
-        connection?.videoOrientation = orientation
+        connection?.videoOrientation = cameraConfig.lockedOutputOrientation ?? orientation
         if videoInput?.device.position == .front, connection?.isVideoMirroringSupported == true {
             connection?.isVideoMirrored = ZLPhotoConfiguration.default().cameraConfiguration.isVideoMirrored
         }
@@ -1190,8 +1190,9 @@ open class ZLCustomCamera: UIViewController {
         let connection = movieFileOutput.connection(with: .video)
         connection?.videoScaleAndCropFactor = 1
         if !restartRecordAfterSwitchCamera {
-            connection?.videoOrientation = orientation
-            cacheVideoOrientation = orientation
+            let setOrientation = cameraConfig.lockedOutputOrientation ?? orientation
+            connection?.videoOrientation = setOrientation
+            cacheVideoOrientation = setOrientation
         } else {
             connection?.videoOrientation = cacheVideoOrientation
         }
