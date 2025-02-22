@@ -459,7 +459,7 @@ open class ZLCustomCamera: UIViewController {
                 largeCircleView.addGestureRecognizer(longGes)
                 takePictureTap?.require(toFail: longGes)
                 recordLongGes = longGes
-                
+
                 let panGes = UIPanGestureRecognizer(target: self, action: #selector(adjustCameraFocus(_:)))
                 panGes.delegate = self
                 panGes.maximumNumberOfTouches = 1
@@ -584,7 +584,7 @@ open class ZLCustomCamera: UIViewController {
             self.session.startRunning()
         }
     }
-    
+
     private func setInitialZoomFactor(for device: AVCaptureDevice) {
         guard isWideCameraEnabled() else { return }
         do {
@@ -633,20 +633,20 @@ open class ZLCustomCamera: UIViewController {
         } else {
             allDeviceTypes = deviceTypes
         }
-        
+
         let session = AVCaptureDevice.DiscoverySession(
             deviceTypes: allDeviceTypes,
             mediaType: .video,
             position: position
         )
-        
+
         if isWideCameraEnabled() {
             if let camera = findFirstDevice(ofTypes: extendedDeviceTypes, in: session) {
                 torchDevice = camera
                 return camera
             }
         }
-        
+
         for device in session.devices {
             if device.position == position {
                 return device
@@ -1252,7 +1252,7 @@ open class ZLCustomCamera: UIViewController {
         guard let movieFileOutput = movieFileOutput else {
             return
         }
-        
+
         guard movieFileOutput.isRecording else {
             return
         }
@@ -1455,7 +1455,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
                         self?.videoURL = nil
                         showAlertView(error.localizedDescription, self)
                     }
-                    
+
                     self?.recordURLs.forEach { try? FileManager.default.removeItem(at: $0) }
                     self?.recordURLs.removeAll()
                     self?.recordDurations.removeAll()
