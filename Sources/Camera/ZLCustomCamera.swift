@@ -783,7 +783,13 @@ open class ZLCustomCamera: UIViewController {
         cleanTimer()
         hideTipsLabel()
     }
-    
+
+    @objc private func autoStopRecording_timerFunc() {
+        if movieFileOutput?.isRecording == true {
+            finishRecord()
+        }
+    }
+
     private func startHideTipsLabelTimer() {
         cleanTimer()
         hideTipsTimer = Timer.scheduledTimer(timeInterval: 3, target: ZLWeakProxy(target: self), selector: #selector(hideTipsLabel_timerFunc), userInfo: nil, repeats: false)
@@ -1235,13 +1241,12 @@ open class ZLCustomCamera: UIViewController {
         if shouldScheduleStop {
             cleanAutoStopTimer() // Cancel any existing timer.
             autoStopTimer = Timer.scheduledTimer(
-                withTimeInterval: Double(cameraConfig.maxRecordDuration),
+                timeInterval: Double(cameraConfig.maxRecordDuration),
+                target: ZLWeakProxy(target: self),
+                selector: #selector(autoStopRecording_timerFunc),
+                userInfo: nil,
                 repeats: false
-            ) { [weak self] _ in // Schedule new timer for full duration.
-                if self?.movieFileOutput?.isRecording == true {
-                    self?.finishRecord()
-                }
-            }
+            )
         }
     }
     
