@@ -244,6 +244,9 @@ open class ZLCustomCamera: UIViewController {
     
     private lazy var cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
     
+    /// Automatically stops recording video after maxRecordDuration on tapToRecordVideo.
+    private var autoStopTimer: Timer?
+    
     // 仅支持竖屏
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
@@ -255,6 +258,7 @@ open class ZLCustomCamera: UIViewController {
     
     deinit {
         zl_debugPrint("ZLCustomCamera deinit")
+        cleanAutoStopTimer()
         cleanTimer()
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }
@@ -779,7 +783,13 @@ open class ZLCustomCamera: UIViewController {
         cleanTimer()
         hideTipsLabel()
     }
-    
+
+    @objc private func autoStopRecording_timerFunc() {
+        if movieFileOutput?.isRecording == true {
+            finishRecord()
+        }
+    }
+
     private func startHideTipsLabelTimer() {
         cleanTimer()
         hideTipsTimer = Timer.scheduledTimer(timeInterval: 3, target: ZLWeakProxy(target: self), selector: #selector(hideTipsLabel_timerFunc), userInfo: nil, repeats: false)
@@ -791,6 +801,11 @@ open class ZLCustomCamera: UIViewController {
         hideTipsTimer = nil
     }
     
+    private func cleanAutoStopTimer() {
+        autoStopTimer?.invalidate()
+        autoStopTimer = nil
+    }
+
     @objc private func appWillResignActive() {
         if session.isRunning {
             dismiss(animated: true, completion: nil)
@@ -822,6 +837,7 @@ open class ZLCustomCamera: UIViewController {
     }
     
     @objc private func dismissBtnClick() {
+        cleanAutoStopTimer()
         dismiss(animated: true) {
             self.cancelBlock?()
         }
@@ -957,7 +973,7 @@ open class ZLCustomCamera: UIViewController {
         isTakingPicture = true
         
         let connection = imageOutput.connection(with: .video)
-        connection?.videoOrientation = orientation
+        connection?.videoOrientation = cameraConfig.lockedOutputOrientation ?? orientation
         if videoInput?.device.position == .front, connection?.isVideoMirroringSupported == true {
             connection?.isVideoMirrored = ZLPhotoConfiguration.default().cameraConfiguration.isVideoMirrored
         }
@@ -1190,12 +1206,13 @@ open class ZLCustomCamera: UIViewController {
         let connection = movieFileOutput.connection(with: .video)
         connection?.videoScaleAndCropFactor = 1
         if !restartRecordAfterSwitchCamera {
-            connection?.videoOrientation = orientation
-            cacheVideoOrientation = orientation
+            let setOrientation = cameraConfig.lockedOutputOrientation ?? orientation
+            connection?.videoOrientation = setOrientation
+            cacheVideoOrientation = setOrientation
         } else {
             connection?.videoOrientation = cacheVideoOrientation
         }
-            
+        
         if let connection = connection, connection.isVideoStabilizationSupported {
             connection.preferredVideoStabilizationMode = cameraConfig.videoStabilizationMode
         }
@@ -1221,12 +1238,15 @@ open class ZLCustomCamera: UIViewController {
         let url = URL(fileURLWithPath: ZLVideoManager.getVideoExportFilePath())
         movieFileOutput.startRecording(to: url, recordingDelegate: self)
         
-        if shouldScheduleStop { // Schedule stop recording after max duration
-            ZLMainAsync(after: Double(cameraConfig.maxRecordDuration)) {
-                if self.movieFileOutput?.isRecording == true {
-                    self.finishRecord()
-                }
-            }
+        if shouldScheduleStop {
+            cleanAutoStopTimer() // Cancel any existing timer.
+            autoStopTimer = Timer.scheduledTimer(
+                timeInterval: Double(cameraConfig.maxRecordDuration),
+                target: ZLWeakProxy(target: self),
+                selector: #selector(autoStopRecording_timerFunc),
+                userInfo: nil,
+                repeats: false
+            )
         }
     }
     
@@ -1403,6 +1423,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
     private func finishRecordAndMergeVideo() {
         ZLMainAsync {
             self.stopRecordAnimation()
+            self.cleanAutoStopTimer() // Cancel timer when recording finishes.
             
             defer {
                 self.resetSubViewStatus()
@@ -1415,7 +1436,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
             let duration = self.recordDurations.reduce(0, +)
             
             // 重置焦距
-            self.setVideoZoomFactor(1)
+            self.setVideoZoomFactor(self.isWideCameraEnabled() ? (self.videoInput?.device.defaultZoomFactor ?? 1) : 1)
             if duration < Double(self.cameraConfig.minRecordDuration) {
                 showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), self.cameraConfig.minRecordDuration), self)
                 self.recordURLs.forEach { try? FileManager.default.removeItem(at: $0) }

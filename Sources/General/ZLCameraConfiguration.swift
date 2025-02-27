@@ -138,6 +138,9 @@ public class ZLCameraConfiguration: NSObject {
             pri_videoCodecType = newValue
         }
     }
+    
+    /// Optional lock for output orientation. If set, any video/photo output will use this orientation.
+    public var lockedOutputOrientation: AVCaptureVideoOrientation? = nil
 }
 
 public extension ZLCameraConfiguration {
@@ -342,6 +345,12 @@ public extension ZLCameraConfiguration {
     @discardableResult
     func videoStabilizationMode(_ value: AVCaptureVideoStabilizationMode) -> ZLCameraConfiguration {
         videoStabilizationMode = value
+        return self
+    }
+    
+    @discardableResult
+    func lockedOutputOrientation(_ orientation: AVCaptureVideoOrientation?) -> ZLCameraConfiguration {
+        self.lockedOutputOrientation = orientation
         return self
     }
 }
