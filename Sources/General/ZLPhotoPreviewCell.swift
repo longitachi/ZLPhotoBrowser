@@ -679,7 +679,7 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         playerLayer?.frame = playerView.bounds
         playerView.layer.insertSublayer(playerLayer!, at: 0)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: AVPlayerItem.didPlayToEndTimeNotification, object: player?.currentItem)
     }
     
     @objc private func playBtnClick() {
@@ -701,18 +701,26 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     @objc private func playFinish() {
-        pausePlayer(seekToZero: true)
+        pausePlayer(seekToZero: true, ignorePlayStatus: true)
     }
     
     @objc private func appWillResignActive() {
         pausePlayer(seekToZero: false)
     }
     
-    private func pausePlayer(seekToZero: Bool) {
-        guard isPlaying else { return }
+    /// 暂停播放器
+    /// - Parameters:
+    ///   - seekToZero: 是否seek到0秒
+    ///   - ignorePlayStatus: 是否忽略当前播放器播放状态（
+    /// - Note: 由于`iOS16`后，收到`AVPlayerItem.didPlayToEndTimeNotification`通知后，`player`的`rate`值已经是`0`，所以会被`guard isPlaying else { return }`拦截。所以加了`ignorePlayStatus`参数
+    private func pausePlayer(seekToZero: Bool, ignorePlayStatus: Bool = false) {
+        guard isPlaying || ignorePlayStatus else { return }
         
         player?.pause()
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        }
+        
         if seekToZero {
             player?.seek(to: .zero)
         }
@@ -841,7 +849,7 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     @objc private func playFinish() {
-        pausePlayer(seekToZero: true)
+        pausePlayer(seekToZero: true, ignorePlayStatus: true)
     }
     
     @objc private func appWillResignActive() {
@@ -852,11 +860,18 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         pausePlayer(seekToZero: false)
     }
     
-    func pausePlayer(seekToZero: Bool) {
-        guard isPlaying else { return }
+    /// 暂停播放器
+    /// - Parameters:
+    ///   - seekToZero: 是否seek到0秒
+    ///   - ignorePlayStatus: 是否忽略当前播放器播放状态（
+    /// - Note: 由于`iOS16`后，收到`AVPlayerItem.didPlayToEndTimeNotification`通知后，`player`的`rate`值已经是`0`，所以会被`guard isPlaying else { return }`拦截。所以加了`ignorePlayStatus`参数
+    private func pausePlayer(seekToZero: Bool, ignorePlayStatus: Bool = false) {
+        guard isPlaying || ignorePlayStatus else { return }
         
         player?.pause()
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        }
         if seekToZero {
             player?.seek(to: .zero)
         }
@@ -888,7 +903,7 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
             CATransaction.commit()
         }
         playerView.layer.insertSublayer(playerLayer!, at: 0)
-        NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(playFinish), name: AVPlayerItem.didPlayToEndTimeNotification, object: player?.currentItem)
     }
     
     private func calculatePlayerFrame(for item: AVPlayerItem, completion: ((CGRect) -> Void)?) {
