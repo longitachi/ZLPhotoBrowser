@@ -914,7 +914,7 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
             let videoTracks = item.asset.tracks(withMediaType: .video)
             
             if let videoTrack = videoTracks.first {
-                let size = videoTrack.naturalSize.applying(videoTrack.preferredTransform)
+                let size = self.correctVideoSize(for: videoTrack)
                 self.videoSizeCache[self.videoURLString] = size
                 
                 ZLMainAsync {
@@ -925,6 +925,23 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
                     completion?(self.bounds)
                 }
             }
+        }
+    }
+    
+    /// 计算视频实际宽高
+    private func correctVideoSize(for track: AVAssetTrack) -> CGSize {
+        let size = track.naturalSize
+        let transform = track.preferredTransform
+
+        // 获取视频的旋转角度
+        let angle = atan2(transform.b, transform.a) * (180 / .pi)
+
+        if angle == 90 || angle == -90 {
+            // 竖屏视频（宽高需要对调）
+            return CGSize(width: abs(size.height), height: abs(size.width))
+        } else {
+            // 横屏视频（宽高不变）
+            return CGSize(width: abs(size.width), height: abs(size.height))
         }
     }
     
