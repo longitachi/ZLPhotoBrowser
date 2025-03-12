@@ -247,6 +247,10 @@ open class ZLCustomCamera: UIViewController {
     /// Automatically stops recording video after maxRecordDuration on tapToRecordVideo.
     private var autoStopTimer: Timer?
     
+    private var canEditImage: Bool {
+        ZLPhotoConfiguration.default().allowEditImage
+    }
+    
     // 仅支持竖屏
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         deviceIsiPhone() ? .portrait : .all
@@ -922,20 +926,8 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
-    private func canEditImage() -> Bool {
-        let config = ZLPhotoConfiguration.default()
-        
-        guard config.allowEditImage else {
-            return false
-        }
-        
-        // 如果满足如下条件，则会在拍照完成后，返回相册界面直接进入编辑界面，这里就不在编辑
-        let editAfterSelect = config.editAfterSelectThumbnailImage && config.maxSelectCount == 1
-        return !editAfterSelect
-    }
-    
     @objc private func editImage() {
-        guard let takedImage = takedImage, canEditImage() else {
+        guard let takedImage = takedImage, canEditImage else {
             return
         }
         
@@ -1316,9 +1308,8 @@ open class ZLCustomCamera: UIViewController {
                 self.bottomView.isHidden = true
                 self.dismissBtn.isHidden = true
                 if self.takedImage != nil {
-                    let canEdit = self.canEditImage()
-                    self.retakeBtn.isHidden = canEdit
-                    self.doneBtn.isHidden = canEdit
+                    self.retakeBtn.isHidden = self.canEditImage
+                    self.doneBtn.isHidden = self.canEditImage
                 } else {
                     self.retakeBtn.isHidden = false
                     self.doneBtn.isHidden = false

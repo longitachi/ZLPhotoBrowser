@@ -98,7 +98,7 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Fix video recording with both torch-on and wide cameras.
     Fixed the problem of freezing caused by calculating the frame when previewing network videos.
     Fix the memory leak issue in the ZLEditImageViewController interface.
-    When there is no album permission, clicking on the album no longer displays the permission alert.
+    After the initial request for album permissions is denied, the permission guidance alert will no longer be displayed.
     Correct eraser misalignment after image cropping.
 ● 4.5.7
   Add:
