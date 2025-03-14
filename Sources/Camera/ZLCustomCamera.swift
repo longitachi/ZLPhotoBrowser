@@ -45,6 +45,8 @@ open class ZLCustomCamera: UIViewController {
     
     @objc public var cancelBlock: (() -> Void)?
     
+    @objc public var willCaptureBlock: ((@escaping () -> Void) -> Void)?
+    
     public lazy var tipsLabel: UILabel = {
         let label = UILabel()
         label.font = .zl.font(ofSize: 14)
@@ -951,6 +953,16 @@ open class ZLCustomCamera: UIViewController {
     
     // 点击拍照
     @objc private func takePicture() {
+        if let willCaptureBlock = willCaptureBlock {
+            willCaptureBlock { [weak self] in
+                self?.performPhotoCapture()
+            }
+        } else {
+            performPhotoCapture()
+        }
+    }
+
+    private func performPhotoCapture() {
         guard ZLPhotoManager.hasCameraAuthority(), !isTakingPicture else {
             return
         }
@@ -1179,6 +1191,16 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func startRecord(shouldScheduleStop: Bool = false) {
+        if let willCaptureBlock = willCaptureBlock {
+            willCaptureBlock { [weak self] in
+                self?.startRecording(shouldScheduleStop: shouldScheduleStop)
+            }
+        } else {
+            startRecording(shouldScheduleStop: shouldScheduleStop)
+        }
+    }
+
+    private func startRecording(shouldScheduleStop: Bool = false) {
         guard let movieFileOutput = movieFileOutput else {
             return
         }
@@ -1205,7 +1227,7 @@ open class ZLCustomCamera: UIViewController {
             connection?.videoOrientation = cacheVideoOrientation
         }
         
-        if let connection = connection, connection.isVideoStabilizationSupported {
+        if let connection = connection, connection.isVideoStabilizationSupported, videoInput?.device.position == .back {
             connection.preferredVideoStabilizationMode = cameraConfig.videoStabilizationMode
         }
         
