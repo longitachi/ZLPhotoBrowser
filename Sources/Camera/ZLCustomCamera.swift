@@ -149,7 +149,7 @@ open class ZLCustomCamera: UIViewController {
     
     public lazy var switchCameraBtn: ZLEnlargeButton = {
         let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
-
+        
         let btn = ZLEnlargeButton(type: .custom)
         btn.setImage(.zl.getImage("zl_toggle_camera"), for: .normal)
         btn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
@@ -366,7 +366,7 @@ open class ZLCustomCamera: UIViewController {
     override open func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         guard session.isRunning else { return }
-
+        
         sessionQueue.async {
             self.session.stopRunning()
         }
@@ -485,7 +485,7 @@ open class ZLCustomCamera: UIViewController {
             recordVideoPlayerLayer?.videoGravity = .resizeAspect
             recordVideoPlayerLayer?.isHidden = true
             view.layer.insertSublayer(recordVideoPlayerLayer!, at: 0)
-
+            
             NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         }
         
@@ -597,7 +597,7 @@ open class ZLCustomCamera: UIViewController {
             self.session.startRunning()
         }
     }
-    
+
     private func setInitialZoomFactor(for device: AVCaptureDevice) {
         guard isWideCameraEnabled() else { return }
         do {
@@ -646,20 +646,20 @@ open class ZLCustomCamera: UIViewController {
         } else {
             allDeviceTypes = deviceTypes
         }
-        
+
         let session = AVCaptureDevice.DiscoverySession(
             deviceTypes: allDeviceTypes,
             mediaType: .video,
             position: position
         )
-        
+
         if isWideCameraEnabled() {
             if let camera = findFirstDevice(ofTypes: extendedDeviceTypes, in: session) {
                 torchDevice = camera
                 return camera
             }
         }
-        
+
         for device in session.devices {
             if device.position == position {
                 return device
@@ -796,13 +796,13 @@ open class ZLCustomCamera: UIViewController {
         cleanTimer()
         hideTipsLabel()
     }
-    
+
     @objc private func autoStopRecording_timerFunc() {
         if movieFileOutput?.isRecording == true {
             finishRecord()
         }
     }
-    
+
     private func startHideTipsLabelTimer() {
         cleanTimer()
         hideTipsTimer = Timer.scheduledTimer(timeInterval: 3, target: ZLWeakProxy(target: self), selector: #selector(hideTipsLabel_timerFunc), userInfo: nil, repeats: false)
@@ -818,7 +818,7 @@ open class ZLCustomCamera: UIViewController {
         autoStopTimer?.invalidate()
         autoStopTimer = nil
     }
-    
+
     @objc private func appWillResignActive() {
         if session.isRunning {
             dismiss(animated: true, completion: nil)
@@ -1045,7 +1045,7 @@ open class ZLCustomCamera: UIViewController {
         isAdjustingFocusPoint = true
         focusCursorView.center = point
         focusCursorView.alpha = 1
-
+        
         let scaleAnimation = ZLAnimationUtils.animation(type: .scale, fromValue: 2, toValue: 1, duration: 0.25)
         let fadeShowAnimation = ZLAnimationUtils.animation(type: .fade, fromValue: 0, toValue: 1, duration: 0.25)
         let fadeDismissAnimation = ZLAnimationUtils.animation(type: .fade, fromValue: 1, toValue: 0, duration: 0.25)
@@ -1286,7 +1286,7 @@ open class ZLCustomCamera: UIViewController {
         guard let movieFileOutput = movieFileOutput else {
             return
         }
-        
+
         guard movieFileOutput.isRecording else {
             return
         }
@@ -1439,7 +1439,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
         ZLMainAsync {
             self.recordURLs.append(outputFileURL)
             self.recordDurations.append(output.recordedDuration.seconds)
-
+            
             if self.restartRecordAfterSwitchCamera {
                 self.startRecord()
                 return
@@ -1489,7 +1489,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
                         self?.videoURL = nil
                         showAlertView(error.localizedDescription, self)
                     }
-                    
+
                     self?.recordURLs.forEach { try? FileManager.default.removeItem(at: $0) }
                     self?.recordURLs.removeAll()
                     self?.recordDurations.removeAll()
