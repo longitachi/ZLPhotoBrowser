@@ -45,7 +45,7 @@ open class ZLCustomCamera: UIViewController {
     
     @objc public var cancelBlock: (() -> Void)?
     
-    @objc public var willCaptureBlock: ((@escaping () -> Void) -> Void)?
+    @objc public var willCaptureBlock: ((@escaping () -> Void, _ isCapturing: Bool) -> Void)?
     
     public lazy var tipsLabel: UILabel = {
         let label = UILabel()
@@ -216,6 +216,8 @@ open class ZLCustomCamera: UIViewController {
     private var recordDurations: [Double] = []
     
     private var microPhontIsAvailable = true
+    
+    private var isCapturePending = false
     
     private lazy var focusCursorTapGes: UITapGestureRecognizer = {
         let tap = UITapGestureRecognizer()
@@ -953,10 +955,13 @@ open class ZLCustomCamera: UIViewController {
     
     // 点击拍照
     @objc private func takePicture() {
+        guard !isCapturePending else { return }
+        isCapturePending = true
+
         if let willCaptureBlock = willCaptureBlock {
-            willCaptureBlock { [weak self] in
+            willCaptureBlock({ [weak self] in
                 self?.performPhotoCapture()
-            }
+            }, isTakingPicture)
         } else {
             performPhotoCapture()
         }
@@ -1191,10 +1196,16 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func startRecord(shouldScheduleStop: Bool = false) {
+        guard !isCapturePending else { return }
+        
         if let willCaptureBlock = willCaptureBlock {
-            willCaptureBlock { [weak self] in
+            isCapturePending = true
+            // Pass information about current capture state.
+            let isCapturing = movieFileOutput?.isRecording == true || restartRecordAfterSwitchCamera
+            willCaptureBlock({ [weak self] in
                 self?.startRecording(shouldScheduleStop: shouldScheduleStop)
-            }
+                self?.isCapturePending = false
+            }, isCapturing)
         } else {
             startRecording(shouldScheduleStop: shouldScheduleStop)
         }
@@ -1368,6 +1379,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
         ZLMainAsync {
             defer {
                 self.isTakingPicture = false
+                self.isCapturePending = false
             }
             
             if photoSampleBuffer == nil || error != nil {
