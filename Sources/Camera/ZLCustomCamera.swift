@@ -44,6 +44,13 @@ open class ZLCustomCamera: UIViewController {
     @objc public var takeDoneBlock: ((UIImage?, URL?) -> Void)?
     
     @objc public var cancelBlock: (() -> Void)?
+
+    /// An optional block that gets called right before photo capture or video recording starts.
+    /// - Parameters:
+    ///   - completion: Call this closure when you want the camera to proceed with capture.
+    ///   - isCapturing: Boolean indicating if a capture operation is already in progress
+    //  (e.g. during camera switch while recording). If true, you might want to skip countdown or effects.
+    @objc public var willCaptureBlock: ((@escaping () -> Void, _ isCapturing: Bool) -> Void)?
     
     public lazy var tipsLabel: UILabel = {
         let label = UILabel()
@@ -214,6 +221,8 @@ open class ZLCustomCamera: UIViewController {
     private var recordDurations: [Double] = []
     
     private var microPhontIsAvailable = true
+    
+    private var isCapturePending = false
     
     private lazy var focusCursorTapGes: UITapGestureRecognizer = {
         let tap = UITapGestureRecognizer()
@@ -951,6 +960,19 @@ open class ZLCustomCamera: UIViewController {
     
     // 点击拍照
     @objc private func takePicture() {
+        if let willCaptureBlock = willCaptureBlock {
+            guard !isCapturePending else { return }
+            isCapturePending = true
+            
+            willCaptureBlock({ [weak self] in
+                self?.performPhotoCapture()
+            }, isTakingPicture)
+        } else {
+            performPhotoCapture()
+        }
+    }
+    
+    private func performPhotoCapture() {
         guard ZLPhotoManager.hasCameraAuthority(), !isTakingPicture else {
             return
         }
@@ -1179,6 +1201,21 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func startRecord(shouldScheduleStop: Bool = false) {
+        if let willCaptureBlock = willCaptureBlock {
+            guard !isCapturePending else { return }
+            isCapturePending = true
+            // Pass information about current capture state.
+            let isCapturing = movieFileOutput?.isRecording == true || restartRecordAfterSwitchCamera
+            willCaptureBlock({ [weak self] in
+                self?.startRecording(shouldScheduleStop: shouldScheduleStop)
+                self?.isCapturePending = false
+            }, isCapturing)
+        } else {
+            startRecording(shouldScheduleStop: shouldScheduleStop)
+        }
+    }
+    
+    private func startRecording(shouldScheduleStop: Bool = false) {
         guard let movieFileOutput = movieFileOutput else {
             return
         }
@@ -1205,7 +1242,7 @@ open class ZLCustomCamera: UIViewController {
             connection?.videoOrientation = cacheVideoOrientation
         }
         
-        if let connection = connection, connection.isVideoStabilizationSupported {
+        if let connection = connection, connection.isVideoStabilizationSupported, videoInput?.device.position == .back {
             connection.preferredVideoStabilizationMode = cameraConfig.videoStabilizationMode
         }
         
@@ -1346,6 +1383,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
         ZLMainAsync {
             defer {
                 self.isTakingPicture = false
+                self.isCapturePending = false
             }
             
             if photoSampleBuffer == nil || error != nil {
