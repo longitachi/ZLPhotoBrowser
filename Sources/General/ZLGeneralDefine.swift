@@ -104,7 +104,11 @@ func deviceSafeAreaInsets() -> UIEdgeInsets {
 }
 
 func deviceIsFringeScreen() -> Bool {
-    return deviceSafeAreaInsets().top > 20
+    if UIApplication.shared.statusBarOrientation.isLandscape {
+        return deviceSafeAreaInsets().left > 0 || deviceSafeAreaInsets().right > 0
+    } else {
+        return deviceSafeAreaInsets().top > 20
+    }
 }
 
 func isSmallScreen() -> Bool {

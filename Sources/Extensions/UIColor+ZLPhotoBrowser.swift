@@ -105,6 +105,16 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
         ZLPhotoUIConfiguration.default().previewVCBgColor
     }
     
+    /// 无相册访问权限时，提示标题和描述的文本颜色
+    static var noLibraryAuthTitleAndDescColor: UIColor {
+        ZLPhotoUIConfiguration.default().noLibraryAuthTitleAndDescColor
+    }
+    
+    /// 无相册访问权限时，前往系统设置按钮标题颜色
+    static var noLibraryAuthGotoSettingBtnTitleColor: UIColor {
+        ZLPhotoUIConfiguration.default().noLibraryAuthGotoSettingBtnTitleColor
+    }
+    
     /// 相册列表界面底部工具条底色
     static var bottomToolViewBgColor: UIColor {
         ZLPhotoUIConfiguration.default().bottomToolViewBgColor

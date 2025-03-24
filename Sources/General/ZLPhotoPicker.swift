@@ -60,9 +60,17 @@ public class ZLPhotoPicker: NSObject {
         zlLoggerInDebug("ZLPhotoPicker deinit")
     }
     
+    @objc override public init() {
+        let config = ZLPhotoConfiguration.default()
+        if !config.allowSelectImage, !config.allowSelectVideo {
+            assertionFailure("ZLPhotoBrowser: error configuration. The values of allowSelectImage and allowSelectVideo are both false")
+            config.allowSelectImage = true
+        }
+    }
+    
     /// - Parameter selectedAssets: preselected assets
-    @objc public init(selectedAssets: [PHAsset]? = nil) {
-        super.init()
+    @objc public convenience init(selectedAssets: [PHAsset]? = nil) {
+        self.init()
         
         let config = ZLPhotoConfiguration.default()
         selectedAssets?.zl.removeDuplicate().forEach { asset in
@@ -81,8 +89,8 @@ public class ZLPhotoPicker: NSObject {
     ///     If you want to continue the last edit, you need to satisfy the value of `saveNewImageAfterEdit` is `false` at the time of the last selection.
     /// - Parameters:
     ///    - results : preselected results
-    @objc public init(results: [ZLResultModel]? = nil) {
-        super.init()
+    @objc public convenience init(results: [ZLResultModel]? = nil) {
+        self.init()
         
         let config = ZLPhotoConfiguration.default()
         results?.zl.removeDuplicate().forEach { result in
@@ -101,51 +109,10 @@ public class ZLPhotoPicker: NSObject {
     }
     
     /// - Warning: When calling this method in OC language, make sure that the `sender` is not zero
-    @objc public func showPreview(animate: Bool = true, sender: UIViewController) {
-        show(preview: true, animate: animate, sender: sender)
-    }
-    
-    /// - Warning: When calling this method in OC language, make sure that the `sender` is not zero
-    @objc public func showPhotoLibrary(sender: UIViewController) {
-        show(preview: false, animate: false, sender: sender)
-    }
-    
-    private func show(preview: Bool, animate: Bool, sender: UIViewController) {
-        UIApplication.shared.zl.photoPicker = self
+    @discardableResult
+    @objc public func showPreview(animate: Bool = true, sender: UIViewController) -> ZLPhotoPreviewSheet {
         self.sender = sender
-        
-        let status = PHPhotoLibrary.zl.authStatus(for: .readWrite)
-        if status == .restricted || status == .denied {
-            showNoAuthorityAlert()
-        } else if status == .notDetermined {
-            PHPhotoLibrary.requestAuthorization { status in
-                ZLMainAsync {
-                    if status == .denied {
-                        // 不符合苹果审核，这里注释掉 https://github.com/longitachi/ZLPhotoBrowser/issues/969#issuecomment-2601632232
-//                        self.showNoAuthorityAlert()
-                    } else if status == .authorized {
-                        if preview {
-                            self.showPreviewSheet()
-                        } else {
-                            self.showLibraryVC()
-                        }
-                    }
-                }
-            }
-        } else {
-            if preview {
-                showPreviewSheet()
-            } else {
-                showLibraryVC()
-            }
-        }
-    }
-    
-    private func showPreviewSheet() {
-        guard let sender else {
-            assertionFailure("sender must not be nil")
-            return
-        }
+        UIApplication.shared.zl.photoPicker = self
         
         let ps = ZLPhotoPreviewSheet(models: arrSelectedModels)
         ps.selectPhotosBlock = { [weak self] models, isOriginal in
@@ -156,52 +123,76 @@ public class ZLPhotoPicker: NSObject {
             self?.arrSelectedModels.removeAll()
             self?.arrSelectedModels.append(contentsOf: models)
             self?.isSelectOriginal = isOriginal
-            self?.showLibraryVC()
+            self?.showPhotoLibrary(sender: sender)
         }
         
         ps.cancelBlock = { [weak self] in
             self?.cancel()
         }
-        // TODO: 加一个进入相册的回调，从这里进去
+        
         ps.showPreview(sender: sender)
         previewSheet = ps
-    }
-    
-    private func showLibraryVC() {
-        let config = ZLPhotoConfiguration.default()
         
-        ZLPhotoManager.getCameraRollAlbum(
-            allowSelectImage: config.allowSelectImage,
-            allowSelectVideo: config.allowSelectVideo
-        ) { [weak self] cameraRoll in
-            guard let `self` = self else { return }
-            
-            let nav: ZLImageNavController
-            if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
-                let tvc = ZLThumbnailViewController(albumList: cameraRoll)
-                nav = self.getImageNav(rootViewController: tvc)
-            } else {
-                nav = self.getImageNav(rootViewController: ZLAlbumListController())
-                let tvc = ZLThumbnailViewController(albumList: cameraRoll)
-                nav.pushViewController(tvc, animated: true)
-            }
-            
-            self.sender?.present(nav, animated: true) {
-                self.previewSheet?.hide()
-            }
-        }
+        return ps
     }
     
-    private func showNoAuthorityAlert() {
-        if let customAlertWhenNoAuthority = ZLPhotoConfiguration.default().customAlertWhenNoAuthority {
-            customAlertWhenNoAuthority(.library)
+    /// - Warning: When calling this method in OC language, make sure that the `sender` is not zero
+    @discardableResult
+    @objc public func showPhotoLibrary(sender: UIViewController) -> ZLImageNavController {
+        self.sender = sender
+        UIApplication.shared.zl.photoPicker = self
+        
+        let nav: ZLImageNavController
+        if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
+            let tvc = ZLThumbnailViewController(albumList: nil)
+            nav = getImageNav(rootViewController: tvc)
+        } else {
+            nav = getImageNav(rootViewController: ZLAlbumListController())
+            let tvc = ZLThumbnailViewController(albumList: nil)
+            nav.pushViewController(tvc, animated: true)
+        }
+        
+        sender.present(nav, animated: true) {
+            self.previewSheet?.hide()
+        }
+        
+        return nav
+    }
+    
+    /// 传入已选择的assets，并预览
+    @objc public func previewAssets(
+        sender: UIViewController,
+        assets: [PHAsset],
+        index: Int,
+        isOriginal: Bool,
+        showBottomViewAndSelectBtn: Bool = true
+    ) {
+        assert(!assets.isEmpty, "Assets cannot be empty")
+        UIApplication.shared.zl.photoPicker = self
+        
+        let models = assets.zl.removeDuplicate().map { asset -> ZLPhotoModel in
+            let m = ZLPhotoModel(asset: asset)
+            m.isSelected = true
+            return m
+        }
+        
+        guard !models.isEmpty else {
             return
         }
         
-        let action = ZLCustomAlertAction(title: localLanguageTextValue(.ok), style: .default) { _ in
-            ZLPhotoConfiguration.default().noAuthorityCallback?(.library)
+        arrSelectedModels.removeAll()
+        arrSelectedModels.append(contentsOf: models)
+        self.sender = sender
+        isSelectOriginal = isOriginal
+        
+        let vc = ZLPhotoPreviewController(photos: models, index: index, showBottomViewAndSelectBtn: showBottomViewAndSelectBtn)
+        vc.autoSelectCurrentIfNotSelectAnyone = false
+        let nav = getImageNav(rootViewController: vc)
+        vc.backBlock = { [weak self] in
+            self?.cancel()
         }
-        showAlertController(title: nil, message: String(format: localLanguageTextValue(.noPhotoLibratyAuthority), getAppName()), style: .alert, actions: [action], sender: sender)
+        
+        sender.showDetailViewController(nav, sender: nil)
     }
     
     private func getImageNav(rootViewController: UIViewController) -> ZLImageNavController {
@@ -289,7 +280,6 @@ public class ZLPhotoPicker: NSObject {
             if let vc = viewController {
                 vc.dismiss(animated: true) {
                     call()
-//                    self?.previewSheet?.hide()
                 }
             } else {
                 self?.previewSheet?.hide {

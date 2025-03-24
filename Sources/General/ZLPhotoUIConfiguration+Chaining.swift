@@ -343,6 +343,18 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func noLibraryAuthTitleAndDescColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        noLibraryAuthTitleAndDescColor = color
+        return self
+    }
+    
+    @discardableResult
+    func noLibraryAuthGotoSettingBtnTitleColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
+        noLibraryAuthGotoSettingBtnTitleColor = color
+        return self
+    }
+    
+    @discardableResult
     func bottomToolViewBgColor(_ color: UIColor) -> ZLPhotoUIConfiguration {
         bottomToolViewBgColor = color
         return self

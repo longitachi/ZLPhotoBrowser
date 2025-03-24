@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "Op z'n hoogst %ld video";
 "lessThanMinVideoSelectCount" = "Selecteer ten minste %ld video's";
 
-"noCameraAuthority" = "Geef %@ toegang tot uw microfoon via de optie \"Instellingen-Privacy-microfoon\" van uw telefoon";
-"noPhotoLibratyAuthority" = "Geef %@ toegang tot uw foto's in de optie \"Instellingen-Privacy-Foto's\" van uw telefoon";
-"noMicrophoneAuthority" = "Geef %@ toegang tot uw microfoon via de optie \"Instellingen-Privacy-microfoon\" van uw telefoon";
+"noCameraAuthorityAlertMessage" = "Geef %@ toegang tot uw microfoon via de optie \"Instellingen-Privacy-microfoon\" van uw telefoon";
+"noPhotoLibraryAuthorityAlertMessage" = "Geef %@ toegang tot uw foto's in de optie \"Instellingen-Privacy-Foto's\" van uw telefoon";
+"noMicrophoneAuthorityAlertMessage" = "Geef %@ toegang tot uw microfoon via de optie \"Instellingen-Privacy-microfoon\" van uw telefoon";
+"unableToAccessAllPhotos" = "%@ heeft alleen toegang tot geselecteerde foto's. Geef %@ toestemming om toegang te krijgen tot \"Alle foto's\"";
+"noLibraryAuthTitleInThumbList" = "Kan geen toegang krijgen tot foto's in album";
+"noLibraryAuthDescInThumbList" = "%@ heeft geen toegang tot foto's. Geef %@ toestemming om toegang te krijgen tot \"Alle foto's\"";
+"gotoSystemSettingInThumbList" = "Ga naar systeeminstellingen";
+
 "cameraUnavailable" = "Camera niet beschikbaar";
 "keepRecording" = "Blijf opnemen";
 "gotoSettings" = "Ga naar Instellingen";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "Mijn foto stream";
 
 "noTitleAlbumListPlaceholder" = "Alle foto's";
-"unableToAccessAllPhotos" = "Geen toegang tot alle foto's in het album,\nGeef toegang tot 'Alle foto's' in 'Foto's'.";
 "textStickerRemoveTips" = "Sleep hier om te verwijderen";

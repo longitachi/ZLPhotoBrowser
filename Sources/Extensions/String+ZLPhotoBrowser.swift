@@ -28,9 +28,9 @@ import Foundation
 import UIKit
 
 extension ZLPhotoBrowserWrapper where Base == String {
-    func boundingRect(font: UIFont, limitSize: CGSize) -> CGSize {
+    func boundingRect(font: UIFont, limitSize: CGSize, lineBreakMode: NSLineBreakMode = .byCharWrapping) -> CGSize {
         let style = NSMutableParagraphStyle()
-        style.lineBreakMode = .byCharWrapping
+        style.lineBreakMode = lineBreakMode
         
         let att = [NSAttributedString.Key.font: font, NSAttributedString.Key.paragraphStyle: style]
         

@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "最多只能选择%ld个视频";
 "lessThanMinVideoSelectCount" = "最少选择%ld个视频";
 
-"noCameraAuthority" = "请在iPhone的\"设置 > 隐私 > 相机\"选项中，允许%@访问你的相机";
-"noPhotoLibratyAuthority" = "请在iPhone的\"设置 > 隐私 >照片\"选项中，允许%@访问你的照片";
-"noMicrophoneAuthority" = "无法录制声音，前往\"设置 > %@\"中打开麦克风权限";
+"noCameraAuthorityAlertMessage" = "请在iPhone的\"设置 > 隐私 > 相机\"选项中，允许%@访问你的相机";
+"noPhotoLibraryAuthorityAlertMessage" = "请在iPhone的\"设置 > 隐私 >照片\"选项中，允许%@访问你的照片";
+"noMicrophoneAuthorityAlertMessage" = "无法录制声音，前往\"设置 > %@\"中打开麦克风权限";
+"unableToAccessAllPhotos" = "你已设置%@只能访问相册部分照片，建议允许访问「所有照片」";
+"noLibraryAuthTitleInThumbList" = "无法访问相册中照片";
+"noLibraryAuthDescInThumbList" = "你已关闭%@照片访问权限，建议允许访问「所有照片」";
+"gotoSystemSettingInThumbList" = "前往系统设置";
+
 "cameraUnavailable" = "相机不可用";
 "keepRecording" = "继续拍摄";
 "gotoSettings" = "前往设置";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "我的照片流";
 
 "noTitleAlbumListPlaceholder" = "所有照片";
-"unableToAccessAllPhotos" = "无法访问相册中所有照片，\n请允许访问「照片」中的「所有照片」。";
 "textStickerRemoveTips" = "拖到此处删除";

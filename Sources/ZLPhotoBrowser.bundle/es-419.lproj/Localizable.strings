@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "Número máximo para la selección de vídeos: %ld";
 "lessThanMinVideoSelectCount" = "Número mínimo para la selección de vídeos: %ld";
 
-"noCameraAuthority" = "Permite que %@ acceda a la cámara de tu dispositivo en \"Ajustes\" > \"Privacidad\" > \"Cámara\"";
-"noPhotoLibratyAuthority" = "Permita que %@ acceda a su álbum en \"Configuración\" > \"Privacidad\" > \"Fotos\"";
-"noMicrophoneAuthority" = "No se puede grabar audio. Ve a \"Ajustes\" > \"%@\" y activa el acceso al micrófono";
+"noCameraAuthorityAlertMessage" = "Permite que %@ acceda a la cámara de tu dispositivo en \"Ajustes\" > \"Privacidad\" > \"Cámara\"";
+"noPhotoLibraryAuthorityAlertMessage" = "Permita que %@ acceda a su álbum en \"Configuración\" > \"Privacidad\" > \"Fotos\"";
+"noMicrophoneAuthorityAlertMessage" = "No se puede grabar audio. Ve a \"Ajustes\" > \"%@\" y activa el acceso al micrófono";
+"unableToAccessAllPhotos" = "%@ solo puede acceder a fotos seleccionadas. Permita que %@ acceda a \"Todas las fotos\".";
+"noLibraryAuthTitleInThumbList" = "No se puede acceder a las fotos del álbum";
+"noLibraryAuthDescInThumbList" = "%@ no puede acceder a las fotos. Permita que %@ acceda a \"Todas las fotos\".";
+"gotoSystemSettingInThumbList" = "Ir a ajustes del sistema";
+
 "cameraUnavailable" = "La cámara no está disponible";
 "keepRecording" = "Continuar Grabando";
 "gotoSettings" = "Ir a Ajustes";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "Mi flujo de fotos";
 
 "noTitleAlbumListPlaceholder" = "Todas las fotos";
-"unableToAccessAllPhotos" = "No se puede acceder a todas las fotos del álbum.\nPermite el acceso a \"Todas las fotos\" en \"Fotos\".";
 "textStickerRemoveTips" = "Arrastra aquí para eliminar";

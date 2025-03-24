@@ -42,7 +42,7 @@ extension ZLThumbnailViewController {
 }
 
 class ZLThumbnailViewController: UIViewController {
-    private var albumList: ZLAlbumListModel
+    private var albumList: ZLAlbumListModel?
     
     private var externalNavView: ZLExternalAlbumListNavView?
     
@@ -149,7 +149,7 @@ class ZLThumbnailViewController: UIViewController {
     
     private var lastPanUpdateTime = CACurrentMediaTime()
     
-    private let showLimitAuthTipsView: Bool = {
+    private var showLimitAuthTipsView: Bool {
         if #available(iOS 14.0, *),
            PHPhotoLibrary.zl.authStatus(for: .readWrite) == .limited,
            ZLPhotoUIConfiguration.default().showEnterSettingTips {
@@ -157,7 +157,7 @@ class ZLThumbnailViewController: UIViewController {
         } else {
             return false
         }
-    }()
+    }
     
     private var autoScrollInfo: (direction: AutoScrollDirection, speed: CGFloat) = (.none, 0)
     
@@ -196,10 +196,12 @@ class ZLThumbnailViewController: UIViewController {
         return view
     }()
     
+    var noAuthTipsView: ZLNoAuthTipsView?
+    
     var arrDataSources: [ZLPhotoModel] = []
     
     var showCameraCell: Bool {
-        if ZLPhotoConfiguration.default().allowTakePhotoInLibrary, albumList.isCameraRoll {
+        if ZLPhotoConfiguration.default().allowTakePhotoInLibrary, albumList?.isCameraRoll == true {
             return true
         }
         return false
@@ -209,7 +211,7 @@ class ZLThumbnailViewController: UIViewController {
     var showAddPhotoCell: Bool {
         PHPhotoLibrary.zl.authStatus(for: .readWrite) == .limited
             && ZLPhotoUIConfiguration.default().showAddPhotoButton
-            && albumList.isCameraRoll
+            && (albumList?.isCameraRoll ?? false)
     }
     
     private var hiddenStatusBar = false {
@@ -217,6 +219,8 @@ class ZLThumbnailViewController: UIViewController {
             setNeedsStatusBarAppearanceUpdate()
         }
     }
+    
+    private var didLayout = false
     
     override var prefersStatusBarHidden: Bool { hiddenStatusBar }
     
@@ -229,7 +233,7 @@ class ZLThumbnailViewController: UIViewController {
         cleanTimer()
     }
     
-    init(albumList: ZLAlbumListModel) {
+    init(albumList: ZLAlbumListModel?) {
         self.albumList = albumList
         super.init(nibName: nil, bundle: nil)
     }
@@ -248,11 +252,21 @@ class ZLThumbnailViewController: UIViewController {
             view.addGestureRecognizer(panGes)
         }
         
-        loadPhotos()
-        
-        // Register for the album change notification when the status is limited, because the photoLibraryDidChange method will be repeated multiple times each time the album changes, causing the interface to refresh multiple times. So the album changes are not monitored in other authority.
-        if #available(iOS 14.0, *), PHPhotoLibrary.zl.authStatus(for: .readWrite) == .limited {
-            PHPhotoLibrary.shared().register(self)
+        let status = PHPhotoLibrary.zl.authStatus(for: .readWrite)
+        if status == .restricted || status == .denied {
+            showNoAuthTipsView()
+        } else if status == .notDetermined {
+            PHPhotoLibrary.requestAuthorization { status in
+                ZLMainAsync {
+                    if status == .denied {
+                        self.showNoAuthTipsView()
+                    } else if status == .authorized {
+                        self.fetchCameraRollAlbumIfNeed()
+                    }
+                }
+            }
+        } else {
+            fetchCameraRollAlbumIfNeed()
         }
     }
     
@@ -284,6 +298,7 @@ class ZLThumbnailViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        didLayout = true
         
         let navViewNormalH: CGFloat = 44
         
@@ -313,6 +328,15 @@ class ZLThumbnailViewController: UIViewController {
             bottomViewH = ZLLayout.bottomToolViewH
         } else {
             bottomViewH = 0
+        }
+        
+        if let noAuthTipsView {
+            noAuthTipsView.frame = CGRect(
+                x: 0,
+                y: navViewFrame.maxY,
+                width: view.zl.width,
+                height: view.zl.height - navViewFrame.height - bottomViewH - insets.bottom
+            )
         }
         
         let totalWidth = view.zl.width - insets.left - insets.right
@@ -409,11 +433,6 @@ class ZLThumbnailViewController: UIViewController {
             bottomView.addSubview(bottomBlurView!)
         }
         
-        if showLimitAuthTipsView {
-            limitAuthTipsView = ZLLimitedAuthorityTipsView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: ZLLimitedAuthorityTipsView.height))
-            bottomView.addSubview(limitAuthTipsView!)
-        }
-        
         bottomView.addSubview(previewBtn)
         bottomView.addSubview(originalLabel)
         bottomView.addSubview(originalBtn)
@@ -422,9 +441,19 @@ class ZLThumbnailViewController: UIViewController {
         setupNavView()
     }
     
+    private func showNoAuthTipsView() {
+        noAuthTipsView = ZLNoAuthTipsView(frame: view.bounds)
+        view.addSubview(noAuthTipsView!)
+        
+        if didLayout {
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
+    }
+    
     private func setupNavView() {
         if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
-            embedNavView = ZLEmbedAlbumListNavView(title: albumList.title)
+            embedNavView = ZLEmbedAlbumListNavView(title: albumList?.title ?? "")
             
             embedNavView?.selectAlbumBlock = { [weak self] in
                 if self?.embedAlbumListView?.isHidden == true {
@@ -443,27 +472,8 @@ class ZLThumbnailViewController: UIViewController {
             }
             
             view.addSubview(embedNavView!)
-            
-            embedAlbumListView = ZLEmbedAlbumListView(selectedAlbum: albumList)
-            embedAlbumListView?.isHidden = true
-            
-            embedAlbumListView?.selectAlbumBlock = { [weak self] album in
-                guard self?.albumList != album else {
-                    return
-                }
-                self?.albumList = album
-                self?.embedNavView?.title = album.title
-                self?.loadPhotos()
-                self?.embedNavView?.reset()
-            }
-            
-            embedAlbumListView?.hideBlock = { [weak self] in
-                self?.embedNavView?.reset()
-            }
-            
-            view.addSubview(embedAlbumListView!)
         } else if ZLPhotoUIConfiguration.default().style == .externalAlbumList {
-            externalNavView = ZLExternalAlbumListNavView(title: albumList.title)
+            externalNavView = ZLExternalAlbumListNavView(title: albumList?.title ?? "")
             
             externalNavView?.backBlock = { [weak self] in
                 self?.navigationController?.popViewController(animated: true)
@@ -477,6 +487,41 @@ class ZLThumbnailViewController: UIViewController {
             
             view.addSubview(externalNavView!)
         }
+    }
+    
+    /// 获取到相册后刷新导航
+    private func refreshSubviewAfterRequestAuth() {
+        if showLimitAuthTipsView {
+            limitAuthTipsView = ZLLimitedAuthorityTipsView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: ZLLimitedAuthorityTipsView.height))
+            bottomView.addSubview(limitAuthTipsView!)
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
+        
+        guard ZLPhotoUIConfiguration.default().style == .embedAlbumList else {
+            externalNavView?.title = albumList?.title ?? ""
+            return
+        }
+        
+        embedNavView?.title = albumList?.title ?? ""
+        embedAlbumListView = ZLEmbedAlbumListView(selectedAlbum: albumList)
+        embedAlbumListView?.isHidden = true
+        
+        embedAlbumListView?.selectAlbumBlock = { [weak self] album in
+            guard self?.albumList != album else {
+                return
+            }
+            self?.albumList = album
+            self?.embedNavView?.title = album.title
+            self?.loadPhotos()
+            self?.embedNavView?.reset()
+        }
+        
+        embedAlbumListView?.hideBlock = { [weak self] in
+            self?.embedNavView?.reset()
+        }
+        
+        view.addSubview(embedAlbumListView!)
     }
     
     private func createBtn(_ title: String, _ action: Selector, _ isDone: Bool = false) -> UIButton {
@@ -495,8 +540,30 @@ class ZLThumbnailViewController: UIViewController {
         return btn
     }
     
+    private func fetchCameraRollAlbumIfNeed() {
+        if let albumList {
+            refreshSubviewAfterRequestAuth()
+            loadPhotos()
+        } else {
+            let config = ZLPhotoConfiguration.default()
+            ZLPhotoManager.getCameraRollAlbum(
+                allowSelectImage: config.allowSelectImage,
+                allowSelectVideo: config.allowSelectVideo
+            ) { [weak self] cameraRoll in
+                self?.albumList = cameraRoll
+                self?.refreshSubviewAfterRequestAuth()
+                self?.loadPhotos()
+            }
+        }
+        
+        // Register for the album change notification when the status is limited, because the photoLibraryDidChange method will be repeated multiple times each time the album changes, causing the interface to refresh multiple times. So the album changes are not monitored in other authority.
+        if #available(iOS 14.0, *), PHPhotoLibrary.zl.authStatus(for: .readWrite) == .limited {
+            PHPhotoLibrary.shared().register(self)
+        }
+    }
+    
     private func loadPhotos() {
-        guard let nav = navigationController as? ZLImageNavController else {
+        guard let nav = navigationController as? ZLImageNavController, let albumList else {
             return
         }
         
@@ -505,13 +572,13 @@ class ZLThumbnailViewController: UIViewController {
         DispatchQueue.global().async {
             var datas: [ZLPhotoModel] = []
             
-            if self.albumList.models.isEmpty {
-                self.albumList.refetchPhotos()
+            if albumList.models.isEmpty {
+                albumList.refetchPhotos()
                 
-                datas.append(contentsOf: self.albumList.models)
+                datas.append(contentsOf: albumList.models)
                 markSelected(source: &datas, selected: &nav.arrSelectedModels)
             } else {
-                datas.append(contentsOf: self.albumList.models)
+                datas.append(contentsOf: albumList.models)
                 markSelected(source: &datas, selected: &nav.arrSelectedModels)
             }
             
@@ -951,7 +1018,7 @@ class ZLThumbnailViewController: UIViewController {
                 picker.videoMaximumDuration = TimeInterval(config.cameraConfiguration.maxRecordDuration)
                 showDetailViewController(picker, sender: nil)
             } else {
-                showAlertView(String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), self)
+                showAlertView(String(format: localLanguageTextValue(.noCameraAuthorityAlertMessage), getAppName()), self)
             }
         }
     }
@@ -984,7 +1051,7 @@ class ZLThumbnailViewController: UIViewController {
     
     private func handleDataArray(newModel: ZLPhotoModel) {
         hasTakeANewAsset = true
-        albumList.refreshResult()
+        albumList?.refreshResult()
         
         let nav = navigationController as? ZLImageNavController
         let config = ZLPhotoConfiguration.default()
@@ -1528,7 +1595,8 @@ extension ZLThumbnailViewController: UIImagePickerControllerDelegate, UINavigati
 
 extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
-        guard let changes = changeInstance.changeDetails(for: albumList.result) else {
+        guard let albumList,
+              let changes = changeInstance.changeDetails(for: albumList.result) else {
             return
         }
         
@@ -1539,7 +1607,7 @@ extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
             }
             // 变化后再次显示相册列表需要刷新
             self.hasTakeANewAsset = true
-            self.albumList.result = changes.fetchResultAfterChanges
+            self.albumList?.result = changes.fetchResultAfterChanges
             if changes.hasIncrementalChanges {
                 for sm in nav.arrSelectedModels {
                     let isDelete = changeInstance.changeDetails(for: sm.asset)?.objectWasDeleted ?? false
@@ -1548,7 +1616,7 @@ extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
                     }
                 }
                 if !changes.removedObjects.isEmpty || !changes.insertedObjects.isEmpty {
-                    self.albumList.models.removeAll()
+                    self.albumList?.models.removeAll()
                 }
                 
                 self.loadPhotos()
@@ -1559,7 +1627,7 @@ extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
                         nav.arrSelectedModels.removeAll { $0 == sm }
                     }
                 }
-                self.albumList.models.removeAll()
+                self.albumList?.models.removeAll()
                 self.loadPhotos()
             }
             self.resetBottomToolBtnStatus()
@@ -1627,8 +1695,8 @@ class ZLEmbedAlbumListNavView: UIView {
     
     var cancelBlock: (() -> Void)?
     
-    init(title: String) {
-        self.title = title
+    init(title: String?) {
+        self.title = title ?? ""
         super.init(frame: .zero)
         setupUI()
     }
@@ -1662,6 +1730,7 @@ class ZLEmbedAlbumListNavView: UIView {
         }
         
         navBlurView?.frame = bounds
+        titleBgControl.isHidden = title.isEmpty
         
         let albumTitleW = min(
             bounds.width / 2,
@@ -1739,7 +1808,12 @@ class ZLEmbedAlbumListNavView: UIView {
 // MARK: external album list nav view
 
 class ZLExternalAlbumListNavView: UIView {
-    private let title: String
+    var title: String {
+        didSet {
+            albumTitleLabel.text = title
+            refreshTitleViewFrame()
+        }
+    }
     
     private var navBlurView: UIVisualEffectView?
     
@@ -1786,8 +1860,8 @@ class ZLExternalAlbumListNavView: UIView {
     
     var cancelBlock: (() -> Void)?
     
-    init(title: String) {
-        self.title = title
+    init(title: String?) {
+        self.title = title ?? ""
         super.init(frame: .zero)
         setupUI()
     }
@@ -1806,9 +1880,7 @@ class ZLExternalAlbumListNavView: UIView {
         }
         
         navBlurView?.frame = bounds
-        
-        let albumTitleW = min(bounds.width / 2, title.zl.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width)
-        albumTitleLabel.frame = CGRect(x: (bounds.width - albumTitleW) / 2, y: insets.top, width: albumTitleW, height: 44)
+        refreshTitleViewFrame()
         
         var cancelBtnW: CGFloat = 44
         if ZLPhotoUIConfiguration.default().navCancelButtonStyle == .text {
@@ -1826,6 +1898,16 @@ class ZLExternalAlbumListNavView: UIView {
             backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
             cancelBtn.frame = CGRect(x: bounds.width - insets.right - cancelBtnW - 10, y: insets.top, width: cancelBtnW, height: 44)
         }
+    }
+    
+    private func refreshTitleViewFrame() {
+        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        if #available(iOS 11.0, *), deviceIsFringeScreen() {
+            insets = safeAreaInsets
+        }
+        
+        let albumTitleW = min(bounds.width / 2, title.zl.boundingRect(font: ZLLayout.navTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44)).width)
+        albumTitleLabel.frame = CGRect(x: (bounds.width - albumTitleW) / 2, y: insets.top, width: albumTitleW, height: 44)
     }
     
     private func setupUI() {
@@ -1859,6 +1941,7 @@ class ZLLimitedAuthorityTipsView: UIView {
         let label = UILabel()
         label.font = .zl.font(ofSize: 14)
         label.text = localLanguageTextValue(.unableToAccessAllPhotos)
+            .replacingOccurrences(of: "%@", with: getAppName())
         label.textColor = .zl.limitedAuthorityTipsColor
         label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
@@ -1894,11 +1977,11 @@ class ZLLimitedAuthorityTipsView: UIView {
     }
     
     @objc private func tapAction() {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+        guard let url = URL(string: UIApplication.openSettingsURLString),
+              UIApplication.shared.canOpenURL(url) else {
             return
         }
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
+        
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }

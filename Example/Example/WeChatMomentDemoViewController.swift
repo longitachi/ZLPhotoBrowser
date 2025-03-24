@@ -168,6 +168,16 @@ extension WeChatMomentDemoViewController: UICollectionViewDataSource, UICollecti
                 }
             }
             
+            previewVC.dismissTransitionFrame = { [weak self] index -> CGRect? in
+                guard let `self` = self,
+                      let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) else {
+                    return nil
+                }
+                
+                let rect = self.collectionView.convert(cell.frame, to: self.view)
+                return rect
+            }
+            
             previewVC.modalPresentationStyle = .fullScreen
             showDetailViewController(previewVC, sender: nil)
         }

@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "動画の最大選択数: %ld";
 "lessThanMinVideoSelectCount" = "動画の最小選択数: %ld";
 
-"noCameraAuthority" = "「設定」>「プライパシー」>「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
-"noPhotoLibratyAuthority" = "「設定」>「プライバシー」>「写真」から、%@があなたのアルバムにアクセスする許可をしてください";
-"noMicrophoneAuthority" = "音声を録音できません。「設定」 >「%@」に移動し、マイクへのアクセスを有効にしてください";
+"noCameraAuthorityAlertMessage" = "「設定」>「プライパシー」>「カメラ」から、%@があなたのデバイスのカメラにアクセスする許可をしてください";
+"noPhotoLibraryAuthorityAlertMessage" = "「設定」>「プライバシー」>「写真」から、%@があなたのアルバムにアクセスする許可をしてください";
+"noMicrophoneAuthorityAlertMessage" = "音声を録音できません。「設定」 >「%@」に移動し、マイクへのアクセスを有効にしてください";
+"unableToAccessAllPhotos" = "%@ は選択した写真にのみアクセスできます。「すべての写真」にアクセスする権限を %@ に許可してください。";
+"noLibraryAuthTitleInThumbList" = "アルバムの写真にアクセスできません";
+"noLibraryAuthDescInThumbList" = "%@ は写真にアクセスできません。「すべての写真」にアクセスする権限を %@ に許可してください。";
+"gotoSystemSettingInThumbList" = "システム設定に移動";
+
 "cameraUnavailable" = "カメラは利用できません";
 "keepRecording" = "撮影を続ける";
 "gotoSettings" = "設定に移動";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "マイフォトストリーム";
 
 "noTitleAlbumListPlaceholder" = "画像すべて";
-"unableToAccessAllPhotos" = "アルバム内のすべての写真にアクセスできません。\n「写真」内の「すべての写真」 へのアクセスを許可してください。";
 "textStickerRemoveTips" = "ここにドラッグして削除します";
