@@ -266,7 +266,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// A color for navigation bar in preview interface.
     /// 预览大图界面的导航条背景色
-    public var navBarColorOfPreviewVC: UIColor = .zl.rgba(50, 50, 50)
+    public var navBarColorOfPreviewVC: UIColor = .zl.rgba(60, 60, 60, 0.85)
     
     /// A color for Navigation bar text.
     /// 相册列表及小图界面导航栏标题颜色
@@ -302,19 +302,27 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// A color for background in thumbnail interface.
     /// 相册小图界面背景色
-    public var thumbnailBgColor: UIColor = .zl.rgba(25, 25, 25)
+    public var thumbnailBgColor: UIColor = .zl.rgba(19, 19, 19)
     
-    /// A color for background in preview interface..
+    /// A color for background in preview interface.
     /// 预览大图界面背景色
     public var previewVCBgColor: UIColor = .black
     
+    /// The text color of the title and description when no album access permission is given.
+    /// 无相册访问权限时，提示标题和描述的文本颜色
+    public var noLibraryAuthTitleAndDescColor: UIColor = .zl.rgba(199, 199, 199)
+    
+    /// When you don't have access to the album, go to the system settings button title color.
+    /// 无相册访问权限时，前往系统设置按钮标题颜色
+    public var noLibraryAuthGotoSettingBtnTitleColor: UIColor = .white
+    
     /// A color for background in bottom tool view.
     /// 相册小图界面底部工具条背景色
-    public var bottomToolViewBgColor: UIColor = .zl.rgba(35, 35, 35, 0.3)
+    public var bottomToolViewBgColor: UIColor = .zl.rgba(25, 25, 25, 0.3)
     
     /// A color for background in bottom tool view in preview interface.
     /// 预览大图界面底部工具条背景色
-    public var bottomToolViewBgColorOfPreviewVC: UIColor = .zl.rgba(35, 35, 35, 0.3)
+    public var bottomToolViewBgColorOfPreviewVC: UIColor = .zl.rgba(25, 25, 25, 0.3)
     
     /// Title color of the original image size label in the album thumbnail interface.
     /// 相册小图界面原图大小label的text颜色
@@ -342,11 +350,11 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// The disable state title color of bottom tool view buttons.  Without done button.
     /// 相册小图界面底部按钮不可交互状态下标题颜色，不包括 `完成` 按钮
-    public var bottomToolViewBtnDisableTitleColor: UIColor = .zl.rgba(168, 168, 168)
+    public var bottomToolViewBtnDisableTitleColor: UIColor = .zl.rgba(80, 80, 80)
     
     /// The disable state title color of bottom tool view done button.
     /// 相册小图界面底部 `完成` 按钮不可交互状态下标题颜色
-    public var bottomToolViewDoneBtnDisableTitleColor: UIColor = .zl.rgba(168, 168, 168)
+    public var bottomToolViewDoneBtnDisableTitleColor: UIColor = .zl.rgba(80, 80, 80)
     
     /// The disable state title color of bottom tool view buttons in preview interface.  Without done button.
     /// 预览大图界面底部按钮不可交互状态下标题颜色，不包括 `完成` 按钮
@@ -382,15 +390,15 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     /// The disable state background color of bottom tool view buttons.
     /// 相册小图界面底部按钮不可交互状态下背景色
-    public var bottomToolViewBtnDisableBgColor: UIColor = .zl.rgba(50, 50, 50)
+    public var bottomToolViewBtnDisableBgColor: UIColor = .zl.rgba(50, 50, 50, 0.5)
     
     /// The disable state background color of bottom tool view buttons in preview interface.
     /// 预览大图界面底部按钮不可交互状态下背景色
-    public var bottomToolViewBtnDisableBgColorOfPreviewVC: UIColor = .zl.rgba(50, 50, 50)
+    public var bottomToolViewBtnDisableBgColorOfPreviewVC: UIColor = .zl.rgba(50, 50, 50, 0.9)
     
     /// With iOS14 limited authority, a color for select more photos at the bottom of the thumbnail interface.
     /// iOS14 limited权限下，下方提示选择更多图片信息文字的颜色
-    public var limitedAuthorityTipsColor: UIColor = .white
+    public var limitedAuthorityTipsColor: UIColor = .zl.rgba(199, 199, 199)
     
     private var pri_cameraRecodeProgressColor: UIColor?
     /// The record progress color of custom camera.

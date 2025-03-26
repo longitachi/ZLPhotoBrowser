@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "Jumlah maksimum untuk pemilihan video: %ld";
 "lessThanMinVideoSelectCount" = "Jumlah minimum untuk pemilihan video: %ld";
 
-"noCameraAuthority" = "Izinkan akses kamera di \"Pengaturan\" > \"%@\" iPhone Anda.";
-"noPhotoLibratyAuthority" = "Izinkan %@ mengakses album Anda di \"Setelan\" > \"Privasi\" > \"Foto\"";
-"noMicrophoneAuthority" = "Tidak dapat merekam audio. Buka \"Setelan\" > \"%@\" dan aktifkan akses mikrofon";
+"noCameraAuthorityAlertMessage" = "Izinkan akses kamera di \"Pengaturan\" > \"%@\" iPhone Anda.";
+"noPhotoLibraryAuthorityAlertMessage" = "Izinkan %@ mengakses album Anda di \"Setelan\" > \"Privasi\" > \"Foto\"";
+"noMicrophoneAuthorityAlertMessage" = "Tidak dapat merekam audio. Buka \"Setelan\" > \"%@\" dan aktifkan akses mikrofon";
+"unableToAccessAllPhotos" = "%@ hanya dapat mengakses foto yang dipilih. Berikan izin %@ untuk mengakses \"Semua Foto\".";
+"noLibraryAuthTitleInThumbList" = "Tidak dapat mengakses foto di album";
+"noLibraryAuthDescInThumbList" = "%@ tidak dapat mengakses foto. Berikan izin %@ untuk mengakses \"Semua Foto\"";
+"gotoSystemSettingInThumbList" = "Masuk ke sistem pengaturan";
+
 "cameraUnavailable" = "Kamera tidak tersedia";
 "keepRecording" = "Terus Merekam";
 "gotoSettings" = "Pergi ke pengaturan";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "Aliran Foto Saya";
 
 "noTitleAlbumListPlaceholder" = "Semua Foto";
-"unableToAccessAllPhotos" = "Tidak dapat mengakses semua foto dalam album.\nIzinkan akses ke \"Semua Foto\" di \"Foto\".";
 "textStickerRemoveTips" = "Seret ke sini untuk menghapus";

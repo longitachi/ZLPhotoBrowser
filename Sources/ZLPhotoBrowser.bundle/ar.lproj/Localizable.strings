@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "أقصى عدد لتحديد الفيديو: %ld";
 "lessThanMinVideoSelectCount" = "الحد الأدنى لتحديد الفيديو: %ld";
 
-"noCameraAuthority" = "يُرجى السماح لـ %@ بالوصول إلى كاميرا جهازك في الإعدادات > الخصوصية > الكاميرا ";
-"noPhotoLibratyAuthority" = "يُرجى السماح لـ %@ بالوصول إلى ألبومك في الإعدادات > الخصوصية > الكاميرا ";
-"noMicrophoneAuthority" = "تعذر تسجيل الصوت. انتقل إلى  الإعدادات >  %@ وقم بتمكين الوصول إلى الميكروفون";
+"noCameraAuthorityAlertMessage" = "يُرجى السماح لـ %@ بالوصول إلى كاميرا جهازك في الإعدادات > الخصوصية > الكاميرا ";
+"noPhotoLibraryAuthorityAlertMessage" = "يُرجى السماح لـ %@ بالوصول إلى ألبومك في الإعدادات > الخصوصية > الكاميرا ";
+"noMicrophoneAuthorityAlertMessage" = "تعذر تسجيل الصوت. انتقل إلى  الإعدادات >  %@ وقم بتمكين الوصول إلى الميكروفون";
+"unableToAccessAllPhotos" = "يستطيع %@ الوصول إلى صور محددة فقط. امنح %@ الإذن بالوصول إلى \"جميع الصور\".";
+"noLibraryAuthTitleInThumbList" = "يتعذر الوصول إلى الصور في الألبوم";
+"noLibraryAuthDescInThumbList" = "لا يستطيع %@ الوصول إلى الصور. امنح %@ الإذن بالوصول إلى \"جميع الصور\".";
+"gotoSystemSettingInThumbList" = "انتقل إلى إعدادات النظام";
+
 "cameraUnavailable" = "الكاميرا غير متوفرة";
 "keepRecording" = "استمر في التسجيل";
 "gotoSettings" = "اذهب للاعدادات";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "دفق الصور الخاص بي";
 
 "noTitleAlbumListPlaceholder" = "جميع الصور";
-"unableToAccessAllPhotos" = "يتعذر الوصول إلى جميع الصور في الألبوم ، يرجى السماح بالوصول إلى كل الصور في الصور .";
 "textStickerRemoveTips" = "اسحب هنا للإزالة";

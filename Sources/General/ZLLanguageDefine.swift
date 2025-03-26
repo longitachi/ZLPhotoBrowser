@@ -175,15 +175,31 @@ public struct ZLLocalLanguageKey: Hashable {
     
     /// Please Allow %@ to access your album in \"Settings\"->\"Privacy\"->\"Photos\"
     /// (请在iPhone的\"设置-隐私-照片\"选项中，允许%@访问你的照片)
-    public static let noPhotoLibratyAuthority = ZLLocalLanguageKey(rawValue: "noPhotoLibratyAuthority")
+    public static let noPhotoLibraryAuthorityAlertMessage = ZLLocalLanguageKey(rawValue: "noPhotoLibraryAuthorityAlertMessage")
     
     /// Please allow %@ to access your device's camera in \"Settings\"->\"Privacy\"->\"Camera\"
     /// (请在iPhone的\"设置-隐私-相机\"选项中，允许%@访问你的相机)
-    public static let noCameraAuthority = ZLLocalLanguageKey(rawValue: "noCameraAuthority")
+    public static let noCameraAuthorityAlertMessage = ZLLocalLanguageKey(rawValue: "noCameraAuthorityAlertMessage")
     
     /// Unable to record audio. Go to \"Settings\" > \"%@\" and enable microphone access.
     /// (无法录制声音，前往\"设置 > %@\"中打开麦克风权限)
-    public static let noMicrophoneAuthority = ZLLocalLanguageKey(rawValue: "noMicrophoneAuthority")
+    public static let noMicrophoneAuthorityAlertMessage = ZLLocalLanguageKey(rawValue: "noMicrophoneAuthorityAlertMessage")
+    
+    /// %@ can only access selected photos. Allow permission for %@ to access \"All Photos\"
+    /// （你已设置%@只能访问相册部分照片，建议允许访问「所有照片」）
+    public static let unableToAccessAllPhotos = ZLLocalLanguageKey(rawValue: "unableToAccessAllPhotos")
+    
+    /// Unable to access photos in album
+    /// （无法访问相册中照片）
+    public static let noLibraryAuthTitleInThumbList = ZLLocalLanguageKey(rawValue: "noLibraryAuthTitleInThumbList")
+    
+    /// %@ cannot access photos. Allow permission for %@ to access \"All Photos\"
+    /// 你已关闭%@照片访问权限，建议允许访问「所有照片」
+    public static let noLibraryAuthDescInThumbList = ZLLocalLanguageKey(rawValue: "noLibraryAuthDescInThumbList")
+    
+    /// Go to system settings
+    /// 前往系统设置
+    public static let gotoSystemSettingInThumbList = ZLLocalLanguageKey(rawValue: "gotoSystemSettingInThumbList")
     
     /// Camera is unavailable (相机不可用)
     public static let cameraUnavailable = ZLLocalLanguageKey(rawValue: "cameraUnavailable")
@@ -326,9 +342,6 @@ public struct ZLLocalLanguageKey: Hashable {
     
     /// All Photos (所有照片)
     public static let noTitleAlbumListPlaceholder = ZLLocalLanguageKey(rawValue: "noTitleAlbumListPlaceholder")
-    
-    /// Unable to access all photos, go to settings (无法访问所有照片，前往设置)
-    public static let unableToAccessAllPhotos = ZLLocalLanguageKey(rawValue: "unableToAccessAllPhotos")
     
     /// Drag here to remove (拖到此处删除)
     public static let textStickerRemoveTips = ZLLocalLanguageKey(rawValue: "textStickerRemoveTips")

@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "Max count for video selection: %ld";
 "lessThanMinVideoSelectCount" = "Min count for video selection: %ld";
 
-"noCameraAuthority" = "Please allow %@ to access your device's camera in \"Settings\" > \"Privacy\" > \"Camera\"";
-"noPhotoLibratyAuthority" = "Please allow %@ to access your album in \"Settings\" > \"Privacy\" > \"Photos\"";
-"noMicrophoneAuthority" = "Unable to record audio. Go to \"Settings\" > \"%@\" and enable microphone access";
+"noCameraAuthorityAlertMessage" = "Please allow %@ to access your device's camera in \"Settings\" > \"Privacy\" > \"Camera\"";
+"noPhotoLibraryAuthorityAlertMessage" = "Please allow %@ to access your album in \"Settings\" > \"Privacy\" > \"Photos\"";
+"noMicrophoneAuthorityAlertMessage" = "Unable to record audio. Go to \"Settings\" > \"%@\" and enable microphone access";
+"unableToAccessAllPhotos" = "%@ can only access selected photos. Allow permission for %@ to access \"All Photos\"";
+"noLibraryAuthTitleInThumbList" = "Unable to access photos in album";
+"noLibraryAuthDescInThumbList" = "%@ cannot access photos. Allow permission for %@ to access \"All Photos\"";
+"gotoSystemSettingInThumbList" = "Go to system settings";
+
 "cameraUnavailable" = "Camera is unavailable";
 "keepRecording" = "Keep Recording";
 "gotoSettings" = "Go to Settings";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "My Photo Stream";
 
 "noTitleAlbumListPlaceholder" = "All Photos";
-"unableToAccessAllPhotos" = "Unable to access all photos in the album.\nAllow access to \"All Photos\" in \"Photos\".";
 "textStickerRemoveTips" = "Drag here to remove";

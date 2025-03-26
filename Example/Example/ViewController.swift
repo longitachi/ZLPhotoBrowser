@@ -236,9 +236,11 @@ class ViewController: UIViewController {
 //            }
         
         /// Using this init method, you can continue editing the selected photo
-        let ac = ZLPhotoPreviewSheet(results: takeSelectedAssetsSwitch.isOn ? selectedResults : nil)
+//        let ac = ZLPhotoPreviewSheet(results: takeSelectedAssetsSwitch.isOn ? selectedResults : nil)
         
 //        let ac = ZLPhotoPreviewSheet(selectedAssets: takeSelectedAssetsSwitch.isOn ? selectedAssets : nil)
+        
+        let ac = ZLPhotoPicker(results: takeSelectedAssetsSwitch.isOn ? selectedResults : nil)
         
         ac.selectImageBlock = { [weak self] results, isOriginal in
             guard let `self` = self else { return }
@@ -453,8 +455,8 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let ac = ZLPhotoPreviewSheet()
-        
+//        let ac = ZLPhotoPreviewSheet()
+        let ac = ZLPhotoPicker()
         ac.selectImageBlock = { [weak self] results, isOriginal in
             guard let `self` = self else { return }
             self.selectedResults = results

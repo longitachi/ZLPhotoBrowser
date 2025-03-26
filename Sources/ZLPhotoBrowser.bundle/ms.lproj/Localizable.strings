@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "Jumlah maksimum untuk pemilihan video: %ld";
 "lessThanMinVideoSelectCount" = "Kiraan minimum untuk pemilihan video: %ld";
 
-"noCameraAuthority" = "Izinkan %@ mengakses kamera peranti anda di \"Tetapan\" > \"Privasi\" > \"Kamera\"";
-"noPhotoLibratyAuthority" = "Izinkan %@ mengakses album anda di \"Tetapan\" > \"Privasi\" > \"Foto\"";
-"noMicrophoneAuthority" = "Tidak dapat merakam audio. Pergi Ke \"Tetapan\" > \"%@\" dan dayakan akses mikrofon";
+"noCameraAuthorityAlertMessage" = "Izinkan %@ mengakses kamera peranti anda di \"Tetapan\" > \"Privasi\" > \"Kamera\"";
+"noPhotoLibraryAuthorityAlertMessage" = "Izinkan %@ mengakses album anda di \"Tetapan\" > \"Privasi\" > \"Foto\"";
+"noMicrophoneAuthorityAlertMessage" = "Tidak dapat merakam audio. Pergi Ke \"Tetapan\" > \"%@\" dan dayakan akses mikrofon";
+"unableToAccessAllPhotos" = "%@ hanya boleh mengakses foto pilihan. Berikan kebenaran kepada %@ untuk mengakses \"Semua Foto\".";
+"noLibraryAuthTitleInThumbList" = "Tidak dapat mengakses foto dalam album";
+"noLibraryAuthDescInThumbList" = "%@ tidak boleh mengakses foto. Berikan kebenaran kepada %@ untuk mengakses \"Semua Foto\".";
+"gotoSystemSettingInThumbList" = "Pergi ke tetapan sistem";
+
 "cameraUnavailable" = "Kamera tidak tersedia";
 "keepRecording" = "Teruskan Perakaman";
 "gotoSettings" = "Pergi ke Tetapan";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "Strim Foto Saya";
 
 "noTitleAlbumListPlaceholder" = "Semua Foto";
-"unableToAccessAllPhotos" = "Tidak dapat mengakses semua foto dalam album.\nBenarkan akses kepada \"Semua Foto\" dalam \"Foto\".";
 "textStickerRemoveTips" = "Seret ke sini untuk mengalih keluar";

@@ -34,10 +34,15 @@
 "exceededMaxVideoSelectCount" = "Nombre maximal de sélections vidéo: %ld";
 "lessThanMinVideoSelectCount" = "Nombre minimal de sélection de vidéo: %ld";
 
-"noCameraAuthority" = "Veuillez autoriser %@ à accéder à la caméra de votre appareil dans \"Paramètres\" > \"Confidentialité\" > \"Caméra\"";
-"noPhotoLibratyAuthority" = "Veuillez autoriser %@ à accéder à votre album dans \"Paramètres\" > \"Confidentialité\" > \"Photos\"";
-"noMicrophoneAuthority" = "Impossible d'enregistrer le son. Rendez-vous dans « Paramètres >> > << %@ » et activez l'accès au microphone";
-"cameraUnavailable" = "La caméra n'est pas disponible";
+"noCameraAuthorityAlertMessage" = "Veuillez autoriser %@ à accéder à la caméra de votre appareil dans \"Paramètres\" > \"Confidentialité\" > \"Caméra\"";
+"noPhotoLibraryAuthorityAlertMessage" = "Veuillez autoriser %@ à accéder à votre album dans \"Paramètres\" > \"Confidentialité\" > \"Photos\"";
+"noMicrophoneAuthorityAlertMessage" = "Impossible d'enregistrer le son. Rendez-vous dans « Paramètres >> > << %@ » et activez l'accès au microphone";
+"unableToAccessAllPhotos" = "%@ ne peut accéder qu'aux photos sélectionnées. Accordez l’autorisation d’accéder à « Toutes les photos » à %@.";
+"noLibraryAuthTitleInThumbList" = "Impossible d’accéder aux photos de l’album";
+"noLibraryAuthDescInThumbList" = "%@ ne peut pas accéder aux photos. Accordez l’autorisation d’accéder à « Toutes les photos » à %@";
+"gotoSystemSettingInThumbList" = "Rendez-vous dans les paramètres du système";
+
+"cameraUnavailable" = "La caméra n’est pas disponible";
 "keepRecording" = "Continuer à enregistrer";
 "gotoSettings" = "Accéder à Paramètres";
 
@@ -45,8 +50,8 @@
 "imageLoadFailed" = "chargement échoué";
 
 "save" = "Enregistrer";
-"saveImageError" = "Échec de l'enregistrement de l'image";
-"saveVideoError" = "Échec de l'enregistrement de la vidéo";
+"saveImageError" = "Échec de l’enregistrement de l’image";
+"saveVideoError" = "Échec de l’enregistrement de la vidéo";
 "timeout" = "La demande a expiré";
 
 "customCameraTips" = "Maintenez la pression sur pour enregistrer";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "Mon flux de photos";
 
 "noTitleAlbumListPlaceholder" = "Toutes les photos";
-"unableToAccessAllPhotos" = "Impossible d'accéder à toutes les photos de l'album.\nAutorisez l'accès à « Toutes les photos » dans « Photos ».";
 "textStickerRemoveTips" = "Faites glisser ici pour supprimer";

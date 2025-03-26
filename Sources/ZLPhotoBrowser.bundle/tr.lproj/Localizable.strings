@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "Maksimum video seçim adeti: %ld";
 "lessThanMinVideoSelectCount" = "Minimum video seçim adeti: %ld";
 
-"noCameraAuthority" = "Lütfen %@'nin \"Ayarlar\" > \"Gizlilik\" > \"Kamera\" bölümünden cihazınızın kamerasına erişmesine izin verin";
-"noPhotoLibratyAuthority" = "Lütfen %@'nin \"Ayarlar\" > \"Gizlilik\" > \"Fotoğraflar\" bölümünde albümünüze erişmesine izin verin";
-"noMicrophoneAuthority" = "Ses kaydedilemiyor. \"Ayarlar\" > \"%@\" seçeneğine gidin ve mikrofon erişimini etkinleştirin";
+"noCameraAuthorityAlertMessage" = "Lütfen %@'nin \"Ayarlar\" > \"Gizlilik\" > \"Kamera\" bölümünden cihazınızın kamerasına erişmesine izin verin";
+"noPhotoLibraryAuthorityAlertMessage" = "Lütfen %@'nin \"Ayarlar\" > \"Gizlilik\" > \"Fotoğraflar\" bölümünde albümünüze erişmesine izin verin";
+"noMicrophoneAuthorityAlertMessage" = "Ses kaydedilemiyor. \"Ayarlar\" > \"%@\" seçeneğine gidin ve mikrofon erişimini etkinleştirin";
+"unableToAccessAllPhotos" = "%@ yalnızca seçili fotoğraflara erişebilir. %@'in \"Tüm Fotoğraflar\" bölümüne erişmesine izin verin.";
+"noLibraryAuthTitleInThumbList" = "Albümdeki fotoğraflara erişilemiyor";
+"noLibraryAuthDescInThumbList" = "%@ fotoğraflara erişemiyor. %@ 'in \"Tüm Fotoğraflar\" bölümüne erişmesine izin verin.";
+"gotoSystemSettingInThumbList" = "Sistem ayarlarına gidin";
+
 "cameraUnavailable" = "Kamera kullanılamıyor";
 "keepRecording" = "Kayda Devam Et";
 "gotoSettings" = "Ayarlara git";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "Fotoğraf Akışım";
 
 "noTitleAlbumListPlaceholder" = "Tüm Fotoğraflar";
-"unableToAccessAllPhotos" = "Albümdeki tüm fotoğraflara erişilemiyor.\n\"Fotoğraflar\"da \"Tüm Fotoğraflar\"a erişime izin verin.";
 "textStickerRemoveTips" = "Kaldırmak için buraya sürükleyin";

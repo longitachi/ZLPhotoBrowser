@@ -297,7 +297,7 @@ open class ZLCustomCamera: UIViewController {
         AVCaptureDevice.requestAccess(for: .video) { videoGranted in
             guard videoGranted else {
                 ZLMainAsync(after: 1) {
-                    self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noCameraAuthority), getAppName()), type: .camera)
+                    self.showAlertAndDismissAfterDoneAction(message: String(format: localLanguageTextValue(.noCameraAuthorityAlertMessage), getAppName()), type: .camera)
                 }
                 return
             }
@@ -311,7 +311,7 @@ open class ZLCustomCamera: UIViewController {
                 self.addNotification()
                 if !audioGranted {
                     ZLMainAsync(after: 1) {
-                        self.showNoMicrophoneAuthorityAlert()
+                        self.shownoMicrophoneAuthorityAlertMessageAlert()
                     }
                 }
             }
@@ -602,7 +602,7 @@ open class ZLCustomCamera: UIViewController {
         guard isWideCameraEnabled() else { return }
         do {
             try device.lockForConfiguration()
-            device.videoZoomFactor = device.defaultZoomFactor
+            device.videoZoomFactor = device.zl.defaultZoomFactor
             device.unlockForConfiguration()
         } catch {
             zl_debugPrint("Failed to set initial zoom factor: \(error.localizedDescription)")
@@ -723,7 +723,7 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
-    private func showNoMicrophoneAuthorityAlert() {
+    private func shownoMicrophoneAuthorityAlertMessageAlert() {
         let continueAction = ZLCustomAlertAction(title: localLanguageTextValue(.keepRecording), style: .default, handler: nil)
         let gotoSettingsAction = ZLCustomAlertAction(title: localLanguageTextValue(.gotoSettings), style: .tint) { _ in
             guard let url = URL(string: UIApplication.openSettingsURLString) else {
@@ -733,7 +733,7 @@ open class ZLCustomCamera: UIViewController {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }
-        showAlertController(title: nil, message: String(format: localLanguageTextValue(.noMicrophoneAuthority), getAppName()), style: .alert, actions: [continueAction, gotoSettingsAction], sender: self)
+        showAlertController(title: nil, message: String(format: localLanguageTextValue(.noMicrophoneAuthorityAlertMessage), getAppName()), style: .alert, actions: [continueAction, gotoSettingsAction], sender: self)
     }
     
     private func showAlertAndDismissAfterDoneAction(message: String, type: ZLNoAuthorityType?) {
@@ -1109,7 +1109,7 @@ open class ZLCustomCamera: UIViewController {
             return 1
         }
         if #available(iOS 11.0, *) {
-            let factor = isWideCameraEnabled() ? device.defaultZoomFactor : 1
+            let factor = isWideCameraEnabled() ? device.zl.defaultZoomFactor : 1
             return min(15 * factor, device.maxAvailableVideoZoomFactor)
         } else {
             return min(15, device.activeFormat.videoMaxZoomFactor)
@@ -1465,7 +1465,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
             let duration = self.recordDurations.reduce(0, +)
             
             // 重置焦距
-            self.setVideoZoomFactor(self.isWideCameraEnabled() ? (self.videoInput?.device.defaultZoomFactor ?? 1) : 1)
+            self.setVideoZoomFactor(self.isWideCameraEnabled() ? (self.videoInput?.device.zl.defaultZoomFactor ?? 1) : 1)
             if duration < Double(self.cameraConfig.minRecordDuration) {
                 showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), self.cameraConfig.minRecordDuration), self)
                 self.recordURLs.forEach { try? FileManager.default.removeItem(at: $0) }

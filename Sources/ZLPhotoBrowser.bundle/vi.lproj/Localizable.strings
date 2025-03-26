@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "Số lượng lựa chọn tối đa của video: %ld";
 "lessThanMinVideoSelectCount" = "Số phút chọn tối thiểu của video: %ld";
 
-"noCameraAuthority" = "Vui lòng cho phép %@ truy cập máy ảnh trên thiết bị của bạn trong \"Cài đặt\" > \"Quyền riêng tư\" > \"Máy ảnh\"";
-"noPhotoLibratyAuthority" = "Vui lòng cho phép %@ truy cập anbom của bạn trong \"Cài đặt\" > \"Bảo mật\" > \"Ảnh\"";
-"noMicrophoneAuthority" = "Không thểghi hình. Đi tới \"Cài đặt\" > \"%@\" và bật quyên truy cập mic";
+"noCameraAuthorityAlertMessage" = "Vui lòng cho phép %@ truy cập máy ảnh trên thiết bị của bạn trong \"Cài đặt\" > \"Quyền riêng tư\" > \"Máy ảnh\"";
+"noPhotoLibraryAuthorityAlertMessage" = "Vui lòng cho phép %@ truy cập anbom của bạn trong \"Cài đặt\" > \"Bảo mật\" > \"Ảnh\"";
+"noMicrophoneAuthorityAlertMessage" = "Không thểghi hình. Đi tới \"Cài đặt\" > \"%@\" và bật quyên truy cập mic";
+"unableToAccessAllPhotos" = "%@ chỉ có thể truy cập ảnh đã chọn. Cho phép quyền đối với %@ để truy cập \"Tất cả ảnh\".";
+"noLibraryAuthTitleInThumbList" = "Không thể truy cập ảnh trong album";
+"noLibraryAuthDescInThumbList" = "%@ không thể truy cập ảnh. Cho phép quyền đối với %@ để truy cập \"Tất cả ảnh\".";
+"gotoSystemSettingInThumbList" = "Đi đến Cài đặt hệ thống";
+
 "cameraUnavailable" = "Máy ảnh không khả dụng";
 "keepRecording" = "Tiếp tục ghi hình";
 "gotoSettings" = "Đi đến Cài đặt";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "Kho ảnh của tôi";
 
 "noTitleAlbumListPlaceholder" = "Tất cả ảnh";
-"unableToAccessAllPhotos" = "Không thể truy cập tất cả ảnh trong album.\nCho phép truy cập vào \"Tất cả ảnh\" trong \"Ành\".";
 "textStickerRemoveTips" = "Kéo vào đây để xóa";

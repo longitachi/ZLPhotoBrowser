@@ -1,8 +1,8 @@
 //
-//  AVCaptureDevice.swift
+//  UIApplication+ZLPhotoBrowser.swift
 //  ZLPhotoBrowser
 //
-//  Created by tsinis on 2024/11/1.
+//  Created by long on 2025/3/13.
 //
 //  Copyright (c) 2020 Long Zhang <495181165@qq.com>
 //
@@ -24,23 +24,17 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-import AVFoundation
+import UIKit
 
-extension ZLPhotoBrowserWrapper where Base: AVCaptureDevice {
-    var defaultZoomFactor: CGFloat {
-        let fallback: CGFloat = 1.0
-        guard #available(iOS 13.0, *) else { return fallback }
+private var photoPickerKey: Void?
 
-        if let wideAngleIndex = base.constituentDevices.firstIndex(where: { $0.deviceType == .builtInWideAngleCamera }) {
-            guard wideAngleIndex >= 1 else { return fallback }
-            return CGFloat(base.virtualDeviceSwitchOverVideoZoomFactors[wideAngleIndex - 1].doubleValue)
+extension ZLPhotoBrowserWrapper where Base: UIApplication {
+    var photoPicker: ZLPhotoPicker? {
+        get {
+            zl_getAssociatedObject(base, &photoPickerKey)
         }
-
-        return fallback
-    }
-
-    func normalizedZoomFactor(for zoomFactor: CGFloat) -> CGFloat {
-        zoomFactor / self.defaultZoomFactor
+        set {
+            zl_setRetainedAssociatedObject(base, &photoPickerKey, newValue)
+        }
     }
 }
-

@@ -30,7 +30,7 @@ import Photos
 class ZLEmbedAlbumListView: UIView {
     static let rowH: CGFloat = 60
     
-    private var selectedAlbum: ZLAlbumListModel
+    private var selectedAlbum: ZLAlbumListModel?
     
     private lazy var tableBgView = UIView()
     
@@ -55,7 +55,7 @@ class ZLEmbedAlbumListView: UIView {
     
     private var orientation: UIInterfaceOrientation = UIApplication.shared.statusBarOrientation
     
-    init(selectedAlbum: ZLAlbumListModel) {
+    init(selectedAlbum: ZLAlbumListModel?) {
         self.selectedAlbum = selectedAlbum
         super.init(frame: .zero)
         setupUI()

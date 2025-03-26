@@ -34,9 +34,14 @@
 "exceededMaxVideoSelectCount" = "동영상 최대 선택 수: %ld";
 "lessThanMinVideoSelectCount" = "동영상 최소 선택 횟수: %ld";
 
-"noCameraAuthority" = "%@ 에서 장치의 카메라에 액세스하도록 허용하십시오 에서 \"설정\" > \"개인 정보\" > \"카메라\"";
-"noPhotoLibratyAuthority" = "%@ 이 \"설정\" > \"개인 정보\" > \"사진\"에서 앨범에 액세스하도록 허용하세요";
-"noMicrophoneAuthority" = "오디오를 녹음할 수 없습니다. \"설정\" > \"%@\"으로 이동하여 마이크 액세스를 사용으로 설정하십시오";
+"noCameraAuthorityAlertMessage" = "%@ 에서 장치의 카메라에 액세스하도록 허용하십시오 에서 \"설정\" > \"개인 정보\" > \"카메라\"";
+"noPhotoLibraryAuthorityAlertMessage" = "%@ 이 \"설정\" > \"개인 정보\" > \"사진\"에서 앨범에 액세스하도록 허용하세요";
+"noMicrophoneAuthorityAlertMessage" = "오디오를 녹음할 수 없습니다. \"설정\" > \"%@\"으로 이동하여 마이크 액세스를 사용으로 설정하십시오";
+"unableToAccessAllPhotos" = "%@에서 선택된 사진에만 액세스할 수 있습니다. %@에 \"모든 사진\"에 대한 액세스 권한을 허용합니다.";
+"noLibraryAuthTitleInThumbList" = "앨범 사진에 접근할 수 없습니다";
+"noLibraryAuthDescInThumbList" = "%@에서 사진에 액세스할 수 없습니다. %@에 \"모든 사진\"에 대한 액세스 권한을 허용합니다.";
+"gotoSystemSettingInThumbList" = "시스템 설정으로 이동";
+
 "cameraUnavailable" = "카메라를 사용할 수 없습니다";
 "keepRecording" = "계속 촬영";
 "gotoSettings" = "설정으로 이동";
@@ -71,5 +76,4 @@
 "myPhotoStream" = "나의 사진 스트림";
 
 "noTitleAlbumListPlaceholder" = "모든 사진";
-"unableToAccessAllPhotos" = "앨범 사진에 접근할 수 없습니다.\n\"사진\"에서 \"모든 사진\"에 대한 접근을 허용합니다.";
 "textStickerRemoveTips" = "제거하려면 여기로 드래그하세요";
