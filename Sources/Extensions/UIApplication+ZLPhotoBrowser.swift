@@ -37,8 +37,4 @@ extension ZLPhotoBrowserWrapper where Base: UIApplication {
             zl_setRetainedAssociatedObject(base, &photoPickerKey, newValue)
         }
     }
-    
-    func test() {
-        
-    }
 }

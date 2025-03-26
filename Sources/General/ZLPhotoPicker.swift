@@ -168,7 +168,6 @@ public class ZLPhotoPicker: NSObject {
         showBottomViewAndSelectBtn: Bool = true
     ) {
         assert(!assets.isEmpty, "Assets cannot be empty")
-        UIApplication.shared.zl.photoPicker = self
         
         let models = assets.zl.removeDuplicate().map { asset -> ZLPhotoModel in
             let m = ZLPhotoModel(asset: asset)
@@ -183,6 +182,8 @@ public class ZLPhotoPicker: NSObject {
         arrSelectedModels.removeAll()
         arrSelectedModels.append(contentsOf: models)
         self.sender = sender
+        UIApplication.shared.zl.photoPicker = self
+        
         isSelectOriginal = isOriginal
         
         let vc = ZLPhotoPreviewController(photos: models, index: index, showBottomViewAndSelectBtn: showBottomViewAndSelectBtn)
