@@ -271,6 +271,10 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
     }
 }
 
+extension UIColor {
+    typealias ZLARGB = (alpha: CGFloat, red: CGFloat, green: CGFloat, blue: CGFloat)
+}
+
 extension ZLPhotoBrowserWrapper where Base: UIColor {
     /// - Parameters:
     ///   - r: 0~255
@@ -279,5 +283,15 @@ extension ZLPhotoBrowserWrapper where Base: UIColor {
     ///   - a: 0~1
     static func rgba(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat = 1) -> UIColor {
         return UIColor(red: r / 255, green: g / 255, blue: b / 255, alpha: a)
+    }
+    
+    func argbTuple() -> UIColor.ZLARGB {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        base.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        return (alpha, red, green, blue)
     }
 }
