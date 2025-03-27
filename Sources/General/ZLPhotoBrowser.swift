@@ -71,7 +71,6 @@ extension UIFont: ZLPhotoBrowserCompatible { }
 extension UIView: ZLPhotoBrowserCompatible { }
 extension UIGraphicsImageRenderer: ZLPhotoBrowserCompatible { }
 extension AVCaptureDevice: ZLPhotoBrowserCompatible { }
-extension UIApplication: ZLPhotoBrowserCompatible { }
 
 extension Array: ZLPhotoBrowserCompatibleValue { }
 extension String: ZLPhotoBrowserCompatibleValue { }

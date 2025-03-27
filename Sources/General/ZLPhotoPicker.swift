@@ -112,22 +112,21 @@ public class ZLPhotoPicker: NSObject {
     @discardableResult
     @objc public func showPreview(animate: Bool = true, sender: UIViewController) -> ZLPhotoPreviewSheet {
         self.sender = sender
-        UIApplication.shared.zl.photoPicker = self
         
         let ps = ZLPhotoPreviewSheet(models: arrSelectedModels)
-        ps.selectPhotosBlock = { [weak self] models, isOriginal in
-            self?.requestSelectPhoto(models: models, isSelectOriginal: isOriginal)
+        ps.selectPhotosBlock = { models, isOriginal in
+            self.requestSelectPhoto(models: models, isSelectOriginal: isOriginal)
         }
         
-        ps.showLibraryBlock = { [weak self] models, isOriginal in
-            self?.arrSelectedModels.removeAll()
-            self?.arrSelectedModels.append(contentsOf: models)
-            self?.isSelectOriginal = isOriginal
-            self?.showPhotoLibrary(sender: sender)
+        ps.showLibraryBlock = { models, isOriginal in
+            self.arrSelectedModels.removeAll()
+            self.arrSelectedModels.append(contentsOf: models)
+            self.isSelectOriginal = isOriginal
+            self.showPhotoLibrary(sender: sender)
         }
         
-        ps.cancelBlock = { [weak self] in
-            self?.cancel()
+        ps.cancelBlock = {
+            self.cancel()
         }
         
         ps.showPreview(sender: sender)
@@ -140,7 +139,6 @@ public class ZLPhotoPicker: NSObject {
     @discardableResult
     @objc public func showPhotoLibrary(sender: UIViewController) -> ZLImageNavController {
         self.sender = sender
-        UIApplication.shared.zl.photoPicker = self
         
         let nav: ZLImageNavController
         if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
@@ -182,15 +180,14 @@ public class ZLPhotoPicker: NSObject {
         arrSelectedModels.removeAll()
         arrSelectedModels.append(contentsOf: models)
         self.sender = sender
-        UIApplication.shared.zl.photoPicker = self
         
         isSelectOriginal = isOriginal
         
         let vc = ZLPhotoPreviewController(photos: models, index: index, showBottomViewAndSelectBtn: showBottomViewAndSelectBtn)
         vc.autoSelectCurrentIfNotSelectAnyone = false
         let nav = getImageNav(rootViewController: vc)
-        vc.backBlock = { [weak self] in
-            self?.cancel()
+        vc.backBlock = {
+            self.cancel()
         }
         
         sender.showDetailViewController(nav, sender: nil)
@@ -199,16 +196,16 @@ public class ZLPhotoPicker: NSObject {
     private func getImageNav(rootViewController: UIViewController) -> ZLImageNavController {
         let nav = ZLImageNavController(rootViewController: rootViewController)
         nav.modalPresentationStyle = .fullScreen
-        nav.selectImageBlock = { [weak self, weak nav] in
-            self?.requestSelectPhoto(
+        nav.selectImageBlock = { [weak nav] in
+            self.requestSelectPhoto(
                 models: nav?.arrSelectedModels ?? [],
                 isSelectOriginal: nav?.isSelectedOriginal ?? false,
                 viewController: nav
             )
         }
         
-        nav.cancelBlock = { [weak self] in
-            self?.cancel()
+        nav.cancelBlock = {
+            self.cancel()
         }
         nav.isSelectedOriginal = isSelectOriginal
         nav.arrSelectedModels.removeAll()
@@ -217,13 +214,8 @@ public class ZLPhotoPicker: NSObject {
         return nav
     }
     
-    private func clearSelf() {
-        UIApplication.shared.zl.photoPicker = nil
-    }
-    
     private func cancel() {
         cancelBlock?()
-        clearSelf()
     }
     
     /// 解析选择的图片
@@ -275,7 +267,6 @@ public class ZLPhotoPicker: NSObject {
                 if !errorAssets.isEmpty {
                     self?.selectImageRequestErrorBlock?(errorAssets, errorIndexs)
                 }
-                self?.clearSelf()
             }
             
             if let vc = viewController {

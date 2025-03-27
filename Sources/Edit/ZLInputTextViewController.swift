@@ -133,6 +133,7 @@ class ZLInputTextViewController: UIViewController {
     private lazy var strokeTextView: ZLStrokeTextView = {
         let view = ZLStrokeTextView()
         view.backgroundColor = .clear
+        view.font = font
         view.strokeColor = currentColor
         view.text = text
         view.isHidden = textStyle != .stroke
@@ -306,13 +307,6 @@ class ZLInputTextViewController: UIViewController {
         }
     }
     
-    private func refreshStrokeTextViewFrame(for containerView: UIView) {
-        var rect = self.textView.convert(containerView.frame, from: containerView)
-        rect = rect.insetBy(dx: textView.textContainerInset.left, dy: 0)
-        rect.origin.y += textView.textContainerInset.top + 0.5
-        self.strokeTextView.frame = rect
-    }
-    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         shouldLayout = true
@@ -334,6 +328,13 @@ class ZLInputTextViewController: UIViewController {
         textView.textAlignment = .left
         
         refreshTextViewUI()
+    }
+    
+    private func refreshStrokeTextViewFrame(for containerView: UIView) {
+        var rect = self.textView.convert(containerView.frame, from: containerView)
+        rect = rect.insetBy(dx: textView.textContainerInset.left, dy: 0)
+        rect.origin.y += textView.textContainerInset.top + 0.5
+        self.strokeTextView.frame = rect
     }
     
     private func refreshTextViewUI() {
@@ -657,6 +658,7 @@ public enum ZLInputTextStyle {
 }
 
 class ZLStrokeTextView: UIView {
+    var font: UIFont = .boldSystemFont(ofSize: ZLTextStickerView.fontSize)
     var strokeColor: UIColor = .white
     var strokeWidth: CGFloat = 4.0
     var text = ""
@@ -684,7 +686,6 @@ class ZLStrokeTextView: UIView {
         context.setFillColor(fillColor.cgColor)
         context.setLineJoin(.round)
         
-        let font = UIFont.boldSystemFont(ofSize: ZLTextStickerView.fontSize)
         // 创建 Core Text 绘制
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 2.2
