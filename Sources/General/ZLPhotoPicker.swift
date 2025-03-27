@@ -324,3 +324,52 @@ public class ZLPhotoPicker: NSObject {
         }
     }
 }
+
+// MARK: Methods for SwiftUI
+
+public extension ZLPhotoPicker {
+    @available(iOS, introduced: 13.0, message: "Only available for SwiftUI")
+    func showPhotoLibraryForSwiftUI() -> ZLImageNavController {
+        let nav: ZLImageNavController
+        if ZLPhotoUIConfiguration.default().style == .embedAlbumList {
+            let tvc = ZLThumbnailViewController(albumList: nil)
+            nav = getImageNav(rootViewController: tvc)
+        } else {
+            nav = getImageNav(rootViewController: ZLAlbumListController())
+            let tvc = ZLThumbnailViewController(albumList: nil)
+            nav.pushViewController(tvc, animated: true)
+        }
+        
+        return nav
+    }
+    
+    /// 传入已选择的assets，并预览
+    @objc func previewAssetsForSwiftUI(
+        assets: [PHAsset],
+        index: Int,
+        isOriginal: Bool,
+        showBottomViewAndSelectBtn: Bool = true
+    ) -> ZLImageNavController {
+        assert(!assets.isEmpty, "Assets cannot be empty")
+        
+        let models = assets.zl.removeDuplicate().map { asset -> ZLPhotoModel in
+            let m = ZLPhotoModel(asset: asset)
+            m.isSelected = true
+            return m
+        }
+        
+        arrSelectedModels.removeAll()
+        arrSelectedModels.append(contentsOf: models)
+        
+        isSelectOriginal = isOriginal
+        
+        let vc = ZLPhotoPreviewController(photos: models, index: index, showBottomViewAndSelectBtn: showBottomViewAndSelectBtn)
+        vc.autoSelectCurrentIfNotSelectAnyone = false
+        let nav = getImageNav(rootViewController: vc)
+        vc.backBlock = {
+            self.cancel()
+        }
+        
+        return nav
+    }
+}

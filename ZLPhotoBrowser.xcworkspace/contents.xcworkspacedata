@@ -5,6 +5,9 @@
       location = "group:Example/Example.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:SwiftUIExample/SwiftUIExample.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:ZLPhotoBrowser.xcodeproj">
    </FileRef>
 </Workspace>
