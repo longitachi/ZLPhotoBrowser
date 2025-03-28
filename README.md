@@ -29,6 +29,7 @@ Detailed usage of `Swift` and `OC`, please refer to [Wiki](https://github.com/lo
 If you only want to use the image edit feature, please move to [ZLImageEditor](https://github.com/longitachi/ZLImageEditor).
 
 ### Features
+- [x] Support SwiftUI.
 - [x] Portrait and landscape.
 - [x] Two framework style.
 - [x] Preview selection (Support drag and drop).
@@ -91,6 +92,17 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.6.0
+  Add:
+    Support SwiftUI.
+    Support for locked output orientation in custom camera.
+    Optimize the playback experience of album videos and online videos.
+    Add will-capture-block for customizable capture actions.
+    Replace ZLPhotoPreviewSheet with ZLPhotoPicker. The permission of ZLPhotoPreviewSheet will be changed to private later.
+    Enhance the text sticker feature by adding text outline and shadow effects.
+  Fix:
+    Fixed the bug that the time of automatically stopping recording is incorrect when clicking to record a video.
+    Fix the issue where the width and height calculations of some videos are inaccurate when previewing online videos.
 ● 4.5.8
   Add:
     Add video stabilization mode to camera configuration.
@@ -107,10 +119,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Custom camera allows adding a custom overlay view.
     Video editing controller adds a callback block for canceling edits.
     Added `ZLImagePreviewControllerDelegate` protocol to receive event callbacks in ZLImagePreviewController.
-● 4.5.6
-  Add:
-    Support iOS18.
-    When saving pictures and videos, add error parameters in the callback.
 ...
 ```
 
@@ -166,7 +174,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.5.8" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.6.0" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support

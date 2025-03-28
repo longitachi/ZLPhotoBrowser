@@ -2,6 +2,21 @@
 
 -----
 
+## [4.6.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.6.0) (2025-03-28)
+### Add:
+* Support SwiftUI.
+* Support for locked output orientation in custom camera. [#976](https://github.com/longitachi/ZLPhotoBrowser/pull/976) @tsinis
+* Optimize the playback experience of album videos and online videos.
+* Add will-capture-block for customizable capture actions. [#988](https://github.com/longitachi/ZLPhotoBrowser/pull/988) @tsinis
+* Replace ZLPhotoPreviewSheet with ZLPhotoPicker. The permission of ZLPhotoPreviewSheet will be changed to private later. [#996](https://github.com/longitachi/ZLPhotoBrowser/pull/996)
+* Enhance the text sticker feature by adding text outline and shadow effects.
+
+### Fix:
+* Fixed the bug that the time of automatically stopping recording is incorrect when clicking to record a video.
+* Fix the issue where the width and height calculations of some videos are inaccurate when previewing online videos.
+
+---
+
 ## [4.5.8](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.5.8) (2025-02-18)
 ### Add:
 * Add video stabilization support in custom camera. [#959](https://github.com/longitachi/ZLPhotoBrowser/pull/959) @tsinis
