@@ -2,7 +2,7 @@
 
 -----
 
-## [4.6.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.6.0) (2025-03-28)
+## [4.6.0 ~ 4.6.0.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.6.0.1) (2025-03-31)
 ### Add:
 * Support SwiftUI.
 * Support for locked output orientation in custom camera. [#976](https://github.com/longitachi/ZLPhotoBrowser/pull/976) @tsinis
