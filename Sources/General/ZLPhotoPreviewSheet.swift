@@ -820,7 +820,14 @@ public class ZLPhotoPreviewSheet: UIView {
             self?.isSelectOriginal = nav?.isSelectedOriginal ?? false
             self?.arrSelectedModels.removeAll()
             self?.arrSelectedModels.append(contentsOf: nav?.arrSelectedModels ?? [])
-            self?.requestSelectPhoto(viewController: nav)
+            
+            if let block = self?.selectPhotosBlock {
+                nav?.dismiss(animated: true) {
+                    block(self?.arrSelectedModels ?? [], self?.isSelectOriginal ?? false)
+                }
+            } else {
+                self?.requestSelectPhoto(viewController: nav)
+            }
         }
         
         nav.cancelBlock = { [weak self] in
