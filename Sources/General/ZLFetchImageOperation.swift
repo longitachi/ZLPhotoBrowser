@@ -27,7 +27,7 @@
 import UIKit
 import Photos
 
-class ZLFetchImageOperation: Operation {
+class ZLFetchImageOperation: Operation, @unchecked Sendable {
     private let model: ZLPhotoModel
     
     private let isOriginal: Bool

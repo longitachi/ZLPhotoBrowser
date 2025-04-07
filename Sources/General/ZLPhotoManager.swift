@@ -443,9 +443,11 @@ public class ZLPhotoManager: NSObject {
             return
         }
         
-        let pointer = UnsafeMutablePointer<PHImageRequestID>.allocate(capacity: MemoryLayout<Int32>.stride)
-        pointer.pointee = PHInvalidImageRequestID
+        var requestID = PHInvalidImageRequestID
         var canceled = false
+        
+        // fix warning：'requestID' mutated after capture by sendable closure
+        let currID = { requestID }
         
         var timer: Timer? = .scheduledTimer(
             withTimeInterval: ZLPhotoUIConfiguration.default().timeout,
@@ -453,7 +455,7 @@ public class ZLPhotoManager: NSObject {
         ) { timer in
             timer.invalidate()
             canceled = true
-            PHImageManager.default().cancelImageRequest(pointer.pointee)
+            PHImageManager.default().cancelImageRequest(currID())
             
             completion(NSError.timeoutError)
         }
@@ -480,7 +482,7 @@ public class ZLPhotoManager: NSObject {
         }
         
         if asset.mediaType == .video {
-            pointer.pointee = fetchVideo(for: asset) { _, error, _, _ in
+            requestID = fetchVideo(for: asset) { _, error, _, _ in
                 write(true, error)
             } completion: { _, info, isDegraded in
                 guard !canceled else { return }
@@ -489,7 +491,7 @@ public class ZLPhotoManager: NSObject {
                 write(isDegraded, error)
             }
         } else if asset.zl.isInCloud {
-            pointer.pointee = fetchOriginalImageData(for: asset) { _, error, _, _ in
+            requestID = fetchOriginalImageData(for: asset) { _, error, _, _ in
                 write(true, error)
             } completion: { _, info, isDegraded in
                 guard !canceled else { return }

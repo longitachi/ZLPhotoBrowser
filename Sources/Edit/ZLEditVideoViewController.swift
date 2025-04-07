@@ -624,7 +624,7 @@ class ZLEditVideoFrameImageCell: UICollectionViewCell {
     }
 }
 
-class ZLEditVideoFetchFrameImageOperation: Operation {
+class ZLEditVideoFetchFrameImageOperation: Operation, @unchecked Sendable {
     private let generator: AVAssetImageGenerator
     
     private let time: CMTime

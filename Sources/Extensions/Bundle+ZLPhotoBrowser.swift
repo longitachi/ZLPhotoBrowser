@@ -39,7 +39,7 @@ extension Bundle {
             Bundle.main.resourceURL,
             
             // Bundle should be present here when the package is linked into a framework.
-            Bundle(for: ZLPhotoPreviewSheet.self).resourceURL,
+            Bundle(for: ZLPhotoPicker.self).resourceURL,
             
             // For command-line tools.
             Bundle.main.bundleURL

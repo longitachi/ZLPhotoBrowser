@@ -541,7 +541,7 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     private func fetchCameraRollAlbumIfNeed() {
-        if let albumList {
+        if albumList != nil {
             refreshSubviewAfterRequestAuth()
             loadPhotos()
         } else {
