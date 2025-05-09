@@ -238,6 +238,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// This block will be called when cancel selecting an asset.
     public var didDeselectAsset: ((PHAsset) -> Void)?
     
+    /// This block will be called when clicking the camera button in the library.
+    public var canEnterCamera: (() -> Bool)?
+    
     /// The maximum number of frames for GIF images. To avoid crashes due to memory spikes caused by loading GIF images with too many frames, it is recommended that this value is not too large. Defaults to 50.
     public var maxFrameCountForGIF = 50
     

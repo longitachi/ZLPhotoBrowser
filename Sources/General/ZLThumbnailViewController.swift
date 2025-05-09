@@ -986,6 +986,8 @@ class ZLThumbnailViewController: UIViewController {
     
     private func showCamera() {
         let config = ZLPhotoConfiguration.default()
+        guard config.canEnterCamera?() ?? true else { return }
+        
         if config.useCustomCamera {
             let camera = ZLCustomCamera()
             camera.takeDoneBlock = { [weak self] image, videoURL in

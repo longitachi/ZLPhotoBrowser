@@ -269,6 +269,12 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
+    func canEnterCamera(_ block: (() -> Bool)?) -> ZLPhotoConfiguration {
+        canEnterCamera = block
+        return self
+    }
+    
+    @discardableResult
     func maxFrameCountForGIF(_ frameCount: Int) -> ZLPhotoConfiguration {
         maxFrameCountForGIF = frameCount
         return self
