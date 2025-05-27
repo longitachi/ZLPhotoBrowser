@@ -136,15 +136,27 @@ public class ZLPhotoManager: NSObject {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
         }
         
+        var arr: [PHFetchResult<PHCollection>?] = []
+        
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil) as? PHFetchResult<PHCollection>
-        let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil) as? PHFetchResult<PHCollection>
-        let streamAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil) as? PHFetchResult<PHCollection>
-        let syncedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil) as? PHFetchResult<PHCollection>
-        let sharedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil) as? PHFetchResult<PHCollection>
-        let arr = [smartAlbums, albums, streamAlbums, syncedAlbums, sharedAlbums].compactMap { $0 }
+        arr.append(smartAlbums)
+        
+        if #available(iOS 18.0, *) {
+            let ablums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil) as? PHFetchResult<PHCollection>
+            arr.append(ablums)
+        } else {
+            let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil) as? PHFetchResult<PHCollection>
+            let streamAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil) as? PHFetchResult<PHCollection>
+            let syncedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil) as? PHFetchResult<PHCollection>
+            let sharedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil) as? PHFetchResult<PHCollection>
+            
+            arr.append(contentsOf: [albums, streamAlbums, syncedAlbums, sharedAlbums])
+        }
+        
+        let results = arr.compactMap { $0 }
         
         var albumList: [ZLAlbumListModel] = []
-        arr.forEach { album in
+        results.forEach { album in
             album.enumerateObjects { collection, _, _ in
                 guard let collection = collection as? PHAssetCollection else { return }
                 if collection.assetCollectionSubtype == .smartAlbumAllHidden {
