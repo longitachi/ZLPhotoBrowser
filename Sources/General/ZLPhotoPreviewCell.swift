@@ -687,7 +687,11 @@ class ZLVideoPreviewCell: ZLPreviewBaseCell {
         let duration = player?.currentItem?.duration
         if !isPlaying {
             if currentTime?.value == duration?.value {
-                player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+                if #available(iOS 11.0, *) {
+                    player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1), completionHandler: nil)
+                } else {
+                    player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+                }
             }
             imageView.isHidden = true
             try? AVAudioSession.sharedInstance().setCategory(.playback)
@@ -816,7 +820,11 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
     }
     
     override func didEndDisplaying() {
-        player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+        if #available(iOS 11.0, *) {
+            player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1), completionHandler: nil)
+        } else {
+            player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+        }
     }
     
     override func animateImageFrame(convertTo view: UIView) -> CGRect {
@@ -836,7 +844,11 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         let duration = player?.currentItem?.duration
         if player?.rate == 0 {
             if currentTime?.value == duration?.value {
-                player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+                if #available(iOS 11.0, *) {
+                    player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1), completionHandler: nil)
+                } else {
+                    player?.currentItem?.seek(to: CMTimeMake(value: 0, timescale: 1))
+                }
             }
             player?.play()
             try? AVAudioSession.sharedInstance().setCategory(.playback)

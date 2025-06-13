@@ -63,7 +63,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 框架支持
  * iOS 10.0
  * Swift 5.x
- * Xcode 12.x
+ * Xcode 14.x
  
 ### 使用示例
  - 快速选择

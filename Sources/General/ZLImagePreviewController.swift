@@ -73,6 +73,9 @@ public class ZLImagePreviewController: UIViewController {
         view.delegate = self
         view.isPagingEnabled = true
         view.showsHorizontalScrollIndicator = false
+        if #available(iOS 11.0, *) {
+            view.contentInsetAdjustmentBehavior = .never
+        }
         
         ZLPhotoPreviewCell.zl.register(view)
         ZLGifPreviewCell.zl.register(view)
@@ -304,7 +307,9 @@ public class ZLImagePreviewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .zl.previewVCBgColor
-        automaticallyAdjustsScrollViewInsets = false
+        if #unavailable(iOS 11.0) {
+            automaticallyAdjustsScrollViewInsets = false
+        }
         
         view.addSubview(navView)
         
