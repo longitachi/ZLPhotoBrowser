@@ -893,10 +893,6 @@ extension ZLPhotoPreviewController: UICollectionViewDataSource, UICollectionView
         if config.allowSelectGif, model.type == .gif {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLGifPreviewCell.zl.identifier, for: indexPath) as! ZLGifPreviewCell
             
-            cell.singleTapBlock = { [weak self] in
-                self?.tapPreviewCell()
-            }
-            
             cell.model = model
             
             baseCell = cell
@@ -914,10 +910,6 @@ extension ZLPhotoPreviewController: UICollectionViewDataSource, UICollectionView
             baseCell = cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLPhotoPreviewCell.zl.identifier, for: indexPath) as! ZLPhotoPreviewCell
-
-            cell.singleTapBlock = { [weak self] in
-                self?.tapPreviewCell()
-            }
 
             cell.model = model
 

@@ -31,6 +31,14 @@ import Photos
 public class ZLPhotoManager: NSObject {
     /// Save image to album.
     public class func saveImageToAlbum(image: UIImage, completion: ((Error?, PHAsset?) -> Void)?) {
+        saveImageObjToAlbum(obj: image, completion: completion)
+    }
+    
+    public class func saveImageDataToAlbum(data: Data, completion: ((Error?, PHAsset?) -> Void)?) {
+        saveImageObjToAlbum(obj: data as AnyObject, completion: completion)
+    }
+    
+    private class func saveImageObjToAlbum(obj: AnyObject, completion: ((Error?, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.zl.authStatus(for: .addOnly)
         if status == .denied || status == .restricted {
             completion?(NSError.noWriteAuthError, nil)
@@ -50,18 +58,28 @@ public class ZLPhotoManager: NSObject {
                 }
             }
         }
-
-        if image.zl.hasAlphaChannel(), let data = image.pngData() {
+        
+        if let image = obj as? UIImage {
+            if image.zl.hasAlphaChannel(), let data = image.pngData() {
+                PHPhotoLibrary.shared().performChanges({
+                    let newAssetRequest = PHAssetCreationRequest.forAsset()
+                    newAssetRequest.addResource(with: .photo, data: data, options: nil)
+                    placeholderAsset = newAssetRequest.placeholderForCreatedAsset
+                }, completionHandler: completionHandler)
+            } else {
+                PHPhotoLibrary.shared().performChanges({
+                    let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+                    placeholderAsset = newAssetRequest.placeholderForCreatedAsset
+                }, completionHandler: completionHandler)
+            }
+        } else if let data = obj as? Data {
             PHPhotoLibrary.shared().performChanges({
                 let newAssetRequest = PHAssetCreationRequest.forAsset()
                 newAssetRequest.addResource(with: .photo, data: data, options: nil)
                 placeholderAsset = newAssetRequest.placeholderForCreatedAsset
             }, completionHandler: completionHandler)
         } else {
-            PHPhotoLibrary.shared().performChanges({
-                let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-                placeholderAsset = newAssetRequest.placeholderForCreatedAsset
-            }, completionHandler: completionHandler)
+            completion?(NSError(message: "Error params type"), nil)
         }
     }
     

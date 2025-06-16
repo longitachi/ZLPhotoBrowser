@@ -225,9 +225,19 @@ class ZLImagePreviewDismissInteractiveTransition: UIPercentDrivenInteractiveTran
             imageView?.layer.insertSublayer(playerLayer, at: 0)
         } else if let videoCell = cell as? ZLNetVideoPreviewCell,
                   let playerLayer = videoCell.playerLayer {
-            playerLayer.removeFromSuperlayer()
-            self.playerLayer = playerLayer
-            imageView?.layer.insertSublayer(playerLayer, at: 0)
+            if videoCell.isPlaying {
+                playerLayer.removeFromSuperlayer()
+                self.playerLayer = playerLayer
+                imageView?.layer.insertSublayer(playerLayer, at: 0)
+            } else {
+                let image: UIImage?
+                if let time = playerLayer.player?.currentTime().seconds, time.isFinite, time != 0 {
+                    image = videoCell.currentImage
+                } else {
+                    image = videoCell.coverImageView.image ?? videoCell.currentImage
+                }
+                imageView?.image = image
+            }
         } else {
             imageView?.image = cell.currentImage
         }

@@ -208,25 +208,39 @@ class ViewController: UIViewController {
                     debugPrint("No microphone authority")
                 }
             }
-            .gifPlayBlock { imageView, data, _ in
-                let animatedImage = FLAnimatedImage(gifData: data)
-                
-                var animatedImageView: FLAnimatedImageView?
-                for subView in imageView.subviews {
-                    if let subView = subView as? FLAnimatedImageView {
-                        animatedImageView = subView
-                        break
+            .gifPlayBlock { imageView, data, asset, _ in
+                let provider = RawImageDataProvider(data: data, cacheKey: asset.localIdentifier)
+                imageView.kf.setImage(
+                    with: .provider(provider),
+                    placeholder: imageView.image,
+                    options: [.cacheOriginalImage]
+                ) { result in
+                    switch result {
+                    case .success(let value):
+                        print("✅ GIF 加载并播放成功")
+                    case .failure(let error):
+                        print("❌ GIF 加载失败")
                     }
                 }
                 
-                if animatedImageView == nil {
-                    animatedImageView = FLAnimatedImageView()
-                    imageView.addSubview(animatedImageView!)
-                }
-                
-                animatedImageView?.frame = imageView.bounds
-                animatedImageView?.animatedImage = animatedImage
-                animatedImageView?.runLoopMode = .default
+//                let animatedImage = FLAnimatedImage(gifData: data)
+//                
+//                var animatedImageView: FLAnimatedImageView?
+//                for subView in imageView.subviews {
+//                    if let subView = subView as? FLAnimatedImageView {
+//                        animatedImageView = subView
+//                        break
+//                    }
+//                }
+//                
+//                if animatedImageView == nil {
+//                    animatedImageView = FLAnimatedImageView()
+//                    imageView.addSubview(animatedImageView!)
+//                }
+//                
+//                animatedImageView?.frame = imageView.bounds
+//                animatedImageView?.animatedImage = animatedImage
+//                animatedImageView?.runLoopMode = .default
             }
             .pauseGIFBlock { $0.subviews.forEach { ($0 as? FLAnimatedImageView)?.stopAnimating() } }
             .resumeGIFBlock { $0.subviews.forEach { ($0 as? FLAnimatedImageView)?.startAnimating() } }
@@ -339,6 +353,11 @@ class ViewController: UIViewController {
         }
         
         vc.delegate = self
+        
+        vc.netVideoCoverImageBlock = { url in
+            debugPrint("Customize the cover image for the network video here. Index: \(String(describing: datas.firstIndex(where: { ($0 as? URL) == url })))")
+            return nil
+        }
         
         vc.doneBlock = { datas in
             debugPrint(datas)

@@ -245,7 +245,7 @@ public class ZLPhotoConfiguration: NSObject {
     public var maxFrameCountForGIF = 50
     
     /// You can use this block to customize the playback of GIF images to achieve better results. For example, use FLAnimatedImage to play GIFs. Defaults to nil.
-    public var gifPlayBlock: ((UIImageView, Data, [AnyHashable: Any]?) -> Void)?
+    public var gifPlayBlock: ((UIImageView, Data, PHAsset, [AnyHashable: Any]?) -> Void)?
     
     /// Pause GIF image playback, used together with gifPlayBlock. Defaults to nil.
     public var pauseGIFBlock: ((UIImageView) -> Void)?

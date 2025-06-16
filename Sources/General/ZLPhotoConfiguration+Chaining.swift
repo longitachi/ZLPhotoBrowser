@@ -281,7 +281,7 @@ public extension ZLPhotoConfiguration {
     }
     
     @discardableResult
-    func gifPlayBlock(_ block: ((UIImageView, Data, [AnyHashable: Any]?) -> Void)?) -> ZLPhotoConfiguration {
+    func gifPlayBlock(_ block: ((UIImageView, Data, PHAsset, [AnyHashable: Any]?) -> Void)?) -> ZLPhotoConfiguration {
         gifPlayBlock = block
         return self
     }
