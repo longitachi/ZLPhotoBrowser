@@ -59,7 +59,7 @@ class ViewController: UIViewController {
                 make.top.equalTo(topLayoutGuide.snp.bottom).offset(20)
             }
             
-            make.left.equalToSuperview().offset(30)
+            make.left.equalTo(view.snp.leftMargin).offset(30)
         }
         
         let configBtn_cn = createBtn("相册配置 (中文)", #selector(cn_configureClick))
@@ -209,41 +209,37 @@ class ViewController: UIViewController {
                 }
             }
             .gifPlayBlock { imageView, data, asset, _ in
+                var animatedImageView: AnimatedImageView?
+                for subView in imageView.subviews {
+                    if let subView = subView as? AnimatedImageView {
+                        animatedImageView = subView
+                        break
+                    }
+                }
+
+                if animatedImageView == nil {
+                    animatedImageView = AnimatedImageView()
+                    imageView.addSubview(animatedImageView!)
+                }
+                
+                animatedImageView?.frame = imageView.bounds
+                
                 let provider = RawImageDataProvider(data: data, cacheKey: asset.localIdentifier)
-                imageView.kf.setImage(
+                animatedImageView?.kf.setImage(
                     with: .provider(provider),
                     placeholder: imageView.image,
                     options: [.cacheOriginalImage]
                 ) { result in
                     switch result {
-                    case .success(let value):
+                    case .success(_):
                         print("✅ GIF 加载并播放成功")
-                    case .failure(let error):
+                    case .failure(_):
                         print("❌ GIF 加载失败")
                     }
                 }
-                
-//                let animatedImage = FLAnimatedImage(gifData: data)
-//                
-//                var animatedImageView: FLAnimatedImageView?
-//                for subView in imageView.subviews {
-//                    if let subView = subView as? FLAnimatedImageView {
-//                        animatedImageView = subView
-//                        break
-//                    }
-//                }
-//                
-//                if animatedImageView == nil {
-//                    animatedImageView = FLAnimatedImageView()
-//                    imageView.addSubview(animatedImageView!)
-//                }
-//                
-//                animatedImageView?.frame = imageView.bounds
-//                animatedImageView?.animatedImage = animatedImage
-//                animatedImageView?.runLoopMode = .default
             }
-            .pauseGIFBlock { $0.subviews.forEach { ($0 as? FLAnimatedImageView)?.stopAnimating() } }
-            .resumeGIFBlock { $0.subviews.forEach { ($0 as? FLAnimatedImageView)?.startAnimating() } }
+            .pauseGIFBlock { $0.subviews.forEach { ($0 as? AnimatedImageView)?.stopAnimating() } }
+            .resumeGIFBlock { $0.subviews.forEach { ($0 as? AnimatedImageView)?.startAnimating() } }
 //            .operateBeforeDoneAction { currVC, block in
 //                // Do something before select photo result callback, and then call block to continue done action.
 //                block()

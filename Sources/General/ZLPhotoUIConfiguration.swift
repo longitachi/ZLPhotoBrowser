@@ -71,6 +71,21 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// Custom alert class. Defaults to nil.
     public var customAlertClass: ZLCustomAlertProtocol.Type?
     
+    /// If true, the album thumbnail interface will load the photos from the album in pages. Defaults to true.
+    public var allowPageLoading = true
+    
+    private var pri_pageSize = 1000
+    
+    /// Number of photos to load per page. Min value is 500. Defaults to 1000.
+    public var pageSize: Int {
+        get {
+            pri_pageSize
+        }
+        set {
+            pri_pageSize = max(500, newValue)
+        }
+    }
+    
     private var pri_columnCount = 4
     /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Defaults to 4.
     /// ```

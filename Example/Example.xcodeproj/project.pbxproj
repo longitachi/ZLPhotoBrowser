@@ -112,8 +112,6 @@
 		FD0F5AD42AFDDA1800EE83F3 /* SizeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0F5A9E2AFDDA1800EE83F3 /* SizeExtensions.swift */; };
 		FD0F5AD52AFDDA1800EE83F3 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0F5A9F2AFDDA1800EE83F3 /* Box.swift */; };
 		FD0F5AD62AFDDA1800EE83F3 /* String+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0F5AA02AFDDA1800EE83F3 /* String+MD5.swift */; };
-		FD0FF0DC29B726F600660EE9 /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0FF0DA29B726F600660EE9 /* FLAnimatedImage.m */; };
-		FD0FF0DD29B726F600660EE9 /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FD0FF0DB29B726F600660EE9 /* FLAnimatedImageView.m */; };
 		FD7274B5286EC7C400FF8CAD /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B4286EC7C400FF8CAD /* CustomAlertController.swift */; };
 		FD7274B8286ECBE300FF8CAD /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B7286ECBE300FF8CAD /* UIColor+Hex.swift */; };
 		FD7274BA286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7274B9286ED42900FF8CAD /* ZLCustomAlertAction+Color.swift */; };
@@ -247,10 +245,6 @@
 		FD0F5A9E2AFDDA1800EE83F3 /* SizeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeExtensions.swift; sourceTree = "<group>"; };
 		FD0F5A9F2AFDDA1800EE83F3 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		FD0F5AA02AFDDA1800EE83F3 /* String+MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+MD5.swift"; sourceTree = "<group>"; };
-		FD0FF0D829B726EE00660EE9 /* FLAnimatedImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
-		FD0FF0D929B726EF00660EE9 /* FLAnimatedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
-		FD0FF0DA29B726F600660EE9 /* FLAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImage.m; sourceTree = "<group>"; };
-		FD0FF0DB29B726F600660EE9 /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
 		FD1E545429EEC95200D7B1B6 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Main.strings; sourceTree = "<group>"; };
 		FD1E545529EEC95300D7B1B6 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		FD3072472AD7A17900CFB618 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Main.strings; sourceTree = "<group>"; };
@@ -370,7 +364,6 @@
 		E4C911A124E283D80061DA40 /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				FD0FF0D729B726D000660EE9 /* FLAnimatedImage */,
 				FD0F5A622AFDDA1800EE83F3 /* Kingfisher */,
 				E4A4109824F39F0000EEC20B /* SnapKit */,
 				FD7274B3286EC79D00FF8CAD /* CustomAlert */,
@@ -518,17 +511,6 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
-		FD0FF0D729B726D000660EE9 /* FLAnimatedImage */ = {
-			isa = PBXGroup;
-			children = (
-				FD0FF0D929B726EF00660EE9 /* FLAnimatedImage.h */,
-				FD0FF0DA29B726F600660EE9 /* FLAnimatedImage.m */,
-				FD0FF0D829B726EE00660EE9 /* FLAnimatedImageView.h */,
-				FD0FF0DB29B726F600660EE9 /* FLAnimatedImageView.m */,
-			);
-			path = FLAnimatedImage;
-			sourceTree = "<group>";
-		};
 		FD7274B3286EC79D00FF8CAD /* CustomAlert */ = {
 			isa = PBXGroup;
 			children = (
@@ -657,7 +639,6 @@
 				E4A410D724F39F0000EEC20B /* ConstraintMakerEditable.swift in Sources */,
 				FD0F5AA92AFDDA1800EE83F3 /* KF.swift in Sources */,
 				FD0F5ABF2AFDDA1800EE83F3 /* ImageDrawing.swift in Sources */,
-				FD0FF0DC29B726F600660EE9 /* FLAnimatedImage.m in Sources */,
 				FD0F5AC02AFDDA1800EE83F3 /* ImageTransition.swift in Sources */,
 				E4A4109724F39DF700EEC20B /* PhotoConfigureViewController.swift in Sources */,
 				FD0F5AAE2AFDDA1800EE83F3 /* KFOptionsSetter.swift in Sources */,
@@ -712,7 +693,6 @@
 				E4A410C224F39F0000EEC20B /* ConstraintDescription.swift in Sources */,
 				FD0F5AC42AFDDA1800EE83F3 /* Placeholder.swift in Sources */,
 				E4A410DE24F39F0000EEC20B /* Debugging.swift in Sources */,
-				FD0FF0DD29B726F600660EE9 /* FLAnimatedImageView.m in Sources */,
 				E4A410DB24F39F0000EEC20B /* ConstraintView+Extensions.swift in Sources */,
 				E4A410CC24F39F0000EEC20B /* ConstraintInsetTarget.swift in Sources */,
 				FD0F5ABC2AFDDA1800EE83F3 /* ImageProgressive.swift in Sources */,

@@ -83,6 +83,18 @@ public extension ZLPhotoUIConfiguration {
         return self
     }
     
+    @discardableResult
+    func allowPageLoading(_ value: Bool) -> ZLPhotoUIConfiguration {
+        allowPageLoading = value
+        return self
+    }
+    
+    @discardableResult
+    func pageSize(_ value: Int) -> ZLPhotoUIConfiguration {
+        pageSize = value
+        return self
+    }
+    
     /// - Note: This property is ignored when using columnCountBlock.
     @discardableResult
     func columnCount(_ count: Int) -> ZLPhotoUIConfiguration {

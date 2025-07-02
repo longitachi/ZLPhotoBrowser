@@ -222,6 +222,8 @@ class ZLThumbnailViewController: UIViewController {
     
     private var didLayout = false
     
+    private var canPreload = false
+    
     override var prefersStatusBarHidden: Bool { hiddenStatusBar }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -362,6 +364,7 @@ class ZLThumbnailViewController: UIViewController {
         if isSwitchOrientation {
             isSwitchOrientation = false
             
+            collectionView.collectionViewLayout.invalidateLayout()
             if let lastVisibleIndexPathBeforeRotation {
                 collectionView.scrollToItem(at: lastVisibleIndexPathBeforeRotation, at: .bottom, animated: false)
             }
@@ -416,7 +419,6 @@ class ZLThumbnailViewController: UIViewController {
         lastVisibleIndexPathBeforeRotation = collectionView.indexPathsForVisibleItems
             .max { $0.row < $1.row }
         isSwitchOrientation = true
-        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func setupUI() {
@@ -569,13 +571,28 @@ class ZLThumbnailViewController: UIViewController {
             return
         }
         
-        let hud = ZLProgressHUD.show(in: view)
+        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        if #available(iOS 11.0, *), deviceIsFringeScreen() {
+            insets = deviceSafeAreaInsets()
+        }
         
+        if UIApplication.shared.statusBarOrientation.isLandscape {
+            let colViewW1 = view.zl.width - insets.left - insets.right
+            let colViewW2 = view.zl.height
+            albumList.columnCounts = (getColumnCount(totalWidth: colViewW2), getColumnCount(totalWidth: colViewW1))
+        } else {
+            let colViewW1 = view.zl.width - insets.left - insets.right
+            let colViewW2 = view.zl.height - max(insets.top, insets.bottom) * 2
+            albumList.columnCounts = (getColumnCount(totalWidth: colViewW1), getColumnCount(totalWidth: colViewW2))
+        }
+        
+        let hud = ZLProgressHUD.show(in: view)
         DispatchQueue.global().async {
             var datas: [ZLPhotoModel] = []
             
+            self.canPreload = false
             if albumList.models.isEmpty {
-                albumList.refetchPhotos()
+                albumList.preloadPhotos(loadAll: !ZLPhotoUIConfiguration.default().allowPageLoading)
                 
                 datas.append(contentsOf: albumList.models)
                 markSelected(source: &datas, selected: &nav.arrSelectedModels)
@@ -598,6 +615,8 @@ class ZLThumbnailViewController: UIViewController {
                     transform = transform.rotated(by: .pi)
                 }
                 self.scrollToBottomBtn.transform = transform
+                
+                self.canPreload = true
             }
         }
     }
@@ -1246,6 +1265,23 @@ extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
 // MARK: CollectionView Delegate & DataSource
 
 extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    private func getColumnCount(totalWidth: CGFloat) -> Int {
+        let uiConfig = ZLPhotoUIConfiguration.default()
+        var columnCount: Int
+        
+        if let columnCountBlock = uiConfig.columnCountBlock {
+            columnCount = columnCountBlock(totalWidth)
+        } else {
+            let defaultCount = uiConfig.columnCount
+            columnCount = deviceIsiPad() ? (defaultCount + 2) : defaultCount
+            if UIApplication.shared.statusBarOrientation.isLandscape {
+                columnCount += 2
+            }
+        }
+        
+        return columnCount
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return ZLPhotoUIConfiguration.default().minimumInteritemSpacing
     }
@@ -1256,19 +1292,9 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let uiConfig = ZLPhotoUIConfiguration.default()
-        var columnCount: Int
+        let columnCount = getColumnCount(totalWidth: collectionView.zl.width)
         
-        if let columnCountBlock = uiConfig.columnCountBlock {
-            columnCount = columnCountBlock(collectionView.zl.width)
-        } else {
-            let defaultCount = uiConfig.columnCount
-            columnCount = deviceIsiPad() ? (defaultCount + 2) : defaultCount
-            if UIApplication.shared.statusBarOrientation.isLandscape {
-                columnCount += 2
-            }
-        }
-        
-        let totalW = collectionView.bounds.width - CGFloat(columnCount - 1) * uiConfig.minimumInteritemSpacing
+        let totalW = collectionView.zl.width - CGFloat(columnCount - 1) * uiConfig.minimumInteritemSpacing
         let singleW = totalW / CGFloat(columnCount)
         return CGSize(width: singleW, height: singleW)
     }
@@ -1426,6 +1452,12 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         }
         
         let vc = ZLPhotoPreviewController(photos: arrDataSources, index: index)
+        if uiConfig.allowPageLoading {
+            vc.preloadBlock = { [weak self] loadAll in
+                self?.preloadPhotos(loadAll: loadAll, force: true) ?? []
+            }
+        }
+        
         vc.backBlock = { [weak self] in
             guard let `self` = self, self.hiddenStatusBar else { return }
             self.hiddenStatusBar = false
@@ -1576,6 +1608,76 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
 extension ZLThumbnailViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateScrollToBottomVisibility()
+        
+        preloadPhotos()
+    }
+    
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        guard ZLPhotoUIConfiguration.default().sortAscending else { return true }
+        
+        preloadPhotos(loadAll: true, force: true)
+        return true
+    }
+    
+    @discardableResult
+    private func preloadPhotos(loadAll: Bool = false, force: Bool = false) -> [ZLPhotoModel] {
+        let uiConfig = ZLPhotoUIConfiguration.default()
+        
+        guard uiConfig.allowPageLoading,
+              canPreload,
+              let nav = navigationController as? ZLImageNavController,
+              let albumList else {
+            return []
+        }
+        
+        let offset = collectionView.contentOffset
+        if uiConfig.sortAscending {
+            if force || offset.y <= view.zl.height * 3 {
+                var models = albumList.preloadPhotos(loadAll: loadAll)
+                guard !models.isEmpty else { return [] }
+                
+                var selectedModels = nav.arrSelectedModels
+                handlePreloadPhotos(models: &models, selectedModels: &selectedModels)
+                nav.arrSelectedModels = selectedModels
+                return models
+            }
+        } else {
+            let contentH = collectionView.contentSize.height
+            if force || contentH - offset.y <= view.zl.height * 4 {
+                var models = albumList.preloadPhotos(loadAll: loadAll)
+                guard !models.isEmpty else { return [] }
+                
+                var selectedModels = nav.arrSelectedModels
+                handlePreloadPhotos(models: &models, selectedModels: &selectedModels)
+                nav.arrSelectedModels = selectedModels
+                return models
+            }
+        }
+        
+        return []
+    }
+    
+    private func handlePreloadPhotos(models: inout [ZLPhotoModel], selectedModels: inout [ZLPhotoModel]) {
+        markSelected(source: &models, selected: &selectedModels)
+        
+        if ZLPhotoUIConfiguration.default().sortAscending {
+            arrDataSources.insert(contentsOf: models, at: 0)
+            let indexPaths = models.indices.map { IndexPath(item: $0, section: 0) }
+            
+            UIView.animate(withDuration: 0) {
+                self.collectionView.performBatchUpdates {
+                    self.collectionView.insertItems(at: indexPaths)
+                }
+            }
+        } else {
+            let oldCount = arrDataSources.count
+            arrDataSources.append(contentsOf: models)
+            
+            collectionView.performBatchUpdates {
+                let indexPaths = models.indices.map { IndexPath(item: oldCount + $0, section: 0) }
+                self.collectionView.insertItems(at: indexPaths)
+            }
+        }
     }
 }
 

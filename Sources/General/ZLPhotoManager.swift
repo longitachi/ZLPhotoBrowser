@@ -119,12 +119,34 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch photos from result.
-    public class func fetchPhoto(in result: PHFetchResult<PHAsset>, ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, limitCount: Int = .max) -> [ZLPhotoModel] {
+    public class func fetchPhoto(
+        in result: PHFetchResult<PHAsset>,
+        ascending: Bool,
+        allowSelectImage: Bool,
+        allowSelectVideo: Bool,
+        limitCount: Int = .max
+    ) -> [ZLPhotoModel] {
+        let indexSet = ascending ? IndexSet(0..<min(result.count, limitCount)) : IndexSet(max(0, result.count - limitCount)..<result.count)
+        return fetchPhoto(
+            in: result,
+            ascending: ascending,
+            allowSelectImage: allowSelectImage,
+            allowSelectVideo: allowSelectImage,
+            indexSet: indexSet
+        )
+    }
+    
+    public class func fetchPhoto(
+        in result: PHFetchResult<PHAsset>,
+        ascending: Bool,
+        allowSelectImage: Bool,
+        allowSelectVideo: Bool,
+        indexSet: IndexSet
+    ) -> [ZLPhotoModel] {
         var models: [ZLPhotoModel] = []
         let option: NSEnumerationOptions = ascending ? .init(rawValue: 0) : .reverse
-        var count = 1
         
-        result.enumerateObjects(options: option) { asset, _, stop in
+        result.enumerateObjects(at: indexSet, options: option) { asset, _, stop in
             let m = ZLPhotoModel(asset: asset)
             
             if m.type == .image, !allowSelectImage {
@@ -133,12 +155,8 @@ public class ZLPhotoManager: NSObject {
             if m.type == .video, !allowSelectVideo {
                 return
             }
-            if count == limitCount {
-                stop.pointee = true
-            }
             
             models.append(m)
-            count += 1
         }
         
         return models
