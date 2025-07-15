@@ -139,8 +139,12 @@ public class ZLDrawPath: NSObject {
 }
 
 public extension ZLDrawPath {
-    static func ==(lhs: ZLDrawPath, rhs: ZLDrawPath) -> Bool {
-        return lhs.index == rhs.index
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? ZLDrawPath else {
+            return false
+        }
+        
+        return index == object.index
     }
 }
 

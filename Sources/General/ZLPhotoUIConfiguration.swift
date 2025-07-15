@@ -75,7 +75,6 @@ public class ZLPhotoUIConfiguration: NSObject {
     public var allowPageLoading = true
     
     private var pri_pageSize = 1000
-    
     /// Number of photos to load per page. Min value is 500. Defaults to 1000.
     public var pageSize: Int {
         get {

@@ -146,7 +146,7 @@ public class ZLPhotoManager: NSObject {
         var models: [ZLPhotoModel] = []
         let option: NSEnumerationOptions = ascending ? .init(rawValue: 0) : .reverse
         
-        result.enumerateObjects(at: indexSet, options: option) { asset, _, stop in
+        result.enumerateObjects(at: indexSet, options: option) { asset, _, _ in
             let m = ZLPhotoModel(asset: asset)
             
             if m.type == .image, !allowSelectImage {

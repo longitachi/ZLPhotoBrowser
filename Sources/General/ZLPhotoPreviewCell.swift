@@ -953,6 +953,7 @@ class ZLNetVideoPreviewCell: ZLPreviewBaseCell {
         player = nil
         playerLayer?.removeFromSuperlayer()
         playerLayer = nil
+        coverImageView.frame = .zero
         coverImageView.image = coverImageBlock?()
         
         var options: [String: Any] = [:]

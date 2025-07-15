@@ -515,6 +515,7 @@ class ZLThumbnailViewController: UIViewController {
             guard self?.albumList != album else {
                 return
             }
+            
             self?.albumList = album
             self?.embedNavView?.title = album.title
             self?.loadPhotos()
@@ -1388,7 +1389,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let c = cell as? ZLThumbnailPhotoCell else {
+        guard let cell = cell as? ZLThumbnailPhotoCell else {
             return
         }
         var index = indexPath.row
@@ -1401,7 +1402,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         }
         
         let model = arrDataSources[index]
-        setCellMaskView(c, isSelected: model.isSelected, model: model)
+        setCellMaskView(cell, isSelected: model.isSelected, model: model)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

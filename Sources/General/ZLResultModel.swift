@@ -52,7 +52,11 @@ public class ZLResultModel: NSObject {
 }
 
 extension ZLResultModel {
-    static func ==(lhs: ZLResultModel, rhs: ZLResultModel) -> Bool {
-        return lhs.asset == rhs.asset
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? ZLResultModel else {
+            return false
+        }
+        
+        return asset == object.asset
     }
 }

@@ -50,12 +50,6 @@ public class ZLAlbumListModel: NSObject {
     
     private var currentLoadIndex: Int
     
-    // 暂未用到
-    private var selectedModels: [ZLPhotoModel] = []
-    
-    // 暂未用到
-    private var selectedCount = 0
-    
     // 根据最小公倍数计算出一个接近pageSize的值
     private var onceLoadCount: Int { Int(ceil(Double(ZLPhotoUIConfiguration.default().pageSize) / Double(lcmColumns))) * lcmColumns }
     
@@ -67,6 +61,12 @@ public class ZLAlbumListModel: NSObject {
             lcmColumns = lcm(columnCounts.portrait, columnCounts.landscape)
         }
     }
+    
+    // 暂未用到
+    private var selectedModels: [ZLPhotoModel] = []
+    
+    // 暂未用到
+    private var selectedCount = 0
     
     public init(
         title: String,
@@ -132,10 +132,14 @@ public class ZLAlbumListModel: NSObject {
     }
 }
 
-extension ZLAlbumListModel {
-    static func ==(lhs: ZLAlbumListModel, rhs: ZLAlbumListModel) -> Bool {
-        return lhs.title == rhs.title &&
-            lhs.count == rhs.count &&
-            lhs.headImageAsset?.localIdentifier == rhs.headImageAsset?.localIdentifier
+public extension ZLAlbumListModel {
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? ZLAlbumListModel else {
+            return false
+        }
+        
+        return title == object.title &&
+            count == object.count &&
+            headImageAsset?.localIdentifier == object.headImageAsset?.localIdentifier
     }
 }
