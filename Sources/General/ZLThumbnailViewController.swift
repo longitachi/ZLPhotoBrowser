@@ -171,7 +171,7 @@ class ZLThumbnailViewController: UIViewController {
         }
     }
     
-    private lazy var panGes: UIPanGestureRecognizer = {
+    lazy var panGes: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(slideSelectAction(_:)))
         pan.delegate = self
         return pan
@@ -224,6 +224,10 @@ class ZLThumbnailViewController: UIViewController {
     
     private var canPreload = false
     
+    private var dismissInteractiveTransition: ZLThumbnailDismissInteractiveTransition?
+    
+    private var hasCancelDismiss = false
+    
     override var prefersStatusBarHidden: Bool { hiddenStatusBar }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -275,7 +279,10 @@ class ZLThumbnailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+        if !hasCancelDismiss {
+            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+        }
+        hasCancelDismiss = false
         resetBottomToolBtnStatus()
     }
     
@@ -443,6 +450,7 @@ class ZLThumbnailViewController: UIViewController {
         bottomView.addSubview(doneBtn)
         
         setupNavView()
+        setupDismissInteractiveTransition()
     }
     
     private func showNoAuthTipsView() {
@@ -490,6 +498,25 @@ class ZLThumbnailViewController: UIViewController {
             }
             
             view.addSubview(externalNavView!)
+        }
+    }
+    
+    private func setupDismissInteractiveTransition() {
+        guard ZLPhotoUIConfiguration.default().style == .embedAlbumList else {
+            return
+        }
+        
+        navigationController?.transitioningDelegate = self
+        dismissInteractiveTransition = ZLThumbnailDismissInteractiveTransition(viewController: self)
+        
+        dismissInteractiveTransition?.startTransition = {
+        }
+        
+        dismissInteractiveTransition?.cancelTransition = { [weak self] in
+            self?.hasCancelDismiss = true
+        }
+        
+        dismissInteractiveTransition?.finishTransition = {
         }
     }
     
@@ -1260,6 +1287,18 @@ extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
         }
         
         return true
+    }
+}
+
+// MARK: UIViewControllerTransitioningDelegate
+
+extension ZLThumbnailViewController: UIViewControllerTransitioningDelegate {
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return dismissInteractiveTransition?.interactive == true ? ZLPhotoPreviewAnimatedTransition() : nil
+    }
+    
+    public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return dismissInteractiveTransition?.interactive == true ? dismissInteractiveTransition : nil
     }
 }
 

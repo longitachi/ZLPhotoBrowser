@@ -68,6 +68,7 @@
 		FD4C971B29F11918000249BF /* ZLCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4C971A29F11918000249BF /* ZLCollectionViewFlowLayout.swift */; };
 		FD5230B5281562DD0034B782 /* ZLEnlargeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5230B4281562DD0034B782 /* ZLEnlargeButton.swift */; };
 		FD74F6DD29345E4100B7916A /* ZLBaseStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD74F6DC29345E4100B7916A /* ZLBaseStickerView.swift */; };
+		FD8B6E2B2E27834600C2DB56 /* ZLThumbnailDismissInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8B6E2A2E27834600C2DB56 /* ZLThumbnailDismissInteractiveTransition.swift */; };
 		FD8FEA6728C8B9B60041374B /* ZLResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8FEA6628C8B9B60041374B /* ZLResultModel.swift */; };
 		FDA31DCA2D81AEC4008C17B0 /* ZLPhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA31DC92D81AEC4008C17B0 /* ZLPhotoPicker.swift */; };
 		FDA31DCC2D82B27C008C17B0 /* Runtime+ZLPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA31DCB2D82B27C008C17B0 /* Runtime+ZLPhotoBrowser.swift */; };
@@ -152,6 +153,7 @@
 		FD5142B12BB2BD5A00FCBD05 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		FD5230B4281562DD0034B782 /* ZLEnlargeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLEnlargeButton.swift; sourceTree = "<group>"; };
 		FD74F6DC29345E4100B7916A /* ZLBaseStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLBaseStickerView.swift; sourceTree = "<group>"; };
+		FD8B6E2A2E27834600C2DB56 /* ZLThumbnailDismissInteractiveTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLThumbnailDismissInteractiveTransition.swift; sourceTree = "<group>"; };
 		FD8FEA6628C8B9B60041374B /* ZLResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLResultModel.swift; sourceTree = "<group>"; };
 		FDA31DC92D81AEC4008C17B0 /* ZLPhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLPhotoPicker.swift; sourceTree = "<group>"; };
 		FDA31DCB2D82B27C008C17B0 /* Runtime+ZLPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Runtime+ZLPhotoBrowser.swift"; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				E4D046EF2500A341000BAEC2 /* ZLPhotoPreviewAnimatedTransition.swift */,
 				E4D046F12500A361000BAEC2 /* ZLPhotoPreviewPopInteractiveTransition.swift */,
 				FD0176C82C412031001AD69D /* ZLImagePreviewDismissInteractiveTransition.swift */,
+				FD8B6E2A2E27834600C2DB56 /* ZLThumbnailDismissInteractiveTransition.swift */,
 				E48E52D42507297500619AED /* ZLClipImageDismissAnimatedTransition.swift */,
 			);
 			path = Animation;
@@ -457,6 +460,7 @@
 				E4C911D424E288780061DA40 /* ZLPhotoConfiguration.swift in Sources */,
 				E410177925305C73004C4952 /* ZLFilter.swift in Sources */,
 				FDE1DB76289A4B120003CA4D /* NSError+ZLPhotoBrowser.swift in Sources */,
+				FD8B6E2B2E27834600C2DB56 /* ZLThumbnailDismissInteractiveTransition.swift in Sources */,
 				E492ABEB24E53575005E1BD5 /* Cell+ZLPhotoBrowser.swift in Sources */,
 				FDAE00A9297134C100EE9486 /* ZLAnimationUtils.swift in Sources */,
 				FD4C971B29F11918000249BF /* ZLCollectionViewFlowLayout.swift in Sources */,
