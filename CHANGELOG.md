@@ -2,6 +2,15 @@
 
 -----
 
+## [4.7.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.7.0) (2025-07-03)
+### Add:
+* Support page loading.
+* Provide a block that enables external control over whether the camera interface can be accessed.
+* Replace some deprecated APIs.
+* Support long-press gestures for more data types in ZLImagePreviewController. Support setting cover images for network videos.
+
+---
+
 ## [4.6.0 ~ 4.6.0.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.6.0.1) (2025-03-31)
 ### Add:
 * Support SwiftUI.
