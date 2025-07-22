@@ -69,20 +69,20 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 使用示例
  - 快速选择
  ```
- let ps = ZLPhotoPreviewSheet()
- ps.selectImageBlock = { [weak self] results, isOriginal in
+ let picker = ZLPhotoPicker()
+ picker.selectImageBlock = { [weak self] results, isOriginal in
      // your code
  }
- ps.showPreview(animate: true, sender: self)
+ picker.showPreview(animate: true, sender: self)
  ```
  
  - 直接进入相册选择
  ```
- let ps = ZLPhotoPreviewSheet()
- ps.selectImageBlock = { [weak self] results, isOriginal in
+ let picker = ZLPhotoPreviewSheet()
+ picker.selectImageBlock = { [weak self] results, isOriginal in
      // your code
  }
- ps.showPhotoLibrary(sender: self)
+ picker.showPhotoLibrary(sender: self)
  ```
  
  - 需要注意的地方，你需要在你app的 `Info.plist` 中添加如下键值对
@@ -153,7 +153,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   > 如果执行时遇到`Building universal frameworks with common architectures is not possible. The device and simulator slices for "ZLPhotoBrowser" both build for: arm64
   Rebuild with --use-xcframeworks to create an xcframework bundle instead.`这个错误，点击[这里](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md)
   
-* Swift Package Manager (该方式集成暂时有问题，图片及多语言资源无法读取，请暂时先用其他方式)
+* Swift Package Manager
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
   * 2. 输入对应版本号（SPM 最低版本为 `4.0.9`）
   * 3. 等Xcode下载完成后确定即可
