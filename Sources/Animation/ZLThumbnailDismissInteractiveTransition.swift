@@ -47,6 +47,8 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
     
     var finishTransition: (() -> Void)?
     
+    private let dismissProgress = 0.5
+    
     deinit {
         zl_debugPrint("ZLThumbnailDismissInteractiveTransition deinit")
     }
@@ -62,7 +64,9 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
     @objc private func edgePanAction(_ ges: UIScreenEdgePanGestureRecognizer) {
         let translation = ges.translation(in: viewController?.view)
         let viewW = viewController?.view.zl.width ?? UIScreen.main.bounds.width
-        let progress = max(0, min(1, translation.x / viewW))
+        let viewH = viewController?.view.zl.height ?? UIScreen.main.bounds.height
+        let length = min(viewW, viewH)
+        let progress = max(0, min(1, translation.x / length))
         
         switch ges.state {
         case .began:
@@ -73,7 +77,7 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
         case .cancelled, .ended:
             guard interactive else { return }
             
-            if progress > 0.5 || ges.velocity(in: viewController?.view).x > 300 {
+            if progress > dismissProgress || ges.velocity(in: viewController?.view).x > 300 {
                 finish()
             } else {
                 cancel()
@@ -107,14 +111,33 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
         containerView.addSubview(fromVC.view)
     }
     
+    /// 将线性进度转换为一个自定义的动画曲线进度
+    private func applyCustomAnimationCurve(to progress: CGFloat) -> CGFloat {
+        // 调整这个值 (0.0 - 1.0) 来改变初始/结束速度。
+        // 0.0 = 纯 EaseInOut (启动慢)
+        // 1.0 = 纯线性 (无缓动)
+        // 推荐值: 0.2 - 0.4
+        let linearity: CGFloat = 0.4
+
+        // EaseInOut 曲线分量
+        let easeInOutProgress = 0.5 * (1 - cos(progress * .pi))
+        // 线性分量
+        let linearProgress = progress
+
+        // 将 EaseInOut 曲线与线性曲线按 "linearity" 比例进行混合
+        // 这能确保 progress 为 0 时，函数结果为 0；progress 为 1 时，函数结果为 1
+        return linearity * linearProgress + (1 - linearity) * easeInOutProgress
+    }
+    
     func updateAnimate(progress: CGFloat) {
         guard let transitionContext,
               let fromVC = transitionContext.viewController(forKey: .from) else {
             return
         }
         
+        let progress = applyCustomAnimationCurve(to: progress)
         shadowView?.alpha = (1 - progress) / 2
-        let top = fromVC.view.zl.height * progress
+        let top = fromVC.view.zl.height * 0.8 * progress
         fromVC.view.frame = CGRect(x: 0, y: top, width: fromVC.view.zl.width, height: fromVC.view.zl.height)
         update(progress)
     }
@@ -130,7 +153,13 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
             return
         }
         
-        UIView.animate(withDuration: 0.2) {
+        let currY = fromVC.view.zl.top
+        let totalDistance = fromVC.view.zl.height * dismissProgress
+        let totalDuration = 0.15
+        var duration = currY / totalDistance * totalDuration
+        duration = max(0, min(0.15, duration))
+        
+        UIView.animate(withDuration: duration) {
             self.shadowView?.alpha = 0.5
             fromVC.view.frame = CGRect(x: 0, y: 0, width: fromVC.view.zl.width, height: fromVC.view.zl.height)
         } completion: { _ in
@@ -152,7 +181,13 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
             return
         }
         
-        UIView.animate(withDuration: 0.2) {
+        let currY = fromVC.view.zl.top
+        let totalDistance = fromVC.view.zl.height * (1 - dismissProgress)
+        let totalDuration = 0.15
+        var duration = (fromVC.view.zl.height - currY) / totalDistance * totalDuration
+        duration = max(0, min(0.2, duration))
+        
+        UIView.animate(withDuration: duration) {
             self.shadowView?.alpha = 0
             fromVC.view.frame = CGRect(x: 0, y: fromVC.view.zl.height, width: fromVC.view.zl.width, height: fromVC.view.zl.height)
         } completion: { _ in
