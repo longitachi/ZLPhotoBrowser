@@ -173,6 +173,8 @@ public class ZLImagePreviewController: UIViewController {
     
     @objc public var netVideoCoverImageBlock: ((_ url: URL) -> UIImage?)?
     
+    @objc public var supportInteractiveDismiss = true
+    
     /// 下拉返回时，需要外界提供一个动画结束时的rect
     public var dismissTransitionFrame: ((_ index: Int) -> CGRect?)?
     
@@ -238,7 +240,6 @@ public class ZLImagePreviewController: UIViewController {
     
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        transitioningDelegate = self
         
         guard isFirstAppear else { return }
         isFirstAppear = false
@@ -342,6 +343,9 @@ public class ZLImagePreviewController: UIViewController {
     }
     
     private func addDismissInteractiveTransition() {
+        guard supportInteractiveDismiss else { return }
+        
+        transitioningDelegate = self
         dismissInteractiveTransition = ZLImagePreviewDismissInteractiveTransition(viewController: self)
         dismissInteractiveTransition?.shouldStartTransition = { [weak self] point -> Bool in
             guard let `self` = self else { return false }
