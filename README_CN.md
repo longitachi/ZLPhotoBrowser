@@ -104,13 +104,14 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
-● 4.7.0
+● 4.7.0.1
   Add:
     支持分页加载。
     小图界面支持边缘侧滑返回。
     提供一个block，外界可以通过该block去控制是否允许进入相机。
     替换一些过期的API。
     ZLImagePreviewController中更多的类型支持长按手势，并允许给网络视频设置封面图。
+    ZLImagePreviewController界面支持禁止下拉返回手势。
 ● 4.6.0.1
   Add:
     支持SwiftUI。

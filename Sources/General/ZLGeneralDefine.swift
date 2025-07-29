@@ -285,6 +285,6 @@ func zl_debugPrint(_ message: Any...) {
 
 func zlLoggerInDebug(_ lastMessage: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line, funcName: String = #function) {
     #if DEBUG
-        print("file: \(file), line: \(line), func: \(funcName), message: \(lastMessage())")
+    debugPrint("file: \(file), line: \(line), func: \(funcName), message: \(lastMessage())")
     #endif
 }
