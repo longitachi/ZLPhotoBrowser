@@ -1112,10 +1112,12 @@ class ZLThumbnailViewController: UIViewController {
         if uiConfig.sortAscending {
             insertIndex = arrDataSources.count
             arrDataSources.append(newModel)
+            albumList?.models.append(newModel)
         } else {
             // 保存拍照的照片或者视频，说明肯定有camera cell
             insertIndex = offset
             arrDataSources.insert(newModel, at: 0)
+            albumList?.models.insert(newModel, at: 0)
         }
         
         var canSelect = true

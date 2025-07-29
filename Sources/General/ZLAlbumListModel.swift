@@ -97,6 +97,13 @@ public class ZLAlbumListModel: NSObject {
     
     @discardableResult
     public func preloadPhotos(loadAll: Bool = false) -> [ZLPhotoModel] {
+        // 受限访问时，如果首次未选择任何照片，currentLoadIndex会为0，那么后续再添加照片的时候，需要重置该值来触发重新加载
+        // bug: https://github.com/longitachi/ZLPhotoBrowser/issues/1016
+        if currentLoadIndex == 0, models.count != result.count {
+            currentLoadIndex = result.count
+            models.removeAll()
+        }
+        
         guard currentLoadIndex > 0 else { return [] }
         
         var loadCount = onceLoadCount
