@@ -33,7 +33,7 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
     
     lazy var edgePan: UIScreenEdgePanGestureRecognizer = {
         let edgePan = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(edgePanAction(_:)))
-        edgePan.edges = .left
+        edgePan.edges = isRTL() ? .right : .left
         return edgePan
     }()
     
@@ -62,11 +62,15 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
     }
     
     @objc private func edgePanAction(_ ges: UIScreenEdgePanGestureRecognizer) {
-        let translation = ges.translation(in: viewController?.view)
+        let transformValue: ((CGFloat) -> CGFloat) = { value -> CGFloat in
+            isRTL() ? -value : value
+        }
+        
+        let translationX = transformValue(ges.translation(in: viewController?.view).x)
         let viewW = viewController?.view.zl.width ?? UIScreen.main.bounds.width
         let viewH = viewController?.view.zl.height ?? UIScreen.main.bounds.height
         let length = min(viewW, viewH)
-        let progress = max(0, min(1, translation.x / length))
+        let progress = max(0, min(1, translationX / length))
         
         switch ges.state {
         case .began:
@@ -77,7 +81,8 @@ class ZLThumbnailDismissInteractiveTransition: UIPercentDrivenInteractiveTransit
         case .cancelled, .ended:
             guard interactive else { return }
             
-            if progress > dismissProgress || ges.velocity(in: viewController?.view).x > 300 {
+            let velX = transformValue(ges.velocity(in: viewController?.view).x)
+            if progress > dismissProgress || velX > 300 {
                 finish()
             } else {
                 cancel()
