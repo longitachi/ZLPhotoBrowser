@@ -44,13 +44,6 @@ open class ZLCustomCamera: UIViewController {
     @objc public var takeDoneBlock: ((UIImage?, URL?) -> Void)?
     
     @objc public var cancelBlock: (() -> Void)?
-
-    /// An optional block that gets called right before photo capture or video recording starts.
-    /// - Parameters:
-    ///   - completion: Call this closure when you want the camera to proceed with capture.
-    ///   - isCapturing: Boolean indicating if a capture operation is already in progress
-    //  (e.g. during camera switch while recording). If true, you might want to skip countdown or effects.
-    @objc public var willCaptureBlock: ((@escaping () -> Void, _ isCapturing: Bool) -> Void)?
     
     public lazy var tipsLabel: UILabel = {
         let label = UILabel()
@@ -252,6 +245,8 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private lazy var cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
+    
+    private lazy var willCaptureBlock = cameraConfig.willCaptureBlock
     
     /// Automatically stops recording video after maxRecordDuration on tapToRecordVideo.
     private var autoStopTimer: Timer?
@@ -964,7 +959,7 @@ open class ZLCustomCamera: UIViewController {
             guard !isCapturePending else { return }
             isCapturePending = true
             
-            willCaptureBlock({ [weak self] in
+            willCaptureBlock(self, { [weak self] in
                 self?.performPhotoCapture()
             }, isTakingPicture)
         } else {
@@ -1213,7 +1208,7 @@ open class ZLCustomCamera: UIViewController {
             isCapturePending = true
             // Pass information about current capture state.
             let isCapturing = movieFileOutput?.isRecording == true || restartRecordAfterSwitchCamera
-            willCaptureBlock({ [weak self] in
+            willCaptureBlock(self, { [weak self] in
                 self?.startRecording(shouldScheduleStop: shouldScheduleStop)
                 self?.isCapturePending = false
             }, isCapturing)

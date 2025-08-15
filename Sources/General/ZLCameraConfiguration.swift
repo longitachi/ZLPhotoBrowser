@@ -139,6 +139,14 @@ public class ZLCameraConfiguration: NSObject {
         }
     }
     
+    /// An optional block that gets called right before photo capture or video recording starts.
+    /// - Parameters:
+    ///   - camera: The camera instance.
+    ///   - completion: Call this closure when you want the camera to proceed with capture.
+    ///   - isCapturing: Boolean indicating if a capture operation is already in progress
+    //  (e.g. during camera switch while recording). If true, you might want to skip countdown or effects.
+    public var willCaptureBlock: ((_ camera: ZLCustomCamera, _ completion: @escaping () -> Void, _ isCapturing: Bool) -> Void)?
+    
     /// Optional lock for output orientation. If set, any video/photo output will use this orientation.
     public var lockedOutputOrientation: AVCaptureVideoOrientation? = nil
 }
@@ -345,6 +353,12 @@ public extension ZLCameraConfiguration {
     @discardableResult
     func videoStabilizationMode(_ value: AVCaptureVideoStabilizationMode) -> ZLCameraConfiguration {
         videoStabilizationMode = value
+        return self
+    }
+    
+    @discardableResult
+    func willCaptureBlock(_ block: ((_ camera: ZLCustomCamera, _ completion: @escaping () -> Void, _ isCapturing: Bool) -> Void)?) -> ZLCameraConfiguration {
+        willCaptureBlock = block
         return self
     }
     
