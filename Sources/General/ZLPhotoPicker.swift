@@ -108,7 +108,7 @@ public class ZLPhotoPicker: NSObject {
         }
     }
     
-    /// - Warning: When calling this method in OC language, make sure that the `sender` is not zero
+    /// - Warning: When calling this method in OC language, make sure that the `sender` is not nil
     @discardableResult
     @objc public func showPreview(animate: Bool = true, sender: UIViewController) -> ZLPhotoPreviewSheet {
         self.sender = sender
@@ -135,7 +135,7 @@ public class ZLPhotoPicker: NSObject {
         return ps
     }
     
-    /// - Warning: When calling this method in OC language, make sure that the `sender` is not zero
+    /// - Warning: When calling this method in OC language, make sure that the `sender` is not nil
     @discardableResult
     @objc public func showPhotoLibrary(sender: UIViewController) -> ZLImageNavController {
         self.sender = sender

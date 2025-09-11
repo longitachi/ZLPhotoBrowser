@@ -226,7 +226,7 @@ class ZLThumbnailViewController: UIViewController {
     
     private var dismissInteractiveTransition: ZLThumbnailDismissInteractiveTransition?
     
-    private var hasCancelDismiss = false
+    private var hasCancelDismiss: Bool?
     
     override var prefersStatusBarHidden: Bool { hiddenStatusBar }
     
@@ -279,10 +279,10 @@ class ZLThumbnailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        if !hasCancelDismiss {
+        if let hasCancelDismiss, hasCancelDismiss {
             collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
         }
-        hasCancelDismiss = false
+        hasCancelDismiss = nil
         resetBottomToolBtnStatus()
     }
     
