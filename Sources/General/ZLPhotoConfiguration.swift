@@ -203,8 +203,17 @@ public class ZLPhotoConfiguration: NSObject {
     /// Display the index of the selected photos. Defaults to true.
     public var showSelectedIndex = true
     
+    private var _maxEditVideoTime: ZLPhotoConfiguration.Second = 10
     /// Maximum cropping time when editing video, unit: second. Defaults to 10.
-    public var maxEditVideoTime: ZLPhotoConfiguration.Second = 10
+    /// - Note: The minimum value must be greater than 1.
+    public var maxEditVideoTime: ZLPhotoConfiguration.Second {
+        get {
+            _maxEditVideoTime
+        }
+        set {
+            _maxEditVideoTime = max(1, newValue)
+        }
+    }
     
     /// Allow to choose the maximum duration of the video. Defaults to 120.
     public var maxSelectVideoDuration: ZLPhotoConfiguration.Second = 120

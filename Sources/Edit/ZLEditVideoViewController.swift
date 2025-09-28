@@ -29,7 +29,10 @@ import Photos
 import AVFoundation
 
 public class ZLEditVideoViewController: UIViewController {
-    private static let frameImageSize = CGSize(width: CGFloat(round(50.0 * 2.0 / 3.0)), height: 50.0)
+    private enum Layout {
+        static let frameImageSize = CGSize(width: CGFloat(round(50.0 * 2.0 / 3.0)), height: 50.0)
+        static let leftRightSideViewW: CGFloat = 8
+    }
     
     private let avAsset: AVAsset
     
@@ -66,7 +69,7 @@ public class ZLEditVideoViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let layout = ZLCollectionViewFlowLayout()
-        layout.itemSize = ZLEditVideoViewController.frameImageSize
+        layout.itemSize = Layout.frameImageSize
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         layout.scrollDirection = .horizontal
@@ -80,6 +83,8 @@ public class ZLEditVideoViewController: UIViewController {
         return view
     }()
     
+    private lazy var overlayView = ZLEditVideoOverlayView()
+    
     private lazy var frameImageBorderView: ZLEditVideoFrameImageBorderView = {
         let view = ZLEditVideoFrameImageBorderView()
         view.isUserInteractionEnabled = false
@@ -87,13 +92,13 @@ public class ZLEditVideoViewController: UIViewController {
     }()
     
     private lazy var leftSideView: UIImageView = {
-        let view = UIImageView(image: .zl.getImage("zl_ic_left"))
+        let view = UIImageView(image: .zl.getImage("zl_edit_video_pan_icon"))
         view.isUserInteractionEnabled = true
         return view
     }()
     
     private lazy var rightSideView: UIImageView = {
-        let view = UIImageView(image: .zl.getImage("zl_ic_right"))
+        let view = UIImageView(image: .zl.getImage("zl_edit_video_pan_icon"))
         view.isUserInteractionEnabled = true
         return view
     }()
@@ -116,11 +121,24 @@ public class ZLEditVideoViewController: UIViewController {
         return view
     }()
     
+    private lazy var durationLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = .zl.font(ofSize: 12)
+        return label
+    }()
+    
     private var measureCount = 0
+    
+    private var maxEditDuration: ZLPhotoConfiguration.Second {
+        let assetDuration = ZLPhotoConfiguration.Second(round(self.avAsset.duration.seconds))
+        return min(assetDuration, ZLPhotoConfiguration.default().maxEditVideoTime)
+    }
     
     private lazy var interval: TimeInterval = {
         let assetDuration = round(self.avAsset.duration.seconds)
-        return min(assetDuration, TimeInterval(ZLPhotoConfiguration.default().maxEditVideoTime)) / 10
+        return TimeInterval(maxEditDuration) / 10
     }()
     
     private lazy var requestFrameImageQueue: OperationQueue = {
@@ -141,7 +159,7 @@ public class ZLEditVideoViewController: UIViewController {
     
     private lazy var generator: AVAssetImageGenerator = {
         let g = AVAssetImageGenerator(asset: self.avAsset)
-        g.maximumSize = CGSize(width: ZLEditVideoViewController.frameImageSize.width * 3, height: ZLEditVideoViewController.frameImageSize.height * 3)
+        g.maximumSize = CGSize(width: Layout.frameImageSize.width * 3, height: Layout.frameImageSize.height * 3)
         g.appliesPreferredTrackTransform = true
         g.requestedTimeToleranceBefore = .zero
         g.requestedTimeToleranceAfter = .zero
@@ -222,7 +240,7 @@ public class ZLEditVideoViewController: UIViewController {
         let btnH = ZLLayout.bottomToolBtnH
         let bottomBtnAndColSpacing: CGFloat = 20
         let playerLayerY = insets.top + 20
-        let diffBottom = btnH + ZLEditVideoViewController.frameImageSize.height + bottomBtnAndColSpacing + insets.bottom + 30
+        let diffBottom = btnH + Layout.frameImageSize.height + bottomBtnAndColSpacing + insets.bottom + 30
         
         playerLayer.frame = CGRect(x: 15, y: insets.top + 20, width: view.bounds.width - 30, height: view.bounds.height - playerLayerY - diffBottom)
         
@@ -235,15 +253,26 @@ public class ZLEditVideoViewController: UIViewController {
             ).width + 20
         doneBtn.frame = CGRect(x: view.bounds.width - doneBtnW - 20, y: view.bounds.height - insets.bottom - btnH, width: doneBtnW, height: btnH)
         
-        collectionView.frame = CGRect(x: 0, y: doneBtn.frame.minY - bottomBtnAndColSpacing - ZLEditVideoViewController.frameImageSize.height, width: view.bounds.width, height: ZLEditVideoViewController.frameImageSize.height)
+        collectionView.frame = CGRect(x: 0, y: doneBtn.frame.minY - bottomBtnAndColSpacing - Layout.frameImageSize.height, width: view.bounds.width, height: Layout.frameImageSize.height)
+        overlayView.frame = collectionView.frame
         
-        let frameViewW = ZLEditVideoViewController.frameImageSize.width * 10
-        frameImageBorderView.frame = CGRect(x: (view.bounds.width - frameViewW) / 2, y: collectionView.frame.minY, width: frameViewW, height: ZLEditVideoViewController.frameImageSize.height)
+        let frameViewW = Layout.frameImageSize.width * 10
+        frameImageBorderView.frame = CGRect(x: (view.bounds.width - frameViewW) / 2, y: collectionView.frame.minY, width: frameViewW, height: Layout.frameImageSize.height)
         // 左右拖动view
-        let leftRightSideViewW = ZLEditVideoViewController.frameImageSize.width / 2
-        leftSideView.frame = CGRect(x: frameImageBorderView.frame.minX, y: collectionView.frame.minY, width: leftRightSideViewW, height: ZLEditVideoViewController.frameImageSize.height)
-        let rightSideViewX = view.bounds.width - frameImageBorderView.frame.minX - leftRightSideViewW
-        rightSideView.frame = CGRect(x: rightSideViewX, y: collectionView.frame.minY, width: leftRightSideViewW, height: ZLEditVideoViewController.frameImageSize.height)
+        leftSideView.frame = CGRect(
+            x: frameImageBorderView.zl.left - Layout.leftRightSideViewW / 2,
+            y: collectionView.zl.top,
+            width: Layout.leftRightSideViewW,
+            height: Layout.frameImageSize.height
+        )
+        rightSideView.frame = CGRect(
+            x: frameImageBorderView.zl.right - Layout.leftRightSideViewW / 2,
+            y: collectionView.zl.top,
+            width: Layout.leftRightSideViewW,
+            height: Layout.frameImageSize.height
+        )
+        durationLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 20)
+        updateSubviewStatus()
         
         frameImageBorderView.validRect = frameImageBorderView.convert(clipRect(), from: view)
     }
@@ -253,10 +282,12 @@ public class ZLEditVideoViewController: UIViewController {
         
         view.layer.addSublayer(playerLayer)
         view.addSubview(collectionView)
+        view.addSubview(overlayView)
         view.addSubview(frameImageBorderView)
         view.addSubview(indicator)
         view.addSubview(leftSideView)
         view.addSubview(rightSideView)
+        view.addSubview(durationLabel)
         
         view.addGestureRecognizer(leftSidePan)
         view.addGestureRecognizer(rightSidePan)
@@ -278,7 +309,7 @@ public class ZLEditVideoViewController: UIViewController {
     @objc private func doneBtnClick() {
         cleanTimer()
         
-        let d = CGFloat(interval) * clipRect().width / ZLEditVideoViewController.frameImageSize.width
+        let d = CGFloat(interval) * clipRect().width / Layout.frameImageSize.width
         if ZLPhotoConfiguration.Second(round(d)) < ZLPhotoConfiguration.default().minSelectVideoDuration {
             let message = String(format: localLanguageTextValue(.shorterThanMinVideoDuration), ZLPhotoConfiguration.default().minSelectVideoDuration)
             showAlertView(message, self)
@@ -312,20 +343,27 @@ public class ZLEditVideoViewController: UIViewController {
         }
     }
     
+    /// 视频最短只能裁剪1s，这里获取左右两个icon间距为多少时时间为1s
+    private func minDistance() -> CGFloat {
+        let maxW = frameImageBorderView.zl.width
+        return maxW / CGFloat(maxEditDuration)
+    }
+    
     @objc private func leftSidePanAction(_ pan: UIPanGestureRecognizer) {
         let point = pan.location(in: view)
         
         if pan.state == .began {
-            frameImageBorderView.layer.borderColor = UIColor(white: 1, alpha: 0.4).cgColor
+            frameImageBorderView.layer.borderColor = UIColor(white: 1, alpha: 0.2).cgColor
             cleanTimer()
         } else if pan.state == .changed {
-            let minX = frameImageBorderView.frame.minX
-            let maxX = rightSideView.frame.minX - leftSideView.frame.width
+            let minX = frameImageBorderView.zl.left - Layout.leftRightSideViewW / 2
+            let maxX = rightSideView.zl.left - minDistance()
             
             var frame = leftSideView.frame
             frame.origin.x = min(maxX, max(minX, point.x))
             leftSideView.frame = frame
             frameImageBorderView.validRect = frameImageBorderView.convert(clipRect(), from: view)
+            updateSubviewStatus()
             
             playerLayer.player?.seek(to: getStartTime(), toleranceBefore: .zero, toleranceAfter: .zero)
         } else if pan.state == .ended || pan.state == .cancelled {
@@ -338,22 +376,37 @@ public class ZLEditVideoViewController: UIViewController {
         let point = pan.location(in: view)
         
         if pan.state == .began {
-            frameImageBorderView.layer.borderColor = UIColor(white: 1, alpha: 0.4).cgColor
+            frameImageBorderView.layer.borderColor = UIColor(white: 1, alpha: 0.2).cgColor
             cleanTimer()
         } else if pan.state == .changed {
-            let minX = leftSideView.frame.maxX
-            let maxX = frameImageBorderView.frame.maxX - rightSideView.frame.width
+            let minX = leftSideView.zl.left + minDistance()
+            let maxX = frameImageBorderView.frame.maxX - Layout.leftRightSideViewW / 2
             
             var frame = rightSideView.frame
             frame.origin.x = min(maxX, max(minX, point.x))
             rightSideView.frame = frame
             frameImageBorderView.validRect = frameImageBorderView.convert(clipRect(), from: view)
+            updateSubviewStatus()
             
-            playerLayer.player?.seek(to: getStartTime(), toleranceBefore: .zero, toleranceAfter: .zero)
+            playerLayer.player?.seek(to: getEndTime(), toleranceBefore: .zero, toleranceAfter: .zero)
         } else if pan.state == .ended || pan.state == .cancelled {
             frameImageBorderView.layer.borderColor = UIColor.clear.cgColor
             startTimer()
         }
+    }
+    
+    private func updateSubviewStatus() {
+        durationLabel.center = CGPoint(x: rightSideView.zl.centerX, y: rightSideView.zl.top - durationLabel.zl.height / 2)
+        let d = CGFloat(interval) * clipRect().width / Layout.frameImageSize.width
+        durationLabel.text = ZLCommonTools.formatVideoDuration(round(d))
+        
+        let rect = CGRect(
+            x: leftSideView.zl.centerX,
+            y: leftSideView.zl.top,
+            width: rightSideView.zl.centerX - leftSideView.zl.centerX,
+            height: frameImageBorderView.zl.height
+        )
+        overlayView.updateMaskLayer(view.convert(rect, to: overlayView))
     }
     
     @objc private func appWillResignActive() {
@@ -407,7 +460,7 @@ public class ZLEditVideoViewController: UIViewController {
     
     private func startTimer() {
         cleanTimer()
-        let duration = interval * TimeInterval(clipRect().width / ZLEditVideoViewController.frameImageSize.width)
+        let duration = interval * TimeInterval(clipRect().width / Layout.frameImageSize.width)
         
         timer = Timer.scheduledTimer(timeInterval: duration, target: ZLWeakProxy(target: self), selector: #selector(playPartVideo), userInfo: nil, repeats: true)
         timer?.fire()
@@ -418,8 +471,8 @@ public class ZLEditVideoViewController: UIViewController {
         let indicatorW: CGFloat = 2
         let indicatorH = leftSideView.zl.height
         let indicatorY = leftSideView.zl.top
-        var indicatorFromX = leftSideView.zl.left
-        var indicatorToX = rightSideView.zl.right - indicatorW
+        var indicatorFromX = leftSideView.zl.centerX
+        var indicatorToX = rightSideView.zl.centerX - indicatorW
         
         if isRTL() {
             swap(&indicatorFromX, &indicatorToX)
@@ -453,15 +506,15 @@ public class ZLEditVideoViewController: UIViewController {
         }
         
         let offsetX = collectionView.contentOffset.x
-        let previousSecond = offsetX / ZLEditVideoViewController.frameImageSize.width * oneFrameDuration
+        let previousSecond = offsetX / Layout.frameImageSize.width * oneFrameDuration
         
         // 框选区域内起始时长
         let innerRect = frameImageBorderView.convert(clipRect(), from: view)
         let innerPreviousSecond: TimeInterval
         if isRTL() {
-            innerPreviousSecond = (frameImageBorderView.zl.width - innerRect.maxX) / ZLEditVideoViewController.frameImageSize.width * interval
+            innerPreviousSecond = (frameImageBorderView.zl.width - innerRect.maxX) / Layout.frameImageSize.width * interval
         } else {
-            innerPreviousSecond = innerRect.minX / ZLEditVideoViewController.frameImageSize.width * interval
+            innerPreviousSecond = innerRect.minX / Layout.frameImageSize.width * interval
         }
         
         let totalDuration = max(0, previousSecond + round(innerPreviousSecond))
@@ -469,19 +522,26 @@ public class ZLEditVideoViewController: UIViewController {
         return CMTimeMakeWithSeconds(Float64(totalDuration), preferredTimescale: avAsset.duration.timescale)
     }
     
+    private func getEndTime() -> CMTime {
+        let start = getStartTime()
+        let d = CGFloat(interval) * clipRect().width / Layout.frameImageSize.width
+        let duration = CMTimeMakeWithSeconds(d, preferredTimescale: avAsset.duration.timescale)
+        return start + duration
+    }
+    
     private func getTimeRange() -> CMTimeRange {
         let start = getStartTime()
-        let d = CGFloat(interval) * clipRect().width / ZLEditVideoViewController.frameImageSize.width
+        let d = CGFloat(interval) * clipRect().width / Layout.frameImageSize.width
         let duration = CMTimeMakeWithSeconds(Float64(round(d)), preferredTimescale: avAsset.duration.timescale)
         return CMTimeRangeMake(start: start, duration: duration)
     }
     
     private func clipRect() -> CGRect {
         var frame = CGRect.zero
-        frame.origin.x = leftSideView.frame.minX
-        frame.origin.y = leftSideView.frame.minY
-        frame.size.width = rightSideView.frame.maxX - frame.minX
-        frame.size.height = leftSideView.frame.height
+        frame.origin.x = leftSideView.zl.centerX
+        frame.origin.y = leftSideView.zl.top
+        frame.size.width = rightSideView.zl.centerX - leftSideView.zl.centerX
+        frame.size.height = leftSideView.zl.height
         return frame
     }
     
@@ -497,13 +557,17 @@ extension ZLEditVideoViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == leftSidePan {
             let point = gestureRecognizer.location(in: view)
-            let frame = leftSideView.frame
-            let outerFrame = frame.inset(by: UIEdgeInsets(top: -20, left: -40, bottom: -20, right: -20))
+            let leftFrame = leftSideView.frame
+            let rightFrame = rightSideView.frame
+            let distance = rightFrame.minX - leftFrame.maxX
+            let outerFrame = leftFrame.inset(by: UIEdgeInsets(top: -20, left: -40, bottom: -20, right: -min(20, distance)))
             return outerFrame.contains(point)
         } else if gestureRecognizer == rightSidePan {
             let point = gestureRecognizer.location(in: view)
-            let frame = rightSideView.frame
-            let outerFrame = frame.inset(by: UIEdgeInsets(top: -20, left: -20, bottom: -20, right: -40))
+            let leftFrame = leftSideView.frame
+            let rightFrame = rightSideView.frame
+            let distance = rightFrame.minX - leftFrame.maxX
+            let outerFrame = rightFrame.inset(by: UIEdgeInsets(top: -20, left: -min(20, distance), bottom: -20, right: -40))
             return outerFrame.contains(point)
         }
         return true
@@ -527,7 +591,7 @@ extension ZLEditVideoViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let w = ZLEditVideoViewController.frameImageSize.width * 10
+        let w = Layout.frameImageSize.width * 10
         let leftRight = (collectionView.frame.width - w) / 2
         return UIEdgeInsets(top: 0, left: leftRight, bottom: 0, right: leftRight)
     }
