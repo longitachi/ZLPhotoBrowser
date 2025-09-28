@@ -131,13 +131,12 @@ public class ZLEditVideoViewController: UIViewController {
     
     private var measureCount = 0
     
-    private var maxEditDuration: ZLPhotoConfiguration.Second {
-        let assetDuration = ZLPhotoConfiguration.Second(round(self.avAsset.duration.seconds))
-        return min(assetDuration, ZLPhotoConfiguration.default().maxEditVideoTime)
+    private var maxEditDuration: TimeInterval {
+        let assetDuration = avAsset.duration.seconds
+        return min(assetDuration, TimeInterval(ZLPhotoConfiguration.default().maxEditVideoTime))
     }
     
     private lazy var interval: TimeInterval = {
-        let assetDuration = round(self.avAsset.duration.seconds)
         return TimeInterval(maxEditDuration) / 10
     }()
     
@@ -322,7 +321,7 @@ public class ZLEditVideoViewController: UIViewController {
         }
         
         // Max deviation is 0.01
-        if abs(d - round(CGFloat(avAsset.duration.seconds))) <= 0.01 {
+        if abs(d - avAsset.duration.seconds) <= 0.01 {
             dismiss(animated: animateDismiss) {
                 self.editFinishBlock?(nil)
             }
@@ -346,7 +345,7 @@ public class ZLEditVideoViewController: UIViewController {
     /// 视频最短只能裁剪1s，这里获取左右两个icon间距为多少时时间为1s
     private func minDistance() -> CGFloat {
         let maxW = frameImageBorderView.zl.width
-        return maxW / CGFloat(maxEditDuration)
+        return maxW / maxEditDuration
     }
     
     @objc private func leftSidePanAction(_ pan: UIPanGestureRecognizer) {
@@ -365,7 +364,11 @@ public class ZLEditVideoViewController: UIViewController {
             frameImageBorderView.validRect = frameImageBorderView.convert(clipRect(), from: view)
             updateSubviewStatus()
             
-            playerLayer.player?.seek(to: getStartTime(), toleranceBefore: .zero, toleranceAfter: .zero)
+            if isRTL() {
+                playerLayer.player?.seek(to: getEndTime(), toleranceBefore: .zero, toleranceAfter: .zero)
+            } else {
+                playerLayer.player?.seek(to: getStartTime(), toleranceBefore: .zero, toleranceAfter: .zero)
+            }
         } else if pan.state == .ended || pan.state == .cancelled {
             frameImageBorderView.layer.borderColor = UIColor.clear.cgColor
             startTimer()
@@ -388,7 +391,11 @@ public class ZLEditVideoViewController: UIViewController {
             frameImageBorderView.validRect = frameImageBorderView.convert(clipRect(), from: view)
             updateSubviewStatus()
             
-            playerLayer.player?.seek(to: getEndTime(), toleranceBefore: .zero, toleranceAfter: .zero)
+            if isRTL() {
+                playerLayer.player?.seek(to: getStartTime(), toleranceBefore: .zero, toleranceAfter: .zero)
+            } else {
+                playerLayer.player?.seek(to: getEndTime(), toleranceBefore: .zero, toleranceAfter: .zero)
+            }
         } else if pan.state == .ended || pan.state == .cancelled {
             frameImageBorderView.layer.borderColor = UIColor.clear.cgColor
             startTimer()
@@ -419,7 +426,7 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     private func analysisAssetImages() {
-        let duration = round(avAsset.duration.seconds)
+        let duration = avAsset.duration.seconds
         guard duration > 0 else {
             showFetchFailedAlert()
             return
@@ -517,7 +524,7 @@ public class ZLEditVideoViewController: UIViewController {
             innerPreviousSecond = innerRect.minX / Layout.frameImageSize.width * interval
         }
         
-        let totalDuration = max(0, previousSecond + round(innerPreviousSecond))
+        let totalDuration = max(0, previousSecond + innerPreviousSecond)
         
         return CMTimeMakeWithSeconds(Float64(totalDuration), preferredTimescale: avAsset.duration.timescale)
     }
@@ -532,7 +539,7 @@ public class ZLEditVideoViewController: UIViewController {
     private func getTimeRange() -> CMTimeRange {
         let start = getStartTime()
         let d = CGFloat(interval) * clipRect().width / Layout.frameImageSize.width
-        let duration = CMTimeMakeWithSeconds(Float64(round(d)), preferredTimescale: avAsset.duration.timescale)
+        let duration = CMTimeMakeWithSeconds(Float64(d), preferredTimescale: avAsset.duration.timescale)
         return CMTimeRangeMake(start: start, duration: duration)
     }
     

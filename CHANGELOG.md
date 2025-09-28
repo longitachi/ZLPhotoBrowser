@@ -2,6 +2,18 @@
 
 -----
 
+## [4.7.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.7.1) (2025-09-28)
+### Add:
+* Improved video editing experience:
+    * Added a shadow area mask for a clearer view of the currently selected video clip.
+    * Added a feature to display the duration of the currently selected clip.
+* The ZLImagePreviewController interface supports disabling the pull-down return gesture.
+
+### Fix:
+* Fixed a bug where the UI of the thumbnail interface might display an error when the permission is "limited".
+
+---
+
 ## [4.7.0 ~ 4.7.0.1](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.7.0) (2025-07-29)
 ### Add:
 * Support page loading.

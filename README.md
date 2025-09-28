@@ -93,6 +93,14 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.7.1
+  Add:
+    Improved video editing experience:
+      1. Added a shadow area mask for a clearer view of the currently selected video clip.
+      2. Added a feature to display the duration of the currently selected clip.
+    The ZLImagePreviewController interface supports disabling the pull-down return gesture.
+  Fix:
+    Fixed a bug where the UI of the thumbnail interface might display an error when the permission is "limited".
 ● 4.7.0.1
   Add:
     Support page loading.
@@ -112,15 +120,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Fix:
     Fixed the bug that the time of automatically stopping recording is incorrect when clicking to record a video.
     Fix the issue where the width and height calculations of some videos are inaccurate when previewing online videos.
-● 4.5.8
-  Add:
-    Add video stabilization mode to camera configuration.
-  Fix:
-    Fix video recording with both torch-on and wide cameras.
-    Fixed the problem of freezing caused by calculating the frame when previewing network videos.
-    Fix the memory leak issue in the ZLEditImageViewController interface.
-    After the initial request for album permissions is denied, the permission guidance alert will no longer be displayed.
-    Correct eraser misalignment after image cropping.
 ...
 ```
 
@@ -176,7 +175,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.7.0.1" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.7.1" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support

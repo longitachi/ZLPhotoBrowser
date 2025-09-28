@@ -305,10 +305,10 @@
 				E40ECF4724FFB8BB00A4D923 /* ZLPhotoBrowser.swift */,
 				FD8FEA6628C8B9B60041374B /* ZLResultModel.swift */,
 				FDAE00A8297134C100EE9486 /* ZLAnimationUtils.swift */,
+				FD0898842E892CA700D9C161 /* ZLCommonTools.swift */,
 				FDCBAF9F2B1ED0A9000860FD /* ZLWeakProxy.h */,
 				FDCBAF9E2B1ED0A9000860FD /* ZLWeakProxy.m */,
 				FD3B66972B984BB0009C7353 /* ZLWeakProxy.swift */,
-				FD0898842E892CA700D9C161 /* ZLCommonTools.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";

@@ -26,7 +26,7 @@ import UIKit
 
 class ZLCommonTools: NSObject {
     class func formatVideoDuration(_ duration: TimeInterval) -> String {
-        let duration = Int(duration)
+        let duration = Int(round(duration))
         
         switch duration {
         case 0..<60:
