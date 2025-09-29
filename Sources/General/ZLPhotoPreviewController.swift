@@ -711,7 +711,7 @@ class ZLPhotoPreviewController: UIViewController {
             return
         }
         
-        func callBackBeforeDone() {
+        func callbackBeforeDone() {
             if let block = ZLPhotoConfiguration.default().operateBeforeDoneAction {
                 block(self) { [weak nav] in
                     nav?.selectImageBlock?()
@@ -724,7 +724,7 @@ class ZLPhotoPreviewController: UIViewController {
         let currentModel = arrDataSources[currentIndex]
         
         guard autoSelectCurrentIfNotSelectAnyone, nav.arrSelectedModels.isEmpty else {
-            callBackBeforeDone()
+            callbackBeforeDone()
             return
         }
         
@@ -736,7 +736,7 @@ class ZLPhotoPreviewController: UIViewController {
             nav?.arrSelectedModels.append(currentModel)
             ZLPhotoConfiguration.default().didSelectAsset?(currentModel.asset)
             
-            callBackBeforeDone()
+            callbackBeforeDone()
         }
     }
     
@@ -786,15 +786,25 @@ class ZLPhotoPreviewController: UIViewController {
     }
     
     private func showEditImageVC(image: UIImage) {
+        let config = ZLPhotoConfiguration.default()
         let model = arrDataSources[currentIndex]
         let nav = navigationController as? ZLImageNavController
         ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: model.editImageModel) { [weak self, weak nav] editImage, editImageModel in
             guard let `self` = self else { return }
             model.editImage = editImage
             model.editImageModel = editImageModel
+            
+            // 单选，且不显示选择按钮的情况下，编辑后直接返回结果
+            if config.maxSelectCount == 1,
+               !config.showSelectBtnWhenSingleSelect {
+                self.doneBtnClick()
+                return
+            }
+            
             if nav?.arrSelectedModels.contains(where: { $0 == model }) == false {
                 model.isSelected = true
                 nav?.arrSelectedModels.append(model)
+                config.didSelectAsset?(model.asset)
                 self.resetSubviewStatus()
                 self.selPhotoPreview?.addSelModel(model: model)
             } else {
@@ -816,7 +826,8 @@ class ZLPhotoPreviewController: UIViewController {
                         let m = ZLPhotoModel(asset: asset)
                         nav?.arrSelectedModels.removeAll()
                         nav?.arrSelectedModels.append(m)
-                        nav?.selectImageBlock?()
+                        ZLPhotoConfiguration.default().didSelectAsset?(asset)
+                        self?.doneBtnClick()
                     } else {
                         showAlertView(localLanguageTextValue(.saveVideoError), self)
                     }
@@ -824,7 +835,8 @@ class ZLPhotoPreviewController: UIViewController {
             } else {
                 nav?.arrSelectedModels.removeAll()
                 nav?.arrSelectedModels.append(model)
-                nav?.selectImageBlock?()
+                ZLPhotoConfiguration.default().didSelectAsset?(model.asset)
+                self?.doneBtnClick()
             }
         }
         
