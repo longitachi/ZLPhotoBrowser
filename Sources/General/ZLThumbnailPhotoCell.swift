@@ -209,14 +209,14 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             livePhotoTag.isHidden = true
             editImageTag.isHidden = true
             descLabel.text = model.duration
-        } else if model.type == .gif {
-            bottomShadowView.isHidden = !config.allowSelectGif
+        } else if model.type == .gif, config.allowSelectGif  {
+            bottomShadowView.isHidden = false
             videoTag.isHidden = true
             livePhotoTag.isHidden = true
             editImageTag.isHidden = true
             descLabel.text = "GIF"
-        } else if model.type == .livePhoto {
-            bottomShadowView.isHidden = !config.allowSelectLivePhoto
+        } else if model.type == .livePhoto, config.allowSelectLivePhoto {
+            bottomShadowView.isHidden = false
             videoTag.isHidden = true
             livePhotoTag.isHidden = false
             editImageTag.isHidden = true

@@ -226,8 +226,6 @@ class ZLThumbnailViewController: UIViewController {
     
     private var dismissInteractiveTransition: ZLThumbnailDismissInteractiveTransition?
     
-    private var hasCancelDismiss: Bool?
-    
     override var prefersStatusBarHidden: Bool { hiddenStatusBar }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -279,10 +277,6 @@ class ZLThumbnailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        if let hasCancelDismiss, hasCancelDismiss {
-            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
-        }
-        hasCancelDismiss = nil
         resetBottomToolBtnStatus()
     }
     
@@ -513,7 +507,6 @@ class ZLThumbnailViewController: UIViewController {
         }
         
         dismissInteractiveTransition?.cancelTransition = { [weak self] in
-            self?.hasCancelDismiss = true
         }
         
         dismissInteractiveTransition?.finishTransition = {
@@ -1260,6 +1253,7 @@ class ZLThumbnailViewController: UIViewController {
     
     /// 预判界面执行pop动画时，该界面需要执行的内容
     func endPopTransition() {
+        collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
         hiddenStatusBar = false
         if deviceIsiPad() {
             view.setNeedsLayout()
@@ -1503,6 +1497,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         vc.backBlock = { [weak self] in
             guard let `self` = self, self.hiddenStatusBar else { return }
             self.hiddenStatusBar = false
+            self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
         }
         show(vc, sender: nil)
     }

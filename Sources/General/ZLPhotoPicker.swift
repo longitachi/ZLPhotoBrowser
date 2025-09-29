@@ -109,8 +109,7 @@ public class ZLPhotoPicker: NSObject {
     }
     
     /// - Warning: When calling this method in OC language, make sure that the `sender` is not nil
-    @discardableResult
-    @objc public func showPreview(animate: Bool = true, sender: UIViewController) -> ZLPhotoPreviewSheet {
+    @objc public func showPreview(animate: Bool = true, sender: UIViewController) {
         self.sender = sender
         
         let ps = ZLPhotoPreviewSheet(models: arrSelectedModels)
@@ -131,8 +130,6 @@ public class ZLPhotoPicker: NSObject {
         
         ps.showPreview(sender: sender)
         previewSheet = ps
-        
-        return ps
     }
     
     /// - Warning: When calling this method in OC language, make sure that the `sender` is not nil

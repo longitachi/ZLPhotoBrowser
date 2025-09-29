@@ -69,8 +69,8 @@ class WeChatMomentDemoViewController: UIViewController {
         config.maxEditVideoTime = 15
         
         // You can provide the selected assets so as not to repeat selection.
-        // Like this 'let photoPicker = ZLPhotoPreviewSheet(selectedAssets: assets)'
-        let photoPicker = ZLPhotoPreviewSheet()
+        // Like this 'let photoPicker = ZLPhotoPicker(selectedAssets: assets)'
+        let photoPicker = ZLPhotoPicker()
         
         photoPicker.selectImageBlock = { [weak self] (results, _) in
             let images = results.map { $0.image }

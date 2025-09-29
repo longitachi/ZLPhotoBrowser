@@ -27,8 +27,7 @@
 import UIKit
 import Photos
 
-@available(*, deprecated, message: "Please use ZLPhotoPicker instead. The permission of ZLPhotoPreviewSheet will be changed to private later.")
-public class ZLPhotoPreviewSheet: UIView {
+class ZLPhotoPreviewSheet: UIView {
     private enum Layout {
         static let colH: CGFloat = 155
         
