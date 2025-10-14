@@ -756,9 +756,10 @@ class ZLPhotoPreviewController: UIViewController {
             
             return
         }
-        collectionView.performBatchUpdates({
+        
+        UIView.animate(withDuration: 0) {
             self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
-        }) { _ in
+        } completion: { _ in
             self.indexBeforOrientationChanged = self.currentIndex
             self.reloadCurrentCell()
         }
