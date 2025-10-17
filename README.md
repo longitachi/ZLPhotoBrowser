@@ -93,6 +93,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 4.7.3
+  Fix:
+    Fixed the issue where the eraser position was displayed incorrectly when editing pictures.
 ● 4.7.2
   Add:
     Improved video editing experience:
@@ -110,17 +113,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
     Replace some deprecated APIs.
     Support long-press gestures for more data types in ZLImagePreviewController. Support setting cover images for network videos.
     The ZLImagePreviewController interface supports disabling the pull-down return gesture.
-● 4.6.0.1
-  Add:
-    Support SwiftUI.
-    Support for locked output orientation in custom camera.
-    Optimize the playback experience of album videos and online videos.
-    Add will-capture-block for customizable capture actions.
-    Replace ZLPhotoPreviewSheet with ZLPhotoPicker. The permission of ZLPhotoPreviewSheet will be changed to private later.
-    Enhance the text sticker feature by adding text outline and shadow effects.
-  Fix:
-    Fixed the bug that the time of automatically stopping recording is incorrect when clicking to record a video.
-    Fix the issue where the width and height calculations of some videos are inaccurate when previewing online videos.
 ...
 ```
 
@@ -176,7 +168,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.7.2" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "4.7.3" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support

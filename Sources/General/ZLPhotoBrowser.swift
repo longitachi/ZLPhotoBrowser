@@ -28,7 +28,7 @@ import UIKit
 import Foundation
 import Photos
 
-let version = "4.7.2"
+let version = "4.7.3"
 
 public struct ZLPhotoBrowserWrapper<Base> {
     public let base: Base

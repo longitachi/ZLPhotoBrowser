@@ -2,6 +2,12 @@
 
 -----
 
+## [4.7.3](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.7.3) (2025-10-17)
+### Fix:
+* Fixed the issue where the eraser position was displayed incorrectly when editing pictures. [#1025](https://github.com/longitachi/ZLPhotoBrowser/issues/1025)
+
+---
+
 ## [4.7.2](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/4.7.2) (2025-09-29)
 ### Add:
 * Improved video editing experience:
