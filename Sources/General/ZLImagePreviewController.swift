@@ -49,7 +49,7 @@ public class ZLImagePreviewController: UIViewController {
     
     private let datas: [Any]
     
-    private var selectStatus: [Bool]
+    public private(set) var selectStatus: [Bool]
     
     private let urlType: ((URL) -> ZLURLType)?
     
@@ -168,6 +168,7 @@ public class ZLImagePreviewController: UIViewController {
     @objc public var longPressBlock: ((_ vc: ZLImagePreviewController?, _ index: Int) -> Void)?
     
     @objc public var doneBlock: (([Any]) -> Void)?
+    @objc public var disappearBlock: (() -> Void)?
     
     @objc public var videoHttpHeader: [String: Any]?
     
@@ -245,6 +246,11 @@ public class ZLImagePreviewController: UIViewController {
         isFirstAppear = false
         
         reloadCurrentCell()
+    }
+    
+    override public func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        disappearBlock?()
     }
     
     override public func viewDidLayoutSubviews() {
