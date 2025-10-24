@@ -168,7 +168,7 @@ public class ZLImagePreviewController: UIViewController {
     @objc public var longPressBlock: ((_ vc: ZLImagePreviewController?, _ index: Int) -> Void)?
     
     @objc public var doneBlock: (([Any]) -> Void)?
-    @objc public var disappearBlock: (() -> Void)?
+    @objc public var didDisappearBlock: (() -> Void)?
     
     @objc public var videoHttpHeader: [String: Any]?
     
@@ -250,7 +250,7 @@ public class ZLImagePreviewController: UIViewController {
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        disappearBlock?()
+        didDisappearBlock?()
     }
     
     override public func viewDidLayoutSubviews() {
