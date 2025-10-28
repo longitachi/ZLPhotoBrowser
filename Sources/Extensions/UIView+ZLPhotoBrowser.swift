@@ -91,12 +91,10 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
         base.layer.shadowOpacity = opacity
         base.layer.shadowOffset = offset
     }
-}
-
-extension UIView {
+    
     /// 判断 view 是否在 window 树中
     var isInWindowHierarchy: Bool {
-        var v: UIView? = self
+        var v: UIView? = base
         while let view = v {
             if view is UIWindow { return true }
             v = view.superview
