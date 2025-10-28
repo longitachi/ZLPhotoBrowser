@@ -200,7 +200,9 @@ class ZLImagePreviewDismissInteractiveTransition: UIPercentDrivenInteractiveTran
         }
         
         let containerView = transitionContext.containerView
-        containerView.addSubview(toVC.view)
+        if !toVC.view.zl.isInWindowHierarchy {
+            containerView.addSubview(toVC.view)
+        }
         
         guard let cell = fromVC.collectionView.cellForItem(at: IndexPath(row: fromVC.currentIndex, section: 0)) as? ZLPreviewBaseCell else {
             return
