@@ -293,8 +293,8 @@ class ZLInputTextViewController: UIViewController {
                 frameObservation = subview.observe(
                     \.frame,
                      options: .new,
-                     changeHandler: { object, change in
-                         self.refreshStrokeTextViewFrame(for: subview)
+                     changeHandler: { [weak self] object, change in
+                         self?.refreshStrokeTextViewFrame(for: subview)
                      }
                 )
                 
