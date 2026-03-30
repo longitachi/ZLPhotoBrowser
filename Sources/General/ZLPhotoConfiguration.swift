@@ -160,7 +160,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// Save the edited image to the album after editing. Defaults to true.
     public var saveNewImageAfterEdit = true
     
-    /// When the style is embedAlbumList, this property controls whether the thumbnail interface supports swiping to close from the edge.
+    /// When the style is embedAlbumList, this property controls whether the thumbnail interface allows swiping to close from the edge.
     public var thumbVCAllowPanToDismiss = true
     
     /// If true, you can slide select photos in album. Defaults to true.
