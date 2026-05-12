@@ -234,6 +234,9 @@ open class ZLEditImageViewController: UIViewController {
     
     private lazy var deleteDrawPaths: [ZLDrawPath] = []
     
+    /// 橡皮擦上一次命中测试使用的坐标（drawPath 坐标系），用于在 pan 事件之间做线段采样
+    private var lastEraserDrawPoint: CGPoint?
+    
     private var defaultDrawPathWidth: CGFloat = 0
     
     private var impactFeedback: UIImpactFeedbackGenerator?
@@ -1259,6 +1262,8 @@ open class ZLEditImageViewController: UIViewController {
                 setToolView(show: true, delay: 0.5)
                 
                 if let path = drawPaths.last {
+                    path.finishDrawing()
+                    drawLine()
                     editorManager.storeAction(.draw(path))
                 }
             }
@@ -1322,10 +1327,17 @@ open class ZLEditImageViewController: UIViewController {
         let pointScale = ratio / originalRatio / toImageScale
         // 转换为drawPath的point
         let drawPoint = CGPoint(x: point.x / pointScale, y: point.y / pointScale)
+        // 橡皮擦半径（drawPath 坐标系）：eraserCircleView 视图尺寸的一半，再换算到 drawPath 坐标系
+        // 注意 eraserCircleView 会随 zoomScale 反向缩放，实际屏幕半径为 (22 / zoomScale)，
+        // 但 drawPoint 已经基于未缩放的 drawingImageView 坐标转换，这里只需转到 drawPath 坐标系
+        let eraserRadiusInView = eraserCircleView.bounds.width / 2 / mainScrollView.zoomScale
+        let eraserRadius = eraserRadiusInView / pointScale
+        
         if pan.state == .began {
             eraserCircleView.transform = CGAffineTransform(scaleX: 1 / mainScrollView.zoomScale, y: 1 / mainScrollView.zoomScale)
             eraserCircleView.isHidden = false
             impactFeedback?.prepare()
+            lastEraserDrawPoint = nil
         }
         
         if pan.state == .began || pan.state == .changed {
@@ -1333,19 +1345,30 @@ open class ZLEditImageViewController: UIViewController {
             
             var needDraw = false
             for path in drawPaths {
-                if path.path.contains(drawPoint), !deleteDrawPaths.contains(path) {
+                if deleteDrawPaths.contains(path) { continue }
+                
+                let hit: Bool
+                if let last = lastEraserDrawPoint {
+                    hit = path.hitTest(from: last, to: drawPoint, extraRadius: eraserRadius)
+                } else {
+                    hit = path.hitTest(drawPoint, extraRadius: eraserRadius)
+                }
+                
+                if hit {
                     path.willDelete = true
                     deleteDrawPaths.append(path)
                     needDraw = true
                     impactFeedback?.impactOccurred()
                 }
             }
+            lastEraserDrawPoint = drawPoint
             if needDraw {
                 drawLine()
             }
         } else {
             eraserCircleView.transform = .identity
             eraserCircleView.isHidden = true
+            lastEraserDrawPoint = nil
             if !deleteDrawPaths.isEmpty {
                 editorManager.storeAction(.eraser(deleteDrawPaths))
                 drawPaths.removeAll { deleteDrawPaths.contains($0) }
