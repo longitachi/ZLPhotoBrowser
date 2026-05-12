@@ -366,7 +366,7 @@ public class ZLPhotoManager: NSObject {
         
         return PHImageManager.default().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { image, info in
             var downloadFinished = false
-            if let info = info {
+            if let info {
                 downloadFinished = !(info[PHImageCancelledKey] as? Bool ?? false) && (info[PHImageErrorKey] == nil)
             }
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)

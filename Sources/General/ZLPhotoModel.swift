@@ -48,15 +48,15 @@ public class ZLPhotoModel: NSObject {
     
     public var isSelected = false
     
-    private var pri_dataSize: ZLPhotoConfiguration.KBUnit?
+    private var _dataSize: ZLPhotoConfiguration.KBUnit?
     
     public var dataSize: ZLPhotoConfiguration.KBUnit? {
-        if let pri_dataSize = pri_dataSize {
-            return pri_dataSize
+        if let _dataSize {
+            return _dataSize
         }
         
         let size = ZLPhotoManager.fetchAssetSize(for: asset)
-        pri_dataSize = size
+        _dataSize = size
         
         return size
     }

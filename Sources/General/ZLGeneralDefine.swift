@@ -248,7 +248,7 @@ func downloadAssetIfNeed(model: ZLPhotoModel, sender: UIViewController?, complet
     let hud = ZLProgressHUD.show(timeout: ZLPhotoUIConfiguration.default().timeout)
     hud.timeoutBlock = { [weak sender] in
         showAlertView(localLanguageTextValue(.timeout), sender)
-        if let requestAssetID = requestAssetID {
+        if let requestAssetID {
             PHImageManager.default().cancelImageRequest(requestAssetID)
         }
     }

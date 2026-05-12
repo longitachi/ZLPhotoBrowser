@@ -576,7 +576,7 @@ public class ZLEditVideoViewController: UIViewController {
                                 cell.imageView.image = image
                             }
                         }
-                    case let .failure(requestedTime, error):
+                    case let .failure(requestedTime, _):
                         let seconds = CMTimeGetSeconds(requestedTime)
                         let index = Int(round(seconds / self.interval))
                         requestFailedFrameImageIndex.insert(index)

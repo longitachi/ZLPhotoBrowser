@@ -77,18 +77,18 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// If true, the album thumbnail interface will load the photos from the album in pages. Defaults to true.
     public var allowPageLoading = true
     
-    private var pri_pageSize = 1000
+    private var _pageSize = 1000
     /// Number of photos to load per page. Min value is 500. Defaults to 1000.
     public var pageSize: Int {
         get {
-            pri_pageSize
+            _pageSize
         }
         set {
-            pri_pageSize = max(500, newValue)
+            _pageSize = max(500, newValue)
         }
     }
     
-    private var pri_columnCount = 4
+    private var _columnCount = 4
     /// The column count when iPhone is in portait mode. Minimum is 2, maximum is 6. Defaults to 4.
     /// ```
     /// iPhone landscape mode: columnCount += 2.
@@ -99,10 +99,10 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// - Note: This property is ignored when using columnCountBlock.
     public var columnCount: Int {
         get {
-            pri_columnCount
+            _columnCount
         }
         set {
-            pri_columnCount = min(6, max(newValue, 2))
+            _columnCount = min(6, max(newValue, 2))
         }
     }
     
@@ -265,15 +265,15 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览快速选择模式下，按钮标题颜色
     public var sheetBtnTitleColor: UIColor = .black
     
-    private var pri_sheetBtnTitleTintColor: UIColor?
+    private var _sheetBtnTitleTintColor: UIColor?
     /// Preview selection mode, cancel button title color when the selection amount is superior than 0.
     /// 预览快速选择模式下，按钮标题高亮颜色
     public var sheetBtnTitleTintColor: UIColor {
         get {
-            pri_sheetBtnTitleTintColor ?? themeColor
+            _sheetBtnTitleTintColor ?? themeColor
         }
         set {
-            pri_sheetBtnTitleTintColor = newValue
+            _sheetBtnTitleTintColor = newValue
         }
     }
     
@@ -381,27 +381,27 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 预览大图界面底部 `完成` 按钮不可交互状态下标题颜色
     public var bottomToolViewDoneBtnDisableTitleColorOfPreviewVC: UIColor = .zl.rgba(168, 168, 168)
     
-    private var pri_bottomToolViewBtnNormalBgColor: UIColor?
+    private var _bottomToolViewBtnNormalBgColor: UIColor?
     /// The normal state background color of bottom tool view buttons.
     /// 相册小图界面底部按钮可交互状态下背景色
     public var bottomToolViewBtnNormalBgColor: UIColor {
         get {
-            pri_bottomToolViewBtnNormalBgColor ?? themeColor
+            _bottomToolViewBtnNormalBgColor ?? themeColor
         }
         set {
-            pri_bottomToolViewBtnNormalBgColor = newValue
+            _bottomToolViewBtnNormalBgColor = newValue
         }
     }
     
-    private var pri_bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor?
+    private var _bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor?
     /// The normal state background color of bottom tool view buttons in preview interface.
     /// 预览大图界面底部按钮可交互状态下背景色
     public var bottomToolViewBtnNormalBgColorOfPreviewVC: UIColor {
         get {
-            pri_bottomToolViewBtnNormalBgColorOfPreviewVC ?? themeColor
+            _bottomToolViewBtnNormalBgColorOfPreviewVC ?? themeColor
         }
         set {
-            pri_bottomToolViewBtnNormalBgColorOfPreviewVC = newValue
+            _bottomToolViewBtnNormalBgColorOfPreviewVC = newValue
         }
     }
     
@@ -417,15 +417,15 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// iOS14 limited权限下，下方提示选择更多图片信息文字的颜色
     public var limitedAuthorityTipsColor: UIColor = .zl.rgba(199, 199, 199)
     
-    private var pri_cameraRecodeProgressColor: UIColor?
+    private var _cameraRecodeProgressColor: UIColor?
     /// The record progress color of custom camera.
     /// 自定义相机录制视频时进度条颜色
     public var cameraRecodeProgressColor: UIColor {
         get {
-            pri_cameraRecodeProgressColor ?? themeColor
+            _cameraRecodeProgressColor ?? themeColor
         }
         set {
-            pri_cameraRecodeProgressColor = newValue
+            _cameraRecodeProgressColor = newValue
         }
     }
     
@@ -433,15 +433,15 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 已选择照片上方遮罩阴影颜色
     public var selectedMaskColor: UIColor = .black.withAlphaComponent(0.45)
     
-    private var pri_selectedBorderColor: UIColor?
+    private var _selectedBorderColor: UIColor?
     /// Border color of selected cell.
     /// 已选择照片border颜色
     public var selectedBorderColor: UIColor {
         get {
-            pri_selectedBorderColor ?? themeColor
+            _selectedBorderColor ?? themeColor
         }
         set {
-            pri_selectedBorderColor = newValue
+            _selectedBorderColor = newValue
         }
     }
     
@@ -453,15 +453,15 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 已选照片右上角序号label背景色
     public var indexLabelTextColor: UIColor = .zl.rgba(220, 220, 220)
     
-    private var pri_indexLabelBgColor: UIColor?
+    private var _indexLabelBgColor: UIColor?
     /// The background color of selected cell index label.
     /// 已选照片右上角序号label背景色
     public var indexLabelBgColor: UIColor {
         get {
-            pri_indexLabelBgColor ?? (showIndexOnSelectBtn ? themeColor : .clear)
+            _indexLabelBgColor ?? (showIndexOnSelectBtn ? themeColor : .clear)
         }
         set {
-            pri_indexLabelBgColor = newValue
+            _indexLabelBgColor = newValue
         }
     }
     
@@ -473,15 +473,15 @@ public class ZLPhotoUIConfiguration: NSObject {
     /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景色
     public var adjustSliderNormalColor: UIColor = .white
     
-    private var pri_adjustSliderTintColor: UIColor?
+    private var _adjustSliderTintColor: UIColor?
     /// The tint color of adjust slider.
     /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景高亮色
     public var adjustSliderTintColor: UIColor {
         get {
-            pri_adjustSliderTintColor ?? themeColor
+            _adjustSliderTintColor ?? themeColor
         }
         set {
-            pri_adjustSliderTintColor = newValue
+            _adjustSliderTintColor = newValue
         }
     }
     

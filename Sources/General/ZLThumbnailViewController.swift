@@ -1179,7 +1179,7 @@ class ZLThumbnailViewController: UIViewController {
         let hud = ZLProgressHUD.show(timeout: ZLPhotoUIConfiguration.default().timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self)
-            if let requestAssetID = requestAssetID {
+            if let requestAssetID {
                 PHImageManager.default().cancelImageRequest(requestAssetID)
             }
         }
@@ -1189,7 +1189,7 @@ class ZLThumbnailViewController: UIViewController {
                 return
             }
             
-            if let image = image {
+            if let image {
                 ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: model.editImageModel) { [weak nav] ei, editImageModel in
                     model.isSelected = true
                     model.editImage = ei
@@ -1214,7 +1214,7 @@ class ZLThumbnailViewController: UIViewController {
         let hud = ZLProgressHUD.show(timeout: ZLPhotoUIConfiguration.default().timeout)
         hud.timeoutBlock = { [weak self] in
             showAlertView(localLanguageTextValue(.timeout), self)
-            if let requestAssetID = requestAssetID {
+            if let requestAssetID {
                 PHImageManager.default().cancelImageRequest(requestAssetID)
             }
         }
@@ -1237,7 +1237,7 @@ class ZLThumbnailViewController: UIViewController {
         // 提前fetch一下 avasset
         requestAssetID = ZLPhotoManager.fetchAVAsset(forVideo: model.asset) { [weak self] avAsset, _ in
             hud.hide()
-            if let avAsset = avAsset {
+            if let avAsset {
                 inner_showEditVideoVC(avAsset)
             } else {
                 showAlertView(localLanguageTextValue(.timeout), self)

@@ -862,7 +862,7 @@ open class ZLEditImageViewController: UIViewController {
             adjustCollectionView = adjustCV
             
             adjustSlider = ZLAdjustSlider()
-            if let selectedAdjustTool = selectedAdjustTool {
+            if let selectedAdjustTool {
                 changeAdjustTool(selectedAdjustTool)
             }
             adjustSlider?.beginAdjust = { [weak self] in
@@ -1348,8 +1348,8 @@ open class ZLEditImageViewController: UIViewController {
                 if deleteDrawPaths.contains(path) { continue }
                 
                 let hit: Bool
-                if let last = lastEraserDrawPoint {
-                    hit = path.hitTest(from: last, to: drawPoint, extraRadius: eraserRadius)
+                if let lastEraserDrawPoint {
+                    hit = path.hitTest(from: lastEraserDrawPoint, to: drawPoint, extraRadius: eraserRadius)
                 } else {
                     hit = path.hitTest(drawPoint, extraRadius: eraserRadius)
                 }
@@ -1441,7 +1441,7 @@ open class ZLEditImageViewController: UIViewController {
     
     private func setToolView(show: Bool, delay: TimeInterval? = nil) {
         cleanToolViewStateTimer()
-        if let delay = delay {
+        if let delay {
             toolViewStateTimer = Timer.scheduledTimer(timeInterval: delay, target: ZLWeakProxy(target: self), selector: #selector(setToolViewShow_timerFunc(show:)), userInfo: ["show": show], repeats: false)
             RunLoop.current.add(toolViewStateTimer!, forMode: .common)
         } else {
@@ -1451,7 +1451,7 @@ open class ZLEditImageViewController: UIViewController {
     
     @objc private func setToolViewShow_timerFunc(show: Bool) {
         var flag = show
-        if let toolViewStateTimer = toolViewStateTimer {
+        if let toolViewStateTimer {
             let userInfo = toolViewStateTimer.userInfo as? [String: Any]
             flag = userInfo?["show"] as? Bool ?? true
             cleanToolViewStateTimer()

@@ -128,7 +128,7 @@ public class ZLPhotoPicker: NSObject {
             self.cancel()
         }
         
-        ps.showPreview(sender: sender)
+        ps.show(animate: animate, sender: sender)
         previewSheet = ps
     }
     
@@ -266,8 +266,8 @@ public class ZLPhotoPicker: NSObject {
                 }
             }
             
-            if let vc = viewController {
-                vc.dismiss(animated: true) {
+            if let viewController {
+                viewController.dismiss(animated: true) {
                     call()
                 }
             } else {

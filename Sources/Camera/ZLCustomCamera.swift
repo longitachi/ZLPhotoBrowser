@@ -512,7 +512,7 @@ open class ZLCustomCamera: UIViewController {
         
         if motionManager?.isDeviceMotionAvailable == true {
             motionManager?.startDeviceMotionUpdates(to: .main, withHandler: { motion, _ in
-                if let motion = motion {
+                if let motion {
                     self.handleDeviceMotion(motion)
                 }
             })
@@ -559,7 +559,7 @@ open class ZLCustomCamera: UIViewController {
         self.movieFileOutput = movieFileOutput
         
         // 添加视频输入
-        if let videoInput = videoInput, session.canAddInput(videoInput) {
+        if let videoInput, session.canAddInput(videoInput) {
             session.addInput(videoInput)
         }
         // 添加音频输入
@@ -859,7 +859,7 @@ open class ZLCustomCamera: UIViewController {
         takedImage = nil
         stopRecordAnimation()
         cameraConfig.overlayView?.isHidden = false
-        if let videoURL = videoURL {
+        if let videoURL {
             recordVideoPlayerLayer?.player?.pause()
             recordVideoPlayerLayer?.player = nil
             recordVideoPlayerLayer?.isHidden = true
@@ -955,7 +955,7 @@ open class ZLCustomCamera: UIViewController {
     
     // 点击拍照
     @objc private func takePicture() {
-        if let willCaptureBlock = willCaptureBlock {
+        if let willCaptureBlock {
             guard !isCapturePending else { return }
             isCapturePending = true
             
@@ -1203,7 +1203,7 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func startRecord(shouldScheduleStop: Bool = false) {
-        if let willCaptureBlock = willCaptureBlock {
+        if let willCaptureBlock {
             guard !isCapturePending else { return }
             isCapturePending = true
             // Pass information about current capture state.
@@ -1244,7 +1244,7 @@ open class ZLCustomCamera: UIViewController {
             connection?.videoOrientation = cacheVideoOrientation
         }
         
-        if let connection = connection, connection.isVideoStabilizationSupported, videoInput?.device.position == .back {
+        if let connection, connection.isVideoStabilizationSupported, videoInput?.device.position == .back {
             connection.preferredVideoStabilizationMode = cameraConfig.videoStabilizationMode
         }
         
@@ -1501,10 +1501,10 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
                 ZLVideoManager.mergeVideos(fileURLs: self.recordURLs) { [weak self] url, error in
                     hud.hide()
                     
-                    if let url = url, error == nil {
+                    if let url, error == nil {
                         self?.videoURL = url
                         self?.playRecordVideo(fileURL: url)
-                    } else if let error = error {
+                    } else if let error {
                         self?.videoURL = nil
                         showAlertView(error.localizedDescription, self)
                     }

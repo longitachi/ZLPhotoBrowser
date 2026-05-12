@@ -288,7 +288,7 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
         
         var toFrame: CGRect?
         
-        if let toIndex = toIndex, let toCell = toVC.collectionView.cellForItem(at: IndexPath(row: toIndex, section: 0)) {
+        if let toIndex, let toCell = toVC.collectionView.cellForItem(at: IndexPath(row: toIndex, section: 0)) {
             toFrame = toVC.collectionView.convert(toCell.frame, to: transitionContext.containerView)
         }
         

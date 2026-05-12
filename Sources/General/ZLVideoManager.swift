@@ -199,8 +199,8 @@ public extension ZLVideoManager {
         }
         
         _ = ZLPhotoManager.fetchAVAsset(forVideo: asset) { avAsset, _ in
-            if let set = avAsset {
-                self.exportVideo(for: set, exportType: exportType, presetName: presetName, complete: complete)
+            if let avAsset {
+                self.exportVideo(for: avAsset, exportType: exportType, presetName: presetName, complete: complete)
             } else {
                 complete(nil, NSError.videoExportError)
             }

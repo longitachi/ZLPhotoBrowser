@@ -1284,7 +1284,7 @@ class ZLPreviewView: UIView {
     
     func resetSubViewSize() {
         let size: CGSize
-        if let model = model {
+        if let model {
             if let ei = model.editImage {
                 size = ei.size
             } else {

@@ -43,42 +43,42 @@ public class ZLPhotoConfiguration: NSObject {
         ZLPhotoConfiguration.single = ZLPhotoConfiguration()
     }
     
-    private var pri_maxSelectCount = 9
+    private var _maxSelectCount = 9
     /// Anything superior than 1 will enable the multiple selection feature. Defaults to 9.
     public var maxSelectCount: Int {
         get {
-            pri_maxSelectCount
+            _maxSelectCount
         }
         set {
-            pri_maxSelectCount = max(1, newValue)
+            _maxSelectCount = max(1, newValue)
         }
     }
     
-    private var pri_maxVideoSelectCount = 0
+    private var _maxVideoSelectCount = 0
     /// A count for video max selection. Defaults to 0.
     /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
     public var maxVideoSelectCount: Int {
         get {
-            if pri_maxVideoSelectCount <= 0 {
+            if _maxVideoSelectCount <= 0 {
                 return maxSelectCount
             } else {
-                return max(minVideoSelectCount, min(pri_maxVideoSelectCount, maxSelectCount))
+                return max(minVideoSelectCount, min(_maxVideoSelectCount, maxSelectCount))
             }
         }
         set {
-            pri_maxVideoSelectCount = newValue
+            _maxVideoSelectCount = newValue
         }
     }
     
-    private var pri_minVideoSelectCount = 0
+    private var _minVideoSelectCount = 0
     /// A count for video min selection. Defaults to 0.
     /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
     public var minVideoSelectCount: Int {
         get {
-            min(maxSelectCount, max(pri_minVideoSelectCount, 0))
+            min(maxSelectCount, max(_minVideoSelectCount, 0))
         }
         set {
-            pri_minVideoSelectCount = newValue
+            _minVideoSelectCount = newValue
         }
     }
     
@@ -89,14 +89,14 @@ public class ZLPhotoConfiguration: NSObject {
     /// Preview selection max preview count, if the value is zero, only show `Camera`, `Album`, `Cancel` buttons. Defaults to 20.
     public var maxPreviewCount = 20
     
-    private var pri_initialIndex = 1
+    private var _initialIndex = 1
     /// The index of the first selected image, and the indices of subsequently selected images are incremented based on this value. Defaults to 1.
     public var initialIndex: Int {
         get {
-            max(pri_initialIndex, 1)
+            max(_initialIndex, 1)
         }
         set {
-            pri_initialIndex = newValue
+            _initialIndex = newValue
         }
     }
     
@@ -117,38 +117,38 @@ public class ZLPhotoConfiguration: NSObject {
     /// If value is false, the LivePhoto logo is not displayed. Defaults to false.
     public var allowSelectLivePhoto = false
     
-    private var pri_allowTakePhotoInLibrary = true
+    private var _allowTakePhotoInLibrary = true
     /// Allow take photos in the album. Defaults to true.
     /// - warning: If allowTakePhoto and allowRecordVideo are both false, it will not be displayed.
     public var allowTakePhotoInLibrary: Bool {
         get {
-            pri_allowTakePhotoInLibrary && (cameraConfiguration.allowTakePhoto || cameraConfiguration.allowRecordVideo)
+            _allowTakePhotoInLibrary && (cameraConfiguration.allowTakePhoto || cameraConfiguration.allowRecordVideo)
         }
         set {
-            pri_allowTakePhotoInLibrary = newValue
+            _allowTakePhotoInLibrary = newValue
         }
     }
     
     /// Whether to callback directly after taking a photo. Defaults to false.
     public var callbackDirectlyAfterTakingPhoto = false
     
-    private var pri_allowEditImage = true
+    private var _allowEditImage = true
     public var allowEditImage: Bool {
         get {
-            pri_allowEditImage
+            _allowEditImage
         }
         set {
-            pri_allowEditImage = newValue
+            _allowEditImage = newValue
         }
     }
     
-    private var pri_allowEditVideo = false
+    private var _allowEditVideo = false
     public var allowEditVideo: Bool {
         get {
-            pri_allowEditVideo
+            _allowEditVideo
         }
         set {
-            pri_allowEditVideo = newValue
+            _allowEditVideo = newValue
         }
     }
     

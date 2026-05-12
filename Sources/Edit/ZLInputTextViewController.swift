@@ -203,10 +203,10 @@ class ZLInputTextViewController: UIViewController {
     init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal) {
         self.image = image
         self.text = text ?? ""
-        if let font = font {
+        if let font {
             self.font = font.withSize(ZLTextStickerView.fontSize)
         }
-        if let textColor = textColor {
+        if let textColor {
             currentColor = textColor
         } else {
             let editConfig = ZLPhotoConfiguration.default().editImageConfiguration

@@ -103,7 +103,7 @@ class ZLAlbumListCell: UITableViewCell {
         
         var titleW: CGFloat = 0
         var countW: CGFloat = 0
-        if let model = model {
+        if let model {
             titleW = min(
                 bounds.width / 3 * 2,
                 model.title.zl.boundingRect(

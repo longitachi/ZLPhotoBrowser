@@ -138,7 +138,7 @@ class ZLTextStickerView: ZLBaseStickerView {
     override func tapAction(_ ges: UITapGestureRecognizer) {
         guard gesIsEnabled else { return }
         
-        if let timer = timer, timer.isValid {
+        if let timer, timer.isValid {
             delegate?.sticker(self, editText: text)
         } else {
             super.tapAction(ges)
