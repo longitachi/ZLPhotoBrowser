@@ -54,6 +54,9 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     public var statusBarStyle: UIStatusBarStyle = .lightContent
     
+    /// Whether landscape mode is supported. This property applies only to iPhone devices. Defaults to true.
+    public var supportLandscape = true
+    
     /// text: Cancel.  image: 'x'. Defaults to image.
     public var navCancelButtonStyle: ZLPhotoUIConfiguration.CancelButtonStyle = .image
     

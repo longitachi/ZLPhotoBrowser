@@ -48,6 +48,12 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    func supportLandscape(_ value: Bool) -> ZLPhotoUIConfiguration {
+        self.supportLandscape = value
+        return self
+    }
+    
+    @discardableResult
     func navCancelButtonStyle(_ style: ZLPhotoUIConfiguration.CancelButtonStyle) -> ZLPhotoUIConfiguration {
         navCancelButtonStyle = style
         return self

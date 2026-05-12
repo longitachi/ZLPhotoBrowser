@@ -44,6 +44,14 @@ public class ZLImageNavController: UINavigationController {
         return ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
+    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if deviceIsiPad() {
+            .all
+        } else {
+            ZLPhotoUIConfiguration.default().supportLandscape ? .all : .portrait
+        }
+    }
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
     }

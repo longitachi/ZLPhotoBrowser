@@ -292,7 +292,7 @@ public class ZLPhotoPicker: NSObject {
                 
                 sucCount += 1
                 
-                if let image = image {
+                if let image {
                     let isEdited = m.editImage != nil && !config.saveNewImageAfterEdit
                     let model = ZLResultModel(
                         asset: asset ?? m.asset,

@@ -96,10 +96,10 @@ public class ZLCameraConfiguration: NSObject {
     /// If `allowTakePhoto` is true, `tapToRecordVideo` will be ignored.
     public var tapToRecordVideo: Bool = false
     
-    private var _enableWideCameras: Bool = false
+    private var _enableWideCameras: Bool = true
     
     /// Enable the use of wide cameras (e.g., .builtInTripleCamera, .builtInDualWideCamera, .builtInDualCamera).
-    /// Only available on iOS 13.0 and higher, defaults to false.
+    /// Only available on iOS 13.0 and higher, defaults to true.
     @available(iOS 13.0, *)
     public var enableWideCameras: Bool {
         get {
