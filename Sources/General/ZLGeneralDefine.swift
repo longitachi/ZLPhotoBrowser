@@ -159,7 +159,12 @@ func canAddModel(_ model: ZLPhotoModel, currentSelectModels: [ZLPhotoModel]?, se
     let currentSelectCount = selModels.count
     if currentSelectCount >= config.maxSelectCount {
         if showAlert {
-            let message = String(format: localLanguageTextValue(.exceededMaxSelectCount), config.maxSelectCount)
+            let message: String
+            if config.allowSelectVideo, !config.allowSelectImage {
+                message = String(format: localLanguageTextValue(.exceededMaxVideoSelectCount), config.maxSelectCount)
+            } else {
+                message = String(format: localLanguageTextValue(.exceededMaxSelectCount), config.maxSelectCount)
+            }
             showAlertView(message, sender)
         }
         return false

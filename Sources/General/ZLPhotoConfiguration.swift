@@ -83,7 +83,6 @@ public class ZLPhotoConfiguration: NSObject {
     }
     
     /// Whether photos and videos can be selected together. Defaults to true.
-    /// If set to false, only one video can be selected. Defaults to true.
     public var allowMixSelect = true
     
     /// Preview selection max preview count, if the value is zero, only show `Camera`, `Album`, `Cancel` buttons. Defaults to 20.

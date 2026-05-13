@@ -609,20 +609,29 @@ class ZLPhotoPreviewSheet: UIView {
         arrDataSources.insert(newModel, at: 0)
         let config = ZLPhotoConfiguration.default()
         
-        var canSelect = true
-        // If mixed selection is not allowed, and the newModel type is video, it will not be selected.
-        if !config.allowMixSelect, newModel.type == .video {
-            canSelect = false
+        // 如果从拍照出来的是图片，且是自定义相机，且满足了编辑条件，代表从拍照界面已经编辑过了，这里就不重复进入后续编辑逻辑了，直接返回
+        if newModel.type == .image,
+           config.useCustomCamera,
+           config.maxSelectCount == 1,
+           config.editAfterSelectThumbnailImage,
+           config.allowEditImage {
+            newModel.isSelected = true
+            arrSelectedModels.append(newModel)
+            config.didSelectAsset?(newModel.asset)
+            selectPhotosBlock?(arrSelectedModels, isSelectOriginal)
+            return
         }
-        // 单选模式，且不显示选择按钮时，不允许选择
-        if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
-            canSelect = false
-        }
-        if canSelect, canAddModel(newModel, currentSelectModels: arrSelectedModels, sender: sender, showAlert: false) {
+        
+        // 是否是单选模式，且不显示选择按钮
+        let isSingleAndNotShowSelectBtnMode = config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
+        
+        if canAddModel(newModel, currentSelectModels: arrSelectedModels, sender: sender, showAlert: false) {
             if !shouldDirectEdit(newModel) {
-                newModel.isSelected = true
-                arrSelectedModels.append(newModel)
-                config.didSelectAsset?(newModel.asset)
+                if config.callbackDirectlyAfterTakingPhoto || !isSingleAndNotShowSelectBtnMode {
+                    newModel.isSelected = true
+                    arrSelectedModels.append(newModel)
+                    config.didSelectAsset?(newModel.asset)
+                }
                 
                 if config.callbackDirectlyAfterTakingPhoto {
                     selectPhotosBlock?(arrSelectedModels, isSelectOriginal)
