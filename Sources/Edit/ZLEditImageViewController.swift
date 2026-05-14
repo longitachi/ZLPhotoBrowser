@@ -540,6 +540,20 @@ open class ZLEditImageViewController: UIViewController {
         }
     }
     
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Presenting a child VC (clip, text input) may trigger
+        // `CALayer.render(in:)` or other operations that cause UITextView to
+        // recreate internal layers at the default contentsScale. Re-apply the
+        // correct pixel density so zoomed text stickers remain crisp.
+        DispatchQueue.main.async { [weak self] in
+            self?.stickersContainer.subviews.forEach { view in
+                (view as? ZLBaseStickerView)?.updateBorderLayer(force: true)
+            }
+        }
+    }
+    
     override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -1055,9 +1069,9 @@ open class ZLEditImageViewController: UIViewController {
     private func textStickerBtnClick() {
         showInputTextVC(
             font: ZLPhotoConfiguration.default().editImageConfiguration.textStickerDefaultFont
-        ) { [weak self] text, textColor, font, image, style in
-            guard !text.isEmpty, let image = image else { return }
-            self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
+        ) { [weak self] text, textColor, font, style in
+            guard !text.isEmpty else { return }
+            self?.addTextStickersView(text, textColor: textColor, font: font, style: style)
         }
         
         selectedTool = nil
@@ -1479,7 +1493,7 @@ open class ZLEditImageViewController: UIViewController {
         toolViewStateTimer = nil
     }
     
-    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal, completion: @escaping ((String, UIColor, UIFont, UIImage?, ZLInputTextStyle) -> Void)) {
+    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: ZLInputTextStyle = .normal, completion: @escaping ((String, UIColor, UIFont, ZLInputTextStyle) -> Void)) {
         // Calculate image displayed frame on the screen.
         var r = mainScrollView.convert(view.frame, to: containerView)
         r.origin.x += mainScrollView.contentOffset.x / mainScrollView.zoomScale
@@ -1495,8 +1509,8 @@ open class ZLEditImageViewController: UIViewController {
             .zl.clipImage(angle: 0, editRect: r, isCircle: isCircle)
         let vc = ZLInputTextViewController(image: bgImage, text: text, textColor: textColor, font: font, style: style)
         
-        vc.endInput = { text, textColor, font, image, style in
-            completion(text, textColor, font, image, style)
+        vc.endInput = { text, textColor, font, style in
+            completion(text, textColor, font, style)
         }
         
         vc.modalPresentationStyle = .fullScreen
@@ -1530,11 +1544,11 @@ open class ZLEditImageViewController: UIViewController {
     }
     
     /// Add text sticker
-    private func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, image: UIImage, style: ZLInputTextStyle) {
+    private func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, style: ZLInputTextStyle) {
         guard !text.isEmpty else { return }
         
         let scale = mainScrollView.zoomScale
-        let size = ZLTextStickerView.calculateSize(image: image)
+        let size = ZLTextStickerView.calculateSize(text: text, font: font, style: style)
         let originFrame = getStickerOriginFrame(size)
         
         let textSticker = ZLTextStickerView(
@@ -1542,7 +1556,6 @@ open class ZLEditImageViewController: UIViewController {
             textColor: textColor,
             font: font,
             style: style,
-            image: image,
             originScale: 1 / scale,
             originAngle: -currentClipStatus.angle,
             originFrame: originFrame
@@ -2047,8 +2060,8 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
     }
     
     func sticker(_ textSticker: ZLTextStickerView, editText text: String) {
-        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { text, textColor, font, image, style in
-            guard let image = image, !text.isEmpty else {
+        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { text, textColor, font, style in
+            guard !text.isEmpty else {
                 textSticker.moveToAshbin()
                 return
             }
@@ -2061,8 +2074,7 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
             textSticker.textColor = textColor
             textSticker.font = font
             textSticker.style = style
-            textSticker.image = image
-            let newSize = ZLTextStickerView.calculateSize(image: image)
+            let newSize = ZLTextStickerView.calculateSize(text: text, font: font, style: style)
             textSticker.changeSize(to: newSize)
         }
     }

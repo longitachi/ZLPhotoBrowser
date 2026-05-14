@@ -31,28 +31,40 @@ class ZLTextStickerView: ZLBaseStickerView {
     
     private static let edgeInset: CGFloat = 10
     
-    private lazy var imageView: UIImageView = {
-        let view = UIImageView(image: image)
-        view.contentMode = .scaleAspectFit
-        view.clipsToBounds = true
+    private lazy var contentView: ZLTextStickerContentView = {
+        let view = ZLTextStickerContentView()
+        view.isEditable = false
+        view.isScrollEnabled = false
         return view
     }()
     
-    var text: String
-    
-    var textColor: UIColor
-    
-    var font: UIFont?
-    
-    var style: ZLInputTextStyle
-    
-    var image: UIImage {
+    var text: String {
         didSet {
-            imageView.image = image
+            contentView.text = text
         }
     }
 
-    // Convert all states to model.
+    var textColor: UIColor {
+        didSet {
+            contentView.textColor = textColor
+        }
+    }
+    
+    var font: UIFont? {
+        didSet {
+            if let font {
+                contentView.font = font
+            }
+        }
+    }
+    
+    var style: ZLInputTextStyle {
+        didSet {
+            contentView.style = style
+        }
+    }
+    
+    /// Convert all states to model.
     override var state: ZLTextStickerState {
         return ZLTextStickerState(
             id: id,
@@ -60,7 +72,6 @@ class ZLTextStickerView: ZLBaseStickerView {
             textColor: textColor,
             font: font,
             style: style,
-            image: image,
             originScale: originScale,
             originAngle: originAngle,
             originFrame: originFrame,
@@ -81,7 +92,6 @@ class ZLTextStickerView: ZLBaseStickerView {
             textColor: state.textColor,
             font: state.font,
             style: state.style,
-            image: state.image,
             originScale: state.originScale,
             originAngle: state.originAngle,
             originFrame: state.originFrame,
@@ -98,7 +108,6 @@ class ZLTextStickerView: ZLBaseStickerView {
         textColor: UIColor,
         font: UIFont?,
         style: ZLInputTextStyle,
-        image: UIImage,
         originScale: CGFloat,
         originAngle: CGFloat,
         originFrame: CGRect,
@@ -111,7 +120,6 @@ class ZLTextStickerView: ZLBaseStickerView {
         self.textColor = textColor
         self.font = font
         self.style = style
-        self.image = image
         super.init(
             id: id,
             originScale: originScale,
@@ -122,8 +130,14 @@ class ZLTextStickerView: ZLBaseStickerView {
             totalTranslationPoint: totalTranslationPoint,
             showBorder: showBorder
         )
-        
-        borderView.addSubview(imageView)
+
+        borderView.addSubview(contentView)
+        contentView.configure(
+            text: text,
+            textColor: textColor,
+            font: font ?? .boldSystemFont(ofSize: Self.fontSize),
+            style: style
+        )
     }
     
     @available(*, unavailable)
@@ -132,19 +146,31 @@ class ZLTextStickerView: ZLBaseStickerView {
     }
     
     override func setupUIFrameWhenFirstLayout() {
-        imageView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
+        contentView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
+    }
+    
+    @discardableResult
+    override func updateBorderLayer(force: Bool = false) -> Bool {
+        if super.updateBorderLayer(force: force) {
+            // Re-rasterize text glyphs & `.bg` rounded path at the current pixel
+            // density so `transform.scaledBy` doesn't just stretch a stale bitmap.
+            contentView.applyContentsScale(lastContentsScale)
+            return true
+        } else {
+            return false
+        }
     }
     
     override func tapAction(_ ges: UITapGestureRecognizer) {
         guard gesIsEnabled else { return }
-        
+
         if let timer, timer.isValid {
             delegate?.sticker(self, editText: text)
         } else {
             super.tapAction(ges)
         }
     }
-    
+
     func changeSize(to newSize: CGSize) {
         // Revert zoom scale.
         transform = transform.scaledBy(x: 1 / originScale, y: 1 / originScale)
@@ -153,7 +179,7 @@ class ZLTextStickerView: ZLBaseStickerView {
         // Revert ges rotation.
         transform = transform.rotated(by: -gesRotation)
         transform = transform.rotated(by: -originAngle.zl.toPi)
-        
+
         // Recalculate current frame.
         let center = CGPoint(x: self.frame.midX, y: self.frame.midY)
         var frame = self.frame
@@ -161,16 +187,16 @@ class ZLTextStickerView: ZLBaseStickerView {
         frame.origin.y = center.y - newSize.height / 2
         frame.size = newSize
         self.frame = frame
-        
+
         let oc = CGPoint(x: originFrame.midX, y: originFrame.midY)
         var of = originFrame
         of.origin.x = oc.x - newSize.width / 2
         of.origin.y = oc.y - newSize.height / 2
         of.size = newSize
         originFrame = of
-        
-        imageView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
-        
+
+        contentView.frame = borderView.bounds.insetBy(dx: Self.edgeInset, dy: Self.edgeInset)
+
         // Readd zoom scale.
         transform = transform.scaledBy(x: originScale, y: originScale)
         // Readd ges scale.
@@ -178,10 +204,22 @@ class ZLTextStickerView: ZLBaseStickerView {
         // Readd ges rotation.
         transform = transform.rotated(by: gesRotation)
         transform = transform.rotated(by: originAngle.zl.toPi)
+
+        updateBorderLayer()
     }
-    
-    class func calculateSize(image: UIImage) -> CGSize {
-        var size = image.size
+
+    /// Size to use for a text sticker including outer edge insets.
+    class func calculateSize(text: String, font: UIFont?, style: ZLInputTextStyle) -> CGSize {
+        let maxWidth = max(1, UIScreen.main.bounds.width - 20)
+        let tempView = ZLTextStickerContentView()
+        tempView.isScrollEnabled = false
+        tempView.configure(
+            text: text,
+            textColor: .white,
+            font: font ?? .boldSystemFont(ofSize: Self.fontSize),
+            style: style
+        )
+        var size = tempView.intrinsicSize(maxWidth: maxWidth)
         size.width += Self.edgeInset * 2
         size.height += Self.edgeInset * 2
         return size

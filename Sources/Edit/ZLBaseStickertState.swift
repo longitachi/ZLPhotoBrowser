@@ -28,13 +28,35 @@ import UIKit
 
 public class ZLBaseStickertState: NSObject {
     let id: String
-    let image: UIImage
     let originScale: CGFloat
     let originAngle: CGFloat
     let originFrame: CGRect
     let gesScale: CGFloat
     let gesRotation: CGFloat
     let totalTranslationPoint: CGPoint
+    
+    public init(
+        id: String,
+        originScale: CGFloat,
+        originAngle: CGFloat,
+        originFrame: CGRect,
+        gesScale: CGFloat,
+        gesRotation: CGFloat,
+        totalTranslationPoint: CGPoint
+    ) {
+        self.id = id
+        self.originScale = originScale
+        self.originAngle = originAngle
+        self.originFrame = originFrame
+        self.gesScale = gesScale
+        self.gesRotation = gesRotation
+        self.totalTranslationPoint = totalTranslationPoint
+        super.init()
+    }
+}
+
+public class ZLImageStickerState: ZLBaseStickertState {
+    let image: UIImage
     
     public init(
         id: String,
@@ -46,19 +68,18 @@ public class ZLBaseStickertState: NSObject {
         gesRotation: CGFloat,
         totalTranslationPoint: CGPoint
     ) {
-        self.id = id
         self.image = image
-        self.originScale = originScale
-        self.originAngle = originAngle
-        self.originFrame = originFrame
-        self.gesScale = gesScale
-        self.gesRotation = gesRotation
-        self.totalTranslationPoint = totalTranslationPoint
-        super.init()
+        super.init(
+            id: id,
+            originScale: originScale,
+            originAngle: originAngle,
+            originFrame: originFrame,
+            gesScale: gesScale,
+            gesRotation: gesRotation,
+            totalTranslationPoint: totalTranslationPoint
+        )
     }
 }
-
-public class ZLImageStickerState: ZLBaseStickertState { }
 
 public class ZLTextStickerState: ZLBaseStickertState {
     let text: String
@@ -72,7 +93,6 @@ public class ZLTextStickerState: ZLBaseStickertState {
         textColor: UIColor,
         font: UIFont?,
         style: ZLInputTextStyle,
-        image: UIImage,
         originScale: CGFloat,
         originAngle: CGFloat,
         originFrame: CGRect,
@@ -86,7 +106,6 @@ public class ZLTextStickerState: ZLBaseStickertState {
         self.style = style
         super.init(
             id: id,
-            image: image,
             originScale: originScale,
             originAngle: originAngle,
             originFrame: originFrame,

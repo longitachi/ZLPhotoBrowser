@@ -60,11 +60,22 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         case left = 270
     }
     
+    private let borderColor: CGColor = UIColor.zl.rgba(240, 240, 240, 0.7).cgColor
+    
     var id: String
     
-    var borderWidth = 1 / UIScreen.main.scale
-    
     var firstLayout = true
+    
+    /// Vector border. Replaces `layer.borderWidth/borderColor` so that when
+    /// the sticker is zoomed via `transform.scaledBy`, we can both:
+    ///   * re-rasterize the stroke at the current pixel density (no aliasing);
+    ///   * keep the stroke visually ~1px thick at any zoom (inverse-scale line width).
+    let borderLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.fillColor = UIColor.clear.cgColor
+        layer.strokeColor = UIColor.clear.cgColor
+        return layer
+    }()
     
     let originScale: CGFloat
     
@@ -89,6 +100,8 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     var gesIsEnabled = true
     
     var originFrame: CGRect
+    
+    var lastContentsScale: CGFloat = 0
     
     lazy var tapGes = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
     
@@ -149,7 +162,7 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         self.gesRotation = gesRotation
         self.totalTranslationPoint = totalTranslationPoint
         
-        borderView.layer.borderWidth = borderWidth
+        borderView.layer.addSublayer(borderLayer)
         hideBorder()
         if showBorder {
             startTimer()
@@ -173,6 +186,8 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        updateBorderLayer()
         
         guard firstLayout else {
             return
@@ -210,6 +225,55 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
     
     func setupUIFrameWhenFirstLayout() {}
+    
+    /// Effective scale of the sticker relative to the screen. Used both to
+    /// decide the pixel density for re-rasterization and to inverse-scale
+    /// the vector border so its visual thickness stays constant.
+    var effectiveScale: CGFloat {
+        return max(abs(originScale * gesScale), .leastNonzeroMagnitude)
+    }
+    
+    /// Re-lays out the vector border and rasterizes it at the current
+    /// effective scale. Call this after any transform / bounds change.
+    /// Subclasses override to additionally refresh their own content
+    /// (e.g. text vector re-rasterization); must call `super`.
+    @discardableResult
+    @objc func updateBorderLayer(force: Bool = false) -> Bool {
+        guard force || shouldUpdateContentsScale() else {
+            return false
+        }
+        
+        let bounds = borderView.bounds
+        let effective = effectiveScale
+        let lineWidth = min(2.0, max(0.5, 1 / effective))
+        let pxScale = max(UIScreen.main.scale, UIScreen.main.scale * effective)
+        
+        // Disable implicit animations so rapid pinch doesn't smear the border.
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        borderLayer.frame = bounds
+        borderLayer.lineWidth = lineWidth
+        let inset = lineWidth / 2
+        borderLayer.path = UIBezierPath(rect: bounds.insetBy(dx: inset, dy: inset)).cgPath
+        if abs(borderLayer.contentsScale - pxScale) > .ulpOfOne {
+            borderLayer.contentsScale = pxScale
+            borderLayer.setNeedsDisplay()
+        }
+        CATransaction.commit()
+        
+        return true
+    }
+    
+    func shouldUpdateContentsScale() -> Bool {
+        let scale = UIScreen.main.scale * effectiveScale
+        // 限制一下，降低更新频率
+        if abs(scale - lastContentsScale) >= 0.5 {
+            lastContentsScale = scale
+            return true
+        } else {
+            return false
+        }
+    }
     
     private func direction(for angle: CGFloat) -> ZLBaseStickerView.Direction {
         // 将角度转换为0~360，并对360取余
@@ -299,7 +363,7 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         if isOn, !onOperation {
             onOperation = true
             cleanTimer()
-            borderView.layer.borderColor = UIColor.white.cgColor
+            borderLayer.strokeColor = borderColor
             delegate?.stickerBeginOperation(self)
         } else if !isOn, onOperation {
             onOperation = false
@@ -327,16 +391,18 @@ class ZLBaseStickerView: UIView, UIGestureRecognizerDelegate {
         transform = transform.rotated(by: gesRotation)
         self.transform = transform
         
+        updateBorderLayer()
+        
         delegate?.stickerOnOperation(self, panGes: panGes)
     }
     
     @objc private func hideBorder() {
-        borderView.layer.borderColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = UIColor.clear.cgColor
     }
     
     func startTimer() {
         cleanTimer()
-        borderView.layer.borderColor = UIColor.white.cgColor
+        borderLayer.strokeColor = borderColor
         timer = Timer.scheduledTimer(timeInterval: 2, target: ZLWeakProxy(target: self), selector: #selector(hideBorder), userInfo: nil, repeats: false)
         RunLoop.current.add(timer!, forMode: .common)
     }
@@ -410,5 +476,7 @@ extension ZLBaseStickerView: ZLStickerViewAdditional {
         
         gesScale *= scale
         maxGesScale *= scale
+        
+        updateBorderLayer()
     }
 }
