@@ -431,7 +431,7 @@ extension ZLTextStickerContentView: UITextViewDelegate {
 
 // MARK: - NSLayoutManagerDelegate
 
-extension ZLTextStickerContentView: NSLayoutManagerDelegate {
+extension ZLTextStickerContentView: @preconcurrency NSLayoutManagerDelegate {
     func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {
         guard layoutFinishedFlag else { return }
         drawTextBackground()

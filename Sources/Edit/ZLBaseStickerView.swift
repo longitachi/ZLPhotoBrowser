@@ -402,7 +402,7 @@ class ZLBaseStickerView: UIView {
     }
 }
 
-extension ZLBaseStickerView: ZLStickerViewAdditional {
+extension ZLBaseStickerView: @preconcurrency ZLStickerViewAdditional {
     func resetState() {
         onOperation = false
         cleanTimer()

@@ -205,24 +205,28 @@ public extension ZLPhotoUIConfiguration {
     }
     
     @discardableResult
+    @MainActor
     func navViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfAlbumList = effect
         return self
     }
     
     @discardableResult
+    @MainActor
     func navViewBlurEffectOfPreview(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         navViewBlurEffectOfPreview = effect
         return self
     }
     
     @discardableResult
+    @MainActor
     func bottomViewBlurEffectOfAlbumList(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         bottomViewBlurEffectOfAlbumList = effect
         return self
     }
     
     @discardableResult
+    @MainActor
     func bottomViewBlurEffectOfPreview(_ effect: UIBlurEffect?) -> ZLPhotoUIConfiguration {
         bottomViewBlurEffectOfPreview = effect
         return self

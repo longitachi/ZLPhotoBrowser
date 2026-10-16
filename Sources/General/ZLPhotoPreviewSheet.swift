@@ -33,7 +33,7 @@ class ZLPhotoPreviewSheet: UIView {
         
         static let btnH: CGFloat = 45
         
-        static let spacing: CGFloat = 1 / UIScreen.main.scale
+        @MainActor static let spacing: CGFloat = 1 / UIScreen.main.scale
     }
     
     private lazy var baseView: UIView = {
@@ -923,7 +923,7 @@ extension ZLPhotoPreviewSheet: UIImagePickerControllerDelegate, UINavigationCont
     }
 }
 
-extension ZLPhotoPreviewSheet: PHPhotoLibraryChangeObserver {
+extension ZLPhotoPreviewSheet: @preconcurrency PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
         ZLMainAsync {

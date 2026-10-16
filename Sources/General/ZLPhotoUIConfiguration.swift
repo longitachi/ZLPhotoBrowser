@@ -35,7 +35,7 @@ public class ZLPhotoUIConfiguration: NSObject {
         case image
     }
     
-    private static var single = ZLPhotoUIConfiguration()
+    nonisolated(unsafe) private static var single = ZLPhotoUIConfiguration()
     
     public class func `default`() -> ZLPhotoUIConfiguration {
         return ZLPhotoUIConfiguration.single
@@ -163,16 +163,16 @@ public class ZLPhotoUIConfiguration: NSObject {
     // MARK: Navigation and bottom tool bar
     
     /// The blur effect of the navigation bar in the album list
-    public var navViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
+    @MainActor public var navViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
     
     /// The blur effect of the navigation bar in the preview interface
-    public var navViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
+    @MainActor public var navViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
     
     /// The blur effect of the bottom tool bar in the album list
-    public var bottomViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
+    @MainActor public var bottomViewBlurEffectOfAlbumList: UIBlurEffect? = UIBlurEffect(style: .dark)
     
     /// The blur effect of the bottom tool bar in the preview interface
-    public var bottomViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
+    @MainActor public var bottomViewBlurEffectOfPreview: UIBlurEffect? = UIBlurEffect(style: .dark)
     
     // MARK: Image properties
     
@@ -509,14 +509,14 @@ public class ZLPhotoUIConfiguration: NSObject {
 
 /// Font deploy
 enum ZLCustomFontDeploy {
-    static var fontName: String?
+    nonisolated(unsafe) static var fontName: String?
 }
 
 /// Image source deploy
 enum ZLCustomImageDeploy {
-    static var imageNames: [String] = []
+    nonisolated(unsafe) static var imageNames: [String] = []
     
-    static var imageForKey: [String: UIImage] = [:]
+    nonisolated(unsafe) static var imageForKey: [String: UIImage] = [:]
 }
 
 @objc public enum ZLPhotoBrowserStyle: Int {
@@ -529,9 +529,9 @@ enum ZLCustomImageDeploy {
 
 /// Language deploy
 enum ZLCustomLanguageDeploy {
-    static var language: ZLLanguageType = .system
+    nonisolated(unsafe) static var language: ZLLanguageType = .system
     
-    static var deploy: [ZLLocalLanguageKey: String] = [:]
+    nonisolated(unsafe) static var deploy: [ZLLocalLanguageKey: String] = [:]
 }
 
 /// Adjust slider type

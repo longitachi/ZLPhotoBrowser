@@ -389,7 +389,7 @@ public class ZLEditVideoViewController: UIViewController {
     }
     
     @objc private func doneBtnClick() {
-        func callback(editModel: ZLEditVideoModel?) {
+        @Sendable func callback(editModel: ZLEditVideoModel?) {
             // 内部自己调用，先回调在退出
             if let nav = presentingViewController as? ZLImageNavController,
                nav.topViewController is ZLPhotoPreviewController {

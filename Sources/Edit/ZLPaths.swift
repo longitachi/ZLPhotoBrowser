@@ -29,7 +29,7 @@ import UIKit
 // MARK: 涂鸦path
 
 public class ZLDrawPath: NSObject {
-    private static var pathIndex = 0
+    nonisolated(unsafe) private static var pathIndex = 0
     
     private let pathColor: UIColor
     

@@ -130,7 +130,7 @@ import Foundation
     }
 }
 
-public struct ZLLocalLanguageKey: Hashable {
+public struct ZLLocalLanguageKey: Hashable, Sendable {
     public let rawValue: String
     
     public init(rawValue: String) {

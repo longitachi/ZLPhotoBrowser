@@ -136,7 +136,7 @@ extension ZLAlbumListController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension ZLAlbumListController: PHPhotoLibraryChangeObserver {
+extension ZLAlbumListController: @preconcurrency PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         shouldReloadAlbumList = true
     }

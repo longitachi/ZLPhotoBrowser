@@ -2019,7 +2019,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
 
 // MARK: ZLTextStickerViewDelegate
 
-extension ZLEditImageViewController: ZLStickerViewDelegate {
+extension ZLEditImageViewController: @preconcurrency ZLStickerViewDelegate {
     func stickerBeginOperation(_ sticker: ZLBaseStickerView) {
         stickersContainer.bringSubviewToFront(sticker)
         preStickerState = sticker.state
@@ -2118,7 +2118,7 @@ extension ZLEditImageViewController: ZLStickerViewDelegate {
 
 // MARK: unod & redo
 
-extension ZLEditImageViewController: ZLEditorManagerDelegate {
+extension ZLEditImageViewController: @preconcurrency ZLEditorManagerDelegate {
     func editorManager(_ manager: ZLEditorManager, didUpdateActions actions: [ZLEditorAction], redoActions: [ZLEditorAction]) {
         undoBtn.isEnabled = !actions.isEmpty
         redoBtn.isEnabled = actions.count != redoActions.count

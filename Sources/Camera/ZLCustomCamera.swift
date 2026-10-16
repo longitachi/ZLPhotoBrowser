@@ -1388,7 +1388,7 @@ open class ZLCustomCamera: UIViewController {
     }
 }
 
-extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
+extension ZLCustomCamera: @preconcurrency AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
         ZLMainAsync {
             let animation = ZLAnimationUtils.animation(type: .fade, fromValue: 0, toValue: 1, duration: 0.25)
@@ -1426,7 +1426,7 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
     }
 }
 
-extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
+extension ZLCustomCamera: @preconcurrency AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
         /*
          recordLongGes?.state != .possible这个判断是为了防止在按钮上快速拖拽一下，然后手指马上离开
@@ -1524,7 +1524,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
     }
 }
 
-extension ZLCustomCamera: CAAnimationDelegate {
+extension ZLCustomCamera: @preconcurrency CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if anim is CAAnimationGroup {
             focusCursorView.alpha = 0

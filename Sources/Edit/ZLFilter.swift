@@ -245,37 +245,37 @@ extension ZLFilter {
 }
 
 public extension ZLFilter {
-    @objc static let all: [ZLFilter] = [.normal, .clarendon, .nashville, .apply1977, .toaster, .chrome, .fade, .instant, .process, .transfer, .tone, .linear, .sepia, .mono, .noir, .tonal]
+    @objc nonisolated(unsafe) static let all: [ZLFilter] = [.normal, .clarendon, .nashville, .apply1977, .toaster, .chrome, .fade, .instant, .process, .transfer, .tone, .linear, .sepia, .mono, .noir, .tonal]
     
-    @objc static let normal = ZLFilter(name: "Normal", filterType: .normal)
+    @objc nonisolated(unsafe) static let normal = ZLFilter(name: "Normal", filterType: .normal)
     
-    @objc static let clarendon = ZLFilter(name: "Clarendon", applier: ZLFilter.clarendonFilter)
+    @objc nonisolated(unsafe) static let clarendon = ZLFilter(name: "Clarendon", applier: ZLFilter.clarendonFilter)
     
-    @objc static let nashville = ZLFilter(name: "Nashville", applier: ZLFilter.nashvilleFilter)
+    @objc nonisolated(unsafe) static let nashville = ZLFilter(name: "Nashville", applier: ZLFilter.nashvilleFilter)
     
-    @objc static let apply1977 = ZLFilter(name: "1977", applier: ZLFilter.apply1977Filter)
+    @objc nonisolated(unsafe) static let apply1977 = ZLFilter(name: "1977", applier: ZLFilter.apply1977Filter)
     
-    @objc static let toaster = ZLFilter(name: "Toaster", applier: ZLFilter.toasterFilter)
+    @objc nonisolated(unsafe) static let toaster = ZLFilter(name: "Toaster", applier: ZLFilter.toasterFilter)
     
-    @objc static let chrome = ZLFilter(name: "Chrome", filterType: .chrome)
+    @objc nonisolated(unsafe) static let chrome = ZLFilter(name: "Chrome", filterType: .chrome)
     
-    @objc static let fade = ZLFilter(name: "Fade", filterType: .fade)
+    @objc nonisolated(unsafe) static let fade = ZLFilter(name: "Fade", filterType: .fade)
     
-    @objc static let instant = ZLFilter(name: "Instant", filterType: .instant)
+    @objc nonisolated(unsafe) static let instant = ZLFilter(name: "Instant", filterType: .instant)
     
-    @objc static let process = ZLFilter(name: "Process", filterType: .process)
+    @objc nonisolated(unsafe) static let process = ZLFilter(name: "Process", filterType: .process)
     
-    @objc static let transfer = ZLFilter(name: "Transfer", filterType: .transfer)
+    @objc nonisolated(unsafe) static let transfer = ZLFilter(name: "Transfer", filterType: .transfer)
     
-    @objc static let tone = ZLFilter(name: "Tone", filterType: .tone)
+    @objc nonisolated(unsafe) static let tone = ZLFilter(name: "Tone", filterType: .tone)
     
-    @objc static let linear = ZLFilter(name: "Linear", filterType: .linear)
+    @objc nonisolated(unsafe) static let linear = ZLFilter(name: "Linear", filterType: .linear)
     
-    @objc static let sepia = ZLFilter(name: "Sepia", filterType: .sepia)
+    @objc nonisolated(unsafe) static let sepia = ZLFilter(name: "Sepia", filterType: .sepia)
     
-    @objc static let mono = ZLFilter(name: "Mono", filterType: .mono)
+    @objc nonisolated(unsafe) static let mono = ZLFilter(name: "Mono", filterType: .mono)
     
-    @objc static let noir = ZLFilter(name: "Noir", filterType: .noir)
+    @objc nonisolated(unsafe) static let noir = ZLFilter(name: "Noir", filterType: .noir)
     
-    @objc static let tonal = ZLFilter(name: "Tonal", filterType: .tonal)
+    @objc nonisolated(unsafe) static let tonal = ZLFilter(name: "Tonal", filterType: .tonal)
 }

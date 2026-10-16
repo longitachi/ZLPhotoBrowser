@@ -33,7 +33,7 @@ public class ZLPhotoConfiguration: NSObject {
     
     public typealias KBUnit = CGFloat
     
-    private static var single = ZLPhotoConfiguration()
+    nonisolated(unsafe) private static var single = ZLPhotoConfiguration()
     
     public class func `default`() -> ZLPhotoConfiguration {
         ZLPhotoConfiguration.single

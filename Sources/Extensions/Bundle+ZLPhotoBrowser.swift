@@ -29,9 +29,9 @@ import Foundation
 private class BundleFinder {}
 
 extension Bundle {
-    private static var bundle: Bundle?
+    nonisolated(unsafe) private static var bundle: Bundle?
     
-    static var normalModule: Bundle? = {
+    nonisolated(unsafe) static var normalModule: Bundle? = {
         let bundleName = "ZLPhotoBrowser"
 
         var candidates = [
@@ -60,7 +60,7 @@ extension Bundle {
         return nil
     }()
     
-    static var spmModule: Bundle? = {
+    nonisolated(unsafe) static var spmModule: Bundle? = {
         let bundleName = "ZLPhotoBrowser_ZLPhotoBrowser"
 
         let candidates = [

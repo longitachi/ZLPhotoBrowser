@@ -1701,7 +1701,7 @@ extension ZLThumbnailViewController: UIImagePickerControllerDelegate, UINavigati
 
 // MARK: Photo library change observer
 
-extension ZLThumbnailViewController: PHPhotoLibraryChangeObserver {
+extension ZLThumbnailViewController: @preconcurrency PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let albumList,
               let changes = changeInstance.changeDetails(for: albumList.result) else {
