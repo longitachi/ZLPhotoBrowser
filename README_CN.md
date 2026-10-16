@@ -152,7 +152,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   
 * Swift Package Manager
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
-  * 2. 输入对应版本号（SPM 最低版本为 `6.0.0`）
+  * 2. 输入对应版本号（SPM 最低版本为 `6.0.1`）
   * 3. 等Xcode下载完成后确定即可
 
 ### 支持
