@@ -200,11 +200,7 @@ public class ZLPhotoManager: NSObject {
                 }
                 
                 let subtype = collection.assetCollectionSubtype
-                if subtype == .any {
-                    return
-                }
-                
-                if #available(iOS 13.0, *), subtype == .smartAlbumUnableToUpload{
+                if subtype == .any || subtype == .smartAlbumUnableToUpload {
                     return
                 }
                 
@@ -356,14 +352,8 @@ public class ZLPhotoManager: NSObject {
             }
         }
         
-        if #available(iOS 13.0, *) {
-            return PHImageManager.default().requestImageDataAndOrientation(for: asset, options: option) { data, _, _, info in
-                resultHandler(data, info)
-            }
-        } else {
-            return PHImageManager.default().requestImageData(for: asset, options: option) { data, _, _, info in
-                resultHandler(data, info)
-            }
+        return PHImageManager.default().requestImageDataAndOrientation(for: asset, options: option) { data, _, _, info in
+            resultHandler(data, info)
         }
     }
     

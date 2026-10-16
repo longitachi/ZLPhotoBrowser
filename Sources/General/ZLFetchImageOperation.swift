@@ -186,18 +186,12 @@ class ZLFetchImageOperation: Operation, @unchecked Sendable {
             return image
         }
         
-        if #available(iOS 11.0, *) {
-            if let data = heifData(from: image, quality: 0.5) {
-                return UIImage(data: data) ?? image
-            }
-            return image
-        } else {
-            let scale: CGFloat = (data.count > Int(mUnit) ? 0.6 : 0.8)
-            return image.jpegData(compressionQuality: scale).flatMap { UIImage(data: $0) } ?? image
+        if let data = heifData(from: image, quality: 0.5) {
+            return UIImage(data: data) ?? image
         }
+        return image
     }
     
-    @available(iOS 11.0, *)
     private func heifData(from image: UIImage, quality: CGFloat) -> Data? {
         guard let cgImage = image.cgImage else {
             return nil

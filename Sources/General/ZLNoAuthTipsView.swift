@@ -88,10 +88,7 @@ class ZLNoAuthTipsView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *), deviceIsFringeScreen() {
-            insets = safeAreaInsets
-        }
+        let insets = zl.owningVCRootViewModifiedSafeAreaInsets
         let totalLRInset = insets.left + insets.right
         
         let titleY = zl.height / 4.6

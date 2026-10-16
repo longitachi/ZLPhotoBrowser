@@ -73,9 +73,7 @@ public class ZLImagePreviewController: UIViewController {
         view.delegate = self
         view.isPagingEnabled = true
         view.showsHorizontalScrollIndicator = false
-        if #available(iOS 11.0, *) {
-            view.contentInsetAdjustmentBehavior = .never
-        }
+        view.contentInsetAdjustmentBehavior = .never
         
         ZLPhotoPreviewCell.zl.register(view)
         ZLGifPreviewCell.zl.register(view)
@@ -104,9 +102,6 @@ public class ZLImagePreviewController: UIViewController {
         var image = UIImage.zl.getImage("zl_navBack")
         if isRTL() {
             image = image?.imageFlippedForRightToLeftLayoutDirection()
-            btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -10)
-        } else {
-            btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         }
         btn.setImage(image, for: .normal)
         btn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
@@ -260,11 +255,7 @@ public class ZLImagePreviewController: UIViewController {
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
-            insets = view.safeAreaInsets
-        }
-        insets.top = max(20, insets.top)
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         
         collectionView.frame = CGRect(
             x: -ZLImagePreviewController.colItemSpacing / 2,
@@ -277,7 +268,8 @@ public class ZLImagePreviewController: UIViewController {
         navView.frame = CGRect(x: 0, y: 0, width: view.zl.width, height: navH)
         navBlurView?.frame = navView.bounds
         
-        indexLabel.frame = CGRect(x: (view.zl.width - 80) / 2, y: insets.top, width: 80, height: 44)
+        let totalW = view.zl.width - insets.left - insets.right
+        indexLabel.frame = CGRect(x: (totalW - 80) / 2 + insets.left, y: insets.top, width: 80, height: 44)
         
         if isRTL() {
             backBtn.frame = CGRect(x: view.zl.width - insets.right - 60, y: insets.top, width: 60, height: 44)
@@ -350,9 +342,6 @@ public class ZLImagePreviewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .zl.previewVCBgColor
-        if #unavailable(iOS 11.0) {
-            automaticallyAdjustsScrollViewInsets = false
-        }
         
         view.addSubview(navView)
         
@@ -456,6 +445,7 @@ public class ZLImagePreviewController: UIViewController {
             return
         }
         
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         let btnY = ZLLayout.bottomToolBtnY
         
         var doneTitle = localLanguageTextValue(.done)
@@ -466,7 +456,7 @@ public class ZLImagePreviewController: UIViewController {
             doneTitle += "(" + String(selCount) + ")"
         }
         let doneBtnW = doneTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
-        doneBtn.frame = CGRect(x: bottomView.bounds.width - doneBtnW - 15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        doneBtn.frame = CGRect(x: bottomView.bounds.width - doneBtnW - 15 - insets.right, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
         doneBtn.setTitle(doneTitle, for: .normal)
     }
     

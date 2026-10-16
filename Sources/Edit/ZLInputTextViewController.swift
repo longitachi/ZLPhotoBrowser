@@ -142,7 +142,7 @@ class ZLInputTextViewController: UIViewController {
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { [.top, .bottom] }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        deviceIsiPhone() ? .portrait : .all
+        ZLCommonTools.deviceIsiPhone() ? .portrait : .all
     }
     
     deinit {
@@ -197,7 +197,7 @@ class ZLInputTextViewController: UIViewController {
         bgImageView.frame = view.bounds
         
         // iPad图片由竖屏切换到横屏时候填充方式会有点异常，这里重置下
-        if deviceIsiPad() {
+        if ZLCommonTools.deviceIsiPad() {
             if UIApplication.shared.zl.isLandscape {
                 bgImageView.contentMode = .scaleAspectFill
             } else {
@@ -207,20 +207,21 @@ class ZLInputTextViewController: UIViewController {
         
         coverView.frame = bgImageView.bounds
         
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         let btnY = max(deviceSafeAreaInsets().top, 20)
         let cancelBtnW = localLanguageTextValue(.cancel)
             .zl.boundingRect(
                 font: ZLLayout.bottomToolTitleFont,
                 limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)
             ).width + 20
-        cancelBtn.frame = CGRect(x: 15, y: btnY, width: cancelBtnW, height: ZLLayout.bottomToolBtnH)
+        cancelBtn.frame = CGRect(x: insets.left + 15, y: btnY, width: cancelBtnW, height: ZLLayout.bottomToolBtnH)
         
         let doneBtnW = (doneBtn.currentTitle ?? "")
             .zl.boundingRect(
                 font: ZLLayout.bottomToolTitleFont,
                 limitSize: CGSize(width: .greatestFiniteMagnitude, height: ZLLayout.bottomToolBtnH)
             ).width + 20
-        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
+        doneBtn.frame = CGRect(x: view.zl.width - 20 - doneBtnW - insets.right, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
         
         contentView.frame = CGRect(x: 10, y: doneBtn.zl.bottom + 30, width: view.zl.width - 20, height: 200)
         toolView.frame = CGRect(

@@ -79,6 +79,7 @@ public class ZLPhotoUIConfiguration: NSObject {
     
     private var _pageSize = 1000
     /// Number of photos to load per page. Min value is 500. Defaults to 1000.
+    /// - Note: It is not recommended to set this value too low; doing so would frequently trigger layout refreshes for the `collectionView`, potentially leading to a crash.
     public var pageSize: Int {
         get {
             _pageSize

@@ -27,8 +27,12 @@
 import UIKit
 
 extension ZLPhotoBrowserWrapper where Base: UIViewController {
+    var statusBarHeight: CGFloat {
+        base.view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+    }
+    
     func showAlertController(_ alertController: UIAlertController) {
-        if deviceIsiPad() {
+        if ZLCommonTools.deviceIsiPad() {
             alertController.popoverPresentationController?.sourceView = base.view
         }
         base.showDetailViewController(alertController, sender: nil)

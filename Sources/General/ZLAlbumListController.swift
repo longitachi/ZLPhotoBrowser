@@ -39,11 +39,7 @@ class ZLAlbumListController: UIViewController {
         view.rowHeight = 55
         view.delegate = self
         view.dataSource = self
-        
-        if #available(iOS 11.0, *) {
-            view.contentInsetAdjustmentBehavior = .always
-        }
-        
+        view.contentInsetAdjustmentBehavior = .never
         ZLAlbumListCell.zl.register(view)
         return view
     }()
@@ -96,21 +92,14 @@ class ZLAlbumListController: UIViewController {
         super.viewDidLayoutSubviews()
         
         let navViewNormalH: CGFloat = 44
-        
-        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        var collectionViewInsetTop: CGFloat = 20
-        if #available(iOS 11.0, *) {
-            insets = view.safeAreaInsets
-            collectionViewInsetTop = navViewNormalH
-        } else {
-            collectionViewInsetTop += navViewNormalH
-        }
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         
         navView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: insets.top + navViewNormalH)
         
         tableView.frame = CGRect(x: insets.left, y: 0, width: view.frame.width - insets.left - insets.right, height: view.frame.height)
-        tableView.contentInset = UIEdgeInsets(top: collectionViewInsetTop, left: 0, bottom: 0, right: 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsets(top: 44, left: 0, bottom: 0, right: 0)
+        let tableInsets = UIEdgeInsets(top: insets.top + navViewNormalH, left: 0, bottom: insets.bottom, right: 0)
+        tableView.contentInset = tableInsets
+        tableView.scrollIndicatorInsets = tableInsets
     }
     
     private func setupUI() {

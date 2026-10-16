@@ -187,7 +187,6 @@ class ZLAdjustSlider: UIView {
             value = temp
             valueChanged?(value)
             
-            guard #available(iOS 10.0, *) else { return }
             if value == 0 {
                 impactFeedback?.impactOccurred()
             }

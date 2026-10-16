@@ -99,11 +99,13 @@ open class ZLCustomCamera: UIViewController {
     }()
     
     public lazy var retakeBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_retake"), for: .normal)
+        var config = UIButton.Configuration.plain()
+        config.image = .zl.getImage("zl_retake")
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.addTarget(self, action: #selector(retakeBtnClick), for: .touchUpInside)
         btn.isHidden = true
-        btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
         return btn
     }()
@@ -122,31 +124,44 @@ open class ZLCustomCamera: UIViewController {
     }()
     
     public lazy var dismissBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_camera_close"), for: .normal)
+        var config = UIButton.Configuration.plain()
+        config.image = .zl.getImage("zl_camera_close")
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.addTarget(self, action: #selector(dismissBtnClick), for: .touchUpInside)
-        btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
         return btn
     }()
     
     public lazy var flashBtn: ZLEnlargeButton = {
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_flash_off"), for: .normal)
-        btn.setImage(.zl.getImage("zl_flash_on"), for: .selected)
+        let offImage = UIImage.zl.getImage("zl_flash_off")
+        let onImage = UIImage.zl.getImage("zl_flash_on")
+        
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.addTarget(self, action: #selector(flashBtnClick), for: .touchUpInside)
-        btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
+        // 按选中状态切换图片（替代原先按 .normal / .selected 的 setImage）
+        btn.configurationUpdateHandler = { button in
+            var updated = button.configuration
+            updated?.image = button.isSelected ? onImage : offImage
+            button.configuration = updated
+        }
         return btn
     }()
     
     public lazy var switchCameraBtn: ZLEnlargeButton = {
         let cameraCount = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices.count
         
-        let btn = ZLEnlargeButton(type: .custom)
-        btn.setImage(.zl.getImage("zl_toggle_camera"), for: .normal)
+        var config = UIButton.Configuration.plain()
+        config.image = .zl.getImage("zl_toggle_camera")
+        config.contentInsets = .zero
+        
+        let btn = ZLEnlargeButton(configuration: config)
         btn.addTarget(self, action: #selector(switchCameraBtnClick), for: .touchUpInside)
-        btn.adjustsImageWhenHighlighted = false
         btn.enlargeInset = 30
         btn.isHidden = !cameraConfig.allowSwitchCamera || cameraCount <= 1
         return btn
@@ -259,7 +274,7 @@ open class ZLCustomCamera: UIViewController {
     
     // 仅支持竖屏
     override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        deviceIsiPhone() ? .portrait : .all
+        ZLCommonTools.deviceIsiPhone() ? .portrait : .all
     }
     
     override public var prefersStatusBarHidden: Bool {
@@ -379,10 +394,7 @@ open class ZLCustomCamera: UIViewController {
         guard shouldLayout else { return }
         shouldLayout = false
         
-        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
-            insets = self.view.safeAreaInsets
-        }
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         
         let cameraRatio: CGFloat = 16 / 9
         let layerH = min(view.zl.width * cameraRatio, view.zl.height)
@@ -637,7 +649,7 @@ open class ZLCustomCamera: UIViewController {
         var extendedDeviceTypes: [AVCaptureDevice.DeviceType] = []
         let allDeviceTypes: [AVCaptureDevice.DeviceType]
         
-        if #available(iOS 13.0, *), cameraConfig.enableWideCameras {
+        if cameraConfig.enableWideCameras {
             extendedDeviceTypes = [.builtInTripleCamera, .builtInDualWideCamera, .builtInDualCamera]
             allDeviceTypes = deviceTypes + extendedDeviceTypes
         } else {
@@ -1004,12 +1016,7 @@ open class ZLCustomCamera: UIViewController {
             connection?.isVideoMirrored = ZLPhotoConfiguration.default().cameraConfiguration.isVideoMirrored
         }
         
-        let settingFormat: [String: Any]
-        if #available(iOS 11.0, *) {
-            settingFormat = [AVVideoCodecKey: AVVideoCodecType.jpeg]
-        } else {
-            settingFormat = [AVVideoCodecKey: AVVideoCodecJPEG]
-        }
+        let settingFormat: [String: Any] = [AVVideoCodecKey: AVVideoCodecType.jpeg]
         let setting = AVCapturePhotoSettings(format: settingFormat)
         if videoInput?.device.hasFlash == true, flashBtn.isSelected {
             setting.flashMode = .on
@@ -1116,23 +1123,16 @@ open class ZLCustomCamera: UIViewController {
     }
     
     private func isWideCameraEnabled() -> Bool {
-        if #available(iOS 13.0, *) {
-            return cameraConfig.enableWideCameras
-        } else {
-            return false
-        }
+        cameraConfig.enableWideCameras
     }
     
     private func getMaxZoomFactor() -> CGFloat {
         guard let device = videoInput?.device else {
             return 1
         }
-        if #available(iOS 11.0, *) {
-            let factor = isWideCameraEnabled() ? device.zl.defaultZoomFactor : 1
-            return min(15 * factor, device.maxAvailableVideoZoomFactor)
-        } else {
-            return min(15, device.activeFormat.videoMaxZoomFactor)
-        }
+        
+        let factor = isWideCameraEnabled() ? device.zl.defaultZoomFactor : 1
+        return min(15 * factor, device.maxAvailableVideoZoomFactor)
     }
     
     private func setVideoZoomFactor(_ zoomFactor: CGFloat) {
@@ -1141,7 +1141,7 @@ open class ZLCustomCamera: UIViewController {
         }
         do {
             try device.lockForConfiguration()
-            if #available(iOS 11.0, *), isWideCameraEnabled() {
+            if isWideCameraEnabled() {
                 let minZoomFactor = device.minAvailableVideoZoomFactor
                 let clampedZoomFactor = max(minZoomFactor, min(zoomFactor, getMaxZoomFactor()))
                 device.videoZoomFactor = clampedZoomFactor
@@ -1266,8 +1266,7 @@ open class ZLCustomCamera: UIViewController {
         }
         
         // 解决不同系统版本,因为录制视频编码导致安卓端无法播放的问题
-        if #available(iOS 11.0, *),
-           movieFileOutput.availableVideoCodecTypes.contains(cameraConfig.videoCodecType),
+        if movieFileOutput.availableVideoCodecTypes.contains(cameraConfig.videoCodecType),
            let connection = connection {
             let outputSettings = [AVVideoCodecKey: cameraConfig.videoCodecType]
             movieFileOutput.setOutputSettings(outputSettings, for: connection)
@@ -1397,24 +1396,8 @@ extension ZLCustomCamera: AVCapturePhotoCaptureDelegate {
         }
     }
     
-    @available(iOS 11.0, *)
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
         handlePhotoOutputData(photo.fileDataRepresentation(), isError: error != nil)
-    }
-    
-    public func photoOutput(
-        _ output: AVCapturePhotoOutput,
-        didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?,
-        previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?,
-        resolvedSettings: AVCaptureResolvedPhotoSettings,
-        bracketSettings: AVCaptureBracketedStillImageSettings?,
-        error: Error?
-    ) {
-        var data: Data?
-        if let photoSampleBuffer {
-            data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
-        }
-        handlePhotoOutputData(data, isError: photoSampleBuffer == nil || error != nil)
     }
     
     private func handlePhotoOutputData(_ data: Data?, isError: Bool) {
@@ -1515,7 +1498,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
             // 拼接视频
             if self.recordURLs.count > 1 {
                 let hud = ZLProgressHUD.show(toast: .processing, in: self.view.window)
-                ZLVideoManager.mergeVideos(fileURLs: self.recordURLs) { [weak self] url, error in
+                ZLVideoManager.mergeVideos(fileURLs: self.recordURLs) { [weak self = self] url, error in
                     hud.hide()
                     
                     if let url, error == nil {

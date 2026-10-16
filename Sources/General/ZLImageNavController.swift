@@ -45,7 +45,7 @@ public class ZLImageNavController: UINavigationController {
     }
     
     public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if deviceIsiPad() {
+        if ZLCommonTools.deviceIsiPad() {
             .all
         } else {
             ZLPhotoUIConfiguration.default().supportLandscape ? .all : .portrait

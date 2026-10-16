@@ -269,7 +269,7 @@ class ZLPhotoPreviewPopInteractiveTransition: UIPercentDrivenInteractiveTransiti
             if toVC.showCameraCell {
                 diff = -1
             }
-            if #available(iOS 14.0, *), toVC.showAddPhotoCell {
+            if toVC.showAddPhotoCell {
                 diff -= 1
             }
         }

@@ -48,9 +48,7 @@ class ZLPhotoPreviewController: UIViewController {
         view.delegate = self
         view.isPagingEnabled = true
         view.showsHorizontalScrollIndicator = false
-        if #available(iOS 11.0, *) {
-            view.contentInsetAdjustmentBehavior = .never
-        }
+        view.contentInsetAdjustmentBehavior = .never
         
         ZLPhotoPreviewCell.zl.register(view)
         ZLGifPreviewCell.zl.register(view)
@@ -77,15 +75,14 @@ class ZLPhotoPreviewController: UIViewController {
     private var navBlurView: UIVisualEffectView?
     
     private lazy var backBtn: UIButton = {
-        let btn = UIButton(type: .custom)
+        var config = UIButton.Configuration.plain()
         var image = UIImage.zl.getImage("zl_navBack")
         if isRTL() {
             image = image?.imageFlippedForRightToLeftLayoutDirection()
-            btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -10)
-        } else {
-            btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
         }
-        btn.setImage(image, for: .normal)
+        config.image = image
+        
+        let btn = UIButton(configuration: config)
         btn.addTarget(self, action: #selector(backBtnClick), for: .touchUpInside)
         return btn
     }()
@@ -128,18 +125,35 @@ class ZLPhotoPreviewController: UIViewController {
     }()
     
     private lazy var originalBtn: UIButton = {
-        let btn = createBtn(localLanguageTextValue(.originalPhoto), #selector(originalPhotoClick))
+        let normalColor = UIColor.zl.bottomToolViewBtnNormalTitleColorOfPreviewVC
+        let disabledColor = UIColor.zl.bottomToolViewBtnDisableTitleColorOfPreviewVC
+        let normalImage = UIImage.zl.getImage("zl_btn_original_circle")
+        let selectedImage = UIImage.zl.getImage("zl_btn_original_selected")
+        
+        var config = UIButton.Configuration.plain()
+        config.title = localLanguageTextValue(.originalPhoto)
+        // 图片和标题之间的间距（替代原先的 titleEdgeInsets，自动适配 RTL）
+        config.imagePadding = 5
+        // 去掉 .plain() 默认的外边距，保持与原布局一致
+        config.contentInsets = .zero
+        // 标题字体（替代原先 createBtn 里的 titleLabel?.font）
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = ZLLayout.bottomToolTitleFont
+            return outgoing
+        }
+        
+        let btn = UIButton(configuration: config)
+        btn.contentHorizontalAlignment = .leading
         btn.titleLabel?.lineBreakMode = .byCharWrapping
         btn.titleLabel?.numberOfLines = 2
-        btn.contentHorizontalAlignment = .left
-        btn.setImage(.zl.getImage("zl_btn_original_circle"), for: .normal)
-        btn.setImage(.zl.getImage("zl_btn_original_selected"), for: .selected)
-        btn.setImage(.zl.getImage("zl_btn_original_selected"), for: [.selected, .highlighted])
-        btn.adjustsImageWhenHighlighted = false
-        if isRTL() {
-            btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 5)
-        } else {
-            btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
+        btn.addTarget(self, action: #selector(originalPhotoClick), for: .touchUpInside)
+        // 按状态切换图片和标题颜色（替代原先的多个 setImage / setTitleColor）
+        btn.configurationUpdateHandler = { button in
+            var updated = button.configuration
+            updated?.image = button.isSelected ? selectedImage : normalImage
+            updated?.baseForegroundColor = button.isEnabled ? normalColor : disabledColor
+            button.configuration = updated
         }
         return btn
     }()
@@ -239,12 +253,7 @@ class ZLPhotoPreviewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
-            insets = self.view.safeAreaInsets
-        }
-        insets.top = max(20, insets.top)
-        
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         collectionView.frame = CGRect(
             x: -ZLPhotoPreviewController.colItemSpacing / 2,
             y: 0,
@@ -261,7 +270,7 @@ class ZLPhotoPreviewController: UIViewController {
             selectBtn.frame = CGRect(x: insets.left + 15, y: insets.top + (44 - 24) / 2, width: 24, height: 24)
         } else {
             backBtn.frame = CGRect(x: insets.left, y: insets.top, width: 60, height: 44)
-            selectBtn.frame = CGRect(x: view.zl.width - 40 - insets.right, y: insets.top + (44 - 24) / 2, width: 24, height: 24)
+            selectBtn.frame = CGRect(x: view.zl.width - insets.right - 40, y: insets.top + (44 - 24) / 2, width: 24, height: 24)
         }
         
 //        indexLabel.frame = selectBtn.bounds
@@ -322,10 +331,7 @@ class ZLPhotoPreviewController: UIViewController {
     }
     
     private func refreshBottomViewFrame() {
-        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
-            insets = view.safeAreaInsets
-        }
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         var bottomViewH = ZLLayout.bottomToolViewH
         
         var showSelPhotoPreview = false
@@ -348,7 +354,7 @@ class ZLPhotoPreviewController: UIViewController {
         
         let editTitle = localLanguageTextValue(.edit)
         let editBtnW = editTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width
-        editBtn.frame = CGRect(x: 15, y: btnY, width: min(btnMaxWidth, editBtnW), height: btnH)
+        editBtn.frame = CGRect(x: insets.left + 15, y: btnY, width: min(btnMaxWidth, editBtnW), height: btnH)
         
         let originalTitle = localLanguageTextValue(.originalPhoto)
         let originBtnW = originalTitle.zl.boundingRect(
@@ -357,11 +363,13 @@ class ZLPhotoPreviewController: UIViewController {
                 width: CGFloat.greatestFiniteMagnitude,
                 height: 30
             )
-        ).width + (originalBtn.currentImage?.size.width ?? 19) + 12
+        ).width + (originalBtn.configuration?.image?.size.width ?? 19) + 12
+        
+        let totalW = bottomView.zl.width - insets.left - insets.right
         let originBtnMaxW = min(btnMaxWidth, originBtnW)
-        originalBtn.frame = CGRect(x: (bottomView.zl.width - originBtnMaxW) / 2 - 5, y: btnY, width: originBtnMaxW, height: btnH)
+        originalBtn.frame = CGRect(x: (totalW - originBtnMaxW) / 2 + insets.left - 5, y: btnY, width: originBtnMaxW, height: btnH)
         originalLabel.frame = CGRect(
-            x: (bottomView.zl.width - btnMaxWidth) / 2 - 5,
+            x: (totalW - btnMaxWidth) / 2 + insets.left - 5,
             y: originalBtn.zl.bottom,
             width: btnMaxWidth,
             height: originalLabel.font.lineHeight
@@ -372,14 +380,11 @@ class ZLPhotoPreviewController: UIViewController {
                 font: ZLLayout.bottomToolTitleFont,
                 limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
             ).width + 20
-        doneBtn.frame = CGRect(x: bottomView.bounds.width - doneBtnW - 15, y: btnY, width: doneBtnW, height: btnH)
+        doneBtn.frame = CGRect(x: bottomView.bounds.width - insets.right - doneBtnW - 15, y: btnY, width: doneBtnW, height: btnH)
     }
     
     private func setupUI() {
         view.backgroundColor = .zl.previewVCBgColor
-        if #unavailable(iOS 11.0) {
-            automaticallyAdjustsScrollViewInsets = false
-        }
         
         let config = ZLPhotoConfiguration.default()
         let uiConfig = ZLPhotoUIConfiguration.default()

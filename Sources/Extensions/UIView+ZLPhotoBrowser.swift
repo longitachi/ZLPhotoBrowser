@@ -101,4 +101,47 @@ extension ZLPhotoBrowserWrapper where Base: UIView {
         }
         return false
     }
+    
+    var owningViewController: UIViewController? {
+        var responder: UIResponder? = base
+        while let r = responder {
+            if let vc = r as? UIViewController { return vc }
+            responder = r.next
+        }
+        return nil
+    }
+    
+    var owningVCRootViewModifiedSafeAreaInsets: UIEdgeInsets {
+        var insets = base.safeAreaInsets
+        insets.top = max(20, insets.top)
+        
+        guard let vc = owningViewController else {
+            return insets
+        }
+        
+        // 分屏/折叠下，另一半屏的挖孔 inset 会被系统报过来，这里按边缘归属过滤掉
+        if #available(iOS 27.1, *) {
+            if let screen = base.window?.screen {
+                if !CGRectEqualToRect(base.bounds, screen.bounds) {
+                    switch base.traitCollection.verticalBarEdge {
+                    case .leading:
+                        // 分屏在左侧
+                        insets.left = 0
+                        insets.right = 0
+                    case .trailing:
+                        // 分屏在右侧
+                        insets.left = 0
+                        if ZLCommonTools.deviceIsFoldableDevice(), vc.prefersStatusBarHidden {
+                            // 折叠屏，且状态栏隐藏，修改右侧insets也为0
+                            insets.right = 0
+                        }
+                    default:
+                        break
+                    }
+                }
+            }
+        }
+        
+        return insets
+    }
 }

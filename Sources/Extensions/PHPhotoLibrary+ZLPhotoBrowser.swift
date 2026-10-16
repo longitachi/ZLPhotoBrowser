@@ -31,7 +31,6 @@ extension ZLPhotoBrowserWrapper where Base: PHPhotoLibrary {
         case addOnly
         case readWrite
         
-        @available(iOS 14.0, *)
         var toPHLevel: PHAccessLevel {
             switch self {
             case .addOnly:
@@ -43,10 +42,6 @@ extension ZLPhotoBrowserWrapper where Base: PHPhotoLibrary {
     }
     
     static func authStatus(for level: ZLAccessLevel) -> PHAuthorizationStatus {
-        if #available(iOS 14.0, *) {
-            return PHPhotoLibrary.authorizationStatus(for: level.toPHLevel)
-        } else {
-            return PHPhotoLibrary.authorizationStatus()
-        }
+        return PHPhotoLibrary.authorizationStatus(for: level.toPHLevel)
     }
 }

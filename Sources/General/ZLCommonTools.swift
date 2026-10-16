@@ -73,4 +73,35 @@ class ZLCommonTools: NSObject {
             return 0
         }
     }
+    
+    class func deviceIsiPhone() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == .phone
+    }
+    
+    class func deviceIsFoldableDevice() -> Bool {
+        let identifier = deviceModelIdentifier()
+        // 先写死真机型号，后面看有没有API
+        if identifier == "iPhone19,4" {
+            return true
+        }
+        if UIScreen.screens.count > 1 {
+            return true
+        }
+        return false
+    }
+    
+    class func deviceIsiPad() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
+    class func deviceModelIdentifier() -> String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+        return identifier
+    }
 }

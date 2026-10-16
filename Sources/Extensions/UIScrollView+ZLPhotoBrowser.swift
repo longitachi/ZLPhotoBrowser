@@ -28,11 +28,7 @@ import UIKit
 
 extension ZLPhotoBrowserWrapper where Base: UIScrollView {
     var contentInset: UIEdgeInsets {
-        if #available(iOS 11.0, *) {
-            return base.adjustedContentInset
-        } else {
-            return base.contentInset
-        }
+        base.adjustedContentInset
     }
     
     func scrollToTop(animated: Bool = true) {

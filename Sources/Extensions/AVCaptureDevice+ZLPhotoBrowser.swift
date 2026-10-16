@@ -29,7 +29,6 @@ import AVFoundation
 extension ZLPhotoBrowserWrapper where Base: AVCaptureDevice {
     var defaultZoomFactor: CGFloat {
         let fallback: CGFloat = 1.0
-        guard #available(iOS 13.0, *) else { return fallback }
 
         if let wideAngleIndex = base.constituentDevices.firstIndex(where: { $0.deviceType == .builtInWideAngleCamera }) {
             guard wideAngleIndex >= 1 else { return fallback }

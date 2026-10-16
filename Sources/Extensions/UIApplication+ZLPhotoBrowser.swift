@@ -27,7 +27,6 @@
 import UIKit
 
 extension ZLPhotoBrowserWrapper where Base: UIApplication {
-    @available(iOS 13.0, *)
     var connectedWindowScene: UIWindowScene? {
         base.connectedScenes
             .compactMap { $0 as? UIWindowScene }
@@ -35,24 +34,18 @@ extension ZLPhotoBrowserWrapper where Base: UIApplication {
     }
     
     var activeWindow: UIWindow? {
-        if #available(iOS 13.0, *) {
-            base.connectedScenes
-                .first(where: { $0.activationState == .foregroundActive })
-                .flatMap { $0 as? UIWindowScene }?
-                .windows
-                .first { $0.isKeyWindow }
-        } else {
-            base.keyWindow
-        }
+        base.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive })
+            .flatMap { $0 as? UIWindowScene }?
+            .windows
+            .first { $0.isKeyWindow }
     }
     
     var interfaceOrientation: UIInterfaceOrientation {
         if #available(iOS 27.0, *) {
             return connectedWindowScene?.effectiveGeometry.interfaceOrientation ?? .portrait
-        } else if #available(iOS 13.0, *) {
-            return connectedWindowScene?.interfaceOrientation ?? .portrait
         } else {
-            return base.statusBarOrientation
+            return connectedWindowScene?.interfaceOrientation ?? .portrait
         }
     }
     

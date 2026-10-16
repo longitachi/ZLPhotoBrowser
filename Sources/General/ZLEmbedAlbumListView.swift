@@ -137,7 +137,7 @@ class ZLEmbedAlbumListView: UIView {
             return
         }
         
-        if #available(iOS 14.0, *), PHPhotoLibrary.zl.authStatus(for: .readWrite) == .limited {
+        if PHPhotoLibrary.zl.authStatus(for: .readWrite) == .limited {
             loadAlbumList { [weak self] in
                 self?.animateShow()
             }

@@ -205,7 +205,7 @@ public class ZLEditVideoViewController: UIViewController {
     override public var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { [.top, .bottom] }
     
     public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        deviceIsiPhone() ? .portrait : .all
+        ZLCommonTools.deviceIsiPhone() ? .portrait : .all
     }
     
     deinit {
@@ -270,10 +270,7 @@ public class ZLEditVideoViewController: UIViewController {
         shouldLayout = false
         
         zl_debugPrint("edit video layout subviews")
-        var insets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
-            insets = self.view.safeAreaInsets
-        }
+        let insets = view.zl.owningVCRootViewModifiedSafeAreaInsets
         
         let btnH = ZLLayout.bottomToolBtnH
         let bottomBtnAndColSpacing: CGFloat = 20

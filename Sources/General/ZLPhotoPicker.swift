@@ -325,7 +325,7 @@ public class ZLPhotoPicker: NSObject {
 // MARK: Methods for SwiftUI
 
 public extension ZLPhotoPicker {
-    @available(iOS, introduced: 13.0, message: "Only available for SwiftUI")
+    @available(iOS, introduced: 15.0, message: "Only available for SwiftUI")
     func showPhotoLibraryForSwiftUI() -> ZLImageNavController {
         let nav: ZLImageNavController
         if ZLPhotoUIConfiguration.default().style == .embedAlbumList {

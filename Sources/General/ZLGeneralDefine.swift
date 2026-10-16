@@ -85,27 +85,13 @@ func getAppName() -> String {
     return "App"
 }
 
-func deviceIsiPhone() -> Bool {
-    return UIDevice.current.userInterfaceIdiom == .phone
-}
-
-func deviceIsiPad() -> Bool {
-    return UIDevice.current.userInterfaceIdiom == .pad
-}
-
 func deviceSafeAreaInsets() -> UIEdgeInsets {
     var insets: UIEdgeInsets = .zero
         
-    if #available(iOS 11, *) {
-        if let window = UIApplication.shared.zl.activeWindow {
-            insets = window.safeAreaInsets
-        } else if #available(iOS 13.0, *) {
-            // 系统权限弹窗期间 app 会处于 foregroundInactive，activeWindow 会返回 nil，
-            // 导致安全区被误读为 .zero（进而把刘海屏误判为非刘海屏、导航栏布局错误）。
-            // window.safeAreaInsets 与 app 激活状态无关，这里回退到 scene 中的 window。
-            insets = UIApplication.shared.zl.connectedWindowScene?.windows.first?.safeAreaInsets ?? .zero
-        }
-    }
+    // 系统权限弹窗期间 app 会处于 foregroundInactive，activeWindow 会返回 nil，
+    // 导致安全区被误读为 .zero（进而把刘海屏误判为非刘海屏、导航栏布局错误）。
+    // window.safeAreaInsets 与 app 激活状态无关，这里回退到 scene 中的 window。
+    insets = UIApplication.shared.zl.connectedWindowScene?.windows.first?.safeAreaInsets ?? .zero
     
     return insets
 }
@@ -148,7 +134,7 @@ func showAlertController(title: String?, message: String?, style: ZLCustomAlertS
     
     let presentedVC = sender ?? UIApplication.shared.zl.activeWindow?.rootViewController
     
-    if deviceIsiPad() {
+    if ZLCommonTools.deviceIsiPad() {
         alert.popoverPresentationController?.sourceView = presentedVC?.view
     }
     

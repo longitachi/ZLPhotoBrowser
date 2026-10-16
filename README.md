@@ -54,9 +54,10 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 > If you have good needs and suggestions in use, or encounter any bugs, please create an issue and I will reply in time.
  
 ### Requirements
- * iOS 10.0
- * Swift 5.x
- * Xcode 14.x
+|version|iOS|Xcode|
+|---|---|---|
+|>=6.0.0|15.0|27|
+|<6.0.0|10.0|26|
  
 ### Usage
  - Preview selection

@@ -351,7 +351,20 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
     ///   - size: Dest size of the image
     ///   - scale: The scale factor of the image
     func resize_vI(_ size: CGSize, scale: CGFloat? = nil) -> UIImage? {
+        if size.width <= 0 || size.height <= 0 {
+            return nil
+        }
+        
         guard let cgImage = base.cgImage else { return nil }
+        
+        // vImageBuffer_InitWithCGImage 会把源图整张解码成 ARGB8888 缓冲区（宽 × 高 × 4 字节）。
+        // 相机原图等超大图在内存吃紧时，该调用会在 C 层抛出无法用返回码拦截的
+        // NSMallocException("Failed to grow buffer")，直接导致崩溃（guard error 拦不住）。
+        // 源图过大时退回到内存更安全的 UIGraphicsImageRenderer 方案，牺牲少量速度换取稳定性。
+        let maxSafePixelCount = 3_000_000
+        if cgImage.width * cgImage.height > maxSafePixelCount {
+            return resize(size, scale: scale)
+        }
         
         var format = vImage_CGImageFormat(
             bitsPerComponent: 8,
@@ -365,11 +378,7 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         
         var sourceBuffer = vImage_Buffer()
         defer {
-            if #available(iOS 13.0, *) {
-                sourceBuffer.free()
-            } else {
-                sourceBuffer.data.deallocate()
-            }
+            sourceBuffer.free()
         }
         
         var error = vImageBuffer_InitWithCGImage(&sourceBuffer, &format, nil, cgImage, numericCast(kvImageNoFlags))
