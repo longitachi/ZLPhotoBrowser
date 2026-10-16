@@ -39,6 +39,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 你想要的应有尽有，部分功能如下，更多功能请查看 `ZLPhotoConfiguration` 中的参数定义（没有的话欢迎提 issue ，功能建议好的话会采纳并着手开发）
 - [x] 支持SwiftUI
 - [x] 支持iPad多窗口
+- [x] 支持iPhone Duo折叠屏
 - [x] 支持横竖屏
 - [x] 自选框架样式
 - [x] 支持分页加载
@@ -107,6 +108,9 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
 ### 更新日志
 > [更多更新日志](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 6.0.0
+  Add:
+    适配iPhoneDuo，升级API至iOS 15.
 ● 5.0.0
   Add:
     优化iPad多任务及自定义窗口大小下的UI体验。
@@ -124,9 +128,6 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   Add:
     支持同时编辑多个视频
     开源协议由MIT改为Apache-2.0
-● 4.7.3
-  Fix:
-    修复编辑图片时，橡皮擦位置显示不正确的问题
 ...
 ```
 
@@ -151,7 +152,7 @@ ZLPhotoBrowser是一款微信样式的图片选择器，支持预览/相册内�
   
 * Swift Package Manager
   * 1. 选择 File > Swift Packages > Add Package Dependency，输入 `https://github.com/longitachi/ZLPhotoBrowser.git`
-  * 2. 输入对应版本号（SPM 最低版本为 `5.0.0`）
+  * 2. 输入对应版本号（SPM 最低版本为 `6.0.0`）
   * 3. 等Xcode下载完成后确定即可
 
 ### 支持

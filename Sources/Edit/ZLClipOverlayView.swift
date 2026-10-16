@@ -94,14 +94,6 @@ class ZLClipOverlayView: UIView {
         return layer
     }()
     
-    override var frame: CGRect {
-        didSet {
-            if oldValue != frame {
-                updateSubviewsFrame()
-            }
-        }
-    }
-    
     var cropRect: CGRect = .zero
     
     var isCircle = false {
@@ -111,6 +103,14 @@ class ZLClipOverlayView: UIView {
             }
             
             shadowMaskLayer.path = getShadowMaskLayerPath().cgPath
+        }
+    }
+    
+    override var frame: CGRect {
+        didSet {
+            if oldValue != frame {
+                updateSubviewsFrame()
+            }
         }
     }
     

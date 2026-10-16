@@ -31,6 +31,7 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Features
 - [x] Support SwiftUI.
 - [x] Support iPad multi-window.
+- [x] Support iPhone Duo.
 - [x] Portrait and landscape.
 - [x] Two framework style.
 - [x] Support page loading.
@@ -95,6 +96,9 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
 ### Change Log
 > [More logs](https://github.com/longitachi/ZLPhotoBrowser/blob/master/CHANGELOG.md)
 ```
+● 6.0.0
+  Add:
+    Adapted UI for iPhone Duo. Updated APIs to iOS 15.0.
 ● 5.0.0
   Add:
     Optimized UI for iPad multitasking and custom window sizes.
@@ -112,9 +116,6 @@ If you only want to use the image edit feature, please move to [ZLImageEditor](h
   Add:
     Supports editing multiple videos.
     Change the license from MIT to Apache-2.0.
-● 4.7.3
-  Fix:
-    Fixed the issue where the eraser position was displayed incorrectly when editing pictures.
 ...
 ```
 
@@ -170,7 +171,7 @@ Rebuild with --use-xcframeworks to create an xcframework bundle instead.` [Click
 
 #### Swift Package Manager
 1. Select File > Add Packages. Enter https://github.com/longitachi/ZLPhotoBrowser.git in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" with "5.0.0" as its earliest version.
+2. In the next page, specify the version resolving rule as "Up to Next Major" with "6.0.0" as its earliest version.
 3. After Xcode checking out the source and resolving the version, you can choose the "ZLPhotoBrowser" library and add it to your app target.
 
 ### Support
