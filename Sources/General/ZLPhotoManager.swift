@@ -407,13 +407,18 @@ public class ZLPhotoManager: NSObject {
         if asset.zl.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { session, info in
                 // iOS11 and earlier, callback is not on the main thread.
+                nonisolated(unsafe) let session = session
+                nonisolated(unsafe) let info = info
+                nonisolated(unsafe) let completion = completion
                 ZLMainAsync {
-                    let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-                    if let avAsset = session?.asset {
-                        let item = AVPlayerItem(asset: avAsset)
-                        completion(item, info, isDegraded)
-                    } else {
-                        completion(nil, nil, true)
+                    MainActor.assumeIsolated {
+                        let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
+                        if let avAsset = session?.asset {
+                            let item = AVPlayerItem(asset: avAsset)
+                            completion(item, info, isDegraded)
+                        } else {
+                            completion(nil, nil, true)
+                        }
                     }
                 }
             })

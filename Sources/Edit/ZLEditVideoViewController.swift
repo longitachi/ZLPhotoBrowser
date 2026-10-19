@@ -149,18 +149,14 @@ public class ZLEditVideoViewController: UIViewController {
         return label
     }()
     
-    private lazy var measureCount: Int = {
-        Int(avAsset.duration.seconds / interval)
-    }()
+    private lazy var measureCount = Int(avAsset.duration.seconds / interval)
     
     private var maxEditDuration: TimeInterval {
         let assetDuration = avAsset.duration.seconds
         return min(assetDuration, TimeInterval(ZLPhotoConfiguration.default().maxEditVideoTime))
     }
     
-    private lazy var interval: TimeInterval = {
-        TimeInterval(maxEditDuration) / 10
-    }()
+    private lazy var interval = TimeInterval(maxEditDuration) / 10
     
     private lazy var avAssetRequestID = PHInvalidImageRequestID
     
@@ -197,14 +193,20 @@ public class ZLEditVideoViewController: UIViewController {
     
     public var cancelEditBlock: (() -> Void)?
     
-    override public var prefersStatusBarHidden: Bool { true }
+    override public var prefersStatusBarHidden: Bool {
+        true
+    }
     
-    override public var prefersHomeIndicatorAutoHidden: Bool { true }
+    override public var prefersHomeIndicatorAutoHidden: Bool {
+        true
+    }
     
     /// 延缓屏幕上下方通知栏弹出，避免手势冲突
-    override public var preferredScreenEdgesDeferringSystemGestures: UIRectEdge { [.top, .bottom] }
+    override public var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
+        [.top, .bottom]
+    }
     
-    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         ZLCommonTools.deviceIsiPhone() ? .portrait : .all
     }
     
@@ -388,20 +390,20 @@ public class ZLEditVideoViewController: UIViewController {
         }
     }
     
-    @objc private func doneBtnClick() {
-        @Sendable func callback(editModel: ZLEditVideoModel?) {
-            // 内部自己调用，先回调在退出
-            if let nav = presentingViewController as? ZLImageNavController,
-               nav.topViewController is ZLPhotoPreviewController {
-                editFinishBlock?(editModel)
-                dismiss(animated: animateDismiss)
-            } else {
-                dismiss(animated: animateDismiss) {
-                    self.editFinishBlock?(editModel)
-                }
+    private func finishEditDone(editModel: ZLEditVideoModel?) {
+        // 内部自己调用，先回调在退出
+        if let nav = presentingViewController as? ZLImageNavController,
+           nav.topViewController is ZLPhotoPreviewController {
+            editFinishBlock?(editModel)
+            dismiss(animated: animateDismiss)
+        } else {
+            dismiss(animated: animateDismiss) {
+                self.editFinishBlock?(editModel)
             }
         }
-        
+    }
+    
+    @objc private func doneBtnClick() {
         let config = ZLPhotoConfiguration.default()
         
         let d = CGFloat(interval) * clipRect().width / Layout.frameImageSize.width
@@ -415,14 +417,14 @@ public class ZLEditVideoViewController: UIViewController {
                 return
             }
             
-            callback(editModel: nil)
+            finishEditDone(editModel: nil)
             return
         }
         
         if let editModel,
            abs(editModel.start - getStartTime().seconds) <= 0.01,
            abs(editModel.end - getEndTime().seconds) <= 0.01 {
-            callback(editModel: editModel)
+            finishEditDone(editModel: editModel)
             return
         }
         
@@ -441,7 +443,6 @@ public class ZLEditVideoViewController: UIViewController {
                     }
                 }
                 
-                
                 self.coverImageGenerator.generateCGImagesAsynchronously(forTimes: [NSValue(time: self.getStartTime())]) { _, cgImage, _, result, _ in
                     var coverImage: UIImage?
                     if result == .succeeded, let cg = cgImage {
@@ -457,7 +458,7 @@ public class ZLEditVideoViewController: UIViewController {
                             coverImage: coverImage
                         )
                         
-                        callback(editModel: editModel)
+                        self.finishEditDone(editModel: editModel)
                     }
                 }
             }
@@ -598,7 +599,7 @@ public class ZLEditVideoViewController: UIViewController {
         } else {
             let times = times.map { NSValue(time: $0) }
             
-            generator.generateCGImagesAsynchronously(forTimes: times) { [weak self] requestedTime, cgImage, actualTime, result, error in
+            generator.generateCGImagesAsynchronously(forTimes: times) { [weak self] requestedTime, cgImage, _, result, _ in
                 guard let `self` = self else { return }
                 
                 var image: UIImage?
@@ -803,7 +804,7 @@ extension ZLEditVideoViewController: UICollectionViewDataSource, UICollectionVie
 class ZLEditVideoFrameImageBorderView: UIView {
     var validRect: CGRect = .zero {
         didSet {
-            self.setNeedsDisplay()
+            setNeedsDisplay()
         }
     }
     

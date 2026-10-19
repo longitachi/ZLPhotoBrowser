@@ -744,8 +744,9 @@ open class ZLEditImageViewController: UIViewController {
             
             ZLMainAsync {
                 self.filterCollectionView?.reloadData()
+                let index = filters.firstIndex(where: { $0 == self.currentFilter })
                 self.filterCollectionView?.performBatchUpdates {} completion: { _ in
-                    if let index = filters.firstIndex(where: { $0 == self.currentFilter }) {
+                    if let index {
                         self.filterCollectionView?.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
                     }
                 }

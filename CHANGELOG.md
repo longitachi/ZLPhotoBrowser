@@ -2,6 +2,12 @@
 
 -----
 
+## [6.0.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/6.0.0) (2026-10-19)
+### Add
+* Adapted UI for iPhone Duo. Updated APIs to iOS 15.0.
+
+---
+
 ## [5.0.0](https://github.com/longitachi/ZLPhotoBrowser/releases/tag/5.0.0) (2026-06-25)
 ### Add
 * Optimized UI for iPad multitasking and custom window sizes for a smoother experience.

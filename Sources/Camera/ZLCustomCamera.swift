@@ -194,11 +194,11 @@ open class ZLCustomCamera: UIViewController {
     
     private var orientation: AVCaptureVideoOrientation = .portrait
     
-    private var torchDevice = AVCaptureDevice.default(for: .video)
+    nonisolated(unsafe) private var torchDevice = AVCaptureDevice.default(for: .video)
     
     private let sessionQueue = DispatchQueue(label: "com.zl.camera.sessionQueue")
     
-    private let session = AVCaptureSession()
+    nonisolated(unsafe) private let session = AVCaptureSession()
     
     private var videoInput: AVCaptureDeviceInput?
     
@@ -261,7 +261,7 @@ open class ZLCustomCamera: UIViewController {
         cameraConfig.tapToRecordVideo && !cameraConfig.allowTakePhoto
     }
     
-    private lazy var cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
+    nonisolated(unsafe) private var cameraConfig = ZLPhotoConfiguration.default().cameraConfiguration
     
     private lazy var willCaptureBlock = cameraConfig.willCaptureBlock
     
@@ -601,13 +601,14 @@ open class ZLCustomCamera: UIViewController {
         
         cameraConfigureFinish = true
         
+        nonisolated(unsafe) let initialCamera = camera
         sessionQueue.async {
-            self.setInitialZoomFactor(for: camera)
+            self.setInitialZoomFactor(for: initialCamera)
             self.session.startRunning()
         }
     }
 
-    private func setInitialZoomFactor(for device: AVCaptureDevice) {
+    nonisolated private func setInitialZoomFactor(for device: AVCaptureDevice) {
         guard isWideCameraEnabled() else { return }
         do {
             try device.lockForConfiguration()
@@ -618,7 +619,7 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
-    private func findFirstDevice(ofTypes types: [AVCaptureDevice.DeviceType], in session: AVCaptureDevice.DiscoverySession) -> AVCaptureDevice? {
+    nonisolated private func findFirstDevice(ofTypes types: [AVCaptureDevice.DeviceType], in session: AVCaptureDevice.DiscoverySession) -> AVCaptureDevice? {
         for type in types {
             if let device = session.devices.first(where: { $0.deviceType == type }) {
                 return device
@@ -627,7 +628,7 @@ open class ZLCustomCamera: UIViewController {
         return nil
     }
     
-    private func refreshSessionPreset(device: AVCaptureDevice) {
+    nonisolated private func refreshSessionPreset(device: AVCaptureDevice) {
         func setSessionPreset(_ preset: AVCaptureSession.Preset) {
             guard session.sessionPreset != preset else {
                 return
@@ -644,7 +645,7 @@ open class ZLCustomCamera: UIViewController {
         }
     }
     
-    private func getCamera(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+    nonisolated private func getCamera(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let deviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera]
         var extendedDeviceTypes: [AVCaptureDevice.DeviceType] = []
         let allDeviceTypes: [AVCaptureDevice.DeviceType]
@@ -1122,7 +1123,7 @@ open class ZLCustomCamera: UIViewController {
         pinch.scale = 1
     }
     
-    private func isWideCameraEnabled() -> Bool {
+    nonisolated private func isWideCameraEnabled() -> Bool {
         cameraConfig.enableWideCameras
     }
     

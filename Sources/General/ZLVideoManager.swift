@@ -110,16 +110,18 @@ public class ZLVideoManager: NSObject {
         exportSession.videoComposition = videoComposition
         
         if #available(iOS 18, *) {
+            nonisolated(unsafe) let session = exportSession
+            nonisolated(unsafe) let completion = completion
             Task {
                 do {
-                    try await exportSession.export(to: outputURL, as: outputFileType)
+                    try await session.export(to: outputURL, as: outputFileType)
                     
                     ZLMainAsync {
-                        let suc = exportSession.status == .completed
-                        if exportSession.status == .failed {
-                            zl_debugPrint("ZLPhotoBrowser: video export failed: \(exportSession.error?.localizedDescription ?? "")")
+                        let suc = session.status == .completed
+                        if session.status == .failed {
+                            zl_debugPrint("ZLPhotoBrowser: video export failed: \(session.error?.localizedDescription ?? "")")
                         }
-                        completion(suc ? outputURL : nil, exportSession.error)
+                        completion(suc ? outputURL : nil, session.error)
                     }
                 } catch {
                     completion(nil, error)
@@ -219,21 +221,24 @@ public extension ZLVideoManager {
             complete(nil, NSError.videoExportError)
             return
         }
+        let outputFileType = exportType.avFileType
         exportSession.outputURL = outputURL
-        exportSession.outputFileType = exportType.avFileType
+        exportSession.outputFileType = outputFileType
         exportSession.timeRange = range
         
         if #available(iOS 18, *) {
+            nonisolated(unsafe) let session = exportSession
+            nonisolated(unsafe) let complete = complete
             Task {
                 do {
-                    try await exportSession.export(to: outputURL, as: exportType.avFileType)
+                    try await session.export(to: outputURL, as: outputFileType)
                     
                     ZLMainAsync {
-                        let suc = exportSession.status == .completed
-                        if exportSession.status == .failed {
-                            zl_debugPrint("ZLPhotoBrowser: video export failed: \(exportSession.error?.localizedDescription ?? "")")
+                        let suc = session.status == .completed
+                        if session.status == .failed {
+                            zl_debugPrint("ZLPhotoBrowser: video export failed: \(session.error?.localizedDescription ?? "")")
                         }
-                        complete(suc ? outputURL : nil, exportSession.error)
+                        complete(suc ? outputURL : nil, session.error)
                     }
                 } catch {
                     complete(nil, error)

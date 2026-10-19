@@ -27,6 +27,7 @@
 import UIKit
 import Photos
 
+@MainActor
 public class ZLPhotoPicker: NSObject {
     private var arrSelectedModels: [ZLPhotoModel] = []
     
@@ -260,9 +261,15 @@ public class ZLPhotoPicker: NSObject {
             hud.hide()
             
             func call() {
-                self?.selectImageBlock?(sucModels, isOriginal)
-                if !errorAssets.isEmpty {
-                    self?.selectImageRequestErrorBlock?(errorAssets, errorIndexs)
+                let picker = self
+                nonisolated(unsafe) let models = sucModels
+                let errAssets = errorAssets
+                let errIndexs = errorIndexs
+                MainActor.assumeIsolated {
+                    picker?.selectImageBlock?(models, isOriginal)
+                    if !errAssets.isEmpty {
+                        picker?.selectImageRequestErrorBlock?(errAssets, errIndexs)
+                    }
                 }
             }
             

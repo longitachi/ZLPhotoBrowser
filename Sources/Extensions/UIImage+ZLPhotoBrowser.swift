@@ -26,7 +26,7 @@
 
 import UIKit
 import Accelerate
-import MobileCoreServices
+import UniformTypeIdentifiers
 
 // MARK: data 转 gif image
 
@@ -35,7 +35,7 @@ public extension ZLPhotoBrowserWrapper where Base: UIImage {
         // Kingfisher
         let info: [String: Any] = [
             kCGImageSourceShouldCache as String: true,
-            kCGImageSourceTypeIdentifierHint as String: kUTTypeGIF
+            kCGImageSourceTypeIdentifierHint as String: UTType.gif.identifier
         ]
         
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, info as CFDictionary) else {

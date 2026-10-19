@@ -188,7 +188,7 @@ public class ZLImagePreviewController: UIViewController {
         ZLPhotoUIConfiguration.default().statusBarStyle
     }
     
-    deinit {
+    isolated deinit {
         cancelImageRequest()
         urlDownloadTask?.cancel()
         zl_debugPrint("ZLImagePreviewController deinit")

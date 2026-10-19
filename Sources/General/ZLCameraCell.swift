@@ -49,7 +49,7 @@ class ZLCameraCell: UICollectionViewCell {
         }
     }
     
-    deinit {
+    isolated deinit {
         session?.stopRunning()
         session = nil
         zl_debugPrint("ZLCameraCell deinit")

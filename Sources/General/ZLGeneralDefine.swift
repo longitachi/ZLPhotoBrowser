@@ -261,6 +261,7 @@ func downloadAssetIfNeed(model: ZLPhotoModel, sender: UIViewController?, complet
 }
 
 func ZLMainAsync(after: TimeInterval = 0, handler: @escaping (() -> Void)) {
+    nonisolated(unsafe) let handler = handler
     if after > 0 {
         DispatchQueue.main.asyncAfter(deadline: .now() + after) {
             handler()

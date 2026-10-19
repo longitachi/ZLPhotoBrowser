@@ -21,7 +21,7 @@ public protocol ZLCustomAlertProtocol: AnyObject {
     func show(with parentVC: UIViewController?)
 }
 
-public class ZLCustomAlertAction: NSObject {
+public class ZLCustomAlertAction: NSObject, @unchecked Sendable {
     public enum Style {
         case `default`
         case tint
